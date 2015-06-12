@@ -74,7 +74,8 @@ clean:
 	rm -rf __pycache__
 	rm -f *.so *.tmp *.pyc *.prof *.c .coverage doc.zip
 	rm -f -r dist
-	$(MAKE) -C doc/source clean
+	rm -f -r doc/build
+	# $(MAKE) -C doc/source clean
 	$(MAKE) -C tests clean
 	$(MAKE) -C examples clean
 
