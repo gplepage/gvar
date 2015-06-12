@@ -1,0 +1,767 @@
+Version 6.1??? 
+============
+
+- Modules lsqfit and gvar used to be distributed together. This is the 
+  first time they are being distributed separately. This was necessary 
+  because gvar is now used by things other than lsqfit. To accommodate 
+  this split, the installation will use setuptools instead of disutils,
+  as before, provided setuptools is installed. setuptools automatically
+  ensures that modules needed by gvar are installed and sufficiently 
+  up-to-date. If setuptools is not installed, distutils is used and 
+  dependencies are not checked --- this must be done by hand. If you want 
+  ito nstall setuptools, download https://bootstrap.pypa.io/ez_setup.py
+  and run 'python ez_setup.py'; or run 'pip install setuptools'; 
+  or check out the setuptools website for instructions.
+
+- Added gvar.equivalent(g1, g2, rtol, atol) which checkes whether or not
+  the GVars in g1 and g2 are the equivalent (ie, g.mean and g.der agree 
+  for each GVar). This is useful for debugging purposes.
+
+- tiny addition to gvar tests.
+
+- gvar.cspline now allows you to specify what order polynomial is used for 
+  out-of-range points. In the past a cubic polynomial was used, based on 
+  the value and derivatives at the knot nearest to the out-of-range point.
+  Now one can specify a lower-order polynomial by setting parameter 
+  extrap_order equal to 0, 1, or 2.
+
+- Added gvar.ode.integral for 1d integrals.
+
+- Added two new numerical analysis packages to gvar: 
+
+    gvar.root - finds roots of 1d functions
+    gvar.linalg - basic linear algebra (det, inv, solve, eigvalsh ...)
+
+  As for the other numerical analysis methods, the new methods work with any 
+  combination of numbers and GVars. 
+
+
+Version 6.0 - 2014-11-01
+========================
+
+This upgrade deals with some issues created by the most recent update  to
+numpy (v1.9.0). The verion number increases to 6 because a (very minor) part
+of the gvar.powerseries interface had to change (and therefore by the rules of
+semantic versioning one must  increase the major verion number). BufferDicts
+are also subtly changed, though in a way that shouldn't affect much code.
+A couple of enhancements are included as well.
+
+- gvar.BufferDicts are now derived from collections.OrderedDict. This is 
+  a consequence of the numpy change, but it is probably a good idea anyway.
+  The interface is the same but pickling has changed. This means that 
+  BufferDicts pickled with the old software cannot be unpickled with 
+  the new. A very minimal module, oldbufferdict.py, is included in lsqfit
+  for converting old pickled data to the new format; see documentation
+  inside the file. Data stored using json is unaffected.
+
+- The power series coefficents of gvar.powerseries.PowerSeries variable 
+  p are now accessed via attribute c: p.c[0], p.c[1] etc. Formerly one 
+  could access the coefficients using array notation --- p[0] for p.c[0],
+  etc --- but this no longer works with numpy. The old notation was a bad
+  idea in any case.
+
+- gvar.fmt_errorbudget has a new option called verify. Set verify=True 
+  to have the code check that the error budget is complete and has no
+  double counting of errors; a warning is issued if this is not the case.
+
+- Added arctan2 to the list of functions that work with GVars,
+  using code from Matt Wingate. (NB, the documentation shows how to 
+  create additional functions (eg, erf(x)) using gvar_function.)
+
+- Obscure bug fix in gvar.ode.Integrator allows GVars as the 
+  independent variables.
+
+- Rearranged documentation now includes case studies. These are self
+  contained examples that are extensively annotated (and relatively simple). 
+  There are only two at the moment but more are forthcoming.
+
+
+Version 5.0.1 - 2014-09-13
+===========================
+This is a very minor bug fix.
+
+- Modified gvar.mean(g), gvar.sdev(g), gvar.var(g) so that g can 
+  include elements that are not GVars. These elements are assumed to 
+  have zero error, so their value is their mean. This means, for 
+  example, that g can be all GVars or all floats or a mixture.
+
+- Fixed bug in gvar.ranseed which caused it to crash under python3 in 
+  certain circumstances.
+
+Version 5.0 - 2014-06-26
+=========================
+A minor upgrade to provide functionality for other libraries. The first 
+change is not backwards compatible, but is unlikely to break much or any
+code (except mine).
+
+- fit.svdcorrection is now the sum of all svdcorrections, not a vector. The
+  sum is all that is needed to construct error budgets, which is the 
+  only use for fit.svdcorrection. The sum is easier to manipulate -- for 
+  example, two svdcorrections can now be added to give a composite 
+  svdcorrection (as opposed to concatenated before).
+
+- Fixed innocuous bug in lsqfit.nonlinear_fit.format().
+
+- gvar.dataset.Dataset.slice can now apply slices to multiple dimensions.
+
+- Added __format__ to gvar.GVar. This converts the GVar to a string 
+  and then applies the format to the string. This was needed to make 
+  python3 and python2 function similarly in certain situations. 
+
+- More polishing of the documentation (especially about svd).
+
+- Beginning with this version of lsqfit, version numbers will be consistent
+  with the rules of "semantic versioning" (http://semver.org). The most 
+  important consequence is that any change that is *not* backwards compatible 
+  with the current interface (as defined by the documentation) will be signaled
+  by a change in the major version number, where the full version number has the 
+  format major.minor.patch (so the major version number is 5 for version 5.0). 
+  A side effect of this is that increases in the major version number can 
+  be triggered by relatively obscure changes in the interface that will have
+  no effect whatsoever on almost all existing codes. The current move to 5.0
+  is an example.
+
+Version 4.8.5.1 - 2014-05-30
+============================
+This release is almost identical to the previous release. It is mainly to do
+with getting the software registered properly online.
+
+- Small improvement to the user interface in gvar.ode. It now works with 
+  vectors of x values, returning vectors of y values.
+
+Version 4.8.5 - 2014-05-29
+==========================
+
+- Bug fix so recent changes in lsqfit don't cause crashes on Windows systems.
+
+Version 4.8.4 - 2014-05-23
+===========================
+Small bug fixes.
+
+- gvar.dataset.Dataset objects now work with Python's pickle. Also
+  Dataset objects can now be initialized from other Dataset object, or from
+  dictionaries, or lists of key-data tuples (like dictionaries).
+
+- lsqfit.wavg now works with priors.
+
+- Removed calls to C's lgamma function because it isn't available to 
+  old C compilers. Use Python's math.lgamma instead, which should always be 
+  available.
+
+Version 4.8.3 - 2014-05-21
+==========================
+Bug fix: the new svd system didn't work with older versions of numpy (earlier
+than 1.8). It now does. The problem was in lsqfit; gvar was fine.
+There was a related issue in gvar.cspline which is also fixed.
+
+Version 4.8.2 - 2014-05-16
+==========================
+Very small additions to facilitate pickling and other serialization of GVars. Changed
+gvar.evalcov and gvar.gvar so that newg = gvar.gvar(gvar.mean(g), gvar.evalcov(g))
+for some array or dictionary g containing GVars creates a new array/dictionary
+with the same means and covariance matrix. Added better documentation 
+on the gvar page about pickling gvars, and also added new functions 
+(dump, dumps, load, loads) for pickling collections of GVars.
+
+Version 4.8.1 - 2014-05-14
+===========================
+Bug fix.
+
+- fixed negative svdcuts (which one shouldn't use anyway), which were broken. 
+
+- gvar.cspline.CSpline functions now return scalars rather than 0-D numpy
+  arrays when given scalar arguments.
+  
+Version 4.8 - 2014-05-12
+========================
+This release has a reworked framework for SVD cuts. The new framework is 
+simpler, but also more robust --- SVD cuts are applied separately 
+to each block-diagonal sub-matrix of the data-prior covariance matrix. This
+is more accurate, faster, and uses less memory, though the differences 
+aren't substantial for most fits. 
+
+- svdnum is no longer an option for lsqfit.nonlinear_fit, raniter, etc. 
+  This parameter makes little sense in the new framework. Make svdcut 
+  negative if it is important to get rid of certain eigenmodes. (Generally
+  it is better to keep the modes, but with larger variances. This is 
+  what happens when svdcut is positive.)
+
+- New information included in the Settings part of a fit report:
+  number of eigenmodes modified by SVD cut, time needed for fit.
+  The number of iterations is moved from the top line of the report
+  to the last line, with the time.
+
+- Better notation for lsqfit.transform_p (mostly compatible with old
+  usage).
+
+- Added a new numerical analysis routine (joining gvar.ode and gvar.cspline) 
+  in gvar for manipulating power series representations of functions:
+  gvar.powerseries. The numerical analysis routines in gvar have been
+  adapted so that they work with GVars and/or floats. More will be added
+  in the future.
+
+- Fixed bug in gvar.cspline (derivatives not computed correctly); added
+  better tests for cspline.
+
+- Fixed documentation errors in gvar.dataset.
+
+- gvar.dataset.avg_data(s) for a dictionary s now (optionally) issues
+  a warning if different entries in s have different sample sizes. The
+  smallest sample size is chosen for all entries in such situations.
+
+- Added option to gvar.ode.Integrator to allow custom adaptive 
+  strategies. Also offers a different interface to the integrator.
+
+- Fixed minor irregularity (not really a bug) in GVar.fmt: 
+  x = gvar(0.999,0.999) implied that x.fmt(2) gave 1.00(100) which 
+  is correct but non-standard (should be 1.00(1.00) and now is).
+
+Version 4.7
+==============
+A minor upgrade but with one backwards incompatible change (that is unlikey
+to affect much code). The incompatibility is the main reason for calling this
+release version 4.7 rather than 4.6.2.
+
+- GVars can be used with any comparison operator now (==, !=, >, >=, <, <=). 
+  The comparison is made with the mean value of the GVar, ignoring the 
+  standard deviation. This is to facilitate the use/design of numeric functions 
+  that are designed to work with either floats or GVars. The definition of == 
+  and != has changed from the past. Before x==y for two GVars was true only if
+  both their means and standard deviations agreed; now it is true if their
+  means agree, but their standard deviations disagree.
+
+- Can use keyword keys to specify the which keys to use and their order when
+  creating a BufferDict from a dictionary-like object.
+
+- Significantly more documentation for the gvar module, and some rearrangement
+  and expansion of the overview documentation.
+
+- New function gvar.gvar_function for creating new arithmetic Python 
+  functions that can accept GVar arguments.
+
+- gvar.gvar(x, xcov) now works when x and xcov are dictionaries. This allows
+  you to deconstruct a dictionary of GVars using gvar.mean and gvar.evalcov, 
+  and then to reconstruct the dictionary using gvar.gvar: e.g.,
+  gvar.gvar(gvar.mean(g), gvar.evalcov(g)) rebuilds g when g is an array
+  of GVars, or a dictionary of GVars and arrays of GVars. 
+
+- gvar has two new numerical analysis modules: gvar.ode for integrating 
+  ordinary differential equations, and gvar.cspline for creating cubic 
+  splines from 1-d data. These modules are adapted from standard routines
+  so they work with GVars as well as floats, which is why they are included
+  here. Additional modules will be added as the need arises.
+
+- When printing an lsqfit fit using fit.format(), setting option maxline=True
+  (rather than a number) now causes all data to be printed.
+
+- Other minor rearrangements and clarifications in setup.py and a few other files.
+
+Version 4.6.1 - 2014-02-02
+===========================
+Cleaning up some small bugs introduced with the new lsqfit.wavg. Also 
+introduced an approximate but potentially much faster *fast* mode for it.
+
+Version 4.6 - 2014-01-30
+========================
+The main change here is an upgrade to lsqfit.wavg.
+
+- Somewhat incompatible change in lsqfit.wavg: When averaging arrays or dicts,
+  wavg used to ignore correlations between different elements of the 
+  array or dict. The new wavg takes account of all correlations between 
+  different pieces of input data. wavg returns a GVar if averaging 
+  a list of GVars, a numpy array of GVars if averaging a list of arrays
+  of GVars, and a Bufferdict of GVars or arrays of GVars if averaging
+  a list of dicts. In each case the return value has extra attributes:
+  chi2, dof, Q, time, fit. The function itself also has these attributes, 
+  coming from the last fit.
+
+- gvar.mean(g) now returns g unchanged if g contains objects of type
+  other than GVar. This is useful for writing functions that must work
+  with either GVars or floats as arguments: gvar.mean can be used to 
+  strip the sdev off of GVars where it isn't needed or wanted.
+
+- New function gvar.asbufferdict(g) converts dictionary g to a 
+  BufferDict unless it already is one, in which case it returns g.
+  The keys in the final result can be restricted by adding a 
+  a list of keys as a second argument: gvar.asbufferdict(g, keylist).
+
+
+Version 4.5.3 - 2013-12-22
+===========================
+
+- Fixed bug in gvar._gvarcore that caused problems on win64 systems.
+
+- GVar's __cinit__ has been changed to an __init__, which makes derivation
+  from GVar possible. GVar also has new property: g.internaldata. 
+  This allows simplifies derivation from GVar --- see, for example, 
+  class WAvg in lsqfit._extras.py. Finally a cython declaration file,
+  gvar.pxd, is installed for the benefit of other cython modules: 
+  cimport gvar gives the module access to the internal definitions of 
+  cython extension types GVar, svec and smat. 
+
+- lsqfit.wavg (weighted averages) now returns a variable 
+  of type WAvg which is a class derived from GVar (with all of 
+  its functionality) but with added attributes: chi2,
+  dof, and Q which are the chi2, dof, Q from the wavg. In the past these were
+  read off the function itself (eg, wavg.Q) but this is nonintuitive. 
+  Now ans = lsqfit.wavg(list_of_GVars) is a GVar with the extra 
+  attributes (ans.chi2, ans.dof, ans.Q). lsqfit.wavg still has attributes
+  chi2, Q etc to help with legacy code. Also this is useful if the average
+  is over a list of arrays or dictionaries (ie, a multidimensional random
+  variable). In this case the individual GVars in the result have chi2s, etc
+  as described above, while lsqfit.wavg has the chi2 for the entire set (ie,
+  the sum of the chi2s for all the components).
+
+Version 4.5.2 - 2013-09-26
+==========================
+
+- str(x) and repr(x) for GVar x both now return strings using the 
+  '2.31(10)' format rather than the older '2.31 +- 0.1'.
+  The old format is still supported on input, but it will 
+  no longer appear in (default) printing. Use x.fmt(-1) to obtain the old
+  format.
+
+- Added gv.evalcorr(g) which calculates the correlation matrix of the 
+  GVars in g.
+
+- gv.chi2 has a new option (fmt=True) that causes it to return a string
+  (describing the chi**2) rather than the numerical value of chi**2.
+
+- Operators > and < are now defined for gvar.GVars. This allows algorithms
+  to order GVars, which is occasionally useful. The ordering is based upon
+  the mean values. Operators >= and <= are still *not* defined, because of 
+  incompatibilities with == and !=, which look not just at mean values but
+  also at all the dependencies. These incompatibilities suggest that one
+  shouldn't define > and < either, except that there are times when it is
+  quite useful to be able to order a numerical data type for algorithmic
+  reasons. The setup here is a compromise (kludge?).
+
+- Fixed very minor bug in lsqfit.nonlinear_fit.format().
+
+
+Version 4.5.1 - 2013-08-13
+==========================
+
+- polishing/minor fixes for nonlinear_fit.simulated_fit_iter. Also now has 
+  a bootstrap option.
+
+- copy.copy and copy.deepcopy now work with GVars.
+
+- very minor fix to gvar.uncorrelated
+
+
+Version 4.5 - 2013-07-31
+========================
+
+- nonlinear_fit.simulated_fit_iter generates fits of new simulated
+  data that is generated randomly from the original fit data. This
+  data is useful for testing fits and tuning parameters in them.
+  Simulated data has the same covariance matrix as the original data but 
+  its mean values fluctuate around values given by the fitting
+  function evaluated at user-specified parameter values p=pexact. 
+  The values in pexact are the "correct" values that should
+  be obtained from a fit of the simulated data --- that is, the
+  results of the fit to simulated data should agree with pexact 
+  to within errors. Knowing the correct answers for the fit 
+  parameters ahead of a fit allows for very realistic testing. See
+  the documentation in the Tutorial section on Testing Fits with
+  Simulated Data for more information.
+
+- nonlinear_fit.format() now adds 1 to 5 stars at the end of any 
+  parameter line where the parameter and the prior differ by more
+  than 1 to 5 (or more) standard deviations, respectively. Stars 
+  are also added when fit data is printed out where fit data 
+  and the fit differ by more than 1 standard deviation. These are 
+  meant to draw attention to potential problems.
+
+- New function: gvar.chi2(g1, g2) computes the chi**2 of g1-g2, where
+  g1 and g2 are (multi-dimensional) distributions. One of g1 or g2 can
+  contain numbers instead of GVars (and/or can be missing entries 
+  contained in the other). Also gvar.chi2(diff) where diff = g1 - g2 
+  equals gvar.chi2(g1, g2).
+
+- gvar.dataset.avg_data has new option specified by parameter noerror.
+  Setting noerror=True causes avg_data to compute averages but not 
+  the errors in those averages.
+
+- gvar.ranseed() called without an argument generates its own random 
+  seed to reinitialize the numpy random number generates. The seed is 
+  returned by the subroutine and can be used to recover the random 
+  number stream in later work. The seed is also stored in gvar.ranseed.seed.
+  The idea is to use gv.ranseed() at the start of a code and print out
+  gvar.ranseed.seed so that the seed can, if desired, be used to recreate
+  the same random numbers in a later run. The key here is the 'if desired';
+  usually you might not care to recreate a run unless something unusual 
+  happens.
+
+- The tutorial in the documentation has a new section (at the end) 
+  with a pedagogical discussion of simple fit strategies.
+
+Version 4.4.4 - 2013-07-07
+==========================
+
+- gvar.SVD sometimes complains that "SVD failed to converge". This is a 
+  numpy.linalg problem (that might be solved by *not* linking with atlas). 
+  Have introduced a back up routine (numpy.linalg.eigh) that is tried when
+  this error is encountered.
+
+- lsqfit.wavg now accepts a list of dictionaries (containing GVars or 
+  arrays of GVars), as well as lists of GVars or arrays of GVars.
+
+- Modest optimization for gvar.evalcov. Small optimizaitons for gvar.svec
+  and gvar.smat.
+
+- Fixed bug in svec.add (where one or other svec is size=0 svec)
+
+- Fixed very minor bug in gvar.gvar() (makes, eg, gvar(array(1.)) work).
+
+Version 4.4.3 - 2013-04-06
+==========================
+
+- Improved syntax for @transform_p from lsqfit. The old syntax still works 
+  but the new syntax is simpler: 1) use @transform_p(priorkeys,0) instead
+  of @transform(prior,0,'p'); and 2) fit.transformed_p is the same as 
+  fit.p but augmented with the exponentials of any log-normal terms, etc.
+
+- Rules for initial values p0 in nonlinear_fit are more flexible: p0 can 
+  include keys that are not in prior (these will be ignored, unless prior 
+  is None). This makes it more likely that an old p0 will be useful for 
+  priming a new fit.
+
+Version 4.4.2 - 2013-03-16
+===========================
+This is another minor upgrade.
+
+- Evaluation of logGBF in nonlinear_fit was having problems (in one user's
+  code, at least) with very large covariance matrices. This is now fixed.
+
+Version 4.4.1 - 2013-03-14
+==========================
+This is a very minor upgrade.
+
+- Set default svdcut=1e-15 instead of None in nonlinear_fit. This cut is
+  very small and so usually has negligible impact in cases where an svdcut is
+  unneeded. It protects against minor roundoff errors that arise relatively
+  frequently, even in fairly simple problems. It also prevents problems from
+  exact zero modes in the data or prior. One might argue that it would be
+  useful to expose these last problems, rather than dealing with them quitely,
+  but dealing with much more common minor roundoff errors seems more important.
+
+- exp(fit.logGBF) is the probability (density) for generating
+  the fit data from the input fit model, assuming Gaussian statistics. 
+  It used to be proportional to that probability; the 
+  proportionality factors are now included. This change will have no
+  impact at all on almost all uses of logGBF. Change made more for the sake of
+  clarity than utility.
+
+- More documentation, including a tutorial section on chained fits and more 
+  discussion of svd cuts.
+
+Version 4.4 --- 2013-02-13
+==========================
+
+- New function gvar.deriv(f, x) computes df/dx where f and x 
+  are gvar.GVars, and x is independent (ie, x has only one non-zero
+  element in x.der). A ValueError exception is raised when x
+  is dependent on other GVars. f can also be an array of GVars
+  or a dictionary of GVars and/or arrays of GVars. GVars also
+  have a method which computes the derivative: f.deriv(x).
+
+- Small code improvements to lsqfit.transform_p. 
+
+Version 4.3.1 --- 2013-02-10
+============================
+
+- Slight refinements to the support for log-normal, etc
+  priors. The decorator name is changed (but the old 
+  name is aliased to the new, to support legacy code 
+  (if there is any)). 
+
+Version 4.3 --- 2013-02-10
+===========================
+
+- Works with python3.3 (and numpy >= 1.17 which is necessary for 3.3).  
+  Fixed minor errors in gvar.BufferDict.__str__ and in some of the unittests
+  that showed up with python3.3.
+
+- Support for log-normal and "sqrt-normal" prior distributions for fit 
+  function parameters. The idea is to use parameters with names like
+  "log(a)" instead of "a" in the prior, while expressing the fit
+  function in terms of "a": so prior["log(a)"] is 
+  specified in the prior but not prior["a"], while the fit
+  function uses parameter p["a"] but not p["log(a)"]. Parameter 
+  p["a"] has a log-normal distribution because prior["log(a)"] is
+  a gaussian variable. See the section "Positive Parameters" in
+  the overview section of the html documentation, for more 
+  information.
+
+- gvar.dataset.Dataset changed to an OrderedDict from a dict. This mostly
+  doesn't matter. Just about the only non-cosmetic effect concerns what 
+  happens when an svdcut is applied to the output of avg_data --- small
+  differences arise when rows and columns of the covariance matrix are
+  interchanged (roundoff error).
+
+- Changed == and != for GVars to allow comparisons with non-GVar types; a GVar
+  compares as not equal to a non-GVar unless its mean equals the 
+  non-GVar and its standard deviation is zero. Note that >, <, etc are
+  not defined for GVars since GVars are not unambiguously ordered
+  --- eg, a number drawn from the distribution 100(99) will be 
+  larger than one from 101(1) almost 50% of the time, even though
+  100 < 101.
+
+- Had too many pieces in the version number, so moved to 4.3. A
+  third component, as in 4.3.1, will indicate bug fixes and minor
+  features. There has been a lot added since 4.2 started (see 4.2.2).
+
+Version 4.2.7.2 --- 2013-01-29
+==============================
+gvar.fmt_errbudget(...) has new parameter to specify column widths. This
+allows for longer names for outputs and inputs.
+
+Version 4.2.7.1 -- 2013-01-14
+=============================
+Adds a further tweak to the exception handling inside fit functions --- 
+slightly more robust than what is in 4.2.7.
+
+Version 4.2.7 -- 2013-01-13
+===========================
+Another minor update:
+
+- gvar.raniter and gvar.bootstrap_iter now work with single gvar.GVar's as
+  arguments (in addition to the more useful cases of arrays and
+  dictionaries). This makes them more consistent with the other utility
+  functions.
+
+- Python errors buried inside fit functions now result in slightly more
+  intelligible error messages. Added two new unittests for such
+  exception-handling.
+
+
+Version 4.2.6 -- 2012-12-03
+===========================
+This is a minor update:
+
+- Adds load (and loads) and dump (and dumps) methods to gvar.BufferDict to
+  facilitate saving serialized BufferDicts in files (or strings) for later
+  use. This is particularly useful when the BufferDict contains gvar.GVars
+  since the correlations between the different GVars in the BufferDict are
+  complicated to retain properly. These are implemented using pickle or,
+  optionally, json. pickle already worked with BufferDicts. json was added
+  because pickle is not compatible between python2 and python3. json files
+  are also readable by non-python code (and by yaml). The json
+  implementation has some limitations (around the types used for keys in
+  the BufferDict, as well as types for the values) so pickle may be
+  preferable except in situations where data must be moved from python2 to
+  python3.
+
+Version 4.2.4 -- 2012-08-18
+===========================
+This update is to fix a bug. Since version 4.2.2 lsqfit has been able to 
+deal correctly with statistical correlations between priors and the input
+fit data. The code checks automatically for such correlations, and modifies
+the definition of chi**2 appropriately if it finds correlations. There was
+a bug in part of the code that checks for correlations, causing it to miss
+certain situations. That bug is fixed in this update. Also 
+
+Other changes:
+
+- Renamed gvar.orthogonal to gvar.uncorrelated, which is more intelligible
+  (and also now has correct code).
+
+- Fixed bug in gvar.GVar.partialvar (and therefore also
+  gvar.fmt_errorbudget). The partial variance due to some GVar g should
+  include the contributions from all other GVars that are statistically
+  correlated with g. This previous code missed correlated but unreferenced
+  variables that should have been included automatically. 
+
+- gvar.dataset.autocorr() is now done properly (with FFTs) and so can
+  handle large datasets. It now computes autocorrelations for all
+  intervals.
+
+- lsqfit now issues deprecation warnings if the old classes GPrior,
+  CGPrior, or LSQFit are used. These have been superseded in recent
+  versions (by gvar.BufferDict and lsqfit.nonlinear_fit), and the old names
+  have been attached to the new constructs, but the correspondence between
+  old and new is only approximate --- hence the warning.
+
+- Documentation improvements in the Tutorial.
+
+Version 4.2.3 -- 2012-07-22
+===========================
+This version updates printing of GVars and of nonlinear_fits:
+
+- Enhanced the formatting capabilities of GVar.fmt. If g is a GVar, then
+  gvar.fmt() will create a string representation of g that shows the
+  leading 2 digits of the error (used to be 1). The new code handles
+  special cases much more effectively. For example very large or small
+  numbers are represented using exponential notation (eg, 1.23(4)e+10 meaning
+  1.23e+10 +- 4e+8). Also removed some bugs in the conversion from strings
+  to GVars (eg, couldn't handle "-.2345(1)"). Added new unittests for fmt
+  (in test_gvar.py).
+
+- Changed the format of the fit report produced by
+  nonlinear_fit.format(..). New format is more compact and more
+  informative. In particular, indices for parameter arrays are included in
+  the output to make finding a particular element easier. Also include
+  errors on the fit values when data and fit are printed out. Output can be
+  streamlined using new option pstyle='m'. (Setting pstyle='vv' gives
+  output a lot like the old format.) Added unittests for format(..) (in
+  test_lsqfit.py).
+
+- Added new utility function gvar.fmt(g..) which formats every GVar in
+  GVar/array/dictionary g (using x.fmt(..) for every GVar x in g).
+
+- Scripts eg0.py ... eg5.py in doc/source now generate program output in
+  files, with names like eg0.out and eg5b.out, that are read directly into
+  the documentation. This simplifies the building of the documentation as
+  changes are made to reporting functions (see above).
+
+Version 4.2.2 -- 2012-06-07
+===========================
+This version involves significant internal change relative to the last
+version, much of which will be invisible to most users. Significant pieces
+of lsqfit and gvar were refactored for simplicity, with replacements for a
+number of awkward constructions that reflected earlier but now obsolete
+ideas about how the code would be used. A somewhat inconvenient change is
+renaming the gdev module to gvar (for "gaussian variable"): every
+instance of 'gdev' is now replaced by 'gvar', as is every 'GDev' by 'GVar'.
+The old names were wrong and therefore misleading. (A tiny 'gdev.py' file
+is included that aliases the new names with the old names, for use with old
+code.) More usefully, the interfaces for many functions in lsqfit and
+especially gvar were made more uniform: for example, almost any gvar
+function that took an array of GVars as an argument can now also accept a
+single GVar or a dictionary whose values are single GVars or arrays of
+GVars. This is motivated by the overall design notion that multidimensional
+distributions should be represented by collections of GVars: either as
+arrays, or as dictionaries containing GVars and/or arrays of GVars, the
+latter providing a much more flexible interface. These changes should make
+the modules easier to learn and use, and certainly makes them easier to
+maintain.
+
+The bigger changes include:
+
+- The names gdev and GDev are everywhere replaced by gvar and GVar (for
+  "gaussian variable"). A new gdev.py module is included that aliases the
+  new names to the old names, for use with old code. gdev.py is not
+  installed with the rest of the code; if you need it (for old code)
+  install it, for example, using "make install-gdev"; or copy it to the the
+  directory containing the old code. Obviously, a better solution is to get
+  rid of the old names.
+
+- Correctly handles situations where priors are correlated with the fit
+  data. Previously such correlations were ignored. This is the most
+  significant change in functionality. It is a situation that arises rather
+  rarely, but which is mishandled by older versions.
+
+- Removed minor bug in lsqfit.wavg (used to ignore svdcut<0).
+
+- Fit functions that depend only on the fit parameters (that is, have no
+  dependence on an independent "x" variable) are now supported. This is
+  signaled either by setting x=False in the fit data (data=(x,y)) or by
+  leaving x out altogether (data=y) in nonlinear_fit.
+
+- Rearranged gvar and lsqfit into packages instead of simple modules. This
+  makes maintenance easier. It also reduces the number of names added to
+  the module space.
+
+- Relocated BufferDict into gvar. BufferDicts can still be constructed from
+  dictionaries but no longer directly from arrays. This makes for a cleaner
+  data type. BufferDicts are used internally in several of gvar's functions
+  as the standard dictionary class (the standard array class is a numpy
+  array). Unlike regular dictionaries, BufferDicts can be pickled even when
+  filled with GVars; this is currently the only way to pickle GVars.
+
+- Removed class GPrior from lsqfit. It isn't really needed any more since a
+  dictionary works just as well. (GPrior is now an alias to
+  gvar.BufferDict, which should allow older code to continue working,
+  mostly.) Also removed classes BasePrior and NullPrior.
+
+- svdcut and svdnum in nonlinear_fit still specify svd cuts for the fit
+  data, but now can also specify svd cuts for the prior (no other easy way
+  to do this now that GPriors are effectively gone). To specify a cut for
+  the prior make svdcut and/or svdnum into 2-tuples, where the first entry
+  is for the data and the second is for the priors.
+
+- fit.svdcorrection is list with one or two elements. Either element can be
+  a (1-d) vector or None. Can now be used directly as an input in 
+  fmt_errorbudget() (don't need/want to put [ ] around it).
+
+- Merged class LSQFit and function nonlinear_fit from lsqfit into a new
+  class called nonlinear_fit. nonlinear_fit is used as before, but is now
+  actually initializing the class when it is fitting. Given standard usage,
+  there was no reason to keep these two separate. (The old LSQFit class was
+  originally meant to represent a fitter, but was mostly used to hold the
+  results of a single fit; the new class nonlinear_fit class represents the
+  result of a fit.)
+
+- Redefined gvar.mean, gvar.sdev, gvar.var, gvar.evalcov, gvar.raniter, etc
+  so that they all work with dictionaries as well as arrays. The
+  dictionaries are converted to BufferDicts internally and results are
+  returned as BufferDicts.
+
+- The name of fmt_partialsdev is now changed to the more understandable
+  fmt_errorbudget. Also it is part of module gvar, as well as being a
+  method in nonlinear_fit objects. The name fmt_partialsdev is retained as
+  an alias, to benefit older code.
+
+- Allow arguments to GVar.partialvar and GVar.partialsdev to be None or
+  single GVars or arrays/dictionaries of GVars. Arguments to
+  gvar.fmt_errorbudget are also now allowed to be None, single GVars or
+  lists of arrays/dictionaries of GVars. Previously each of these routines
+  was more restrictive.
+
+- Added a bootstrap_iter function to gvar to create bootstrap copies of
+  collections of GVars (arrays or dictionaries).
+
+- lsqfit's nonlinear_fit.bootstrap_iter does bootstrap fits on a list of
+  bootstrap copies of the fit data. Now the list of bootstrapped data can
+  be omitted and bootstrap copies are generated internally, from the means
+  and covariance matrix of the data set. This is useful if the data has
+  small errors (ie, is gaussian) which is often the case even if the fit
+  parameters turn out to be non-gaussian (and therefore require
+  bootstrapping).
+
+- Created new options for gvar.gvar arguments: eg,
+  gvar.gvar(["0(1)",(2,1)]) returns array [gvar(0,1),gvar(2,1)].
+
+- Added new tools in gvar.dataset for handling random samples from
+  distributions. These include functions avg_data(data),
+  bootstrap_iter(data), and bin_data(data,binsize), as well as class
+  Dataset for collecting random samples (in a dictionary). These additions
+  are meant to supplant the old dataset.py module.
+
+- Internal changes to how the data and covariance matrices are inverted
+  could lead to small differences in results, due to roundoff error.
+
+- nonlinear_fit.check_roundoff() now issues a warning, rather than an
+  error, if large roundoff errors are suspected.
+
+- svd analysis is handled by function gvar.svd which is now applied to a
+  dictionary or array of GVars. It uses class gvar.SVD which is applied to
+  a covariance matrix.
+
+- nonlinear_fit.kappa no longer exists. It can be obtained using gvar.SVD.
+
+- renamed nonlinear_fit.dump_parameters with nonlinear_fit.dump_pmean. Also
+  added nonlinear_fit.dump_p and nonlinear_fit.load_parameters.
+
+- Documentation streamlined. The Overview and Tutorial section was
+  simplified a little, and has a new section on Troubleshooting.
+
+- Speed is about the same except in cases where there are correlations
+  between the priors and the fit data (where it is somewhat slower now,
+  because it is doing the right thing).
+
+
+# Created by G. Peter Lepage (Cornell University) on 2012-04-29.
+# Copyright (c) 2008-2014 G. Peter Lepage. 
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version (see <http://www.gnu.org/licenses/>).
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
