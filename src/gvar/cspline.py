@@ -1,7 +1,7 @@
 """ Cubic splines for GVars. """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-04-27.
-# Copyright (c) 2014 G. Peter Lepage. 
+# Copyright (c) 2014-15 G. Peter Lepage. 
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,30 +17,30 @@ import warnings
 import numpy
 
 class CSpline:
-    """ Cubic spline resentation of a function.
+    """ Cubic spline approximation to a function.
 
-    Given ``N`` values of a function ``y[i]`` at ``N`` points
-    ``x[i]`` for ``i=0..N-1`` (the 'knots' of the spline), 
+    Given ``N`` values of a function ``yknot[i]`` at ``N`` points
+    ``xknot[i]`` for ``i=0..N-1`` (the 'knots' of the spline), 
     the code ::
 
         from gvar.cspline import CSpline
 
-        f = CSpline(x, y)
+        f = CSpline(xknot, yknot)
 
-    defines a function ``f`` such that: a) ``f(x[i]) = y[i]`` for 
+    defines a function ``f`` such that: a) ``f(xknot[i]) = yknot[i]`` for 
     all ``i``; and b) ``f(x)`` is 
     continuous, as are its first and second derivatives.
-    Function ``f(x)`` is a cubic polynomial between the knots ``x[i]``.
+    Function ``f(x)`` is a cubic polynomial between the knots ``xknot[i]``.
 
-    ``CSpline(x,y)`` creates a *natural spline*, which has zero second
-    derivative at the end points, ``x[0]`` and ``x[-1]``. More generally
-    one can specify the derivatives of ``f(x)`` at one or both of the
-    endpoints::
+    ``CSpline(xknot, yknot)`` creates a *natural spline*, which has zero second
+    derivative at the end points, ``xknot[0]`` and ``xknot[-1]`` (assuming
+    the knots are sorted). More generally one can specify the derivatives 
+    of ``f(x)`` at one or both of the endpoints::
 
-        f = CSpline(x, y, deriv=[dydx_i, dydx_f])
+        f = CSpline(xknot, yknot, deriv=[dydx_i, dydx_f])
 
-    where ``dydx_i`` is the derivative at ``x[0]`` and ``dydx_f`` is the 
-    derivative at ``x[-1]``. Replacing either (or both) of these with 
+    where ``dydx_i`` is the derivative at ``xknot[0]`` and ``dydx_f`` is the 
+    derivative at ``xknot[-1]``. Replacing either (or both) of these with 
     ``None`` results in a derivative corresponding to zero second 
     derivative at that boundary (i.e., a *natural* boundary).
 
@@ -50,10 +50,10 @@ class CSpline:
 
         ``f.D2(x)`` --- second derivative at ``x``;
 
-        ``f.integ(x)`` --- integral from ``x[0]`` to ``x``.
+        ``f.integ(x)`` --- integral from ``xknot[0]`` to ``x``.
 
     Splines can be used outside the range covered by the defining
-    ``x`` values. As this is often a bad idea, the :mod:`CSpline` 
+    ``xknot`` values. As this is often a bad idea, the :mod:`CSpline` 
     methods issue a warning when called with out-of-range points. 
     The warning can be suppressed by setting parameter ``warn=False``.
     The spline value for an out-of-range point is calculated 
@@ -63,28 +63,74 @@ class CSpline:
     setting parameter ``extrap_order`` to a (non-negative) integer 
     less than 3; this is often a good idea.
 
-    :param x: The knots of the spline, where the function values are
-        specified.
-    :type x: 1-d sequence of numbers
-    :param y: Function values at the locations specified by ``x[i]``.
-    :type y: 1-d sequence
-    :param deriv: Derivatives at initial and final boundaries of the 
-        region specified by ``x[i]``. Default value is ``None`` for 
-        each boundary.
-    :type deriv: 2-component sequence
-    :param extrap_order: Order of polynomial used for extrapolations outside
-        of the spline range. The polynomial is constructed from the spline's
-        value and derivatives at the (nearest) knot of the spline. 
-        The allowed range is ``0 <= extrap_order <= 3``. The default value
-        is 3 although it is common practice to use smaller values.
-    :param warn: If ``True``, warnings are generated 
-        when the spline function is called for ``x`` values that 
-        fall outside of the original range of ``x``\s used to 
-        define the spline. Default value is ``True``;
-        out-of-range warnings are suppressed if set to ``False``.
+    Examples:
+        Typical usage is::
+
+            >>> import math
+            >>> import gvar as gv
+            >>> xknot = [0., 0.78539816, 1.57079633, 2.35619449, 3.14159265]
+            >>> yknot = [0., 0.70710678, 1.0, 0.70710678, 0.]
+            >>> f = gv.cspline.CSpline(xknot, yknot)
+            >>> print(f(.3), math.sin(.3))  
+            0.295053928494 0.295520206661
+            >>> print(f(1.2), math.sin(1.2))
+            0.930988357092 0.932039085967
+            >>> print(f.D(0.5), math.cos(0.5))
+            0.879290177 0.87758256189
+            >>> print(f.D2(0.5), -math.sin(0.5))
+            -0.473740536269 -0.479425538604
+            >>> print(f.integ(0.5), 1 - math.cos(0.5))
+            0.122248265257 0.12241743811
+
+        Here the ``yknot`` values were obtained by taking ``sin(xknot)``,
+        so these results show that this 5-knot spline gives a pretty good 
+        approximation of the function ``sin(x)``, as well as of its first 
+        and second derivatives and its integral. Using the spline outside
+        the range covered by the knots is less good::
+
+            >>> print(f(2 * math.pi))
+            gvar/cspline.py:164: UserWarning: x outside of spline range: [ 6.28318531]
+            1.7618635470106501
+
+        The correct answer is 0.0, of course. This is why the spline function 
+        issues a warning. Working just outside the knot region is often fine,
+        although it is usually a good idea to limit the order of the 
+        polynomial used in such regions: for example, setting ::
+
+            >>> f = gv.cspline.CSpline(xknot, yknot, extrap_order=2)
+
+        implies that quadratic polynomials are used outside the spline range.
+        Finally one can specify the values of the first derivatives of the 
+        function at one or the other endpoints of the spline region, if they
+        are known. Continuing from above, for example, one would take ::
+
+            >>> f = gv.cspline.CSpline(xknot, yknot, deriv=[1., -1.])
+
+        since the derivatives of ``sin(x)`` at ``x=0`` and ``x=3.14159265``
+        are 1 and -1, respectively.
+
+    Args:
+        xknot (1-d sequence of number): The knots of the spline, where the 
+            function values are specified.
+        yknot (1-d sequence of number): Function values at the locations 
+            specified by ``xknot[i]``.
+        deriv (2-component sequence): Derivatives at initial and final 
+            boundaries of the  region specified by ``xknot[i]``. 
+            Default value is ``None`` for each boundary.
+        extrap_order (int): Order of polynomial used for extrapolations 
+            outside of the spline range. The polynomial is constructed from 
+            the spline's value and derivatives at the (nearest) knot of the 
+            spline. The allowed range is ``0 <= extrap_order <= 3``. The 
+            default value is 3 although it is common practice to use 
+            smaller values.
+        warn (bool): If ``True``, warnings are generated 
+            when the spline function is called for ``x`` values that 
+            fall outside of the original range of ``xknot``\s used to 
+            define the spline. Default value is ``True``;
+            out-of-range warnings are suppressed if set to ``False``.
     """
-    def __init__(self, x, y, deriv=(None, None), extrap_order=3, warn=True):
-        x, y = zip(*sorted(zip(x, y)))
+    def __init__(self, xknots, yknots, deriv=(None, None), extrap_order=3, warn=True):
+        x, y = zip(*sorted(zip(xknots, yknots)))
         x = numpy.array(x)
         y = numpy.array(y)
         self.warn = warn

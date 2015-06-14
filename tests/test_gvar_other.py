@@ -616,7 +616,7 @@ class test_root(unittest.TestCase,ArrayTests):
         " root.search(fcn, x0) "
         interval = root.search(np.sin, 0.5, incr=0.5, fac=1.)
         np.testing.assert_allclose(interval, (3.0, 3.5))
-        self.assertEqual(root.search.nit, 6)
+        self.assertEqual(interval.nit, 6)
         interval = root.search(np.sin, 1.0, incr=0.0, fac=1.5)
         np.testing.assert_allclose(interval, (27./8., 9./4.))
         with self.assertRaises(RuntimeError):
@@ -635,8 +635,8 @@ class test_root(unittest.TestCase,ArrayTests):
         for rtol in [0.1, 0.01, 0.001, 0.0001]:
             r = root.refine(fcn, (0.1, 2.1), rtol=rtol)
             self.assertGreater(rtol * 0.5, abs(r - 0.5))
-            self.assertGreater(root.refine.nit, nit)
-            nit = root.refine.nit
+            self.assertGreater(r.nit, nit)
+            nit = r.nit
         def f(x, w=gv.gvar(1,0.1)):
             return np.sin(w * x)
         r = root.refine(f, (1, 4))
@@ -696,9 +696,16 @@ class test_linalg(unittest.TestCase, ArrayTests):
         sth = numpy.sin(th)
         u = numpy.array([[cth, sth], [-sth, cth]])
         mrot = u.T.dot(m.dot(u))
-        vals =  linalg.eigvalsh(mrot)
-        self.assertTrue(gv.equivalent(vals[0], m[1, 1]))
-        self.assertTrue(gv.equivalent(vals[1], m[0, 0]))
+        val =  linalg.eigvalsh(mrot)
+        self.assertTrue(gv.equivalent(val[0], m[1, 1]))
+        self.assertTrue(gv.equivalent(val[1], m[0, 0]))
+        val, vec = linalg.eigvalsh(mrot, eigvec=True)
+        np.testing.assert_allclose(
+            gv.mean(mrot).dot(vec[:, 0]), val[0].mean * vec[:, 0]
+            )
+        np.testing.assert_allclose(
+            gv.mean(mrot).dot(vec[:, 1]), val[1].mean * vec[:, 1]
+            )
 
 if __name__ == '__main__':
     unittest.main()

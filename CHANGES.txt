@@ -1,23 +1,28 @@
-Version 6.1??? 
+Version 7.0??? 
 ============
+The biggest change in this version is that gvar is now distributed 
+independently of lsqfit; it will no longer be bundled in lsqfit. 
+This is better because gvar is used by packages other than lsqfit. 
+There is also a minor change in the interface for gvar.chi2, which is
+why the major version number is increasing from 6 to 7 (because of 
+semantic versioning).
 
-- Modules lsqfit and gvar used to be distributed together. This is the 
-  first time they are being distributed separately. This was necessary 
-  because gvar is now used by things other than lsqfit. To accommodate 
-  this split, the installation will use setuptools instead of disutils,
-  as before, provided setuptools is installed. setuptools automatically
-  ensures that modules needed by gvar are installed and sufficiently 
+- The only incompatible change in the gvar concerns a rarely used feature
+  of gvar.chi2. Previous versions stored information about dof and Q in 
+  as attributes of the function; these are now stored in the result of the 
+  function, which is much more natural.
+
+- Installation will now use setuptools instead of disutils, provided 
+  setuptools is installed. setuptools automatically ensures that 
+  modules needed by gvar are installed and sufficiently 
   up-to-date. If setuptools is not installed, distutils is used and 
-  dependencies are not checked --- this must be done by hand. If you want 
-  ito nstall setuptools, download https://bootstrap.pypa.io/ez_setup.py
-  and run 'python ez_setup.py'; or run 'pip install setuptools'; 
-  or check out the setuptools website for instructions.
+  dependencies are not checked --- this must be done by hand. 
 
 - Added gvar.equivalent(g1, g2, rtol, atol) which checkes whether or not
   the GVars in g1 and g2 are the equivalent (ie, g.mean and g.der agree 
   for each GVar). This is useful for debugging purposes.
 
-- tiny addition to gvar tests.
+- Tiny addition to gvar tests.
 
 - gvar.cspline now allows you to specify what order polynomial is used for 
   out-of-range points. In the past a cubic polynomial was used, based on 

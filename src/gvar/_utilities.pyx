@@ -526,7 +526,7 @@ def fmt_values(outputs, ndecimal=None, ndigit=None):
     return ans
 
 def fmt_errorbudget(
-    outputs, inputs, ndecimal=2, percent=True, colwidth=10, 
+    outputs, inputs, ndecimal=2, percent=True, colwidth=None, 
     verify=False, ndigit=None
     ):
     """ Tabulate error budget for ``outputs[ko]`` due to ``inputs[ki]``.
@@ -552,8 +552,9 @@ def fmt_errorbudget(
     :param percent: Tabulate % errors if ``percent is True``; otherwise
         tabulate the errors themselves.
     :type percent: boolean
-    :param colwidth: Width of each column.
-    :type colwidth: positive integer
+    :param colwidth: Width of each column. This is set automatically, to 
+        accommodate label widths, if ``colwidth=None`` (default).
+    :type colwidth: positive integer or None
     :param verify: If ``True``, a warning is issued if: 1) different inputs are 
         correlated (and therefore double count errors); or 
         2) the sum (in quadrature) of partial errors is not equal to the
@@ -596,9 +597,21 @@ def fmt_errorbudget(
                 warnings.warn("{} partial error {}  !=  total error {}".format(
                     ko, totvar ** 0.5, outputs[ko].sdev
                     ))
-    # form table 
-    w = colwidth
-    w0 = w if w > 20 else 20
+    # form table
+    # determine column widths 
+    if colwidth is None:
+        # find it by hand: w0 for 1st col, w for rest
+        w = 10
+        for ko in outputs:
+            if len(ko) >= w:
+                w = len(ko) + 1
+        w0 = 10
+        for ki in inputs:
+            if len(ki) >= w0:
+                w0 = len(ki) + 1
+    else:
+        w = colwidth
+        w0 = w if w > 20 else 20
     lfmt = (
         "%" + str(w0 - 1) + "s:" +
         len(outputs) * ( "%" + str(w) + "." + str(ndecimal) + "f") + "\n"

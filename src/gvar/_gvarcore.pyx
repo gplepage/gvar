@@ -618,7 +618,21 @@ cdef class GVar:
             return self.cov.expval(self.d)  
 
     property internaldata:
-        """ Data contained in |GVar| """
+        """ Data contained in |GVar|. 
+
+        This attribute is useful when creating a class that 
+        inherits from a |GVar|: for example, ::
+
+            import gvar as gv
+            class newGVar(gv.GVar):
+                def __init__(self, g, a):
+                    super(newGVar, self).__init__(*g.internaldata)
+                    g.a = a
+
+        creates a variation on |GVar| that, in effect, adds a new attribute
+        ``a``  to an existing |GVar| ``g`` (being careful not to avoid 
+        names that collide with an existing |GVar| attribute).
+        """
         def __get__(self):
             return self.v, self.d, self.cov
 

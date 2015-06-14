@@ -566,17 +566,17 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             ) 
         out = "\n".join([
             "Partial % Errors:",
-            "                             z",
-            "------------------------------",
-            "                  a:      20.6",
-            "                  s:       5.7",
-            "                  d:      48.2",
-            "                 ad:      52.5",
-            "                 sa:      21.4",
-            "                 sd:      48.6",
-            "                sad:      52.8",
-            "------------------------------",
-            "              total:      52.8",
+            "                   z",
+            "--------------------",
+            "        a:      20.6",
+            "        s:       5.7",
+            "        d:      48.2",
+            "       ad:      52.5",
+            "       sa:      21.4",
+            "       sd:      48.6",
+            "      sad:      52.8",
+            "--------------------",
+            "    total:      52.8",        
             ""
             ])
         self.assertEqual(tmp,out,"fmt_errorbudget output wrong")
@@ -588,7 +588,6 @@ class test_gvar2(unittest.TestCase,ArrayTests):
                 ]),
             ndecimal=1, colwidth=25
             )        
-
         out = "\n".join([
             "Partial % Errors:",
             "                                                 z",
@@ -1228,43 +1227,50 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         # uncorrelated
         g = gvar([1., 2.], [1., 2.])
         x = [2., 4.]
-        self.assertAlmostEqual(chi2(x,g), 2.)
-        self.assertEqual(chi2.dof, 2)
-        self.assertAlmostEqual(chi2.Q, 0.36787944, places=2)
+        ans = chi2(x, g)
+        self.assertAlmostEqual(ans, 2.)
+        self.assertEqual(ans.dof, 2)
+        self.assertAlmostEqual(ans.Q, 0.36787944, places=2)
         
         # correlated
         g = np.array([g[0]+g[1], g[0]-g[1]])
         x = np.array([x[0]+x[1], x[0]-x[1]])
-        self.assertAlmostEqual(chi2(x,g), 2.)
-        self.assertEqual(chi2.dof, 2)
-        self.assertAlmostEqual(chi2.Q, 0.36787944, places=2)
+        ans = chi2(x, g)
+        self.assertAlmostEqual(ans, 2.)
+        self.assertEqual(ans.dof, 2)
+        self.assertAlmostEqual(ans.Q, 0.36787944, places=2)
         
         # correlated with 0 mode and svdcut < 0
         g = np.array([g[0], g[1], g[0]+g[1]])
         x = np.array([x[0], x[1], x[0]+x[1]])
-        self.assertAlmostEqual(chi2(x, g, svdcut=-1e-10), 2.)
-        self.assertEqual(chi2.dof, 2)
-        self.assertAlmostEqual(chi2.Q, 0.36787944, places=2)
+        ans = chi2(x, g, svdcut=-1e-10)
+        self.assertAlmostEqual(ans, 2.)
+        self.assertEqual(ans.dof, 2)
+        self.assertAlmostEqual(ans.Q, 0.36787944, places=2)
         
         # dictionaries with different keys
         g = dict(a=gvar(1,1), b=[[gvar(2,2)], [gvar(3,3)], [gvar(4,4)]], c=gvar(5,5))
         x = dict(a=2., b=[[4.], [6.]])
-        self.assertAlmostEqual(chi2(x,g), 3.)
-        self.assertEqual(chi2.dof, 3)
-        self.assertAlmostEqual(chi2.Q, 0.3916252, places=2)
-        self.assertAlmostEqual(chi2(g,x), 3.)
-        self.assertEqual(chi2.dof, 3)
-        self.assertAlmostEqual(chi2.Q, 0.3916252, places=2)
-        self.assertAlmostEqual(chi2(2., gvar(1,1)), 1.)
-        self.assertEqual(chi2.dof, 1)
-        self.assertAlmostEqual(chi2.Q, 0.31731051, places=2)
+        ans = chi2(x,g)
+        self.assertAlmostEqual(ans, 3.)
+        self.assertEqual(ans.dof, 3)
+        self.assertAlmostEqual(ans.Q, 0.3916252, places=2)
+        ans = chi2(g,x)
+        self.assertAlmostEqual(ans, 3.)
+        self.assertEqual(ans.dof, 3)
+        self.assertAlmostEqual(ans.Q, 0.3916252, places=2)
+        ans = chi2(2., gvar(1,1))
+        self.assertAlmostEqual(ans, 1.)
+        self.assertEqual(ans.dof, 1)
+        self.assertAlmostEqual(ans.Q, 0.31731051, places=2)
         
         # two dictionaries
         g1 = dict(a=gvar(1, 1), b=[gvar(2, 2)])
         g2 = dict(a=gvar(2, 2), b=[gvar(4, 4)])
-        self.assertAlmostEqual(chi2(g1, g2), 0.2 + 0.2)
-        self.assertEqual(chi2.dof, 2)
-        self.assertAlmostEqual(chi2.Q, 0.81873075, places=2)
+        ans = chi2(g1, g2)
+        self.assertAlmostEqual(ans, 0.2 + 0.2)
+        self.assertEqual(ans.dof, 2)
+        self.assertAlmostEqual(ans.Q, 0.81873075, places=2)
 
     def test_corr(self):
         """ rebuild (corr!=0) """

@@ -13,6 +13,7 @@ Here we describe some sample numerical codes, included in
 to work with |GVar|\s, as well as with ``float``\s. 
 More examples will follow with time.
 
+.. _cspline:
 
 Cubic Splines
 -----------------
@@ -21,6 +22,8 @@ The module :mod:`gvar.cspline` implements a class for smoothing and/or
 interpolating one-dimensional data using cubic splines:
 
 .. autoclass:: gvar.cspline.CSpline
+
+.. _linalg:
 
 Linear Algebra
 ---------------------
@@ -40,6 +43,8 @@ linear algebra with matrices whose elements can be either numbers or
 .. automethod:: gvar.linalg.eigvalsh
 
 
+.. _ode:
+
 Ordinary Differential Equations 
 ------------------------------------------------
 
@@ -56,6 +61,7 @@ A simple analyzer class is:
 
 .. autoclass:: gvar.ode.Solution()
 
+.. _integral:
 
 One-Dimensional Integration
 ----------------------------
@@ -65,6 +71,8 @@ one-dimensional integrals (using its adaptive Runge-Kutta algorithm):
 
 .. automethod:: gvar.ode.integral
 
+.. _power-series:
+
 Power Series
 --------------
 .. automodule:: gvar.powerseries
@@ -73,19 +81,67 @@ Power Series
 .. autoclass:: gvar.powerseries.PowerSeries
     :members:
 
+.. _root:
 
 Root Finding
 --------------
 
 The module :mod:`gvar.root` contains methods for finding the roots of 
 of one-dimensional functions: that is, finding ``x`` such that 
-``fcn(x)=0`` for a given function ``fcn``. It has two routines. The 
-first does a coarse search for an interval containing a root:
+``fcn(x)=0`` for a given function ``fcn``. Typical usage is::
+
+    >>> import math
+    >>> import gvar as gv
+    >>> interval = gv.root.search(math.sin, 1.)     # bracket root
+    >>> print(interval)
+    (3.1384283767210035, 3.4522712143931042)
+    >>> root = gv.root.refine(math.sin, interval)   # refine root
+    >>> print(root)
+    3.14159265359
+
+This code finds the first root of ``sin(x)=0`` larger than 1. The first
+setp is a search to find an interval containing a root. Here
+:meth:`gvar.root.search` examines ``sin(x)`` for a sequence of points
+``1. * 1.1 ** n`` for ``n=0,1,2...``, stopping when the function changes 
+sign. The last two points in the sequence then bracket a root
+since ``sin(x)`` is continuous; they are returned as a tuple to ``interval``.
+The final root is found by refining the interval, using ``gvar.root.refine``.
+By default, the root is refined iteratively to machine precision, but this
+requires only a small number (4) of iterations::
+
+    >>> print(root.nit)                             # number of iterations
+    4
+
+The most challenging situations are ones where the function
+is extremely flat in the vicinity of the root --- that is,
+two or more of its leading derivatives vanish there. For 
+example::
+
+    >>> import gvar as gv
+    >>> def f(x):
+    ...     return (x + 1) ** 3 * (x - 0.5) ** 11
+    >>> root = gv.root.refine(f, (0, 2))
+    >>> print(root)
+    0.5
+    >>> print(root.nit)                             # number of iterations
+    142
+
+This routine also works with variables of type :class:`gvar.GVar`: 
+for example, ::
+
+    >>> import gvar as gv
+    >>> def f(x, w=gv.gvar(1, 0.1)):
+    ...     return gv.sin(w * x)
+    >>> root = gv.root.refine(f, (1, 4))
+    >>> print(root)
+    3.14(31)
+
+returns a root with a 10% uncertainty, reflecting the 
+uncertainty in parameter ``w``.
+
+Descriptions of the two methods follow.
 
 .. automethod:: gvar.root.search
-
-The second method refines estimates for a root given an interval 
-containing one:
 
 .. automethod:: gvar.root.refine
 

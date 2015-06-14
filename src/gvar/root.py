@@ -16,6 +16,7 @@
 import sys
 import warnings
 import numpy
+import gvar
 
 def search(fcn, x0, incr=0, fac=1.1, maxit=100, analyzer=None):
     """ Search for and bracket root of one-dimensional function ``fcn(x)``.
@@ -36,7 +37,8 @@ def search(fcn, x0, incr=0, fac=1.1, maxit=100, analyzer=None):
         ``sin(x)`` with ``x>0.1``::
 
             >>> import math
-            >>> interval = search(math.sin, 0.1)
+            >>> import gvar as gv
+            >>> interval = gv.root.search(math.sin, 0.1)
             >>> print(interval)
             (3.0912680532870755, 3.4003948586157833)
 
@@ -60,19 +62,24 @@ def search(fcn, x0, incr=0, fac=1.1, maxit=100, analyzer=None):
 
     Returns:
         Tuple ``(a, b)`` where ``fcn(a) * fcn(b) <= 0``, which implies
-            that a root occurs between ``a`` and ``b`` (provided the 
-            function is continuous).
+        that a root occurs between ``a`` and ``b`` (provided the 
+        function is continuous). The tuple has extra attributes 
+        that provide additional information about the search:
+
+        - **nit** --- Number of iterations used to find interval ``(a,b)``.
+        - **fcnval** --- Tuple containing the function values at ``(a,b)``.
 
     Raises:
         RuntimeError: If unable to find a root in ``maxit`` steps.
-
-    This function has the following attributes:
-
-        nit (int): Number of iterations used to find last interval.
-        
-        fcnval (tuple): Tuple containing the function values at 
-            the ends of the last interval.
     """
+    # custom return class for result
+    class ans(tuple):
+        def __new__(cls, interval, nit, fcnval):
+            return tuple.__new__(cls, interval)
+        def __init__(self, interval, nit, fcnval):
+            self.interval = interval
+            self.nit = nit 
+            self.fcnval = fcnval
     x = x0
     f = fcn(x)
     for nit in range(maxit):
@@ -82,13 +89,10 @@ def search(fcn, x0, incr=0, fac=1.1, maxit=100, analyzer=None):
         if analyzer!=None:
             analyzer(x, f)
         if f*fo<=0:
-            search.nit = nit + 1
             if numpy.fabs(fo)<=numpy.fabs(f):
-                search.fcnval = (fo, f)
-                return (xo, x)
+                return ans((xo, x), nit=nit + 1, fcnval=(fo, f))
             else:
-                search.fcnval = (f, fo)
-                return (x, xo)
+                return ans((x, xo), nit=nit+1, fcnval=(f, fo))
     raise RuntimeError("unable to bracket root")
 
 
@@ -103,58 +107,21 @@ def refine(fcn, interval, rtol=None, maxit=1000, analyzer=None):
     without Derivatives" (1973). Being pure Python it works with
     :class:`gvar.GVar`-valued functions and variables.
 
-    Examples:
+    Example:
         The following code finds a root of ``sin(x)`` in the interval
-        ``1 <= x <= 4``::
+        ``1 <= x <= 4``, using 7 iterative refinements of the initial
+        interval::
 
             >>> import math
-            >>> root = refine(math.sin, (1, 4))
-            >>> print(root)
-            3.14159265359
-
-        It is often convenient to use :meth:`root.search` to find 
-        a starting interval for :meth:`root.refine`::
-
-            >>> interval = search(math.sin, 0.1)
-            >>> print(interval)
-            (3.0912680532870755, 3.4003948586157833)
-            >>> root = refine(math.sin, interval)
-            >>> print(root)
-            3.14159265359
-
-        This code first searches for an interval containing a root 
-        by examining points ``x0 * 1.1 ** n`` where ``n=0,1,2...`` and
-        ``x0 = 0.1``. It then refines the search result to find 
-        a precise root.
-
-        The most challenging situations are ones where the function
-        is extremely flat in the vicinity of the root --- that is,
-        two or more of its leading derivatives vanish there. For 
-        example::
-
-            >>> def f(x):
-            ...     return (x + 1) ** 3 * (x - 0.5) ** 11
-            >>> root = refine(f, (0, 2))
-            >>> print(root)
-            0.5
-            >>> print(refine.nit)           # number of iterations used
-            142
-
-        This routine works with variables of type :class:`gvar.GVar`: 
-        for example, ::
-
             >>> import gvar as gv
-            >>> def f(x, w=gv.gvar(1, 0.1)):
-            ...     return gv.sin(w * x)
-            >>> root = refine(f, (1, 4))
+            >>> root = gv.root.refine(math.sin, (1, 4))
             >>> print(root)
-            3.14(31)
-
-        returns a root with a 10% uncertainty, reflecting the 
-        uncertainty in parameter ``w``.
+            3.14159265359
+            >>> print(root.nit)
+            7
 
     Args:
-        fcn: One-dimensional function whose root is sought.
+        fcn: One-dimensional function whose zero/root is sought.
         interval: Tuple ``(a,b)`` specifying an interval containing
             the root, with ``fcn(a) * fcn(b) <= 0``. The search 
             for a root is confined to this interval.
@@ -172,25 +139,39 @@ def refine(fcn, interval, rtol=None, maxit=1000, analyzer=None):
             debugging. Default is ``None``.
 
     Returns:
-        The final root. 
+        The root, which is either a ``float`` or 
+        a :class:`gvar.GVar` but with extra attributes that
+        provide additional information about the root: 
+
+        - **nit** --- Number of iterations used to find the root.
+
+        - **interval** --- Smallest interval ``(b,c)`` found containing
+          the root, where ``b`` is the root returned by the method.
+
+        - **fcnval** --- Value of ``fcn(x)`` at the root.
 
     Raises:
         ValueError: If ``fcn(a) * fcn(b) > 0`` for initial 
             interval ``(a,b)``.
         UserWarning: If the algorithm fails to converge 
             after ``maxit`` iterations.
-
-    This function has the following attributes:
-
-        refine.nit (int): Number of iterations used to find last root.
-        
-        refine.interval (tuple): Smallest interval ``(b,c)`` containing
-            the last root, where ``b`` is the root returned by the
-            algorithm.
-
-        refine.fcnval: Value of ``fcn(x)`` at the last root.
-
     """
+    # Create custom class for answer
+    def ans(root, interval, nit, fcnval):
+        if isinstance(root, gvar.GVar):
+            class _ans(gvar.GVar):
+                def __init__(self, root):
+                    super(_ans, self).__init__(*root.internaldata)
+        else:
+            class _ans(float):
+                def __new__(cls, root):
+                    return float.__new__(cls, root)
+        root = _ans(root)
+        root.interval = interval
+        root.nit = nit 
+        root.fcnval = fcnval
+        return root
+
     # Throughout the routine: root is in interval (b,c), 
     # b is the best value, and a is the previous value of b.
     if rtol is None:
@@ -216,10 +197,10 @@ def refine(fcn, interval, rtol=None, maxit=1000, analyzer=None):
         m = 0.5 * (c - b) 
         if numpy.fabs(m) < tol or fb == 0:
             # found root
-            refine.fcnval = fb
-            refine.nit = nit
-            refine.interval = (b, c)
-            return b
+            # refine.fcnval = fb
+            # refine.nit = nit
+            # refine.interval = (b, c)
+            return ans(b, fcnval=fb, nit=nit, interval=(b, c))
         # check for bisection
         if numpy.fabs(e) < tol or numpy.fabs(fa) <= numpy.fabs(fb):
             d = m 
@@ -270,7 +251,7 @@ def refine(fcn, interval, rtol=None, maxit=1000, analyzer=None):
     warnings.warn(
         "failed to converge in maxit={} iterations".format(maxit)
         ) 
-    refine.fcnval = fb
-    refine.nit = nit
-    refine.interval = (b, c)            
-    return b
+    # refine.fcnval = fb
+    # refine.nit = nit
+    # refine.interval = (b, c)            
+    return ans(b, fcnval=fb, nit=nit, interval=(b, c))

@@ -204,25 +204,24 @@ def chi2(g1, g2=None, svdcut=1e-15, nocorr=False, fmt=False):
     parameters ``svdcut``; see the documentation 
     for :func:`gvar.svd`, which is used to apply the cut.
 
-    The return value is the ``chi**2``. Extra data is stored in 
-    ``chi2`` itself:
+    The return value is the ``chi**2``. Extra attributes attached to this
+    value give additional information:
 
-    .. attribute:: chi2.dof
+    - **dof** --- Number of degrees of freedom (that is, the number of variables
+      compared).
 
-        Number of degrees of freedom (that is, the number of variables
-        compared).
-
-    .. attribute:: chi2.Q
-
-        The probability that the ``chi**2`` could have been larger, 
-        by chance, even if ``g1`` and ``g2`` agree. 
-        Values smaller than 0.1 or so suggest that they do not
-        agree. Also called the *p-value*.
-
-    If argument ``fmt==True``, then a string is returned containing the
-    ``chi**2`` per degree of freedom, the number of degrees of freedom, and
-    ``Q``.
+    - **Q** --- The probability that the ``chi**2`` could have been larger, 
+      by chance, even if ``g1`` and ``g2`` agree. Values smaller than 0.1 
+      or so suggest that they do not agree. Also called the *p-value*.
     """
+    # customized class for answer
+    class ans(float):
+        def __new__(cls, chi2, dof, Q):
+            return float.__new__(cls, chi2)
+        def __init__(self, chi2, dof, Q):
+            self.dof = dof 
+            self.Q = Q
+
     # leaving nocorr (turn off correlations) undocumented because I
     #   suspect I will remove it
     if g2 is None:
@@ -267,27 +266,25 @@ def chi2(g1, g2=None, svdcut=1e-15, nocorr=False, fmt=False):
             'cannot compute chi**2 for types ' + str(type(g1)) + ' ' +
             str(type(g2))
             )
-    chi2.dof = diff.size
-    if chi2.dof == 0:
-        chi2.Q = 0
-        return 0.0    
+    dof = diff.size
+    if dof == 0:
+        return ans(0.0, 0, 0)    
     if nocorr:
         # ignore correlations
-        ans = numpy.sum(mean(diff) ** 2 / var(diff))
-        chi2.dof = len(diff)
+        chi2 = numpy.sum(mean(diff) ** 2 / var(diff))
+        dof = len(diff)
     else:
         diffmod, i_wgts = svd(diff, svdcut=svdcut, wgts=-1)
         diffmean = mean(diffmod)
         i, wgts = i_wgts[0]
-        ans = 0.0
+        chi2 = 0.0
         if len(i) > 0:
-            ans += numpy.sum((diffmean[i] * wgts) ** 2)
+            chi2 += numpy.sum((diffmean[i] * wgts) ** 2)
         for i, wgts in i_wgts[1:]:
-            ans += numpy.sum(wgts.dot(diffmean[i]) ** 2)
-        chi2.dof = numpy.sum(len(wgts) for i, wgts in i_wgts)
-    chi2.Q = gammaQ(chi2.dof/2., ans/2.)
-    chi2.chi2 = ans
-    return ans if fmt == False else fmt_chi2(chi2)
+            chi2 += numpy.sum(wgts.dot(diffmean[i]) ** 2)
+        dof = numpy.sum(len(wgts) for i, wgts in i_wgts)
+    Q = gammaQ(dof/2., chi2/2.)
+    return ans(chi2, dof=dof, Q=Q)
 
 def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
     """ Determine whether ``g1`` and ``g2`` contain equivalent |GVar|\s.

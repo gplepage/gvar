@@ -16,9 +16,13 @@ PYTHON = python
 
 install : 
 	$(PYTHON) setup.py install --user --record files-gvar.$(PYTHON)
+	rm -fr build/gvar.egg-info
+	mv gvar.egg-info build/
 
 install-sys : 		
 	$(PYTHON) setup.py install --record files-gvar.$(PYTHON)
+	rm -fr build/gvar.egg-info
+	mv gvar.egg-info build/
 
 uninstall :			# mostly works (leaves some empty directories)
 	- cat files-gvar.$(PYTHON) | xargs rm -rf

@@ -19,8 +19,9 @@ To install:
 		installed, distutils is used and dependencies are not checked --- 
 		this must then be done by hand. To install setuptools either:
 		1) download https://bootstrap.pypa.io/ez_setup.py
-  		and run 'python ez_setup.py'; or 2) run 'pip install setuptools'; 
-  		or 3) check out the setuptools website for instructions.
+  		and run 'python ez_setup.py'; or 2) go to the setuptools website 
+  		for instructions.
+  		(https://pythonhosted.org/setuptools/)
 				
 	The gvar code works for Python 2.6 and 2.7, and Python 3.2-3.4. It
 	does not work for Python versions 2.5.X or earlier. It has not been tested

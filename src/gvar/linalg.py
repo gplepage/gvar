@@ -59,35 +59,37 @@ def slogdet(a):
     ldet += numpy.matrix.trace(da.dot(ainv))
     return s, ldet
 
-def eigvalsh(a):
+def eigvalsh(a, eigvec=False):
     """ Eigenvalues of Hermitian matrix ``a``.
 
     Args:
         a: Two-dimensional, square matrix/array of numbers 
             and/or :class:`gvar.GVar`\s.
+        eigvec (bool): If ``True``, method returns a tuple of arrays
+            ``(val, vec)`` where the ``val[i]`` are the
+            eigenvalues. Arrays ``vec[:, i]`` are the corresponding
+            eigenvectors of ``a`` when one ignores uncertainties (that is, 
+            they are eigenvectors of ``gvar.mean(a)``). Only ``val`` is 
+            returned if ``eigvec=False`` (default).
 
     Returns: 
-        Array of eigenvalues of matrix ``a``.
+        Array of eigenvalues of matrix ``a`` if parameter 
+        ``eigvec==False`` (default).  where the ``val[i]`` are the
+        eigenvalues; otherwise it returns a tuple of arrays ``(val, vec)`` 
+        where the ``val[i]`` are the eigenvalues. Arrays ``vec[:, i]`` are 
+        the corresponding eigenvectors of ``a`` when one ignores 
+        uncertainties (that is, they are eigenvectors of ``gvar.mean(a)``).
 
     Raises:
         ValueError: If matrix is not square and two-dimensional.
-
-    This function has the following attribute:
-
-        eigvalsh.vec: Array containing eigenvectors of ``a`` ignoring
-            uncertainties (that is, eigenvectors of ``gvar.mean(a)``).
-            The eigenvector corresponding to the ``i``-th 
-            eigenvalue is ``eigvalsh.vec[:, i]``.
-
-
     """
     amean = gvar.mean(a)
     if amean.ndim != 2 or amean.shape[0] != amean.shape[1]:
         raise ValueError('Bad matrix shape: ' + str(a.shape))
     da = a - amean 
     val, vec = numpy.linalg.eigh(amean)
-    eigvalsh.vec = vec
-    return val + [vec[:, i].dot(da.dot(vec[:, i])) for i in range(vec.shape[1])]
+    val = val + [vec[:, i].dot(da.dot(vec[:, i])) for i in range(vec.shape[1])]
+    return (val, vec) if eigvec else val
 
 def inv(a):
     """ Inverse of matrix ``a``. 

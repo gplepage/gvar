@@ -25,7 +25,10 @@ rare multi-sigma fluctuations; rerun the tests if they do fail.) Some
 examples are give in the ``examples/`` subdirectory.
 
 Versioning: Version numbers for ``gvar`` are now (5.0 and later) based upon
-*semantic  versioning* (``http://semver.org``). Incompatible changes will be
+*semantic  versioning* (http://semver.org). Incompatible changes will be
 signaled by incrementing the major version number, where version numbers have
 the form major.minor.patch. The minor number signals new features, and the
 patch number bug fixes.
+
+| Created by G. Peter Lepage (Cornell University) 2008
+| Copyright (c) 2008-2015 G. Peter Lepage
