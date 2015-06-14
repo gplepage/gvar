@@ -13,6 +13,19 @@ Here we describe some sample numerical codes, included in
 to work with |GVar|\s, as well as with ``float``\s. 
 More examples will follow with time.
 
+The sub-modules included here are:
+
+    - :any:`cspline <cspline>` --- cubic splines for 1-d data.
+
+    - :any:`linalg <linalg>` --- basic linear algebra.
+
+    - :any:`ode <ode>` --- integration of systems of ordinary differential equations;
+        :ref:`one-dimensional integrals <integral>`.
+
+    - :any:`powerseries <power-series>` --- power series representation of functions.
+
+    - :any:`root <root>` --- root-finding for one-dimensional functions.
+
 .. _cspline:
 
 Cubic Splines

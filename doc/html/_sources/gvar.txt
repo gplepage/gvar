@@ -35,7 +35,7 @@ using :func:`gvar.gvar`: for example, ::
 This module contains a variety of tools for creating and
 manipulating gaussian random variables, including:
     
-    - :any:`mean`\ ``(g)`` --- extract means. 
+    - :any:`mean`\ ``(g)`` --- extract means.
     
     - :any:`sdev`\ ``(g)`` --- extract standard deviations.
     
@@ -78,21 +78,6 @@ manipulating gaussian random variables, including:
     - :any:`dataset.bootstrap_iter`\ ``(data,N)`` --- bootstrap random sample data.
     
     - class :class:`dataset.Dataset` --- class for collecting random sample data.
-
-There are also sub-modules that implement some standard numerical analysis 
-tools for use with |GVar|\s (or ``float``\s):
-
-    - :any:`cspline <cspline>` --- cubic splines for 1-d data.
-
-    - :any:`ode <ode>` --- integration of systems of ordinary differential equations;
-        one dimensional integrals.
-
-    - :any:`linalg <linalg>` --- basic linear algebra.
-
-    - :any:`powerseries <power-series>` --- power series representation of functions.
-
-    - :any:`root <root>` --- root-finding for one-dimensional functions.
-
 
 Functions
 ----------
