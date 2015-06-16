@@ -11,10 +11,7 @@ Overview and Tutorial
    :trim:
 
 .. moduleauthor:: G.P. Lepage <g.p.lepage@cornell.edu>
-
-.. module:: gvar
-   :synopsis: Correlated Gaussian random variables. 
-
+ 
 Introduction 
 ------------------
 This module provides tools for representing, manipulating, and  simulating
@@ -24,12 +21,12 @@ supports complicated (Python) functions of Gaussian variables,  automatically
 propagating uncertainties and correlations through the functions.
 
 A Gaussian variable ``x`` represents a Gaussian probability distribution, and
-is therefore completely characterized by its mean, ``x.mean``, and standard
-deviation, ``x.sdev``. They are used to represent quantities whose values are
+is therefore completely characterized by its mean ``x.mean`` and standard
+deviation ``x.sdev``. They are used to represent quantities whose values are
 uncertain: for example, the mass,  |~| 125.7±0.4 |~| GeV, of the recently
 discovered Higgs boson from particle physics. The following code illustrates a
 (very) simple application of :mod:`gvar`;  it calculates the Higgs boson's
-energy when it carries  a momentum ``p`` of |~| 50±0.15 |~| GeV. ::
+energy when it carries momentum |~| 50±0.15 |~| GeV. ::
 
     >>> import gvar as gv
     >>> m = gv.gvar(125.7, 0.4)             # Higgs boson mass
@@ -41,7 +38,7 @@ energy when it carries  a momentum ``p`` of |~| 50±0.15 |~| GeV. ::
     135.279303665 +- 0.375787639425
 
 Here method :func:`gvar.gvar` creates objects ``m`` and ``p`` of type |GVar| 
-that represent Gaussian random variables for the Higgs mass and the momentum,
+that represent Gaussian random variables for the Higgs mass and momentum,
 respectively. The energy ``E``
 computed from the mass and momentum must, like them, be uncertain and so is
 also an object of type |Gvar| --- with mean
@@ -63,7 +60,7 @@ in the mass, and largely cancel, for example, in the ratio::
 The ratio is 4--5 |~| times more accurate than the either 
 the mass or energy separately.
 
-The correlation between ``E`` and ``m`` is obvious from their covariance and 
+The correlation between ``m`` and ``E`` is obvious from their covariance and 
 correlation matrices, both of which have large 
 off-diagonal elements::
 
@@ -88,9 +85,9 @@ machine precision, as they should be. This works only because |GVar| object
 ``E`` knows that its uncertainty comes from the uncertainties associated
 with variables ``m`` and |~| ``p``.
 
-The uncertainty in the Higgs boson's energy comes mostly from its mass, with
-only a small contribution from its momentum.  We verify this by creating an
-*error  budget* for the Higgs energy (and for its energy to mass ratio)::
+We can verify that the uncertainty in the Higgs boson's energy comes mostly
+from its mass by creating an *error budget* for the Higgs energy (and for its
+energy to mass ratio)::
 
     >>> inputs = {'m':m, 'p':p}             # sources of uncertainty
     >>> outputs = {'E':E, 'E/m':E/m}        # derived quantities
@@ -103,13 +100,12 @@ only a small contribution from its momentum.  We verify this by creating an
     ------------------------------
         total:      0.28      0.06
 
-For each output (``E`` and ``E/m``),
-the error budget lists the contribution to the total uncertainty coming from 
-each of the inputs (``m`` and ``p``). The total uncertainty in the  energy
-is |~| ±0.28%, and almost all of that comes from the mass --- only |~| ±0.04% 
-comes from the uncertainty in the momentum. The two sources of uncertainty
-contribute equally, however, to the ratio ``E/m``, but it has a total
-uncertainty of only |~| 0.06%.
+For each output (``E`` and ``E/m``), the error budget lists the contribution
+to the total uncertainty coming from  each of the inputs (``m`` and ``p``).
+The total uncertainty in the  energy is |~| ±0.28%, and almost all of that
+comes from the mass --- only |~| ±0.04%  comes from the uncertainty in the
+momentum. The two sources of uncertainty contribute equally, however, to the
+ratio ``E/m``, which has a total uncertainty of only |~| 0.06%.
 
 This example is relatively simple. Module :mod:`gvar`, however, can easily 
 handle thousands of Gaussian random variables and all of their correlations. 
@@ -119,15 +115,19 @@ track uncertainties and correlations for and between all of these variables.
 The code for tracking correlations is the most complex part of 
 the module's design, particularly since this is done automatically, behind the
 scenes.
+ 
+What follows is a tutorial showing how to create |GVar|\s and
+manipulate them to solve common problems in error propagation. 
+Another way to learn about :mod:`gvar` is to look at the
+case studies later in the documentation. Each focuses on a single problem,
+and includes the full code and data, to allow for further experimentation.
 
-In the following sections we demonstrate how to create |GVar|\s and how to
-manipulate them to solve common problems in error propagation. They are also
-very useful for simulating correlated Gaussian noise, and
-in Bayesian analyses that involve correlated Gaussian priors and statistically
-correlated  data.
-(For one extensive application see module :mod:`lsqfit` which does (Bayesian)
-nonlinear multidimensional least-squares fitting; :mod:`gvar` used to be
-distributed together with :mod:`lsqfit`.)
+:mod:`gvar` was originally written for use by the :mod:`lsqfit` module, 
+which does multidimensional (Bayesian) least-squares fitting. It used to 
+be distributed as part of :mod:`lsqfit`, but is now distributed separately
+because it is used by other modules 
+(*e.g.*, :mod:`vegas` for multidimensional
+Monte Carlo integration).
 
 *About Printing:* The examples in this tutorial use the ``print`` function
 as it is used in Python 3. Drop the outermost parenthesis in each ``print``

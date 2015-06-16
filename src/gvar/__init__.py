@@ -25,27 +25,27 @@ variables including:
 
     - ``chi2(g1, g2)`` --- ``chi**2`` of ``g1-g2``.
 
-    - ``equivalent(g1, g2)`` --- |GVar|\s the same in ``g1`` and ``g2``?
+    - ``equivalent(g1, g2)`` --- ``g1`` and ``g2`` the same?
     
     - ``evalcov(g)`` --- compute covariance matrix.
 
     - ``evalcorr(g)`` --- compute correlation matrix.
     
-    - ``fmt_values(g)`` --- create table of values for printing.
+    - ``fmt_values(g)`` --- create table of values.
     
-    - ``fmt_errorbudget(g)`` --- create error-budget table for printing.
+    - ``fmt_errorbudget(g)`` --- create error-budget table.
 
-    - ``fmt_chi2(f)`` --- format chi**2 information in f as string for printing.
+    - ``fmt_chi2(f)`` --- format chi**2 information in f.
     
     - class ``BufferDict`` --- ordered dictionary with data buffer.
 
-    - ``dump(g, outputfile)`` --- pickle a collection of |GVar|\s in file.
+    - ``dump(g, outputfile)`` --- pickle |GVar|\s in file.
 
-    - ``dumps(g)`` --- pickle a collection of |GVar|s in a string.
+    - ``dumps(g)`` --- pickle |GVar|s in a string.
 
-    - ``load(inputfile)`` --- reconstitute a collection of |GVar|\s from a file.
+    - ``load(inputfile)`` --- read |GVar|\s from a file.
 
-    - ``loads(inputstr)`` --- reconstitute a collection of |GVar|\s from a string.
+    - ``loads(inputstr)`` --- read |GVar|\s from a string.
     
     - ``raniter(g,N)`` --- iterator for random numbers.
     
@@ -55,23 +55,24 @@ variables including:
     
     - ``dataset.bin_data(data)`` --- bin random sample data.
     
-    - ``dataset.avg_data(data)`` --- estimate means of random sample data.
+    - ``dataset.avg_data(data)`` --- estimate means from data.
     
-    - ``dataset.bootstrap_iter(data,N)`` --- bootstrap random sample data.
+    - ``dataset.bootstrap_iter(data,N)`` --- bootstrap data.
     
-    - class ``dataset.Dataset`` --- class for collecting random sample data.
+    - class ``dataset.Dataset`` --- class for collecting data.
 
 There are also sub-modules that implement some standard numerical analysis 
 tools for use with |GVar|\s (or ``float``\s):
 
     - ``cspline`` --- cubic splines for 1-d data.
 
-    - ``ode`` --- integration of systems of ordinary differential equations;
-        one dimensional integrals.
+    - ``ode`` --- integration of systems of ordinary differential
+        equations; one dimensional integrals.
 
     - ``linalg`` --- basic linear algebra.
 
-    - ``powerseries`` --- power series representation of functions.
+    - ``powerseries`` --- power series representation 
+        of functions.
 
     - ``root`` --- root-finding for one-dimensional functions.
 """

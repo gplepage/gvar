@@ -24,6 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="gvar 7.0 documentation" href="index.html" />
+    <link rel="next" title="Case Study: Pendulum Clock" href="case-pendulum.html" />
     <link rel="prev" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -44,6 +45,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="case-pendulum.html" title="Case Study: Pendulum Clock"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">gvar 7.0 documentation</a> &raquo;</li> 
@@ -56,36 +60,36 @@
           <div class="body" role="main">
             
   <div class="section" id="numerical-analysis-modules-in-gvar">
-<span id="id1"></span><h1>Numerical Analysis Modules in <a class="reference internal" href="overview.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a><a class="headerlink" href="#numerical-analysis-modules-in-gvar" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Numerical Analysis Modules in <a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a><a class="headerlink" href="#numerical-analysis-modules-in-gvar" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s can be used in many numerical algorithms, to propagates errors
 through the algorithm. A code that is written in pure Python is likely to
 work well with <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, perhaps with minor modifications.
 Here we describe some sample numerical codes, included in
-<a class="reference internal" href="overview.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a>, that have been adapted
+<a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a>, that have been adapted
 to work with <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, as well as with <code class="docutils literal"><span class="pre">float</span></code>s.
 More examples will follow with time.</p>
 <p>The sub-modules included here are:</p>
 <blockquote>
 <div><ul>
-<li><p class="first"><a class="reference internal" href="#cspline"><span>cspline</span></a> &#8212; cubic splines for 1-d data.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> &#8212; cubic splines for 1-d data.</p>
 </li>
-<li><p class="first"><a class="reference internal" href="#linalg"><span>linalg</span></a> &#8212; basic linear algebra.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> &#8212; basic linear algebra.</p>
 </li>
 <li><dl class="first docutils">
-<dt><a class="reference internal" href="#ode"><span>ode</span></a> &#8212; integration of systems of ordinary differential equations;</dt>
+<dt><a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> &#8212; integration of systems of ordinary differential equations;</dt>
 <dd><p class="first last"><a class="reference internal" href="#integral"><span>one-dimensional integrals</span></a>.</p>
 </dd>
 </dl>
 </li>
-<li><p class="first"><a class="reference internal" href="#power-series"><span>powerseries</span></a> &#8212; power series representation of functions.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal"><span class="pre">gvar.powerseries</span></code></a> &#8212; power series representation of functions.</p>
 </li>
-<li><p class="first"><a class="reference internal" href="#root"><span>root</span></a> &#8212; root-finding for one-dimensional functions.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> &#8212; root-finding for one-dimensional functions.</p>
 </li>
 </ul>
 </div></blockquote>
-<div class="section" id="cubic-splines">
-<span id="cspline"></span><h2>Cubic Splines<a class="headerlink" href="#cubic-splines" title="Permalink to this headline">¶</a></h2>
-<p>The module <code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code> implements a class for smoothing and/or
+<span class="target" id="module-gvar.cspline"></span><div class="section" id="cubic-splines">
+<h2>Cubic Splines<a class="headerlink" href="#cubic-splines" title="Permalink to this headline">¶</a></h2>
+<p>The module <a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> implements a class for smoothing and/or
 interpolating one-dimensional data using cubic splines:</p>
 <dl class="class">
 <dt id="gvar.cspline.CSpline">
@@ -137,22 +141,26 @@ less than 3; this is often a good idea.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.78539816</span><span class="p">,</span> <span class="mf">1.57079633</span><span class="p">,</span> <span class="mf">2.35619449</span><span class="p">,</span> <span class="mf">3.14159265</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">yknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="o">.</span><span class="mi">3</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="o">.</span><span class="mi">3</span><span class="p">))</span>
-<span class="go">0.295053928494 0.295520206661</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mf">1.2</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">1.2</span><span class="p">))</span>
-<span class="go">0.930988357092 0.932039085967</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
-<span class="go">0.879290177 0.87758256189</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
-<span class="go">-0.473740536269 -0.479425538604</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">0.5</span><span class="p">))</span>
-<span class="go">0.122248265257 0.12241743811</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="mf">0.7</span><span class="p">))</span>
+<span class="go">0.644243383101 0.765592448296 -0.663236750777 0.234963942648</span>
 </pre></div>
 </div>
-<p>Here the <code class="docutils literal"><span class="pre">yknot</span></code> values were obtained by taking <code class="docutils literal"><span class="pre">sin(xknot)</span></code>,
-so these results show that this 5-knot spline gives a pretty good
-approximation of the function <code class="docutils literal"><span class="pre">sin(x)</span></code>, as well as of its first
-and second derivatives and its integral. Using the spline outside
+<p>Here the <code class="docutils literal"><span class="pre">yknot</span></code> values were obtained by taking <code class="docutils literal"><span class="pre">sin(xknot)</span></code>.
+Tabulating results from the spline together with the exact results
+shows that this 5-knot spline gives a pretty good approximation
+of the function <code class="docutils literal"><span class="pre">sin(x)</span></code>, as well as its derivatives and integral:</p>
+<div class="highlight-python"><div class="highlight"><pre>x    f(x)    f.D(x)  f.D2(x) f.integ(x) | sin(x)  cos(x)  1-cos(x)
+------------------------------------------------------------------
+0.3  0.2951  0.9551  -0.2842 0.04458    | 0.2955  0.9553  0.04466
+0.5  0.4791  0.8793  -0.4737 0.1222     | 0.4794  0.8776  0.1224
+0.7  0.6442  0.7656  -0.6632 0.235      | 0.6442  0.7648  0.2352
+0.9  0.783   0.6176  -0.7891 0.3782     | 0.7833  0.6216  0.3784
+1.1  0.8902  0.452   -0.8676 0.5461     | 0.8912  0.4536  0.5464
+1.3  0.9627  0.2706  -0.9461 0.7319     | 0.9636  0.2675  0.7325
+1.5  0.9974  0.07352 -1.025  0.9286     | 0.9975  0.07074 0.9293
+</pre></div>
+</div>
+<p>Using the spline outside
 the range covered by the knots is less good:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
 <span class="go">gvar/cspline.py:164: UserWarning: x outside of spline range: [ 6.28318531]</span>
@@ -181,7 +189,8 @@ are 1 and -1, respectively.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>xknot</strong> (<em>1-d sequence of number</em>) &#8211; The knots of the spline, where the
-function values are specified.</li>
+function values are specified. The knots are sorted (from small
+to large) if necessary.</li>
 <li><strong>yknot</strong> (<em>1-d sequence of number</em>) &#8211; Function values at the locations
 specified by <code class="docutils literal"><span class="pre">xknot[i]</span></code>.</li>
 <li><strong>deriv</strong> (<em>2-component sequence</em>) &#8211; Derivatives at initial and final
@@ -205,10 +214,10 @@ out-of-range warnings are suppressed if set to <code class="docutils literal"><s
 </table>
 </dd></dl>
 
-</div>
+<span class="target" id="module-gvar.linalg"></span></div>
 <div class="section" id="linear-algebra">
-<span id="linalg"></span><h2>Linear Algebra<a class="headerlink" href="#linear-algebra" title="Permalink to this headline">¶</a></h2>
-<p>The module <code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code> implements several methods for doing basic
+<h2>Linear Algebra<a class="headerlink" href="#linear-algebra" title="Permalink to this headline">¶</a></h2>
+<p>The module <a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> implements several methods for doing basic
 linear algebra with matrices whose elements can be either numbers or
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s:</p>
 <dl class="method">
@@ -342,10 +351,10 @@ If matrix is not square and two-dimensional.</p>
 </table>
 </dd></dl>
 
-</div>
+<span class="target" id="module-gvar.ode"></span></div>
 <div class="section" id="ordinary-differential-equations">
-<span id="ode"></span><h2>Ordinary Differential Equations<a class="headerlink" href="#ordinary-differential-equations" title="Permalink to this headline">¶</a></h2>
-<p>The module <code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code> implements two classes for integrating systems
+<h2>Ordinary Differential Equations<a class="headerlink" href="#ordinary-differential-equations" title="Permalink to this headline">¶</a></h2>
+<p>The module <a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> implements two classes for integrating systems
 of first-order differential equations using an adaptive Runge-Kutta
 algorithm. One integrates scalar- or array-valued equations, while the
 other integrates dictionary-valued equations:</p>
@@ -353,7 +362,7 @@ other integrates dictionary-valued equations:</p>
 <dt id="gvar.ode.Integrator">
 <em class="property">class </em><code class="descclassname">gvar.ode.</code><code class="descname">Integrator</code><span class="sig-paren">(</span><em>deriv</em>, <em>tol=1e-05</em>, <em>h=None</em>, <em>hmin=None</em>, <em>analyzer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.Integrator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integrate <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">deriv(x,y)</span></code>.</p>
-<p>An <code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code> object <code class="docutils literal"><span class="pre">odeint</span></code> integrates <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">f(x,y)</span></code>
+<p>An <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> object <code class="docutils literal"><span class="pre">odeint</span></code> integrates <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">f(x,y)</span></code>
 to obtain <code class="docutils literal"><span class="pre">y(x1)</span></code> from <code class="docutils literal"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal"><span class="pre">y</span></code> and <code class="docutils literal"><span class="pre">f(x,y)</span></code> can
 be scalars or <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays. Typical usage is illustrated
 by the following code for integrating <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">y</span></code>:</p>
@@ -404,10 +413,10 @@ also be called with an array of <code class="docutils literal"><span class="pre"
 array containing the corresponding <code class="docutils literal"><span class="pre">y</span></code> values is returned.</p>
 <p>The integrator uses an adaptive Runge-Kutta algorithm that adjusts
 the integrator&#8217;s step size to obtain relative accuracy <code class="docutils literal"><span class="pre">tol</span></code> in the solution.
-An initial step size can be set in the <code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code> by specifying
+An initial step size can be set in the <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> by specifying
 parameter <code class="docutils literal"><span class="pre">h</span></code>. A minimum step size <code class="docutils literal"><span class="pre">hmin</span></code> can also be specified;
-the <code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code> raises an exception if the step size becomes
-smaller than <code class="docutils literal"><span class="pre">hmin</span></code>. The <code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code> keeps track of the
+the <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> raises an exception if the step size becomes
+smaller than <code class="docutils literal"><span class="pre">hmin</span></code>. The <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> keeps track of the
 number of good steps, where <code class="docutils literal"><span class="pre">h</span></code> is increased, and the number of
 bad steps, where <code class="docutils literal"><span class="pre">h</span></code> is decreased and the step is repeated:
 <code class="docutils literal"><span class="pre">odeint.ngood</span></code> and <code class="docutils literal"><span class="pre">odeint.nbad</span></code>, respectively.</p>
@@ -455,9 +464,10 @@ less precision is repeated with a smaller step size. The step size
 is increased if precision is higher than needed. Default is 1e-5.</li>
 <li><strong>h</strong> (<em>float or None</em>) &#8211; Absolute value of initial step size. The default value equals the
 entire width of the integration interval.</li>
-<li><strong>hmin</strong> (<em>float or None</em>) &#8211; Smallest step size allowed. An exception is raised
-if a smaller step size is needed. This is mostly useful for
-preventing infinite loops caused by programming errors. The
+<li><strong>hmin</strong> (<em>float or None</em>) &#8211; Smallest step size allowed. A warning is raised
+if a smaller step size is requested, and the step size is not
+decreased. This prevents infinite loops at singular points, but
+the solution may not be reliable when a warning has been issued. The
 default value is zero (which does <em>not</em> prevent infinite loops).</li>
 <li><strong>delta</strong> &#8211; Function <code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> that returns
 a number to be compared  with <code class="docutils literal"><span class="pre">tol</span></code> at each integration step:
@@ -481,7 +491,7 @@ results.</li>
 <dt id="gvar.ode.DictIntegrator">
 <em class="property">class </em><code class="descclassname">gvar.ode.</code><code class="descname">DictIntegrator</code><span class="sig-paren">(</span><em>deriv</em>, <em>tol=1e-05</em>, <em>h=None</em>, <em>hmin=None</em>, <em>analyzer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.DictIntegrator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integrate <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">deriv(x,y)</span></code> where <code class="docutils literal"><span class="pre">y</span></code> is a dictionary.</p>
-<p>An <code class="xref py py-class docutils literal"><span class="pre">DictIntegrator</span></code> object <code class="docutils literal"><span class="pre">odeint</span></code> integrates <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">f(x,y)</span></code>
+<p>An <a class="reference internal" href="#gvar.ode.DictIntegrator" title="gvar.ode.DictIntegrator"><code class="xref py py-class docutils literal"><span class="pre">DictIntegrator</span></code></a> object <code class="docutils literal"><span class="pre">odeint</span></code> integrates <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">f(x,y)</span></code>
 to obtain <code class="docutils literal"><span class="pre">y(x1)</span></code> from <code class="docutils literal"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal"><span class="pre">y</span></code> and <code class="docutils literal"><span class="pre">f(x,y)</span></code> are
 dictionary types having the same keys, and containing scalars
 and/or <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays as values. Typical usage is:</p>
@@ -507,10 +517,10 @@ y1, y2 ... = odeint(y0, interval=[x0, x1, x2 ...])
 </div>
 <p>The integrator uses an adaptive Runge-Kutta algorithm that adjusts
 the integrator&#8217;s step size to obtain relative accuracy <code class="docutils literal"><span class="pre">tol</span></code> in the solution.
-An initial step size can be set in the <code class="xref py py-class docutils literal"><span class="pre">DictIntegrator</span></code> by specifying
+An initial step size can be set in the <a class="reference internal" href="#gvar.ode.DictIntegrator" title="gvar.ode.DictIntegrator"><code class="xref py py-class docutils literal"><span class="pre">DictIntegrator</span></code></a> by specifying
 parameter <code class="docutils literal"><span class="pre">h</span></code>. A minimum ste psize <code class="docutils literal"><span class="pre">hmin</span></code> can also be specified;
-the <code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code> raises an exception if the step size becomes
-smaller than <code class="docutils literal"><span class="pre">hmin</span></code>. The <code class="xref py py-class docutils literal"><span class="pre">DictIntegrator</span></code> keeps track of the
+the <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> raises an exception if the step size becomes
+smaller than <code class="docutils literal"><span class="pre">hmin</span></code>. The <a class="reference internal" href="#gvar.ode.DictIntegrator" title="gvar.ode.DictIntegrator"><code class="xref py py-class docutils literal"><span class="pre">DictIntegrator</span></code></a> keeps track of the
 number of good steps, where <code class="docutils literal"><span class="pre">h</span></code> is increased, and the number of
 bad steps, where <code class="docutils literal"><span class="pre">h</span></code> is decreases and the step is repeated:
 <code class="docutils literal"><span class="pre">odeint.ngood</span></code> and <code class="docutils literal"><span class="pre">odeint.nbad</span></code>, respectively.</p>
@@ -568,7 +578,7 @@ of the differential equation at that point.</p>
 </div>
 <div class="section" id="one-dimensional-integration">
 <span id="integral"></span><h2>One-Dimensional Integration<a class="headerlink" href="#one-dimensional-integration" title="Permalink to this headline">¶</a></h2>
-<p>The module <code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code> also provides a method for evaluating
+<p>The module <a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> also provides a method for evaluating
 one-dimensional integrals (using its adaptive Runge-Kutta algorithm):</p>
 <dl class="method">
 <dt id="gvar.ode.integral">
@@ -630,7 +640,7 @@ the shape.</li>
 
 </div>
 <div class="section" id="module-gvar.powerseries">
-<span id="id2"></span><span id="power-series"></span><h2>Power Series<a class="headerlink" href="#module-gvar.powerseries" title="Permalink to this headline">¶</a></h2>
+<span id="power-series"></span><h2>Power Series<a class="headerlink" href="#module-gvar.powerseries" title="Permalink to this headline">¶</a></h2>
 <p>This module provides tools for manipulating power series approximations
 of functions. A function&#8217;s power series is specified by the coefficients in
 its Taylor expansion with respect to an independent variable, say <code class="docutils literal"><span class="pre">x</span></code>:</p>
@@ -848,10 +858,10 @@ integrating from point <em>x0</em>, is returned.</p>
 
 </dd></dl>
 
-</div>
+<span class="target" id="module-gvar.root"></span></div>
 <div class="section" id="root-finding">
-<span id="root"></span><h2>Root Finding<a class="headerlink" href="#root-finding" title="Permalink to this headline">¶</a></h2>
-<p>The module <code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code> contains methods for finding the roots of
+<h2>Root Finding<a class="headerlink" href="#root-finding" title="Permalink to this headline">¶</a></h2>
+<p>The module <a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> contains methods for finding the roots of
 of one-dimensional functions: that is, finding <code class="docutils literal"><span class="pre">x</span></code> such that
 <code class="docutils literal"><span class="pre">fcn(x)=0</span></code> for a given function <code class="docutils literal"><span class="pre">fcn</span></code>. Typical usage is:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
@@ -1073,6 +1083,9 @@ after <code class="docutils literal"><span class="pre">maxit</span></code> itera
   <h4>Previous topic</h4>
   <p class="topless"><a href="gvar_dataset.html"
                         title="previous chapter"><code class="docutils literal"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="case-pendulum.html"
+                        title="next chapter">Case Study: Pendulum Clock</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -1099,6 +1112,9 @@ after <code class="docutils literal"><span class="pre">maxit</span></code> itera
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="case-pendulum.html" title="Case Study: Pendulum Clock"
+             >next</a> |</li>
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>

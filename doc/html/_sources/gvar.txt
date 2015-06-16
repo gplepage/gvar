@@ -12,7 +12,7 @@
 
 .. moduleauthor:: G.P. Lepage <g.p.lepage@cornell.edu>
 
-.. module:: gvar
+.. module:: gvar 
    :synopsis: Correlated Gaussian random variables. 
 
 Introduction
@@ -22,13 +22,13 @@ Objects of type :class:`gvar.GVar` represent gaussian random variables,
 which are specified by a mean and standard deviation. They are created
 using :func:`gvar.gvar`: for example, ::
     
-    >>> x = gvar.gvar(0,3)          # 0 +- 3
-    >>> y = gvar.gvar(2,4)          # 2 +- 4
+    >>> x = gvar.gvar(10,3)          # 0 +- 3
+    >>> y = gvar.gvar(12,4)          # 2 +- 4
     >>> z = x+y                     # 2 +- 5
     >>> print(z)
-    2 +- 5
+    22.0(5.0)
     >>> print(z.mean)
-    2.0
+    22.0
     >>> print(z.sdev)
     5.0
     

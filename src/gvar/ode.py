@@ -14,6 +14,7 @@
 # GNU General Public License for more details.
 
 import sys
+import warnings
 
 import numpy
 import gvar
@@ -128,9 +129,10 @@ class Integrator(object):
     :param h: Absolute value of initial step size. The default value equals the
         entire width of the integration interval.
     :type h: float or None
-    :param hmin: Smallest step size allowed. An exception is raised
-        if a smaller step size is needed. This is mostly useful for 
-        preventing infinite loops caused by programming errors. The 
+    :param hmin: Smallest step size allowed. A warning is raised
+        if a smaller step size is requested, and the step size is not 
+        decreased. This prevents infinite loops at singular points, but 
+        the solution may not be reliable when a warning has been issued. The 
         default value is zero (which does *not* prevent infinite loops).
     :type hmin: float or None
     :param delta: Function ``delta(yerr, y, delta_y)`` that returns 
@@ -200,13 +202,14 @@ class Integrator(object):
                 delta = numpy.max(delta)
                 if isinstance(delta, gvar.GVar):
                     delta = delta.mean
-            if delta >= tol:
+            if delta >= tol:  
                 # smaller step size -- adjust and redo step
-                h *= 0.97 * (tol / delta) ** 0.25
                 if h < hmin:
-                    raise RuntimeError(
-                        'step size smaller than hmin: %g < %g' % (h, hmin)
+                    warnings.warn(
+                        'step size not reduced (< hmin) --- errors may not be reliable'
                         )
+                    continue
+                h *= 0.97 * (tol / delta) ** 0.25
                 x = xold
                 y = yold
                 self.nbad += 1

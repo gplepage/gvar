@@ -20,8 +20,8 @@ To install:
 		this must then be done by hand. To install setuptools either:
 		1) download https://bootstrap.pypa.io/ez_setup.py
   		and run 'python ez_setup.py'; or 2) go to the setuptools website 
-  		for instructions.
-  		(https://pythonhosted.org/setuptools/)
+  		on PyPI for instructions.
+  		(https://pypi.python.org/pypi/setuptools/)
 				
 	The gvar code works for Python 2.6 and 2.7, and Python 3.2-3.4. It
 	does not work for Python versions 2.5.X or earlier. It has not been tested
@@ -41,8 +41,9 @@ To install:
 	used by Python. This will not be a problem if the new package overwrites
 	the older one, but could cause trouble if the new package is written 
 	to a different place. Find out where the older package is stored by
-	using 'pydoc gvar' before installing the new software
-	(pydoc lists the location of the module under "FILE", at the end).
+	using 'pydoc gvar' before installing the new software, and make sure
+	all vestiges of the old gvar are removed (pydoc lists the location of 
+	the module under "FILE", at the end).
 	
 	N.B. To install gvar for an alternative version of python, say python3 
 	for example, use 'make PYTHON=python3 install'. Python's standard 
@@ -69,6 +70,9 @@ To install:
 		
 4. (Optional) Use 'make clean' to erase work files/directories.
 
+5. (Optional) Use 'make run-examples' to run the example files in 
+   directory examples/. These are short, annotated examples, suitable
+   for tinkering.
 
 To uninstall:
 

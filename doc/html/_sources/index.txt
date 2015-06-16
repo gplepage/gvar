@@ -15,6 +15,7 @@ Contents:
    gvar.rst
    gvar_dataset.rst
    gvar_other.rst
+   case-pendulum.rst
 
 Indices and tables
 ==================

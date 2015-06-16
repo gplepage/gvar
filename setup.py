@@ -21,11 +21,9 @@ try:
     from setuptools import setup, Extension
     setuptools_kwargs = dict(
         install_requires=['cython>=0.17', 'numpy>=1.7'],
+        # include_package_data = True,
         )
 except ImportError:
-    warnings.warn(
-        "setuptools not installed so can't verify dependencies"
-        )
     from distutils.core import setup
     from distutils.extension import Extension
     setuptools_kwargs = dict(
@@ -65,8 +63,8 @@ ext_modules = [     #
 
 # packages
 packages = ["gvar"]
-package_dir = {"gvar":"src/gvar"}
-package_data = {"gvar":['../gvar.pxd']}
+package_dir = dict(gvar="src/gvar")
+package_data = dict(gvar=['../gvar.pxd', '_svec_smat.pxd', '_gvarcore.pxd'])
 
 setup(name='gvar',
     version=GVAR_VERSION,

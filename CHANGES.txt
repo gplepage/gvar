@@ -1,34 +1,24 @@
-Version 7.0??? 
-============
-The biggest change in this version is that gvar is now distributed 
-independently of lsqfit; it will no longer be bundled in lsqfit. 
-This is better because gvar is used by packages other than lsqfit. 
-There is also a minor change in the interface for gvar.chi2, which is
-why the major version number is increasing from 6 to 7 (because of 
-semantic versioning).
+Version 7.0 - 2015-06-16
+==========================
 
-- The only incompatible change in the gvar concerns a rarely used feature
+The biggest change in this version is that gvar is now distributed
+independently of lsqfit; it will no longer be bundled with the latter.  This
+is better because gvar is used by packages other than lsqfit.  There are also
+two very minor but incompatible changes, in the interfaces for gvar.chi2 and
+gvar.ode, that require the major version number to increase from 6 to 7
+(because of  semantic versioning). Finally there are some significant
+additions to the numerical analysis routines provided with gvar.
+
+- The first incompatible change concerns a rarely used feature
   of gvar.chi2. Previous versions stored information about dof and Q in 
   as attributes of the function; these are now stored in the result of the 
   function, which is much more natural.
 
-- Installation will now use setuptools instead of disutils, provided 
-  setuptools is installed. setuptools automatically ensures that 
-  modules needed by gvar are installed and sufficiently 
-  up-to-date. If setuptools is not installed, distutils is used and 
-  dependencies are not checked --- this must be done by hand. 
-
-- Added gvar.equivalent(g1, g2, rtol, atol) which checkes whether or not
-  the GVars in g1 and g2 are the equivalent (ie, g.mean and g.der agree 
-  for each GVar). This is useful for debugging purposes.
-
-- Tiny addition to gvar tests.
-
-- gvar.cspline now allows you to specify what order polynomial is used for 
-  out-of-range points. In the past a cubic polynomial was used, based on 
-  the value and derivatives at the knot nearest to the out-of-range point.
-  Now one can specify a lower-order polynomial by setting parameter 
-  extrap_order equal to 0, 1, or 2.
+- The second incompatible change is in gvar.ode. The behavior when the 
+  step size is reduced below hmin is changed. Before an exception was 
+  issued and execution stopped. Now a warning is issued, the step size 
+  is not reduced and execution continues. The warning is necessary since
+  it means that errors may not be under control to the extent hoped.
 
 - Added gvar.ode.integral for 1d integrals.
 
@@ -39,6 +29,26 @@ semantic versioning).
 
   As for the other numerical analysis methods, the new methods work with any 
   combination of numbers and GVars. 
+
+- gvar.cspline now allows you to specify what order polynomial is used for 
+  out-of-range points. In the past a cubic polynomial was used, based on 
+  the value and derivatives at the knot nearest to the out-of-range point.
+  Now one can specify a lower-order polynomial by setting parameter 
+  extrap_order equal to 0, 1, or 2.
+
+- Added gvar.equivalent(g1, g2, rtol, atol) which checkes whether or not
+  the GVars in g1 and g2 are the equivalent (ie, g.mean and g.der agree 
+  for each GVar). This is useful for debugging purposes.
+
+- Installation will now use setuptools instead of disutils, provided 
+  setuptools is installed. setuptools automatically ensures that 
+  modules needed by gvar are installed and sufficiently 
+  up-to-date. If setuptools is not installed, distutils is used and 
+  dependencies are not checked --- this must be done by hand. 
+
+- Tiny addition to gvar tests.
+
+
 
 
 Version 6.0 - 2014-11-01

@@ -15,18 +15,20 @@ More examples will follow with time.
 
 The sub-modules included here are:
 
-    - :any:`cspline <cspline>` --- cubic splines for 1-d data.
+    - :mod:`gvar.cspline` --- cubic splines for 1-d data.
 
-    - :any:`linalg <linalg>` --- basic linear algebra.
+    - :mod:`gvar.linalg` --- basic linear algebra.
 
-    - :any:`ode <ode>` --- integration of systems of ordinary differential equations;
+    - :mod:`gvar.ode` --- integration of systems of ordinary differential equations;
         :ref:`one-dimensional integrals <integral>`.
 
-    - :any:`powerseries <power-series>` --- power series representation of functions.
+    - :mod:`gvar.powerseries` --- power series representation of functions.
 
-    - :any:`root <root>` --- root-finding for one-dimensional functions.
+    - :mod:`gvar.root` --- root-finding for one-dimensional functions.
 
-.. _cspline:
+
+.. module:: gvar.cspline 
+   :synopsis: Cubic splines. 
 
 Cubic Splines
 -----------------
@@ -36,7 +38,9 @@ interpolating one-dimensional data using cubic splines:
 
 .. autoclass:: gvar.cspline.CSpline
 
-.. _linalg:
+
+.. module:: gvar.linalg 
+   :synopsis: Basic linear algebra. 
 
 Linear Algebra
 ---------------------
@@ -56,7 +60,8 @@ linear algebra with matrices whose elements can be either numbers or
 .. automethod:: gvar.linalg.eigvalsh
 
 
-.. _ode:
+.. module:: gvar.ode 
+   :synopsis: Ordinary differential equations. 
 
 Ordinary Differential Equations 
 ------------------------------------------------
@@ -74,6 +79,7 @@ A simple analyzer class is:
 
 .. autoclass:: gvar.ode.Solution()
 
+
 .. _integral:
 
 One-Dimensional Integration
@@ -84,7 +90,7 @@ one-dimensional integrals (using its adaptive Runge-Kutta algorithm):
 
 .. automethod:: gvar.ode.integral
 
-.. _power-series:
+
 
 Power Series
 --------------
@@ -94,7 +100,10 @@ Power Series
 .. autoclass:: gvar.powerseries.PowerSeries
     :members:
 
-.. _root:
+
+
+.. module:: gvar.root 
+   :synopsis: Roots (zeros) of one-dimensional functions. 
 
 Root Finding
 --------------

@@ -71,21 +71,25 @@ class CSpline:
             >>> xknot = [0., 0.78539816, 1.57079633, 2.35619449, 3.14159265]
             >>> yknot = [0., 0.70710678, 1.0, 0.70710678, 0.]
             >>> f = gv.cspline.CSpline(xknot, yknot)
-            >>> print(f(.3), math.sin(.3))  
-            0.295053928494 0.295520206661
-            >>> print(f(1.2), math.sin(1.2))
-            0.930988357092 0.932039085967
-            >>> print(f.D(0.5), math.cos(0.5))
-            0.879290177 0.87758256189
-            >>> print(f.D2(0.5), -math.sin(0.5))
-            -0.473740536269 -0.479425538604
-            >>> print(f.integ(0.5), 1 - math.cos(0.5))
-            0.122248265257 0.12241743811
+            >>> print(f(0.7), f.D(0.7), f.D2(0.7), f.integ(0.7))
+            0.644243383101 0.765592448296 -0.663236750777 0.234963942648
 
-        Here the ``yknot`` values were obtained by taking ``sin(xknot)``,
-        so these results show that this 5-knot spline gives a pretty good 
-        approximation of the function ``sin(x)``, as well as of its first 
-        and second derivatives and its integral. Using the spline outside
+        Here the ``yknot`` values were obtained by taking ``sin(xknot)``.
+        Tabulating results from the spline together with the exact results
+        shows that this 5-knot spline gives a pretty good approximation 
+        of the function ``sin(x)``, as well as its derivatives and integral::
+
+            x    f(x)    f.D(x)  f.D2(x) f.integ(x) | sin(x)  cos(x)  1-cos(x)
+            ------------------------------------------------------------------
+            0.3  0.2951  0.9551  -0.2842 0.04458    | 0.2955  0.9553  0.04466
+            0.5  0.4791  0.8793  -0.4737 0.1222     | 0.4794  0.8776  0.1224 
+            0.7  0.6442  0.7656  -0.6632 0.235      | 0.6442  0.7648  0.2352 
+            0.9  0.783   0.6176  -0.7891 0.3782     | 0.7833  0.6216  0.3784 
+            1.1  0.8902  0.452   -0.8676 0.5461     | 0.8912  0.4536  0.5464 
+            1.3  0.9627  0.2706  -0.9461 0.7319     | 0.9636  0.2675  0.7325 
+            1.5  0.9974  0.07352 -1.025  0.9286     | 0.9975  0.07074 0.9293 
+
+        Using the spline outside
         the range covered by the knots is less good::
 
             >>> print(f(2 * math.pi))
@@ -111,7 +115,8 @@ class CSpline:
 
     Args:
         xknot (1-d sequence of number): The knots of the spline, where the 
-            function values are specified.
+            function values are specified. The knots are sorted (from small 
+            to large) if necessary.
         yknot (1-d sequence of number): Function values at the locations 
             specified by ``xknot[i]``.
         deriv (2-component sequence): Derivatives at initial and final 

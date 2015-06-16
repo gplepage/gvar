@@ -60,19 +60,19 @@
           <div class="body" role="main">
             
   <div class="section" id="gvar-gaussian-random-variables">
-<h1><a class="reference internal" href="overview.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a> - Gaussian Random Variables<a class="headerlink" href="#gvar-gaussian-random-variables" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a> - Gaussian Random Variables<a class="headerlink" href="#gvar-gaussian-random-variables" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-gvar"></span><div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>Objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> represent gaussian random variables,
 which are specified by a mean and standard deviation. They are created
 using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal"><span class="pre">gvar.gvar()</span></code></a>: for example,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>          <span class="c"># 0 +- 3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>          <span class="c"># 2 +- 4</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>          <span class="c"># 0 +- 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>          <span class="c"># 2 +- 4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span>                     <span class="c"># 2 +- 5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="go">2 +- 5</span>
+<span class="go">22.0(5.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
-<span class="go">2.0</span>
+<span class="go">22.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sdev</span><span class="p">)</span>
 <span class="go">5.0</span>
 </pre></div>
@@ -214,7 +214,7 @@ whose values are floats or arrays of floats, respectively.</p>
 </div>
 <p>creates a version of <code class="docutils literal"><span class="pre">sin(x)</span></code> that works with either floats or
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s as its argument. This particular function is unnecessary since
-it is already provided by <a class="reference internal" href="overview.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a>.</p>
+it is already provided by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -578,7 +578,7 @@ than <code class="docutils literal"><span class="pre">|svdcut|</span> <span clas
 <dd><p>Seed random number generators with tuple <code class="docutils literal"><span class="pre">seed</span></code>.</p>
 <p>Argument <code class="docutils literal"><span class="pre">seed</span></code> is a <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code> of integers that is used to seed
 the random number generators used by <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> and
-<code class="xref py py-mod docutils literal"><span class="pre">random</span></code> (and therefore by <a class="reference internal" href="overview.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a>). Reusing
+<code class="xref py py-mod docutils literal"><span class="pre">random</span></code> (and therefore by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a>). Reusing
 the same <code class="docutils literal"><span class="pre">seed</span></code> results in the same set of random numbers.</p>
 <p><code class="docutils literal"><span class="pre">ranseed</span></code> generates its own seed when called without an argument
 or with <code class="docutils literal"><span class="pre">seed=None</span></code>. This seed is stored in <code class="docutils literal"><span class="pre">ranseed.seed</span></code> and
@@ -1385,7 +1385,7 @@ decomposition cannot be computed if the input matrix was rescaled
 </div>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="overview.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a> makes heavy use of <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> for array manipulations. It
+<p><a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a> makes heavy use of <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> for array manipulations. It
 also uses the <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> code for implementing elementary functions
 (<em>e.g.</em>, <code class="docutils literal"><span class="pre">sin</span></code>, <code class="docutils literal"><span class="pre">exp</span></code> ...) in terms of member functions.</p>
 </div>

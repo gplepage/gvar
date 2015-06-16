@@ -1,0 +1,12 @@
+period T = 1.0210(20) sec
+uncertainty = 2.79 min/day
+
+Partial % Errors:
+                   T
+--------------------
+        l:      0.10
+theta_max:      0.17
+--------------------
+    total:      0.19
+
+period T = 1.0210 +- 0.0019

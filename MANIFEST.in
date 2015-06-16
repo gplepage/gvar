@@ -1,13 +1,12 @@
 include makefile README.rst INSTALLATION.txt LICENSE.txt MANIFEST.in CHANGES.txt
-include setup.py src/gvar.pxd src/gvar/*.pxd  src/*.pyx
+include setup.py src/gvar.pxd src/gvar/*.pxd  src/*.pyx src/gvar/*.pyx
 include gdev-setup.py
 include doc/gvar.pdf
 
 graft doc/html
-graft examples
 graft tests
-exclude examples/*.tmp 
-exclude examples/*.pyc
 exclude tests/*.pyc
+graft examples
+exclude examples/*.pyc examples/*.tmp
 recursive-exclude tests/__pycache__ *
 recursive-exclude doc/source/_build *
