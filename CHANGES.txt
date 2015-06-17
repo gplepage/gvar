@@ -1,3 +1,9 @@
+Version 7.0.3
+=========================
+
+- fixed default initialization of gvar.ranseed so it doesn't generate 
+  errors due to new restrictions on numpy's random generator.
+
 Version 7.0.2 - 2015-06-17
 ===========================
 Changed to pip + distutils for installation. Fixed inconsistencies in 

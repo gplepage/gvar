@@ -26,8 +26,7 @@ install-sys :
 # $(PYTHON) setup.py install --record files-gvar.$(PYTHONVERSION)
 
 uninstall :			# mostly works (may leave some empty directories)
-	- $(PIP) uninstall gvar 
-	- $(PIP) uninstall gdev 
+	$(PIP) uninstall gvar 
 
 # - cat files-gvar.$(PYTHONVERSION) | xargs rm -rf
 # - cat files-gdev.$(PYTHONVERSION) | xargs rm -rf

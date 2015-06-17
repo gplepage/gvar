@@ -1207,6 +1207,11 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_arraysequal(f1,next(f))
         self.assertEqual(x1,x())
         self.assertEqual(y1,y())
+        # default initialization
+        ranseed()
+        f1 = next(f)
+        ranseed(ranseed.seed)
+        self.assert_arraysequal(f1, next(f))
     
     def test_rebuild(self):
         """ rebuild """

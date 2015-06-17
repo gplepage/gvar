@@ -134,7 +134,7 @@ def ranseed(seed=None):
     :returns: The seed.
     """
     if seed is None:
-        seed = numpy.random.randint(1, sys.maxsize, size=3)
+        seed = numpy.random.randint(1, int(2e9), size=3)
     seed = tuple(seed)
     numpy.random.seed(seed)
     ranseed.seed = seed
