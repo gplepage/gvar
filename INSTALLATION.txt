@@ -76,9 +76,8 @@ To install:
 
 To uninstall:
 
-1. 'make uninstall' (probably) uninstalls most of what was installed. It 
-	relies upon files with names like "files-gvar.python" that were 
-	created during installation.
+1. 'make uninstall' (probably) uninstalls most of what was installed. It
+    uses pip uninstall.
 
 
 Problems:

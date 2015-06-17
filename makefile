@@ -12,27 +12,27 @@
 # GNU General Public License for more details.
 
 PYTHON = python
+PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
 # PYTHONHASH = `python -c 'import sys; print(hash(sys.version))'`
 
 install : 
-	$(PYTHON) setup.py install --user --record files-gvar.$(PYTHON)
-	rm -fr build/gvar.egg-info
-	mv gvar.egg-info build/
+	$(PYTHON) setup.py install --user --record files-gvar.$(PYTHONVERSION)
 
 install-sys : 		
-	$(PYTHON) setup.py install --record files-gvar.$(PYTHON)
-	rm -fr build/gvar.egg-info
-	mv gvar.egg-info build/
+	$(PYTHON) setup.py install --record files-gvar.$(PYTHONVERSION)
 
-uninstall :			# mostly works (leaves some empty directories)
-	- cat files-gvar.$(PYTHON) | xargs rm -rf
-	- cat files-gdev.$(PYTHON) | xargs rm -rf
+uninstall :			# mostly works (may leave some empty directories)
+	- pip uninstall gvar -y 
+	- pip uninstall gdev -y
+
+# - cat files-gvar.$(PYTHONVERSION) | xargs rm -rf
+# - cat files-gdev.$(PYTHONVERSION) | xargs rm -rf
 
 install-gdev :
-	$(PYTHON) gdev-setup.py install --user --record files-gdev.$(PYTHON)
+	$(PYTHON) gdev-setup.py install --user --record files-gdev.$(PYTHONVERSION)
 
 install-gdev-sys :
-	$(PYTHON) gdev-setup.py install --record files-gdev.$(PYTHON)
+	$(PYTHON) gdev-setup.py install --record files-gdev.$(PYTHONVERSION)
 
 doc-html:
 	rm -rf doc/html; sphinx-build -b html doc/source doc/html

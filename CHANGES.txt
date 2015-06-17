@@ -1,3 +1,9 @@
+Version 7.0.1 - 2015-06-16
+==========================
+Had to replace setuptools with distutils because I could get cython 
+pxd files to work properly with the eggs, causing build problems for 
+lsqfit.
+
 Version 7.0 - 2015-06-16
 ==========================
 

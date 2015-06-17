@@ -17,22 +17,24 @@ GNU General Public License for more details.
 """
 import warnings
 
-try:
-    from setuptools import setup, Extension
-    setuptools_kwargs = dict(
-        install_requires=['cython>=0.17', 'numpy>=1.7'],
-        # include_package_data = True,
-        )
-except ImportError:
-    from distutils.core import setup
-    from distutils.extension import Extension
-    setuptools_kwargs = dict(
-        requires=['cython (>=0.17)', 'numpy (>=1.7)'],
-        )
+# try:
+    # from setuptools import setup, Extension
+    # installation_kwargs = dict(
+    #     install_requires=['cython>=0.17', 'numpy>=1.7'],
+    #     include_package_data = True,
+    #     )
+# except ImportError:
+
+from distutils.core import setup
+from distutils.extension import Extension
+installation_kwargs = dict(
+    requires=['cython (>=0.17)', 'numpy (>=1.7)'],
+    )
+
 from Cython.Build import cythonize
 import numpy
 
-GVAR_VERSION = '7.0'
+GVAR_VERSION = '7.0.1'
 
 # create gvar/_version.py so gvar knows its version number 
 with open("src/gvar/_version.py","w") as version_file:
@@ -111,5 +113,5 @@ setup(name='gvar',
         'Programming Language :: Cython',
         'Topic :: Scientific/Engineering'
         ],
-    **setuptools_kwargs
+    **installation_kwargs
 )
