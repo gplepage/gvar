@@ -1,7 +1,4 @@
 """ 
-build in place: python setup.py build_ext --inplace 
-install in ddd: python setup.py install --install-lib ddd
-
 Created by G. Peter Lepage (Cornell University) on 9/2011.
 Copyright (c) 2011-15 G. Peter Lepage.
 
@@ -15,26 +12,16 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
-import warnings
 
-# try:
-    # from setuptools import setup, Extension
-    # installation_kwargs = dict(
-    #     install_requires=['cython>=0.17', 'numpy>=1.7'],
-    #     include_package_data = True,
-    #     )
-# except ImportError:
+# from setuptools import setup, Extension
 
 from distutils.core import setup
 from distutils.extension import Extension
-installation_kwargs = dict(
-    requires=['cython (>=0.17)', 'numpy (>=1.7)'],
-    )
 
 from Cython.Build import cythonize
 import numpy
 
-GVAR_VERSION = '7.0.1'
+GVAR_VERSION = '7.0.2'
 
 # create gvar/_version.py so gvar knows its version number 
 with open("src/gvar/_version.py","w") as version_file:
@@ -55,7 +42,7 @@ ext_args = dict(
     extra_link_args=[] # ['-framework','vecLib'], # for Mac OSX ?
     )
 
-ext_modules = [     #
+ext_modules = [     
     Extension("gvar._gvarcore", ["src/gvar/_gvarcore.pyx"], **ext_args),
     Extension( "gvar._svec_smat", ["src/gvar/_svec_smat.pyx"], **ext_args),
     Extension("gvar._utilities", ["src/gvar/_utilities.pyx"], **ext_args),
@@ -77,6 +64,8 @@ setup(name='gvar',
     package_dir=package_dir,
     package_data=package_data,
     ext_modules= cythonize(ext_modules),
+    install_requires=['cython>=0.17', 'numpy>=1.7'], # for pip (distutils ignores)
+    requires=['cython (>=0.17)', 'numpy (>=1.7)'],   # for distutils
     url="https://github.com/gplepage/gvar.git",
     license='GPLv3+',
     platforms='Any',
@@ -113,5 +102,4 @@ setup(name='gvar',
         'Programming Language :: Cython',
         'Topic :: Scientific/Engineering'
         ],
-    **installation_kwargs
 )

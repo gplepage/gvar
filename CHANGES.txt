@@ -1,3 +1,8 @@
+Version 7.0.2 - 2015-06-17
+===========================
+Changed to pip + distutils for installation. Fixed inconsistencies in 
+INSTALLATION.txt.
+
 Version 7.0.1 - 2015-06-16
 ==========================
 Had to replace setuptools with distutils again, because I could get cython 

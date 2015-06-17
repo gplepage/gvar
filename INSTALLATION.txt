@@ -12,16 +12,10 @@ To install:
 		may not work. 
 		(http://www.cython.org/)
 
-	c. The setuptools package (optional). setuptools is used in place of
-		distutils for installing the package, if setuptools is present. 
-		setuptools automatically ensures that modules needed by gvar 
-		are installed and sufficiently up-to-date. If setuptools is not 
-		installed, distutils is used and dependencies are not checked --- 
-		this must then be done by hand. To install setuptools either:
-		1) download https://bootstrap.pypa.io/ez_setup.py
-  		and run 'python ez_setup.py'; or 2) go to the setuptools website 
-  		on PyPI for instructions.
-  		(https://pypi.python.org/pypi/setuptools/)
+	c. pip is used for installing (and uninstalling) gvar. pip usually 
+	    comes with python. pip can be used to install numpy and cython as 
+	    well.
+	    (https://pypi.python.org/pypi/pip)
 				
 	The gvar code works for Python 2.6 and 2.7, and Python 3.2-3.4. It
 	does not work for Python versions 2.5.X or earlier. It has not been tested
@@ -34,7 +28,9 @@ To install:
 	files-gvar.python (in case, for example, you want to uninstall them).
 	
 	N.B. Rather than using make and the makefile, one can instead use 
-	standard distutils commands: eg, 'python setup.py install --user'
+	standard python installation tools like 'pip install . --user' 
+	(from within the main directory) or python distutils commands 
+	like 'python setup.py install --user'.
 	
 	N.B. If you have previously installed older versions of gvar,
 	consider removing the earlier package to make sure that the new ones are 
@@ -45,8 +41,8 @@ To install:
 	all vestiges of the old gvar are removed (pydoc lists the location of 
 	the module under "FILE", at the end).
 	
-	N.B. To install gvar for an alternative version of python, say python3 
-	for example, use 'make PYTHON=python3 install'. Python's standard 
+	N.B. To install gvar with an alternative version of pip, say pip3 
+	for example, use 'make PIP=pip3 install'. Python's standard 
 	directories are structured in such a way that it is necessary to do 
 	a separate installation for each python version that will be used for 
 	gvar.
