@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gvar - Gaussian Random Variables &mdash; gvar 7.0.3 documentation</title>
+    <title>gvar - Gaussian Random Variables &mdash; gvar 7.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '7.0.3',
+        VERSION:     '7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 7.0.3 documentation" href="index.html" />
+    <link rel="top" title="gvar 7.1 documentation" href="index.html" />
     <link rel="next" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
     <link rel="prev" title="Overview and Tutorial" href="overview.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.0.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -84,11 +84,13 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.mean" title="gvar.mean"><code class="xref any py py-func docutils literal"><span class="pre">mean</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; extract means.</li>
 <li><a class="reference internal" href="#gvar.sdev" title="gvar.sdev"><code class="xref any py py-func docutils literal"><span class="pre">sdev</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; extract standard deviations.</li>
 <li><a class="reference internal" href="#gvar.var" title="gvar.var"><code class="xref any py py-func docutils literal"><span class="pre">var</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; extract variances.</li>
+<li><a class="reference internal" href="#gvar.fmt" title="gvar.fmt"><code class="xref any py py-func docutils literal"><span class="pre">fmt</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; replace all <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary by string representations.</li>
+<li><a class="reference internal" href="#gvar.tabulate" title="gvar.tabulate"><code class="xref any py py-func docutils literal"><span class="pre">tabulate</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; tabulate entries in array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><a class="reference internal" href="#gvar.chi2" title="gvar.chi2"><code class="xref any py py-func docutils literal"><span class="pre">chi2</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <code class="docutils literal"><span class="pre">chi**2</span></code> of <code class="docutils literal"><span class="pre">g1-g2</span></code>.</li>
 <li><a class="reference internal" href="#gvar.equivalent" title="gvar.equivalent"><code class="xref any py py-func docutils literal"><span class="pre">equivalent</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s the same in <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code>?</li>
 <li><a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref any py py-func docutils literal"><span class="pre">evalcov</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute covariance matrix.</li>
 <li><a class="reference internal" href="#gvar.evalcorr" title="gvar.evalcorr"><code class="xref any py py-func docutils literal"><span class="pre">evalcorr</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute correlation matrix.</li>
-<li><a class="reference internal" href="#gvar.fmt_values" title="gvar.fmt_values"><code class="xref any py py-func docutils literal"><span class="pre">fmt_values</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; create table of values for printing.</li>
+<li><a class="reference internal" href="#gvar.fmt_values" title="gvar.fmt_values"><code class="xref any py py-func docutils literal"><span class="pre">fmt_values</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; list values for printing.</li>
 <li><a class="reference internal" href="#gvar.fmt_errorbudget" title="gvar.fmt_errorbudget"><code class="xref any py py-func docutils literal"><span class="pre">fmt_errorbudget</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; create error-budget table for printing.</li>
 <li><a class="reference internal" href="#gvar.fmt_chi2" title="gvar.fmt_chi2"><code class="xref any py py-func docutils literal"><span class="pre">fmt_chi2</span></code></a><code class="docutils literal"><span class="pre">(f)</span></code> &#8212; format chi**2 information in f as string for printing.</li>
 <li>class <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">BufferDict</span></code></a> &#8212; ordered dictionary with data buffer.</li>
@@ -272,6 +274,65 @@ matrices and correlation/comparison information can be extracted from arrays
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s. Each <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal"><span class="pre">gi</span></code> in <code class="docutils literal"><span class="pre">g</span></code> is replaced
 by the string generated by <code class="docutils literal"><span class="pre">gi.fmt(ndecimal,sep)</span></code>. Result has same
 structure as <code class="docutils literal"><span class="pre">g</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.tabulate">
+<code class="descclassname">gvar.</code><code class="descname">tabulate</code><span class="sig-paren">(</span><em>g</em>, <em>ncol=1</em>, <em>headers=True</em>, <em>offset=''</em>, <em>ndecimal=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.tabulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tabulate contents of an array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>Given an array <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal"><span class="pre">gvar.tabulate(g)</span></code> returns a
+string containing a table of the values of <code class="docutils literal"><span class="pre">g</span></code>&#8216;s entries.
+For example, the code</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span>
+<span class="n">g</span><span class="p">[</span><span class="s">&#39;scalar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s">&#39;10.3(1)&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="p">[</span><span class="s">&#39;vector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s">&#39;0.52(3)&#39;</span><span class="p">,</span> <span class="s">&#39;0.09(10)&#39;</span><span class="p">,</span> <span class="s">&#39;1.2(1)&#39;</span><span class="p">])</span>
+<span class="n">g</span><span class="p">[</span><span class="s">&#39;tensor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span>
+    <span class="p">[</span><span class="s">&#39;0.01(50)&#39;</span><span class="p">,</span> <span class="s">&#39;0.001(20)&#39;</span><span class="p">,</span> <span class="s">&#39;0.033(15)&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s">&#39;0.001(20)&#39;</span><span class="p">,</span> <span class="s">&#39;2.00(5)&#39;</span><span class="p">,</span> <span class="s">&#39;0.12(52)&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s">&#39;0.007(45)&#39;</span><span class="p">,</span> <span class="s">&#39;0.237(4)&#39;</span><span class="p">,</span> <span class="s">&#39;10.23(75)&#39;</span><span class="p">],</span>
+    <span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">tabulate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>prints the following table:</p>
+<div class="highlight-python"><div class="highlight"><pre>   key/index          value     key/index          value
+---------------------------  ---------------------------
+      scalar     10.30 (10)           1,0     0.001 (20)
+    vector 0     0.520 (30)           1,1     2.000 (50)
+           1      0.09 (10)           1,2      0.12 (52)
+           2      1.20 (10)           2,0     0.007 (45)
+  tensor 0,0      0.01 (50)           2,1    0.2370 (40)
+         0,1     0.001 (20)           2,2     10.23 (75)
+         0,2     0.033 (15)
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>g</strong> &#8211; Array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s (any shape) or dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s (any shape).</li>
+<li><strong>ncol</strong> &#8211; The table is split over <code class="docutils literal"><span class="pre">ncol</span></code> columns of key/index values
+plus <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> values. Default value is 1.</li>
+<li><strong>headers</strong> &#8211; Prints standard header on table if <code class="docutils literal"><span class="pre">True</span></code>; omits the
+header if <code class="docutils literal"><span class="pre">False</span></code>. If <code class="docutils literal"><span class="pre">headers</span></code> is a 2-tuple, then
+<code class="docutils literal"><span class="pre">headers[0]</span></code> is used in the header over the indices/keys
+and <code class="docutils literal"><span class="pre">headers[1]</span></code> over the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> values. (Default is <code class="docutils literal"><span class="pre">True</span></code>.)</li>
+<li><strong>offset</strong> (<em>str</em>) &#8211; String inserted at the beginning of each line in
+the table. Default is <code class="docutils literal"><span class="pre">''</span></code>.</li>
+<li><strong>ndecimal</strong> &#8211; Number of digits displayed after the decimal point.
+Default is <code class="docutils literal"><span class="pre">ndecimal=None</span></code> which adjusts table entries to
+show 2 digits of error.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1447,7 +1508,7 @@ also uses the <code class="xref py py-mod docutils literal"><span class="pre">nu
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.0.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

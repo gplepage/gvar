@@ -1,4 +1,4 @@
-""" 
+"""
 Created by G. Peter Lepage (Cornell University) on 9/2011.
 Copyright (c) 2011-15 G. Peter Lepage.
 
@@ -21,18 +21,18 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 import numpy
 
-GVAR_VERSION = '7.0.3'
+GVAR_VERSION = '7.1'
 
-# create gvar/_version.py so gvar knows its version number 
+# create gvar/_version.py so gvar knows its version number
 with open("src/gvar/_version.py","w") as version_file:
     version_file.write(
-        "# File created by lsqfit setup.py\nversion = '%s'\n" 
+        "# File created by lsqfit setup.py\nversion = '%s'\n"
         % GVAR_VERSION
         )
 
-# extension modules 
-# Add explicit directories to the ..._dirs variables if 
-# the build process has trouble finding the gsl library 
+# extension modules
+# Add explicit directories to the ..._dirs variables if
+# the build process has trouble finding the gsl library
 # or the numpy headers. This should not be necessary if
 # gsl and numpy are installed in standard locations.
 ext_args = dict(
@@ -42,7 +42,7 @@ ext_args = dict(
     extra_link_args=[] # ['-framework','vecLib'], # for Mac OSX ?
     )
 
-ext_modules = [     
+ext_modules = [
     Extension("gvar._gvarcore", ["src/gvar/_gvarcore.pyx"], **ext_args),
     Extension( "gvar._svec_smat", ["src/gvar/_svec_smat.pyx"], **ext_args),
     Extension("gvar._utilities", ["src/gvar/_utilities.pyx"], **ext_args),
@@ -71,19 +71,19 @@ setup(name='gvar',
     platforms='Any',
     long_description="""\
     This package facilitates the creation and manipulation of arbitrarily
-    complicated (correlated) multi-dimensional Gaussian random variables. 
+    complicated (correlated) multi-dimensional Gaussian random variables.
     The random variables are represented by a new data type that can be used
-    in arithmetic expressions and pure Python functions. Such 
-    expressions/functions create new Gaussian random variables 
-    while automatically tracking statistical correlations between the new 
-    and old variables. This data type is useful for simple error propagation 
-    but also is heavily used by the Bayesian least-squares fitting module 
+    in arithmetic expressions and pure Python functions. Such
+    expressions/functions create new Gaussian random variables
+    while automatically tracking statistical correlations between the new
+    and old variables. This data type is useful for simple error propagation
+    but also is heavily used by the Bayesian least-squares fitting module
     lsqfit.py (to define priors and specify fit results, while accounting
     for correlations between all variables).
-    
+
     This package uses numpy for efficient array arithmetic, and cython to
     compile efficient core routines and interface code.
-    """ 
+    """
     ,
     classifiers = [                     #
         'Development Status :: 5 - Production/Stable',
