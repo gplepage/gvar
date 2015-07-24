@@ -542,7 +542,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             ['0.007(45)', '0.237(4)', '10.23(75)'],
             ])
         table = gv.tabulate(g, ncol=2)
-        correct = [
+        correct = '\n'. join([
             '   key/index          value     key/index          value',
             '---------------------------  ---------------------------',
             '      scalar     10.3 (1.2)           1,0     0.001 (20)',
@@ -552,8 +552,8 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             '  tensor 0,0      0.01 (50)           2,1    0.2370 (40)',
             '         0,1     0.001 (20)           2,2     10.23 (75)',
             '         0,2     0.033 (15)',
-            ]
-
+            ])
+        self.assertEqual(table, correct, 'tabulate wrong')
 
     def test_partialvar(self):
         """ x.partialvar x.partialsdev fmt_errorbudget """
