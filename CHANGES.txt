@@ -1,4 +1,4 @@
-Version 7.2  2015-08-09
+Version 7.2  2015-08-10
 =======================
 
 - Fixed error in evalcov(g) and evalcorr(g) when g is a dictionary.
@@ -9,7 +9,10 @@ Version 7.2  2015-08-09
   incorrectly when elements g[k] were arrays.
 
 - Added correlate(g, corr) which takes a set of uncorrelated GVars in g
-  and adds correlations as specified by the correlation matrix corr.
+  and adds correlations as specified by correlation matrix corr. It is
+  common for people to publish correlated data as a set of means and
+  standard deviations, plus a correlation matrix. This routine
+  facilitates converting such data into GVars.
 
 - Minor corrections to documentation and improved testing for evalcov
   and evalcorr.
