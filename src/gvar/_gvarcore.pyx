@@ -8,7 +8,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,14 +47,14 @@ from numpy import arcsinh, arccosh, arctanh
 import copy
 
 import gvar.powerseries
-_ARRAY_TYPES = [numpy.ndarray, gvar.powerseries.PowerSeries]   
+_ARRAY_TYPES = [numpy.ndarray, gvar.powerseries.PowerSeries]
 
-# GVar 
+# GVar
 cdef class GVar:
     # cdef double v     -- value or mean
     # cdef svec d       -- vector of derivatives
     # cdef readonly smat cov    -- covariance matrix
-    
+
     def __init__(self,double v,svec d,smat cov):
         self.v = v
         self.d = d
@@ -68,7 +68,7 @@ cdef class GVar:
 
     def __copy__(self):
         return self
-    
+
     def __format__(self, fmt=None):
         """ Convert to string and format the string """
         return format(str(self), fmt)
@@ -77,8 +77,8 @@ cdef class GVar:
         """ Return string representation of ``self``.
 
         The representation is designed to show at least
-        one digit of the mean and two digits of the standard deviation. 
-        For cases where mean and standard deviation are not 
+        one digit of the mean and two digits of the standard deviation.
+        For cases where mean and standard deviation are not
         too different in magnitude, the representation is of the
         form ``'mean(sdev)'``. When this is not possible, the string
         has the form ``'mean +- sdev'``.
@@ -91,8 +91,8 @@ cdef class GVar:
             return 0 if ans < 0 else ans
         dv = abs(self.sdev)
         v = self.mean
-        
-        # special cases 
+
+        # special cases
         if dv == float('inf'):
             return '%g +- inf' % v
         elif v == 0 and (dv >= 1e5 or dv < 1e-4):
@@ -120,7 +120,7 @@ cdef class GVar:
         elif dv > 1e4 * abs(v):
             return '%.1g +- %.2g' % (v, dv)
         elif abs(v) >= 1e6 or abs(v) < 1e-5:
-            # exponential notation for large |self.mean| 
+            # exponential notation for large |self.mean|
             exponent = numpy.floor(numpy.log10(abs(v)))
             fac = 10.**exponent
             mantissa = str(self/fac)
@@ -199,7 +199,7 @@ cdef class GVar:
         elif isinstance(yy,GVar):
             y = yy
             return GVar(y.v+xx,y.d,y.cov)
-        else: 
+        else:
             return NotImplemented
 
     def __sub__(xx,yy):
@@ -218,12 +218,12 @@ cdef class GVar:
         elif isinstance(yy,GVar):
             y = yy
             return GVar(xx-y.v,y.d.mul(-1.),y.cov)
-        else: 
+        else:
             return NotImplemented
 
     def __mul__(xx,yy):
         cdef GVar x,y
-        
+
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
         elif isinstance(xx,GVar):
@@ -238,7 +238,7 @@ cdef class GVar:
         elif isinstance(yy,GVar):
             y = yy
             return GVar(xx*y.v,y.d.mul(xx),y.cov)
-        else: 
+        else:
             return NotImplemented
 
     # truediv and div are the same --- 1st is for python3, 2nd for python2
@@ -261,7 +261,7 @@ cdef class GVar:
             y = yy
             xd=xx
             return GVar(xd/y.v,y.d.mul(-xd/y.v**2),y.cov)
-        else: 
+        else:
             return NotImplemented
 
     def __div__(xx,yy):
@@ -283,7 +283,7 @@ cdef class GVar:
             y = yy
             xd=xx
             return GVar(xd/y.v,y.d.mul(-xd/y.v**2),y.cov)
-        else: 
+        else:
             return NotImplemented
 
     def __pow__(xx,yy,zz):
@@ -312,7 +312,7 @@ cdef class GVar:
             ans = c_pow(xd,y.v)
             f1 = ans*c_log(xd)
             return GVar(ans,y.d.mul(f1),y.cov)
-        else: 
+        else:
             return NotImplemented
 
     def sin(self):
@@ -328,13 +328,13 @@ cdef class GVar:
     def arcsin(self):
         return GVar(c_asin(self.v),self.d.mul(1./(1.-self.v**2)**0.5),self.cov)
 
-    def asin(self): 
+    def asin(self):
         return self.arcsin()
 
     def arccos(self):
         return GVar(c_acos(self.v),self.d.mul(-1./(1.-self.v**2)**0.5),self.cov)
 
-    def acos(self): 
+    def acos(self):
         return self.arccos()
 
     def arctan(self):
@@ -352,15 +352,15 @@ cdef class GVar:
             return numpy.arctan(yy / xx)
         elif xx < 0.0:
             return (
-                numpy.arctan(yy / xx) + numpy.pi 
-                if yy >= 0 else 
+                numpy.arctan(yy / xx) + numpy.pi
+                if yy >= 0 else
                 numpy.arctan(yy / xx) - numpy.pi
                 )
         else:
             return (
-                numpy.pi / 2 - numpy.arctan(xx / yy) 
-                if yy >= 0 else 
-                - numpy.pi / 2 - numpy.arctan(xx / yy) 
+                numpy.pi / 2 - numpy.arctan(xx / yy)
+                if yy >= 0 else
+                - numpy.pi / 2 - numpy.arctan(xx / yy)
                 )
 
     def atan2(yy, xx):
@@ -400,11 +400,11 @@ cdef class GVar:
 
     def log(self):
         return GVar(c_log(self.v),self.d.mul(1./self.v),self.cov)
-    
+
     def sqrt(self):
         cdef double ans = c_sqrt(self.v)
         return GVar(ans,self.d.mul(0.5/ans),self.cov)
-    
+
     def fabs(self):
         if self.v >= 0:
             return self
@@ -414,17 +414,17 @@ cdef class GVar:
     def deriv(GVar self, GVar x):
         """ Derivative of ``self`` with respest to *primary* |GVar| ``x``.
 
-        All |GVar|\s are constructed from primary |GVar|\s. 
-        ``self.deriv(x)`` returns the partial derivative of ``self`` with 
-        respect to primary |GVar| ``x``, holding all of the other 
+        All |GVar|\s are constructed from primary |GVar|\s.
+        ``self.deriv(x)`` returns the partial derivative of ``self`` with
+        respect to primary |GVar| ``x``, holding all of the other
         primary |GVar|\s constant.
 
-        :param x: A primary |GVar| (or a function of a single 
+        :param x: A primary |GVar| (or a function of a single
             primary |GVar|).
         :returns: The derivative of ``self`` with respect to ``x``.
         """
         cdef Py_ssize_t i, ider
-        cdef double xder 
+        cdef double xder
         xder = 0.0
         for i in range(x.d.size):
             if x.d.v[i].v != 0:
@@ -440,8 +440,8 @@ cdef class GVar:
             return 0.0
 
     def fmt(self, ndecimal=None, sep='', d=None):
-        """ Convert to string with format: ``mean(sdev)``. 
-            
+        """ Convert to string with format: ``mean(sdev)``.
+
         Leading zeros in the standard deviation are omitted: for example,
         ``25.67 +- 0.02`` becomes ``25.67(2)``. Parameter ``ndecimal``
         specifies how many digits follow the decimal point in the mean.
@@ -471,7 +471,7 @@ cdef class GVar:
         v = self.mean
 
         if dv == float('inf'):
-            # infinite sdev 
+            # infinite sdev
             if ndecimal > 0:
                 ft = "%%.%df" % int(ndecimal)
                 return (ft % v) + ' +- inf'
@@ -479,7 +479,7 @@ cdef class GVar:
                 return str(v) + ' +- inf'
 
         if ndecimal<0 or ndecimal != int(ndecimal):
-            # do not use compact notation 
+            # do not use compact notation
             return "%g +- %g" % (v,dv)
 
         dv = round(dv, ndecimal)
@@ -492,14 +492,14 @@ cdef class GVar:
 
     def partialvar(self,*args):
         """ Compute partial variance due to |GVar|\s in ``args``.
-            
+
         This method computes the part of ``self.var`` due to the |GVar|\s
         in ``args``. If ``args[i]`` is correlated with other |GVar|\s, the
         variance coming from these is included in the result as well. (This
         last convention is necessary because variances associated with
         correlated |GVar|\s cannot be disentangled into contributions
         corresponding to each variable separately.)
-            
+
         :param args[i]: Variables contributing to the partial variance.
         :type args[i]: |GVar| or array/dictionary of |GVar|\s
         :returns: Partial variance due to all of ``args``.
@@ -516,8 +516,8 @@ cdef class GVar:
             return 0.0
         dstart = self.d.v[0].i
         dstop = self.d.v[self.d.size-1].i+1
-        # create a mask = 1 if (cov * args[i].der) component!=0; 0 otherwise 
-        # a) collect all indices referenced in args[i].der 
+        # create a mask = 1 if (cov * args[i].der) component!=0; 0 otherwise
+        # a) collect all indices referenced in args[i].der
         iset = set()
         for a in args:
             if a is None:
@@ -534,13 +534,13 @@ cdef class GVar:
                     assert ai.cov is self.cov,"Incompatible |GVar|\s."
                 iset.update(ai.d.indices())
 
-        # b) collect indices connected to args[i].der indices by self.cov 
+        # b) collect indices connected to args[i].der indices by self.cov
         cov = self.cov
         jset = set()
         for i in iset:
             jset.update(cov.rowlist[i].indices())
 
-        # c) build the mask 
+        # c) build the mask
         dmask = numpy.zeros(dstop-dstart,int)
         for j in sorted(jset):
             if j<dstart:
@@ -551,7 +551,7 @@ cdef class GVar:
                 dmask[j-dstart] |= 1
 
 
-        # create masked derivative vector for self 
+        # create masked derivative vector for self
         md_size = 0
         md_idx = numpy.zeros(dstop-dstart,int)
         md_v = numpy.zeros(dstop-dstart,float)
@@ -567,16 +567,16 @@ cdef class GVar:
 
         return md.dot(self.cov.dot(md))
 
-    def partialsdev(self,*args): 
+    def partialsdev(self,*args):
         """ Compute partial standard deviation due to |GVar|\s in ``args``.
-            
+
         This method computes the part of ``self.sdev`` due to the |GVar|\s
         in ``args``. If ``args[i]`` is correlated with other |GVar|\s, the
         standard deviation coming from these is included in the result as
         well. (This last convention is necessary because variances
         associated with correlated |GVar|\s cannot be disentangled into
         contributions corresponding to each variable separately.)
-            
+
         :param args[i]: Variables contributing to the partial standard
             deviation.
         :type args[i]: |GVar| or array/dictionary of |GVar|\s
@@ -586,13 +586,13 @@ cdef class GVar:
         return ans**0.5 if ans>0 else -(-ans)**0.5
 
     property val:
-        """ Mean value. """ 
+        """ Mean value. """
         def __get__(self):
             return self.v
 
     property der:
         """ Array of derivatives with respect to  underlying (original)
-        |GVar|\s. 
+        |GVar|\s.
         """
         def __get__(self):
             return self.d.toarray(len(self.cov))
@@ -605,7 +605,7 @@ cdef class GVar:
     property sdev:
         """ Standard deviation. """
         def __get__(self):
-            cdef double var = self.cov.expval(self.d) 
+            cdef double var = self.cov.expval(self.d)
             if var>=0:
                 return c_sqrt(var)
             else:
@@ -615,12 +615,12 @@ cdef class GVar:
         """ Variance. """
         # @cython.boundscheck(False)
         def __get__(self):
-            return self.cov.expval(self.d)  
+            return self.cov.expval(self.d)
 
     property internaldata:
-        """ Data contained in |GVar|. 
+        """ Data contained in |GVar|.
 
-        This attribute is useful when creating a class that 
+        This attribute is useful when creating a class that
         inherits from a |GVar|: for example, ::
 
             import gvar as gv
@@ -630,7 +630,7 @@ cdef class GVar:
                     g.a = a
 
         creates a variation on |GVar| that, in effect, adds a new attribute
-        ``a``  to an existing |GVar| ``g`` (being careful not to avoid 
+        ``a``  to an existing |GVar| ``g`` (being careful not to avoid
         names that collide with an existing |GVar| attribute).
         """
         def __get__(self):
@@ -647,73 +647,73 @@ cdef class GVar:
 
 
 
-# GVar factory functions 
-    
+# GVar factory functions
+
 _RE1 = re.compile(r"(.*)\s*[+][-]\s*(.*)")
 _RE2 = re.compile(r"(.*)[e](.*)")
 _RE3 = re.compile(r"([-+]?)([0-9]*)[.]?([0-9]*)\s*\(([0-9]+)\)")
 _RE3a = re.compile(r"([-+]?[0-9]*[.]?[0-9]*)\s*\(([.0-9]+)\)")
-                       
+
 class GVarFactory:
     """ Create one or more new |GVar|\s.
-        
+
     Each of the following creates new |GVar|\s:
-        
+
     .. function:: gvar(x,xsdev)
-        
+
         Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.
         Returns an array of |GVar|\s if ``x`` and ``xsdev`` are arrays
         with the same shape; the shape of the result is the same as the
-        shape of ``x``. Returns a |BufferDict| if ``x`` and ``xsdev`` 
+        shape of ``x``. Returns a |BufferDict| if ``x`` and ``xsdev``
         are dictionaries with the same keys and layout; the result has
         the same keys and layout as ``x``.
-        
+
     .. function:: gvar(x,xcov)
-        
+
         Returns an array of |GVar|\s with means given by array ``x`` and a
         covariance matrix given by array ``xcov``, where ``xcov.shape =
         2*x.shape``; the result has the same shape as ``x``. Returns a
         |BufferDict| if ``x`` and ``xcov`` are dictionaries, where the
         keys in ``xcov`` are ``(k1,k2)`` for any keys ``k1`` and ``k2``
-        in ``x``. Returns a single |GVar| if ``x`` is a number and 
-        ``xcov`` is a one-by-one matrix. The layout for ``xcov`` is 
-        compatible with that produced by :func:`gvar.evalcov` for 
+        in ``x``. Returns a single |GVar| if ``x`` is a number and
+        ``xcov`` is a one-by-one matrix. The layout for ``xcov`` is
+        compatible with that produced by :func:`gvar.evalcov` for
         a single |GVar|, an array of |GVar|\s, or a dictionary whose
-        values are |GVar|\s and/or arrays of |GVar|\s. Therefore 
+        values are |GVar|\s and/or arrays of |GVar|\s. Therefore
         ``gvar.gvar(gvar.mean(g), gvar.evalcov(g))`` creates |GVar|\s
-        with the same means and covariance matrix as the |GVar|\s 
-        in ``g`` provided ``g`` is a single |GVar|, or an array or 
+        with the same means and covariance matrix as the |GVar|\s
+        in ``g`` provided ``g`` is a single |GVar|, or an array or
         dictionary of |GVar|\s.
-        
+
     .. function:: gvar((x,xsdev))
-        
+
         Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.
-        
+
     .. function:: gvar(xstr)
-        
-        Returns a |GVar| corresponding to string ``xstr`` which is 
+
+        Returns a |GVar| corresponding to string ``xstr`` which is
         either of the form ``"xmean +- xsdev"`` or ``"x(xerr)"`` (see
         :meth:`GVar.fmt`).
-        
+
     .. function:: gvar(xgvar)
-        
+
         Returns |GVar| ``xgvar`` unchanged.
-        
+
     .. function:: gvar(xdict)
-        
-        Returns a dictionary (:class:`BufferDict`) ``b`` where 
+
+        Returns a dictionary (:class:`BufferDict`) ``b`` where
         ``b[k] = gvar(xdict[k])`` for every key in dictionary ``xdict``.
-        The values in ``xdict``, therefore, can be strings, tuples or 
+        The values in ``xdict``, therefore, can be strings, tuples or
         |GVar|\s (see above), or arrays of these.
-        
+
     .. function:: gvar(xarray)
-        
+
         Returns an array ``a`` having the same shape as ``xarray`` where
         every element ``a[i...] = gvar(xarray[i...])``. The values in
         ``xarray``, therefore, can be strings, tuples or |GVar|\s (see
         above).
-                    
-    ``gvar.gvar`` is actually an object of type :class:`gvar.GVarFactory`.  
+
+    ``gvar.gvar`` is actually an object of type :class:`gvar.GVarFactory`.
     """
     def __init__(self,cov=None):
         if cov is None:
@@ -730,13 +730,13 @@ class GVarFactory:
         cdef numpy.ndarray[numpy.double_t,ndim=1] d
         cdef numpy.ndarray[numpy.double_t,ndim=1] d_v
         cdef numpy.ndarray[numpy.intp_t,ndim=1] d_idx
-        
+
         if len(args)==2:
             if hasattr(args[0], 'keys'):
                 # args are dictionaries -- convert to arrays
                 if not hasattr(args[1], 'keys'):
                     raise ValueError(
-                        'Argument mismatch: %s, %s' 
+                        'Argument mismatch: %s, %s'
                         % (str(type(args[0])), str(type(args[1])))
                         )
                 if set(args[0].keys()) == set(args[1].keys()):
@@ -752,13 +752,27 @@ class GVarFactory:
                     x = BufferDict(args[0])
                     xcov = numpy.empty((x.size, x.size), float)
                     for k1 in x:
+                        k1_sl, k1_sh = x.slice_shape(k1)
+                        if k1_sh == ():
+                            k1_sl = slice(k1_sl, k1_sl + 1)
+                            n1 = 1
+                        else:
+                            n1 = numpy.product(k1_sh)
                         for k2 in x:
-                            xcov[x.slice(k1), x.slice(k2)] = args[1][k1, k2]
+                            k2_sl, k2_sh = x.slice_shape(k2)
+                            if k2_sh == ():
+                                k2_sl = slice(k2_sl, k2_sl + 1)
+                                n2 = 1
+                            else:
+                                n2 = numpy.product(k2_sh)
+                            xcov[k1_sl, k2_sl] = (
+                                numpy.asarray(args[1][k1, k2]).reshape(n1, n2)
+                                )
                     xflat = self(x.flat, xcov)
                     return BufferDict(x, buf=xflat)
             else:
-                # (x,xsdev) or (xarray,sdev-array) or (xarray,cov) 
-                # unpack arguments and verify types 
+                # (x,xsdev) or (xarray,sdev-array) or (xarray,cov)
+                # unpack arguments and verify types
                 try:
                     x = numpy.asarray(args[0],float)
                     xsdev = numpy.asarray(args[1],float)
@@ -766,10 +780,10 @@ class GVarFactory:
                     raise TypeError("Arguments must be numbers or arrays of numbers")
 
                 if len(x.shape)==0:
-                    # single gvar from x and xsdev 
+                    # single gvar from x and xsdev
                     if xsdev.shape == (1, 1):
                         # xsdev is actually a variance (1x1 matrix)
-                        xsdev = c_sqrt(abs(xsdev[0, 0])) 
+                        xsdev = c_sqrt(abs(xsdev[0, 0]))
                     elif len(xsdev.shape) != 0:
                         raise ValueError("x and xsdev different shapes.")
                     idx = self.cov.append_diag(numpy.array([xsdev**2]))
@@ -778,7 +792,7 @@ class GVarFactory:
                     der.v[0].v = 1.0
                     return GVar(x,der,self.cov)
                 else:
-                    # array of gvars from x and sdev/cov arrays 
+                    # array of gvars from x and sdev/cov arrays
                     nx = len(x.flat)
                     if x.shape==xsdev.shape:  # x,sdev
                         idx = self.cov.append_diag(xsdev.reshape(nx)**2)
@@ -798,7 +812,7 @@ class GVarFactory:
         elif len(args)==1:
             x = args[0]
             if isinstance(x,str):
-                # case 1: x is a string like "3.72(41)" or "3.2 +- 4" 
+                # case 1: x is a string like "3.72(41)" or "3.2 +- 4"
                 x = x.strip()
                 try:
                     # eg: 3.4 +- 0.7e-4
@@ -836,22 +850,22 @@ class GVarFactory:
                     raise ValueError("Poorly formatted string: "+x)
 
             elif isinstance(x,GVar):
-                # case 2: x is a GVar 
+                # case 2: x is a GVar
                 return x
 
             elif isinstance(x,tuple) and len(x)==2:
-                # case 3: x = (x,sdev) tuple 
+                # case 3: x = (x,sdev) tuple
                 return self(x[0],x[1])
 
             elif hasattr(x,'keys'):
-                # case 4: x is a dictionary 
+                # case 4: x is a dictionary
                 ans = BufferDict()
                 for k in x:
                     ans[k] = self(x[k])
                 return ans
 
             elif hasattr(x,'__iter__'):
-                # case 5: x is an array 
+                # case 5: x is an array
                 try:
                     xa = numpy.asarray(x)
                 except ValueError:
@@ -859,18 +873,18 @@ class GVarFactory:
                 if xa.size==0:
                     return xa
                 if xa.shape != () and xa.shape[-1]==2 and xa.dtype!=object and xa.ndim>1:
-                    # array of tuples? 
+                    # array of tuples?
                     xxa = numpy.empty(xa.shape[:-1],object)
                     xxa[:] = x
                     if all(type(xxai)==tuple for xxai in xxa.flat):
                         return self(xa[...,0],xa[...,1])
-                return numpy.array([xai if isinstance(xai,GVar) else self(xai) 
+                return numpy.array([xai if isinstance(xai,GVar) else self(xai)
                                     for xai in xa.flat]).reshape(xa.shape)
 
             else:   # case 6: a number
                 return self(x,0.0)
         elif len(args)==3:
-            # (x,der,cov) 
+            # (x,der,cov)
             try:
                 x = numpy.asarray(args[0],float)
                 d = numpy.asarray(args[1],float).flatten()
@@ -898,16 +912,16 @@ def gvar_function(x, double f, dfdx):
     This function creates a |GVar| corresponding to a function of |GVar|\s ``x``
     whose value is ``f`` and whose derivatives with respect to each
     ``x`` are given by ``dfdx``. Here ``x`` can be a single |GVar|,
-    an array of |GVar|\s (for a multidimensional function), or 
-    a dictionary whose values are |GVar|\s or arrays of |GVar|\s, while 
-    ``dfdx`` must be a float, an array of floats, or a dictionary 
+    an array of |GVar|\s (for a multidimensional function), or
+    a dictionary whose values are |GVar|\s or arrays of |GVar|\s, while
+    ``dfdx`` must be a float, an array of floats, or a dictionary
     whose values are floats or arrays of floats, respectively.
 
     This function is useful for creating functions that can accept
     |GVar|\s as arguments. For example, ::
 
         import math
-        import gvar as gv 
+        import gvar as gv
 
         def sin(x):
             if isinstance(x, gv.GVar):
@@ -919,7 +933,7 @@ def gvar_function(x, double f, dfdx):
 
     creates a version of ``sin(x)`` that works with either floats or
     |GVar|\s as its argument. This particular function is unnecessary since
-    it is already provided by :mod:`gvar`. 
+    it is already provided by :mod:`gvar`.
 
     :param x: Point at which the function is evaluated.
     :type x: |GVar|, array of |GVar|\s, or a dictionary of |GVar|\s
@@ -927,7 +941,7 @@ def gvar_function(x, double f, dfdx):
     :param f: Value of function at point ``gvar.mean(x)``.
     :type f: float
 
-    :param dfdx: Derivatives of function with respect to x at 
+    :param dfdx: Derivatives of function with respect to x at
         point ``gvar.mean(x)``.
     :type dfdx: float, array of floats, or a dictionary of floats
 
@@ -974,4 +988,3 @@ def gvar_function(x, double f, dfdx):
 
 
 
- 

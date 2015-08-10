@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gvar - Gaussian Random Variables &mdash; gvar 7.1 documentation</title>
+    <title>gvar - Gaussian Random Variables &mdash; gvar 7.2 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '7.1',
+        VERSION:     '7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 7.1 documentation" href="index.html" />
+    <link rel="top" title="gvar 7.2 documentation" href="index.html" />
     <link rel="next" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
     <link rel="prev" title="Overview and Tutorial" href="overview.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.2 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -68,7 +68,7 @@ which are specified by a mean and standard deviation. They are created
 using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal"><span class="pre">gvar.gvar()</span></code></a>: for example,</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>          <span class="c"># 0 +- 3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>          <span class="c"># 2 +- 4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span>                     <span class="c"># 2 +- 5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                    <span class="c"># 2 +- 5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 <span class="go">22.0(5.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
@@ -86,6 +86,7 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.var" title="gvar.var"><code class="xref any py py-func docutils literal"><span class="pre">var</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; extract variances.</li>
 <li><a class="reference internal" href="#gvar.fmt" title="gvar.fmt"><code class="xref any py py-func docutils literal"><span class="pre">fmt</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; replace all <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary by string representations.</li>
 <li><a class="reference internal" href="#gvar.tabulate" title="gvar.tabulate"><code class="xref any py py-func docutils literal"><span class="pre">tabulate</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; tabulate entries in array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
+<li><a class="reference internal" href="#gvar.correlate" title="gvar.correlate"><code class="xref any py py-func docutils literal"><span class="pre">correlate</span></code></a><code class="docutils literal"><span class="pre">(g,</span> <span class="pre">corr)</span></code> &#8212; add correlations to <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary <code class="docutils literal"><span class="pre">g</span></code>.</li>
 <li><a class="reference internal" href="#gvar.chi2" title="gvar.chi2"><code class="xref any py py-func docutils literal"><span class="pre">chi2</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <code class="docutils literal"><span class="pre">chi**2</span></code> of <code class="docutils literal"><span class="pre">g1-g2</span></code>.</li>
 <li><a class="reference internal" href="#gvar.equivalent" title="gvar.equivalent"><code class="xref any py py-func docutils literal"><span class="pre">equivalent</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s the same in <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code>?</li>
 <li><a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref any py py-func docutils literal"><span class="pre">evalcov</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute covariance matrix.</li>
@@ -336,6 +337,58 @@ show 2 digits of error.</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="gvar.correlate">
+<code class="descclassname">gvar.</code><code class="descname">correlate</code><span class="sig-paren">(</span><em>g</em>, <em>corr</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.correlate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add correlations to uncorrelated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal"><span class="pre">g</span></code>.</p>
+<p>This method creates correlated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from uncorrelated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal"><span class="pre">g</span></code>,
+using the correlations specified in <code class="docutils literal"><span class="pre">corr</span></code>.</p>
+<p>Note that correlations initially present in <code class="docutils literal"><span class="pre">g</span></code>, if any, are ignored.</p>
+<p class="rubric">Examples</p>
+<p>A typical application involves the construction of correlated
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s give the means and standard deviations, together with
+a correlation matrix:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s">&#39;1(1)&#39;</span><span class="p">,</span> <span class="s">&#39;2(10)&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>           <span class="c"># uncorrelated</span>
+<span class="go">[[ 1.  0.]</span>
+<span class="go"> [ 0.  1.]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span>  <span class="n">gv</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">[[</span><span class="mf">1.</span> <span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>           <span class="c"># correlated</span>
+<span class="go">[[ 1.   0.1]</span>
+<span class="go"> [ 0.1  1. ]]</span>
+</pre></div>
+</div>
+<p>This also works when <code class="docutils literal"><span class="pre">g</span></code> and <code class="docutils literal"><span class="pre">corr</span></code> are dictionaries:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;1(1)&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="s">&#39;2(10)&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+<span class="go">{(&#39;a&#39;, &#39;a&#39;): array([[ 1.]]),(&#39;a&#39;, &#39;b&#39;): array([[ 0.]]),(&#39;b&#39;, &#39;a&#39;): array([[ 0.]]),(&#39;b&#39;, &#39;b&#39;): array([[ 1.]])}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">correlate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">corr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+<span class="go">{(&#39;a&#39;, &#39;a&#39;): array([[ 1.]]),(&#39;a&#39;, &#39;b&#39;): array([[ 0.1]]),(&#39;b&#39;, &#39;a&#39;): array([[ 0.1]]),(&#39;b&#39;, &#39;b&#39;): array([[ 1.]])}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>g</strong> &#8211; An array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
+<li><strong>corr</strong> &#8211; Correlations between <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s: <code class="docutils literal"><span class="pre">corr[i,</span> <span class="pre">j]</span></code> is the
+correlation between <code class="docutils literal"><span class="pre">g[i]</span></code> and <code class="docutils literal"><span class="pre">g[j]</span></code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="gvar.evalcov">
 <code class="descclassname">gvar.</code><code class="descname">evalcov</code><span class="sig-paren">(</span><em>g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.evalcov" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute covariance matrix for elements of
@@ -344,7 +397,7 @@ array/dictionary <code class="docutils literal"><span class="pre">g</span></code
 covariance matrix as an array with shape <code class="docutils literal"><span class="pre">g.shape+g.shape</span></code>.
 If <code class="docutils literal"><span class="pre">g</span></code> is a dictionary whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, the result is a doubly-indexed dictionary where
-<code class="docutils literal"><span class="pre">cov[k1,k2]</span></code> is the covariance for <code class="docutils literal"><span class="pre">g[k1].flat</span></code> and <code class="docutils literal"><span class="pre">g[k2].flat</span></code>.</p>
+<code class="docutils literal"><span class="pre">cov[k1,k2]</span></code> is the covariance for <code class="docutils literal"><span class="pre">g[k1]</span></code> and <code class="docutils literal"><span class="pre">g[k2]</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -421,20 +474,20 @@ attribute <code class="docutils literal"><span class="pre">logGBF</span></code>.
 <p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are compared by:</p>
 <dl class="function">
 <dt id="gvar.equivalent">
-<code class="descclassname">gvar.</code><code class="descname">equivalent</code><span class="sig-paren">(</span><em>g1</em>, <em>g2</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.equivalent" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">equivalent</code><span class="sig-paren">(</span><em>g1</em>, <em>g2</em>, <em>rtol=1e-10</em>, <em>atol=1e-10</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.equivalent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code> contain equivalent <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
-<p>This compares summs and differences of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s stored in <code class="docutils literal"><span class="pre">g1</span></code>
+<p>Compares sums and differences of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s stored in <code class="docutils literal"><span class="pre">g1</span></code>
 and <code class="docutils literal"><span class="pre">g2</span></code> to see if they agree with tolerances. Operationally,
 agreement means that:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">summ</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rtol</span> <span class="o">+</span> <span class="n">atol</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal"><span class="pre">diff</span></code> and <code class="docutils literal"><span class="pre">summ`</span> <span class="pre">are</span> <span class="pre">the</span> <span class="pre">difference</span> <span class="pre">and</span> <span class="pre">sum</span> <span class="pre">of</span> <span class="pre">the</span>
-<span class="pre">mean</span> <span class="pre">values</span> <span class="pre">(``g.mean</span></code>) or derivatives (<code class="docutils literal"><span class="pre">g.der</span></code>) associated with
+<p>where <code class="docutils literal"><span class="pre">diff</span></code> and <code class="docutils literal"><span class="pre">summ</span></code> are the difference and sum of the
+mean values (<code class="docutils literal"><span class="pre">g.mean</span></code>) or derivatives (<code class="docutils literal"><span class="pre">g.der</span></code>) associated with
 each pair of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
-<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s that are equivalent are effectively interchangeable both
-respect to their means and also with respect to their covariances with
-any other <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> (including ones not in <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code>).</p>
+<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s that are equivalent are effectively interchangeable with respect
+to both their means and also their covariances with any other <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>
+(including ones not in <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code>).</p>
 <p><code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code> can be individual <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s
 or dictionaries whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.
 Comparisons are made only for shared keys when they are dictionaries.
@@ -1508,7 +1561,7 @@ also uses the <code class="xref py py-mod docutils literal"><span class="pre">nu
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

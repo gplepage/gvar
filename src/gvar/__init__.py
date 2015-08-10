@@ -23,6 +23,8 @@ variables including:
 
     - ``var(g)`` --- extract variances.
 
+    - ``correlate(g, corr)`` --- add correlations to GVars in dict/array g.
+
     - ``chi2(g1, g2)`` --- ``chi**2`` of ``g1-g2``.
 
     - ``equivalent(g1, g2)`` --- ``g1`` and ``g2`` the same?
@@ -290,19 +292,19 @@ def chi2(g1, g2=None, svdcut=1e-15, nocorr=False, fmt=False):
 def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
     """ Determine whether ``g1`` and ``g2`` contain equivalent |GVar|\s.
 
-    This compares summs and differences of |GVar|\s stored in ``g1``
+    Compares sums and differences of |GVar|\s stored in ``g1``
     and ``g2`` to see if they agree with tolerances. Operationally,
     agreement means that::
 
         abs(diff) < abs(summ) / 2 * rtol + atol
 
-    where ``diff`` and ``summ` are the difference and sum of the
+    where ``diff`` and ``summ`` are the difference and sum of the
     mean values (``g.mean``) or derivatives (``g.der``) associated with
     each pair of |GVar|\s.
 
-    |GVar|\s that are equivalent are effectively interchangeable both
-    respect to their means and also with respect to their covariances with
-    any other |GVar| (including ones not in ``g1`` and ``g2``).
+    |GVar|\s that are equivalent are effectively interchangeable with respect
+    to both their means and also their covariances with any other |GVar|
+    (including ones not in ``g1`` and ``g2``).
 
     ``g1`` and ``g2`` can be individual |GVar|\s or arrays of |GVar|\s
     or dictionaries whose values are |GVar|\s and/or arrays of |GVar|\s.

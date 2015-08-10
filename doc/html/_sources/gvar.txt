@@ -24,7 +24,7 @@ using :func:`gvar.gvar`: for example, ::
 
     >>> x = gvar.gvar(10,3)          # 0 +- 3
     >>> y = gvar.gvar(12,4)          # 2 +- 4
-    >>> z = x+y                     # 2 +- 5
+    >>> z = x + y                    # 2 +- 5
     >>> print(z)
     22.0(5.0)
     >>> print(z.mean)
@@ -44,6 +44,8 @@ manipulating gaussian random variables, including:
     - :any:`fmt`\ ``(g)`` --- replace all |GVar|\s in array/dictionary by string representations.
 
     - :any:`tabulate`\ ``(g)`` --- tabulate entries in array/dictionary of |GVar|\s.
+
+    - :any:`correlate`\ ``(g, corr)`` --- add correlations to |GVar|\s in array/dictionary ``g``.
 
     - :any:`chi2`\ ``(g1, g2)`` --- ``chi**2`` of ``g1-g2``.
 
@@ -108,6 +110,8 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.tabulate(g, ncol=1, headers=True, offset='', ndecimal=None)
 
+.. autofunction:: gvar.correlate(g, corr)
+
 .. autofunction:: gvar.evalcov(g)
 
 .. autofunction:: gvar.evalcorr(g)
@@ -120,7 +124,7 @@ matrices and correlation/comparison information can be extracted from arrays
 
 |GVar|\s are compared by:
 
-.. autofunction:: gvar.equivalent(g1, g2)
+.. autofunction:: gvar.equivalent(g1, g2, rtol=1e-10, atol=1e-10)
 
 |GVar|\s can be stored (pickled) and retrieved from files (or strings) using:
 

@@ -849,11 +849,48 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         with self.assertRaises(ValueError):
             deriv(f, x+y)
 
+    def test_correlate(self):
+        " correlate(g, corr) "
+        x = gvar([1., 2.], [[64., 4.], [4., 16.]])
+        xmean = mean(x)
+        xsdev = sdev(x)
+        xx = correlate(gvar(xmean, xsdev), evalcorr(x))
+        self.assert_arraysequal(xmean, mean(xx))
+        self.assert_arraysequal(evalcov(x), evalcov(xx))
+        x.shape = (2, 1)
+        xmean = mean(x)
+        xsdev = sdev(x)
+        xx = correlate(gvar(xmean, xsdev), evalcorr(x))
+        self.assert_arraysequal(xmean, mean(xx))
+        self.assert_arraysequal(evalcov(x), evalcov(xx))
+        y = BufferDict()
+        y['a'] = x[0, 0]
+        y['b'] = x
+        ymean = mean(y)
+        ysdev = sdev(y)
+        yy = correlate(gvar(ymean, ysdev), evalcorr(y))
+        for k in y:
+            self.assert_arraysequal(mean(y[k]), mean(yy[k]))
+        ycov = evalcov(y)
+        yycov = evalcov(yy)
+        for k in ycov:
+            self.assert_arraysequal(ycov[k], yycov[k])
+
     def test_evalcorr(self):
         " evalcorr(array) "
-        a, b = gvar([1., 2.], [[64., 4.], [4., 16.]])
+        x = gvar([1., 2.], [[64., 4.], [4., 16.]])
+        a, b = x
         c = evalcorr([a, b])
         self.assert_arraysequal(c, [[1., 1/8.], [1/8., 1.]])
+        c = evalcorr(x.reshape(2, 1))
+        self.assertEqual(c.shape, 2 * (2, 1))
+        self.assert_arraysequal(c.reshape(2,2), [[1., 1/8.], [1/8., 1.]])
+        y = dict(a=x[0], b=x)
+        c = evalcorr(y)
+        self.assertEqual(c['a', 'a'], [[1]])
+        self.assert_arraysequal(c['a', 'b'], [[1., 1/8.]])
+        self.assert_arraysequal(c['b', 'a'], [[1.], [1./8.]])
+        self.assert_arraysequal(c['b', 'b'], [[1., 1/8.], [1/8., 1.]])
 
     def test_evalcov1(self):
         """ evalcov(array) """
@@ -874,16 +911,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
     def test_evalcov2(self):
         """ evalcov(dict) """
-        c = evalcov({0:x+y/2,1:2*x-y})
-        rotn = np.array([[1.,1/2.],[2.,-1.]])
-        cz = np.dot(rotn,np.dot(evalcov([x,y]),rotn.transpose()))
-        c = [[c[0,0],c[0,1]],[c[1,0],c[1,1]]]
-        self.assert_arraysequal(c,cz)
-        c = evalcov(dict(x=x,y=[x,y]))
-        self.assert_arraysequal(c['y','y'],evalcov([x,y]))
-        self.assertEqual(c['x','x'],x.var)
-        self.assert_arraysequal(c['x','y'],[x.var,evalcov([x,y])[0,1]])
-        self.assert_arraysequal(c['y','x'],c['x','y'])
+        c = evalcov({0:x + y / 2, 1:2 * x - y})
+        rotn = np.array([[1., 1/2.], [2., -1.]])
+        cz = np.dot(rotn, np.dot(evalcov([x, y]), rotn.transpose()))
+        c = [[c[0,0][0,0], c[0,1][0,0]], [c[1,0][0,0], c[1,1][0,0]]]
+        self.assert_arraysequal(c, cz)
+        c = evalcov(dict(x=x, y=[x, y]))
+        self.assert_arraysequal(c['y','y'], evalcov([x, y]))
+        self.assertEqual(c['x','x'], [[x.var]])
+        self.assert_arraysequal(c['x','y'], [[x.var, evalcov([x,y])[0,1]]])
+        self.assert_arraysequal(c['y','x'], c['x','y'].T)
 
     @unittest.skipIf(FAST,"skipping test_raniter for speed")
     def test_raniter(self):
@@ -1303,9 +1340,9 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
     def test_corr(self):
         """ rebuild (corr!=0) """
-        a = gvar([1.,2.],[3.,4.])
+        a = gvar([1., 2.], [3., 4.])
         corr = 1.
-        b = rebuild(a,corr=corr)
+        b = rebuild(a, corr=corr)
         self.assert_arraysclose(evalcov(a).diagonal(),evalcov(b).diagonal())
         bcov = evalcov(b)
         self.assert_arraysclose(bcov[0,1],corr*(bcov[0,0]*bcov[1,1])**0.5)
@@ -1315,20 +1352,26 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
     def test_pickle(self):
         """ pickle strategies """
-        for g in ['1(5)', [['2(1)'], ['3(2)']], dict(a='4(2)', b=['5(5)', '6(9)'])]:
+        for g in [
+            '1(5)',
+            [['2(1)'], ['3(2)']],
+            dict(a='4(2)', b=[['5(5)', '6(9)']]),
+            ]:
             g1 = gvar(g)
             gtuple = (mean(g1), evalcov(g1))
             gpickle = pickle.dumps(gtuple)
             gtuple = pickle.loads(gpickle)
             g2 = gvar(gtuple)
             self.assertEqual(str(g1), str(g2))
+            self.assertEqual(str(evalcov(g1)), str(evalcov(g2)))
             dump(g1, 'outputfile.p')
             g3 = load('outputfile.p')
             self.assertEqual(str(g1), str(g3))
+            self.assertEqual(str(evalcov(g1)), str(evalcov(g3)))
             gstr = dumps(g1)
             g4 = loads(gstr)
             self.assertEqual(str(g1), str(g4))
-
+            self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
 
     def test_gammaQ(self):
         " gammaQ(a, x) "
