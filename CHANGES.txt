@@ -1,3 +1,25 @@
+Version 7.2.1
+=====================
+
+- Made gvar.gvar(a, sd) substantially faster (30%) when a is a large array.
+  Replaced a Python list by a numpy array -- corrects an oversight from
+  before. This probably won't have a big effect on most codes since
+  gvar creation is usually a small part of the cost.
+
+- Bug fixes in gvar.powerseries that make it work better with
+  coefficients that are numpy arrays.
+
+- Bug fixes in gvar.cspline when spline is used outside of its range,
+  with extrap_order set to 0, 1 or 2. The array size returned
+  by the spline function (or derivatives) was not always correct.
+  Additional test code.
+
+- Small change in BufferDict to help with legacy code issues.
+
+- BufferDict(d) for d=dictionary no longer stores keys in sorted order. This
+  never made sense but also causes trouble in python3 when keys of mixed type
+  are used.
+
 Version 7.2  2015-08-10
 =======================
 

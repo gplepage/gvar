@@ -127,7 +127,7 @@ class BufferDict(collections.OrderedDict):
         if len(args)==0:
             # kargs are dictionary entries
             self._buf = numpy.array([],int)
-            for k in sorted(kargs):
+            for k in kargs:
                 self[k] = kargs[k]
         elif len(args) == 1 and 'keys' in kargs and len(kargs) == 1:
             self._buf = numpy.array([],int)
@@ -171,7 +171,7 @@ class BufferDict(collections.OrderedDict):
                 # add initial data
                 if hasattr(bd,"keys"):
                     # bd a dictionary
-                    for k in sorted(bd):
+                    for k in bd:
                         self[k] = bd[k]
                 else:
                     # bd an array of tuples
@@ -210,7 +210,10 @@ class BufferDict(collections.OrderedDict):
         for k in layout:
             super(BufferDict, self).__setitem__(
                 k,
-                BUFFERDICTDATA(slice=layout[k][0], shape=layout[k][1])
+                BUFFERDICTDATA(
+                    slice=layout[k][0],
+                    shape=layout[k][1] if layout[k][1] is not None else ()
+                    )
                 )
         self._buf = buf
 
@@ -335,7 +338,7 @@ class BufferDict(collections.OrderedDict):
         return super(BufferDict, self).__getitem__(k).slice
 
     def slice_shape(self,k):
-        """ Return slice/index, shape in ``self.flat`` corresponding to key ``k``."""
+        """ Return ``(slice or index, shape)`` in ``self.flat`` corresponding to key ``k``."""
         return super(BufferDict, self).__getitem__(k)
 
     def isscalar(self,k):

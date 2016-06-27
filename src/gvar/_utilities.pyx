@@ -294,7 +294,8 @@ def uncorrelated(g1,g2):
     cov = g.cov
     s0 = set()
     for i in s[0]:
-        s0.update(cov.rowlist[i].indices())
+        # s0.update(cov.rowlist[i].indices())
+        s0.update(cov.row[i].indices())
     # orthogonal if indices in g1 not connected to indices in g2 by cov
     return s0.isdisjoint(s[1])
 
@@ -450,7 +451,7 @@ def evalcov(g):
     ng = len(g)
     ans = numpy.zeros((ng,ng),float)
     cov = g[0].cov
-    nc = len(cov.rowlist)
+    nc = cov.nrow # len(cov.rowlist)
     imask = numpy.zeros(nc, numpy.int8)
     for a in range(ng):
         ga = g[a]
@@ -664,7 +665,9 @@ def fmt_errorbudget(
     if ndigit is not None:
         ndecimal = ndigit       # legacy name
     err = {}
+    outputs_keys = []
     for ko in outputs:
+        outputs_keys.append(str(ko))
         for ki in inputs:
             inputs_ki = inputs[ki]
             if hasattr(inputs_ki,'keys') or not hasattr(inputs_ki,'__iter__'):
@@ -696,7 +699,7 @@ def fmt_errorbudget(
     if colwidth is None:
         # find it by hand: w0 for 1st col, w for rest
         w = 10
-        for ko in outputs:
+        for ko in outputs_keys:
             if len(ko) >= w:
                 w = len(ko) + 1
         w0 = 10
@@ -720,7 +723,7 @@ def fmt_errorbudget(
     else:
         val = 1.
         ans = "Partial Errors:\n"
-    ans += hfmt % (("",)+tuple(outputs.keys()))
+    ans += hfmt % (("",)+tuple(outputs_keys))
     ans += (w0 +len(outputs) * w) * '-' + "\n"
     for ck in inputs:
         verr = numpy.array([err[vk,ck] for vk in outputs])/val

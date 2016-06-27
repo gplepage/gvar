@@ -272,6 +272,8 @@ scalars) that supports Python pickling:
 
    .. automethod:: slice(k)
 
+   .. automethod:: slice_shape(k)
+
    .. automethod:: isscalar(k)
 
    .. method:: update(d)

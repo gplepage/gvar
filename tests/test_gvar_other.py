@@ -1,10 +1,10 @@
-# Copyright (c) 2012-15 G. Peter Lepage. 
+# Copyright (c) 2012-15 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,10 +22,10 @@ from gvar.powerseries import PowerSeries
 class ArrayTests(object):
     def __init__(self):
         pass
-    
+
     def assert_gvclose(self,x,y,rtol=1e-5,atol=1e-8,prt=False):
         """ asserts that the means and sdevs of all x and y are close """
-        if hasattr(x,'keys') and hasattr(y,'keys'): 
+        if hasattr(x,'keys') and hasattr(y,'keys'):
             if sorted(x.keys())==sorted(y.keys()):
                 for k in x:
                     self.assert_gvclose(x[k],y[k],rtol=rtol,atol=atol)
@@ -41,7 +41,7 @@ class ArrayTests(object):
         for xi,yi in zip(x,y):
             self.assertGreater(atol+rtol*abs(yi.mean),abs(xi.mean-yi.mean))
             self.assertGreater(10*(atol+rtol*abs(yi.sdev)),abs(xi.sdev-yi.sdev))
-    
+
     def assert_arraysclose(self,x,y,rtol=1e-5,prt=False):
         self.assertSequenceEqual(np.shape(x),np.shape(y))
         x = np.array(x).flatten()
@@ -53,7 +53,7 @@ class ArrayTests(object):
             print(y)
             print(max_val,max_rdiff,rtol)
         self.assertAlmostEqual(max_rdiff,0.0,delta=rtol)
-    
+
     def assert_arraysequal(self,x,y):
         self.assertSequenceEqual(np.shape(x),np.shape(y))
         x = [float(xi) for xi in np.array(x).flatten()]
@@ -62,7 +62,7 @@ class ArrayTests(object):
 
 class test_ode(unittest.TestCase,ArrayTests):
     def setUp(self): pass
-        
+
     def tearDown(self): pass
 
     def test_scalar(self):
@@ -77,7 +77,7 @@ class test_ode(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(y1, exact)
         yN = odeint(y0, [0.0, 0.5, 1.0])
         self.assert_arraysclose(yN, numpy.exp([0.5, 1.0]))
-    
+
     def test_gvar_scalar(self):
         # exponential with errors
         gam = gv.gvar('1.0(1)')
@@ -104,7 +104,7 @@ class test_ode(unittest.TestCase,ArrayTests):
         self.assert_arraysclose(y1, exact)
         yN = odeint(y0, [0., 0.5, 1.0])
         self.assert_arraysclose(
-            yN, 
+            yN,
             [[numpy.sin(0.5), numpy.cos(0.5)], [numpy.sin(1.0), numpy.cos(1.0)]],
             )
 
@@ -122,7 +122,7 @@ class test_ode(unittest.TestCase,ArrayTests):
         self.assert_arraysclose([y1['y'], y1['dydx']], exact)
         yN = odeint(y0, [0., 0.5, 1.0])
         self.assert_arraysclose(
-            [[yN[0]['y'], yN[0]['dydx']], [yN[1]['y'], yN[1]['dydx']]], 
+            [[yN[0]['y'], yN[0]['dydx']], [yN[1]['y'], yN[1]['dydx']]],
             [[numpy.sin(0.5), numpy.cos(0.5)], [numpy.sin(1.0), numpy.cos(1.0)]],
             )
 
@@ -195,7 +195,7 @@ class test_ode(unittest.TestCase,ArrayTests):
         self.assert_arraysclose(sdev(ans['b']), [3, 7])
         self.assertTrue(gv.equivalent(
             ans,
-            dict(a=a, b=[3 * a, 7 * a]), 
+            dict(a=a, b=[3 * a, 7 * a]),
             rtol=1e-6, atol=1e-6)
             )
 
@@ -225,9 +225,9 @@ class test_ode(unittest.TestCase,ArrayTests):
 
 class test_cspline(unittest.TestCase,ArrayTests):
     def setUp(self): pass
-        
+
     def tearDown(self): pass
-    
+
     def f(self, x):
         return 1 + 2. * x + 3 * x ** 2 + 4 * x ** 3
 
@@ -240,7 +240,29 @@ class test_cspline(unittest.TestCase,ArrayTests):
     def integf(self, x, x0=0):
         return x + x**2 + x**3 + x**4 - (x0 + x0**2 + x0**3 + x0**4)
 
+    def test_shape(self):
+        " shape of spline == shape of argument "
+        xx = np.array([0, 1., 3.])
+        yy = self.f(xx)
+        yp= self.Df(xx)
+        for extrap_order in [1,3]:
+            s = cspline.CSpline(
+                xx, yy,
+                deriv=[yp[0], yp[-1]], warn=False,
+                extrap_order=extrap_order
+                )
+            for x in [-1, 0.5, 4.]:
+                self.assertEqual(np.shape(x), np.shape(s(x)))
+            for x in [
+                [-1,0.5], [0.2, 0.5], [0.5, 4.], [-1,4.],
+                [-1, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.],
+                [0.5, 1.0, 1.5, 2.0, 2.5],
+                [[-1, 1.1],[2.3, 4.]], [[2.]],
+                ]:
+                self.assertEqual(np.shape(x), np.shape(s(x)))
+
     def test_normal(self):
+        " normal range "
         x = np.array([0, 1., 3.])
         x0 = x[0]
         y = self.f(x)
@@ -286,21 +308,21 @@ class test_cspline(unittest.TestCase,ArrayTests):
             ans = self.Df(x)
             ans[x<xl] = 0
             ans[x>xr] = 0
-            return ans        
+            return ans
         def D2f0(x):
             if np.shape(x) == ():
                 return D2f0(np.array([x]))[0]
             ans = self.D2f(x)
             ans[x<xl] = 0
             ans[x>xr] = 0
-            return ans 
+            return ans
         def integf0(x):
             if np.shape(x) == ():
                 return integf0(np.array([x]))[0]
             ans = self.integf(x)
             ans[x<xl] = (x[x<xl] - xl) * self.f(xl)
             ans[x>xr] = self.integf(xr, xl) + (x[x>xr] - xr) * self.f(xr)
-            return ans       
+            return ans
         y = self.f(x)
         yp = self.Df(x)
         s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=0, warn=False)
@@ -328,14 +350,14 @@ class test_cspline(unittest.TestCase,ArrayTests):
             ans = self.Df(x)
             ans[x<xl] = self.Df(xl)
             ans[x>xr] = self.Df(xr)
-            return ans        
+            return ans
         def D2f1(x):
             if np.shape(x) == ():
                 return D2f1(np.array([x]))[0]
             ans = self.D2f(x)
             ans[x<xl] = 0
             ans[x>xr] = 0
-            return ans        
+            return ans
         def integf1(x):
             if np.shape(x) == ():
                 return integf1(np.array([x]))[0]
@@ -344,7 +366,7 @@ class test_cspline(unittest.TestCase,ArrayTests):
             ans[x<xl] = dx * self.f(xl) + dx**2 * self.Df(xl) / 2.
             dx = x[x>xr] - xr
             ans[x>xr] = self.integf(xr, xl) + dx * self.f(xr) + dx**2 * self.Df(xr) / 2.
-            return ans       
+            return ans
         y = self.f(x)
         yp = self.Df(x)
         s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=1, warn=False)
@@ -364,11 +386,11 @@ class test_cspline(unittest.TestCase,ArrayTests):
                 return f2(np.array([x]))[0]
             ans = self.f(x)
             ans[x<xl] = (
-                self.f(xl) + (x[x<xl] - xl) * self.Df(xl) 
+                self.f(xl) + (x[x<xl] - xl) * self.Df(xl)
                 + 0.5 * (x[x<xl] - xl) ** 2 * self.D2f(xl)
                 )
             ans[x>xr] = (
-                self.f(xr) + (x[x>xr] - xr) * self.Df(xr) 
+                self.f(xr) + (x[x>xr] - xr) * self.Df(xr)
                 + 0.5 * (x[x>xr] - xr) ** 2 * self.D2f(xr)
                 )
             return ans
@@ -378,29 +400,29 @@ class test_cspline(unittest.TestCase,ArrayTests):
             ans = self.Df(x)
             ans[x<xl] = self.Df(xl) + (x[x<xl] - xl) * self.D2f(xl)
             ans[x>xr] = self.Df(xr) + (x[x>xr] - xr) * self.D2f(xr)
-            return ans        
+            return ans
         def D2f2(x):
             if np.shape(x) == ():
                 return D2f2(np.array([x]))[0]
             ans = self.D2f(x)
             ans[x<xl] = self.D2f(xl)
             ans[x>xr] = self.D2f(xr)
-            return ans        
+            return ans
         def integf2(x):
             if np.shape(x) == ():
                 return integf2(np.array([x]))[0]
             ans = self.integf(x)
             dx = x[x<xl] - xl
             ans[x<xl] = (
-                dx * self.f(xl) + dx**2 * self.Df(xl) / 2. 
+                dx * self.f(xl) + dx**2 * self.Df(xl) / 2.
                 + dx**3 * self.D2f(xl) / 6.
                 )
             dx = x[x>xr] - xr
             ans[x>xr] = (
-                self.integf(xr, xl) + dx * self.f(xr) 
+                self.integf(xr, xl) + dx * self.f(xr)
                 + dx**2 * self.Df(xr) / 2. + dx**3 * self.D2f(xr) / 6.
                 )
-            return ans       
+            return ans
         y = self.f(x)
         yp = self.Df(x)
         s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=2, warn=False)
@@ -503,7 +525,7 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
             self.assertEqual(xi, yi)
         for i in range(self.order + 1):
             self.assertEqual(x.c[i], y.c[i])
-        y = PowerSeries(self.exp_x)      
+        y = PowerSeries(self.exp_x)
         for i in range(self.order + 1):
             y.c[i] *= 2
         self.assert_close(y, 2 * self.exp_x)
@@ -612,11 +634,11 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
         self.assert_close(self.exp_x.deriv(n=0), self.exp_x)
         self.assert_close(self.x.deriv(self.order + 2), PowerSeries([0]))
         self.assert_close(
-            self.exp_x.deriv(), 
+            self.exp_x.deriv(),
             PowerSeries(self.exp_x, order=self.order - 1)
             )
         self.assert_close(
-            self.exp_x.integ(x0=0), 
+            self.exp_x.integ(x0=0),
             exp(PowerSeries(self.x, order=self.order+1)) - 1
             )
 

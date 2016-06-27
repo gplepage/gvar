@@ -1,13 +1,13 @@
 """ Cubic splines for GVars. """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-04-27.
-# Copyright (c) 2014-15 G. Peter Lepage. 
+# Copyright (c) 2014-15 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,31 +20,31 @@ class CSpline:
     """ Cubic spline approximation to a function.
 
     Given ``N`` values of a function ``yknot[i]`` at ``N`` points
-    ``xknot[i]`` for ``i=0..N-1`` (the 'knots' of the spline), 
+    ``xknot[i]`` for ``i=0..N-1`` (the 'knots' of the spline),
     the code ::
 
         from gvar.cspline import CSpline
 
         f = CSpline(xknot, yknot)
 
-    defines a function ``f`` such that: a) ``f(xknot[i]) = yknot[i]`` for 
-    all ``i``; and b) ``f(x)`` is 
+    defines a function ``f`` such that: a) ``f(xknot[i]) = yknot[i]`` for
+    all ``i``; and b) ``f(x)`` is
     continuous, as are its first and second derivatives.
     Function ``f(x)`` is a cubic polynomial between the knots ``xknot[i]``.
 
     ``CSpline(xknot, yknot)`` creates a *natural spline*, which has zero second
     derivative at the end points, ``xknot[0]`` and ``xknot[-1]`` (assuming
-    the knots are sorted). More generally one can specify the derivatives 
+    the knots are sorted). More generally one can specify the derivatives
     of ``f(x)`` at one or both of the endpoints::
 
         f = CSpline(xknot, yknot, deriv=[dydx_i, dydx_f])
 
-    where ``dydx_i`` is the derivative at ``xknot[0]`` and ``dydx_f`` is the 
-    derivative at ``xknot[-1]``. Replacing either (or both) of these with 
-    ``None`` results in a derivative corresponding to zero second 
+    where ``dydx_i`` is the derivative at ``xknot[0]`` and ``dydx_f`` is the
+    derivative at ``xknot[-1]``. Replacing either (or both) of these with
+    ``None`` results in a derivative corresponding to zero second
     derivative at that boundary (i.e., a *natural* boundary).
 
-    Derivatives and integrals of the spline function can also be evaluated: 
+    Derivatives and integrals of the spline function can also be evaluated:
 
         ``f.D(x)`` --- first derivative at ``x``;
 
@@ -53,14 +53,14 @@ class CSpline:
         ``f.integ(x)`` --- integral from ``xknot[0]`` to ``x``.
 
     Splines can be used outside the range covered by the defining
-    ``xknot`` values. As this is often a bad idea, the :mod:`CSpline` 
-    methods issue a warning when called with out-of-range points. 
+    ``xknot`` values. As this is often a bad idea, the :mod:`CSpline`
+    methods issue a warning when called with out-of-range points.
     The warning can be suppressed by setting parameter ``warn=False``.
-    The spline value for an out-of-range point is calculated 
+    The spline value for an out-of-range point is calculated
     using a polynomial whose value and derivatives match those of the spline
-    at the knot closest to the out-of-range point. The extrapolation 
-    polynomial is cubic by default, but lower orders can be specified by 
-    setting parameter ``extrap_order`` to a (non-negative) integer 
+    at the knot closest to the out-of-range point. The extrapolation
+    polynomial is cubic by default, but lower orders can be specified by
+    setting parameter ``extrap_order`` to a (non-negative) integer
     less than 3; this is often a good idea.
 
     Examples:
@@ -76,18 +76,18 @@ class CSpline:
 
         Here the ``yknot`` values were obtained by taking ``sin(xknot)``.
         Tabulating results from the spline together with the exact results
-        shows that this 5-knot spline gives a pretty good approximation 
+        shows that this 5-knot spline gives a pretty good approximation
         of the function ``sin(x)``, as well as its derivatives and integral::
 
             x    f(x)    f.D(x)  f.D2(x) f.integ(x) | sin(x)  cos(x)  1-cos(x)
             ------------------------------------------------------------------
             0.3  0.2951  0.9551  -0.2842 0.04458    | 0.2955  0.9553  0.04466
-            0.5  0.4791  0.8793  -0.4737 0.1222     | 0.4794  0.8776  0.1224 
-            0.7  0.6442  0.7656  -0.6632 0.235      | 0.6442  0.7648  0.2352 
-            0.9  0.783   0.6176  -0.7891 0.3782     | 0.7833  0.6216  0.3784 
-            1.1  0.8902  0.452   -0.8676 0.5461     | 0.8912  0.4536  0.5464 
-            1.3  0.9627  0.2706  -0.9461 0.7319     | 0.9636  0.2675  0.7325 
-            1.5  0.9974  0.07352 -1.025  0.9286     | 0.9975  0.07074 0.9293 
+            0.5  0.4791  0.8793  -0.4737 0.1222     | 0.4794  0.8776  0.1224
+            0.7  0.6442  0.7656  -0.6632 0.235      | 0.6442  0.7648  0.2352
+            0.9  0.783   0.6176  -0.7891 0.3782     | 0.7833  0.6216  0.3784
+            1.1  0.8902  0.452   -0.8676 0.5461     | 0.8912  0.4536  0.5464
+            1.3  0.9627  0.2706  -0.9461 0.7319     | 0.9636  0.2675  0.7325
+            1.5  0.9974  0.07352 -1.025  0.9286     | 0.9975  0.07074 0.9293
 
         Using the spline outside
         the range covered by the knots is less good::
@@ -96,15 +96,15 @@ class CSpline:
             gvar/cspline.py:164: UserWarning: x outside of spline range: [ 6.28318531]
             1.7618635470106501
 
-        The correct answer is 0.0, of course. This is why the spline function 
+        The correct answer is 0.0, of course. This is why the spline function
         issues a warning. Working just outside the knot region is often fine,
-        although it is usually a good idea to limit the order of the 
+        although it is usually a good idea to limit the order of the
         polynomial used in such regions: for example, setting ::
 
             >>> f = gv.cspline.CSpline(xknot, yknot, extrap_order=2)
 
         implies that quadratic polynomials are used outside the spline range.
-        Finally one can specify the values of the first derivatives of the 
+        Finally one can specify the values of the first derivatives of the
         function at one or the other endpoints of the spline region, if they
         are known. Continuing from above, for example, one would take ::
 
@@ -114,23 +114,23 @@ class CSpline:
         are 1 and -1, respectively.
 
     Args:
-        xknot (1-d sequence of number): The knots of the spline, where the 
-            function values are specified. The knots are sorted (from small 
+        xknot (1-d sequence of number): The knots of the spline, where the
+            function values are specified. The knots are sorted (from small
             to large) if necessary.
-        yknot (1-d sequence of number): Function values at the locations 
+        yknot (1-d sequence of number): Function values at the locations
             specified by ``xknot[i]``.
-        deriv (2-component sequence): Derivatives at initial and final 
-            boundaries of the  region specified by ``xknot[i]``. 
+        deriv (2-component sequence): Derivatives at initial and final
+            boundaries of the  region specified by ``xknot[i]``.
             Default value is ``None`` for each boundary.
-        extrap_order (int): Order of polynomial used for extrapolations 
-            outside of the spline range. The polynomial is constructed from 
-            the spline's value and derivatives at the (nearest) knot of the 
-            spline. The allowed range is ``0 <= extrap_order <= 3``. The 
-            default value is 3 although it is common practice to use 
+        extrap_order (int): Order of polynomial used for extrapolations
+            outside of the spline range. The polynomial is constructed from
+            the spline's value and derivatives at the (nearest) knot of the
+            spline. The allowed range is ``0 <= extrap_order <= 3``. The
+            default value is 3 although it is common practice to use
             smaller values.
-        warn (bool): If ``True``, warnings are generated 
-            when the spline function is called for ``x`` values that 
-            fall outside of the original range of ``xknot``\s used to 
+        warn (bool): If ``True``, warnings are generated
+            when the spline function is called for ``x`` values that
+            fall outside of the original range of ``xknot``\s used to
             define the spline. Default value is ``True``;
             out-of-range warnings are suppressed if set to ``False``.
     """
@@ -159,29 +159,29 @@ class CSpline:
             d = numpy.zeros(y.shape, float)
             self.intydx = numpy.zeros(y.shape, float)
         for i in range(1, len(y)-1):
-            # m[i, i - 1] 
+            # m[i, i - 1]
             a[i] = 1. / (x[i] - x[i - 1])
-            # m[i, i + 1] 
+            # m[i, i + 1]
             c[i] = 1./ (x[i + 1] - x[i])
-            # m[i, i] 
+            # m[i, i]
             b[i] = 2. * (a[i] + c[i])
             d[i] = 3. * (
                 (y[i] - y[i - 1]) * a[i] ** 2 +
                 (y[i + 1] - y[i]) * c[i] ** 2
                 )
         if deriv[0] is None:
-            # m[0, 0] 
+            # m[0, 0]
             b[0] = 2. / (x[1] - x[0])
-            # m[0, 1] 
+            # m[0, 1]
             c[0] = 1. / (x[1] - x[0])
             d[0] = 3. * (y[1] - y[0]) / (x[1] - x[0]) ** 2
         else:
             b[0] = 1.
             d[0] = deriv[0]
         if deriv[1] is None:
-            # m[-1, -2] 
+            # m[-1, -2]
             a[-1] = 1. / (x[-1] - x[-2])
-            # m[-1, -1] 
+            # m[-1, -1]
             b[-1] = 2. / (x[-1] - x[-2])
             d[-1] = 3. * (y[-1] - y[-2]) / (x[-1] - x[-2]) ** 2
         else:
@@ -214,10 +214,10 @@ class CSpline:
         if self.warn and out_of_range:
             warnings.warn('x outside of spline range: ' + str(x))
         if out_of_range and self.extrap_order < 3:
-            ans = numpy.empty(self.n, object)
+            ans = numpy.empty(len(x), object)
             middle = numpy.logical_not(numpy.logical_or(left, right))
             for coef, idx, x0 in [
-                (self.cleft, left, self.x[0]), 
+                (self.cleft, left, self.x[0]),
                 (self.cright, right, self.x[-1]),
                 ]:
                 if len(idx) == 0:
@@ -261,11 +261,11 @@ class CSpline:
         if self.warn and out_of_range:
             warnings.warn('x outside of spline range: ' + str(x))
         if out_of_range and self.extrap_order < 3:
-            ans = numpy.empty(self.n, object)
+            ans = numpy.empty(len(x), object)
             middle = numpy.logical_not(numpy.logical_or(left, right))
             cfac = numpy.array([1, 1/2., 1/3.])[:self.extrap_order + 1]
             for coef, idx, x0 in [
-                (self.cleft, left, self.x[0]), 
+                (self.cleft, left, self.x[0]),
                 (self.cright, right, self.x[-1]),
                 ]:
                 if len(idx) == 0:
@@ -285,7 +285,7 @@ class CSpline:
             # self.x[i] and self.x[j] bracket x where possible
             # otherwise use first or last increment
             j = numpy.searchsorted(self.x, x)
-            j[j <= 0] = 1   
+            j[j <= 0] = 1
             j[j >= self.n] = self.n - 1
             i = j - 1
             x1 = self.x[i]
@@ -316,10 +316,10 @@ class CSpline:
         if self.warn and out_of_range:
             warnings.warn('x outside of spline range: ' + str(x))
         if out_of_range and self.extrap_order < 3:
-            ans = numpy.empty(self.n, object)
+            ans = numpy.empty(len(x), object)
             middle = numpy.logical_not(numpy.logical_or(left, right))
             for coef, idx, x0 in [
-                (self.cleft, left, self.x[0]), 
+                (self.cleft, left, self.x[0]),
                 (self.cright, right, self.x[-1]),
                 ]:
                 if len(idx) == 0:
@@ -353,7 +353,7 @@ class CSpline:
             a = k1 * (x2 - x1) - (y2 - y1)
             b = - k2 * (x2 - x1) + (y2 - y1)
             ans = (
-                (y2 - y1) / (x2 - x1) 
+                (y2 - y1) / (x2 - x1)
                 + (1 - 2 * t) * (a * (1 - t) + b * t) / (x2 - x1)
                 + t * (1 - t) * (b - a) / (x2 - x1)
                 )
@@ -369,10 +369,10 @@ class CSpline:
         if self.warn and out_of_range:
             warnings.warn('x outside of spline range: ' + str(x))
         if out_of_range and self.extrap_order < 3:
-            ans = numpy.empty(self.n, object)
+            ans = numpy.empty(len(x), object)
             middle = numpy.logical_not(numpy.logical_or(left, right))
             for coef, idx, x0 in [
-                (self.cleft, left, self.x[0]), 
+                (self.cleft, left, self.x[0]),
                 (self.cright, right, self.x[-1]),
                 ]:
                 if len(idx) == 0:
@@ -409,7 +409,7 @@ class CSpline:
 def tri_diag_solve(a, b, c, d):
     """ Solve a[i] * x[i-1] + b[i] * x[i] + c[i] * x[i+1] = d[i] for x[i]
 
-    Adapted from: http://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm. 
+    Adapted from: http://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm.
     """
     n = len(a)
     a, b, c, d = map(numpy.array, (a, b, c, d))

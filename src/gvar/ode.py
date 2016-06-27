@@ -1,13 +1,13 @@
 """ Differential equation integrator for GVars. """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-04-27.
-# Copyright (c) 2014 G. Peter Lepage. 
+# Copyright (c) 2014-2015 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,7 +26,7 @@ class Integrator(object):
 
     An :class:`Integrator` object ``odeint`` integrates ``dy/dx = f(x,y)``
     to obtain ``y(x1)`` from ``y0 = y(x0)``. ``y`` and ``f(x,y)`` can
-    be scalars or :mod:`numpy` arrays. Typical usage is illustrated 
+    be scalars or :mod:`numpy` arrays. Typical usage is illustrated
     by the following code for integrating ``dy/dx = y``::
 
         from gvar.ode import Integrator
@@ -57,7 +57,7 @@ class Integrator(object):
         y1, y2 ... = odeint(y0, interval=[0, 1., 2. ...])
 
 
-    An alternative interface creates a new function which is the 
+    An alternative interface creates a new function which is the
     solution of the differential equation for specific initial conditions.
     The code above could be rewritten::
 
@@ -68,12 +68,12 @@ class Integrator(object):
         y2 = y(2)
         ...
 
-    Here method :meth:`Integrator.solution` returns a function ``y(x)`` 
-    where: a) ``y(x0) = y0``; and b) ``y(x)`` uses the integator to 
-    integrate the differential equation to point ``x`` starting 
-    from  the last point at which ``y`` was evaluated 
+    Here method :meth:`Integrator.solution` returns a function ``y(x)``
+    where: a) ``y(x0) = y0``; and b) ``y(x)`` uses the integator to
+    integrate the differential equation to point ``x`` starting
+    from  the last point at which ``y`` was evaluated
     (or from ``x0`` for the first call to ``y(x)``). The function can
-    also be called with an array of ``x`` values, in which case an 
+    also be called with an array of ``x`` values, in which case an
     array containing the corresponding ``y`` values is returned.
 
     The integrator uses an adaptive Runge-Kutta algorithm that adjusts
@@ -86,39 +86,39 @@ class Integrator(object):
     bad steps, where ``h`` is decreased and the step is repeated:
     ``odeint.ngood`` and ``odeint.nbad``, respectively.
 
-    A custom criterion for step-size changes can be implemented by 
+    A custom criterion for step-size changes can be implemented by
     specifying a function for parameter delta. This is a function
     ``delta(yerr, y, delta_y)`` --- of the estimated error ``yerr``
-    after a given step, the proposed value for ``y``, and the 
-    proposed change ``delta_y`` in ``y`` --- that returns a number 
-    to compare with tolerance ``tol``. The step size is 
+    after a given step, the proposed value for ``y``, and the
+    proposed change ``delta_y`` in ``y`` --- that returns a number
+    to compare with tolerance ``tol``. The step size is
     decreased and the step repeated if ``delta(yerr, y, delta_y) > tol``;
-    otherwise the step is accepted and the step size increased. 
+    otherwise the step is accepted and the step size increased.
     The default definition of ``delta`` is roughly equivalent to::
 
         import numpy as np
         import gvar as gv
-        
+
         def delta(yerr, y, delta_y):
             return np.max(
                 np.fabs(yerr) / (np.fabs(y) + np.fabs(delta_y) + gv.ode.TINY)
                 )
-    
-    A custom definition can be used to allow an ``Integrator`` to 
-    work with data types other than floats or :mod:`numpy` arrays of floats. 
-    All that is required of the data type is that it support 
-    ordinary arithmetic. Therefore, for example, defining 
+
+    A custom definition can be used to allow an ``Integrator`` to
+    work with data types other than floats or :mod:`numpy` arrays of floats.
+    All that is required of the data type is that it support
+    ordinary arithmetic. Therefore, for example, defining
     ``delta(yerr, y, delta_y)`` with ``np.abs()`` instead of ``np.fabs()``
-    allows ``y`` to be complex valued. (Actually the default ``delta`` 
+    allows ``y`` to be complex valued. (Actually the default ``delta``
     allows this as well.)
 
     An analyzer ``analyzer(x,y)`` can be specified using parameter
     ``analyzer``. This function is called after every full step of
-    the integration, with the current values of ``x`` and ``y``. 
-    Objects of type :class:`gvar.ode.Solution` are examples of 
+    the integration, with the current values of ``x`` and ``y``.
+    Objects of type :class:`gvar.ode.Solution` are examples of
     (simple) analyzers.
 
-    :param deriv: Function of ``x`` and ``y`` that returns ``dy/dx``. 
+    :param deriv: Function of ``x`` and ``y`` that returns ``dy/dx``.
         The return value should have the same shape as ``y`` if arrays
         are used.
     :param tol: Relative accuracy in ``y`` relative to ``|y| + h|dy/dx|``
@@ -130,22 +130,22 @@ class Integrator(object):
         entire width of the integration interval.
     :type h: float or None
     :param hmin: Smallest step size allowed. A warning is raised
-        if a smaller step size is requested, and the step size is not 
-        decreased. This prevents infinite loops at singular points, but 
-        the solution may not be reliable when a warning has been issued. The 
-        default value is zero (which does *not* prevent infinite loops).
+        if a smaller step size is requested, and the step size is not
+        decreased. This prevents infinite loops at singular points, but
+        the solution may not be reliable when a warning has been issued. The
+        default value is ``None`` (which does *not* prevent infinite loops).
     :type hmin: float or None
-    :param delta: Function ``delta(yerr, y, delta_y)`` that returns 
-        a number to be compared  with ``tol`` at each integration step: 
-        if it is larger than ``tol``, the step is repeated with a smaller 
-        step size; if it is smaller the step is accepted and a larger 
-        step size used for the subsequent step. Here ``yerr`` is an 
-        estimate of the error in ``y`` on the last step; ``y`` is the 
-        proposed value; and ``delta_y`` is the change in ``y`` over 
+    :param delta: Function ``delta(yerr, y, delta_y)`` that returns
+        a number to be compared  with ``tol`` at each integration step:
+        if it is larger than ``tol``, the step is repeated with a smaller
+        step size; if it is smaller the step is accepted and a larger
+        step size used for the subsequent step. Here ``yerr`` is an
+        estimate of the error in ``y`` on the last step; ``y`` is the
+        proposed value; and ``delta_y`` is the change in ``y`` over
         the last step.
     :param analyzer: Function of ``x`` and ``y`` that is called after each
         step of the integration. This can be used to analyze intermediate
-        results. 
+        results.
     """
     def __init__(self, deriv=None, tol=1e-5, h=None, hmin=None, delta=None, analyzer=None):
         self.deriv = deriv
@@ -202,7 +202,7 @@ class Integrator(object):
                 delta = numpy.max(delta)
                 if isinstance(delta, gvar.GVar):
                     delta = delta.mean
-            if delta >= tol:  
+            if delta >= tol:
                 # smaller step size -- adjust and redo step
                 if h < hmin:
                     warnings.warn(
@@ -225,7 +225,7 @@ class Integrator(object):
         return y
 
     def solution(self, x0, y0):
-        """ Create a solution function ``y(x)`` such that ``y(x0) = y0``. 
+        """ Create a solution function ``y(x)`` such that ``y(x0) = y0``.
 
         A list of solution values ``[y(x0), y(x1) ...]`` is returned if the
         function is called with a list ``[x0, x1 ...]`` of ``x`` values.
@@ -248,12 +248,12 @@ class Integrator(object):
 def rk5_stepper(x, h, y , deriv, errors=False):
     """ Compute y(x+h) from y and dy/dx=deriv(x,y).
 
-    Uses a one-step 5th-order Runge-Kutta algorithm. 
+    Uses a one-step 5th-order Runge-Kutta algorithm.
 
     Returns x+h, y(x+h) if errors is False; otherwise
-    returns x+h, y(x+h), yerr where yerr is an error 
+    returns x+h, y(x+h), yerr where yerr is an error
     estimate.
-        
+
     Adapted from Numerical Recipes.
     """
     k1 = h * deriv(x,y)
@@ -285,8 +285,8 @@ class DictIntegrator(Integrator):
     """ Integrate ``dy/dx = deriv(x,y)`` where ``y`` is a dictionary.
 
     An :class:`DictIntegrator` object ``odeint`` integrates ``dy/dx = f(x,y)``
-    to obtain ``y(x1)`` from ``y0 = y(x0)``. ``y`` and ``f(x,y)`` are 
-    dictionary types having the same keys, and containing scalars 
+    to obtain ``y(x1)`` from ``y0 = y(x0)``. ``y`` and ``f(x,y)`` are
+    dictionary types having the same keys, and containing scalars
     and/or :mod:`numpy` arrays as values. Typical usage is::
 
         from gvar.ode import DictIntegrator
@@ -302,12 +302,12 @@ class DictIntegrator(Integrator):
     The first call to ``odeint`` integrates from ``x=x0`` to ``x=x1``,
     returning ``y1=y(x1)``. The second call continues the integration
     to ``x=x2``, returning ``y2=y(x2)``. Multiple integration points
-    can be specified in ``interval``, in which case a list of the 
+    can be specified in ``interval``, in which case a list of the
     corresponding ``y`` values is returned: for example, ::
 
         odeint = DictIntegrator(deriv=f,  tol=1e-8)
         y1, y2 ... = odeint(y0, interval=[x0, x1, x2 ...])
-    
+
     The integrator uses an adaptive Runge-Kutta algorithm that adjusts
     the integrator's step size to obtain relative accuracy ``tol`` in the solution.
     An initial step size can be set in the :class:`DictIntegrator` by specifying
@@ -320,31 +320,32 @@ class DictIntegrator(Integrator):
 
     An analyzer ``analyzer(x,y)`` can be specified using parameter
     ``analyzer``. This function is called after every full step of
-    the integration with the current values of ``x`` and ``y``.     
-    Objects of type :class:`gvar.ode.Solution` are examples of 
+    the integration with the current values of ``x`` and ``y``.
+    Objects of type :class:`gvar.ode.Solution` are examples of
     (simple) analyzers.
 
 
-    :param deriv: Function of ``x`` and ``y`` that returns ``dy/dx``. 
-        The return value should be a dictionary with the same 
+    :param deriv: Function of ``x`` and ``y`` that returns ``dy/dx``.
+        The return value should be a dictionary with the same
         keys as ``y``, and values that have the same
         shape as the corresponding values in ``y``.
     :param tol: Relative accuracy in ``y`` relative to ``|y| + h|dy/dx|``
         for each step in the integration. Any integration step that achieves
         less precision is repeated with a smaller step size. The step size
-        is increased if precision is higher than needed. 
+        is increased if precision is higher than needed.
     :type tol: float
     :param h: Absolute value of initial step size. The default value equals the
-        entire width of the integration interval. 
+        entire width of the integration interval.
     :type h: float
-    :param hmin: Smallest step size allowed. An exception is raised
-        if a smaller step size is needed. This is mostly useful for 
-        preventing infinite loops caused by programming errors. The 
-        default value is zero (which does *not* prevent infinite loops).
+    :param hmin: Smallest step size allowed. A warning is raised
+        if a smaller step size is requested, and the step size is not
+        decreased. This prevents infinite loops at singular points, but
+        the solution may not be reliable when a warning has been issued. The
+        default value is ``None`` (which does *not* prevent infinite loops).
     :type hmin: float
     :param analyzer: Function of ``x`` and ``y`` that is called after each
         step of the integration. This can be used to analyze intermediate
-        results. 
+        results.
     """
     def __init__(self, **args):
         super(DictIntegrator, self).__init__(**args)
@@ -369,14 +370,14 @@ class DictIntegrator(Integrator):
         self.deriv = deriv_orig
         return gvar.BufferDict(y0, buf=ans)
 
-def integral(fcn, interval, fcnshape=None, tol=1e-8):
+def integral(fcn, interval, fcnshape=None, tol=1e-8, hmin=None):
     """ Compute integral of ``fcn(x)`` on interval.
 
     Given a function ``fcn(x)`` the call ::
 
         result = integral(fcn, interval=(x0, x1))
 
-    calculates the integral of ``fcn(x)`` from ``x0`` to ``x1``. 
+    calculates the integral of ``fcn(x)`` from ``x0`` to ``x1``.
     For example::
 
         >>> def fcn(x):
@@ -385,7 +386,7 @@ def integral(fcn, interval, fcnshape=None, tol=1e-8):
         >>> print(result)
         0.500000002834
 
-    Function ``fcn(x)`` can return a scalar or an array (any shape): 
+    Function ``fcn(x)`` can return a scalar or an array (any shape):
     for example, ::
 
         >>> def fcn(x):
@@ -404,16 +405,21 @@ def integral(fcn, interval, fcnshape=None, tol=1e-8):
         >>> print(result)
         {'x': 0.5,'x3': 0.25}
 
-    :param fcn: Function of scalar variable ``x`` that returns the integrand. 
+    :param fcn: Function of scalar variable ``x`` that returns the integrand.
         The return value should be either a scalar or an array, or a
         dictionary whose values are scalars and/or arrays.
     :param interval: Contains the interval ``(x0,x1)`` over which the integral
         is computed.
     :param fcnshape: Contains the shape of the array returned by ``f(x)`` or
-        ``()`` if the function returns a scalar. Setting ``fshape=None`` 
-        (the default) results in an extra function evaluation to determine 
+        ``()`` if the function returns a scalar. Setting ``fshape=None``
+        (the default) results in an extra function evaluation to determine
         the shape.
     :param tol: Relative accuracy of result.
+    :param hmin: Smallest step size allowed in adaptive integral. A warning is
+        raised if a smaller step size is requested, and the step size is not
+        decreased. This prevents infinite loops at singular points, but
+        the integral may not be accurate when a warning has been issued. The
+        default value is ``None`` (which does *not* prevent infinite loops).
     """
     if fcnshape is None:
         fx0 = fcn(interval[0])
@@ -424,27 +430,27 @@ def integral(fcn, interval, fcnshape=None, tol=1e-8):
             fcnshape = numpy.shape(fx0)
     if fcnshape is None:
         def deriv(x, y, fcn=fcn):
-            return gvar.BufferDict(fcn(x)).buf 
+            return gvar.BufferDict(fcn(x)).buf
         y0 = fx0.buf * 0.0
     else:
         def deriv(x, y, fcn=fcn):
             return fcn(x)
         y0 = 0.0 if fcnshape == () else numpy.zeros(fcnshape, float)
-    odeint = Integrator(deriv=deriv, tol=tol)
+    odeint = Integrator(deriv=deriv, tol=tol, hmin=hmin)
     ans = odeint(y0, interval=interval)
     return ans if fcnshape is not None else gvar.BufferDict(fx0, buf=ans)
-        
+
 class Solution:
     """ ODE analyzer for storing intermediate values.
 
     Usage: eg, given ::
-    
+
         odeint = Integrator(...)
         soln = Solution()
         y0 = ...
         y = odeint(y0, interval=(x0, x), analyzer=soln)
 
-    then the ``soln.x[i]`` are the points at which the integrator 
+    then the ``soln.x[i]`` are the points at which the integrator
     evaluated the solution, and ``soln.y[i]`` is the solution
     of the differential equation at that point.
     """

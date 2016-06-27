@@ -1,3 +1,4 @@
+#cython: boundscheck=False
 # c#ython: profile=True
 # remove extra # above for profiling
 
@@ -182,7 +183,28 @@ cdef class GVar:
     def __pos__(self):
         return self
 
+    # def __add__(xx,yy):
+    #     cdef GVar x,y
+    #     cdef Py_ssize_t i,nx,di,ny
+    #     if type(yy) in _ARRAY_TYPES:
+    #         return NotImplemented   # let ndarray handle it
+    #     elif isinstance(xx,GVar):
+    #         if isinstance(yy,GVar):
+    #             x = xx
+    #             y = yy
+    #             assert x.cov is y.cov,"Incompatible GVars."
+    #             return GVar(x.v+y.v,x.d.add(y.d),x.cov)
+    #         else:
+    #             x = xx
+    #             return GVar(x.v+yy,x.d,x.cov)
+    #     elif isinstance(yy,GVar):
+    #         y = yy
+    #         return GVar(y.v+xx,y.d,y.cov)
+    #     else:
+    #         return NotImplemented
+
     def __add__(xx,yy):
+        cdef GVar ans = GVar.__new__(GVar)
         cdef GVar x,y
         cdef Py_ssize_t i,nx,di,ny
         if type(yy) in _ARRAY_TYPES:
@@ -192,15 +214,25 @@ cdef class GVar:
                 x = xx
                 y = yy
                 assert x.cov is y.cov,"Incompatible GVars."
-                return GVar(x.v+y.v,x.d.add(y.d),x.cov)
+                ans.v = x.v + y.v
+                ans.d = x.d.add(y.d)
+                ans.cov = x.cov
+                # return GVar(x.v+y.v,x.d.add(y.d),x.cov)
             else:
                 x = xx
-                return GVar(x.v+yy,x.d,x.cov)
+                ans.v = x.v + yy
+                ans.d = x.d
+                ans.cov = x.cov
+                # return GVar(x.v+yy,x.d,x.cov)
         elif isinstance(yy,GVar):
             y = yy
-            return GVar(y.v+xx,y.d,y.cov)
+            ans.v = y.v + xx
+            ans.d = y.d
+            ans.cov = y.cov
+            # return GVar(y.v+xx,y.d,y.cov)
         else:
             return NotImplemented
+        return ans
 
     def __sub__(xx,yy):
         cdef GVar x,y
@@ -264,81 +296,100 @@ cdef class GVar:
         else:
             return NotImplemented
 
-    def __div__(xx,yy):
-        cdef GVar x,y
-        cdef double xd,yd
+    def __div__(xx, yy):
+        cdef GVar x, y
+        cdef double xd, yd
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
-        elif isinstance(xx,GVar):
-            if isinstance(yy,GVar):
+        elif isinstance(xx, GVar):
+            if isinstance(yy, GVar):
                 x = xx
                 y = yy
                 assert x.cov is y.cov,"Incompatible GVars."
-                return GVar(x.v/y.v,x.d.add(y.d,1./y.v,-x.v/y.v**2),x.cov)
+                return GVar(
+                    x.v / y.v,
+                    x.d.add(y.d, 1. / y.v, -x.v / y.v**2),
+                    x.cov,
+                    )
             else:
                 x = xx
                 yd=yy
-                return GVar(x.v/yd,x.d.mul(1./yd),x.cov)
-        elif isinstance(yy,GVar):
+                return GVar(x.v / yd, x.d.mul(1. / yd), x.cov)
+        elif isinstance(yy, GVar):
             y = yy
             xd=xx
-            return GVar(xd/y.v,y.d.mul(-xd/y.v**2),y.cov)
+            return GVar(xd / y.v, y.d.mul(-xd / y.v **2), y.cov)
         else:
             return NotImplemented
 
-    def __pow__(xx,yy,zz):
-        cdef GVar x,y
-        cdef double ans,f1,f2,yd,xd
+    def __pow__(xx, yy, zz):
+        cdef GVar x, y
+        cdef double ans, f1, f2, yd, xd
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
-        elif isinstance(xx,GVar):
-            if isinstance(yy,GVar):
+        elif isinstance(xx, GVar):
+            if isinstance(yy, GVar):
                 x = xx
                 y = yy
                 assert x.cov is y.cov,"Incompatible GVars."
-                ans = c_pow(x.v,y.v)
+                ans = c_pow(x.v, y.v)
                 f1 = c_pow(x.v,y.v-1)*y.v
                 f2 = ans*c_log(x.v)
-                return GVar(ans,x.d.add(y.d,f1,f2),x.cov)
+                return GVar(ans, x.d.add(y.d, f1, f2), x.cov)
             else:
                 x = xx
                 yd= yy
                 ans = c_pow(x.v,yd)
                 f1 = c_pow(x.v,yd-1)*yy
-                return GVar(ans,x.d.mul(f1),x.cov)
-        elif isinstance(yy,GVar):
+                return GVar(ans, x.d.mul(f1), x.cov)
+        elif isinstance(yy, GVar):
             y = yy
             xd= xx
-            ans = c_pow(xd,y.v)
+            ans = c_pow(xd, y.v)
             f1 = ans*c_log(xd)
-            return GVar(ans,y.d.mul(f1),y.cov)
+            return GVar(ans, y.d.mul(f1), y.cov)
         else:
             return NotImplemented
 
     def sin(self):
-        return GVar(c_sin(self.v),self.d.mul(c_cos(self.v)),self.cov)
+        return GVar(c_sin(self.v), self.d.mul(c_cos(self.v)), self.cov)
+
+    # def sin(self):
+    #     cdef GVar ans = GVar.__new__(GVar)
+    #     ans.v = c_sin(self.v)
+    #     ans.d = self.d.mul(c_cos(self.v))
+    #     ans.cov = self.cov
+    #     return ans
 
     def cos(self):
-        return GVar(c_cos(self.v),self.d.mul(-c_sin(self.v)),self.cov)
+        return GVar(c_cos(self.v), self.d.mul(-c_sin(self.v)), self.cov)
 
     def tan(self):
         cdef double ans = c_tan(self.v)
-        return GVar(ans,self.d.mul(1+ans*ans),self.cov)
+        return GVar(ans, self.d.mul(1 + ans * ans), self.cov)
 
     def arcsin(self):
-        return GVar(c_asin(self.v),self.d.mul(1./(1.-self.v**2)**0.5),self.cov)
+        return GVar(
+            c_asin(self.v),
+            self.d.mul(1. / (1. - self.v ** 2) ** 0.5),
+            self.cov
+            )
 
     def asin(self):
         return self.arcsin()
 
     def arccos(self):
-        return GVar(c_acos(self.v),self.d.mul(-1./(1.-self.v**2)**0.5),self.cov)
+        return GVar(
+            c_acos(self.v),
+            self.d.mul(-1. / (1. - self.v**2) ** 0.5),
+            self.cov,
+            )
 
     def acos(self):
         return self.arccos()
 
     def arctan(self):
-        return GVar(c_atan(self.v),self.d.mul(1./(1.+self.v**2)),self.cov)
+        return GVar(c_atan(self.v), self.d.mul(1. / (1. + self.v ** 2)), self.cov)
 
     def atan(self):
         return self.arctan()
@@ -367,28 +418,32 @@ cdef class GVar:
         return yy.arctan2(xx)
 
     def sinh(self):
-        return GVar(c_sinh(self.v),self.d.mul(c_cosh(self.v)),self.cov)
+        return GVar(c_sinh(self.v), self.d.mul(c_cosh(self.v)), self.cov)
 
     def cosh(self):
-        return GVar(c_cosh(self.v),self.d.mul(c_sinh(self.v)),self.cov)
+        return GVar(c_cosh(self.v), self.d.mul(c_sinh(self.v)), self.cov)
 
     def tanh(self):
-        return GVar(c_tanh(self.v),self.d.mul(1./(c_cosh(self.v)**2)),self.cov)
+        return GVar(
+            c_tanh(self.v),
+            self.d.mul(1. / (c_cosh(self.v) ** 2)),
+            self.cov,
+            )
 
     def arcsinh(self):
-        return log(self+sqrt(self*self+1.))
+        return log(self + sqrt(self * self + 1.))
 
     def asinh(self):
         return self.arcsinh()
 
     def arccosh(self):
-        return log(self+sqrt(self*self-1.))
+        return log(self + sqrt(self * self - 1.))
 
     def acosh(self):
         return self.arccosh()
 
     def arctanh(self):
-        return log((1.+self)/(1.-self))/2.
+        return log((1. + self) / (1. - self)) / 2.
 
     def atanh(self):
         return self.arctanh()
@@ -396,14 +451,14 @@ cdef class GVar:
     def exp(self):
         cdef double ans
         ans = c_exp(self.v)
-        return GVar(ans,self.d.mul(ans),self.cov)
+        return GVar(ans, self.d.mul(ans), self.cov)
 
     def log(self):
-        return GVar(c_log(self.v),self.d.mul(1./self.v),self.cov)
+        return GVar(c_log(self.v), self.d.mul(1./self.v), self.cov)
 
     def sqrt(self):
         cdef double ans = c_sqrt(self.v)
-        return GVar(ans,self.d.mul(0.5/ans),self.cov)
+        return GVar(ans, self.d.mul(0.5/ans), self.cov)
 
     def fabs(self):
         if self.v >= 0:
@@ -538,7 +593,8 @@ cdef class GVar:
         cov = self.cov
         jset = set()
         for i in iset:
-            jset.update(cov.rowlist[i].indices())
+            # jset.update(cov.rowlist[i].indices())
+            jset.update(cov.row[i].indices())
 
         # c) build the mask
         dmask = numpy.zeros(dstop-dstart,int)
@@ -723,13 +779,14 @@ class GVarFactory:
             self.cov = cov
 
     def __call__(self, *args):
-        cdef Py_ssize_t nx,i,nd
+        cdef Py_ssize_t nx, i, nd
         cdef svec der
         cdef smat cov
-        cdef GVar gd
-        cdef numpy.ndarray[numpy.double_t,ndim=1] d
-        cdef numpy.ndarray[numpy.double_t,ndim=1] d_v
-        cdef numpy.ndarray[numpy.intp_t,ndim=1] d_idx
+        cdef GVar gv
+        cdef numpy.ndarray[numpy.double_t, ndim=1] d
+        cdef numpy.ndarray[numpy.double_t, ndim=1] d_v
+        cdef numpy.ndarray[numpy.intp_t, ndim=1] d_idx
+        cdef numpy.ndarray[numpy.intp_t, ndim=1] idx
 
         if len(args)==2:
             if hasattr(args[0], 'keys'):
@@ -790,25 +847,35 @@ class GVarFactory:
                     der = svec(1)
                     der.v[0].i = idx[0]
                     der.v[0].v = 1.0
-                    return GVar(x,der,self.cov)
+                    # gv = GVar.__new__(GVar)
+                    # gv.v = x
+                    # gv.d = der
+                    # gv.cov = self.cov
+                    # return gv
+                    return GVar(x, der, self.cov)
                 else:
                     # array of gvars from x and sdev/cov arrays
                     nx = len(x.flat)
                     if x.shape==xsdev.shape:  # x,sdev
-                        idx = self.cov.append_diag(xsdev.reshape(nx)**2)
-                    elif xsdev.shape==2*x.shape: # x,cov
-                        idx = self.cov.append_diag_m(xsdev.reshape(nx,nx))
+                        idx = self.cov.append_diag(xsdev.reshape(nx) ** 2)
+                    elif xsdev.shape==2 * x.shape: # x,cov
+                        idx = self.cov.append_diag_m(xsdev.reshape(nx, nx))
                     else:
-                        raise ValueError("Argument shapes mismatched: "+
-                            str(x.shape)+' '+str(xsdev.shape))
-                    d = numpy.ones(nx,float)
-                    ans = []
+                        raise ValueError("Argument shapes mismatched: " +
+                            str(x.shape) + ' ' + str(xsdev.shape))
+                    d = numpy.ones(nx, float)
+                    ans = numpy.empty(nx, object)
                     for i in range(nx):
                         der = svec(1)
                         der.v[0].i = idx[i]
                         der.v[0].v = 1.0
-                        ans.append(GVar(x.flat[i],der,self.cov))
-                    return numpy.array(ans).reshape(x.shape)
+                        # gv = GVar.__new__(GVar)
+                        # gv.v = x.flat[i]
+                        # gv.d = der
+                        # gv.cov = self.cov
+                        # ans[i] = gv
+                        ans[i] = GVar(x.flat[i], der, self.cov)
+                    return ans.reshape(x.shape)
         elif len(args)==1:
             x = args[0]
             if isinstance(x,str):

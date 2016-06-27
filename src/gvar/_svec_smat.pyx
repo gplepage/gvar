@@ -1,3 +1,4 @@
+#cython: boundscheck=False, intializedcheck=False, wraparound=False
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-13 G. Peter Lepage.
 #
@@ -5,7 +6,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,15 +24,15 @@ cdef class svec:
     """ sparse vector --- for GVar derivatives (only)"""
     # cdef svec_element * v
     # cdef readonly usigned int size ## number of elements in v
-    
-    def __cinit__(self,Py_ssize_t size,*arg,**karg):
+
+    def __cinit__(svec self,Py_ssize_t size, *arg, **karg):
         self.v = <svec_element *> malloc(size*sizeof(self.v[0]))
         memset(self.v,0,size*sizeof(self.v[0]))
-        self.size = size 
-    ##
+        self.size = size
+
     def __dealloc__(self):
         free(<void *> self.v)
-    ##
+
 
     def __reduce__(self):
         cdef numpy.ndarray[numpy.uint_t, ndim=1] idx = numpy.empty(self.size, numpy.uint)
@@ -44,7 +45,7 @@ cdef class svec:
 
     def __setstate__(self, data):
         cdef Py_ssize_t i
-        cdef numpy.ndarray[numpy.uint_t, ndim=1] idx 
+        cdef numpy.ndarray[numpy.uint_t, ndim=1] idx
         cdef numpy.ndarray[numpy.float_t, ndim=1] val
         val, idx = data
         for i in range(self.size):
@@ -58,7 +59,7 @@ cdef class svec:
             return 0
         else:
             return max([self.v[i].i for i in range(self.size)])
-    ##
+
     cpdef svec clone(self):
         cdef svec ans
         cdef Py_ssize_t i
@@ -67,16 +68,15 @@ cdef class svec:
             ans.v[i].v = self.v[i].v
             ans.v[i].i = self.v[i].i
         return ans
-    ##
+
     cpdef numpy.ndarray[numpy.int_t,ndim=1] indices(self):
         cdef Py_ssize_t i
         cdef numpy.ndarray [numpy.int_t,ndim=1] ans
         ans = numpy.zeros(self.size,int)
-        n = 0
         for i in range(self.size):
             ans[i] = self.v[i].i
         return ans
-    ##
+
     cpdef numpy.ndarray[numpy.double_t,ndim=1] toarray(self,Py_ssize_t msize=0):
         """ Create numpy.array version of self, padded with zeros to length
         msize if msize is not None and larger than the actual size.
@@ -90,18 +90,18 @@ cdef class svec:
         for i in range(self.size):
             ans[self.v[i].i] = self.v[i].v
         return ans
-    ##
+
     cpdef _assign(self,numpy.ndarray[numpy.double_t,ndim=1] v,
                      numpy.ndarray[numpy.int_t,ndim=1] idx):
         """ Assign v and idx to self.v[i].v and self.v[i].i.
-            
-        Assumes that len(v)==len(idx)==self.size and idx sorted 
+
+        Assumes that len(v)==len(idx)==self.size and idx sorted
         """
         cdef Py_ssize_t i
-        for i in range(self.size): 
+        for i in range(self.size):
             self.v[i].v = v[i]
             self.v[i].i = idx[i]
-    ##
+
     def assign(self,v,idx):
         """ assign v and idx to self.v[i].v and self.v[i].i """
         cdef Py_ssize_t nv, i
@@ -109,10 +109,10 @@ cdef class svec:
         assert nv==len(idx) and nv==self.size,"v,idx length mismatch"
         if nv>0:
             idx,v = zip(*sorted(zip(idx,v)))
-            for i in range(self.size): 
+            for i in range(self.size):
                 self.v[i].v = v[i]
                 self.v[i].i = idx[i]
-    ##
+
     cpdef double dot(svec self,svec v):
         """ Compute dot product of self and v: <self|v> """
         cdef svec va,vb
@@ -126,7 +126,7 @@ cdef class svec:
         if va.size==0 or vb.size==0:
             return 0.0
         if va.v[va.size-1].i<vb.v[0].i or vb.v[vb.size-1].i<va.v[0].i:
-            return ans 
+            return ans
         while ia<va.size and ib<vb.size:
             if va.v[ia].i==vb.v[ib].i:
                 ans += va.v[ia].v*vb.v[ib].v
@@ -137,27 +137,27 @@ cdef class svec:
             else:
                 ib += 1
         return ans
-    ##
+
     cpdef svec add(svec self,svec v,double a=1.,double b=1.):
         """ Compute a*self + b*v. """
         cdef svec va,vb
-        cdef Py_ssize_t ia,ib,i
+        cdef Py_ssize_t ia,ib,i, ians
         cdef svec ans
         va = self
         vb = v
         if va.size == 0:
-            ans = svec(vb.size)
+            ans = svec.__new__(svec, vb.size) # svec(vb.size)
             for i in range(vb.size):
                 ans.v[i].i = vb.v[i].i
                 ans.v[i].v = b * vb.v[i].v
             return ans
         elif vb.size == 0:
-            ans = svec(va.size)
+            ans = svec.__new__(svec, va.size) # svec(va.size)
             for i in range(va.size):
                 ans.v[i].i = va.v[i].i
                 ans.v[i].v = a * va.v[i].v
             return ans
-        ans = svec(va.size+vb.size)     # could be too big
+        ans = svec.__new__(svec, va.size + vb.size) # svec(va.size+vb.size)     # could be too big
         ia = 0
         ib = 0
         ians = 0
@@ -187,7 +187,7 @@ cdef class svec:
                 ans.v[ians].v = a*va.v[ia].v
                 ians += 1
                 ia += 1
-                if ia>=va.size: 
+                if ia>=va.size:
                     while ib<vb.size:
                         ans.v[ians].i = vb.v[ib].i
                         ans.v[ians].v = b*vb.v[ib].v
@@ -210,84 +210,114 @@ cdef class svec:
         ans.v = <svec_element *> realloc(<void*> ans.v,
                                          ans.size*sizeof(self.v[0]))
         return ans
-    ##
+
     cpdef svec mul(svec self,double a):
         """ Compute a*self. """
         cdef Py_ssize_t i
-        cdef svec ans = svec(self.size)
+        cdef svec ans = svec.__new__(svec, self.size) # svec(self.size)
         for i in range(self.size):
             ans.v[i].i = self.v[i].i
             ans.v[i].v = a*self.v[i].v
         return ans
-    ##
-    
-    
+
+
+
 cdef class smat:
     """ sym. sparse matrix --- for GVar covariance matrices (only) """
     # cdef object rowlist
-    
-    def __init__(self):
-        self.rowlist = []
-    ##
+
+    def __cinit__(smat self):
+        self.row = numpy.empty(2000, object)
+        self.nrow = 0
+        self.nrow_max = 2000
+
+    # def __init__(self):
+    #     self.rowlist = []
+
     def __reduce__(self):
-        return (smat, (), self.rowlist)
+        return (smat, (), numpy.asarray(self.row))
+        # return (smat, (), self.rowlist)
 
     def __setstate__(self, data):
-        self.rowlist = data
+        self.row = data
+        # self.rowlist = data
 
     def __len__(self):
         """ Dimension of matrix. """
-        return len(self.rowlist)
-    ##
-    cpdef numpy.ndarray[numpy.int_t,ndim=1] append_diag(self,
+        return self.nrow # len(self.rowlist)
+
+    cpdef _add_memory(smat self):
+        cdef object[:] oldrow = self.row
+        cdef Py_ssize_t i
+        self.row = numpy.empty(2 * self.nrow_max, object)
+        for i in range(self.nrow_max):
+            self.row[i] = oldrow[i]
+        self.nrow_max = 2 * self.nrow_max
+        # print('added memory')
+
+    cpdef numpy.ndarray[numpy.intp_t,ndim=1] append_diag(self,
                                     numpy.ndarray[numpy.double_t,ndim=1] d):
         """ Add d[i] along diagonal. """
         cdef Py_ssize_t i,nr
         cdef numpy.ndarray[numpy.double_t,ndim=1] v
-        cdef numpy.ndarray[numpy.int_t,ndim=1] idx,vrange
+        cdef numpy.ndarray[numpy.intp_t,ndim=1] idx,vrange
+        cdef svec new_svec
         idx = numpy.zeros(1,int)
-        nr = len(self.rowlist)
+        nr = self.nrow # len(self.rowlist)
         v = numpy.zeros(1,float)
         vrange = numpy.arange(nr,nr+d.shape[0],dtype=int)
         for i in range(d.shape[0]):
             v[0] = d[i]
-            idx[0] = len(self.rowlist)
-            self.rowlist.append(svec(1))
-            self.rowlist[-1]._assign(v,idx)
+            idx[0] = self.nrow # len(self.rowlist)
+            # self.rowlist.append(svec(1))
+            # self.rowlist[-1]._assign(v,idx)
+            if self.nrow >= self.nrow_max:
+                self._add_memory()
+            new_svec = svec(1)
+            new_svec._assign(v, idx)
+            self.row[self.nrow] = new_svec
+            self.nrow += 1
         return vrange
     ##
-    cpdef numpy.ndarray[numpy.int_t,ndim=1] append_diag_m(self,
+    cpdef numpy.ndarray[numpy.intp_t,ndim=1] append_diag_m(self,
                                     numpy.ndarray[numpy.double_t,ndim=2] m):
         """ Add matrix m on diagonal. """
         cdef Py_ssize_t i,j,nr,nm
         cdef numpy.ndarray[numpy.double_t,ndim=1] v
-        cdef numpy.ndarray[numpy.int_t,ndim=1] idx,vrange
+        cdef numpy.ndarray[numpy.intp_t,ndim=1] idx,vrange
+        cdef svec new_svec
         assert m.shape[0]==m.shape[1],"m must be square matrix"
         nm = m.shape[0]
         idx = numpy.zeros(nm,int)
         v = numpy.zeros(nm,float)
-        nr = len(self.rowlist)
-        vrange = numpy.arange(nr,nr+nm,dtype=int)
+        nr = self.nrow # len(self.rowlist)
+        vrange = numpy.arange(nr, nr + nm, dtype=int)
         for i in range(nm):
             idx[i] = nr+i
         for i in range(nm):
             for j in range(nm):
-                v[j] = m[i,j]
-            self.rowlist.append(svec(nm))
-            self.rowlist[-1]._assign(v,idx)
+                v[j] = m[i, j]
+            # self.rowlist.append(svec(nm))
+            # self.rowlist[-1]._assign(v,idx)
+            if self.nrow >= self.nrow_max:
+                self._add_memory()
+            new_svec = svec(nm)
+            new_svec._assign(v, idx)
+            self.row[self.nrow] = new_svec
+            self.nrow += 1
         return vrange
-    ##
-    cpdef double expval(self,svec vv):
+
+    cpdef double expval(self, svec vv):
         """ Compute expectation value <vv|self|vv>. """
         cdef Py_ssize_t i
         cdef svec row
         cdef double ans
         ans = 0.0
         for i in range(vv.size):
-            row = self.rowlist[vv.v[i].i]
-            ans += row.dot(vv)*vv.v[i].v
+            row = self.row[vv.v[i].i] # self.rowlist[vv.v[i].i]
+            ans += row.dot(vv) * vv.v[i].v
         return ans
-    ##
+
     cpdef svec dot(self,svec vv):
         """ Compute dot product self|vv>. """
         cdef numpy.ndarray[numpy.double_t,ndim=1] v
@@ -295,12 +325,12 @@ cdef class smat:
         cdef double rowv
         cdef Py_ssize_t nr, size, i
         cdef svec row
-        nr = len(self.rowlist)
+        nr = self.nrow # len(self.rowlist)
         v = numpy.zeros(nr,float)
         idx = numpy.zeros(nr,int)
         size = 0
         for i in range(nr):
-            row = self.rowlist[i]
+            row = self.row[i] # self.rowlist[i]
             rowv = row.dot(vv)
             if rowv!=0.0:
                 idx[size] = i
@@ -311,7 +341,7 @@ cdef class smat:
             ans.v[i].v = v[i]
             ans.v[i].i = idx[i]
         return ans
-    ##   
+
     cpdef svec masked_dot(self, svec vv, numpy.ndarray[numpy.int8_t,ndim=1] imask):
         """ Compute masked dot product self|vv>.
 
@@ -324,14 +354,14 @@ cdef class smat:
         cdef double rowv
         cdef svec row
         cdef svec ans
-        nr = len(self.rowlist)
+        nr = self.nrow # len(self.rowlist)
         v = numpy.zeros(nr,float)
         idx = numpy.zeros(nr,int)
         size = 0
         for i in range(nr):
             if not imask[i]:
                 continue
-            row = self.rowlist[i]
+            row = self.row[i] # self.rowlist[i]
             rowv = row.dot(vv)
             if rowv!=0.0:
                 idx[size] = i
@@ -340,17 +370,17 @@ cdef class smat:
         ans = svec(size)
         for i in range(size):
             ans.v[i].v = v[i]
-            ans.v[i].i = idx[i]    
+            ans.v[i].i = idx[i]
         return ans
 
     cpdef numpy.ndarray[numpy.double_t,ndim=2] toarray(self):
         """ Create numpy ndim=2 array version of self. """
         cdef numpy.ndarray[numpy.double_t,ndim=2] ans
-        cdef Py_ssize_t nr = len(self.rowlist)
+        cdef Py_ssize_t nr = self.nrow # len(self.rowlist)
         cdef Py_ssize_t i
         ans = numpy.zeros((nr,nr),float)
         for i in range(nr):
-            row = self.rowlist[i].toarray()
+            row = self.row[i].toarray() # self.rowlist[i].toarray()
             ans[i][:len(row)] = row
         return ans
-    ##
+

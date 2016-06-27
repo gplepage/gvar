@@ -4,7 +4,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,13 +27,16 @@ cdef class svec:
     cpdef svec clone(svec)
     cpdef svec add(svec,svec,double a=*,double b=*)
     cpdef svec mul(svec self,double a)
-   
-   
+
+
 cdef class smat:
-    cdef object rowlist
-    cpdef numpy.ndarray[numpy.int_t,ndim=1] append_diag(self,
+    # cdef object rowlist
+    cdef object[:] row
+    cdef Py_ssize_t nrow, nrow_max
+    cpdef _add_memory(smat self)
+    cpdef numpy.ndarray[numpy.intp_t,ndim=1] append_diag(self,
                                         numpy.ndarray[numpy.double_t,ndim=1])
-    cpdef numpy.ndarray[numpy.int_t,ndim=1] append_diag_m(self,
+    cpdef numpy.ndarray[numpy.intp_t,ndim=1] append_diag_m(self,
                                         numpy.ndarray[numpy.double_t,ndim=2])
     cpdef svec dot(self,svec)
     cpdef svec masked_dot(self, svec vv, numpy.ndarray[numpy.int8_t,ndim=1] imask)
