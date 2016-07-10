@@ -1318,6 +1318,12 @@ the shape is <code class="docutils literal"><span class="pre">None</span></code>
 </dd></dl>
 
 <dl class="method">
+<dt id="gvar.BufferDict.slice_shape">
+<code class="descname">slice_shape</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.slice_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return tuple <code class="docutils literal"><span class="pre">(slice/index,</span> <span class="pre">shape)</span></code> corresponding to key <code class="docutils literal"><span class="pre">k</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="gvar.BufferDict.isscalar">
 <code class="descname">isscalar</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.isscalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return <code class="docutils literal"><span class="pre">True</span></code> if <code class="docutils literal"><span class="pre">self[k]</span></code> is scalar else <code class="docutils literal"><span class="pre">False</span></code>.</p>
@@ -1492,6 +1498,158 @@ decomposition cannot be computed if the input matrix was rescaled
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</dd></dl>
+
+<p>Expectation values using probability density functions defined by
+collections of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s can be evaluated using the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code>
+module (for multi-dimensional integration) and the following class:</p>
+<dl class="class">
+<dt id="gvar.PDFIntegrator">
+<em class="property">class </em><code class="descclassname">gvar.</code><code class="descname">PDFIntegrator</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-15</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> integrator optimized for probability density functions (PDF).</p>
+<p><code class="docutils literal"><span class="pre">PDFIntegrator(g)</span></code> creates a <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> integrator optimized for
+integrating the probability density function and similar functions
+associated with the multi-dimensional Gaussian distribution associated
+with <code class="docutils literal"><span class="pre">g</span></code>, which is a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> or an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or a dictionary
+whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p><code class="docutils literal"><span class="pre">PDFIntegrator</span></code> reformulates integrals over the variables in <code class="docutils literal"><span class="pre">g</span></code>
+in terms of new variables that diagonalize <code class="docutils literal"><span class="pre">g</span></code>&#8216;s covariance matrix.
+This greatly facilitates integration over these variables using the
+<code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> module for multi-dimensional integration. (The <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code>
+module must be installed in order to use <code class="docutils literal"><span class="pre">PDFIntegrator</span></code>.)</p>
+<p>A simple illustration of <code class="docutils literal"><span class="pre">PDFIntegrator</span></code> is given by the following
+code:</p>
+<div class="highlight-python"><div class="highlight"><pre>import gvar as gv:
+
+g = gv.BufferDict()             # multi-dimensional Gaussian dist&#39;n
+g[&#39;a&#39;] = gv.gvar([0., 1.], [[1., 0.9], [0.9, 1.]])
+g[&#39;b&#39;] = gv.gvar(&#39;1(1)&#39;)
+
+integrator = PDFIntegrator(g)
+
+def f(p):
+    return p[&#39;a&#39;][0] * p[&#39;a&#39;][1] + p[&#39;b&#39;]
+
+def f_f2(p):                    # want expectation value of [f(p), f(p)**2]
+    fp = f(p)
+    return [fp, fp ** 2]
+
+# adapt integrator to f
+warmup = integrator.expval(f, neval=1000, nitn=5)
+
+# estimate the expectation value of f_f2
+results = integrator.expval(f_f2, neval=1000, nitn=5, adapt=False)
+print (results.summary())
+print (&#39;results =&#39;, results, &#39;\n&#39;)
+
+fmean = results[0]
+fsdev = gv.sqrt(results[1] - results[0] ** 2)
+print (&#39;f.mean =&#39;, fmean, &#39;   f.sdev =&#39;, fsdev)
+print (&quot;Gaussian approx&#39;n for f(g) =&quot;, f(g))
+</pre></div>
+</div>
+<p>where the <code class="docutils literal"><span class="pre">warmup</span></code> calls to the integrator are used to
+adapt it to <code class="docutils literal"><span class="pre">f(p)</span></code>, and the final results are in <code class="docutils literal"><span class="pre">results</span></code>.
+Here <code class="docutils literal"><span class="pre">neval</span></code> is the (approximate) number of function calls
+per iteration of the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> algorithm and <code class="docutils literal"><span class="pre">nitn</span></code> is the
+number of iterations. We adapt the integrator to <code class="docutils literal"><span class="pre">f(p)</span></code> and
+then use it to calculated the expectation value of <code class="docutils literal"><span class="pre">f(p)</span></code> and
+<code class="docutils literal"><span class="pre">f(p)**2</span></code>, so we can compute the standard deviation for the
+distribution of <code class="docutils literal"><span class="pre">f(p)</span></code>s. The output from this code shows that
+the Gaussian approximation (1.0(1.4)) for the mean and
+standard deviation of the <code class="docutils literal"><span class="pre">f(p)</span></code> distribution is not particularly
+accurate here (correct value is 1.9(1.9)), because of the large
+uncertainties in <code class="docutils literal"><span class="pre">g</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>itn   integral        average         chi2/dof        Q
+-------------------------------------------------------
+  1   1.869(32)       1.869(32)           0.00     1.00
+  2   1.920(29)       1.894(22)           0.69     0.50
+  3   1.890(29)       1.893(17)           1.04     0.39
+  4   1.950(28)       1.907(15)           1.20     0.30
+  5   1.895(30)       1.905(13)           0.98     0.45
+
+results = [1.905(13) 7.391(68)]
+
+f.mean = 1.905(13)    f.sdev = 1.940(14)
+Gaussian approx&#39;n for f(g) = 1.0(1.4)
+</pre></div>
+</div>
+<p>In general <code class="docutils literal"><span class="pre">f(p)</span></code> can return a number, or an array of numbers,
+or a dictionary whose values are numbers or arrays of numbers.
+This allows multiple expectation values to be evaluated simultaneously.</p>
+<p>See the documentation with the <code class="xref py py-mod docutils literal"><span class="pre">vegas`module</span> <span class="pre">for</span> <span class="pre">more</span>
+<span class="pre">details</span> <span class="pre">on</span> <span class="pre">its</span> <span class="pre">use.</span> <span class="pre">Note</span> <span class="pre">that</span> <span class="pre">``neval`</span></code> may need to be much
+larger (tens or hundreds of thousands) for difficulty high-dimension
+integrals.</p>
+<p>In the example above, <code class="docutils literal"><span class="pre">integrator.expval(f_f2</span> <span class="pre">...)</span></code> integrates
+<code class="docutils literal"><span class="pre">[f(p),</span> <span class="pre">f(p)**2]</span></code> weigthed by the PDF for <code class="docutils literal"><span class="pre">g</span></code>. The integrator
+can also be used to evaluate integrals without the weighting. For
+example, changing the definitions of <code class="docutils literal"><span class="pre">f_f2</span></code> and <code class="docutils literal"><span class="pre">results</span></code> in
+the code above to</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+<span class="k">def</span> <span class="nf">f_f2</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="n">integrator</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">fp</span> <span class="o">*</span> <span class="n">prob</span><span class="p">,</span> <span class="n">fp</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">prob</span><span class="p">]</span>
+
+<span class="o">...</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">integrator</span><span class="p">(</span><span class="n">f_f2</span><span class="p">,</span> <span class="n">neval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives results identical to what was obtained above. Here
+<code class="docutils literal"><span class="pre">integrator.pdf(p)</span></code> evaluates the probability density function
+associated with <code class="docutils literal"><span class="pre">g</span></code> at point <code class="docutils literal"><span class="pre">p</span></code>, and <code class="docutils literal"><span class="pre">integrator(f_f2</span> <span class="pre">...)</span></code>
+evaluates the integral of <code class="docutils literal"><span class="pre">f_f2(p)</span></code> with no additional weighting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>g</strong> &#8211; <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
+are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s that specifies the
+multi-dimensional Gaussian distribution used to construct
+the probability density function.</li>
+<li><strong>svdcut</strong> (<em>float</em>) &#8211; <p>...</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="gvar.PDFIntegrator.logpdf">
+<code class="descname">logpdf</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator.logpdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the probability density function evaluated at <code class="docutils literal"><span class="pre">p</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gvar.PDFIntegrator.pdf">
+<code class="descname">pdf</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability density function associated with <code class="docutils literal"><span class="pre">g</span></code> evaluated at <code class="docutils literal"><span class="pre">p</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gvar.PDFIntegrator.expval">
+<code class="descname">expval</code><span class="sig-paren">(</span><em>f</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator.expval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate expectation value of function <code class="docutils literal"><span class="pre">f(p)</span></code>.</p>
+<p>Using module <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> to estimate the integral of
+<code class="docutils literal"><span class="pre">f(p)</span></code> multiplied by the probability density function
+associated with <code class="docutils literal"><span class="pre">g</span></code> (i.e., <code class="docutils literal"><span class="pre">pdf(p)</span></code>). All keyword
+arguments are passed on to a <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> integrator;
+see the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> documentation for further information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gvar.PDFIntegrator.__call__">
+<code class="descname">__call__</code><span class="sig-paren">(</span><em>f</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate integral of function <code class="docutils literal"><span class="pre">f(p)</span></code>.</p>
+<p>Uses module <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> to estimate the integral of
+<code class="docutils literal"><span class="pre">f(p)</span></code>, as in <code class="docutils literal"><span class="pre">expval(f</span> <span class="pre">...)</span></code> but <em>not</em> weighted by the
+distributions probability density function. All keyword
+arguments are passed to a <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> integrator;
+see the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> documentation for further information.</p>
 </dd></dl>
 
 </dd></dl>

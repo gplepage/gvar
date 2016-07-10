@@ -89,7 +89,7 @@ More examples will follow with time.</p>
 </div></blockquote>
 <span class="target" id="module-gvar.cspline"></span><div class="section" id="cubic-splines">
 <h2>Cubic Splines<a class="headerlink" href="#cubic-splines" title="Permalink to this headline">¶</a></h2>
-<p>The module <a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> implements a class for smoothing and/or
+<p>Module <a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> implements a class for smoothing and/or
 interpolating one-dimensional data using cubic splines:</p>
 <dl class="class">
 <dt id="gvar.cspline.CSpline">
@@ -217,7 +217,7 @@ out-of-range warnings are suppressed if set to <code class="docutils literal"><s
 <span class="target" id="module-gvar.linalg"></span></div>
 <div class="section" id="linear-algebra">
 <h2>Linear Algebra<a class="headerlink" href="#linear-algebra" title="Permalink to this headline">¶</a></h2>
-<p>The module <a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> implements several methods for doing basic
+<p>Module <a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> implements several methods for doing basic
 linear algebra with matrices whose elements can be either numbers or
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s:</p>
 <dl class="method">
@@ -354,7 +354,7 @@ If matrix is not square and two-dimensional.</p>
 <span class="target" id="module-gvar.ode"></span></div>
 <div class="section" id="ordinary-differential-equations">
 <h2>Ordinary Differential Equations<a class="headerlink" href="#ordinary-differential-equations" title="Permalink to this headline">¶</a></h2>
-<p>The module <a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> implements two classes for integrating systems
+<p>Module <a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> implements two classes for integrating systems
 of first-order differential equations using an adaptive Runge-Kutta
 algorithm. One integrates scalar- or array-valued equations, while the
 other integrates dictionary-valued equations:</p>
@@ -468,7 +468,7 @@ entire width of the integration interval.</li>
 if a smaller step size is requested, and the step size is not
 decreased. This prevents infinite loops at singular points, but
 the solution may not be reliable when a warning has been issued. The
-default value is zero (which does <em>not</em> prevent infinite loops).</li>
+default value is <code class="docutils literal"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
 <li><strong>delta</strong> &#8211; Function <code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> that returns
 a number to be compared  with <code class="docutils literal"><span class="pre">tol</span></code> at each integration step:
 if it is larger than <code class="docutils literal"><span class="pre">tol</span></code>, the step is repeated with a smaller
@@ -544,10 +544,11 @@ less precision is repeated with a smaller step size. The step size
 is increased if precision is higher than needed.</li>
 <li><strong>h</strong> (<em>float</em>) &#8211; Absolute value of initial step size. The default value equals the
 entire width of the integration interval.</li>
-<li><strong>hmin</strong> (<em>float</em>) &#8211; Smallest step size allowed. An exception is raised
-if a smaller step size is needed. This is mostly useful for
-preventing infinite loops caused by programming errors. The
-default value is zero (which does <em>not</em> prevent infinite loops).</li>
+<li><strong>hmin</strong> (<em>float</em>) &#8211; Smallest step size allowed. A warning is raised
+if a smaller step size is requested, and the step size is not
+decreased. This prevents infinite loops at singular points, but
+the solution may not be reliable when a warning has been issued. The
+default value is <code class="docutils literal"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
 <li><strong>analyzer</strong> &#8211; Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that is called after each
 step of the integration. This can be used to analyze intermediate
 results.</li>
@@ -578,11 +579,11 @@ of the differential equation at that point.</p>
 </div>
 <div class="section" id="one-dimensional-integration">
 <span id="integral"></span><h2>One-Dimensional Integration<a class="headerlink" href="#one-dimensional-integration" title="Permalink to this headline">¶</a></h2>
-<p>The module <a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> also provides a method for evaluating
+<p>Module <a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> also provides a method for evaluating
 one-dimensional integrals (using its adaptive Runge-Kutta algorithm):</p>
 <dl class="method">
 <dt id="gvar.ode.integral">
-<code class="descclassname">ode.</code><code class="descname">integral</code><span class="sig-paren">(</span><em>fcn</em>, <em>interval</em>, <em>fcnshape=None</em>, <em>tol=1e-08</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.integral" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ode.</code><code class="descname">integral</code><span class="sig-paren">(</span><em>fcn</em>, <em>interval</em>, <em>fcnshape=None</em>, <em>tol=1e-08</em>, <em>hmin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.integral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute integral of <code class="docutils literal"><span class="pre">fcn(x)</span></code> on interval.</p>
 <p>Given a function <code class="docutils literal"><span class="pre">fcn(x)</span></code> the call</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
@@ -631,6 +632,11 @@ is computed.</li>
 (the default) results in an extra function evaluation to determine
 the shape.</li>
 <li><strong>tol</strong> &#8211; Relative accuracy of result.</li>
+<li><strong>hmin</strong> &#8211; Smallest step size allowed in adaptive integral. A warning is
+raised if a smaller step size is requested, and the step size is not
+decreased. This prevents infinite loops at singular points, but
+the integral may not be accurate when a warning has been issued. The
+default value is <code class="docutils literal"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
 </ul>
 </td>
 </tr>
@@ -641,9 +647,10 @@ the shape.</li>
 </div>
 <div class="section" id="module-gvar.powerseries">
 <span id="power-series"></span><h2>Power Series<a class="headerlink" href="#module-gvar.powerseries" title="Permalink to this headline">¶</a></h2>
-<p>This module provides tools for manipulating power series approximations
-of functions. A function&#8217;s power series is specified by the coefficients in
-its Taylor expansion with respect to an independent variable, say <code class="docutils literal"><span class="pre">x</span></code>:</p>
+<p>Module <a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal"><span class="pre">gvar.powerseries</span></code></a> provides tools for manipulating power series
+approximations of functions. A function&#8217;s power series is specified by the
+coefficients in its Taylor expansion with respect to an independent variable,
+say <code class="docutils literal"><span class="pre">x</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre>f(x) = f(0) + f&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;(0)/6)*x**3 + ...
      = f0 + f1*x + f2*x**2 + f3*x**3 + ...
 </pre></div>
@@ -861,7 +868,7 @@ integrating from point <em>x0</em>, is returned.</p>
 <span class="target" id="module-gvar.root"></span></div>
 <div class="section" id="root-finding">
 <h2>Root Finding<a class="headerlink" href="#root-finding" title="Permalink to this headline">¶</a></h2>
-<p>The module <a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> contains methods for finding the roots of
+<p>Module <a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> contains methods for finding the roots of
 of one-dimensional functions: that is, finding <code class="docutils literal"><span class="pre">x</span></code> such that
 <code class="docutils literal"><span class="pre">fcn(x)=0</span></code> for a given function <code class="docutils literal"><span class="pre">fcn</span></code>. Typical usage is:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>

@@ -499,6 +499,12 @@ The |GVar|\s are retrieved using::
 using Python's :mod:`json` module rather than :mod:`pickle`.
 
 
+Non-Gaussian Expectation Values
+-----------------------------------------------
+Functions of |GVar|\s are also |GVar|\s, but there are cases where
+such functions cannot be represented accurately by Gaussian distributions.
+A very simple example is the product of 0(1) with 1(1)
+
 .. _gvar-random-number-generators:
 
 Random Number Generators and Simulations

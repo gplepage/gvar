@@ -4,13 +4,13 @@
 test-bufferdict.py
 
 """
-# Copyright (c) 2012 G. Peter Lepage. 
+# Copyright (c) 2012-2016 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,7 +20,7 @@ import unittest
 import pickle as pckl
 import numpy as np
 import gvar as gv
-from gvar import BufferDict
+from gvar import BufferDict, ExtendedDict, add_parameter_parentheses, trim_redundant_keys
 
 class ArrayTests(object):
     def __init__(self):
@@ -28,7 +28,7 @@ class ArrayTests(object):
     ##
     def assert_gvclose(self,x,y,rtol=1e-5,atol=1e-8,prt=False):
         """ asserts that the means and sdevs of all x and y are close """
-        if hasattr(x,'keys') and hasattr(y,'keys'): 
+        if hasattr(x,'keys') and hasattr(y,'keys'):
             if sorted(x.keys())==sorted(y.keys()):
                 for k in x:
                     self.assert_gvclose(x[k],y[k],rtol=rtol,atol=atol)
@@ -44,7 +44,7 @@ class ArrayTests(object):
         for xi,yi in zip(x,y):
             self.assertGreater(atol+rtol*abs(yi.mean),abs(xi.mean-yi.mean))
             self.assertGreater(10*(atol+rtol*abs(yi.sdev)),abs(xi.sdev-yi.sdev))
-    ##
+
     def assert_arraysclose(self,x,y,rtol=1e-5,prt=False):
         self.assertSequenceEqual(np.shape(x),np.shape(y))
         x = np.array(x).flatten()
@@ -56,14 +56,14 @@ class ArrayTests(object):
             print(y)
             print(max_val,max_rdiff,rtol)
         self.assertAlmostEqual(max_rdiff,0.0,delta=rtol)
-    ##
+
     def assert_arraysequal(self,x,y):
         self.assertSequenceEqual(np.shape(x),np.shape(y))
         x = [float(xi) for xi in np.array(x).flatten()]
         y = [float(yi) for yi in np.array(y).flatten()]
         self.assertSequenceEqual(x,y)
-    ##
-##
+
+
 
 class test_bufferdict(unittest.TestCase,ArrayTests):
     def setUp(self):
@@ -76,11 +76,11 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         b['scalar'] = 0.
         b['vector'] = [1.,2.]
         b['tensor'] = [[3.,4.],[5.,6.]]
-    ##
+
     def tearDown(self):
         global b,bkeys,bvalues,bslices,bbuf
         b = None
-    ##
+
     def test_b_flat(self):
         """ b.flat """
         global b,bkeys,bvalues,bslices,bbuf
@@ -95,7 +95,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         for k in b:
             b[k] = 10.
         self.assert_arraysequal(bbuf,bbuf_save)
-    ##
+
     def test_b_buf(self):
         """ b.buf """
         global b,bkeys,bvalues,bslices,bbuf
@@ -109,37 +109,37 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         for k in b:
             b[k] = 10.
         self.assert_arraysequal(bbuf,np.zeros(bbuf.size)+10.)
-    ##
+
     def test_b_keys(self):
         """ b.keys """
         global b,bkeys
         self.assertSequenceEqual(list(b.keys()),bkeys)
-    ##
+
     def test_b_slice(self):
         """ b.slice(k) """
         global b,bkeys,bvalues,bslices,bbuf
         for k,sl in zip(bkeys,bslices):
             self.assertEqual(sl,b.slice(k))
-    ##
+
     def test_b_getitem(self):
         """ v = b[k] """
         global b,bkeys,bvalues,bslices,bbuf
         for k,v in zip(bkeys,bvalues):
             self.assert_arraysequal(b[k],v)
-    ##
+
     def test_b_setitem(self):
         """ b[k] = v """
         global b,bkeys,bvalues,bslices,bbuf
         for k,v in zip(bkeys,bvalues):
             b[k] = v + 10.
             self.assert_arraysequal(b[k],v+10.)
-            self.assert_arraysequal(b.flat[b.slice(k)],((v+10.).flatten() 
+            self.assert_arraysequal(b.flat[b.slice(k)],((v+10.).flatten()
                                                 if k=='tensor' else v+10.))
         b['pseudoscalar'] = 11.
         self.assertEqual(b['pseudoscalar'],11)
         self.assertEqual(b.flat[-1],11)
         self.assertSequenceEqual(list(b.keys()),bkeys+['pseudoscalar'])
-    ##
+
     def test_str(self):
         """ str(b) repr(b) """
         outstr = "{'scalar':0.0,'vector':array([1.,2.]),"
@@ -148,7 +148,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         outstr = "BufferDict([('scalar',0.0),('vector',array([1.,2.])),"
         outstr += "('tensor',array([[3.,4.],[5.,6.]]))])"
         self.assertEqual(''.join(repr(b).split()),outstr)
-    ##
+
     def test_bufferdict_b(self):
         """ BufferDict(b) """
         global b,bkeys,bvalues,bslices,bbuf
@@ -168,7 +168,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         nb = BufferDict(b, keys=reversed(bkeys))
         nbkeys = list(nb.keys())
         self.assertEqual(nbkeys, list(reversed(bkeys)))
-    ##
+
     def test_b_update(self):
         """ b.add(dict(..)) """
         global b,bkeys,bvalues,bslices,bbuf
@@ -178,38 +178,38 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             self.assert_arraysequal(nb[k] , b[k])
             nb[k] += 10.
             self.assert_arraysequal(nb[k] , b[k]+10.)
-    ##
+
     def test_b_add_err(self):
         """ b.add err """
         global b
         with self.assertRaises(ValueError):
             b.add(bkeys[1],10.)
-    ##
+
     def test_b_getitem_err(self):
         """ b[k] err """
         global b
         with self.assertRaises(KeyError):
             x = b['pseudoscalar']
-    ##
+
     def test_b_buf_err(self):
         """ b.flat assignment err """
         global b,bbuf
         with self.assertRaises(ValueError):
             b.buf = bbuf[:-1]
-    ##
+
     def test_b_del_err(self):
         """ del b[k] """
         global b
         with self.assertRaises(NotImplementedError):
             del b['scalar']
-    ##
+
     def test_pickle(self):
         global b
         sb = pckl.dumps(b)
         c = pckl.loads(sb)
         for k in b:
             self.assert_arraysequal(b[k],c[k])
-    ##
+
     def test_dump(self):
         global b
         b[0,1] = 2.
@@ -218,14 +218,14 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             c = BufferDict.loads(sb, use_json=use_json)
             for k in b:
                 self.assert_arraysequal(b[k],c[k])
-    ##
+
     def test_pickle_gvar(self):
         b = BufferDict(dict(a=gv.gvar(1,2),b=[gv.gvar(3,4),gv.gvar(5,6)]))
         sb = pckl.dumps(b)
         c = pckl.loads(sb)
         for k in b:
             self.assert_gvclose(b[k],c[k],rtol=1e-6)
-    ##
+
     def test_dump_gvar(self):
         b = BufferDict(dict(a=gv.gvar(1,2),b=[gv.gvar(3,4),gv.gvar(5,6)]))
         b[0,1] = b['a']+10*b['b'][0]
@@ -234,10 +234,62 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             c = BufferDict.loads(sb, use_json=use_json)
             for k in b:
                 self.assert_gvclose(b[k],c[k],rtol=1e-6)
-            self.assert_gvclose((c[0,1]-10*c['b'][0])/c['a'], 
+            self.assert_gvclose((c[0,1]-10*c['b'][0])/c['a'],
                                 gv.gvar(1.0,0.0), rtol=1e-6)
-##    
-        
+
+    def test_ExtendedDict(self):
+        " ExtendedDict "
+        # check ExtendedDict() and refill_buf
+        p = BufferDict()
+        p['a'] = 1.
+        p['b'] = [2., 3.]
+        p['log(c)'] = 0.
+        p['sqrt(d)'] = [5., 6.]
+        newp = ExtendedDict(p)
+        for i in range(2):
+            for k in p:
+                assert np.all(p[k] == newp[k])
+            assert newp['c'] == np.exp(newp['log(c)'])
+            assert np.all(newp['d'] == np.square(newp['sqrt(d)']))
+            p.buf[:] = [10., 20., 30., 1., 2., 3.]
+            newp.refill_buf(p.buf)
+        # trim redundant keys
+        oldp = trim_redundant_keys(newp)
+        assert 'c' not in oldp
+        assert 'd' not in oldp
+        assert np.all(oldp.buf == p.buf)
+        # stripkey
+        for ks, f, k in [
+            ('aa', np.exp, 'log(aa)'),
+            ('aa', np.square, 'sqrt(aa)'),
+            ]:
+            assert (ks, f) == ExtendedDict.stripkey(k)
+        # addparentheses
+        pvar = BufferDict()
+        pvar['a'] = p['a']
+        pvar['b'] = p['b']
+        pvar['logc'] = p['log(c)']
+        pvar['sqrtd'] = p['sqrt(d)']
+        pvar = add_parameter_parentheses(pvar)
+        for k in p:
+            assert k in pvar
+            assert np.all(p[k] == pvar[k])
+        for k in pvar:
+            assert k in p
+        pvar = add_parameter_parentheses(pvar)
+        for k in p:
+            assert k in pvar
+            assert np.all(p[k] == pvar[k])
+        for k in pvar:
+            assert k in p
+        pvar['log(c(23))'] = 1.2
+        pvar = ExtendedDict(pvar)
+        assert 'c(23)' in pvar
+        assert 'log(c(23))' in pvar
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
 

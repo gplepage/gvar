@@ -517,6 +517,12 @@ The <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><
 <p><a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a>s also have methods that allow saving their contents
 using Python&#8217;s <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> module rather than <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code>.</p>
 </div>
+<div class="section" id="non-gaussian-expectation-values">
+<h2>Non-Gaussian Expectation Values<a class="headerlink" href="#non-gaussian-expectation-values" title="Permalink to this headline">¶</a></h2>
+<p>Functions of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are also <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, but there are cases where
+such functions cannot be represented accurately by Gaussian distributions.
+A very simple example is the product of 0(1) with 1(1)</p>
+</div>
 <div class="section" id="random-number-generators-and-simulations">
 <span id="gvar-random-number-generators"></span><h2>Random Number Generators and Simulations<a class="headerlink" href="#random-number-generators-and-simulations" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s represent probability distributions. It is possible to use them
@@ -712,6 +718,7 @@ covariances. Note that the previous <a class="reference internal" href="gvar.htm
 <li><a class="reference internal" href="#gvar-arithmetic-and-functions"><code class="docutils literal"><span class="pre">gvar.GVar</span></code> Arithmetic and Functions</a></li>
 <li><a class="reference internal" href="#error-budgets-from-gvars">Error Budgets from <code class="docutils literal"><span class="pre">gvar.GVar</span></code>s</a></li>
 <li><a class="reference internal" href="#storing-gvars-for-later-use-bufferdicts">Storing <code class="docutils literal"><span class="pre">gvar.GVar</span></code>s for Later Use; <code class="docutils literal"><span class="pre">gvar.BufferDict</span></code>s</a></li>
+<li><a class="reference internal" href="#non-gaussian-expectation-values">Non-Gaussian Expectation Values</a></li>
 <li><a class="reference internal" href="#random-number-generators-and-simulations">Random Number Generators and Simulations</a></li>
 <li><a class="reference internal" href="#limitations">Limitations</a></li>
 <li><a class="reference internal" href="#optimizations">Optimizations</a></li>

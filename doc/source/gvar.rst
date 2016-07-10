@@ -302,6 +302,20 @@ SVD analysis is handled by the following class:
 
    .. automethod:: decomp(n)
 
+Expectation values using probability density functions defined by
+collections of |GVar|\s can be evaluated using the :mod:`vegas`
+module (for multi-dimensional integration) and the following class:
+
+.. autoclass:: gvar.PDFIntegrator(g, svdcut=1e-15)
+
+  .. automethod:: logpdf(p)
+
+  .. automethod:: pdf(p)
+
+  .. automethod:: expval(f, **kargs)
+
+  .. automethod:: __call__(f, **kargs)
+
 
 Requirements
 ------------

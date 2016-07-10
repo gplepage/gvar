@@ -1,5 +1,19 @@
-Version 7.2.1
+Version 7.3
 =====================
+New features include PDFIntegrator for integrating over PDFs and the
+ability to read compressed files in gvar.Dataset. Several bug fixes as well.
+
+- New class PDFIntegrator for evaluating expectation values weighted
+  by the probability density function (PDF) for arbitrary multi-dimensional
+  Gaussian distributions. This class uses the vegas module to evaluate
+  the multi-dimensional integrals, and optimizes the integrands for vegas.
+  vegas uses adaptive Monte Carlo integration and so can handle fairly
+  high-dimension integrals (dim=10, 20, 50 ...) efficiently. The vegas
+  module must be installed separately.
+
+- gvar.Dataset can now read gzipped and bzipped files. It looks for .gz
+  and .bz2 at the end of the file names to identify which files are
+  compressed.
 
 - Made gvar.gvar(a, sd) substantially faster (30%) when a is a large array.
   Replaced a Python list by a numpy array -- corrects an oversight from

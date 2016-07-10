@@ -338,7 +338,7 @@ class BufferDict(collections.OrderedDict):
         return super(BufferDict, self).__getitem__(k).slice
 
     def slice_shape(self,k):
-        """ Return ``(slice or index, shape)`` in ``self.flat`` corresponding to key ``k``."""
+        """ Return tuple ``(slice/index, shape)`` corresponding to key ``k``."""
         return super(BufferDict, self).__getitem__(k)
 
     def isscalar(self,k):

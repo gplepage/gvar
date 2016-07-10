@@ -64,11 +64,10 @@ simple example of a simulation that uses <a class="reference internal" href="gva
 <div class="section" id="the-problem">
 <h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
 <p>The precision of a particular pendulum clock is limited by two  dominant
-factors: 1) the length of the pendulum (0.25m) can be adjusted  with a
-precision of at best ±0.5mm; and 2) irregularities in  the drive mechanism
-cause the maximum angle of swing (π/6) to fluctuate by ±0.025&nbsp;radians. The
-challenge is to determine how these uncertainties affect time-keeping over a
-day.</p>
+factors: 1) the length of the pendulum (0.25m) can be adjusted  with a precision
+of at best ±0.5mm; and 2) irregularities in  the drive mechanism mean that the
+maximum angle of swing (π/6) is uncertain by ±0.025&nbsp;radians. The challenge
+is to determine how these uncertainties affect time-keeping over a day.</p>
 <p>The angle <code class="docutils literal"><span class="pre">theta(t)</span></code> of the pendulum satisfies a differential equation</p>
 <div class="highlight-python"><div class="highlight"><pre>d/dt d/dt theta(t) = -(g/l) sin(theta(t))
 </pre></div>

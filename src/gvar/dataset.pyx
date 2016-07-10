@@ -5,14 +5,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 import fileinput
-import re 
+import re
 import warnings
 
 import numpy
@@ -20,10 +20,10 @@ import numpy
 import gvar as _gvar
 
 # tools for random data: Dataset, avg_data, bin_data
- 
+
 def _vec_median(v, spread=False, noerror=False):
-    """ estimate the median, with errors, of data in 1-d vector ``v``. 
-        
+    """ estimate the median, with errors, of data in 1-d vector ``v``.
+
     If ``spread==True``, the error on the median is replaced by the spread
     of the data (which is larger by ``sqrt(len(v))``).
 
@@ -49,21 +49,21 @@ def _vec_median(v, spread=False, noerror=False):
         sdev = sdev/nv**0.5
     return _gvar.gvar(median,sdev)
 
-    
+
 def bin_data(data, binsize=2):
     """ Bin random data.
-        
+
     ``data`` is a list of random numbers or random arrays, or a dictionary of
     lists of random numbers/arrays. ``bin_data(data,binsize)`` replaces
     consecutive groups of ``binsize`` numbers/arrays by the average of those
     numbers/arrays. The result is new data list (or dictionary) with
     ``1/binsize`` times as much random data: for example, ::
-        
+
         >>> print(bin_data([1,2,3,4,5,6,7],binsize=2))
         [1.5, 3.5, 5.5]
         >>> print(bin_data(dict(s=[1,2,3,4,5],v=[[1,2],[3,4],[5,6],[7,8]]),binsize=2))
         {'s': [1.5, 3.5], 'v': [array([ 2.,  3.]), array([ 6.,  7.])]}
-        
+
     Data is dropped at the end if there is insufficient data to from complete
     bins. Binning is used to make calculations
     faster and to reduce measurement-to-measurement correlations, if they
@@ -94,58 +94,58 @@ def bin_data(data, binsize=2):
     return list(accum/float(binsize))
 
 
-        
+
 def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn=True):
     """ Average random data to estimate mean.
-        
+
     ``data`` is a list of random numbers, a list of random arrays, or a dictionary
     of lists of random numbers and/or arrays: for example, ::
-        
+
         >>> random_numbers = [1.60, 0.99, 1.28, 1.30, 0.54, 2.15]
         >>> random_arrays = [[12.2,121.3],[13.4,149.2],[11.7,135.3],
         ...                  [7.2,64.6],[15.2,69.0],[8.3,108.3]]
         >>> random_dict = dict(n=random_numbers,a=random_arrays)
-        
+
     where in each case there are six random numbers/arrays. ``avg_data``
     estimates the means of the distributions from which the random
     numbers/arrays are drawn, together with the uncertainties in those
     estimates. The results are returned as a |GVar| or an array of
     |GVar|\s, or a dictionary of |GVar|\s and/or arrays of |GVar|\s::
-        
+
         >>> print(avg_data(random_numbers))
         1.31(20)
         >>> print(avg_data(random_arrays))
         [11.3(1.1) 108(13)]
         >>> print(avg_data(random_dict))
         {'a': array([11.3(1.1), 108(13)], dtype=object),'n': 1.31(20)}
-        
+
     The arrays in ``random_arrays`` are one dimensional; in general, they
     can have any shape.
-        
-    ``avg_data(data)`` also estimates any correlations between different 
-    quantities in ``data``. When ``data`` is a dictionary, it does this by 
-    assuming that the lists of random numbers/arrays for the different 
-    ``data[k]``\s are synchronized, with the first element in one list 
+
+    ``avg_data(data)`` also estimates any correlations between different
+    quantities in ``data``. When ``data`` is a dictionary, it does this by
+    assuming that the lists of random numbers/arrays for the different
+    ``data[k]``\s are synchronized, with the first element in one list
     corresponding to the first elements in all other lists, and so on. If
-    some lists are shorter than others, the longer lists are truncated to 
+    some lists are shorter than others, the longer lists are truncated to
     the same length as the shortest list (discarding data samples).
-        
+
     There are four optional arguments. If argument ``spread=True`` each
     standard deviation in the results refers to the spread in the data, not
     the uncertainty in the estimate of the mean. The former is ``sqrt(N)``
     larger where ``N`` is the number of random numbers (or arrays) being
     averaged::
-        
+
         >>> print(avg_data(random_numbers,spread=True))
         1.31(50)
         >>> print(avg_data(random_numbers))
         1.31(20)
         >>> print((0.50 / 0.20) ** 2)   # should be (about) 6
         6.25
-        
+
     This is useful, for example, when averaging bootstrap data. The default
     value is ``spread=False``.
-            
+
     The second option is triggered by setting ``median=True``. This
     replaces the means in the results by medians, while the standard
     deviations are approximated by the half-width of the interval, centered
@@ -153,15 +153,15 @@ def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn
     more robust than the mean and standard deviation when averaging over
     small amounts of data; in particular, they are unaffected by extreme
     outliers in the data. The default is ``median=False``.
-        
+
     The third option is triggered by setting ``bstrap=True``. This is
     shorthand for setting ``median=True`` and ``spread=True``, and
     overrides any explicit setting for these keyword arguments. This is the
     typical choice for analyzing bootstrap data --- hence its name. The
     default value is ``bstrap=False``.
 
-    The fourth option is to omit the error estimates on the averages, which 
-    is triggered by setting ``noerror=True``. Just the mean values are 
+    The fourth option is to omit the error estimates on the averages, which
+    is triggered by setting ``noerror=True``. Just the mean values are
     returned. The default value is ``noerror=False``.
 
     The final option ``warn`` determines whether or not a warning is issued when
@@ -183,7 +183,7 @@ def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn
                 % (samplesize, max(samplesize_list))
                 )
         if samplesize<=0:
-            raise ValueError(  
+            raise ValueError(
                 "Largest consistent sample size is zero --- no data."
                 )
         bd = _gvar.BufferDict()
@@ -192,8 +192,8 @@ def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn
             bd[k] = data_k[0]
             newdata.append(data_k.reshape(samplesize,-1))
         newdata = numpy.concatenate(tuple(newdata),axis=1)
-        return _gvar.BufferDict(       
-            bd, 
+        return _gvar.BufferDict(
+            bd,
             buf=avg_data(newdata, median=median, spread=spread, noerror=noerror)
             )
 
@@ -224,7 +224,7 @@ def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn
             if ans.size==1:                 # rescale std devs
                 D = _gvar.sdev(ans)/cov**0.5
             else:
-                D = _gvar.sdev(ans).reshape(ans.size)/numpy.diag(cov)**0.5 
+                D = _gvar.sdev(ans).reshape(ans.size)/numpy.diag(cov)**0.5
             cov = ((cov*D).transpose()*D).transpose()
             return _gvar.gvar(_gvar.mean(ans),cov.reshape(ans.shape+ans.shape))
 
@@ -245,31 +245,31 @@ def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn
             cov = cov**0.5
         return _gvar.gvar(means, cov.reshape(means.shape+means.shape))
 
- 
+
 def autocorr(data):
-    """ Compute autocorrelation in random data. 
-        
+    """ Compute autocorrelation in random data.
+
     ``data`` is a list of random numbers or random arrays, or a dictionary
-    of lists of random numbers/arrays. 
-        
+    of lists of random numbers/arrays.
+
     When ``data`` is a list of random numbers, ``autocorr(data)`` returns
     an array where ``autocorr(data)[i]`` is the correlation between
     elements in ``data`` that are separated by distance ``i`` in the list:
     for example, ::
-        
+
         >>> print(autocorr([2,-2,2,-2,2,-2]))
         [ 1. -1.  1. -1.  1. -1.]
-            
+
     shows perfect correlation between elements separated by an even
     interval in the list, and perfect anticorrelation between elements by
     an odd interval.
-        
+
     ``autocorr(data)`` returns a list of arrays of autocorrelation
     coefficients when ``data`` is a list of random arrays. Again
     ``autocorr(data)[i]`` gives the autocorrelations for ``data`` elements
     separated by distance ``i`` in the list. Similarly ``autocorr(data)``
     returns a dictionary when ``data`` is a dictionary.
-        
+
     ``autocorr(data)`` uses FFTs to compute the autocorrelations; the cost
     of computing the autocorrelations should grow roughly linearly with the
     number of random samples in ``data`` (up to logarithms).
@@ -292,7 +292,7 @@ def autocorr(data):
 
     datat = data.transpose()
     ans = numpy.zeros(datat.shape,float)
-    idxlist = numpy.ndindex(datat.shape[:-1])  
+    idxlist = numpy.ndindex(datat.shape[:-1])
     for idx in numpy.ndindex(datat.shape[:-1]):
         f = datat[idx]
         dft = numpy.fft.fft(f-f.mean())
@@ -300,30 +300,30 @@ def autocorr(data):
     return ans.transpose()
 
 
-    
+
 def bootstrap_iter(data, n=None):
     """ Create iterator that returns bootstrap copies of ``data``.
-        
+
     ``data`` is a list of random numbers or random arrays, or a dictionary
     of lists of random numbers/arrays. ``bootstrap_iter(data,n)`` is an
     iterator that returns ``n`` bootstrap copies of data. The random
     numbers/arrays in a bootstrap copy are drawn at random (with repetition
     allowed) from among the samples in ``data``: for example, ::
-            
+
         >>> data = [1.1, 2.3, 0.5, 1.9]
         >>> data_iter = bootstrap_iter(data)
         >>> print(next(data_iter))
         [ 1.1  1.1  0.5  1.9]
         >>> print(next(data_iter))
         [ 0.5  2.3  1.9  0.5]
-            
+
         >>> data = dict(a=[1,2,3,4],b=[1,2,3,4])
         >>> data_iter = bootstrap_iter(data)
         >>> print(next(data_iter))
         {'a': array([3, 3, 1, 2]), 'b': array([3, 3, 1, 2])}
         >>> print(next(data_iter))
         {'a': array([1, 3, 3, 2]), 'b': array([1, 3, 3, 2])}
-            
+
         >>> data = [[1,2],[3,4],[5,6],[7,8]]
         >>> data_iter = bootstrap_iter(data)
         >>> print(next(data_iter))
@@ -336,14 +336,14 @@ def bootstrap_iter(data, n=None):
          [ 7.  8.]
          [ 3.  4.]
          [ 1.  2.]]
-            
+
     The distribution of bootstrap copies is an approximation to the
     distribution from which ``data`` was drawn. Consequently means,
     variances and correlations for bootstrap copies should be similar to
     those in ``data``. Analyzing variations from bootstrap copy to copy is
     often useful when dealing with non-gaussian behavior or complicated
     correlations between different quantities.
-        
+
     Parameter ``n`` specifies the maximum number of copies; there is no
     maximum if ``n is None``.
     """
@@ -386,17 +386,17 @@ try:
     from collections import OrderedDict as _BASE_DICT
 except ImportError:
     _BASE_DICT = dict
-           
+
 class Dataset(_BASE_DICT):
     """ Dictionary for collecting random data.
-        
+
     This dictionary class simplifies the collection of random data. The
     random data are stored in a dictionary, with each piece of random data
     being a number or a :mod:`numpy` array of numbers. For example, consider a
     situation where there are four random values for a scalar ``s`` and
     four random values for vector ``v``. These can be collected as
     follows::
-        
+
         >>> data = Dataset()
         >>> data.append(s=1.1,v=[12.2,20.6])
         >>> data.append(s=0.8,v=[14.1,19.2])
@@ -406,36 +406,36 @@ class Dataset(_BASE_DICT):
         [ 1.1, 0.8, 0.95, 0.91]
         >>> print(data['v'])       # 4 random vector-values of v
         [array([ 12.2,  20.6]), array([ 14.1,  19.2]), array([ 10.3,  19.7]), array([  8.2,  21. ])]
-        
+
     The argument to ``data.append()`` could be a dictionary: for example,
     ``dd = dict(s=1.1,v=[12.2,20.6]); data.append(dd)`` is equivalent
-    to the first ``append`` statement above. This is useful, for 
+    to the first ``append`` statement above. This is useful, for
     example, if the data comes from a function (that returns a dictionary).
-        
+
     One can also append data key-by-key: for example,
-    ``data.append('s',1.1); data.append('v',[12.2,20.6])`` 
+    ``data.append('s',1.1); data.append('v',[12.2,20.6])``
     is equivalent to the first ``append`` in the example above. One could
     also achieve this with, for example,
-    ``data['s'].append(1.1); data['v'].append([12.2,20.6])``, 
+    ``data['s'].append(1.1); data['v'].append([12.2,20.6])``,
     since each dictionary value is a list, but :class:`gvar.Dataset`'s
     ``append`` checks for consistency between the new data and data already
     collected and so is preferable.
-        
+
     Use ``extend`` in place of ``append`` to add data in batches: for
     example, ::
-        
+
         >>> data = Dataset()
         >>> data.extend(s=[1.1,0.8],v=[[12.2,20.6],[14.1,19.2]])
         >>> data.extend(s=[0.95,0.91],v=[[10.3,19.7],[8.2,21.0]])
         >>> print(data['s'])       # 4 random values of s
         [ 1.1, 0.8, 0.95, 0.91]
-        
+
     gives the same dataset as the first example above.
-        
+
     A :class:`Dataset` can also be created from a file where
     every line is a new random sample. The data in the first example
     above could have been stored in a file with the following content::
-            
+
         # file: datafile
         s 1.1
         v [12.2,20.6]
@@ -445,23 +445,23 @@ class Dataset(_BASE_DICT):
         v [10.3,19.7]
         s 0.91
         v [8.2,21.0]
-        
+
     Lines that begin with ``#`` are ignored. Assuming the file is called
     ``datafile``, we create a dataset identical to that above using the
     code::
-        
+
         >>> data = Dataset('datafile')
         >>> print(data['s'])
         [ 1.1, 0.8, 0.95, 0.91]
-        
+
     Data can be binned while reading it in, which might be useful if
     the data set is huge. To bin the data contained in file ``datafile`` in
     bins of binsize 2 we use::
-        
+
         >>> data = Dataset('datafile',binsize=2)
         >>> print(data['s'])
         [0.95, 0.93]
-        
+
     The keys read from a data file are restricted to those listed in keyword
     ``keys`` and those that are matched (or partially matched) by regular
     expression ``grep`` if one or other of these is specified: for
@@ -480,7 +480,7 @@ class Dataset(_BASE_DICT):
         >>> print([k for k in a])
         []
 
-    :class:`Dataset`\s can also be constructed from dictionaries, other 
+    :class:`Dataset`\s can also be constructed from dictionaries, other
     :class:`Dataset`\s, or lists of key-data tuples. For example, ::
 
         >>> data = Dataset('datafile')
@@ -488,8 +488,8 @@ class Dataset(_BASE_DICT):
         >>> data_v = Dataset(data, keys=['v'])
 
     reads data from file ``'datafile'`` into :class:`Dataset` ``data``,
-    and then creates a new :class:`Dataset` with the data binned 
-    (``data_binned``), and another that only containes the data with 
+    and then creates a new :class:`Dataset` with the data binned
+    (``data_binned``), and another that only containes the data with
     key ``'v'`` (``data_v``).
     """
     def __init__(self, *args, **kargs):
@@ -501,7 +501,7 @@ class Dataset(_BASE_DICT):
             raise TypeError("Expected at most 1 argument, got %d."%len(args))
         if 'nbin' in kargs and 'binsize' not in kargs:
             binsize = int(kargs.get('nbin', 1))   # for legacy code
-        else: 
+        else:
             binsize = int(kargs.get('binsize',1))
         keys = set(kargs.get('keys',[]))
         grep = kargs.get('grep', None)
@@ -525,9 +525,9 @@ class Dataset(_BASE_DICT):
         except ValueError:
             # args[0] = files
             super(Dataset, self).__init__()
-        if binsize>1: 
+        if binsize>1:
             acc = {}
-        for line in fileinput.input(args[0]):
+        for line in fileinput.input(args[0], openhook=fileinput.hook_compressed):
             f = line.split()
             if len(f)<2 or f[0][0]=='#':
                 continue
@@ -553,7 +553,7 @@ class Dataset(_BASE_DICT):
                     d = numpy.sum(acc[k], axis=0)/float(binsize)
                     del acc[k]
                     self.append(k, d)
- 
+
     def toarray(self):
         """ Create dictionary ``d`` where ``d[k]=numpy.array(self[k])`` for all ``k``. """
         ans = dict()
@@ -562,19 +562,19 @@ class Dataset(_BASE_DICT):
         return ans
 
     def append(self,*args,**kargs):
-        """ Append data to dataset. 
-            
+        """ Append data to dataset.
+
         There are three equivalent ways of adding data to a dataset
         ``data``: for example, each of ::
-            
+
             data.append(n=1.739,a=[0.494,2.734])        # method 1
-            
+
             data.append(n,1.739)                        # method 2
             data.append(a,[0.494,2.734])
-            
+
             dd = dict(n=1.739,a=[0.494,2.734])          # method 3
             data.append(dd)
-            
+
         adds one new random number to ``data['n']``, and a new
         vector to ``data['a']``.
         """
@@ -608,28 +608,28 @@ class Dataset(_BASE_DICT):
             self.append(k, kargs[k])
 
     def extend(self,*args,**kargs):
-        """ Add batched data to dataset. 
-            
+        """ Add batched data to dataset.
+
         There are three equivalent ways of adding batched data, containing
         multiple samples for each quantity, to a dataset ``data``: for
         example, each of ::
-            
+
             data.extend(n=[1.739,2.682],
                         a=[[0.494,2.734],[ 0.172, 1.400]])  # method 1
-            
+
             data.extend(n,[1.739,2.682])                    # method 2
             data.extend(a,[[0.494,2.734],[ 0.172, 1.400]])
-            
+
             dd = dict(n=[1.739,2.682],
                         a=[[0.494,2.734],[ 0.172, 1.400]])  # method 3
             data.extend(dd)
-            
-        adds two new random numbers to ``data['n']``, and two new 
+
+        adds two new random numbers to ``data['n']``, and two new
         random vectors to ``data['a']``.
-            
+
         This method can be used to merge two datasets, whether or not they
         share keys: for example, ::
-            
+
             data = Dataset("file1")
             data_extra = Dataset("file2")
             data.extend(data_extra)   # data now contains all of data_extra
@@ -668,17 +668,17 @@ class Dataset(_BASE_DICT):
 
     def slice(self, sl):
         """ Create new dataset with ``self[k] -> self[k][sl].``
-            
+
         Parameter ``sl`` is a slice object that is applied to every
         item in the dataset to produce a new :class:`gvar.Dataset`.
         Setting ``sl = slice(0,None,2)``, for example, discards every
-        other sample for each quantity in the dataset. Setting 
-        ``sl = slice(100,None)`` discards the first 100 samples for 
+        other sample for each quantity in the dataset. Setting
+        ``sl = slice(100,None)`` discards the first 100 samples for
         each quantity.
 
         If parameter ``sl`` is a tuple of slice objects, these
         are applied to successive indices of ``self[k]``. An exception
-        is called if the number of slice objects exceeds the number 
+        is called if the number of slice objects exceeds the number
         of dimensions for any ``self[k]``.
         """
         if isinstance(sl, tuple) and len(sl) > 1:
@@ -695,11 +695,11 @@ class Dataset(_BASE_DICT):
 
     def grep(self,rexp):
         """ Create new dataset containing items whose keys match ``rexp``.
-            
+
         Returns a new :class:`gvar.dataset.Dataset`` containing only the
         items ``self[k]`` whose keys ``k`` match regular expression
-        ``rexp`` (a string) according to Python module :mod:`re`:: 
-            
+        ``rexp`` (a string) according to Python module :mod:`re`::
+
             >>> a = Dataset()
             >>> a.append(xx=1.,xy=[10.,100.])
             >>> a.append(xx=2.,xy=[20.,200.])
@@ -711,7 +711,7 @@ class Dataset(_BASE_DICT):
             {'xx': [1.0, 2.0], 'xy': [array([  10.,  100.]), array([  20.,  200.])]}
             >>> print a.grep('[^y][^x]')
             {'xy': [array([  10.,  100.]), array([  20.,  200.])]}
-            
+
         Items are retained even if ``rexp`` matches only part of the item's
         key.
         """
@@ -737,16 +737,16 @@ class Dataset(_BASE_DICT):
                           doc="Smallest number of samples for any key.")
     def arrayzip(self, template):
         """ Merge lists of random data according to ``template``.
-            
+
         ``template`` is an array of keys in the dataset, where the shapes
         of ``self[k]`` are the same for all keys ``k`` in ``template``.
         ``self.arrayzip(template)`` merges the lists of random
         numbers/arrays associated with these keys to create a new list of
-        (merged) random arrays whose layout is specified by ``template``: 
+        (merged) random arrays whose layout is specified by ``template``:
         for example, ::
-            
+
             >>> d = Dataset()
-            >>> d.append(a=1,b=10)  
+            >>> d.append(a=1,b=10)
             >>> d.append(a=2,b=20)
             >>> d.append(a=3,b=30)
             >>> print(d)            # three random samples each for a and b
@@ -756,17 +756,17 @@ class Dataset(_BASE_DICT):
             [[  1.  10.]
              [  2.  20.]
              [  3.  30.]]
-            >>> # merge into list of (symmetric) 2x2 matrices: 
-            >>> print(d.arrayzip([['b','a'],['a','b']])) 
+            >>> # merge into list of (symmetric) 2x2 matrices:
+            >>> print(d.arrayzip([['b','a'],['a','b']]))
             [[[ 10.   1.]
               [  1.  10.]]
-              
+
              [[ 20.   2.]
               [  2.  20.]]
-              
+
              [[ 30.   3.]
               [  3.  30.]]]
-                
+
         The number of samples in each merged result is the same as the
         number samples for each key (here 3). The keys used in this example
         represent scalar quantities; in general, they could be either
@@ -797,6 +797,6 @@ class Dataset(_BASE_DICT):
         return ans.reshape(ans_shape)
 
 
-    
+
 
 

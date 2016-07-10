@@ -499,6 +499,78 @@ The |GVar|\s are retrieved using::
 using Python's :mod:`json` module rather than :mod:`pickle`.
 
 
+Non-Gaussian Expectation Values
+--------------------------------------------------------
+
+By default functions of |GVar|\s are also |GVar|\s, but there are cases where
+such functions cannot be represented accurately by Gaussian distributions. The
+product of 0.1(4) and 0.2(5), for example, is not very Gaussian because the
+standard deviations are large compared to the scale over which the function
+changes appreciably. In such cases one may want to use the true distribution
+of the product, instead of its Gaussian approximation, in an analysis.
+
+Class :class:`gvar.PDFIntegrator` evaluates integrals over multi-dimensional
+Gaussian probability density functions (PDFs) using the :mod:`vegas` module,
+which does adaptive multi-dimensional  integration. This permits us to
+calculate, for example, to calculate the true mean and standard deviation  of
+a function of  Gaussian variables, or to test the extent to which the true
+distribution of the function is Gaussian. The following code analyzes
+the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``:
+
+    import numpy as np
+    import pylab as plt
+    import gvar as gv
+
+    p = gv.gvar(['0.1(4)', '0.2(5)'])
+
+    # function of interest
+    def f(p):
+        return np.sin(p[0] * p[1])
+
+    fhist = gv.PDFHistogramBuilder(bins=np.linspace(-1.,1.,41))
+
+    def fstats(p):
+        fp = f(p)
+        ans = {}
+        ans['moments'] = [1., fp, fp ** 2, fp ** 3, fp ** 4]
+        ans['histogram'] = fhist.integrand(fp)
+        return ans
+
+    # evaluate expectation value of fstats in 3 steps
+    # 1 - create an integrator for the PDF associated with p
+    integrator = gv.PDFIntegrator(p)
+    # 2 - adapt the integrator to the PDF (specify no function)
+    integrator.expval(neval=1000, nitn=10)
+    # 3 - evaluate expectation value of function(s) fhist(p)
+    results = integrator.expval(fstats, neval=5000, nitn=5, adapt=False)
+
+    # results from expectation value integration
+    print(results.summary())
+    print('moments:', results['moments'])
+    stats = gv.PDFStatistics(results['moments'])
+    print('exact statistics:', stats)
+    print(' gaussian approx:', f(p))
+
+    # plot histogram from integration
+    plt.xlabel('$\sin(p_0 p_1)$')
+    plt.ylabel('probability')
+    plt.xlim(-1,1)
+    fhist.make_plot(results['histogram'], plt=plt, alpha=0.2)
+
+    # plot gaussians for comparison
+    def gaussian_pdf(x, mean, sdev):
+        return np.exp(-(x-mean) ** 2 / 2. / sdev**2) / np.sqrt(2 * np.pi) / sdev
+
+    x = np.arange(-1.,1.01,0.005)
+    width = fhist.widths[0]
+    plt.plot(x, gaussian_pdf(x, f(p).mean, f(p).sdev) * width, 'k--')
+    plt.plot(x, gv.mean(gaussian_pdf(x, stats.mean, stats.sdev)) * width, 'r:' )
+    plt.show()
+
+
+
+
+
 .. _gvar-random-number-generators:
 
 Random Number Generators and Simulations
