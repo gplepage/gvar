@@ -43,7 +43,7 @@ variables including:
 
     - ``PDFIntegrator`` --- (class) integrator for probability density functions.
 
-    - ``PDFStats`` --- (class) statistical analysis of moments of a random variable.
+    - ``PDFStatistics`` --- (class) statistical analysis of moments of a random variable.
 
     - ``PDFHistogramBuilder`` --- (class) tool for building PDF histograms.
 
@@ -104,6 +104,12 @@ import collections
 import sys
 
 import numpy
+
+try:
+    import scipy.special
+    _have_scipy = True
+except ImportError:
+    _have_scipy = False
 
 from ._gvarcore import *
 gvar = GVarFactory()            # order matters for this statement
@@ -907,13 +913,12 @@ def trim_redundant_keys(p):
 try:
     import vegas
     class PDFIntegrator(vegas.Integrator):
-        """ :mod:`vegas` integrator optimized for probability density functions (PDF).
+        """ :mod:`vegas` integrator for PDF expectation values.
 
-        ``PDFIntegrator(g)`` creates a :mod:`vegas` integrator optimized for
-        integrating the probability density function and similar functions
-        associated with the multi-dimensional Gaussian distribution associated
-        with ``g``, which is a |GVar| or an array of |GVar|\s or a dictionary
-        whose values are |GVar|\s or arrays of |GVar|\s.
+        ``PDFIntegrator(g)`` is a :mod:`vegas` integrator that evaluates
+        expectation values for the multi-dimensional Gaussian distribution
+        specified by with ``g``, which is a |GVar| or an array of |GVar|\s or a
+        dictionary whose values are |GVar|\s or arrays of |GVar|\s.
 
         ``PDFIntegrator`` reformulates integrals over the variables in ``g``
         in terms of new variables that diagonalize ``g``'s covariance matrix.
@@ -924,29 +929,33 @@ try:
         A simple illustration of ``PDFIntegrator`` is given by the following
         code::
 
-            import gvar as gv:
+            import gvar as gv
 
-            g = gv.BufferDict()             # multi-dimensional Gaussian dist'n
+            # multi-dimensional Gaussian distribution
+            g = gv.BufferDict()
             g['a'] = gv.gvar([0., 1.], [[1., 0.9], [0.9, 1.]])
             g['b'] = gv.gvar('1(1)')
 
-            integrator = PDFIntegrator(g)
+            # integrator for expectation values in distribution g
+            g_expval = gv.PDFIntegrator(g)
 
+            # want expectation value of [f(p), f(p)**2]
             def f(p):
                 return p['a'][0] * p['a'][1] + p['b']
 
-            def f_f2(p):                    # want expectation value of [f(p), f(p)**2]
+            def f_f2(p):
                 fp = f(p)
                 return [fp, fp ** 2]
 
-            # adapt integrator to f
-            warmup = integrator.expval(f, neval=1000, nitn=5)
+            # adapt g_expval to f; warmup = <f(p)> in distribution g
+            warmup = g_expval(f, neval=1000, nitn=5)
 
-            # estimate the expectation value of f_f2
-            results = integrator.expval(f_f2, neval=1000, nitn=5, adapt=False)
+            # results = <f_f2> in distribution g
+            results = g_expval(f_f2, neval=1000, nitn=5, adapt=False)
             print (results.summary())
             print ('results =', results, '\\n')
 
+            # mean and standard deviation of f(p)'s distribution
             fmean = results[0]
             fsdev = gv.sqrt(results[1] - results[0] ** 2)
             print ('f.mean =', fmean, '   f.sdev =', fsdev)
@@ -962,50 +971,31 @@ try:
         distribution of ``f(p)``\s. The output from this code shows that
         the Gaussian approximation (1.0(1.4)) for the mean and
         standard deviation of the ``f(p)`` distribution is not particularly
-        accurate here (correct value is 1.9(1.9)), because of the large
+        accurate here (correct value is 1.9(2.0)), because of the large
         uncertainties in ``g``::
 
             itn   integral        average         chi2/dof        Q
             -------------------------------------------------------
-              1   1.869(32)       1.869(32)           0.00     1.00
-              2   1.920(29)       1.894(22)           0.69     0.50
-              3   1.890(29)       1.893(17)           1.04     0.39
-              4   1.950(28)       1.907(15)           1.20     0.30
-              5   1.895(30)       1.905(13)           0.98     0.45
+              1   1.880(15)       1.880(15)           0.00     1.00
+              2   1.912(19)       1.896(12)           2.66     0.07
+              3   1.892(18)       1.8947(99)          2.31     0.06
+              4   1.918(17)       1.9006(85)          2.02     0.06
+              5   1.910(19)       1.9026(78)          1.45     0.17
 
-            results = [1.905(13) 7.391(68)]
+            results = [1.9026(78) 7.479(84)]
 
-            f.mean = 1.905(13)    f.sdev = 1.940(14)
+            f.mean = 1.9026(78)    f.sdev = 1.965(19)
             Gaussian approx'n for f(g) = 1.0(1.4)
 
-        In general ``f(p)`` can return a number, or an array of numbers,
-        or a dictionary whose values are numbers or arrays of numbers.
+        In general functions being integrated can return a number, or an array of
+        numbers, or a dictionary whose values are numbers or arrays of numbers.
         This allows multiple expectation values to be evaluated simultaneously.
 
-        See the documentation with the :mod:`vegas`module for more
-        details on its use. Note that ``neval`` may need to be much
-        larger (tens or hundreds of thousands) for difficulty high-dimension
-        integrals.
-
-        In the example above, ``integrator.expval(f_f2 ...)`` integrates
-        ``[f(p), f(p)**2]`` weigthed by the PDF for ``g``. The integrator
-        can also be used to evaluate integrals without the weighting. For
-        example, changing the definitions of ``f_f2`` and ``results`` in
-        the code above to ::
-
-            ...
-            def f_f2(p):
-                prob = integrator.pdf(p)
-                fp = f(p)
-                return [fp * prob, fp ** 2 * prob]
-
-            ...
-            results = integrator(f_f2, neval=1000, nitn=2)
-
-        gives results identical to what was obtained above. Here
-        ``integrator.pdf(p)`` evaluates the probability density function
-        associated with ``g`` at point ``p``, and ``integrator(f_f2 ...)``
-        evaluates the integral of ``f_f2(p)`` with no additional weighting.
+        See the documentation with the :mod:`vegas`module for more details on its
+        use. The example sets ``adapt=False`` when  computing final results. This
+        gives more reliable error estimates  when ``neval`` is small, as it is
+        here. Note that ``neval`` may need to be much larger (tens or hundreds of
+        thousands) for difficult high-dimension integrals.
 
         Args:
             g : |GVar|, array of |GVar|\s, or dictionary whose values
@@ -1051,17 +1041,81 @@ try:
                 )
             self.vec_sig = numpy.array(s.vec)
             self.vec_isig = numpy.array(s.vec)
-            self.pjac = 1.
+            self.pjac = s.val ** 0.5
             for i, sigi in enumerate(s.val ** 0.5):
                 self.vec_sig[i] *= sigi
                 self.vec_isig[i] /= sigi
-                self.pjac *= sigi
             self.scale = scale
             self.gmean = mean(gflat)
             self.g = g
             self.log_gnorm = numpy.sum(0.5 * numpy.log(2 * numpy.pi * s.val))
+            self.limit = abs(limit)
+            if _have_scipy and limit <= 8.:
+                limit = scipy.special.ndtr(self.limit)
+                super(PDFIntegrator, self).__init__(self.gmean.size * [(1. - limit, limit)])
+                self._expval = self._expval_ndtri
+            else:
+                integ_map = self._make_map(self.limit)
+                super(PDFIntegrator, self).__init__(self.gmean.size * [integ_map])
+                self._expval = self._expval_tan
+
+        def _make_map(self, limit):
+            """ Make vegas grid that is adapted to the pdf. """
+            ny = 2000
+            y = numpy.random.uniform(0., 1., (ny,1))
             limit = numpy.arctan(limit)
-            super(PDFIntegrator, self).__init__(self.gmean.size * [(-limit, limit)])
+            m = vegas.AdaptiveMap([[-limit, limit]], ninc=100)
+            theta = numpy.empty(y.shape, float)
+            jac = numpy.empty(y.shape[0], float)
+            for itn in range(10):
+                m.map(y, theta, jac)
+                tan_theta = numpy.tan(theta[:, 0])
+                x = self.scale * tan_theta
+                fx = (tan_theta ** 2 + 1) * numpy.exp(-(x ** 2) / 2.)
+                m.add_training_data(y, (jac * fx) ** 2)
+                m.adapt(alpha=1.5)
+            return numpy.array(m.grid[0])
+
+        def __call__(self, f=None, nopdf=False, mpi=False, **kargs):
+            """ Estimate expectation value of function ``f(p)``.
+
+            Uses module :mod:`vegas` to estimate the integral of
+            ``f(p)`` multiplied by the probability density function
+            associated with ``g`` (i.e., ``pdf(p)``). The probability
+            density function is omitted if ``nopdf=True`` (default
+            setting is ``False``). Setting ``mpi=True`` configures vegas
+            for multi-processor running using MPI.
+
+            Args:
+                f (function): Function ``f(p)`` to integrate. Integral is
+                    the expectation value of the function with respect
+                    to the distribution. The function can return a number,
+                    an array of numbers, or a dictionary whose values are
+                    numbers or arrays of numbers.
+
+                nopdf (bool): If ``True`` drop the probability density function
+                    from the integrand (so no longer an expectation value).
+                    Default is ``False``.
+
+                mpi (bool): If ``True`` configure for use with multiple processors
+                    and MPI. This option requires module :mod:`mpi4py`. A
+                    script ``xxx.py`` using an MPI integrator is run
+                    with ``mpirun``: e.g., ::
+
+                        mpirun -np 4 python xxx.py
+
+                    runs on 4 processors. Setting ``mpi=False`` (default) does
+                    not support multiple processors.
+
+            All other keyword arguments are passed on to a :mod:`vegas`
+            integrator; see the :mod:`vegas` documentation for further information.
+            """
+            integrand = self._expval(f, nopdf)
+            if mpi:
+                integrand = vegas.MPIintegrand(integrand)
+            else:
+                integrand = vegas.batchintegrand(integrand)
+            return super(PDFIntegrator, self).__call__(integrand, **kargs)
 
         def logpdf(self, p):
             """ Logarithm of the probability density function evaluated at ``p``. """
@@ -1076,21 +1130,56 @@ try:
             """ Probability density function associated with ``g`` evaluated at ``p``."""
             return numpy.exp(self.logpdf(p))
 
-        def expval(self, f=None, **args):
-            """ Estimate expectation value of function ``f(p)``.
+        def _expval_ndtri(self, f, nopdf):
+            """ Return integrand using ndtr mapping. """
+            def ff(theta, nopdf=nopdf):
+                x = scipy.special.ndtri(theta)
+                dp = x.dot(self.vec_sig)
+                if nopdf:
+                    # must remove built in pdf
+                    pdf = (
+                        numpy.sqrt(2 * numpy.pi) * numpy.exp((x ** 2) / 2.)
+                        * self.pjac[None,:]
+                        )
+                else:
+                    pdf = numpy.ones(numpy.shape(x), float)
+                ans = []
+                ans_dict = collections.OrderedDict()
+                for dpi, pdfi in zip(dp, pdf):
+                    p = self.gmean + dpi
+                    if self.g.shape is None:
+                        if self.extend:
+                            p = ExtendedDict(self.g, buf=p)
+                        else:
+                            p = BufferDict(self.g, buf=p)
+                    else:
+                        p = p.reshape(self.g.shape)
+                    fp = 1. if f is None else f(p)
+                    if hasattr(fp, 'keys'):
+                        if not isinstance(fp, BufferDict):
+                            fp = BufferDict(fp)
+                        fp = BufferDict(fp, buf=fp.buf * numpy.prod(pdfi))
+                        for k in fp:
+                            if k in ans_dict:
+                                ans_dict[k].append(fp[k])
+                            else:
+                                ans_dict[k] = [fp[k]]
+                    else:
+                        fp = numpy.asarray(fp) * numpy.prod(pdfi)
+                        ans.append(fp)
+                return numpy.array(ans) if len(ans) > 0 else BufferDict(ans_dict)
+            return ff
 
-            Using module :mod:`vegas` to estimate the integral of
-            ``f(p)`` multiplied by the probability density function
-            associated with ``g`` (i.e., ``pdf(p)``). All keyword
-            arguments are passed on to a :mod:`vegas` integrator;
-            see the :mod:`vegas` documentation for further information.
-            """
-            @vegas.batchintegrand
-            def ff(theta):
+        def _expval_tan(self, f, nopdf):
+            """ Return integrand using the tan mapping. """
+            def ff(theta, nopdf=nopdf):
                 tan_theta = numpy.tan(theta)
                 x = self.scale * tan_theta
                 jac = self.scale * (tan_theta ** 2 + 1.)
-                pdf = jac * numpy.exp(-(x ** 2) / 2.) / numpy.sqrt(2 * numpy.pi)
+                if nopdf:
+                    pdf = jac * self.pjac[None, :]
+                else:
+                    pdf = jac * numpy.exp(-(x ** 2) / 2.) / numpy.sqrt(2 * numpy.pi)
                 dp = x.dot(self.vec_sig)
                 ans = []
                 ans_dict = collections.OrderedDict()
@@ -1117,50 +1206,7 @@ try:
                         fp = numpy.asarray(fp) * numpy.prod(pdfi)
                         ans.append(fp)
                 return numpy.array(ans) if len(ans) > 0 else BufferDict(ans_dict)
-            return super(PDFIntegrator, self).__call__(ff, **args)
-
-        def __call__(self, f, **args):
-            """ Estimate integral of function ``f(p)``.
-
-            Uses module :mod:`vegas` to estimate the integral of
-            ``f(p)``, as in ``expval(f ...)`` but *not* weighted by the
-            distributions probability density function. All keyword
-            arguments are passed to a :mod:`vegas` integrator;
-            see the :mod:`vegas` documentation for further information.
-            """
-            @vegas.batchintegrand
-            def ff(theta):
-                tan_theta = numpy.tan(theta)
-                jac = self.scale * (tan_theta ** 2 + 1.)
-                dp = (self.scale * tan_theta).dot(self.vec_sig)
-                ans = []
-                ans_dict = collections.OrderedDict()
-                for dpi, jaci in zip(dp, jac):
-                    p = self.gmean + dpi
-                    if self.g.shape is None:
-                        if self.extend:
-                            p = ExtendedDict(self.g, buf=p)
-                        else:
-                            p = BufferDict(self.g, buf=p)
-                    else:
-                        p = p.reshape(self.g.shape)
-                    fp = f(p)
-                    if hasattr(fp, 'keys'):
-                        fpg = fp
-                        if not isinstance(fp, BufferDict):
-                            fp = BufferDict(fp)
-                        fp = BufferDict(fp, buf=fp.buf * (numpy.prod(jaci) * self.pjac))
-                        for k in fp:
-                            if k in ans_dict:
-                                ans_dict[k].append(fp[k])
-                            else:
-                                ans_dict[k] = [fp[k]]
-                    else:
-                        fp = numpy.asarray(fp) * (numpy.prod(jaci) * self.pjac)
-                        ans.append(fp)
-                return numpy.array(ans) if len(ans) > 0 else BufferDict(ans_dict)
-            return super(PDFIntegrator, self).__call__(ff, **args)
-
+            return ff
 except:
     pass
 
@@ -1178,26 +1224,37 @@ class PDFHistogramBuilder(object):
 
         p = gv.gvar('1(1)')
 
-        # 21 bins from 0. to 10.
-        p2hist = gv.PDFHistogramBuilder(bins=np.linspace(0., 10., 21))
+        # function whose PDF will be histogrammed
+        def f(p):
+            return (p + 2) ** 2 / 4.
 
-        def fhist(p):                           # histogram of p**2
-            return p2hist.integrand((p + 2) ** 2 / 4.)
+        # use f(p) to set up histogram bins
+        p2hist = gv.PDFHistogramBuilder(f(p))
 
+        # integrand used to build histogram
+        def fhist(p):                               # histogram of f(p)
+            return p2hist.integrand(f(p))
+
+        # integrate in two steps
         integ = gv.PDFIntegrator(p)
-        integ.expval(neval=1000, nitn=5)        # adapt integrator to PDF
-        results = integ.expval(fhist, neval=1000, nitn=5)   # final result
 
+        # step 1 - adapt integrator to the pdf
+        integ(neval=1000, nitn=5)
+
+        # step 2 - integrate the histogram
+        results = integ(fhist, neval=1000, nitn=5, adapt=False)
+
+        # print statistical analysis of histogram and plot it
         print(p2hist.histogram(results).stats)  # statistics for p**2 PDF
         plt = p2hist.make_plot(results)
         plt.xlabel('$(p + 2)^2/4$')
         plt.ylabel('probability')
         plt.show()                              # display plot
 
-    The output lists statistics about the distribution (see
+    The output lists approximate statistics based on the histogram (see
     :class:`PDFStats`):
 
-        mean = 2.49832(37)   sdev = 1.53356(46)   skew = 0.9131(15)   ex_kurt = 0.9516(71)
+        mean = 2.4656(12)   sdev = 1.5715(14)   skew = 0.6537(40)   ex_kurt = 0.334(13)
 
     It also displays a plot showing the probability of ``(p + 2) ** 2 / 4``
     being in each bin. More typically the distribution would be
@@ -1205,8 +1262,17 @@ class PDFHistogramBuilder(object):
     whose values are |GVar|\s or arrays of |GVar|\s.
 
     Args:
+        g (|GVar|): The mean and standard deviation of ``g`` are used to
+            design the histogram bins, which are centered on the mean.
+        nbin (int): The number of histogram bins. Set equal to
+            ``PDFHistogramBuilder.default_nbin'' if ``None`` (initial
+            value is 8.)
+        binwidth(float): The width of each bin is ``binwidth * g.sdev``.
+            Set equal to ``PDFHistogramBuilder.default_binwidth'' if ``None``
+            (initial value is 1.)
         bins (array): Bin edges for the histogram. ``len(bins)`` is one
-            larger than the number of bins.
+            larger than the number of bins. If specified it overrides
+            the default bin design specified by ``g``. (Default is ``None``.)
 
     Attributes:
         bins (array): Same as above.
@@ -1215,19 +1281,30 @@ class PDFHistogramBuilder(object):
     """
 
     Histogram = collections.namedtuple('Histogram', 'bins, prob, stats, norm ')
-    default_nbin = 16
-    default_nsig = 4.
+    default_nbin = 8
+    default_binwidth = 1.
 
-    def __init__(self, bins):
-        if isinstance(bins, str):
-            bins = gvar(str)
-        if isinstance(bins, GVar):
-            bins = numpy.linspace(
-                bins.mean - PDFHistogramBuilder.default_nsig * bins.sdev,
-                bins.mean + PDFHistogramBuilder.default_nsig * bins.sdev,
-                PDFHistogramBuilder.default_nbin + 1
-                )
-        self.bins = numpy.array(bins)
+    def __init__(self, g=None, nbin=None, binwidth=None, bins=None):
+        self.g = g
+        if nbin is None:
+            nbin = self.default_nbin
+        if binwidth is None:
+            binwidth = self.default_binwidth
+        if g is not None:
+            g = gvar(g)
+            limit = binwidth * nbin / 2.
+            if bins is None:
+                self.bins = numpy.linspace(
+                    g.mean - binwidth * nbin * g.sdev / 2.,
+                    g.mean + binwidth * nbin * g.sdev / 2.,
+                    nbin + 1,
+                    )
+            else:
+                self.bins = numpy.array(bins)
+        elif bins is not None:
+            self.bins = numpy.array(bins)
+        else:
+            raise ValueError('must specify either g or bins')
         self.bins.sort()
         self.midpoints = (self.bins[1:] + self.bins[:-1]) / 2.
         self.widths = self.bins[1:] - self.bins[:-1]
@@ -1261,7 +1338,7 @@ class PDFHistogramBuilder(object):
         """ Convert :mod:`vegas` output into histogram data.
 
         Extracts histogram from integration results obtained
-        from :meth:`PDFIntegrator.expval` used with
+        from an instance of :meth:`PDFIntegrator` applied to
         integrand :meth:`PDFHistogramBuilder.integrand`. Returns
         a named tuple containing the following information (in order).
 
@@ -1283,12 +1360,24 @@ class PDFHistogramBuilder(object):
             norm = 1.
         mid = self.midpoints
         stats = PDFStatistics(numpy.sum(
-            [data, mid * data, mid ** 2 * data, mid **3 * data, mid ** 4 * data],
+            [mid * data, mid ** 2 * data, mid **3 * data, mid ** 4 * data],
             axis=1
             ))
         return PDFHistogramBuilder.Histogram(self.bins, data, stats, norm)
 
-    def make_plot(self, data, plot=None, show=False, density=False, **kargs):
+    @staticmethod
+    def gaussian_pdf(x, g):
+        return (
+            numpy.exp(-(x - g.mean) ** 2 / 2. /g.var) /
+            numpy.sqrt(g.var * 2 * numpy.pi)
+            )
+
+    def make_plot(
+        self, data, plot=None, show=False, density=False,
+        bar=dict(alpha=0.2, color='b'),
+        errorbar=dict(fmt='b.'),
+        gaussian=dict(ls='--', c='r')
+        ):
         """ Convert :mod:`vegas` output into histogram plot.
 
         Args:
@@ -1306,7 +1395,7 @@ class PDFHistogramBuilder(object):
                 bar graph.
         """
         if plot is None:
-            import pylab as plot
+            import matplotlib.pyplot as plot
         if len(data) == len(self.midpoints) + 1:
             data = data[1:] / data[0]
         elif len(data) != len(self.midpoints):
@@ -1316,8 +1405,18 @@ class PDFHistogramBuilder(object):
                 )
         if density:
             data = data / self.widths
-        plot.errorbar(self.midpoints, mean(data), sdev(data), fmt='.')
-        plot.bar(self.bins[:-1], mean(data), width=self.widths, **kargs)
+        if errorbar:
+            plot.errorbar(self.midpoints, mean(data), sdev(data), **errorbar)
+        if bar:
+            plot.bar(self.bins[:-1], mean(data), width=self.widths, **bar)
+        if gaussian and self.g is not None:
+            x = self.midpoints
+            y = self.gaussian_pdf(x, self.g)
+            if not density:
+                y = y * self.widths
+            ys = cspline.CSpline(x, y)
+            x = numpy.linspace(x[0], x[-1], 100)
+            plot.plot(x, ys(x), **gaussian)
         if show:
             plot.show()
         else:
@@ -1330,7 +1429,10 @@ class PDFStatistics(object):
     mean, standard deviation, skewness, and excess kurtosis.
 
     Args:
-        m (array of floats): ``m[i]`` is the i-th moment.
+        m (array of floats): ``m[i]`` is the (i+1)-th moment.
+
+        norm (float or |GVar|): The expectation value of 1. Moments
+            are divided by ``norm`` before use. (Default is 1.)
 
     Attributes:
         mean: mean value
@@ -1338,18 +1440,18 @@ class PDFStatistics(object):
         skew: skewness coefficient
         ex_kurt: excess kurtosis
     """
-    def __init__(self, m):
-        x = numpy.array(m) / m[0]
-        self.mean = x[1]
+    def __init__(self, m, norm=1.):
+        x = numpy.array(m) / norm
+        self.mean = x[0]
+        if len(x) > 1:
+            self.sdev = numpy.fabs(x[1] - x[0] ** 2) ** 0.5
         if len(x) > 2:
-            self.sdev = numpy.fabs(x[2] - x[1] ** 2) ** 0.5
-        if len(x) > 3:
             self.skew = (
-                x[3] - 3. * self.mean * self.sdev ** 2 - self.mean ** 3
+                x[2] - 3. * self.mean * self.sdev ** 2 - self.mean ** 3
                 ) / self.sdev ** 3
-        if len(x) > 4:
+        if len(x) > 3:
             self.ex_kurt = (
-                x[4] - 4. * x[3] * self.mean + 6 * x[2] * self.mean ** 2
+                x[3] - 4. * x[2] * self.mean + 6 * x[1] * self.mean ** 2
                 - 3 * self.mean ** 4
                 ) / self.sdev ** 4 - 3.
     def __str__(self):
@@ -1360,9 +1462,12 @@ class PDFStatistics(object):
         return ans
 
     @staticmethod
-    def moments(f, exponents=numpy.arange(0,5)):
-        """ Compute 0th-4th moments of f, returned in an array. """
+    def moments(f, exponents=numpy.arange(1,5)):
+        """ Compute 1st-4th moments of f, returned in an array. """
         return f ** exponents
+
+
+
 
 # legacy code support
 fmt_partialsdev = fmt_errorbudget

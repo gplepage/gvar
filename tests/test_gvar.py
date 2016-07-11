@@ -1411,10 +1411,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         x = gv.gvar('3.0(4)')
         avgs = np.zeros((10,4), float)
         for i in range(10):
-            moments = np.zeros(5, float)
+            moments = np.zeros(4, float)
             for xi in gv.raniter(x, 100):
-                moments += xi ** np.arange(5)
-            s = PDFStatistics(moments)
+                moments += xi ** np.arange(1, 5)
+            s = PDFStatistics(moments, norm=100.)
             avgs[i] = [s.mean, s.sdev, s.skew, s.ex_kurt]
         mean = np.mean(avgs,axis=0)
         sdev = np.std(avgs, axis=0)
@@ -1428,7 +1428,7 @@ try:
     class test_pdfintegrator(unittest.TestCase,ArrayTests):
         @unittest.skipIf(FAST,"skipping test_pdfintegrator for speed")
         def test_expval(self):
-            " integrator.expval(f ...) "
+            " integrator(f ...) "
             xarray = gv.gvar([5., 3.], [[4., 0.9], [0.9, 1.]])
             xdict = gv.BufferDict([(0, 1), (1, 1)])
             xdict = gv.BufferDict(xdict, buf=xarray)
@@ -1440,14 +1440,14 @@ try:
                 if hasattr(x, 'keys'):
                     x = x.buf
                 return gv.BufferDict([
-                    (0, 1), (1, x[0]), (2, x[0] ** 2),
-                    (3, x[0] ** 3), (4, x[0] ** 4)
+                     (0, x[0]), (1, x[0] ** 2),
+                    (2, x[0] ** 3), (3, x[0] ** 4)
                     ])
             for x in [xarray, xdict]:
                 integ = PDFIntegrator(x)
-                integ.expval(neval=1000, nitn=5)
+                integ(neval=1000, nitn=5)
                 for f in [farray, fdict]:
-                    r = integ.expval(f, neval=1000, nitn=5, adapt=False)
+                    r = integ(f, neval=1000, nitn=5, adapt=False)
                     if hasattr(r, 'keys'):
                         r = r.buf
                     s = PDFStatistics(r)
@@ -1460,7 +1460,7 @@ try:
             def fcov(x):
                 return dict(x=x, xx=np.outer(x, x))
             integ = PDFIntegrator(xarray)
-            r = integ.expval(fcov, neval=1000, nitn=5)
+            r = integ(fcov, neval=1000, nitn=5)
             rmean = r['x']
             rcov = r['xx'] - np.outer(r['x'], r['x'])
             xmean = gv.mean(xarray)
@@ -1472,7 +1472,7 @@ try:
 
         @unittest.skipIf(FAST,"skipping test_pdfintegrator for speed")
         def test_call(self):
-            " integrator(f ...) and pdf(p) "
+            " integrator(f ... nopdf=True) and pdf(p) "
             xarray = gv.gvar([5., 3.], [[4., 1.9], [1.9, 1.]])
             xdict = gv.BufferDict([(0, 1), (1, 1)])
             xdict = gv.BufferDict(xdict, buf=xarray)
@@ -1481,18 +1481,19 @@ try:
                 if hasattr(x, 'keys'):
                     x = x.buf
                 prob = pdf(x)
-                return [x[0] * prob, x[0] ** 2 * prob]
+                return [x[0] * prob, x[0] ** 2 * prob, prob]
             def fdict(x):
                 if hasattr(x, 'keys'):
                     x = x.buf
                 prob = pdf(x)
-                return gv.BufferDict([(0, x[0] * prob), (1, x[0] ** 2 * prob)])
+                return gv.BufferDict([(0, x[0] * prob), (1, x[0] ** 2 * prob), (3, prob)])
             for x in [xarray, xdict]:
-                x[0] += 1.
-                x[1] -= 1.
+                x[0] -= 0.1 * x[0].sdev
+                x[1] += 0.1 * x[1].sdev
                 for f in [farray, fdict]:
-                    integ = PDFIntegrator(x)
-                    r = integ(f, neval=1000, nitn=5)
+                    integ = PDFIntegrator(x,limit=1e16)
+                    integ(f, neval=1000, nitn=5)
+                    r = integ(f, neval=1000, nitn=5, nopdf=True, adapt=False)
                     rmean = r[0]
                     rsdev = np.sqrt(r[1] - rmean ** 2)
                     self.assertTrue(abs(rmean.mean - 5.) < 5. * rmean.sdev)
@@ -1503,12 +1504,11 @@ try:
             x = gv.gvar([5., 3.], [[4., 0.2], [0.2, 1.]])
             xsum = x[0] + x[1]
             integ = PDFIntegrator(x)
-            PDFHistogramBuilder.default_nbin = 40
-            hist = PDFHistogramBuilder(xsum)
-            integ.expval(neval=1000, nitn=5)
+            hist = PDFHistogramBuilder(xsum, nbin=40, binwidth=0.2)
+            integ(neval=1000, nitn=5)
             def fhist(x):
                 return hist.integrand(x[0] + x[1])
-            r = integ.expval(fhist, neval=1000, nitn=5, adapt=False)
+            r = integ(fhist, neval=1000, nitn=5, adapt=False)
             bins, prob, stat, norm = hist.histogram(r)
             self.assertTrue(abs(gv.mean(np.sum(prob)) - 1.) < 5. * gv.sdev(np.sum(prob)))
             self.assertTrue(abs(stat.mean.mean - xsum.mean) < 5. * stat.mean.sdev)
