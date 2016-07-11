@@ -88,7 +88,7 @@ tools for use with |GVar|\s (or ``float``\s):
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-15 G. Peter Lepage.
+# Copyright (c) 2012-16 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -992,10 +992,11 @@ try:
         This allows multiple expectation values to be evaluated simultaneously.
 
         See the documentation with the :mod:`vegas`module for more details on its
-        use. The example sets ``adapt=False`` when  computing final results. This
-        gives more reliable error estimates  when ``neval`` is small, as it is
-        here. Note that ``neval`` may need to be much larger (tens or hundreds of
-        thousands) for difficult high-dimension integrals.
+        use, and on the attributes and methods associated with integrators.
+        The example above sets ``adapt=False`` when  computing final results. This
+        gives more reliable error estimates  when ``neval`` is small. Note
+        that ``neval`` may need to be much larger (tens or hundreds of
+        thousands) for more difficult high-dimension integrals.
 
         Args:
             g : |GVar|, array of |GVar|\s, or dictionary whose values
@@ -1058,6 +1059,7 @@ try:
                 integ_map = self._make_map(self.limit)
                 super(PDFIntegrator, self).__init__(self.gmean.size * [integ_map])
                 self._expval = self._expval_tan
+            self.mpi_rank = 0    # in case mpi is used
 
         def _make_map(self, limit):
             """ Make vegas grid that is adapted to the pdf. """
@@ -1105,7 +1107,9 @@ try:
                         mpirun -np 4 python xxx.py
 
                     runs on 4 processors. Setting ``mpi=False`` (default) does
-                    not support multiple processors.
+                    not support multiple processors. The MPI processor
+                    rank can be obtained from the ``mpi_rank``
+                    attribute of the integrator.
 
             All other keyword arguments are passed on to a :mod:`vegas`
             integrator; see the :mod:`vegas` documentation for further information.
@@ -1113,6 +1117,7 @@ try:
             integrand = self._expval(f, nopdf)
             if mpi:
                 integrand = vegas.MPIintegrand(integrand)
+                self.mpi_rank = integrand.rank
             else:
                 integrand = vegas.batchintegrand(integrand)
             return super(PDFIntegrator, self).__call__(integrand, **kargs)
@@ -1274,10 +1279,13 @@ class PDFHistogramBuilder(object):
             larger than the number of bins. If specified it overrides
             the default bin design specified by ``g``. (Default is ``None``.)
 
+    The attributes are as follows:
+
     Attributes:
-        bins (array): Same as above.
-        midpoints (array): Bin midpoints.
-        widths (array): Bin widths.
+        g: |GVar| used to design the histogram.
+        bins: Bin edges for the histogram (see above).
+        midpoints: Bin midpoints.
+        widths: Bin widths.
     """
 
     Histogram = collections.namedtuple('Histogram', 'bins, prob, stats, norm ')
@@ -1367,6 +1375,7 @@ class PDFHistogramBuilder(object):
 
     @staticmethod
     def gaussian_pdf(x, g):
+        """ Gaussian probability density function at ``x`` for |GVar| ``g``. """
         return (
             numpy.exp(-(x - g.mean) ** 2 / 2. /g.var) /
             numpy.sqrt(g.var * 2 * numpy.pi)
@@ -1391,8 +1400,16 @@ class PDFHistogramBuilder(object):
             density (booleam): Display probability density if ``True``;
                 otherwise display total probability in each bin. Default is
                 ``False``.
-            kargs (dictionary): Additional plotting arguments for the
-                bar graph.
+            bar (dictionary): Additional plotting arguments for the bar graph.
+                This part of the plot is omitted if ``bar=None``.
+            errorbar (dictionary): Additional plotting arguments for the
+                errorbar graph. This part of the plot is omitted
+                if ``errorbar=None``.
+            gaussian (dictionary): Additional plotting arguments for the
+                plot of the Gaussian probability for the |GVar| (``g``)
+                specified in the initialization. This part of the plot
+                is omitted if ``gaussian=None`` or if no ``g`` was
+                specified.
         """
         if plot is None:
             import matplotlib.pyplot as plot
@@ -1405,11 +1422,11 @@ class PDFHistogramBuilder(object):
                 )
         if density:
             data = data / self.widths
-        if errorbar:
+        if errorbar is not None:
             plot.errorbar(self.midpoints, mean(data), sdev(data), **errorbar)
-        if bar:
+        if bar is not None:
             plot.bar(self.bins[:-1], mean(data), width=self.widths, **bar)
-        if gaussian and self.g is not None:
+        if gaussian is not None and self.g is not None:
             x = self.midpoints
             y = self.gaussian_pdf(x, self.g)
             if not density:
@@ -1433,6 +1450,8 @@ class PDFStatistics(object):
 
         norm (float or |GVar|): The expectation value of 1. Moments
             are divided by ``norm`` before use. (Default is 1.)
+
+    The attributes are as follows:
 
     Attributes:
         mean: mean value

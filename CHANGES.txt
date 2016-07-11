@@ -9,10 +9,12 @@ ability to read compressed files in gvar.Dataset. Several bug fixes as well.
   the multi-dimensional integrals, and optimizes the integrands for vegas.
   vegas uses adaptive Monte Carlo integration and so can handle fairly
   high-dimension integrals (dim=10, 20, 50 ...) efficiently. The vegas
-  module must be installed separately.
+  module must be installed separately. Two other modules are provided
+  in addition: PDFStatistics and PDFHistogramBuilder. See the section
+  on "Non-Gaussian Expectation Values" in the tutorial for an example.
 
 - gvar.Dataset can now read gzipped and bzipped files. It looks for .gz
-  and .bz2 at the end of the file names to identify which files are
+  and .bz2 at the ends of file names to identify which files are
   compressed.
 
 - Made gvar.gvar(a, sd) substantially faster (30%) when a is a large array.

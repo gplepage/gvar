@@ -312,10 +312,13 @@ module (for multi-dimensional integration) and the following class:
 
   .. automethod:: pdf(p)
 
-  .. automethod:: expval(f, **kargs)
-
   .. automethod:: __call__(f, **kargs)
 
+Related classes are:
+
+.. autoclass:: gvar.PDFStatistics(m, norm=1)
+
+.. autoclass:: gvar.PDFHistogramBuilder(g, nbin=None, binwidth=None, bins=None, density=False)
 
 Requirements
 ------------

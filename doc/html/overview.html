@@ -519,9 +519,134 @@ using Python&#8217;s <code class="xref py py-mod docutils literal"><span class="
 </div>
 <div class="section" id="non-gaussian-expectation-values">
 <h2>Non-Gaussian Expectation Values<a class="headerlink" href="#non-gaussian-expectation-values" title="Permalink to this headline">¶</a></h2>
-<p>Functions of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are also <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, but there are cases where
-such functions cannot be represented accurately by Gaussian distributions.
-A very simple example is the product of 0(1) with 1(1)</p>
+<p>By default functions of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are also <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, but there are cases where
+such functions cannot be represented accurately by Gaussian distributions. The
+product of 0.1(4) and 0.2(5), for example, is not very Gaussian because the
+standard deviations are large compared to the scale over which the function
+changes appreciably. In such cases one may want to use the true distribution
+of the function, instead of its Gaussian approximation, in an analysis.</p>
+<p>Class <a class="reference internal" href="gvar.html#gvar.PDFIntegrator" title="gvar.PDFIntegrator"><code class="xref py py-class docutils literal"><span class="pre">gvar.PDFIntegrator</span></code></a> evaluates integrals over multi-dimensional
+Gaussian probability density functions (PDFs) using the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> module,
+which does adaptive multi-dimensional  integration. This permits
+us, for example, to calculate the true mean and standard deviation  of
+a function of  Gaussian variables, or to test the extent to which the true
+distribution of the function is Gaussian. The following code analyzes
+the distribution of <code class="docutils literal"><span class="pre">sin(p[0]</span> <span class="pre">*</span> <span class="pre">p[1])</span></code> where <code class="docutils literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">[0.1(4),</span> <span class="pre">0.2(5)]</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s">&#39;0.1(4)&#39;</span><span class="p">,</span> <span class="s">&#39;0.2(5)&#39;</span><span class="p">])</span>
+
+<span class="c"># function of interest</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c"># histogram for values of f(p)</span>
+<span class="n">fhist</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFHistogramBuilder</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">nbin</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="c"># want expectation value of fstats(p)</span>
+<span class="k">def</span> <span class="nf">fstats</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ans</span><span class="p">[</span><span class="s">&#39;norm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">ans</span><span class="p">[</span><span class="s">&#39;moments&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">fp</span><span class="p">,</span> <span class="n">fp</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">fp</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span> <span class="n">fp</span> <span class="o">**</span> <span class="mi">4</span><span class="p">]</span>
+    <span class="n">ans</span><span class="p">[</span><span class="s">&#39;histogram&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fhist</span><span class="o">.</span><span class="n">integrand</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ans</span>
+
+<span class="c"># evaluate expectation value of fstats in 3 steps</span>
+<span class="c"># 1 - create an integrator to evaluate expectation values of functions of p</span>
+<span class="n">p_expval</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFIntegrator</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="c"># 2 - adapt p_expval to the p&#39;s PDF (N.B., no function specified)</span>
+<span class="n">p_expval</span><span class="p">(</span><span class="n">neval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c"># 3 - evaluate expectation value of function(s) fhist(p)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">p_expval</span><span class="p">(</span><span class="n">fstats</span><span class="p">,</span> <span class="n">neval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c"># results from expectation value integration</span>
+<span class="k">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;moments:&#39;</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s">&#39;moments&#39;</span><span class="p">])</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFStatistics</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s">&#39;moments&#39;</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;exact statistics:&#39;</span><span class="p">,</span> <span class="n">stats</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39; gaussian approx:&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+
+<span class="c"># plot histogram from integration (plt = matplotlib.pyplot)</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">fhist</span><span class="o">.</span><span class="n">make_plot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s">&#39;histogram&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">r&#39;$\sin(p_0 p_1)$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;probability&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c"># add extra curve corresponding to Gaussian with &quot;correct&quot; mean and sdev</span>
+<span class="n">correct_fp</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">mean</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">sdev</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFHistogramBuilder</span><span class="o">.</span><span class="n">gaussian_pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">correct_fp</span><span class="p">)</span> <span class="o">*</span> <span class="n">fhist</span><span class="o">.</span><span class="n">widths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;k:&#39;</span> <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The key construct here is <code class="docutils literal"><span class="pre">p_expval</span></code> which is a <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> integrator
+designed so that <code class="docutils literal"><span class="pre">p_expval(f)</span></code> returns the expectation value of any
+function <code class="docutils literal"><span class="pre">f(p)</span></code> with respect to the probability distribution specified
+by <code class="docutils literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">gv.gvar(['0.1(4)',</span> <span class="pre">'0.2(5)'])</span></code>. The integrator is adaptive so
+it is called once without a function, to allow it to adapt to the probability
+density function (PDF). It is then applied to function <code class="docutils literal"><span class="pre">fstats(p)</span></code>,
+which calculates various moments of <code class="docutils literal"><span class="pre">f(p)</span></code> as well as information for
+histogramming values of <code class="docutils literal"><span class="pre">f(p)</span></code> (using <a class="reference internal" href="gvar.html#gvar.PDFHistogramBuilder" title="gvar.PDFHistogramBuilder"><code class="xref py py-class docutils literal"><span class="pre">gvar.PDFHistogramBuilder</span></code></a>).
+Parameters <code class="docutils literal"><span class="pre">nitn</span></code> and <code class="docutils literal"><span class="pre">neval</span></code> control the multidimensional integrator,
+telling it how many iterations of its adaptive algorithm to use
+and the maximum number of integrand evaluations to use in each iteration.</p>
+<p>The output from this code is:</p>
+<div class="highlight-python"><div class="highlight"><pre>itn   integral        average         chi2/dof        Q
+-------------------------------------------------------
+  1   0.01927(53)     0.01927(53)         0.00     1.00
+  2   0.01863(59)     0.01895(39)         0.67     0.87
+  3   0.01875(48)     0.01888(31)         0.78     0.85
+  4   0.01874(48)     0.01885(26)         0.80     0.88
+  5   0.01807(61)     0.01869(24)         0.74     0.97
+  6   0.01883(55)     0.01872(22)         0.74     0.98
+  7   0.01841(50)     0.01867(20)         0.76     0.98
+  8   0.01872(58)     0.01868(19)         0.83     0.94
+  9   0.01948(51)     0.01877(18)         0.81     0.97
+ 10   0.01955(55)     0.01884(17)         0.90     0.84
+
+moments: [0.01884(17) 0.04327(12) 0.00497(10) 0.011535(89)]
+exact statistics:
+  mean = 0.01884(17)   sdev = 0.20715(28)   skew = 0.2856(98)   ex_kurt = 3.110(23)
+gaussian approx: 0.020(94)
+</pre></div>
+</div>
+<p>The table summarizes the integrator&#8217;s performance over the <code class="docutils literal"><span class="pre">nitn=10</span></code> iterations
+it performed to obtain the final results; see the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> documentation
+for further information. The expectation values for moments of
+<code class="docutils literal"><span class="pre">f(p)</span></code> are then listed, followed by the mean and standard deviation
+computed from these moments, as well as the skewness and excess kurtosis
+of the <code class="docutils literal"><span class="pre">f(p)</span></code> distribution. Finally the mean and standard deviation
+in the Gaussian approximate is listed.</p>
+<p>The exact mean of the <code class="docutils literal"><span class="pre">f(p)</span></code> distribution is 0.188(2), which is somewhat
+lower than Gaussian approximation of 0.020. A more important difference is
+in the standard deviation which is 0.2072(3) for the real distribution,
+but less than half that size (0.094) in the Gaussian approximation. The
+real distribution is significantly broader than the Gaussian approximation
+suggests, though its mean is close. The real distribution also has
+nonzero skewness (0.28(1)) and excess kurtosis (3.11(2)), which suggest
+that it is not well described by any Gaussian. (Skewness and excess kurtosis
+vanish for Gaussian distributions.)</p>
+<p>The code also displays a histogram showing the probability distribution for
+values of <code class="docutils literal"><span class="pre">f(p)</span></code>:</p>
+<a class="reference internal image-reference" href="_images/histogram.png"><img alt="_images/histogram.png" src="_images/histogram.png" style="width: 80%;" /></a>
+<p>This shows the actual probability associated with each <code class="docutils literal"><span class="pre">f(p)</span></code> bin,
+together with the
+shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
+It also shows the Gaussian distribution corresponding to correct mean
+and standard deviation (0.186(207)) of the distribution (black dotted line).
+Neither
+Gaussian is quite right: the first is more accurate close to the maximimum,
+while the second does better further out. From the histogram we can estimate
+that 68% of the probability lies within ±0.015 of the mean, which is
+probably the best single characterization of the uncertainty (and half
+way between the other two estimates).</p>
+<p>This example is relatively simple since the underlying Gaussian
+distribution is only two dimensional. The <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> integrator used
+here is adaptive and so can function effectively even for high
+dimensions (10, 20, 50 ... Gaussian variables). High dimensions usually
+cost more, requiring many more function evaluations (<code class="docutils literal"><span class="pre">neval</span></code>).</p>
 </div>
 <div class="section" id="random-number-generators-and-simulations">
 <span id="gvar-random-number-generators"></span><h2>Random Number Generators and Simulations<a class="headerlink" href="#random-number-generators-and-simulations" title="Permalink to this headline">¶</a></h2>

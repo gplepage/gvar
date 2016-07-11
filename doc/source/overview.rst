@@ -507,18 +507,17 @@ such functions cannot be represented accurately by Gaussian distributions. The
 product of 0.1(4) and 0.2(5), for example, is not very Gaussian because the
 standard deviations are large compared to the scale over which the function
 changes appreciably. In such cases one may want to use the true distribution
-of the product, instead of its Gaussian approximation, in an analysis.
+of the function, instead of its Gaussian approximation, in an analysis.
 
 Class :class:`gvar.PDFIntegrator` evaluates integrals over multi-dimensional
 Gaussian probability density functions (PDFs) using the :mod:`vegas` module,
-which does adaptive multi-dimensional  integration. This permits us to
-calculate, for example, to calculate the true mean and standard deviation  of
+which does adaptive multi-dimensional  integration. This permits
+us, for example, to calculate the true mean and standard deviation  of
 a function of  Gaussian variables, or to test the extent to which the true
 distribution of the function is Gaussian. The following code analyzes
-the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``:
+the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
 
     import numpy as np
-    import pylab as plt
     import gvar as gv
 
     p = gv.gvar(['0.1(4)', '0.2(5)'])
@@ -527,22 +526,25 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``:
     def f(p):
         return np.sin(p[0] * p[1])
 
-    fhist = gv.PDFHistogramBuilder(bins=np.linspace(-1.,1.,41))
+    # histogram for values of f(p)
+    fhist = gv.PDFHistogramBuilder(f(p), nbin=16)
 
+    # want expectation value of fstats(p)
     def fstats(p):
         fp = f(p)
         ans = {}
-        ans['moments'] = [1., fp, fp ** 2, fp ** 3, fp ** 4]
+        ans['norm'] = 1.
+        ans['moments'] = [fp, fp ** 2, fp ** 3, fp ** 4]
         ans['histogram'] = fhist.integrand(fp)
         return ans
 
     # evaluate expectation value of fstats in 3 steps
-    # 1 - create an integrator for the PDF associated with p
-    integrator = gv.PDFIntegrator(p)
-    # 2 - adapt the integrator to the PDF (specify no function)
-    integrator.expval(neval=1000, nitn=10)
+    # 1 - create an integrator to evaluate expectation values of functions of p
+    p_expval = gv.PDFIntegrator(p)
+    # 2 - adapt p_expval to the p's PDF (N.B., no function specified)
+    p_expval(neval=5000, nitn=10)
     # 3 - evaluate expectation value of function(s) fhist(p)
-    results = integrator.expval(fstats, neval=5000, nitn=5, adapt=False)
+    results = p_expval(fstats, neval=5000, nitn=10, adapt=False)
 
     # results from expectation value integration
     print(results.summary())
@@ -551,24 +553,91 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``:
     print('exact statistics:', stats)
     print(' gaussian approx:', f(p))
 
-    # plot histogram from integration
-    plt.xlabel('$\sin(p_0 p_1)$')
+    # plot histogram from integration (plt = matplotlib.pyplot)
+    plt = fhist.make_plot(results['histogram'])
+    plt.xlabel(r'$\sin(p_0 p_1)$')
     plt.ylabel('probability')
-    plt.xlim(-1,1)
-    fhist.make_plot(results['histogram'], plt=plt, alpha=0.2)
-
-    # plot gaussians for comparison
-    def gaussian_pdf(x, mean, sdev):
-        return np.exp(-(x-mean) ** 2 / 2. / sdev**2) / np.sqrt(2 * np.pi) / sdev
-
-    x = np.arange(-1.,1.01,0.005)
-    width = fhist.widths[0]
-    plt.plot(x, gaussian_pdf(x, f(p).mean, f(p).sdev) * width, 'k--')
-    plt.plot(x, gv.mean(gaussian_pdf(x, stats.mean, stats.sdev)) * width, 'r:' )
+    plt.xlim(-1, 1)
+    # add extra curve corresponding to Gaussian with "correct" mean and sdev
+    correct_fp = gv.gvar(stats.mean.mean, stats.sdev.mean)
+    x = np.linspace(-1.,1.,50)
+    y = gv.PDFHistogramBuilder.gaussian_pdf(x, correct_fp) * fhist.widths[0]
+    plt.plot(x, y, 'k:' )
     plt.show()
 
+The key construct here is ``p_expval`` which is a :mod:`vegas` integrator
+designed so that ``p_expval(f)`` returns the expectation value of any
+function ``f(p)`` with respect to the probability distribution specified
+by ``p = gv.gvar(['0.1(4)', '0.2(5)'])``. The integrator is adaptive so
+it is called once without a function, to allow it to adapt to the probability
+density function (PDF). It is then applied to function ``fstats(p)``,
+which calculates various moments of ``f(p)`` as well as information for
+histogramming values of ``f(p)`` (using :class:`gvar.PDFHistogramBuilder`).
+Parameters ``nitn`` and ``neval`` control the multidimensional integrator,
+telling it how many iterations of its adaptive algorithm to use
+and the maximum number of integrand evaluations to use in each iteration.
 
+The output from this code is::
 
+    itn   integral        average         chi2/dof        Q
+    -------------------------------------------------------
+      1   0.01927(53)     0.01927(53)         0.00     1.00
+      2   0.01863(59)     0.01895(39)         0.67     0.87
+      3   0.01875(48)     0.01888(31)         0.78     0.85
+      4   0.01874(48)     0.01885(26)         0.80     0.88
+      5   0.01807(61)     0.01869(24)         0.74     0.97
+      6   0.01883(55)     0.01872(22)         0.74     0.98
+      7   0.01841(50)     0.01867(20)         0.76     0.98
+      8   0.01872(58)     0.01868(19)         0.83     0.94
+      9   0.01948(51)     0.01877(18)         0.81     0.97
+     10   0.01955(55)     0.01884(17)         0.90     0.84
+
+    moments: [0.01884(17) 0.04327(12) 0.00497(10) 0.011535(89)]
+    exact statistics:
+      mean = 0.01884(17)   sdev = 0.20715(28)   skew = 0.2856(98)   ex_kurt = 3.110(23)
+    gaussian approx: 0.020(94)
+
+The table summarizes the integrator's performance over the ``nitn=10`` iterations
+it performed to obtain the final results; see the :mod:`vegas` documentation
+for further information. The expectation values for moments of
+``f(p)`` are then listed, followed by the mean and standard deviation
+computed from these moments, as well as the skewness and excess kurtosis
+of the ``f(p)`` distribution. Finally the mean and standard deviation
+in the Gaussian approximate is listed.
+
+The exact mean of the ``f(p)`` distribution is 0.188(2), which is somewhat
+lower than Gaussian approximation of 0.020. A more important difference is
+in the standard deviation which is 0.2072(3) for the real distribution,
+but less than half that size (0.094) in the Gaussian approximation. The
+real distribution is significantly broader than the Gaussian approximation
+suggests, though its mean is close. The real distribution also has
+nonzero skewness (0.28(1)) and excess kurtosis (3.11(2)), which suggest
+that it is not well described by any Gaussian. (Skewness and excess kurtosis
+vanish for Gaussian distributions.)
+
+The code also displays a histogram showing the probability distribution for
+values of ``f(p)``:
+
+.. image:: histogram.*
+   :width: 80%
+
+This shows the actual probability associated with each ``f(p)`` bin,
+together with the
+shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
+It also shows the Gaussian distribution corresponding to correct mean
+and standard deviation (0.186(207)) of the distribution (black dotted line).
+Neither
+Gaussian is quite right: the first is more accurate close to the maximimum,
+while the second does better further out. From the histogram we can estimate
+that 68% of the probability lies within ±0.015 of the mean, which is
+probably the best single characterization of the uncertainty (and half
+way between the other two estimates).
+
+This example is relatively simple since the underlying Gaussian
+distribution is only two dimensional. The :mod:`vegas` integrator used
+here is adaptive and so can function effectively even for high
+dimensions (10, 20, 50 ... Gaussian variables). High dimensions usually
+cost more, requiring many more function evaluations (``neval``).
 
 
 .. _gvar-random-number-generators:
