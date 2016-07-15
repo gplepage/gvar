@@ -18,8 +18,6 @@ PYTHONVERSION = python`python -c 'import platform; print(platform.python_version
 install :
 	$(PIP) install . --user
 
-# $(PYTHON) setup.py install --user --record files-gvar.$(PYTHONVERSION)
-
 install-sys :
 	$(PIP) install .
 
@@ -28,8 +26,12 @@ install-sys :
 uninstall :			# mostly works (may leave some empty directories)
 	$(PIP) uninstall gvar
 
-# - cat files-gvar.$(PYTHONVERSION) | xargs rm -rf
-# - cat files-gdev.$(PYTHONVERSION) | xargs rm -rf
+try:
+	$(PYTHON) setup.py install --user --record files-gvar.$(PYTHONVERSION)
+
+untry:
+	- cat files-gvar.$(PYTHONVERSION) | xargs rm -rf
+	- cat files-gdev.$(PYTHONVERSION) | xargs rm -rf
 
 install-gdev :
 	$(PYTHON) gdev-setup.py install --user --record files-gdev.$(PYTHONVERSION)

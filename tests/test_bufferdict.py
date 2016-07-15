@@ -21,6 +21,7 @@ import pickle as pckl
 import numpy as np
 import gvar as gv
 from gvar import BufferDict, ExtendedDict, add_parameter_parentheses, trim_redundant_keys
+from gvar import nonredundant_keys
 
 class ArrayTests(object):
     def __init__(self):
@@ -251,13 +252,17 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
                 assert np.all(p[k] == newp[k])
             assert newp['c'] == np.exp(newp['log(c)'])
             assert np.all(newp['d'] == np.square(newp['sqrt(d)']))
+            assert np.all(p.buf == newp.stripped_buf)
             p.buf[:] = [10., 20., 30., 1., 2., 3.]
-            newp.refill_buf(p.buf)
+            newp.buf = np.array(p.buf.tolist() + i * [114., 135., 4223.])
         # trim redundant keys
         oldp = trim_redundant_keys(newp)
         assert 'c' not in oldp
         assert 'd' not in oldp
         assert np.all(oldp.buf == p.buf)
+        # nonredundant keys
+        assert set(nonredundant_keys(newp.keys())) == set(p.keys())
+
         # stripkey
         for ks, f, k in [
             ('aa', np.exp, 'log(aa)'),

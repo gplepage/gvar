@@ -1385,6 +1385,22 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             np.testing.assert_allclose(gax, gv._utilities.gammaQ(a, x), rtol=0.01)
             np.testing.assert_allclose(gxa, gv._utilities.gammaQ(x, a), rtol=0.01)
 
+    def test_erf(self):
+        " erf(x) "
+        for x in [-1.1, 0.2]:
+            self.assertAlmostEqual(erf(x), math.erf(x))
+        x = [[-1.1], [0.2]]
+        np.testing.assert_allclose(erf(x), [[math.erf(-1.1)], [math.erf(0.2)]])
+        x = gv.gvar('0(2)')
+        erfx = erf(x)
+        self.assertAlmostEqual(erfx.mean, math.erf(0))
+        self.assertAlmostEqual(
+            erfx.sdev,
+            2 * (math.erf(1e-10) - math.erf(-1e-10)) / 2e-10
+            )
+        x = gv.gvar('1.5(2)')
+        self.assertAlmostEqual(erf(x).mean, math.erf(x.mean))
+
     def test_equivalent(self):
         " equivalent(g1, g2) "
         x = gvar(['1(1)', '2(2)'])
@@ -1504,12 +1520,12 @@ try:
             x = gv.gvar([5., 3.], [[4., 0.2], [0.2, 1.]])
             xsum = x[0] + x[1]
             integ = PDFIntegrator(x)
-            hist = PDFHistogramBuilder(xsum, nbin=40, binwidth=0.2)
+            hist = PDFHistogram(xsum, nbin=40, binwidth=0.2)
             integ(neval=1000, nitn=5)
             def fhist(x):
-                return hist.integrand(x[0] + x[1])
+                return hist.count(x[0] + x[1])
             r = integ(fhist, neval=1000, nitn=5, adapt=False)
-            bins, prob, stat, norm = hist.histogram(r)
+            bins, prob, stat, norm = hist.analyze(r)
             self.assertTrue(abs(gv.mean(np.sum(prob)) - 1.) < 5. * gv.sdev(np.sum(prob)))
             self.assertTrue(abs(stat.mean.mean - xsum.mean) < 5. * stat.mean.sdev)
             self.assertTrue(abs(stat.sdev.mean - xsum.sdev) < 5. * stat.sdev.sdev)
@@ -1596,13 +1612,14 @@ try:
             x = gv.gvar([5., 3.], [[4., 0.2], [0.2, 1.]])
             xsum = x[0] + x[1]
             integ = PDFIntegrator(x, limit=7.)
-            hist = PDFHistogramBuilder(xsum, nbin=40, binwidth=0.2)
+            hist = PDFHistogram(xsum, nbin=40, binwidth=0.2)
             integ(neval=1000, nitn=5)
             def fhist(x):
-                return hist.integrand(x[0] + x[1])
+                return hist.count(x[0] + x[1])
             r = integ(fhist, neval=1000, nitn=5, adapt=False)
-            bins, prob, stat, norm = hist.histogram(r)
-            self.assertTrue(abs(gv.mean(np.sum(prob)) - 1.) < 5. * gv.sdev(np.sum(prob)))
+            bins, prob, stat, norm = hist.analyze(r)
+            # np.sum(prob) is 1 almost to machine precision, so next line doesn't work
+            # self.assertTrue(abs(gv.mean(np.sum(prob)) - 1.) < 5. * gv.sdev(np.sum(prob)))
             self.assertTrue(abs(stat.mean.mean - xsum.mean) < 5. * stat.mean.sdev)
             self.assertTrue(abs(stat.sdev.mean - xsum.sdev) < 5. * stat.sdev.sdev)
             self.assertTrue(abs(stat.skew.mean) < 5. * stat.skew.sdev)
