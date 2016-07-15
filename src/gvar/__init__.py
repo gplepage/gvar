@@ -765,11 +765,11 @@ class ExtendedDict(BufferDict):
 
     Used for parameters when there may be log-normal/sqrt-normal/...  variables.
     The exponentiated/squared/... values of those variables are included in the
-    BufferDict, together with  the original versions. Method
-    :meth:`ExtendedDict.refill_buf` refills the buffer with  a 1-d array and
-    then fills in the exponentiated/squared values of  the log-normal/sqrt-
-    normal variables ---  that is, ``p.refill_buf(newbuf)``
-    replaces ``p.buf = newbuf``.
+    BufferDict, together with  the original variables. Setting ``p.buf=buf``
+    assigns a new buffer and fills in the exponentiated/squared/... values.
+    (The buffer is resized if ``buf`` is sized for just the original variables.)
+    Use ``p.stripped_buf`` to access the part of the buffer that has only
+    the original variables.
 
     Use function :meth:`gvar.add_parameter_distribution` to add distributions.
 
@@ -791,6 +791,8 @@ class ExtendedDict(BufferDict):
         for k in p0.keys():
             k_stripped, k_fcn = ExtendedDict.stripkey(k)
             if k_fcn is not None:
+                if k_stripped in p0:
+                    raise ValueError('Redundant key in p0: ' + str(k_stripped))
                 self[k_stripped] = k_fcn(self[k])
                 extensions.append(
                     (self.slice(k_stripped), k_fcn, self.slice(k))
@@ -1236,15 +1238,6 @@ try:
                         fp = f(parg)
                     else:
                         fp = 1.
-                    # if self.g.shape is None:
-                    #     if self.extend:
-                    #         p = ExtendedDict(self.g, buf=p)
-                    #     else:
-                    #         p = BufferDict(self.g, buf=p)
-                    # else:
-                    #     p = p.reshape(self.g.shape)
-                    # fp = 1. if f is None else f(p)
-                    fp = 1. if f is None else f(parg)
                     if hasattr(fp, 'keys'):
                         if not isinstance(fp, BufferDict):
                             fp = BufferDict(fp)
@@ -1293,14 +1286,6 @@ try:
                         fp = f(parg)
                     else:
                         fp = 1.
-                    # if self.g.shape is None:
-                    #     if self.extend:
-                    #         p = ExtendedDict(self.g, buf=p)
-                    #     else:
-                    #         p = BufferDict(self.g, buf=p)
-                    # else:
-                    #     p = p.reshape(self.g.shape)
-                    # fp = 1. if f is None else f(p)
                     if hasattr(fp, 'keys'):
                         if not isinstance(fp, BufferDict):
                             fp = BufferDict(fp)
