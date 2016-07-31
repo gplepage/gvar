@@ -335,7 +335,7 @@ denominator::
 The :mod:`gvar` module defines versions of the standard Python mathematical
 functions that work with |GVar| arguments. These include:
 ``exp, log, sqrt, sin, cos, tan, arcsin, arccos, arctan, arctan2, sinh, cosh,
-tanh, arcsinh, arccosh, arctanh``. Numeric functions defined
+tanh, arcsinh, arccosh, arctanh, erf``. Numeric functions defined
 entirely in Python (*i.e.*, pure-Python functions)
 will likely also work with |GVar|\s.
 
@@ -360,7 +360,8 @@ as its argument::
             return math.erf(x)
 
 Here function :func:`gvar.gvar_function` creates the |GVar| for a function with
-mean value ``f`` and derivative ``dfdx`` at point ``x``.
+mean value ``f`` and derivative ``dfdx`` at point ``x``. A more complete
+version of ``erf`` is included in :mod:`gvar`.
 
 Some sample numerical analysis codes, adapted for use with |GVar|\s, are
 described in :ref:`numerical-analysis-modules-in-gvar`.
@@ -527,7 +528,7 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
         return np.sin(p[0] * p[1])
 
     # histogram for values of f(p)
-    fhist = gv.PDFHistogramBuilder(f(p), nbin=16)
+    fhist = gv.PDFHistogram(f(p), nbin=16)
 
     # want expectation value of fstats(p)
     def fstats(p):
@@ -535,7 +536,7 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
         ans = {}
         ans['norm'] = 1.
         ans['moments'] = [fp, fp ** 2, fp ** 3, fp ** 4]
-        ans['histogram'] = fhist.integrand(fp)
+        ans['histogram'] = fhist.count(fp)
         return ans
 
     # evaluate expectation value of fstats in 3 steps
@@ -561,9 +562,11 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
     # add extra curve corresponding to Gaussian with "correct" mean and sdev
     correct_fp = gv.gvar(stats.mean.mean, stats.sdev.mean)
     x = np.linspace(-1.,1.,50)
-    y = gv.PDFHistogramBuilder.gaussian_pdf(x, correct_fp) * fhist.widths[0]
+    pdf = gv.PDF(correct_fp)
+    y = [pdf(xi) * fhist.widths[0] for xi in x]
     plt.plot(x, y, 'k:' )
     plt.show()
+
 
 The key construct here is ``p_expval`` which is a :mod:`vegas` integrator
 designed so that ``p_expval(f)`` returns the expectation value of any
@@ -572,7 +575,7 @@ by ``p = gv.gvar(['0.1(4)', '0.2(5)'])``. The integrator is adaptive so
 it is called once without a function, to allow it to adapt to the probability
 density function (PDF). It is then applied to function ``fstats(p)``,
 which calculates various moments of ``f(p)`` as well as information for
-histogramming values of ``f(p)`` (using :class:`gvar.PDFHistogramBuilder`).
+histogramming values of ``f(p)`` (using :class:`gvar.PDFHistogram`).
 Parameters ``nitn`` and ``neval`` control the multidimensional integrator,
 telling it how many iterations of its adaptive algorithm to use
 and the maximum number of integrand evaluations to use in each iteration.

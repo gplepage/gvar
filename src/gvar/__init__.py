@@ -41,11 +41,13 @@ variables including:
 
     - ``fmt_chi2(f)`` --- format chi**2 information in f.
 
+    - ``PDF(g)`` --- (class) probability density function.
+
     - ``PDFIntegrator`` --- (class) integrator for probability density functions.
 
     - ``PDFStatistics`` --- (class) statistical analysis of moments of a random variable.
 
-    - ``PDFHistogramBuilder`` --- (class) tool for building PDF histograms.
+    - ``PDFHistogram`` --- (class) tool for building PDF histograms.
 
     - ``BufferDict`` --- (class) ordered dictionary with data buffer.
 
@@ -773,6 +775,15 @@ class ExtendedDict(BufferDict):
 
     Use function :meth:`gvar.add_parameter_distribution` to add distributions.
 
+    It is a bad idea to change the values of any of the entries
+    separately: eg, ``p['a'] = 2.6``. I haven't redesigned setitem to
+    check whether or not something else needs updating, and probably
+    won't. The only "correct" way to change the values in an
+    ExtendedDict is by overwriting the buffer: ``p.buf = buf``. This
+    class is not really for public use; it has a very specific
+    behind-the-scenes function. Might change its name to _ExtendedDict
+    to emphasize this.
+
     N.B. ExtendedDict is *not* part of the public api yet (or maybe ever).
 
     Args:
@@ -978,6 +989,95 @@ add_parameter_distribution('log', numpy.exp)
 add_parameter_distribution('sqrt', numpy.square)
 add_parameter_distribution('erfinv', erf)
 
+class PDF(object):
+    """ Probability density function (PDF) for ``g``.
+
+    Given an array or dictionary ``g`` of |GVar|\s, ``pdf=PDF(g)`` is
+    the probability density function for the (usually correlated)
+    multi-dimensional Gaussian distribution defined by ``g``. That is
+    ``pdf(p)`` is the probability density for random sample ``p``
+    drawn from ``g``. The logarithm of the PDF is obtained using
+    ``pdf.logpdf(p)``.
+
+    Args:
+        g: |GVar| or array of |GVar|\s, or dictionary of |GVar|\s
+            or arrays of |GVar|\s.
+
+        svdcut (non-negative float or None): If not ``None``, replace
+            covariance matrix of ``g`` with a new matrix whose
+            small eigenvalues are modified: eigenvalues smaller than
+            ``svdcut`` times the maximum eigenvalue ``eig_max`` are
+            replaced by ``svdcut*eig_max``. This can ameliorate
+            problems caused by roundoff errors when inverting the
+            covariance matrix. It increases the uncertainty associated
+            with the modified eigenvalues and so is conservative.
+            Setting ``svdcut=None`` or ``svdcut=0`` leaves the
+            covariance matrix unchanged. Default is ``1e-15``.
+    """
+    def __init__(self, g, svdcut=1e-15):
+        self.extend = False
+        if hasattr(g, 'keys'):
+            # g is a dict
+            if isinstance(g, ExtendedDict):
+                self.extend = True
+                g = trim_redundant_keys(g)
+            elif not isinstance(g, BufferDict):
+                g = BufferDict(g)
+            gflat = g.buf
+        else:
+            # g is an array
+            g = numpy.asarray(g)
+            gflat = g.reshape(-1)
+        s = SVD(
+            evalcov(gflat),
+            svdcut=abs(svdcut) if svdcut is not None else None
+            )
+        self.vec_sig = numpy.array(s.vec)
+        self.vec_isig = numpy.array(s.vec)
+        self.pjac = s.val ** 0.5
+        for i, sigi in enumerate(s.val ** 0.5):
+            self.vec_sig[i] *= sigi
+            self.vec_isig[i] /= sigi
+        self.meanflat = mean(gflat)
+        self.size = g.size
+        self.shape = g.shape
+        self.g = g
+        self.log_gnorm = numpy.sum(0.5 * numpy.log(2 * numpy.pi * s.val))
+
+    def x2dpflat(self, x):
+        """ Map vector ``x`` in x-space into the displacement from ``g.mean``.
+
+         x-space is a vector space of dimension ``p.size``. Its axes are
+        in the directions specified by the eigenvectors of ``p``'s covariance
+        matrix, and distance along an axis is in units of the standard
+        deviation in that direction.
+        """
+        return x.dot(self.vec_sig)
+
+    def p2x(self, p):
+        """ Map parameters ``p`` to vector in x-space.
+
+        x-space is a vector space of dimension ``p.size``. Its axes are
+        in the directions specified by the eigenvectors of ``p``'s covariance
+        matrix, and distance along an axis is in units of the standard
+        deviation in that direction.
+        """
+        if hasattr(p, 'keys'):
+            dp = BufferDict(p, keys=self.g.keys())._buf[:self.meanflat.size] - self.meanflat
+        else:
+            dp = numpy.asarray(p).reshape(-1) - self.meanflat
+        return self.vec_isig.dot(dp)
+
+    def logpdf(self, p):
+        """ Logarithm of the probability density function evaluated at ``p``. """
+        x2 = self.p2x(p) ** 2
+        return -0.5 * numpy.sum(x2) - self.log_gnorm
+
+    def __call__(self, p):
+        """ Probability density function evaluated at ``p``."""
+        return numpy.exp(self.logpdf(p))
+
+
 try:
     import vegas
     class PDFIntegrator(vegas.Integrator):
@@ -988,11 +1088,13 @@ try:
         specified by with ``g``, which is a |GVar| or an array of |GVar|\s or a
         dictionary whose values are |GVar|\s or arrays of |GVar|\s.
 
-        ``PDFIntegrator`` reformulates integrals over the variables in ``g``
-        in terms of new variables that diagonalize ``g``'s covariance matrix.
-        This greatly facilitates integration over these variables using the
-        :mod:`vegas` module for multi-dimensional integration. (The :mod:`vegas`
-        module must be installed in order to use ``PDFIntegrator``.)
+        ``PDFIntegrator`` integrates over the entire parameter space of the
+        distribution but reexpresses integrals in terms of variables
+        that diagonalize ``g``'s covariance matrix and are center at
+        its mean value. This greatly facilitates integration over these
+        variables using the :mod:`vegas` module, making integrals over
+        10s or more of parameters feasible. (The :mod:`vegas` module must be
+        installed separately in order to use ``PDFIntegrator``.)
 
         A simple illustration of ``PDFIntegrator`` is given by the following
         code::
@@ -1059,7 +1161,7 @@ try:
         numbers, or a dictionary whose values are numbers or arrays of numbers.
         This allows multiple expectation values to be evaluated simultaneously.
 
-        See the documentation with the :mod:`vegas`module for more details on its
+        See the documentation with the :mod:`vegas` module for more details on its
         use, and on the attributes and methods associated with integrators.
         The example above sets ``adapt=False`` when  computing final results. This
         gives more reliable error estimates  when ``neval`` is small. Note
@@ -1091,41 +1193,19 @@ try:
                 arguments). Default is ``1e15``.
         """
         def __init__(self, g, limit=1e15, svdcut=1e-15, scale=1.):
-            self.extend = False
-            if hasattr(g, 'keys'):
-                # g is a dict
-                if isinstance(g, ExtendedDict):
-                    self.extend = True
-                    g = trim_redundant_keys(g)
-                elif not isinstance(g, BufferDict):
-                    g = BufferDict(g)
-                gflat = g.buf
+            if isinstance(g, PDF):
+                self.pdf = g
             else:
-                # g is an array
-                g = numpy.asarray(g)
-                gflat = g.reshape(-1)
-            s = SVD(
-                evalcov(gflat),
-                svdcut=abs(svdcut) if svdcut is not None else None
-                )
-            self.vec_sig = numpy.array(s.vec)
-            self.vec_isig = numpy.array(s.vec)
-            self.pjac = s.val ** 0.5
-            for i, sigi in enumerate(s.val ** 0.5):
-                self.vec_sig[i] *= sigi
-                self.vec_isig[i] /= sigi
-            self.scale = scale
-            self.gmean = mean(gflat)
-            self.g = g
-            self.log_gnorm = numpy.sum(0.5 * numpy.log(2 * numpy.pi * s.val))
+                self.pdf = PDF(g, svdcut=svdcut)
             self.limit = abs(limit)
+            self.scale = scale
             if _have_scipy and limit <= 8.:
                 limit = scipy.special.ndtr(self.limit)
-                super(PDFIntegrator, self).__init__(self.gmean.size * [(1. - limit, limit)])
+                super(PDFIntegrator, self).__init__(self.pdf.size * [(1. - limit, limit)])
                 self._expval = self._expval_ndtri
             else:
                 integ_map = self._make_map(self.limit)
-                super(PDFIntegrator, self).__init__(self.gmean.size * [integ_map])
+                super(PDFIntegrator, self).__init__(self.pdf.size * [integ_map])
                 self._expval = self._expval_tan
             self.mpi_rank = 0    # in case mpi is used
 
@@ -1190,29 +1270,16 @@ try:
                 integrand = vegas.batchintegrand(integrand)
             return super(PDFIntegrator, self).__call__(integrand, **kargs)
 
-        def logpdf(self, p):
-            """ Logarithm of the probability density function evaluated at ``p``. """
-            if hasattr(p, 'keys'):
-                dp = BufferDict(p).buf[:len(self.gmean)] - self.gmean
-            else:
-                dp = numpy.asarray(p).reshape(-1) - self.gmean
-            x2 = self.vec_isig.dot(dp) ** 2
-            return -0.5 * numpy.sum(x2) - self.log_gnorm
-
-        def pdf(self, p):
-            """ Probability density function associated with ``g`` evaluated at ``p``."""
-            return numpy.exp(self.logpdf(p))
-
         def _expval_ndtri(self, f, nopdf):
             """ Return integrand using ndtr mapping. """
             def ff(theta, nopdf=nopdf):
                 x = scipy.special.ndtri(theta)
-                dp = x.dot(self.vec_sig)
+                dp = self.pdf.x2dpflat(x) # x.dot(self.vec_sig)
                 if nopdf:
                     # must remove built in pdf
                     pdf = (
                         numpy.sqrt(2 * numpy.pi) * numpy.exp((x ** 2) / 2.)
-                        * self.pjac[None,:]
+                        * self.pdf.pjac[None,:]
                         )
                 else:
                     pdf = numpy.ones(numpy.shape(x), float)
@@ -1220,16 +1287,16 @@ try:
                 ans_dict = collections.OrderedDict()
                 parg = None
                 for dpi, pdfi in zip(dp, pdf):
-                    p = self.gmean + dpi
+                    p = self.pdf.meanflat + dpi
                     if f is not None:
                         if parg is None:
-                            if self.g.shape is None:
-                                if self.extend:
-                                    parg = ExtendedDict(self.g, buf=p)
+                            if self.pdf.shape is None:
+                                if self.pdf.extend:
+                                    parg = ExtendedDict(self.pdf.g, buf=p)
                                 else:
-                                    parg = BufferDict(self.g, buf=p)
+                                    parg = BufferDict(self.pdf.g, buf=p)
                             else:
-                                parg = p.reshape(self.g.shape)
+                                parg = p.reshape(self.pdf.shape)
                         else:
                             if parg.shape is None:
                                 parg.buf = p
@@ -1260,24 +1327,24 @@ try:
                 x = self.scale * tan_theta
                 jac = self.scale * (tan_theta ** 2 + 1.)
                 if nopdf:
-                    pdf = jac * self.pjac[None, :]
+                    pdf = jac * self.pdf.pjac[None, :]
                 else:
                     pdf = jac * numpy.exp(-(x ** 2) / 2.) / numpy.sqrt(2 * numpy.pi)
-                dp = x.dot(self.vec_sig)
+                dp = self.pdf.x2dpflat(x) # .dot(self.vec_sig))
                 ans = []
                 ans_dict = collections.OrderedDict()
                 parg = None
                 for dpi, pdfi in zip(dp, pdf):
-                    p = self.gmean + dpi
+                    p = self.pdf.meanflat + dpi
                     if f is not None:
                         if parg is None:
-                            if self.g.shape is None:
-                                if self.extend:
-                                    parg = ExtendedDict(self.g, buf=p)
+                            if self.pdf.shape is None:
+                                if self.pdf.extend:
+                                    parg = ExtendedDict(self.pdf.g, buf=p)
                                 else:
-                                    parg = BufferDict(self.g, buf=p)
+                                    parg = BufferDict(self.pdf.g, buf=p)
                             else:
-                                parg = p.reshape(self.g.shape)
+                                parg = p.reshape(self.pdf.shape)
                         else:
                             if parg.shape is None:
                                 parg.buf = p

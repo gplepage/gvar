@@ -95,6 +95,10 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.fmt_errorbudget" title="gvar.fmt_errorbudget"><code class="xref any py py-func docutils literal"><span class="pre">fmt_errorbudget</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; create error-budget table for printing.</li>
 <li><a class="reference internal" href="#gvar.fmt_chi2" title="gvar.fmt_chi2"><code class="xref any py py-func docutils literal"><span class="pre">fmt_chi2</span></code></a><code class="docutils literal"><span class="pre">(f)</span></code> &#8212; format chi**2 information in f as string for printing.</li>
 <li>class <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">BufferDict</span></code></a> &#8212; ordered dictionary with data buffer.</li>
+<li>class <a class="reference internal" href="#gvar.PDF" title="gvar.PDF"><code class="xref py py-class docutils literal"><span class="pre">PDF</span></code></a> &#8212; probability density function.</li>
+<li>class <a class="reference internal" href="#gvar.PDFIntegrator" title="gvar.PDFIntegrator"><code class="xref py py-class docutils literal"><span class="pre">PDFIntegrator</span></code></a> &#8212; integrator for probability density functions.</li>
+<li>class <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal"><span class="pre">PDFStatistics</span></code></a> &#8212; statistical analysis of moments of a random variable.</li>
+<li>class <a class="reference internal" href="#gvar.PDFHistogram" title="gvar.PDFHistogram"><code class="xref py py-class docutils literal"><span class="pre">PDFHistogram</span></code></a> &#8212; tool for building PDF histograms.</li>
 <li><a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref any py py-func docutils literal"><span class="pre">dump</span></code></a><code class="docutils literal"><span class="pre">(g,</span> <span class="pre">outputfile)</span></code> &#8212; pickle a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in file.</li>
 <li><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal"><span class="pre">dumps</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; pickle a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in a string.</li>
 <li><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal"><span class="pre">load</span></code></a><code class="docutils literal"><span class="pre">(inputfile)</span></code> &#8212; reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from a file.</li>
@@ -1513,11 +1517,13 @@ module (for multi-dimensional integration) and the following class:</p>
 expectation values for the multi-dimensional Gaussian distribution
 specified by with <code class="docutils literal"><span class="pre">g</span></code>, which is a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> or an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or a
 dictionary whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
-<p><code class="docutils literal"><span class="pre">PDFIntegrator</span></code> reformulates integrals over the variables in <code class="docutils literal"><span class="pre">g</span></code>
-in terms of new variables that diagonalize <code class="docutils literal"><span class="pre">g</span></code>&#8216;s covariance matrix.
-This greatly facilitates integration over these variables using the
-<code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> module for multi-dimensional integration. (The <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code>
-module must be installed in order to use <code class="docutils literal"><span class="pre">PDFIntegrator</span></code>.)</p>
+<p><code class="docutils literal"><span class="pre">PDFIntegrator</span></code> integrates over the entire parameter space of the
+distribution but reexpresses integrals in terms of variables
+that diagonalize <code class="docutils literal"><span class="pre">g</span></code>&#8216;s covariance matrix and are center at
+its mean value. This greatly facilitates integration over these
+variables using the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> module, making integrals over
+10s of parameters feasible. (The <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> module must be
+installed separately in order to use <code class="docutils literal"><span class="pre">PDFIntegrator</span></code>.)</p>
 <p>A simple illustration of <code class="docutils literal"><span class="pre">PDFIntegrator</span></code> is given by the following
 code:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
@@ -1582,9 +1588,9 @@ Gaussian approx&#39;n for f(g) = 1.0(1.4)
 <p>In general functions being integrated can return a number, or an array of
 numbers, or a dictionary whose values are numbers or arrays of numbers.
 This allows multiple expectation values to be evaluated simultaneously.</p>
-<p>See the documentation with the <code class="xref py py-mod docutils literal"><span class="pre">vegas`module</span> <span class="pre">for</span> <span class="pre">more</span> <span class="pre">details</span> <span class="pre">on</span> <span class="pre">its</span>
-<span class="pre">use,</span> <span class="pre">and</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">and</span> <span class="pre">methods</span> <span class="pre">associated</span> <span class="pre">with</span> <span class="pre">integrators.</span>
-<span class="pre">The</span> <span class="pre">example</span> <span class="pre">above</span> <span class="pre">sets</span> <span class="pre">``adapt=False`</span></code> when  computing final results. This
+<p>See the documentation with the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> module for more details on its
+use, and on the attributes and methods associated with integrators.
+The example above sets <code class="docutils literal"><span class="pre">adapt=False</span></code> when  computing final results. This
 gives more reliable error estimates  when <code class="docutils literal"><span class="pre">neval</span></code> is small. Note
 that <code class="docutils literal"><span class="pre">neval</span></code> may need to be much larger (tens or hundreds of
 thousands) for more difficult high-dimension integrals.</p>
@@ -1618,18 +1624,6 @@ arguments). Default is <code class="docutils literal"><span class="pre">1e15</sp
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="gvar.PDFIntegrator.logpdf">
-<code class="descname">logpdf</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator.logpdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the probability density function evaluated at <code class="docutils literal"><span class="pre">p</span></code>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="gvar.PDFIntegrator.pdf">
-<code class="descname">pdf</code><span class="sig-paren">(</span><em>p</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator.pdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Probability density function associated with <code class="docutils literal"><span class="pre">g</span></code> evaluated at <code class="docutils literal"><span class="pre">p</span></code>.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="gvar.PDFIntegrator.__call__">
 <code class="descname">__call__</code><span class="sig-paren">(</span><em>f</em>, <em>**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFIntegrator.__call__" title="Permalink to this definition">¶</a></dt>
@@ -1678,6 +1672,40 @@ integrator; see the <code class="xref py py-mod docutils literal"><span class="p
 
 <p>Related classes are:</p>
 <dl class="class">
+<dt id="gvar.PDF">
+<em class="property">class </em><code class="descclassname">gvar.</code><code class="descname">PDF</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-15</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability density function (PDF) for <code class="docutils literal"><span class="pre">g</span></code>.</p>
+<p>Given an array or dictionary <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal"><span class="pre">pdf=PDF(g)</span></code> is
+the probability density function for the (usually correlated)
+multi-dimensional Gaussian distribution defined by <code class="docutils literal"><span class="pre">g</span></code>. That is
+<code class="docutils literal"><span class="pre">pdf(p)</span></code> is the probability density for random sample <code class="docutils literal"><span class="pre">p</span></code>
+drawn from <code class="docutils literal"><span class="pre">g</span></code>. The logarithm of the PDF is obtained using
+<code class="docutils literal"><span class="pre">pdf.logpdf(p)</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>g</strong> &#8211; <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s
+or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
+<li><strong>svdcut</strong> (<em>non-negative float or None</em>) &#8211; If not <code class="docutils literal"><span class="pre">None</span></code>, replace
+covariance matrix of <code class="docutils literal"><span class="pre">g</span></code> with a new matrix whose
+small eigenvalues are modified: eigenvalues smaller than
+<code class="docutils literal"><span class="pre">svdcut</span></code> times the maximum eigenvalue <code class="docutils literal"><span class="pre">eig_max</span></code> are
+replaced by <code class="docutils literal"><span class="pre">svdcut*eig_max</span></code>. This can ameliorate
+problems caused by roundoff errors when inverting the
+covariance matrix. It increases the uncertainty associated
+with the modified eigenvalues and so is conservative.
+Setting <code class="docutils literal"><span class="pre">svdcut=None</span></code> or <code class="docutils literal"><span class="pre">svdcut=0</span></code> leaves the
+covariance matrix unchanged. Default is <code class="docutils literal"><span class="pre">1e-15</span></code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
 <dt id="gvar.PDFStatistics">
 <em class="property">class </em><code class="descclassname">gvar.</code><code class="descname">PDFStatistics</code><span class="sig-paren">(</span><em>m</em>, <em>norm=1</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFStatistics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute statistical information about a distribution.</p>
@@ -1721,102 +1749,190 @@ are divided by <code class="docutils literal"><span class="pre">norm</span></cod
 <dd><p>excess kurtosis</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="gvar.PDFStatistics.gvar">
+<code class="descname">gvar</code><a class="headerlink" href="#gvar.PDFStatistics.gvar" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">gvar.gvar(mean,</span> <span class="pre">sdev)</span></code></p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
-<dt id="gvar.PDFHistogramBuilder">
-<em class="property">class </em><code class="descclassname">gvar.</code><code class="descname">PDFHistogramBuilder</code><span class="sig-paren">(</span><em>g</em>, <em>nbin=None</em>, <em>binwidth=None</em>, <em>bins=None</em>, <em>density=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogramBuilder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Utility class for creating PDF histograms using <a class="reference internal" href="#gvar.PDFIntegrator" title="gvar.PDFIntegrator"><code class="xref py py-class docutils literal"><span class="pre">PDFIntegrator</span></code></a>.</p>
-<p>This class is used to create a histogram of the probability
-distribution function (PDF) for some function <code class="docutils literal"><span class="pre">f(p)</span></code> where <code class="docutils literal"><span class="pre">p</span></code>
-represents a (possibly multi-dimensional) Gaussian distribution.
-A trivial example would be to compute and display the PDF
-for <code class="docutils literal"><span class="pre">(p</span> <span class="pre">+</span> <span class="pre">2)</span> <span class="pre">**</span> <span class="pre">2</span> <span class="pre">/</span> <span class="pre">4</span></code> where <code class="docutils literal"><span class="pre">p</span></code> is Gaussian variable:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<dt id="gvar.PDFHistogram">
+<em class="property">class </em><code class="descclassname">gvar.</code><code class="descname">PDFHistogram</code><span class="sig-paren">(</span><em>g</em>, <em>nbin=None</em>, <em>binwidth=None</em>, <em>bins=None</em>, <em>density=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility class for creating PDF histograms.</p>
+<p>This class is designed to facilitate studies of probability
+density functions associated with <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s. The following code,
+for example, makes a histogram of probabilities for the Gaussian
+distribution corresponding to <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> 1.0(5):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s">&#39;1.0(5)&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)]</span>
 
-<span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s">&#39;1(1)&#39;</span><span class="p">)</span>
-
-<span class="c"># function whose PDF will be histogrammed</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="mf">4.</span>
-
-<span class="c"># use f(p) to set up histogram bins</span>
-<span class="n">p2hist</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFHistogramBuilder</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
-
-<span class="c"># integrand used to build histogram</span>
-<span class="k">def</span> <span class="nf">fhist</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>                               <span class="c"># histogram of f(p)</span>
-    <span class="k">return</span> <span class="n">p2hist</span><span class="o">.</span><span class="n">integrand</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
-
-<span class="c"># integrate in two steps</span>
-<span class="n">integ</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFIntegrator</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-
-<span class="c"># step 1 - adapt integrator to the pdf</span>
-<span class="n">integ</span><span class="p">(</span><span class="n">neval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-
-<span class="c"># step 2 - integrate the histogram</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">integ</span><span class="p">(</span><span class="n">fhist</span><span class="p">,</span> <span class="n">neval</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-
-<span class="c"># print statistical analysis of histogram and plot it</span>
-<span class="k">print</span><span class="p">(</span><span class="n">p2hist</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>  <span class="c"># statistics for p**2 PDF</span>
-<span class="n">plt</span> <span class="o">=</span> <span class="n">p2hist</span><span class="o">.</span><span class="n">make_plot</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;$(p + 2)^2/4$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;probability&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>                              <span class="c"># display plot</span>
+<span class="n">hist</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFHistogram</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;probabilities:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">prob</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;statistics:</span><span class="se">\n</span><span class="s">  &#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The output lists approximate statistics based on the histogram (see
-<code class="xref py py-class docutils literal"><span class="pre">PDFStats</span></code>):</p>
-<blockquote>
-<div>mean = 2.4656(12)   sdev = 1.5715(14)   skew = 0.6537(40)   ex_kurt = 0.334(13)</div></blockquote>
-<p>It also displays a plot showing the probability of <code class="docutils literal"><span class="pre">(p</span> <span class="pre">+</span> <span class="pre">2)</span> <span class="pre">**</span> <span class="pre">2</span> <span class="pre">/</span> <span class="pre">4</span></code>
-being in each bin. More typically the distribution would be
-multi-dimensional, with <code class="docutils literal"><span class="pre">p</span></code> being an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or a dictionary
-whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>Here <code class="docutils literal"><span class="pre">hist</span></code> defines a histogram with 8 bins, centered on
+<code class="docutils literal"><span class="pre">g.mean</span></code>, and each with width equal to <code class="docutils literal"><span class="pre">g.sdev</span></code>. The data in
+array <code class="docutils literal"><span class="pre">data</span></code> is a random sampling from <code class="docutils literal"><span class="pre">g</span></code>&#8216;s distribution.
+The number of data elements in each bin is determined by
+<code class="docutils literal"><span class="pre">hist.count(data)</span></code> and turned into probabilities by
+<code class="docutils literal"><span class="pre">hist.analyze(count)</span></code>. The probabilities (<code class="docutils literal"><span class="pre">a.prob</span></code>) and
+a statistical analysis of the probability distribution based
+on the histogram (<code class="docutils literal"><span class="pre">a.stats</span></code>) are then printed out:</p>
+<div class="highlight-python"><div class="highlight"><pre>probabilities: [ 0.001  0.011  0.138  0.325  0.367  0.131  0.026  0.001]
+statistics:
+   mean = 1.024   sdev = 0.50786   skew = 0.064247   ex_kurt = -0.065656
+</pre></div>
+</div>
+<p>A plot of the histogram can be created and displayed using,
+for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">plt</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">make_plot</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;probabilities&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#gvar.PDFIntegrator" title="gvar.PDFIntegrator"><code class="xref py py-class docutils literal"><span class="pre">PDFIntegrator</span></code></a> can be used to create histograms for more
+complicated, multi-dimensional distributions: the expectation value of
+<code class="docutils literal"><span class="pre">hist.count(f(p))</span></code> over values of <code class="docutils literal"><span class="pre">p</span></code> drawn from a multi-dimensional
+distribution gives the the probability distribution for function <code class="docutils literal"><span class="pre">f(p)</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>) &#8211; The mean and standard deviation of <code class="docutils literal"><span class="pre">g</span></code> are used to
-design the histogram bins, which are centered on the mean.</li>
+<li><strong>g</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; The mean and standard deviation of <code class="docutils literal"><span class="pre">g</span></code> are
+used to design the histogram bins, which are centered
+on <code class="docutils literal"><span class="pre">g.mean</span></code>. Ignored if <code class="docutils literal"><span class="pre">None</span></code> (in which case <code class="docutils literal"><span class="pre">bins</span></code> must
+be specified).</li>
 <li><strong>nbin</strong> (<em>int</em>) &#8211; The number of histogram bins. Set equal to
-<code class="docutils literal"><span class="pre">PDFHistogramBuilder.default_nbin''</span> <span class="pre">if</span> <span class="pre">``None</span></code> (initial
-value is 8.)</li>
+<code class="docutils literal"><span class="pre">PDFHistogram.default_nbin''</span> <span class="pre">(=8</span> <span class="pre">initially)</span> <span class="pre">if</span> <span class="pre">``None</span></code>.</li>
 <li><strong>binwidth</strong> (<em>float</em>) &#8211; The width of each bin is <code class="docutils literal"><span class="pre">binwidth</span> <span class="pre">*</span> <span class="pre">g.sdev</span></code>.
-Set equal to <code class="docutils literal"><span class="pre">PDFHistogramBuilder.default_binwidth''</span> <span class="pre">if</span> <span class="pre">``None</span></code>
-(initial value is 1.)</li>
-<li><strong>bins</strong> (<em>array</em>) &#8211; Bin edges for the histogram. <code class="docutils literal"><span class="pre">len(bins)</span></code> is one
-larger than the number of bins. If specified it overrides
-the default bin design specified by <code class="docutils literal"><span class="pre">g</span></code>. (Default is <code class="docutils literal"><span class="pre">None</span></code>.)</li>
+Set equal to <code class="docutils literal"><span class="pre">PDFHistogram.default_binwidth''</span> <span class="pre">(=1.</span> <span class="pre">initially)</span>
+<span class="pre">if</span> <span class="pre">``None</span></code>.</li>
+<li><strong>bins</strong> (array or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; Ignored if <code class="docutils literal"><span class="pre">None</span></code> (default). Otherwise specifies the
+histogram&#8217;s bin edges, overriding the default bin design specified
+by <code class="docutils literal"><span class="pre">g</span></code>. <code class="docutils literal"><span class="pre">len(bins)</span></code> is one larger than the number of bins. If
+specified it overrides the default bin design indicated by <code class="docutils literal"><span class="pre">g</span></code>.
+One of <code class="docutils literal"><span class="pre">g</span></code> or <code class="docutils literal"><span class="pre">bins</span></code> must be specified.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>The attributes are as follows:</p>
+<p>The main attributes are:</p>
 <dl class="attribute">
-<dt id="gvar.PDFHistogramBuilder.g">
-<code class="descname">g</code><a class="headerlink" href="#gvar.PDFHistogramBuilder.g" title="Permalink to this definition">¶</a></dt>
+<dt id="gvar.PDFHistogram.g">
+<code class="descname">g</code><a class="headerlink" href="#gvar.PDFHistogram.g" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> used to design the histogram.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.PDFHistogramBuilder.bins">
-<code class="descname">bins</code><a class="headerlink" href="#gvar.PDFHistogramBuilder.bins" title="Permalink to this definition">¶</a></dt>
+<dt id="gvar.PDFHistogram.bins">
+<code class="descname">bins</code><a class="headerlink" href="#gvar.PDFHistogram.bins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin edges for the histogram (see above).</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.PDFHistogramBuilder.midpoints">
-<code class="descname">midpoints</code><a class="headerlink" href="#gvar.PDFHistogramBuilder.midpoints" title="Permalink to this definition">¶</a></dt>
+<dt id="gvar.PDFHistogram.midpoints">
+<code class="descname">midpoints</code><a class="headerlink" href="#gvar.PDFHistogram.midpoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin midpoints.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.PDFHistogramBuilder.widths">
-<code class="descname">widths</code><a class="headerlink" href="#gvar.PDFHistogramBuilder.widths" title="Permalink to this definition">¶</a></dt>
+<dt id="gvar.PDFHistogram.widths">
+<code class="descname">widths</code><a class="headerlink" href="#gvar.PDFHistogram.widths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin widths.</p>
+</dd></dl>
+
+<p>The main methods are:</p>
+<dl class="method">
+<dt id="gvar.PDFHistogram.count">
+<code class="descname">count</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute histogram of data.</p>
+<p>Counts the number of elements from array <code class="docutils literal"><span class="pre">data</span></code> in each bin of the
+histogram. Results are returned in an array, call it <code class="docutils literal"><span class="pre">h</span></code>, of
+length <code class="docutils literal"><span class="pre">nbin+2</span></code> where <code class="docutils literal"><span class="pre">h[0]</span></code> is the number of data elements
+that fall below the range of the histogram, <code class="docutils literal"><span class="pre">h[-1]</span></code>
+(i.e., <code class="docutils literal"><span class="pre">h[nbin+1]</span></code>) is the number that fall above the range,
+and <code class="docutils literal"><span class="pre">h[i]</span></code> is the number in the <code class="docutils literal"><span class="pre">i</span></code>-th bin for <code class="docutils literal"><span class="pre">i=1...nbin</span></code>.</p>
+<p>Argument <code class="docutils literal"><span class="pre">data</span></code> can also be a float, in which case the result is the
+same as from <code class="docutils literal"><span class="pre">histogram([data])</span></code>. Note that the expectation value of
+<code class="docutils literal"><span class="pre">count(f(p))</span></code> over parameter values <code class="docutils literal"><span class="pre">p</span></code> drawn from a random
+distribution gives the probabilities for values of <code class="docutils literal"><span class="pre">f(p)</span></code> to fall
+in each histogram bin. Dividing  by the bin widths gives the average
+probability density for random variable <code class="docutils literal"><span class="pre">f(p)</span></code> in each bin.</p>
+<p>Bin intervals are closed on the left and open on the right,
+except for the last interval which is closed on both ends.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gvar.PDFHistogram.analyze">
+<code class="descname">analyze</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyze count data from <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal"><span class="pre">PDFHistogram.count()</span></code></a>.</p>
+<p>Turns an array of counts (see <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal"><span class="pre">PDFHistogram.count()</span></code></a>) into a
+histogram of probabilities, and  estimates the mean, standard
+deviation, and other statistical characteristics of the corresponding
+probability distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>count</strong> (<em>array</em>) &#8211; Array of length <code class="docutils literal"><span class="pre">nbin+2</span></code> containing histogram
+data where <code class="docutils literal"><span class="pre">count[0]</span></code> is the count for values that are
+below the range of the histogram, <code class="docutils literal"><span class="pre">count[-1]</span></code> is the count
+for values above the range, and <code class="docutils literal"><span class="pre">count[i]</span></code> is the count
+for the <code class="docutils literal"><span class="pre">i</span></code>-th bin where <code class="docutils literal"><span class="pre">i=1...nbin</span></code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Returns a named tuple containing the following information (in order):</p>
+<blockquote>
+<div><p><em>bins</em>: Array of bin edges for histogram (length <code class="docutils literal"><span class="pre">nbin+1</span></code>)</p>
+<p><em>prob</em>: Array of probabilities for each bin.</p>
+<p><em>stats</em>: Statistical data about histogram. See <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal"><span class="pre">PDFStatistics</span></code></a>.</p>
+<p><em>norm</em>: Convert counts into probabilities by dividing by <code class="docutils literal"><span class="pre">norm</span></code>.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="gvar.PDFHistogram.make_plot">
+<code class="descname">make_plot</code><span class="sig-paren">(</span><em>count</em>, <em>plot=None</em>, <em>show=False</em>, <em>density=False</em>, <em>bar=dict(alpha=0.15</em>, <em>color='b')</em>, <em>errorbar=dict(fmt='b.')</em>, <em>gaussian=dict(ls='--'</em>, <em>c='r')</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.make_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert histogram counts in array <code class="docutils literal"><span class="pre">count</span></code> into a plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>count</strong> (<em>array</em>) &#8211; Array of histogram counts (see
+<a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal"><span class="pre">PDFHistogram.count()</span></code></a>).</li>
+<li><strong>plot</strong> (<em>plotter</em>) &#8211; <code class="xref py py-mod docutils literal"><span class="pre">matplotlib</span></code> plotting window. If <code class="docutils literal"><span class="pre">None</span></code>
+uses the default window. Default is <code class="docutils literal"><span class="pre">None</span></code>.</li>
+<li><strong>show</strong> (<em>boolean</em>) &#8211; Displayes plot if <code class="docutils literal"><span class="pre">True</span></code>; otherwise returns
+the plot. Default is <code class="docutils literal"><span class="pre">False</span></code>.</li>
+<li><strong>density</strong> (<em>booleam</em>) &#8211; Display probability density if <code class="docutils literal"><span class="pre">True</span></code>;
+otherwise display total probability in each bin. Default is
+<code class="docutils literal"><span class="pre">False</span></code>.</li>
+<li><strong>bar</strong> (<em>dictionary</em>) &#8211; Additional plotting arguments for the bar graph
+showing the histogram. This part of the plot is omitted
+if <code class="docutils literal"><span class="pre">bar=None</span></code>.</li>
+<li><strong>errorbar</strong> (<em>dictionary</em>) &#8211; Additional plotting arguments for the
+errorbar graph, showing error bars on the histogram. This
+part of the plot is omitted if <code class="docutils literal"><span class="pre">errorbar=None</span></code>.</li>
+<li><strong>gaussian</strong> (<em>dictionary</em>) &#8211; Additional plotting arguments for the
+plot of the Gaussian probability for the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> (<code class="docutils literal"><span class="pre">g</span></code>)
+specified in the initialization. This part of the plot
+is omitted if <code class="docutils literal"><span class="pre">gaussian=None</span></code> or if no <code class="docutils literal"><span class="pre">g</span></code> was
+specified.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

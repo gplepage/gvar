@@ -63,6 +63,14 @@ manipulating gaussian random variables, including:
 
     - class :class:`BufferDict` --- ordered dictionary with data buffer.
 
+    - class :class:`PDF` --- probability density function.
+
+    - class :class:`PDFIntegrator` --- integrator for probability density functions.
+
+    - class :class:`PDFStatistics` --- statistical analysis of moments of a random variable.
+
+    - class :class:`PDFHistogram` --- tool for building PDF histograms.
+
     - :any:`dump`\ ``(g, outputfile)`` --- pickle a collection of |GVar|\s in file.
 
     - :any:`dumps`\ ``(g)`` --- pickle a collection of |GVar|\s in a string.
@@ -308,17 +316,23 @@ module (for multi-dimensional integration) and the following class:
 
 .. autoclass:: gvar.PDFIntegrator(g, svdcut=1e-15)
 
-  .. automethod:: logpdf(p)
-
-  .. automethod:: pdf(p)
-
   .. automethod:: __call__(f, **kargs)
 
 Related classes are:
 
+.. autoclass:: gvar.PDF(g, svdcut=1e-15)
+
 .. autoclass:: gvar.PDFStatistics(m, norm=1)
 
-.. autoclass:: gvar.PDFHistogramBuilder(g, nbin=None, binwidth=None, bins=None, density=False)
+.. autoclass:: gvar.PDFHistogram(g, nbin=None, binwidth=None, bins=None, density=False)
+
+  The main methods are:
+
+  .. automethod:: count(data)
+
+  .. automethod:: analyze(count)
+
+  .. automethod:: make_plot(count, plot=None, show=False, density=False, bar=dict(alpha=0.15, color='b'), errorbar=dict(fmt='b.'), gaussian=dict(ls='--', c='r'))
 
 Requirements
 ------------

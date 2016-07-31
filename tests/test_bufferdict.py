@@ -246,20 +246,24 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         p['b'] = [2., 3.]
         p['log(c)'] = 0.
         p['sqrt(d)'] = [5., 6.]
+        p['erfinv(e)'] = [[33.]]
         newp = ExtendedDict(p)
         for i in range(2):
             for k in p:
                 assert np.all(p[k] == newp[k])
             assert newp['c'] == np.exp(newp['log(c)'])
             assert np.all(newp['d'] == np.square(newp['sqrt(d)']))
+            assert np.all(newp['e'] == gv.erf(newp['erfinv(e)']))
             assert np.all(p.buf == newp.stripped_buf)
-            p.buf[:] = [10., 20., 30., 1., 2., 3.]
-            newp.buf = np.array(p.buf.tolist() + i * [114., 135., 4223.])
+            p.buf[:] = [10., 20., 30., 1., 2., 3., 4.]
+            newp.buf = np.array(p.buf.tolist() + i * [114., 135., 4223., 0.7])
+
         # trim redundant keys
         oldp = trim_redundant_keys(newp)
         assert 'c' not in oldp
         assert 'd' not in oldp
         assert np.all(oldp.buf == p.buf)
+
         # nonredundant keys
         assert set(nonredundant_keys(newp.keys())) == set(p.keys())
 
@@ -269,12 +273,14 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             ('aa', np.square, 'sqrt(aa)'),
             ]:
             assert (ks, f) == ExtendedDict.stripkey(k)
+
         # addparentheses
         pvar = BufferDict()
         pvar['a'] = p['a']
         pvar['b'] = p['b']
         pvar['logc'] = p['log(c)']
         pvar['sqrtd'] = p['sqrt(d)']
+        pvar['erfinv(e)'] = p['erfinv(e)']
         pvar = add_parameter_parentheses(pvar)
         for k in p:
             assert k in pvar
