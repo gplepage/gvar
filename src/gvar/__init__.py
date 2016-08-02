@@ -929,8 +929,11 @@ def add_parameter_distribution(name, invfcn):
 
     enables the use of log-normal distributions for parameters. The log-normal
     distribution is invoked for a parameter ``p`` by including ``log(p)``
-    rather than ``p`` itself in the fit prior. log-normal and sqrt-normal
-    distributions are included by default.
+    rather than ``p`` itself in the fit prior. log-normal, sqrt-normal,  and
+    erfinv-normal distributions are included by default. (Setting  a prior
+    ``prior[erfinv(w)]`` equal to ``gv.gvar('0(1)') / gv.sqrt(2)``  means that
+    the prior probability for ``w`` is distributed uniformly between -1 and 1,
+    and is zero elsewhere.)
 
     These distributions are implemented by replacing a fit parameter ``p``
     by a new fit parameter ``fcn(p)`` where ``fcn`` is some function. ``fcn(p)``
