@@ -843,9 +843,9 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(deriv(f, y).tolist(), [3., 0.])
         with self.assertRaises(ValueError):
             deriv(f, x+y)
-        f = BufferDict(a=2 * x + 3 * y, b=4 * x)
-        self.assertEqual(deriv(f, x), BufferDict([('a',2.), ('b',4.)])) # dict(a=2., b=4.))
-        self.assertEqual(deriv(f, y), BufferDict([('a',3.), ('b',0.)])) # dict(a=3., b=0.))
+        f = BufferDict([('a', 2 * x + 3 * y), ('b', 4 * x)])
+        self.assertEqual(deriv(f, x), BufferDict([('a',2.), ('b',4.)]))
+        self.assertEqual(deriv(f, y), BufferDict([('a',3.), ('b',0.)]))
         with self.assertRaises(ValueError):
             deriv(f, x+y)
 

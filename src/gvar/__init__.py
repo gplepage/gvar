@@ -1229,7 +1229,7 @@ try:
                 m.adapt(alpha=1.5)
             return numpy.array(m.grid[0])
 
-        def __call__(self, f=None, nopdf=False, mpi=False, **kargs):
+        def __call__(self, f=None, nopdf=False, mpi=False, _fstd=None, **kargs):
             """ Estimate expectation value of function ``f(p)``.
 
             Uses module :mod:`vegas` to estimate the integral of
@@ -1265,13 +1265,59 @@ try:
             All other keyword arguments are passed on to a :mod:`vegas`
             integrator; see the :mod:`vegas` documentation for further information.
             """
-            integrand = self._expval(f, nopdf)
+            # N.B. If _fstd is specified then it substitutes for fstd()
+            # and the results are returned without modification. This
+            # is use by lsqfit.BayesIntegrator.
+            if nopdf and f is None and _fstd is None:
+                raise ValueError('nopdf==True and f is None --- no integrand')
+            if _fstd is None:
+                self._buffer = None
+                def fstd(p):
+                    """ convert output to an array """
+                    fp = [] if f is None else f(p)
+                    if self._buffer is None:
+                        # setup --- only on first call
+                        self._is_dict = hasattr(fp, 'keys')
+                        if self._is_dict:
+                            self._fp = BufferDict(fp)
+                            self._is_bdict = isinstance(fp, BufferDict)
+                            bufsize = self._fp.buf.size
+                        else:
+                            self._is_bdict = False
+                            self._fp = numpy.asarray(fp)
+                            bufsize = self._fp.size
+                        if nopdf:
+                            self._buffer = numpy.empty(bufsize, float)
+                        else:
+                            self._buffer = numpy.empty(bufsize + 1, float)
+                            self._buffer[0] = 1.
+                    if self._is_bdict:
+                        self._buffer[(0 if nopdf else 1):] = fp.buf
+                    elif self._is_dict:
+                        self._buffer[(0 if nopdf else 1):] = BufferDict(fp).buf
+                    else:
+                        self._buffer[(0 if nopdf else 1):] = numpy.asarray(fp).flat[:]
+                    return self._buffer
+            else:
+                fstd = _fstd
+            integrand = self._expval(fstd, nopdf)
             if mpi:
                 integrand = vegas.MPIintegrand(integrand)
                 self.mpi_rank = integrand.rank
             else:
                 integrand = vegas.batchintegrand(integrand)
-            return super(PDFIntegrator, self).__call__(integrand, **kargs)
+            results = super(PDFIntegrator, self).__call__(integrand, **kargs)
+            if _fstd is not None:
+                return results
+            else:
+                # return output to original format:
+                self.norm = None if nopdf else results[0]
+                if self._fp.shape is None:
+                    return _RAvgDictWrapper(self._fp, results, nopdf)
+                elif self._fp.shape != ():
+                    return _RAvgArrayWrapper(self._fp.shape, results, nopdf)
+                else:
+                    return _RAvgWrapper(results, nopdf)
 
         def _expval_ndtri(self, f, nopdf):
             """ Return integrand using ndtr mapping. """
@@ -1287,40 +1333,24 @@ try:
                 else:
                     pdf = numpy.ones(numpy.shape(x), float)
                 ans = []
-                ans_dict = collections.OrderedDict()
                 parg = None
                 for dpi, pdfi in zip(dp, pdf):
                     p = self.pdf.meanflat + dpi
-                    if f is not None:
-                        if parg is None:
-                            if self.pdf.shape is None:
-                                if self.pdf.extend:
-                                    parg = ExtendedDict(self.pdf.g, buf=p)
-                                else:
-                                    parg = BufferDict(self.pdf.g, buf=p)
+                    if parg is None:
+                        if self.pdf.shape is None:
+                            if self.pdf.extend:
+                                parg = ExtendedDict(self.pdf.g, buf=p)
                             else:
-                                parg = p.reshape(self.pdf.shape)
+                                parg = BufferDict(self.pdf.g, buf=p)
                         else:
-                            if parg.shape is None:
-                                parg.buf = p
-                            else:
-                                parg.flat[:] = p
-                        fp = f(parg)
+                            parg = p.reshape(self.pdf.shape)
                     else:
-                        fp = 1.
-                    if hasattr(fp, 'keys'):
-                        if not isinstance(fp, BufferDict):
-                            fp = BufferDict(fp)
-                        fp = BufferDict(fp, buf=fp.buf * numpy.prod(pdfi))
-                        for k in fp:
-                            if k in ans_dict:
-                                ans_dict[k].append(fp[k])
-                            else:
-                                ans_dict[k] = [fp[k]]
-                    else:
-                        fp = numpy.asarray(fp) * numpy.prod(pdfi)
-                        ans.append(fp)
-                return numpy.array(ans) if len(ans) > 0 else BufferDict(ans_dict)
+                        if parg.shape is None:
+                            parg.buf = p
+                        else:
+                            parg.flat[:] = p
+                    ans.append(f(parg) * numpy.prod(pdfi))
+                return numpy.array(ans)
             return ff
 
         def _expval_tan(self, f, nopdf):
@@ -1335,41 +1365,130 @@ try:
                     pdf = jac * numpy.exp(-(x ** 2) / 2.) / numpy.sqrt(2 * numpy.pi)
                 dp = self.pdf.x2dpflat(x) # .dot(self.vec_sig))
                 ans = []
-                ans_dict = collections.OrderedDict()
                 parg = None
                 for dpi, pdfi in zip(dp, pdf):
                     p = self.pdf.meanflat + dpi
-                    if f is not None:
-                        if parg is None:
-                            if self.pdf.shape is None:
-                                if self.pdf.extend:
-                                    parg = ExtendedDict(self.pdf.g, buf=p)
-                                else:
-                                    parg = BufferDict(self.pdf.g, buf=p)
+                    if parg is None:
+                        if self.pdf.shape is None:
+                            if self.pdf.extend:
+                                parg = ExtendedDict(self.pdf.g, buf=p)
                             else:
-                                parg = p.reshape(self.pdf.shape)
+                                parg = BufferDict(self.pdf.g, buf=p)
                         else:
-                            if parg.shape is None:
-                                parg.buf = p
-                            else:
-                                parg.flat[:] = p
-                        fp = f(parg)
+                            parg = p.reshape(self.pdf.shape)
                     else:
-                        fp = 1.
-                    if hasattr(fp, 'keys'):
-                        if not isinstance(fp, BufferDict):
-                            fp = BufferDict(fp)
-                        fp = BufferDict(fp, buf=fp.buf * numpy.prod(pdfi))
-                        for k in fp:
-                            if k in ans_dict:
-                                ans_dict[k].append(fp[k])
-                            else:
-                                ans_dict[k] = [fp[k]]
-                    else:
-                        fp = numpy.asarray(fp) * numpy.prod(pdfi)
-                        ans.append(fp)
-                return numpy.array(ans) if len(ans) > 0 else BufferDict(ans_dict)
+                        if parg.shape is None:
+                            parg.buf = p
+                        else:
+                            parg.flat[:] = p
+                    ans.append(f(parg) * numpy.prod(pdfi))
+                return numpy.array(ans)
             return ff
+
+    class _RAvgWrapper(GVar):
+        """ Wrapper for BayesIntegrator GVar result. """
+        def __init__(self, results, nopdf=False):
+            self.results = results
+            ans = results[0] if nopdf else (results[1] / results[0])
+            super(_RAvgWrapper, self).__init__(*ans.internaldata)
+
+        def _dof(self):
+            return self.results.dof
+
+        dof = property(
+            _dof,
+            None,
+            None,
+            "Number of degrees of freedom in weighted average."
+            )
+
+        def _Q(self):
+            return self.results.Q
+
+        Q = property(
+            _Q,
+            None,
+            None,
+            "*Q* or *p-value* of weighted average's *chi**2*.",
+            )
+
+        def summary(self, weighted=None):
+            return self.results.summary(weighted=weighted)
+
+    class _RAvgDictWrapper(BufferDict):
+        """ Wrapper for BayesIntegrator dictionary result """
+        def __init__(self, fp, results, nopdf=False):
+            super(_RAvgDictWrapper, self).__init__(fp)
+            self.results = results
+            self.buf = results if nopdf else (results[1:] / results[0])
+
+        def _dof(self):
+            return self.results.dof
+
+        dof = property(
+            _dof,
+            None,
+            None,
+            "Number of degrees of freedom in weighted average."
+            )
+
+        def _Q(self):
+            return self.results.Q
+
+        Q = property(
+            _Q,
+            None,
+            None,
+            "*Q* or *p-value* of weighted average's *chi**2*.",
+            )
+
+        def summary(self, weighted=None):
+            return self.results.summary(weighted=weighted)
+
+    class _RAvgArrayWrapper(numpy.ndarray):
+        """ Wrapper for BayesIntegrator array result. """
+        def __new__(
+            subtype, shape, results, nopdf=False,
+            dtype=object, buffer=None, offset=0, strides=None, order=None
+            ):
+            obj = numpy.ndarray.__new__(
+                subtype, shape=shape, dtype=object, buffer=buffer, offset=offset,
+                strides=strides, order=order
+                )
+            if buffer is None:
+                obj.flat = numpy.array(obj.size * [gvar(0,0)])
+            obj.results = results
+            obj.flat = results if nopdf else (results[1:] / results[0])
+            return obj
+
+        def __array_finalize__(self, obj):
+            if obj is None:
+                return
+            self.results = getattr(obj, 'results', None)
+
+        def _dof(self):
+            return self.results.dof
+
+        dof = property(
+            _dof,
+            None,
+            None,
+            "Number of degrees of freedom in weighted average."
+            )
+
+        def _Q(self):
+            return self.results.Q
+
+        Q = property(
+            _Q,
+            None,
+            None,
+            "*Q* or *p-value* of weighted average's *chi**2*.",
+            )
+
+        def summary(self, weighted=None):
+            return self.results.summary(weighted=weighted)
+
 except ImportError:
     pass
 
@@ -1667,7 +1786,7 @@ class PDFStatistics(object):
                 x[3] - 4. * x[2] * self.mean + 6 * x[1] * self.mean ** 2
                 - 3 * self.mean ** 4
                 ) / self.sdev ** 4 - 3.
-        self.gvar = gvar(mean(self.mean), mean(self.sdev))
+        self.gvar = self.mean + gvar(0 * mean(self.mean), mean(self.sdev))
 
     def __str__(self):
         ans = 'mean = {}'.format(self.mean)
