@@ -1685,7 +1685,7 @@ class PDFHistogram(object):
             )
 
     def make_plot(
-        self, count, plot=None, show=False, density=False,
+        self, count, plot=None, show=False, plottype='probability',
         bar=dict(alpha=0.15, color='b'),
         errorbar=dict(fmt='b.'),
         gaussian=dict(ls='--', c='r')
@@ -1699,9 +1699,10 @@ class PDFHistogram(object):
                 uses the default window. Default is ``None``.
             show (boolean): Displayes plot if ``True``; otherwise returns
                 the plot. Default is ``False``.
-            density (booleam): Display probability density if ``True``;
-                otherwise display total probability in each bin. Default is
-                ``False``.
+            plottype (str): The probabilities in each bin are plotted if
+                ``plottype='probability'`` (default). The average probability
+                density is plot if ``plottype='density'``. The
+                cumulative probability is plotted if ``plottype=cumulative``.
             bar (dictionary): Additional plotting arguments for the bar graph
                 showing the histogram. This part of the plot is omitted
                 if ``bar=None``.
@@ -1728,23 +1729,59 @@ class PDFHistogram(object):
                 )
         else:
             data = numpy.asarray(count)
-        if density:
-            data = data / self.widths
-        if errorbar is not None:
+        if plottype == 'cumulative':
+            data = numpy.cumsum(data)
+            data = numpy.array([0.] + data.tolist())
             data_sdev = sdev(data)
             if not numpy.all(data_sdev == 0.0):
                 data_mean = mean(data)
-                plot.errorbar(self.midpoints, data_mean, data_sdev, **errorbar)
-        if bar is not None:
-            plot.bar(self.bins[:-1], mean(data), width=self.widths, **bar)
+                plot.errorbar(self.bins, data_mean, data_sdev, **errorbar)
+            if bar is not None:
+                plot.fill_between(self.bins, 0, data_mean, **bar)
+                # mean, +- 1 sigma lines
+                plot.plot([self.bins[0], self.bins[-1]], [0.5, 0.5], 'k:')
+                plot.plot([self.bins[0], self.bins[-1]], [0.158655254, 0.158655254], 'k:')
+                plot.plot([self.bins[0], self.bins[-1]], [0.841344746, 0.841344746], 'k:')
+        else:
+            if plottype == 'density':
+                data = data / self.widths
+            if errorbar is not None:
+                data_sdev = sdev(data)
+                if not numpy.all(data_sdev == 0.0):
+                    data_mean = mean(data)
+                    plot.errorbar(self.midpoints, data_mean, data_sdev, **errorbar)
+            if bar is not None:
+                plot.bar(self.bins[:-1], mean(data), width=self.widths, **bar)
         if gaussian is not None and self.g is not None:
-            x = self.midpoints
-            y = self.gaussian_pdf(x, self.g)
-            if not density:
-                y = y * self.widths
-            ys = cspline.CSpline(x, y)
-            x = numpy.linspace(x[0], x[-1], 100)
-            plot.plot(x, ys(x), **gaussian)
+            # spline goes through the errorbar points for gaussian stats
+            if plottype == 'cumulative':
+                x = numpy.array(self.bins.tolist() + self.midpoints.tolist())
+                x.sort()
+                dx = (x - self.g.mean) / self.g.sdev
+                y = (erf(dx / 2**0.5) + 1) / 2.
+                yspline = cspline.CSpline(x, y)
+                plot.ylabel('cumulative probability')
+                plot.ylim(0, 1.0)
+            elif plottype in ['density', 'probability']:
+                x = self.bins
+                dx = (x - self.g.mean) / self.g.sdev
+                y = (erf(dx / 2**0.5) + 1) / 2.
+                x = self.midpoints
+                y = (y[1:] - y[:-1])
+                if plottype == 'density':
+                    y /= self.widths
+                    plot.ylabel('probability density')
+                else:
+                    plot.ylabel('probability')
+                yspline = cspline.CSpline(x, y)
+            else:
+                raise ValueError('unknown plottype: ' + str(plottype))
+            if len(x) < 100:
+                ny = int(100. / len(x) + 0.5) * len(x)
+            else:
+                ny = len(x)
+            xplot = numpy.linspace(x[0], x[-1], ny)
+            plot.plot(xplot, yspline(xplot), **gaussian)
         if show:
             plot.show()
         else:
