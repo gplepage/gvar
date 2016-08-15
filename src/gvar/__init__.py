@@ -108,11 +108,11 @@ import sys
 
 import numpy
 
-try:
-    import scipy.special
-    _have_scipy = True
-except ImportError:
-    _have_scipy = False
+# try:
+#     import scipy.special
+#     _have_scipy = False # True
+# except ImportError:
+#     _have_scipy = False
 
 from ._gvarcore import *
 gvar = GVarFactory()            # order matters for this statement
@@ -795,22 +795,29 @@ class ExtendedDict(BufferDict):
     extension_fcn = {}
 
     def __init__(self, p0, buf=None):
-        super(ExtendedDict, self).__init__(p0, buf=buf)
-        self.stripped_buf_size = p0.buf.size
-        extensions = []
-        newkeys = []
-        for k in p0.keys():
-            k_stripped, k_fcn = ExtendedDict.stripkey(k)
-            if k_fcn is not None:
-                if k_stripped in p0:
-                    raise ValueError('Redundant key in p0: ' + str(k_stripped))
-                self[k_stripped] = k_fcn(self[k])
-                extensions.append(
-                    (self.slice(k_stripped), k_fcn, self.slice(k))
-                    )
-                newkeys.append(k_stripped)
-        self.extensions = extensions
-        self._newkeys = newkeys
+        super(ExtendedDict, self).__init__(p0)
+        if isinstance(p0, ExtendedDict):
+            self.extensions = list(p0.extensions)
+            self._newkeys = list(p0._newkeys)
+            self.stripped_buf_size = p0.stripped_buf_size
+        else:
+            self.stripped_buf_size = self.buf.size
+            extensions = []
+            newkeys = []
+            for k in p0.keys():
+                k_stripped, k_fcn = ExtendedDict.stripkey(k)
+                if k_fcn is not None:
+                    if k_stripped in p0:
+                        raise ValueError('Redundant key in p0: ' + str(k_stripped))
+                    self[k_stripped] = k_fcn(self[k])
+                    extensions.append(
+                        (self.slice(k_stripped), k_fcn, self.slice(k))
+                        )
+                    newkeys.append(k_stripped)
+            self.extensions = extensions
+            self._newkeys = newkeys
+        if buf is not None:
+            self.buf = buf
 
     def _getbuf(self):
         return self._buf
@@ -818,11 +825,13 @@ class ExtendedDict(BufferDict):
     def _setbuf(self, buf):
         """ Replace buffer with ``buf``.
 
-        ``buf`` must be a 1-dimensional :mod:`numpy` array of the same size
+        ``buf`` must be a 1-dimensional array of the same size
         as ``self._buf`` or size ``self.stripped_buf_size``
         """
-        if not (isinstance(buf, numpy.ndarray) and buf.ndim == 1):
-            raise ValueError('New buffer not a 1-d numpy array.')
+        if not isinstance(buf, numpy.ndarray):
+            buf = numpy.array(buf)
+        if buf.ndim != 1:
+            raise ValueError('New buffer not a 1-d array.')
         if len(buf) == self.stripped_buf_size:
             if self._buf.dtype == buf.dtype:
                 self._buf[:self.stripped_buf_size] = buf
@@ -1082,8 +1091,11 @@ class PDF(object):
 
 
 try:
-    import vegas
-    class PDFIntegrator(vegas.Integrator):
+    from vegas import Integrator as _vegas_Integrator
+    from vegas import MPIintegrand as _vegas_MPIintegrand
+    from vegas import batchintegrand as _vegas_batchintegrand
+
+    class PDFIntegrator(_vegas_Integrator):
         """ :mod:`vegas` integrator for PDF expectation values.
 
         ``PDFIntegrator(g)`` is a :mod:`vegas` integrator that evaluates
@@ -1093,7 +1105,7 @@ try:
 
         ``PDFIntegrator`` integrates over the entire parameter space of the
         distribution but reexpresses integrals in terms of variables
-        that diagonalize ``g``'s covariance matrix and are center at
+        that diagonalize ``g``'s covariance matrix and are centered at
         its mean value. This greatly facilitates integration over these
         variables using the :mod:`vegas` module, making integrals over
         10s or more of parameters feasible. (The :mod:`vegas` module must be
@@ -1112,16 +1124,13 @@ try:
             # integrator for expectation values in distribution g
             g_expval = gv.PDFIntegrator(g)
 
-            # want expectation value of [f(p), f(p)**2]
-            def f(p):
-                return p['a'][0] * p['a'][1] + p['b']
+            # adapt integrator to PDF
+            warmup = g_expval(neval=1000, nitn=5)
 
+            # want expectation value of [fp, fp**2]
             def f_f2(p):
-                fp = f(p)
+                fp = p['a'][0] * p['a'][1] + p['b']
                 return [fp, fp ** 2]
-
-            # adapt g_expval to f; warmup = <f(p)> in distribution g
-            warmup = g_expval(f, neval=1000, nitn=5)
 
             # results = <f_f2> in distribution g
             results = g_expval(f_f2, neval=1000, nitn=5, adapt=False)
@@ -1132,32 +1141,31 @@ try:
             fmean = results[0]
             fsdev = gv.sqrt(results[1] - results[0] ** 2)
             print ('f.mean =', fmean, '   f.sdev =', fsdev)
-            print ("Gaussian approx'n for f(g) =", f(g))
+            print ("Gaussian approx'n for f(g) =", f_f2(g)[0])
 
-        where the ``warmup`` calls to the integrator are used to
-        adapt it to ``f(p)``, and the final results are in ``results``.
-        Here ``neval`` is the (approximate) number of function calls
-        per iteration of the :mod:`vegas` algorithm and ``nitn`` is the
-        number of iterations. We adapt the integrator to ``f(p)`` and
-        then use it to calculated the expectation value of ``f(p)`` and
-        ``f(p)**2``, so we can compute the standard deviation for the
-        distribution of ``f(p)``\s. The output from this code shows that
-        the Gaussian approximation (1.0(1.4)) for the mean and
-        standard deviation of the ``f(p)`` distribution is not particularly
-        accurate here (correct value is 1.9(2.0)), because of the large
-        uncertainties in ``g``::
+        where the ``warmup`` calls to the integrator are used to adapt it to
+        the PDF, and the final results are in ``results``. Here ``neval`` is
+        the (approximate) number of function calls per iteration of the
+        :mod:`vegas` algorithm and ``nitn`` is the number of iterations. We
+        use the integrator to calculated  the expectation value of ``fp`` and
+        ``fp**2``, so we can compute the standard deviation for the
+        distribution of ``fp``\s. The output from this code shows that the
+        Gaussian approximation (1.0(1.4)) for the mean and standard deviation
+        of the ``fp`` distribution is not particularly accurate here
+        (correct value is 1.9(2.0)), because of the large uncertainties in
+        ``g``::
 
             itn   integral        average         chi2/dof        Q
             -------------------------------------------------------
-              1   1.880(15)       1.880(15)           0.00     1.00
-              2   1.912(19)       1.896(12)           2.66     0.07
-              3   1.892(18)       1.8947(99)          2.31     0.06
-              4   1.918(17)       1.9006(85)          2.02     0.06
-              5   1.910(19)       1.9026(78)          1.45     0.17
+              1   0.995(12)       0.995(12)           0.00     1.00
+              2   1.014(11)       1.0043(79)          1.39     0.24
+              3   1.005(11)       1.0046(65)          1.75     0.10
+              4   0.977(13)       0.9978(58)          2.40     0.01
+              5   1.004(12)       0.9990(52)          1.94     0.03
 
-            results = [1.9026(78) 7.479(84)]
+            results = [1.904(17) 7.57(17)]
 
-            f.mean = 1.9026(78)    f.sdev = 1.965(19)
+            f.mean = 1.904(17)    f.sdev = 1.986(31)
             Gaussian approx'n for f(g) = 1.0(1.4)
 
         In general functions being integrated can return a number, or an array of
@@ -1177,6 +1185,20 @@ try:
                 multi-dimensional Gaussian distribution used to construct
                 the probability density function.
 
+            limit (positive float): Limits the integrations to a finite
+                region of size ``limit`` times the standard deviation on
+                either side of the mean. This can be useful if the
+                functions being integrated misbehave for large parameter
+                values (e.g., ``numpy.exp`` overflows for a large range of
+                arguments). Default is ``1e15``.
+
+            scale (positive float): The integration variables are
+                rescaled to emphasize parameter values of order
+                ``scale`` times the standard deviation. The rescaling
+                does not change the value of the integral but it
+                can reduce uncertainties in the :mod:`vegas` estimate.
+                Default is ``1.0``.
+
             svdcut (non-negative float or None): If not ``None``, replace
                 covariance matrix of ``g`` with a new matrix whose
                 small eigenvalues are modified: eigenvalues smaller than
@@ -1187,47 +1209,43 @@ try:
                 with the modified eigenvalues and so is conservative.
                 Setting ``svdcut=None`` or ``svdcut=0`` leaves the
                 covariance matrix unchanged. Default is ``1e-15``.
-
-            limit (positive float): Limits the integrations to a finite
-                region of size ``limit`` times the standard deviation on
-                either side of the mean. This can be useful if the
-                functions being integrated misbehave for large parameter
-                values (e.g., ``numpy.exp`` overflows for a large range of
-                arguments). Default is ``1e15``.
         """
-        def __init__(self, g, limit=1e15, svdcut=1e-15, scale=1.):
+        def __init__(self, g, limit=1e15, scale=1., svdcut=1e-15):
             if isinstance(g, PDF):
                 self.pdf = g
             else:
                 self.pdf = PDF(g, svdcut=svdcut)
             self.limit = abs(limit)
             self.scale = scale
-            if _have_scipy and limit <= 8.:
-                limit = scipy.special.ndtr(self.limit)
-                super(PDFIntegrator, self).__init__(self.pdf.size * [(1. - limit, limit)])
-                self._expval = self._expval_ndtri
-            else:
-                integ_map = self._make_map(self.limit)
-                super(PDFIntegrator, self).__init__(self.pdf.size * [integ_map])
-                self._expval = self._expval_tan
+            # if _have_scipy and limit <= 8.:
+            #     limit = scipy.special.ndtr(self.limit)
+            #     super(PDFIntegrator, self).__init__(self.pdf.size * [(1. - limit, limit)])
+            #     self._expval = self._expval_ndtri
+            # else:
+            # integ_map = self._make_map(self.limit / self.scale)
+            limit = numpy.arctan(self.limit / self.scale)
+            super(PDFIntegrator, self).__init__(
+                self.pdf.size * [(-limit, limit)]
+                )
+            self._expval = self._expval_tan
             self.mpi_rank = 0    # in case mpi is used
 
-        def _make_map(self, limit):
-            """ Make vegas grid that is adapted to the pdf. """
-            ny = 2000
-            y = numpy.random.uniform(0., 1., (ny,1))
-            limit = numpy.arctan(limit)
-            m = vegas.AdaptiveMap([[-limit, limit]], ninc=100)
-            theta = numpy.empty(y.shape, float)
-            jac = numpy.empty(y.shape[0], float)
-            for itn in range(10):
-                m.map(y, theta, jac)
-                tan_theta = numpy.tan(theta[:, 0])
-                x = self.scale * tan_theta
-                fx = (tan_theta ** 2 + 1) * numpy.exp(-(x ** 2) / 2.)
-                m.add_training_data(y, (jac * fx) ** 2)
-                m.adapt(alpha=1.5)
-            return numpy.array(m.grid[0])
+        # def _make_map(self, limit):
+        #     """ Make vegas grid that is adapted to the pdf. """
+        #     ny = 2000
+        #     y = numpy.random.uniform(0., 1., (ny,1))
+        #     limit = numpy.arctan(limit)
+        #     m = vegas.AdaptiveMap([[-limit, limit]], ninc=100)
+        #     theta = numpy.empty(y.shape, float)
+        #     jac = numpy.empty(y.shape[0], float)
+        #     for itn in range(10):
+        #         m.map(y, theta, jac)
+        #         tan_theta = numpy.tan(theta[:, 0])
+        #         x = self.scale * tan_theta
+        #         fx = (tan_theta ** 2 + 1) * numpy.exp(-(x ** 2) / 2.)
+        #         m.add_training_data(y, (jac * fx) ** 2)
+        #         m.adapt(alpha=1.5)
+        #     return numpy.array(m.grid[0])
 
         def __call__(self, f=None, nopdf=False, mpi=False, _fstd=None, **kargs):
             """ Estimate expectation value of function ``f(p)``.
@@ -1248,14 +1266,16 @@ try:
 
                 nopdf (bool): If ``True`` drop the probability density function
                     from the integrand (so no longer an expectation value).
-                    Default is ``False``.
+                    This is useful if one wants to use the optimized
+                    integrator for something other than a standard
+                    expectation value. Default is ``False``.
 
                 mpi (bool): If ``True`` configure for use with multiple processors
                     and MPI. This option requires module :mod:`mpi4py`. A
                     script ``xxx.py`` using an MPI integrator is run
                     with ``mpirun``: e.g., ::
 
-                        mpirun -np 4 python xxx.py
+                        mpirun -np 4 -output-filename xxx.out python xxx.py
 
                     runs on 4 processors. Setting ``mpi=False`` (default) does
                     not support multiple processors. The MPI processor
@@ -1302,10 +1322,10 @@ try:
                 fstd = _fstd
             integrand = self._expval(fstd, nopdf)
             if mpi:
-                integrand = vegas.MPIintegrand(integrand)
+                integrand = _vegas_MPIintegrand(integrand)
                 self.mpi_rank = integrand.rank
             else:
-                integrand = vegas.batchintegrand(integrand)
+                integrand = _vegas_batchintegrand(integrand)
             results = super(PDFIntegrator, self).__call__(integrand, **kargs)
             if _fstd is not None:
                 return results
@@ -1319,39 +1339,39 @@ try:
                 else:
                     return _RAvgWrapper(results, nopdf)
 
-        def _expval_ndtri(self, f, nopdf):
-            """ Return integrand using ndtr mapping. """
-            def ff(theta, nopdf=nopdf):
-                x = scipy.special.ndtri(theta)
-                dp = self.pdf.x2dpflat(x) # x.dot(self.vec_sig)
-                if nopdf:
-                    # must remove built in pdf
-                    pdf = (
-                        numpy.sqrt(2 * numpy.pi) * numpy.exp((x ** 2) / 2.)
-                        * self.pdf.pjac[None,:]
-                        )
-                else:
-                    pdf = numpy.ones(numpy.shape(x), float)
-                ans = []
-                parg = None
-                for dpi, pdfi in zip(dp, pdf):
-                    p = self.pdf.meanflat + dpi
-                    if parg is None:
-                        if self.pdf.shape is None:
-                            if self.pdf.extend:
-                                parg = ExtendedDict(self.pdf.g, buf=p)
-                            else:
-                                parg = BufferDict(self.pdf.g, buf=p)
-                        else:
-                            parg = p.reshape(self.pdf.shape)
-                    else:
-                        if parg.shape is None:
-                            parg.buf = p
-                        else:
-                            parg.flat[:] = p
-                    ans.append(f(parg) * numpy.prod(pdfi))
-                return numpy.array(ans)
-            return ff
+        # def _expval_ndtri(self, f, nopdf):
+        #     """ Return integrand using ndtr mapping. """
+        #     def ff(theta, nopdf=nopdf):
+        #         x = scipy.special.ndtri(theta)
+        #         dp = self.pdf.x2dpflat(x) # x.dot(self.vec_sig)
+        #         if nopdf:
+        #             # must remove built in pdf
+        #             pdf = (
+        #                 numpy.sqrt(2 * numpy.pi) * numpy.exp((x ** 2) / 2.)
+        #                 * self.pdf.pjac[None,:]
+        #                 )
+        #         else:
+        #             pdf = numpy.ones(numpy.shape(x), float)
+        #         ans = []
+        #         parg = None
+        #         for dpi, pdfi in zip(dp, pdf):
+        #             p = self.pdf.meanflat + dpi
+        #             if parg is None:
+        #                 if self.pdf.shape is None:
+        #                     if self.pdf.extend:
+        #                         parg = ExtendedDict(self.pdf.g, buf=p)
+        #                     else:
+        #                         parg = BufferDict(self.pdf.g, buf=p)
+        #                 else:
+        #                     parg = p.reshape(self.pdf.shape)
+        #             else:
+        #                 if parg.shape is None:
+        #                     parg.buf = p
+        #                 else:
+        #                     parg.flat[:] = p
+        #             ans.append(f(parg) * numpy.prod(pdfi))
+        #         return numpy.array(ans)
+        #     return ff
 
         def _expval_tan(self, f, nopdf):
             """ Return integrand using the tan mapping. """
@@ -1501,13 +1521,13 @@ class PDFHistogram(object):
     distribution corresponding to |GVar| 1.0(5)::
 
         g = gv.gvar('1.0(5)')
-        data = [g() for i in range(1000)]
+        data = [g() for i in range(10000)]
 
         hist = gv.PDFHistogram(g)
         count = hist.count(data)
         a = hist.analyze(count)
         print('probabilities:', a.prob)
-        print('statistics:\n  ', a.stats)
+        print('statistics:\n', a.stats)
 
     Here ``hist`` defines a histogram with 8 bins, centered on
     ``g.mean``, and each with width equal to ``g.sdev``. The data in
@@ -1518,9 +1538,10 @@ class PDFHistogram(object):
     a statistical analysis of the probability distribution based
     on the histogram (``a.stats``) are then printed out::
 
-        probabilities: [ 0.001  0.011  0.138  0.325  0.367  0.131  0.026  0.001]
+        probabilities: [ 0.0017  0.0213  0.1358  0.3401  0.3418  0.1351  0.0222  0.0018]
         statistics:
-           mean = 1.024   sdev = 0.50786   skew = 0.064247   ex_kurt = -0.065656
+              mean = 1.001   sdev = 0.52334   skew = 0.0069999   ex_kurt = 0.034105
+           median = 1.00141666398   plus = 0.499891542549   minus = 0.501710986504
 
     A plot of the histogram can be created and displayed using,
     for example::
@@ -1670,10 +1691,7 @@ class PDFHistogram(object):
             data = count
             norm = 1.
         mid = self.midpoints
-        stats = PDFStatistics(numpy.sum(
-            [mid * data, mid ** 2 * data, mid **3 * data, mid ** 4 * data],
-            axis=1
-            ))
+        stats = PDFStatistics(histogram=(self.bins, count))
         return PDFHistogram.Histogram(self.bins, data, stats, norm)
 
     @staticmethod
@@ -1784,8 +1802,7 @@ class PDFHistogram(object):
             plot.plot(xplot, yspline(xplot), **gaussian)
         if show:
             plot.show()
-        else:
-            return plot
+        return plot
 
 
 class PDFStatistics(object):
@@ -1795,10 +1812,16 @@ class PDFStatistics(object):
     mean, standard deviation, skewness, and excess kurtosis.
 
     Args:
-        m (array of floats): ``m[i]`` is the (i+1)-th moment.
+        moments (array of floats): ``moments[i]`` is the (i+1)-th moment.
+            Optional argument unless ``histgram=None``.
 
-        norm (float or |GVar|): The expectation value of 1. Moments
-            are divided by ``norm`` before use. (Default is 1.)
+        histogram (tuple): Tuple ``(bins,prob)`` where ``prob[i]`` is
+            the probability in the bin between ``bins[i-1]`` and ``bins[i]``.
+            ``prob[0]`` is the probability below ``bins[0]`` and ``prob[-1]``
+            is the probability above ``bins[-1]``. Array ``bins`` is ordered.
+            The format for ``prob`` is what is returned by accumulating calls
+            to :meth:`gvar.PDFHistogram.count`. Optional argument unless
+            ``moments=None``.
 
     The attributes are as follows:
 
@@ -1807,26 +1830,75 @@ class PDFStatistics(object):
         sdev: standard deviation
         skew: skewness coefficient
         ex_kurt: excess kurtosis
+        median: median (if ``histogram`` provided)
+        plus: interval ``(median, median+plus)`` contains 34.1% of probability
+        minus: interval ``(median-minus, median)`` contains 34.1% of probability
         gvar: ``gvar.gvar(mean, sdev)``
     """
-    def __init__(self, m, norm=1.):
-        x = numpy.array(m) / norm
-        self.mean = x[0]
-        if len(x) > 1:
-            self.sdev = numpy.fabs(x[1] - x[0] ** 2) ** 0.5
-        if len(x) > 2:
-            self.skew = (
-                x[2] - 3. * self.mean * self.sdev ** 2 - self.mean ** 3
-                ) / self.sdev ** 3
-        if len(x) > 3:
-            self.ex_kurt = (
-                x[3] - 4. * x[2] * self.mean + 6 * x[1] * self.mean ** 2
-                - 3 * self.mean ** 4
-                ) / self.sdev ** 4 - 3.
-        self.gvar = self.mean + gvar(0 * mean(self.mean), mean(self.sdev))
+    def __init__(self, moments=None, histogram=None, prefix='   '):
+        self.prefix = prefix
+        if histogram is not None:
+            bins, prob = histogram
+            prob = prob / sum(prob)
+            cumprob = numpy.cumsum(prob)[:-1]
+            probspline = cspline.CSpline(bins, cumprob)
+            x0 = []
+            for p0 in [0.317310507863 / 2., 0.5, 1 - 0.317310507863 / 2.]:
+                if cumprob[0] < p0 and cumprob[-1] > p0:
+                    def f(x):
+                        return probspline(x) - p0
+                    x0.append(root.refine(f, (bins[0], bins[-1])))
+                else:
+                    x0.append(None)
+            self.minus, self.median, self.plus = x0
+            if self.median is None:
+                self.minus = None
+                self.plus = None
+            else:
+                if self.minus is not None:
+                    self.minus = self.median - self.minus
+                if self.plus is not None:
+                    self.plus = self.plus - self.median
+            if moments is None:
+                mid = (bins[1:] + bins[:-1]) / 2.
+                moments = numpy.sum(
+                    [mid * prob[1:-1], mid**2 * prob[1:-1],
+                    mid**3 * prob[1:-1], mid**4 * prob[1:-1],
+                    ],
+                    axis=1
+                    )
+            if self.minus is not None and self.plus is not None:
+                sdev = mean(self.plus + self.minus) / 2.
+            elif self.minus is not None:
+                sdev = mean(self.minus)
+            elif self.plus is not None:
+                sdev = mean(self.plus)
+            else:
+                sdev = None
+            if sdev is not None:
+                self.gvar = self.median + gvar(0, sdev)
+        if moments is not None:
+            x = numpy.array(moments)
+            self.mean = x[0]
+            if len(x) > 1:
+                self.sdev = numpy.fabs(x[1] - x[0] ** 2) ** 0.5
+            if len(x) > 2:
+                self.skew = (
+                    x[2] - 3. * self.mean * self.sdev ** 2 - self.mean ** 3
+                    ) / self.sdev ** 3
+            if len(x) > 3:
+                self.ex_kurt = (
+                    x[3] - 4. * x[2] * self.mean + 6 * x[1] * self.mean ** 2
+                    - 3 * self.mean ** 4
+                    ) / self.sdev ** 4 - 3.
+            if not hasattr(self, 'gvar'):
+                self.gvar = self.mean + gvar(0 * mean(self.mean), mean(self.sdev))
+        else:
+            raise ValueError('need moments and/or histogram')
 
     def __str__(self):
-        ans = 'mean = {}'.format(self.mean)
+        ans = self.prefix
+        ans += 'mean = {}'.format(self.mean)
         for attr in ['sdev', 'skew', 'ex_kurt']:
             if hasattr(self, attr):
                 x = getattr(self, attr)
@@ -1834,13 +1906,17 @@ class PDFStatistics(object):
                     ans += '   {} = {}'.format(attr, x)
                 else:
                     ans += '   {} = {:.5}'.format(attr, x)
+        if hasattr(self, 'median'):
+            ans += '\n' + self.prefix
+            ans += 'median = {}'.format(self.median)
+            ans += '   plus = {}'.format(self.plus)
+            ans += '   minus = {}'.format(self.minus)
         return ans
 
     @staticmethod
     def moments(f, exponents=numpy.arange(1,5)):
         """ Compute 1st-4th moments of f, returned in an array. """
         return f ** exponents
-
 
 
 # legacy code support

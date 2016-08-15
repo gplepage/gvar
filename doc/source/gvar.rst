@@ -240,8 +240,8 @@ The fundamental class for representing Gaussian variables is:
 
    .. automethod:: dotder(v)
 
-Other Classes
--------------
+:class:`gvar.BufferDict` Objects
+----------------------------------
 The following class is a specialized form of an ordered dictionary for
 holding |GVar|\s (or other scalars) and arrays of |GVar|\s (or other
 scalars) that supports Python pickling:
@@ -304,27 +304,31 @@ scalars) that supports Python pickling:
 
    .. automethod:: dumps(use_json=False)
 
+:class:`gvar.SVD` Objects
+---------------------------
 SVD analysis is handled by the following class:
 
 .. autoclass:: gvar.SVD(mat, svdcut=None, svdnum=None, compute_delta=False, rescale=False)
 
    .. automethod:: decomp(n)
 
+:class:`gvar.PDFIntegrator` and other PDF-related Objects
+-----------------------------------------------------------
 Expectation values using probability density functions defined by
 collections of |GVar|\s can be evaluated using the :mod:`vegas`
 module (for multi-dimensional integration) and the following class:
 
-.. autoclass:: gvar.PDFIntegrator(g, svdcut=1e-15)
+.. autoclass:: gvar.PDFIntegrator(g, limit=1e15, scale=1., svdcut=1e-15)
 
-  .. automethod:: __call__(f, **kargs)
+  .. automethod:: __call__(f, nopdf=False, mpi=False, **kargs)
 
 Related classes are:
 
 .. autoclass:: gvar.PDF(g, svdcut=1e-15)
 
-.. autoclass:: gvar.PDFStatistics(m, norm=1)
+.. autoclass:: gvar.PDFStatistics(moments=None, histogram=None)
 
-.. autoclass:: gvar.PDFHistogram(g, nbin=None, binwidth=None, bins=None, density=False)
+.. autoclass:: gvar.PDFHistogram(g, nbin=None, binwidth=None, bins=None)
 
   The main methods are:
 
@@ -332,7 +336,7 @@ Related classes are:
 
   .. automethod:: analyze(count)
 
-  .. automethod:: make_plot(count, plot=None, show=False, density=False, bar=dict(alpha=0.15, color='b'), errorbar=dict(fmt='b.'), gaussian=dict(ls='--', c='r'))
+  .. automethod:: make_plot(count, plot=None, show=False, , plottype='probability', bar=dict(alpha=0.15, color='b'), errorbar=dict(fmt='b.'), gaussian=dict(ls='--', c='r'))
 
 Requirements
 ------------

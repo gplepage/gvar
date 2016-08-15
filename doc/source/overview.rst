@@ -506,7 +506,7 @@ Non-Gaussian Expectation Values
 By default functions of |GVar|\s are also |GVar|\s, but there are cases where
 such functions cannot be represented accurately by Gaussian distributions. The
 product of 0.1(4) and 0.2(5), for example, is not very Gaussian because the
-standard deviations are large compared to the scale over which the function
+standard deviations are large compared to the scale over which the product
 changes appreciably. In such cases one may want to use the true distribution
 of the function, instead of its Gaussian approximation, in an analysis.
 
@@ -533,11 +533,10 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
     # want expectation value of fstats(p)
     def fstats(p):
         fp = f(p)
-        ans = {}
-        ans['norm'] = 1.
-        ans['moments'] = [fp, fp ** 2, fp ** 3, fp ** 4]
-        ans['histogram'] = fhist.count(fp)
-        return ans
+        return dict(
+            moments=[fp, fp ** 2, fp ** 3, fp ** 4],
+            histogram=fhist.count(fp),
+            )
 
     # evaluate expectation value of fstats in 3 steps
     # 1 - create an integrator to evaluate expectation values of functions of p
@@ -550,14 +549,17 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
     # results from expectation value integration
     print(results.summary())
     print('moments:', results['moments'])
-    stats = gv.PDFStatistics(results['moments'])
-    print('exact statistics:', stats)
-    print(' gaussian approx:', f(p))
+    stats = gv.PDFStatistics(
+        moments=results['moments'],
+        histogram=(fhist.bins, results['histogram']),
+        )
+    print('Statistics from Bayesian integrals:')
+    print(stats)
+    print('Gaussian approx:', f(p))
 
     # plot histogram from integration (plt = matplotlib.pyplot)
     plt = fhist.make_plot(results['histogram'])
     plt.xlabel(r'$\sin(p_0 p_1)$')
-    plt.ylabel('probability')
     plt.xlim(-1, 1)
     # add extra curve corresponding to Gaussian with "correct" mean and sdev
     correct_fp = gv.gvar(stats.mean.mean, stats.sdev.mean)
@@ -566,7 +568,6 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
     y = [pdf(xi) * fhist.widths[0] for xi in x]
     plt.plot(x, y, 'k:' )
     plt.show()
-
 
 The key construct here is ``p_expval`` which is a :mod:`vegas` integrator
 designed so that ``p_expval(f)`` returns the expectation value of any
@@ -584,31 +585,35 @@ The output from this code is::
 
     itn   integral        average         chi2/dof        Q
     -------------------------------------------------------
-      1   0.01927(53)     0.01927(53)         0.00     1.00
-      2   0.01863(59)     0.01895(39)         0.67     0.87
-      3   0.01875(48)     0.01888(31)         0.78     0.85
-      4   0.01874(48)     0.01885(26)         0.80     0.88
-      5   0.01807(61)     0.01869(24)         0.74     0.97
-      6   0.01883(55)     0.01872(22)         0.74     0.98
-      7   0.01841(50)     0.01867(20)         0.76     0.98
-      8   0.01872(58)     0.01868(19)         0.83     0.94
-      9   0.01948(51)     0.01877(18)         0.81     0.97
-     10   0.01955(55)     0.01884(17)         0.90     0.84
+      1   1.00032(90)     1.00032(90)         0.00     1.00
+      2   0.9992(10)      0.99976(69)         1.10     0.33
+      3   0.9987(10)      0.99942(57)         0.97     0.53
+      4   1.00058(92)     0.99971(49)         0.89     0.74
+      5   0.99992(99)     0.99975(44)         0.91     0.73
+      6   1.00059(99)     0.99989(40)         0.92     0.71
+      7   0.99830(96)     0.99966(37)         0.90     0.80
+      8   1.00201(88)     0.99996(34)         0.91     0.77
+      9   0.9977(12)      0.99971(33)         0.89     0.86
+     10   0.9996(10)      0.99970(32)         0.84     0.95
 
-    moments: [0.01884(17) 0.04327(12) 0.00497(10) 0.011535(89)]
-    exact statistics:
-      mean = 0.01884(17)   sdev = 0.20715(28)   skew = 0.2856(98)   ex_kurt = 3.110(23)
-    gaussian approx: 0.020(94)
+    moments: [0.01862(13) 0.043161(90) 0.004672(80) 0.011470(72)]
+    Statistics from Bayesian integrals:
+       mean = 0.01862(13)   sdev = 0.20692(21)   skew = 0.2567(75)   ex_kurt = 3.116(20)
+       median = 0.00017(14)   plus = 0.17397(49)   minus = 0.11705(43)
+    Gaussian approx: 0.020(94)
 
 The table summarizes the integrator's performance over the ``nitn=10`` iterations
 it performed to obtain the final results; see the :mod:`vegas` documentation
 for further information. The expectation values for moments of
 ``f(p)`` are then listed, followed by the mean and standard deviation
 computed from these moments, as well as the skewness and excess kurtosis
-of the ``f(p)`` distribution. Finally the mean and standard deviation
-in the Gaussian approximate is listed.
+of the ``f(p)`` distribution. The median value for the distribution is
+estimated from the histogram, as are the intervals on either side
+of the median (``(median-minus,median)`` and ``(median,median+plus)``)
+containing 34% of the probability. Finally the mean and standard deviation
+in the Gaussian approximate are listed.
 
-The exact mean of the ``f(p)`` distribution is 0.188(2), which is somewhat
+The exact mean of the ``f(p)`` distribution is 0.0186(1), which is somewhat
 lower than Gaussian approximation of 0.020. A more important difference is
 in the standard deviation which is 0.2072(3) for the real distribution,
 but less than half that size (0.094) in the Gaussian approximation. The
@@ -629,12 +634,12 @@ together with the
 shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
 It also shows the Gaussian distribution corresponding to correct mean
 and standard deviation (0.186(207)) of the distribution (black dotted line).
-Neither
-Gaussian is quite right: the first is more accurate close to the maximimum,
-while the second does better further out. From the histogram we can estimate
-that 68% of the probability lies within ±0.015 of the mean, which is
-probably the best single characterization of the uncertainty (and half
-way between the other two estimates).
+
+Neither Gaussian in this plot is quite right: the first is more accurate close
+to the maximimum, while the second does better further out. From the histogram
+we can estimate that 68% of the probability lies within ±0.14 of 0.03,
+which is probably the best succinct characterization of the uncertainty
+|~| (``0.03(14)``).
 
 This example is relatively simple since the underlying Gaussian
 distribution is only two dimensional. The :mod:`vegas` integrator used

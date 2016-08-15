@@ -358,7 +358,7 @@ def bootstrap_iter(data, n=None):
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
-            idx = numpy.random.random_integers(0,ns-1,ns)
+            idx = numpy.random.randint(0,ns,ns)
             ans = Dataset()
             for k in datadict:
                 ans[k] = datadict[k][idx]
@@ -377,7 +377,7 @@ def bootstrap_iter(data, n=None):
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
-            idx = numpy.random.random_integers(0,ns-1,ns)
+            idx = numpy.random.randint(0,ns,ns)
             yield data[idx]
 
 
