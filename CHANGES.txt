@@ -1,5 +1,5 @@
-Version 7.3
-=====================
+Version 7.3 2016-08-14
+========================
 New features include PDFIntegrator for integrating over PDFs and the
 ability to read compressed files in gvar.Dataset. Several bug fixes as well.
 
