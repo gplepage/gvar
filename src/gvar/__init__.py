@@ -1094,6 +1094,7 @@ try:
     from vegas import Integrator as _vegas_Integrator
     from vegas import MPIintegrand as _vegas_MPIintegrand
     from vegas import batchintegrand as _vegas_batchintegrand
+    from vegas import AdaptiveMap as _vegas_AdaptiveMap
 
     class PDFIntegrator(_vegas_Integrator):
         """ :mod:`vegas` integrator for PDF expectation values.
@@ -1222,30 +1223,33 @@ try:
             #     super(PDFIntegrator, self).__init__(self.pdf.size * [(1. - limit, limit)])
             #     self._expval = self._expval_ndtri
             # else:
-            # integ_map = self._make_map(self.limit / self.scale)
-            limit = numpy.arctan(self.limit / self.scale)
+            integ_map = self._make_map(self.limit / self.scale)
             super(PDFIntegrator, self).__init__(
-                self.pdf.size * [(-limit, limit)]
+                self.pdf.size * [integ_map]
                 )
+            # limit = numpy.arctan(self.limit / self.scale)
+            # super(PDFIntegrator, self).__init__(
+            #     self.pdf.size * [(-limit, limit)]
+            #     )
             self._expval = self._expval_tan
             self.mpi_rank = 0    # in case mpi is used
 
-        # def _make_map(self, limit):
-        #     """ Make vegas grid that is adapted to the pdf. """
-        #     ny = 2000
-        #     y = numpy.random.uniform(0., 1., (ny,1))
-        #     limit = numpy.arctan(limit)
-        #     m = vegas.AdaptiveMap([[-limit, limit]], ninc=100)
-        #     theta = numpy.empty(y.shape, float)
-        #     jac = numpy.empty(y.shape[0], float)
-        #     for itn in range(10):
-        #         m.map(y, theta, jac)
-        #         tan_theta = numpy.tan(theta[:, 0])
-        #         x = self.scale * tan_theta
-        #         fx = (tan_theta ** 2 + 1) * numpy.exp(-(x ** 2) / 2.)
-        #         m.add_training_data(y, (jac * fx) ** 2)
-        #         m.adapt(alpha=1.5)
-        #     return numpy.array(m.grid[0])
+        def _make_map(self, limit):
+            """ Make vegas grid that is adapted to the pdf. """
+            ny = 2000
+            y = numpy.random.uniform(0., 1., (ny,1))
+            limit = numpy.arctan(limit)
+            m = _vegas_AdaptiveMap([[-limit, limit]], ninc=100)
+            theta = numpy.empty(y.shape, float)
+            jac = numpy.empty(y.shape[0], float)
+            for itn in range(10):
+                m.map(y, theta, jac)
+                tan_theta = numpy.tan(theta[:, 0])
+                x = self.scale * tan_theta
+                fx = (tan_theta ** 2 + 1) * numpy.exp(-(x ** 2) / 2.)
+                m.add_training_data(y, (jac * fx) ** 2)
+                m.adapt(alpha=1.5)
+            return numpy.array(m.grid[0])
 
         def __call__(self, f=None, nopdf=False, mpi=False, _fstd=None, **kargs):
             """ Estimate expectation value of function ``f(p)``.
@@ -1704,7 +1708,7 @@ class PDFHistogram(object):
 
     def make_plot(
         self, count, plot=None, show=False, plottype='probability',
-        bar=dict(alpha=0.15, color='b'),
+        bar=dict(alpha=0.15, color='b', linewidth=1),
         errorbar=dict(fmt='b.'),
         gaussian=dict(ls='--', c='r')
         ):
@@ -1867,16 +1871,17 @@ class PDFStatistics(object):
                     ],
                     axis=1
                     )
-            if self.minus is not None and self.plus is not None:
-                sdev = mean(self.plus + self.minus) / 2.
-            elif self.minus is not None:
-                sdev = mean(self.minus)
-            elif self.plus is not None:
-                sdev = mean(self.plus)
-            else:
-                sdev = None
-            if sdev is not None:
-                self.gvar = self.median + gvar(0, sdev)
+                if self.minus is not None and self.plus is not None:
+                    self.gvar = (
+                        self.median + (self.plus - self.minus) / 2. +
+                        gvar(0., mean(self.plus + self.minus) / 2.)
+                        )
+                elif self.minus is not None:
+                    self.gvar = self.median + gvar(0, self.minus.mean)
+                elif self.plus is not None:
+                    self.gvar = self.median + gvar(0, self.plus.mean)
+                else:
+                    self.gvar = None
         if moments is not None:
             x = numpy.array(moments)
             self.mean = x[0]
