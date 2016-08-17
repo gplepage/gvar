@@ -1,3 +1,18 @@
+Version 7.3.1 2016-08-17
+==========================
+This is a very small change to the new PDFIntegrator class (new as of
+v7.3) that results in much improved performance for very high dimensions
+(eg, integrating over 100 variables). PDFIntegrator has a way of
+pre-adapting the integrator during initialization, so that it is almost
+fully adapted to the PDF. This has little impact for low-dimension
+integrals (eg, 3 variables) but can make a huge difference for
+very-high-dimension integrals, causing them to work for much smaller
+values of neval. This feature is actually in the v7.3 code but was
+accidentally left unactivated. This is merely an optimization.
+
+The only other correction is a small, behind-the-scenes improvement
+in PDFStatistics.
+
 Version 7.3 2016-08-14
 ========================
 New features include PDFIntegrator for integrating over PDFs and the
