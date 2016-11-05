@@ -127,11 +127,11 @@ class BufferDict(collections.OrderedDict):
         self.shape = None
         if len(args)==0:
             # kargs are dictionary entries
-            self._buf = numpy.array([],int)
+            self._buf = numpy.array([],numpy.intp)
             for k in kargs:
                 self[k] = kargs[k]
         elif len(args) == 1 and 'keys' in kargs and len(kargs) == 1:
-            self._buf = numpy.array([],int)
+            self._buf = numpy.array([],numpy.intp)
             try:
                 for k in kargs['keys']:
                     self[k] = args[0][k]
@@ -168,7 +168,7 @@ class BufferDict(collections.OrderedDict):
                     raise ValueError("buf must be 1-d, not shape = %s"
                                      % (self._buf.shape,))
             elif buf is None:
-                self._buf = numpy.array([],int)
+                self._buf = numpy.array([],numpy.intp)
                 # add initial data
                 if hasattr(bd,"keys"):
                     # bd a dictionary

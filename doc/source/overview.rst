@@ -510,7 +510,7 @@ standard deviations are large compared to the scale over which the product
 changes appreciably. In such cases one may want to use the true distribution
 of the function, instead of its Gaussian approximation, in an analysis.
 
-Class :class:`gvar.PDFIntegrator` evaluates integrals over multi-dimensional
+Class :class:`vegas.PDFIntegrator` evaluates integrals over multi-dimensional
 Gaussian probability density functions (PDFs) using the :mod:`vegas` module,
 which does adaptive multi-dimensional  integration. This permits
 us, for example, to calculate the true mean and standard deviation  of
@@ -520,6 +520,7 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
 
     import numpy as np
     import gvar as gv
+    import vegas
 
     p = gv.gvar(['0.1(4)', '0.2(5)'])
 
@@ -540,7 +541,7 @@ the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
 
     # evaluate expectation value of fstats in 3 steps
     # 1 - create an integrator to evaluate expectation values of functions of p
-    p_expval = gv.PDFIntegrator(p)
+    p_expval = vegas.PDFIntegrator(p)
     # 2 - adapt p_expval to the p's PDF (N.B., no function specified)
     p_expval(neval=5000, nitn=10)
     # 3 - evaluate expectation value of function(s) fhist(p)

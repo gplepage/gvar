@@ -65,8 +65,6 @@ manipulating gaussian random variables, including:
 
     - class :class:`PDF` --- probability density function.
 
-    - class :class:`PDFIntegrator` --- integrator for probability density functions.
-
     - class :class:`PDFStatistics` --- statistical analysis of moments of a random variable.
 
     - class :class:`PDFHistogram` --- tool for building PDF histograms.
@@ -312,17 +310,12 @@ SVD analysis is handled by the following class:
 
    .. automethod:: decomp(n)
 
-:class:`gvar.PDFIntegrator` and other PDF-related Objects
+:class:`vegas.PDFIntegrator` and other PDF-related Objects
 -----------------------------------------------------------
 Expectation values using probability density functions defined by
 collections of |GVar|\s can be evaluated using the :mod:`vegas`
-module (for multi-dimensional integration) and the following class:
-
-.. autoclass:: gvar.PDFIntegrator(g, limit=1e15, scale=1., svdcut=1e-15)
-
-  .. automethod:: __call__(f, nopdf=False, mpi=False, **kargs)
-
-Related classes are:
+module (for multi-dimensional integration) and class
+:class:`vegas.PDFIntegrator`. Related classes are:
 
 .. autoclass:: gvar.PDF(g, svdcut=1e-15)
 

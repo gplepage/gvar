@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Overview and Tutorial &mdash; gvar 7.3.1 documentation</title>
+    <title>Overview and Tutorial &mdash; gvar 8.0 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '7.3.1',
+        VERSION:     '8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 7.3.1 documentation" href="index.html" />
+    <link rel="top" title="gvar 8.0 documentation" href="index.html" />
     <link rel="next" title="gvar - Gaussian Random Variables" href="gvar.html" />
     <link rel="prev" title="gvar Documentation" href="index.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.3.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -526,7 +526,7 @@ product of 0.1(4) and 0.2(5), for example, is not very Gaussian because the
 standard deviations are large compared to the scale over which the product
 changes appreciably. In such cases one may want to use the true distribution
 of the function, instead of its Gaussian approximation, in an analysis.</p>
-<p>Class <a class="reference internal" href="gvar.html#gvar.PDFIntegrator" title="gvar.PDFIntegrator"><code class="xref py py-class docutils literal"><span class="pre">gvar.PDFIntegrator</span></code></a> evaluates integrals over multi-dimensional
+<p>Class <code class="xref py py-class docutils literal"><span class="pre">vegas.PDFIntegrator</span></code> evaluates integrals over multi-dimensional
 Gaussian probability density functions (PDFs) using the <code class="xref py py-mod docutils literal"><span class="pre">vegas</span></code> module,
 which does adaptive multi-dimensional  integration. This permits
 us, for example, to calculate the true mean and standard deviation  of
@@ -535,6 +535,7 @@ distribution of the function is Gaussian. The following code analyzes
 the distribution of <code class="docutils literal"><span class="pre">sin(p[0]</span> <span class="pre">*</span> <span class="pre">p[1])</span></code> where <code class="docutils literal"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">[0.1(4),</span> <span class="pre">0.2(5)]</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<span class="kn">import</span> <span class="nn">vegas</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s">&#39;0.1(4)&#39;</span><span class="p">,</span> <span class="s">&#39;0.2(5)&#39;</span><span class="p">])</span>
 
@@ -555,7 +556,7 @@ the distribution of <code class="docutils literal"><span class="pre">sin(p[0]</s
 
 <span class="c"># evaluate expectation value of fstats in 3 steps</span>
 <span class="c"># 1 - create an integrator to evaluate expectation values of functions of p</span>
-<span class="n">p_expval</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFIntegrator</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="n">p_expval</span> <span class="o">=</span> <span class="n">vegas</span><span class="o">.</span><span class="n">PDFIntegrator</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 <span class="c"># 2 - adapt p_expval to the p&#39;s PDF (N.B., no function specified)</span>
 <span class="n">p_expval</span><span class="p">(</span><span class="n">neval</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="c"># 3 - evaluate expectation value of function(s) fhist(p)</span>
@@ -895,7 +896,7 @@ covariances. Note that the previous <a class="reference internal" href="gvar.htm
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 7.3.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

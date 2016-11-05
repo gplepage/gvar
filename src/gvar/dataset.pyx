@@ -19,6 +19,11 @@ import numpy
 
 import gvar as _gvar
 
+cimport numpy, cython
+
+from numpy cimport npy_intp as INTP_TYPE
+# index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
+
 # tools for random data: Dataset, avg_data, bin_data
 
 def _vec_median(v, spread=False, noerror=False):
@@ -83,7 +88,7 @@ def bin_data(data, binsize=2):
         return []
     # force data into a numpy array of floats
     try:
-        data = numpy.asarray(data,float)
+        data = numpy.asarray(data,numpy.float_)
     except ValueError:
         raise ValueError("Inconsistent array shapes or data types in data.")
 
@@ -202,7 +207,7 @@ def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn
         return None
     # force data into a numpy array of floats
     try:
-        data = numpy.asarray(data,float)
+        data = numpy.asarray(data,numpy.float_)
     except ValueError:
         raise ValueError("Inconsistent array shapes or data types in data.")
 
@@ -240,7 +245,7 @@ def avg_data(data, median=False, spread=False, bstrap=False, noerror=False, warn
                 rowvar=False, bias=True
                 ) / norm
         else:
-            cov = numpy.zeros(means.shape + means.shape, float)
+            cov = numpy.zeros(means.shape + means.shape, numpy.float_)
         if cov.shape==() and means.shape==():
             cov = cov**0.5
         return _gvar.gvar(means, cov.reshape(means.shape+means.shape))
@@ -286,12 +291,12 @@ def autocorr(data):
         raise ValueError("Need at least two samples to compute autocorr.")
     # force data into a numpy array of floats
     try:
-        data = numpy.asarray(data,float)
+        data = numpy.asarray(data,numpy.float_)
     except ValueError:
         raise ValueError("Inconsistent array shapes or data types in data.")
 
     datat = data.transpose()
-    ans = numpy.zeros(datat.shape,float)
+    ans = numpy.zeros(datat.shape,numpy.float_)
     idxlist = numpy.ndindex(datat.shape[:-1])
     for idx in numpy.ndindex(datat.shape[:-1]):
         f = datat[idx]
@@ -354,7 +359,7 @@ def bootstrap_iter(data, n=None):
         ns = min(len(data[k]) for k in data)  # number of samples
         datadict = {}
         for k in data:
-            datadict[k] = numpy.asarray(data[k],float)
+            datadict[k] = numpy.asarray(data[k],numpy.float_)
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
@@ -369,7 +374,7 @@ def bootstrap_iter(data, n=None):
             return
         # force data into a numpy array of floats
         try:
-            data = numpy.asarray(data,float)
+            data = numpy.asarray(data,numpy.float_)
         except ValueError:
             raise ValueError( #
                 "Inconsistent array shapes or data types in data.")
@@ -493,7 +498,7 @@ class Dataset(_BASE_DICT):
     key ``'v'`` (``data_v``).
     """
     def __init__(self, *args, **kargs):
-        cdef Py_ssize_t binsize
+        cdef INTP_TYPE binsize
         if not args:
             super(Dataset, self).__init__()
             return
@@ -558,7 +563,7 @@ class Dataset(_BASE_DICT):
         """ Create dictionary ``d`` where ``d[k]=numpy.array(self[k])`` for all ``k``. """
         ans = dict()
         for k in self:
-            ans[k] = numpy.array(self[k],float)
+            ans[k] = numpy.array(self[k],numpy.float_)
         return ans
 
     def append(self,*args,**kargs):
@@ -584,7 +589,7 @@ class Dataset(_BASE_DICT):
             # append(k, m)
             k = args[0]
             try:
-                d = numpy.asarray(args[1],float)
+                d = numpy.asarray(args[1],numpy.float_)
             except ValueError:
                 raise ValueError("Unreadable data: " + str(args[1]))
             if d.shape==():
@@ -640,7 +645,7 @@ class Dataset(_BASE_DICT):
             # extend(k,m)
             k = args[0]
             try:
-                d = [numpy.asarray(di,float) for di in args[1]]
+                d = [numpy.asarray(di,numpy.float_) for di in args[1]]
             except TypeError:
                 raise TypeError('Bad argument.')
             if not d:
@@ -790,7 +795,7 @@ class Dataset(_BASE_DICT):
                 "Different shapes for different elements in template.")
         n_sample = shape[0]
         ans_shape = shape[:1] + template_shape + shape[1:]
-        ans = numpy.zeros(ans_shape, float)
+        ans = numpy.zeros(ans_shape, numpy.float_)
         ans = ans.reshape(n_sample, template.size, -1)
         for i,k in enumerate(template_flat):
             ans[:, i, :] = numpy.reshape(self[k], (n_sample,-1))

@@ -50,6 +50,9 @@ import copy
 import gvar.powerseries
 _ARRAY_TYPES = [numpy.ndarray, gvar.powerseries.PowerSeries]
 
+from numpy cimport npy_intp as INTP_TYPE
+# index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
+
 # GVar
 cdef class GVar:
     # cdef double v     -- value or mean
@@ -185,7 +188,7 @@ cdef class GVar:
 
     # def __add__(xx,yy):
     #     cdef GVar x,y
-    #     cdef Py_ssize_t i,nx,di,ny
+    #     cdef INTP_TYPE i,nx,di,ny
     #     if type(yy) in _ARRAY_TYPES:
     #         return NotImplemented   # let ndarray handle it
     #     elif isinstance(xx,GVar):
@@ -206,7 +209,7 @@ cdef class GVar:
     def __add__(xx,yy):
         cdef GVar ans = GVar.__new__(GVar)
         cdef GVar x,y
-        cdef Py_ssize_t i,nx,di,ny
+        # cdef INTP_TYPE i,nx,di,ny
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
         elif isinstance(xx,GVar):
@@ -478,7 +481,7 @@ cdef class GVar:
             primary |GVar|).
         :returns: The derivative of ``self`` with respect to ``x``.
         """
-        cdef Py_ssize_t i, ider
+        cdef INTP_TYPE i, ider
         cdef double xder
         xder = 0.0
         for i in range(x.d.size):
@@ -562,11 +565,11 @@ cdef class GVar:
         cdef GVar ai
         cdef svec md
         cdef smat cov
-        cdef numpy.ndarray[numpy.int_t,ndim=1] dmask
-        cdef numpy.ndarray[numpy.int_t,ndim=1] md_idx
-        cdef numpy.ndarray[numpy.double_t,ndim=1] md_v
-        cdef Py_ssize_t i,j,md_size
-        cdef Py_ssize_t dstart,dstop
+        cdef numpy.ndarray[INTP_TYPE,ndim=1] dmask
+        cdef numpy.ndarray[INTP_TYPE,ndim=1] md_idx
+        cdef numpy.ndarray[numpy.float_t,ndim=1] md_v
+        cdef INTP_TYPE i,j,md_size
+        cdef INTP_TYPE dstart,dstop
         if self.d.size<=0:
             return 0.0
         dstart = self.d.v[0].i
@@ -597,7 +600,7 @@ cdef class GVar:
             jset.update(cov.row[i].indices())
 
         # c) build the mask
-        dmask = numpy.zeros(dstop-dstart,int)
+        dmask = numpy.zeros(dstop-dstart, numpy.intp)
         for j in sorted(jset):
             if j<dstart:
                 continue
@@ -609,8 +612,8 @@ cdef class GVar:
 
         # create masked derivative vector for self
         md_size = 0
-        md_idx = numpy.zeros(dstop-dstart,int)
-        md_v = numpy.zeros(dstop-dstart,float)
+        md_idx = numpy.zeros(dstop-dstart, numpy.intp)
+        md_v = numpy.zeros(dstop-dstart,numpy.float_)
         for i in range(self.d.size):
             if dmask[self.d.v[i].i-dstart]==0:
                 continue
@@ -692,10 +695,10 @@ cdef class GVar:
         def __get__(self):
             return self.v, self.d, self.cov
 
-    def dotder(self,numpy.ndarray[numpy.double_t,ndim=1] v not None):
+    def dotder(self,numpy.ndarray[numpy.float_t,ndim=1] v not None):
         """ Return the dot product of ``self.der`` and ``v``. """
         cdef double ans = 0
-        cdef Py_ssize_t i
+        cdef INTP_TYPE i
         for i in range(self.d.size):
             ans += v[self.d.v[i].i]*self.d.v[i].v
         return ans
@@ -779,14 +782,15 @@ class GVarFactory:
             self.cov = cov
 
     def __call__(self, *args):
-        cdef Py_ssize_t nx, i, nd
+        cdef INTP_TYPE nx, i, nd
         cdef svec der
         cdef smat cov
         cdef GVar gv
-        cdef numpy.ndarray[numpy.double_t, ndim=1] d
-        cdef numpy.ndarray[numpy.double_t, ndim=1] d_v
-        cdef numpy.ndarray[numpy.intp_t, ndim=1] d_idx
-        cdef numpy.ndarray[numpy.intp_t, ndim=1] idx
+        cdef numpy.ndarray[numpy.float_t, ndim=1] d
+        cdef numpy.ndarray[numpy.float_t, ndim=1] d_v
+        cdef numpy.ndarray[numpy.float_t, ndim=2] xcov
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] d_idx
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
 
         if len(args)==2:
             if hasattr(args[0], 'keys'):
@@ -799,7 +803,7 @@ class GVarFactory:
                 if set(args[0].keys()) == set(args[1].keys()):
                     # means and stdevs
                     x = BufferDict(args[0])
-                    xsdev = BufferDict(x, buf=numpy.empty(x.size, float))
+                    xsdev = BufferDict(x, buf=numpy.empty(x.size, numpy.float_))
                     for k in x:
                         xsdev[k] = args[1][k]
                     xflat = self(x.flat, xsdev.flat)
@@ -807,7 +811,7 @@ class GVarFactory:
                 else:
                     # means and covariance matrix
                     x = BufferDict(args[0])
-                    xcov = numpy.empty((x.size, x.size), float)
+                    xcov = numpy.empty((x.size, x.size), numpy.float_)
                     for k1 in x:
                         k1_sl, k1_sh = x.slice_shape(k1)
                         if k1_sh == ():
@@ -831,8 +835,8 @@ class GVarFactory:
                 # (x,xsdev) or (xarray,sdev-array) or (xarray,cov)
                 # unpack arguments and verify types
                 try:
-                    x = numpy.asarray(args[0],float)
-                    xsdev = numpy.asarray(args[1],float)
+                    x = numpy.asarray(args[0],numpy.float_)
+                    xsdev = numpy.asarray(args[1],numpy.float_)
                 except (ValueError,TypeError):
                     raise TypeError("Arguments must be numbers or arrays of numbers")
 
@@ -863,7 +867,7 @@ class GVarFactory:
                     else:
                         raise ValueError("Argument shapes mismatched: " +
                             str(x.shape) + ' ' + str(xsdev.shape))
-                    d = numpy.ones(nx, float)
+                    d = numpy.ones(nx, numpy.float_)
                     ans = numpy.empty(nx, object)
                     for i in range(nx):
                         der = svec(1)
@@ -953,8 +957,8 @@ class GVarFactory:
         elif len(args)==3:
             # (x,der,cov)
             try:
-                x = numpy.asarray(args[0],float)
-                d = numpy.asarray(args[1],float).flatten()
+                x = numpy.asarray(args[0],numpy.float_)
+                d = numpy.asarray(args[1],numpy.float_).flatten()
             except (ValueError,TypeError,AssertionError):
                 raise TypeError("Value and derivatives not numbers.")
             assert len(x.shape)==0,"Value not a number."

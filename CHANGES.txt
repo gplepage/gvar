@@ -1,3 +1,16 @@
+Version 8.0 2016-11-05
+=======================
+This is a small change but one that is not compatible with previous
+versions. I accidently introduced a circular import when adding
+PDFIntegrator to gvar. PDFIntegrator has to be part of the vegas
+module, not the gvar module. So gvar.PDFIntegrator needs to be
+replaced by vegas.PDFIntegrator in existing code. This is the only
+change and is irrelevant if you are not using module vegas together
+with gvar (or lsqfit).
+
+There are also some internal changes to correct data-type mismatches
+on windows machines.
+
 Version 7.3.1 2016-08-17
 ==========================
 This is a very small change to the new PDFIntegrator class (new as of
