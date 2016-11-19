@@ -135,7 +135,8 @@ _GVAR_LIST = []
 def ranseed(seed=None):
     """ Seed random number generators with tuple ``seed``.
 
-    Argument ``seed`` is a :class:`tuple` of integers that is used to seed
+    Argument ``seed`` is an integer or
+    a :class:`tuple` of integers that is used to seed
     the random number generators used by :mod:`numpy` and
     :mod:`random` (and therefore by :mod:`gvar`). Reusing
     the same ``seed`` results in the same set of random numbers.
@@ -151,7 +152,10 @@ def ranseed(seed=None):
     """
     if seed is None:
         seed = numpy.random.randint(1, int(2e9), size=3)
-    seed = tuple(seed)
+    try:
+        seed = tuple(seed)
+    except TypeError:
+        pass
     numpy.random.seed(seed)
     ranseed.seed = seed
     return seed
