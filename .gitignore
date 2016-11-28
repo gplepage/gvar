@@ -2,6 +2,10 @@
 build/
 __pycache__/
 *.c
+*.p
+xxx.*
+yyy.*
+zzz.*
 examples/*.p
 examples/*.tmp
 MANIFEST
