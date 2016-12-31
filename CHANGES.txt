@@ -1,3 +1,14 @@
+Version 8.????
+===========================
+
+- disassemble and reassemble (not for public however) plus testing.
+  Must fix so reassemble has default cov (then make public?).
+
+- changed gvar.chi2() so its output can be formatted with
+  gvar.fmt_chi2().
+
+
+
 Version 8.0 2016-11-05
 =======================
 This is a small change but one that is not compatible with previous
@@ -107,7 +118,7 @@ INSTALLATION.txt.
 
 Version 7.0.1 - 2015-06-16
 ==========================
-Had to replace setuptools with distutils again, because I could get cython
+Had to replace setuptools with distutils again, because I could not get cython
 pxd files to work properly with the eggs, causing build problems for
 lsqfit.
 

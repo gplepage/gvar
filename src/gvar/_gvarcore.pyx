@@ -186,26 +186,6 @@ cdef class GVar:
     def __pos__(self):
         return self
 
-    # def __add__(xx,yy):
-    #     cdef GVar x,y
-    #     cdef INTP_TYPE i,nx,di,ny
-    #     if type(yy) in _ARRAY_TYPES:
-    #         return NotImplemented   # let ndarray handle it
-    #     elif isinstance(xx,GVar):
-    #         if isinstance(yy,GVar):
-    #             x = xx
-    #             y = yy
-    #             assert x.cov is y.cov,"Incompatible GVars."
-    #             return GVar(x.v+y.v,x.d.add(y.d),x.cov)
-    #         else:
-    #             x = xx
-    #             return GVar(x.v+yy,x.d,x.cov)
-    #     elif isinstance(yy,GVar):
-    #         y = yy
-    #         return GVar(y.v+xx,y.d,y.cov)
-    #     else:
-    #         return NotImplemented
-
     def __add__(xx,yy):
         cdef GVar ans = GVar.__new__(GVar)
         cdef GVar x,y
@@ -957,22 +937,35 @@ class GVarFactory:
         elif len(args)==3:
             # (x,der,cov)
             try:
-                x = numpy.asarray(args[0],numpy.float_)
-                d = numpy.asarray(args[1],numpy.float_).flatten()
-            except (ValueError,TypeError,AssertionError):
-                raise TypeError("Value and derivatives not numbers.")
-            assert len(x.shape)==0,"Value not a number."
+                x = float(args[0])
+            except (ValueError, TypeError):
+                raise TypeError('Value not a number.')
             cov = args[2]
-            assert isinstance(cov,smat),"cov not type gvar.smat."
-            assert len(cov)>=len(d),"length mismatch between d and cov"
-            d_idx = d.nonzero()[0]
-            d_v = d[d_idx]
+            assert isinstance(cov, smat), "cov not type gvar.smat."
+            if isinstance(args[1], svec):
+                return GVar(x, args[1], cov)
+            elif isinstance(args[1], tuple):
+                try:
+                    d_idx = numpy.asarray(args[0], numpy.intp)
+                    d_v = numpy.asarray(args[0], numpy.float_)
+                    assert d_idx.ndim == 1 and d_idx.shape == d_v.shape
+                except (ValueError, TypeError, AssertionError):
+                    raise TypeError('Badly formed derivative.')
+            else:
+                try:
+                    d = numpy.asarray(args[1], numpy.float_)
+                    assert d.ndim == 1
+                except (ValueError, TypeError, AssertionError):
+                    raise TypeError('Badly formed derivative.')
+                d_idx = d.nonzero()[0]
+                d_v = d[d_idx]
+            assert len(cov) > d_idx[-1], "length mismatch between der and cov"
             nd = len(d_idx)
             der = svec(nd)
             for i in range(nd):
                 der.v[i].i = d_idx[i]
                 der.v[i].v = d_v[i]
-            return GVar(x,der,cov)
+            return GVar(x, der, cov)
         else:
             raise ValueError("Wrong number of arguments: "+str(len(args)))
 

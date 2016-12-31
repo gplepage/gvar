@@ -530,31 +530,68 @@ def loads(inputstring):
     """
     return _gvar.gvar(pickle.loads(inputstring))
 
-def disassemble(numpy.ndarray garray):
-    cdef GVar g
-    cdef INTP_TYPE i
-    cdef numpy.ndarray[object, ndim=1] ans
-    if not isinstance(garray[0], GVar):
-        return garray
-    ans = numpy.empty(garray.size, object)
-    for i in range(garray.size):
-        g = garray[i]
-        ans[i] = (g.v, g.d)
-    return ans
+def disassemble(g):
+    cdef INTP_TYPE i, gsize
+    cdef GVar gi
+    cdef numpy.ndarray[object, ndim=1] newbuf
+    if hasattr(g, 'keys'):
+        if not isinstance(g, BufferDict):
+            g = BufferDict(g)
+    else:
+        g = numpy.asarray(g)
+    gsize = g.size
+    newbuf = numpy.empty(gsize, object)
+    for i,gi in enumerate(g.flat):
+        newbuf[i] = (gi.v, gi.d)
+    return BufferDict(g, buf=newbuf) if g.shape is None else newbuf.reshape(g.shape)
 
-def reassemble(numpy.ndarray data, smat cov):
-    cdef GVar g
-    cdef INTP_TYPE i
-    cdef numpy.ndarray[object, ndim=1] ans
+def reassemble(data, smat cov):
+    cdef INTP_TYPE i, datasize
+    cdef object datai
     cdef svec der
     cdef double val
-    if not isinstance(data[0], tuple):
-        return data
-    ans = numpy.empty(data.size, object)
-    for i in range(ans.size):
-        val, der = data[i]
-        ans[i] = GVar(val, der, cov)
-    return ans
+    cdef numpy.ndarray[object, ndim=1] newbuf
+    if hasattr(data, 'keys'):
+        if not isinstance(data, BufferDict):
+            data = BufferDict(data)
+    else:
+        data = numpy.asarray(data)
+    datasize = data.size
+    newbuf = numpy.empty(datasize, object)
+    for i,(val,der) in enumerate(data.flat):
+        newbuf[i] = GVar(val, der, cov)
+    return (
+        BufferDict(data, buf=newbuf) if data.shape is None else
+        newbuf.reshape(data.shape)
+        )
+
+# def disassemble(numpy.ndarray garray):
+#     """ Replace ``garray[i]`` by ``(garray[i].v, garray[i].d)``. """
+#     cdef GVar g
+#     cdef INTP_TYPE i
+#     cdef numpy.ndarray[object, ndim=1] ans
+#     if not isinstance(garray[0], GVar):
+#         return garray
+#     ans = numpy.empty(garray.size, object)
+#     for i in range(garray.size):
+#         g = garray[i]
+#         ans[i] = (g.v, g.d)
+#     return ans
+
+# def reassemble(numpy.ndarray data, smat cov):
+#     """ Replace ``data[i]`` by ``gvar.GVar(data[i][0], data[i][1], cov)``. """
+#     cdef GVar g
+#     cdef INTP_TYPE i
+#     cdef numpy.ndarray[object, ndim=1] ans
+#     cdef svec der
+#     cdef double val
+#     if not isinstance(data[0], tuple):
+#         return data
+#     ans = numpy.empty(data.size, object)
+#     for i in range(ans.size):
+#         val, der = data[i]
+#         ans[i] = GVar(val, der, cov)
+#     return ans
 
 
 def wsum_der(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):
@@ -841,7 +878,6 @@ def raniter(g, n=None, svdcut=None):
         else:
             yield buf.reshape(g.shape)
     raise StopIteration
-
 
 class SVD(object):
     """ SVD decomposition of a pos. sym. matrix.

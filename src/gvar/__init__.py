@@ -240,6 +240,7 @@ def chi2(g1, g2=None, svdcut=1e-15, nocorr=False, fmt=False):
         def __init__(self, chi2, dof, Q):
             self.dof = dof
             self.Q = Q
+            self.chi2 = chi2
 
     # leaving nocorr (turn off correlations) undocumented because I
     #   suspect I will remove it
@@ -930,9 +931,9 @@ class PDFHistogram(object):
             on ``g.mean``. Ignored if ``None`` (in which case ``bins`` must
             be specified).
         nbin (int): The number of histogram bins. Set equal to
-            ``PDFHistogram.default_nbin'' (=8 initially) if ``None``.
+            ``PDFHistogram.default_nbin`` (=8 initially) if ``None``.
         binwidth (float): The width of each bin is ``binwidth * g.sdev``.
-            Set equal to ``PDFHistogram.default_binwidth'' (=1. initially)
+            Set equal to ``PDFHistogram.default_binwidth`` (=1. initially)
             if ``None``.
         bins (array or ``None``): Ignored if ``None`` (default). Otherwise specifies the
             histogram's bin edges, overriding the default bin design specified
@@ -1287,6 +1288,43 @@ class PDFStatistics(object):
         """ Compute 1st-4th moments of f, returned in an array. """
         return f ** exponents
 
+
+def make_fake_data(g, fac=1.0):
+    """ Make fake data based on ``g``.
+
+    This function replaces the |GVar|\s in ``g`` by  new |GVar|\s with similar
+    means and a similar covariance matrix, but multiplied by ``fac**2`` (so
+    standard deviations are ``fac`` times smaller). The changes are random.
+    The function was designed to create fake data for testing fitting
+    routines, where ``g`` is set equal to ``fitfcn(x, prior)`` and ``fac<1``
+    (e.g.,  set ``fac=0.1`` to get fit parameters whose standard deviations
+    are  10x smaller than those of the corresponding priors).
+
+    Args:
+        g (dict, array or gvar.GVar): The |GVar| or array of |GVar|\s,
+            or dictionary whose values are |GVar|\s or arrays of |GVar|\s that
+            from which the fake data is generated.
+
+        fac (float): Uncertainties are rescaled by ``fac`` in the fake data.
+
+    Returns:
+        A collection of |GVar|\s with the same layout as ``g`` but with
+        somewhat different means, and standard deviations rescaled by ``fac``.
+    """
+    if hasattr(g, 'keys'):
+        if not isinstance(g, BufferDict):
+            g = BufferDict(g)
+        return BufferDict(g, buf=make_fake_data(g.buf, fac))
+    else:
+        g_shape = numpy.shape(g)
+        g_flat = numpy.asarray(g).flat
+        zero = numpy.zeros(len(g_flat), float)
+        dg = 0.5 * gvar(zero, evalcov(g_flat))
+        g_flat = mean(g_flat) +  next(raniter(dg))
+        dg *=  fac
+        noise = gvar(zero, sdev(dg))
+        g_flat = g_flat + dg + noise + next(raniter(noise))
+        return g_flat[0] if g_shape == () else g_flat.reshape(g_shape)
 
 # legacy code support
 fmt_partialsdev = fmt_errorbudget

@@ -693,7 +693,8 @@ than <code class="docutils literal"><span class="pre">|svdcut|</span> <span clas
 <dt id="gvar.ranseed">
 <code class="descclassname">gvar.</code><code class="descname">ranseed</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ranseed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Seed random number generators with tuple <code class="docutils literal"><span class="pre">seed</span></code>.</p>
-<p>Argument <code class="docutils literal"><span class="pre">seed</span></code> is a <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code> of integers that is used to seed
+<p>Argument <code class="docutils literal"><span class="pre">seed</span></code> is an integer or
+a <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code> of integers that is used to seed
 the random number generators used by <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> and
 <code class="xref py py-mod docutils literal"><span class="pre">random</span></code> (and therefore by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal"><span class="pre">gvar</span></code></a>). Reusing
 the same <code class="docutils literal"><span class="pre">seed</span></code> results in the same set of random numbers.</p>
@@ -1679,10 +1680,10 @@ used to design the histogram bins, which are centered
 on <code class="docutils literal"><span class="pre">g.mean</span></code>. Ignored if <code class="docutils literal"><span class="pre">None</span></code> (in which case <code class="docutils literal"><span class="pre">bins</span></code> must
 be specified).</li>
 <li><strong>nbin</strong> (<em>int</em>) &#8211; The number of histogram bins. Set equal to
-<code class="docutils literal"><span class="pre">PDFHistogram.default_nbin''</span> <span class="pre">(=8</span> <span class="pre">initially)</span> <span class="pre">if</span> <span class="pre">``None</span></code>.</li>
+<code class="docutils literal"><span class="pre">PDFHistogram.default_nbin</span></code> (=8 initially) if <code class="docutils literal"><span class="pre">None</span></code>.</li>
 <li><strong>binwidth</strong> (<em>float</em>) &#8211; The width of each bin is <code class="docutils literal"><span class="pre">binwidth</span> <span class="pre">*</span> <span class="pre">g.sdev</span></code>.
-Set equal to <code class="docutils literal"><span class="pre">PDFHistogram.default_binwidth''</span> <span class="pre">(=1.</span> <span class="pre">initially)</span>
-<span class="pre">if</span> <span class="pre">``None</span></code>.</li>
+Set equal to <code class="docutils literal"><span class="pre">PDFHistogram.default_binwidth</span></code> (=1. initially)
+if <code class="docutils literal"><span class="pre">None</span></code>.</li>
 <li><strong>bins</strong> (array or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; Ignored if <code class="docutils literal"><span class="pre">None</span></code> (default). Otherwise specifies the
 histogram&#8217;s bin edges, overriding the default bin design specified
 by <code class="docutils literal"><span class="pre">g</span></code>. <code class="docutils literal"><span class="pre">len(bins)</span></code> is one larger than the number of bins. If

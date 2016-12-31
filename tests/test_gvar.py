@@ -1421,6 +1421,31 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         dnew = dict(x=xnew, y0=x[0])
         self.assertTrue(not equivalent(d, dnew))
 
+    def test_disassemble(self):
+        " d = disassemble(g); reassemble(d) "
+        # gvar
+        g = gvar('1(2)')
+        gn = reassemble(disassemble(g), gvar.cov)
+        d = gn - g
+        self.assertEqual(d.mean, 0.0)
+        self.assertEqual(d.sdev, 0.0)
+        # array
+        g = gvar([['1(2)', '2(3)'], ['3(4)', '4(5)']])
+        gn = reassemble(disassemble(g), gvar.cov)
+        self.assertEqual(g.shape, gn.shape)
+        d = gn - g
+        self.assertTrue(np.all(gv.mean(d) == 0.0))
+        self.assertTrue(np.all(gv.sdev(d) == 0.0))
+        # dict
+        g = gvar(
+            dict(s=gvar('1(2)'), a=gvar([['1(2)', '2(3)'], ['3(4)', '4(5)']]))
+            )
+        gn = reassemble(disassemble(g), gvar.cov)
+        for k in g:
+            d = gn[k] - g[k]
+            self.assertTrue(np.all(gv.mean(d) == 0.0))
+            self.assertTrue(np.all(gv.mean(d) == 0.0))
+
     @unittest.skipIf(FAST,"skipping test_pdfstats for speed")
     def test_pdfstats(self):
         " PDFStatistics(moments) "
@@ -1467,210 +1492,6 @@ class test_gvar2(unittest.TestCase,ArrayTests):
                 abs(stats.minus.mean - g.sdev) < 5 * stats.minus.sdev
                 )
 
-# try:
-    # import vegas
-    # class test_pdfintegrator(unittest.TestCase,ArrayTests):
-    #     @unittest.skipIf(FAST,"skipping test_expval for speed")
-    #     def test_expval(self):
-    #         " integrator(f ...) "
-    #         xarray = gv.gvar([5., 3.], [[4., 0.9], [0.9, 1.]])
-    #         xdict = gv.BufferDict([(0, 1), (1, 1)])
-    #         xdict = gv.BufferDict(xdict, buf=xarray)
-    #         def farray(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             return PDFStatistics.moments(x[0])
-    #         def fdict(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             return gv.BufferDict([
-    #                  (0, x[0]), (1, x[0] ** 2),
-    #                 (2, x[0] ** 3), (3, x[0] ** 4)
-    #                 ])
-    #         for x in [xarray, xdict]:
-    #             integ = PDFIntegrator(x)
-    #             integ(neval=1000, nitn=5)
-    #             for f in [farray, fdict]:
-    #                 r = integ(f, neval=1000, nitn=5, adapt=False)
-    #                 if hasattr(r, 'keys'):
-    #                     r = r.buf
-    #                 s = PDFStatistics(r)
-    #                 self.assertTrue(abs(s.mean.mean - 5.) < 5. * s.mean.sdev)
-    #                 self.assertTrue(abs(s.sdev.mean - 2.) < 5. * s.sdev.sdev)
-    #                 self.assertTrue(abs(s.skew.mean) < 5. * s.skew.sdev)
-    #                 self.assertTrue(abs(s.ex_kurt.mean) < 5. * s.ex_kurt.sdev)
-
-    #         # covariance test
-    #         def fcov(x):
-    #             return dict(x=x, xx=np.outer(x, x))
-    #         integ = PDFIntegrator(xarray)
-    #         r = integ(fcov, neval=1000, nitn=5)
-    #         rmean = r['x']
-    #         rcov = r['xx'] - np.outer(r['x'], r['x'])
-    #         xmean = gv.mean(xarray)
-    #         xcov = gv.evalcov(xarray)
-    #         for i in [0, 1]:
-    #             self.assertTrue(abs(rmean[i].mean - xmean[i]) < 5. * rmean[i].sdev)
-    #             for j in [0, 1]:
-    #                 self.assertTrue(abs(rcov[i,j].mean - xcov[i,j]) < 5. * rcov[i,j].sdev)
-
-    #     @unittest.skipIf(FAST,"skipping test_nopdf for speed")
-    #     def test_nopdf(self):
-    #         " integrator(f ... nopdf=True) and pdf(p) "
-    #         xarray = gv.gvar([5., 3.], [[4., 1.9], [1.9, 1.]])
-    #         xdict = gv.BufferDict([(0, 1), (1, 1)])
-    #         xdict = gv.BufferDict(xdict, buf=xarray)
-    #         pdf = PDFIntegrator(xarray).pdf
-    #         def farray(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             prob = pdf(x)
-    #             return [x[0] * prob, x[0] ** 2 * prob, prob]
-    #         def fdict(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             prob = pdf(x)
-    #             return gv.BufferDict([(0, x[0] * prob), (1, x[0] ** 2 * prob), (3, prob)])
-    #         for x in [xarray, xdict]:
-    #             x[0] -= 0.1 * x[0].sdev
-    #             x[1] += 0.1 * x[1].sdev
-    #             for f in [farray, fdict]:
-    #                 integ = PDFIntegrator(x)
-    #                 integ(f, neval=1000, nitn=5)
-    #                 r = integ(f, neval=1000, nitn=5, nopdf=True, adapt=False)
-    #                 rmean = r[0]
-    #                 rsdev = np.sqrt(r[1] - rmean ** 2)
-    #                 self.assertTrue(abs(rmean.mean - 5.) < 5. * rmean.sdev)
-    #                 self.assertTrue(abs(rsdev.mean - 2.) < 5. * rsdev.sdev)
-
-    #     @unittest.skipIf(FAST,"skipping test_limit_scale for speed")
-    #     def test_limit_scale(self):
-    #         " integrator(...,limit=..,scale=..) "
-    #         g = gv.gvar(1,0.1)
-    #         for scale in [1., 2.]:
-    #             integ = PDFIntegrator(g, limit=1., scale=scale)
-    #             integ(neval=1000, nitn=5)
-    #             self.assertTrue(
-    #                 abs(integ.norm.mean - 0.682689492137) < 5 * integ.norm.sdev
-    #                 )
-    #             integ = PDFIntegrator(g, limit=2., scale=scale)
-    #             integ(neval=1000, nitn=5)
-    #             self.assertTrue(
-    #                 abs(integ.norm.mean - 0.954499736104) < 5 * integ.norm.sdev
-    #                 )
-
-    #     @unittest.skipIf(FAST,"skipping test_histogram for speed")
-    #     def test_histogram(self):
-    #         x = gv.gvar([5., 3.], [[4., 0.2], [0.2, 1.]])
-    #         xsum = x[0] + x[1]
-    #         integ = PDFIntegrator(x)
-    #         hist = PDFHistogram(xsum, nbin=40, binwidth=0.2)
-    #         integ(neval=1000, nitn=5)
-    #         def fhist(x):
-    #             return hist.count(x[0] + x[1])
-    #         r = integ(fhist, neval=1000, nitn=5, adapt=False)
-    #         bins, prob, stat, norm = hist.analyze(r)
-    #         self.assertTrue(abs(gv.mean(np.sum(prob)) - 1.) < 5. * gv.sdev(np.sum(prob)))
-    #         self.assertTrue(abs(stat.mean.mean - xsum.mean) < 5. * stat.mean.sdev)
-    #         self.assertTrue(abs(stat.sdev.mean - xsum.sdev) < 5. * stat.sdev.sdev)
-    #         self.assertTrue(abs(stat.skew.mean) < 5. * stat.skew.sdev)
-    #         self.assertTrue(abs(stat.ex_kurt.mean) < 5. * stat.ex_kurt.sdev)
-
-    # class test_pdfintegrator2(unittest.TestCase,ArrayTests):
-    #     """ same as above but with limit=7. everywhere """
-    #     @unittest.skipIf(FAST, "skipping test_pdfintegrator2 for speed")
-    #     def test_expval(self):
-    #         " integrator(f ...) "
-    #         xarray = gv.gvar([5., 3.], [[4., 0.9], [0.9, 1.]])
-    #         xdict = gv.BufferDict([(0, 1), (1, 1)])
-    #         xdict = gv.BufferDict(xdict, buf=xarray)
-    #         def farray(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             return PDFStatistics.moments(x[0])
-    #         def fdict(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             return gv.BufferDict([
-    #                  (0, x[0]), (1, x[0] ** 2),
-    #                 (2, x[0] ** 3), (3, x[0] ** 4)
-    #                 ])
-    #         for x in [xarray, xdict]:
-    #             integ = PDFIntegrator(x, limit=7.)
-    #             integ(neval=1000, nitn=5)
-    #             for f in [farray, fdict]:
-    #                 r = integ(f, neval=1000, nitn=5, adapt=False)
-    #                 if hasattr(r, 'keys'):
-    #                     r = r.buf
-    #                 s = PDFStatistics(r)
-    #                 self.assertTrue(abs(s.mean.mean - 5.) < 5. * s.mean.sdev)
-    #                 self.assertTrue(abs(s.sdev.mean - 2.) < 5. * s.sdev.sdev)
-    #                 self.assertTrue(abs(s.skew.mean) < 5. * s.skew.sdev)
-    #                 self.assertTrue(abs(s.ex_kurt.mean) < 5. * s.ex_kurt.sdev)
-
-    #         # covariance test
-    #         def fcov(x):
-    #             return dict(x=x, xx=np.outer(x, x))
-    #         integ = PDFIntegrator(xarray, limit=7.)
-    #         r = integ(fcov, neval=1000, nitn=5)
-    #         rmean = r['x']
-    #         rcov = r['xx'] - np.outer(r['x'], r['x'])
-    #         xmean = gv.mean(xarray)
-    #         xcov = gv.evalcov(xarray)
-    #         for i in [0, 1]:
-    #             self.assertTrue(abs(rmean[i].mean - xmean[i]) < 5. * rmean[i].sdev)
-    #             for j in [0, 1]:
-    #                 self.assertTrue(abs(rcov[i,j].mean - xcov[i,j]) < 5. * rcov[i,j].sdev)
-
-    #     @unittest.skipIf(FAST, "skipping test_pdfintegrator2 for speed")
-    #     def test_call(self):
-    #         " integrator(f ... nopdf=True) and pdf(p) "
-    #         xarray = gv.gvar([5., 3.], [[4., 1.9], [1.9, 1.]])
-    #         xdict = gv.BufferDict([(0, 1), (1, 1)])
-    #         xdict = gv.BufferDict(xdict, buf=xarray)
-    #         pdf = PDFIntegrator(xarray).pdf
-    #         def farray(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             prob = pdf(x)
-    #             return [x[0] * prob, x[0] ** 2 * prob, prob]
-    #         def fdict(x):
-    #             if hasattr(x, 'keys'):
-    #                 x = x.buf
-    #             prob = pdf(x)
-    #             return gv.BufferDict([(0, x[0] * prob), (1, x[0] ** 2 * prob), (3, prob)])
-    #         for x in [xarray, xdict]:
-    #             x[0] -= 0.1 * x[0].sdev
-    #             x[1] += 0.1 * x[1].sdev
-    #             for f in [farray, fdict]:
-    #                 integ = PDFIntegrator(x,limit=7.)
-    #                 integ(f, neval=1000, nitn=5)
-    #                 r = integ(f, neval=1000, nitn=5, nopdf=True, adapt=False)
-    #                 rmean = r[0]
-    #                 rsdev = np.sqrt(r[1] - rmean ** 2)
-    #                 self.assertTrue(abs(rmean.mean - 5.) < 5. * rmean.sdev)
-    #                 self.assertTrue(abs(rsdev.mean - 2.) < 5. * rsdev.sdev)
-
-    #     @unittest.skipIf(FAST, "skipping test_pdfintegrator2 for speed")
-    #     def test_histogram(self):
-    #         x = gv.gvar([5., 3.], [[4., 0.2], [0.2, 1.]])
-    #         xsum = x[0] + x[1]
-    #         integ = PDFIntegrator(x, limit=7.)
-    #         hist = PDFHistogram(xsum, nbin=40, binwidth=0.2)
-    #         integ(neval=1000, nitn=5)
-    #         def fhist(x):
-    #             return hist.count(x[0] + x[1])
-    #         r = integ(fhist, neval=1000, nitn=5, adapt=False)
-    #         bins, prob, stat, norm = hist.analyze(r)
-    #         # np.sum(prob) is 1 almost to machine precision, so next line doesn't work
-    #         # self.assertTrue(abs(gv.mean(np.sum(prob)) - 1.) < 5. * gv.sdev(np.sum(prob)))
-    #         self.assertTrue(abs(stat.mean.mean - xsum.mean) < 5. * stat.mean.sdev)
-    #         self.assertTrue(abs(stat.sdev.mean - xsum.sdev) < 5. * stat.sdev.sdev)
-    #         self.assertTrue(abs(stat.skew.mean) < 5. * stat.skew.sdev)
-    #         self.assertTrue(abs(stat.ex_kurt.mean) < 5. * stat.ex_kurt.sdev)
-
-# except:
-#     pass
 
 if __name__ == '__main__':
 	unittest.main()
