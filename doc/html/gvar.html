@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gvar - Gaussian Random Variables &mdash; gvar 8.0 documentation</title>
+    <title>gvar - Gaussian Random Variables &mdash; gvar 8.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '8.0',
+        VERSION:     '8.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 8.0 documentation" href="index.html" />
+    <link rel="top" title="gvar 8.0.1 documentation" href="index.html" />
     <link rel="next" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
     <link rel="prev" title="Overview and Tutorial" href="overview.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -102,6 +102,8 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal"><span class="pre">dumps</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; pickle a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in a string.</li>
 <li><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal"><span class="pre">load</span></code></a><code class="docutils literal"><span class="pre">(inputfile)</span></code> &#8212; reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from a file.</li>
 <li><a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref any py py-func docutils literal"><span class="pre">loads</span></code></a><code class="docutils literal"><span class="pre">(inputstr)</span></code> &#8212; reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from a string.</li>
+<li><code class="xref any docutils literal"><span class="pre">disassmeble</span></code><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
+<li><a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref any py py-func docutils literal"><span class="pre">reassemble</span></code></a><code class="docutils literal"><span class="pre">(data,cov)</span></code> &#8212; low-level routine to reassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref any py py-func docutils literal"><span class="pre">raniter</span></code></a><code class="docutils literal"><span class="pre">(g,N)</span></code> &#8212; iterator for random numbers.</li>
 <li><a class="reference internal" href="#gvar.bootstrap_iter" title="gvar.bootstrap_iter"><code class="xref any py py-func docutils literal"><span class="pre">bootstrap_iter</span></code></a><code class="docutils literal"><span class="pre">(g,N)</span></code> &#8212; bootstrap iterator.</li>
 <li><a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref any py py-func docutils literal"><span class="pre">svd</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; SVD modification of correlation matrix.</li>
@@ -593,6 +595,44 @@ pickled <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code 
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="gvar.disassemble">
+<code class="descclassname">gvar.</code><code class="descname">disassemble</code><span class="sig-paren">(</span><em>g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.disassemble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disassemble collection <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>Disassembles collection <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s into components
+that can be pickled or otherwise stored. The output
+is reassembled by <a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref py py-func docutils literal"><span class="pre">gvar.reassemble()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>g</strong> (<em>dict, array, or gvar.GVar</em>) &#8211; Collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s to be
+disassembled.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.reassemble">
+<code class="descclassname">gvar.</code><code class="descname">reassemble</code><span class="sig-paren">(</span><em>data</em>, <em>cov=gvar.gvar.cov</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.reassemble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert data (from disassemble) back into <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>BufferDict, array</em>) &#8211; Disassembled collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s
+from <a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref py py-func docutils literal"><span class="pre">gvar.disassemble()</span></code></a> that are to be reassembled.</li>
+<li><strong>cov</strong> (<em>gvar.smat</em>) &#8211; Covariance matrix corresponding to the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s
+in <code class="docutils literal"><span class="pre">data</span></code>. (Default is <code class="docutils literal"><span class="pre">gvar.gvar.cov</span></code>.)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s contain information about derivatives with respect to the <em>independent</em>
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from which they were constructed. This information can be extracted using:</p>
 <dl class="function">
@@ -706,9 +746,10 @@ the same set of random numbers at a later time.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> (<em>tuple or None</em>) &#8211; A tuple of integers. Generates a random tuple if <code class="docutils literal"><span class="pre">None</span></code>.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> (<em>int, tuple, or None</em>) &#8211; Seed for generator. Generates a
+random tuple if <code class="docutils literal"><span class="pre">None</span></code>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The seed.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The seed used to reseed the generator.</td>
 </tr>
 </tbody>
 </table>
@@ -1875,7 +1916,7 @@ also uses the <code class="xref py py-mod docutils literal"><span class="pre">nu
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

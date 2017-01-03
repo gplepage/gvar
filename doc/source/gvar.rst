@@ -77,6 +77,10 @@ manipulating gaussian random variables, including:
 
     - :any:`loads`\ ``(inputstr)`` --- reconstitute a collection of |GVar|\s from a string.
 
+    - :any:`disassmeble`\ ``(g)`` --- low-level routine to disassemble a collection of |GVar|\s.
+
+    - :any:`reassemble`\ ``(data,cov)`` --- low-level routine to reassemble a collection of |GVar|\s.
+
     - :any:`raniter`\ ``(g,N)`` --- iterator for random numbers.
 
     - :any:`bootstrap_iter`\ ``(g,N)`` --- bootstrap iterator.
@@ -141,6 +145,10 @@ matrices and correlation/comparison information can be extracted from arrays
 .. autofunction:: gvar.load(inputfile)
 
 .. autofunction:: gvar.loads(inputstring)
+
+.. autofunction:: gvar.disassemble(g)
+
+.. autofunction:: gvar.reassemble(data, cov=gvar.gvar.cov)
 
 |GVar|\s contain information about derivatives with respect to the *independent*
 |GVar|\s from which they were constructed. This information can be extracted using:

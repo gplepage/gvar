@@ -537,7 +537,7 @@ def disassemble(g):
     that can be pickled or otherwise stored. The output
     is reassembled by :func:`gvar.reassemble`.
 
-    Arg:
+    Args:
         g (dict, array, or gvar.GVar): Collection of |GVar|\s to be
             disassembled.
     """

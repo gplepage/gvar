@@ -49,6 +49,10 @@ variables including:
 
     - ``BufferDict`` --- (class) ordered dictionary with data buffer.
 
+    - ``disassemble(g)`` --- disassemble |GVar|\s in ``g``.
+
+    - ``reassemble(data, cov)`` --- reassemble into |GVar|\s.
+
     - ``dump(g, outputfile)`` --- pickle |GVar|\s in file.
 
     - ``dumps(g)`` --- pickle |GVar|s in a string.
@@ -146,9 +150,11 @@ def ranseed(seed=None):
     also returned by the function. The seed can be used to regenerate
     the same set of random numbers at a later time.
 
-    :param seed: A tuple of integers. Generates a random tuple if ``None``.
-    :type seed: tuple or None
-    :returns: The seed.
+    Args::
+        seed (int, tuple, or None): Seed for generator. Generates a
+            random tuple if ``None``.
+    Returns::
+        The seed used to reseed the generator.
     """
     if seed is None:
         seed = numpy.random.randint(1, int(2e9), size=3)

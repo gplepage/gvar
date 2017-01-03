@@ -1,13 +1,15 @@
-Version 8.????
+Version 8.0.1 2017-01-02
 ===========================
+Tiny changes needed by other code.
 
-- disassemble and reassemble (not for public however) plus testing.
-  Must fix so reassemble has default cov (then make public?).
+- gvar.ranseed now accepts single integers, as well as lists of
+  integers, as an argument.
+
+- New low-level routines gvar.disassemble and gvar.reassemble
+  that should be used with care.
 
 - changed gvar.chi2() so its output can be formatted with
   gvar.fmt_chi2().
-
-
 
 Version 8.0 2016-11-05
 =======================
