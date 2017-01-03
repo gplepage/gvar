@@ -531,6 +531,16 @@ def loads(inputstring):
     return _gvar.gvar(pickle.loads(inputstring))
 
 def disassemble(g):
+    """ Disassemble collection ``g`` of |GVar|\s.
+
+    Disassembles collection ``g`` of |GVar|\s into components
+    that can be pickled or otherwise stored. The output
+    is reassembled by :func:`gvar.reassemble`.
+
+    Arg:
+        g (dict, array, or gvar.GVar): Collection of |GVar|\s to be
+            disassembled.
+    """
     cdef INTP_TYPE i, gsize
     cdef GVar gi
     cdef numpy.ndarray[object, ndim=1] newbuf
@@ -545,7 +555,15 @@ def disassemble(g):
         newbuf[i] = (gi.v, gi.d)
     return BufferDict(g, buf=newbuf) if g.shape is None else newbuf.reshape(g.shape)
 
-def reassemble(data, smat cov):
+def reassemble(data, smat cov=_gvar.gvar.cov):
+    """ Convert data (from disassemble) back into |GVar|\s.
+
+    Args:
+        data (BufferDict, array): Disassembled collection of |GVar|\s
+            from :func:`gvar.disassemble` that are to be reassembled.
+        cov (gvar.smat): Covariance matrix corresponding to the |GVar|\s
+            in ``data``. (Default is ``gvar.gvar.cov``.)
+    """
     cdef INTP_TYPE i, datasize
     cdef object datai
     cdef svec der
