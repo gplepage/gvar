@@ -150,10 +150,10 @@ def ranseed(seed=None):
     also returned by the function. The seed can be used to regenerate
     the same set of random numbers at a later time.
 
-    Args::
+    Args:
         seed (int, tuple, or None): Seed for generator. Generates a
             random tuple if ``None``.
-    Returns::
+    Returns:
         The seed used to reseed the generator.
     """
     if seed is None:
