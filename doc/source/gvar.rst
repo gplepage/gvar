@@ -53,6 +53,8 @@ manipulating gaussian random variables, including:
 
     - :any:`evalcov`\ ``(g)`` --- compute covariance matrix.
 
+    - :any:`evalcov_cov`\ ``(g)`` --- compute diagonal blocks of covariance matrix.
+
     - :any:`evalcorr`\ ``(g)`` --- compute correlation matrix.
 
     - :any:`fmt_values`\ ``(g)`` --- list values for printing.
@@ -124,7 +126,13 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.evalcov(g)
 
+.. autofunction:: gvar.cov(g1, g2)
+
+.. autofunction:: gvar.evalcov_blocks(g)
+
 .. autofunction:: gvar.evalcorr(g)
+
+.. autofunction:: gvar.corr(g1, g2)
 
 .. autofunction:: gvar.uncorrelated(g1, g2)
 

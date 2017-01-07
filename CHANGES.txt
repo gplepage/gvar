@@ -1,6 +1,18 @@
-Version 8.0.1 2017-01-02
+Version 8.1 2017-01-02
 ===========================
-Tiny changes needed by other code.
+Small changes needed by other code.
+
+- Improved internal treatment of sparse covariance matrices in
+  gvar.svd (more sparse now). This involved improvements in svec and smat,
+  which now look for and remove entries that are 0; and it involved a new
+  function evalcov_blocks which constructs the non-zero block diagonals of the
+  covariance matrix (as opposed to the entire matrix, which is what evalcov
+  does). This should lead to small speedups but also greatly reducememory
+  consumption in cases where evalcov was used to construct covariance matrices
+  for large numbers of GVars (eg, lsqfit).
+
+- Two new convenience functions: cov(g1,g2) which is evalcov([g1,g2])[0,1]
+  and corr(g1,g2) which returns evalcorr([g1,g2])[0,1].
 
 - gvar.ranseed now accepts single integers, as well as lists of
   integers, as an argument.

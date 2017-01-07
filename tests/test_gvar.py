@@ -881,6 +881,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         x = gvar([1., 2.], [[64., 4.], [4., 16.]])
         a, b = x
         c = evalcorr([a, b])
+        self.assertEqual(corr(a,b), 1/8.)
         self.assert_arraysequal(c, [[1., 1/8.], [1/8., 1.]])
         c = evalcorr(x.reshape(2, 1))
         self.assertEqual(c.shape, 2 * (2, 1))
@@ -897,6 +898,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         a,b = gvar([1.,2.],[[64.,4.],[4.,36.]])
         c = evalcov([a,b/2])
         self.assert_arraysequal(c,[[ 64.,2.],[ 2.,9.]])
+        self.assertEqual(cov(a, b/2), 2.)
         c = evalcov([a/2,b])
         self.assert_arraysequal(c,[[ 16.,2.],[ 2.,36.]])
         z = gvar(8.,32.)

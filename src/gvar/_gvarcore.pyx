@@ -246,13 +246,13 @@ cdef class GVar:
                 x = xx
                 y = yy
                 assert x.cov is y.cov,"Incompatible GVars."
-                return GVar(x.v*y.v,x.d.add(y.d,y.v,x.v),x.cov)
+                return GVar(x.v * y.v, x.d.add(y.d, y.v, x.v), x.cov)
             else:
                 x = xx
-                return GVar(x.v*yy,x.d.mul(yy),x.cov)
+                return GVar(x.v*yy, x.d.mul(yy), x.cov)
         elif isinstance(yy,GVar):
             y = yy
-            return GVar(xx*y.v,y.d.mul(xx),y.cov)
+            return GVar(xx*y.v, y.d.mul(xx), y.cov)
         else:
             return NotImplemented
 

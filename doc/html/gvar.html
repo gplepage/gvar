@@ -90,6 +90,7 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.chi2" title="gvar.chi2"><code class="xref any py py-func docutils literal"><span class="pre">chi2</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <code class="docutils literal"><span class="pre">chi**2</span></code> of <code class="docutils literal"><span class="pre">g1-g2</span></code>.</li>
 <li><a class="reference internal" href="#gvar.equivalent" title="gvar.equivalent"><code class="xref any py py-func docutils literal"><span class="pre">equivalent</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s the same in <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code>?</li>
 <li><a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref any py py-func docutils literal"><span class="pre">evalcov</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute covariance matrix.</li>
+<li><code class="xref any docutils literal"><span class="pre">evalcov_cov</span></code><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute diagonal blocks of covariance matrix.</li>
 <li><a class="reference internal" href="#gvar.evalcorr" title="gvar.evalcorr"><code class="xref any py py-func docutils literal"><span class="pre">evalcorr</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute correlation matrix.</li>
 <li><a class="reference internal" href="#gvar.fmt_values" title="gvar.fmt_values"><code class="xref any py py-func docutils literal"><span class="pre">fmt_values</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; list values for printing.</li>
 <li><a class="reference internal" href="#gvar.fmt_errorbudget" title="gvar.fmt_errorbudget"><code class="xref any py py-func docutils literal"><span class="pre">fmt_errorbudget</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; create error-budget table for printing.</li>
@@ -403,6 +404,42 @@ covariance matrix as an array with shape <code class="docutils literal"><span cl
 If <code class="docutils literal"><span class="pre">g</span></code> is a dictionary whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, the result is a doubly-indexed dictionary where
 <code class="docutils literal"><span class="pre">cov[k1,k2]</span></code> is the covariance for <code class="docutils literal"><span class="pre">g[k1]</span></code> and <code class="docutils literal"><span class="pre">g[k2]</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.evalcov_blocks">
+<code class="descclassname">gvar.</code><code class="descname">evalcov_blocks</code><span class="sig-paren">(</span><em>g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.evalcov_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate covariance matrix for elements of <code class="docutils literal"><span class="pre">g</span></code>.</p>
+<p>Evaluates the covariance matrices for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s stored in
+array or dictionary of arrays <code class="docutils literal"><span class="pre">g</span></code>. The covariance matrix is
+decomposed into its block diagonal components, and a list of
+tuples <code class="docutils literal"><span class="pre">(idx,bcov)</span></code> is returned where <code class="docutils literal"><span class="pre">bcov</span></code> is a diagonal
+block of the covariance matrix and <code class="docutils literal"><span class="pre">idx</span></code> an array containing the
+corresponding indices in <code class="docutils literal"><span class="pre">g.flat</span></code> for that block. So to reassemble
+the blocks into a single matrix, for example, one would use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bcov</span> <span class="ow">in</span> <span class="n">evalcov_block</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">idx</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcov</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#gvar.evalcov_blocks" title="gvar.evalcov_blocks"><code class="xref py py-func docutils literal"><span class="pre">gvar.evalcov_blocks()</span></code></a> is particularly useful when the covariance
+matrix is sparse; only nonzero elements are retained.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>g</strong> (<em>dictionary, array, or gvar.GVar</em>) &#8211; Collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s whose
+correlation matrix is to be determined.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Results::</dt>
+<dd>A list of tuples <code class="docutils literal"><span class="pre">(idx,bcov)</span></code> containing the indices <code class="docutils literal"><span class="pre">idx</span></code>
+and value <code class="docutils literal"><span class="pre">bcov</span></code> of the diagonal blocks of the covariance
+matrix.</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">

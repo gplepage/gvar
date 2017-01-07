@@ -335,10 +335,25 @@ def evalcorr(g):
         return ans
     else:
         g = numpy.asarray(g)
+        g_shape = g.shape
         cov = evalcov(g.flat)
         idx = numpy.arange(cov.shape[0])
         sdev = cov[idx, idx] ** 0.5
-        return (cov / numpy.outer(sdev, sdev)).reshape(2 * g.shape)
+        ans = (cov / numpy.outer(sdev, sdev)) # .reshape(2 * g.shape)
+        return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
+
+def corr(g1, g2):
+    """ Correlation between :class:`gvar.GVar`\s ``g1`` and ``g2``. """
+    if not isinstance(g1, GVar) and not isinstance(g2, GVar):
+        raise ValueError('g1 and g2 must be GVars')
+    return evalcorr([g1, g2])[0,1]
+
+def cov(g1, g2):
+    """ Covariance of :class:`gvar.GVar` ``g1`` with ``g2``. """
+    if not isinstance(g1, GVar) and not isinstance(g2, GVar):
+        raise ValueError('g1 and g2 must be GVars')
+    return evalcov([g1, g2])[0,1]
+
 
 def correlate(g, corr):
     """ Add correlations to uncorrelated |GVar|\s in ``g``.
@@ -416,6 +431,88 @@ def correlate(g, corr):
         corr = numpy.asarray(corr).reshape(mean.shape[0], -1)
         return _gvar.gvar(mean, corr * numpy.outer(sdev, sdev)).reshape(g.shape)
 
+def evalcov_blocks(g):
+    """ Evaluate covariance matrix for elements of ``g``.
+
+    Evaluates the covariance matrices for |GVar|\s stored in
+    array or dictionary of arrays ``g``. The covariance matrix is
+    decomposed into its block diagonal components, and a list of
+    tuples ``(idx,bcov)`` is returned where ``bcov`` is a diagonal
+    block of the covariance matrix and ``idx`` an array containing the
+    corresponding indices in ``g.flat`` for that block. So to reassemble
+    the blocks into a single matrix ``cov``, for example, one would use::
+
+        import numpy as np
+        cov = np.empty((len(g), len(g)), float)
+        for idx, bcov in evalcov_block(g):
+            cov[idx, idx[None,:].T] = bcov
+
+    :func:`gvar.evalcov_blocks` is particularly useful when the covariance
+    matrix is sparse; only nonzero elements are retained.
+
+    Args::
+        g (dictionary, array, or gvar.GVar): Collection of |GVar|\s whose
+            correlation matrix is to be determined.
+    """
+    cdef INTP_TYPE a, b
+    cdef GVar ga, gb
+    cdef smat master_cov
+    cdef numpy.ndarray[numpy.npy_intp, ndim=1] idx, ga_d_indices
+    cdef numpy.ndarray[object, ndim=1] gf, g_indices
+    # find blocks
+    if hasattr(g, 'keys'):
+        if isinstance(g, BufferDict):
+            gf = g.flat[:]
+        else:
+            gf = BufferDict(g).buf[:]
+    elif hasattr(g, 'flat'):
+        gf = g.flat[:]
+    else:
+        gf = numpy.asarray(g).flat[:]
+    # gcov indices not in block yet = unassigned_indices
+    if len(gf) <= 0:
+        return []
+    unassigned_indices = set(numpy.arange(0, len(gf)))
+    # set containing xcov indices for each g[a] is g_indices[a]
+    g_indices = numpy.zeros(len(g), object)
+    blocks = []
+    master_cov = gf[0].cov
+    while unassigned_indices:
+        a = unassigned_indices.pop()
+        # gcov indices in current block = gcov_indices
+        gcov_indices = set([a])
+        ga = gf[a]
+        # xcov indices in the current gcov block = xcov_indices
+        ga_d_indices = ga.d.indices()
+        xcov_indices = set(ga_d_indices)
+        # find all indices connected to xcov_indices by the master cov
+        for i in ga_d_indices:
+            xcov_indices.update(master_cov.row[i].indices())
+        # new_indices = indices added to gcov_indices in the for-b loop
+        new_indices = set()
+        for b in unassigned_indices:
+            if g_indices[b] == 0:
+                gb = gf[b]
+                g_indices[b] = set(gb.d.indices())
+            if g_indices[b].isdisjoint(xcov_indices):
+                continue
+            else:
+                xcov_indices.update(g_indices[b])
+                gcov_indices.add(b)
+                new_indices.add(b)
+        blocks.append(gcov_indices)
+        unassigned_indices.difference_update(new_indices)
+    ans = []
+    for bl in blocks:
+        if len(bl) == 1:
+            b = bl.pop()
+            gb = gf[b]
+            ans.append((numpy.array([b]), numpy.array([[gb.var]])))
+        else:
+            idx = numpy.array([b for b in bl])
+            ans.append((idx, evalcov(gf[idx])))
+    return ans
+
 def evalcov(g):
     """ Compute covariance matrix for elements of
     array/dictionary ``g``.
@@ -426,7 +523,7 @@ def evalcov(g):
     |GVar|\s, the result is a doubly-indexed dictionary where
     ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.
     """
-    cdef int a,b,ng,i,j,nc
+    cdef INTP_TYPE a,b,ng,i,j,nc
     cdef numpy.ndarray[numpy.float_t,ndim=2] ans
     cdef numpy.ndarray[object,ndim=1] covd
     cdef numpy.ndarray[numpy.int8_t,ndim=1] imask

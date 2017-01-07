@@ -29,8 +29,8 @@ cdef class svec:
     # cdef readonly usigned int size ## number of elements in v
 
     def __cinit__(svec self, INTP_TYPE size, *arg, **karg):
-        self.v = <svec_element *> malloc(size*sizeof(self.v[0]))
-        memset(self.v,0,size*sizeof(self.v[0]))
+        self.v = <svec_element *> malloc(size * sizeof(self.v[0]))
+        memset(self.v, 0, size * sizeof(self.v[0]))
         self.size = size
 
     def __dealloc__(self):
@@ -75,7 +75,7 @@ cdef class svec:
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] indices(self):
         cdef INTP_TYPE i
         cdef numpy.ndarray [INTP_TYPE, ndim=1] ans
-        ans = numpy.zeros(self.size,numpy.intp)
+        ans = numpy.zeros(self.size, numpy.intp)
         for i in range(self.size):
             ans[i] = self.v[i].i
         return ans
@@ -100,23 +100,39 @@ cdef class svec:
 
         Assumes that len(v)==len(idx)==self.size and idx sorted
         """
-        cdef INTP_TYPE i
+        cdef INTP_TYPE i, j
+        j = 0
         for i in range(self.size):
-            self.v[i].v = v[i]
-            self.v[i].i = idx[i]
-
-    def assign(self,v,idx):
+            # only keep non-zero items
+            if v[i] != 0.0:
+                self.v[j].v = v[i]
+                self.v[j].i = idx[i]
+                j = j + 1
+        if j < self.size:
+            self.size = j
+            self.v = <svec_element *> realloc(
+                <void*> self.v, self.size * sizeof(self.v[0])
+                )
+    def assign(self, v, idx):
         """ assign v and idx to self.v[i].v and self.v[i].i """
-        cdef INTP_TYPE nv, i
+        cdef INTP_TYPE nv, i, j
         nv = len(v)
         assert nv==len(idx) and nv==self.size,"v,idx length mismatch"
         if nv>0:
             idx,v = zip(*sorted(zip(idx,v)))
+            j = 0
             for i in range(self.size):
-                self.v[i].v = v[i]
-                self.v[i].i = idx[i]
+                if v[i] != 0.0:
+                    self.v[i].v = v[i]
+                    self.v[i].i = idx[i]
+                    j = j + 1
+            if j < self.size:
+                self.size = j
+                self.v = <svec_element *> realloc(
+                    <void*> self.v, self.size * sizeof(self.v[0])
+                    )
 
-    cpdef double dot(svec self,svec v):
+    cpdef double dot(svec self, svec v):
         """ Compute dot product of self and v: <self|v> """
         cdef svec va,vb
         cdef INTP_TYPE ia,ib
@@ -141,25 +157,17 @@ cdef class svec:
                 ib += 1
         return ans
 
-    cpdef svec add(svec self,svec v,double a=1.,double b=1.):
+    cpdef svec add(svec self, svec v, double a=1., double b=1.):
         """ Compute a*self + b*v. """
-        cdef svec va,vb
-        cdef INTP_TYPE ia,ib,i, ians
+        cdef svec va, vb
+        cdef INTP_TYPE ia, ib, i, ians
         cdef svec ans
         va = self
         vb = v
-        if va.size == 0:
-            ans = svec.__new__(svec, vb.size) # svec(vb.size)
-            for i in range(vb.size):
-                ans.v[i].i = vb.v[i].i
-                ans.v[i].v = b * vb.v[i].v
-            return ans
-        elif vb.size == 0:
-            ans = svec.__new__(svec, va.size) # svec(va.size)
-            for i in range(va.size):
-                ans.v[i].i = va.v[i].i
-                ans.v[i].v = a * va.v[i].v
-            return ans
+        if va.size == 0 or a == 0:
+            return vb.mul(b)
+        elif vb.size == 0 or b == 0:
+            return va.mul(a)
         ans = svec.__new__(svec, va.size + vb.size) # svec(va.size+vb.size)     # could be too big
         ia = 0
         ib = 0
@@ -167,7 +175,7 @@ cdef class svec:
         while ia<va.size or ib<vb.size:
             if va.v[ia].i==vb.v[ib].i:
                 ans.v[ians].i = va.v[ia].i
-                ans.v[ians].v = a*va.v[ia].v+b*vb.v[ib].v
+                ans.v[ians].v = a * va.v[ia].v + b * vb.v[ib].v
                 ians += 1
                 ia += 1
                 ib += 1
@@ -214,13 +222,15 @@ cdef class svec:
                                          ans.size*sizeof(self.v[0]))
         return ans
 
-    cpdef svec mul(svec self,double a):
+    cpdef svec mul(svec self, double a):
         """ Compute a*self. """
         cdef INTP_TYPE i
+        if a == 0:
+            return svec.__new__(svec, 0)
         cdef svec ans = svec.__new__(svec, self.size) # svec(self.size)
         for i in range(self.size):
             ans.v[i].i = self.v[i].i
-            ans.v[i].v = a*self.v[i].v
+            ans.v[i].v = a * self.v[i].v
         return ans
 
 
@@ -285,27 +295,30 @@ cdef class smat:
     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self,
                                     numpy.ndarray[numpy.float_t,ndim=2] m):
         """ Add matrix m on diagonal. """
-        cdef INTP_TYPE i,j,nr,nm
-        cdef numpy.ndarray[numpy.float_t,ndim=1] v
-        cdef numpy.ndarray[INTP_TYPE,ndim=1] idx,vrange
+        cdef INTP_TYPE i, j, nr, nm, n_nonzero
+        cdef numpy.ndarray[numpy.float_t, ndim=1] v
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] idx,vrange
         cdef svec new_svec
-        assert m.shape[0]==m.shape[1],"m must be square matrix"
+        assert m.shape[0]==m.shape[1], "m must be square matrix"
         nm = m.shape[0]
-        idx = numpy.zeros(nm,numpy.intp)
-        v = numpy.zeros(nm,numpy.float_)
+        idx = numpy.zeros(nm, numpy.intp)
+        v = numpy.zeros(nm, numpy.float_)
         nr = self.nrow # len(self.rowlist)
         vrange = numpy.arange(nr, nr + nm, dtype=numpy.intp)
         for i in range(nm):
-            idx[i] = nr+i
-        for i in range(nm):
+            n_nonzero = 0
             for j in range(nm):
-                v[j] = m[i, j]
-            # self.rowlist.append(svec(nm))
-            # self.rowlist[-1]._assign(v,idx)
+                # only keep non-zero elements
+                if m[i, j] != 0.0:
+                    v[n_nonzero] = m[i, j]
+                    idx[n_nonzero] = j + nr
+                    n_nonzero += 1
+            if n_nonzero == 0:
+                continue
             if self.nrow >= self.nrow_max:
                 self._add_memory()
-            new_svec = svec(nm)
-            new_svec._assign(v, idx)
+            new_svec = svec(n_nonzero) # nm)
+            new_svec._assign(v[:n_nonzero], idx[:n_nonzero])
             self.row[self.nrow] = new_svec
             self.nrow += 1
         return vrange

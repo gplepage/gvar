@@ -31,7 +31,13 @@ variables including:
 
     - ``evalcov(g)`` --- compute covariance matrix.
 
+    - ``cov(g1, g2)`` --- covariance of :class:`gvar.GVar` ``g1`` with ``g2``.
+
+    - ``evalcov_blocks(g)`` --- compute diagonal blocks of covariance matrix.
+
     - ``evalcorr(g)`` --- compute correlation matrix.
+
+    - ``corr(g1, g2)`` --- correlation between :class:`gvar.GVar` ``g1`` and ``g2``.
 
     - ``tabulate(g)`` --- create a table of GVar values in dict/array g.
 
@@ -92,7 +98,7 @@ tools for use with |GVar|\s (or ``float``\s):
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-16 G. Peter Lepage.
+# Copyright (c) 2012-17 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -560,10 +566,11 @@ def svd(g, svdcut=1e-15, wgts=False):
         g = BufferDict(g)
     else:
         g = numpy.array(g)
-    cov = evalcov(g.flat)
-    block_idx = find_diagonal_blocks(cov)
+    # cov = evalcov(g.flat)      ### a bottle neck for lots of data -- sparse matrix???
+    # block_idx = find_diagonal_blocks(cov) ### might combine this with previous line to avoid making giant matrices
+    idx_bcov = evalcov_blocks(g.flat)
     svd.logdet = 0.0
-    svd.correction = numpy.zeros(cov.shape[0], object)
+    svd.correction = numpy.zeros(len(g.flat), object)
     svd.correction[:] = gvar(0, 0)
     svd.eigen_range = 1.
     svd.nmod = 0
@@ -571,17 +578,17 @@ def svd(g, svdcut=1e-15, wgts=False):
         i_wgts = [([], [])] # 1st entry for all 1x1 blocks
     lost_modes = 0
     svd.nblocks = {}
-    for idx in block_idx:
+    for idx, block_cov in idx_bcov:
         svd.nblocks[len(idx)] = svd.nblocks.get(len(idx), 0) + 1
         if len(idx) == 1:
             i = idx[0]
-            svd.logdet += numpy.log(cov[i, i])
+            svd.logdet += numpy.log(block_cov[0, 0])
             if wgts is not False:
                 i_wgts[0][0].append(i)
-                i_wgts[0][1].append(cov[i, i] ** (wgts * 0.5))
+                i_wgts[0][1].append(block_cov[0, 0] ** (wgts * 0.5))
         else:
-            idxT = idx[:, numpy.newaxis]
-            block_cov = cov[idx, idxT]
+            # idxT = idx[:, numpy.newaxis]
+            # block_cov = cov[idx, idxT]
             s = SVD(block_cov, svdcut=svdcut, rescale=True, compute_delta=True)
             if s.D is not None:
                 svd.logdet -= 2 * numpy.sum(numpy.log(di) for di in s.D)
