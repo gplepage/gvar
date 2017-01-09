@@ -426,7 +426,7 @@ the blocks into a single matrix <code class="docutils literal"><span class="pre"
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bcov</span> <span class="ow">in</span> <span class="n">evalcov_block</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
-    <span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">idx</span><span class="p">[</span><span class="bp">None</span><span class="p">,:]</span><span class="o">.</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcov</span>
+    <span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">],</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcov</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="#gvar.evalcov_blocks" title="gvar.evalcov_blocks"><code class="xref py py-func docutils literal"><span class="pre">gvar.evalcov_blocks()</span></code></a> is particularly useful when the covariance
@@ -924,12 +924,13 @@ for example, one could use code like:</p>
     <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wgts</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="ow">in</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>                <span class="c"># nxn sub-matrices (n&gt;1)</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wgts</span><span class="p">:</span>
-        <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+        <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This sets <code class="docutils literal"><span class="pre">inv_cov</span></code> equal to the inverse of the covariance matrix of
 the <code class="docutils literal"><span class="pre">gmod</span></code>s. Similarly, we can  compute the expectation value,
-<code class="docutils literal"><span class="pre">u.dot(inv_cov.dot(v))</span></code>, between two vectors (<code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays) using:</p>
+<code class="docutils literal"><span class="pre">u.dot(inv_cov.dot(v))</span></code>, between two vectors (<code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays)
+using:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="o">=</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                       <span class="c"># 1x1 sub-matrices</span>
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
