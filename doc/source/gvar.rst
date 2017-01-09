@@ -53,7 +53,7 @@ manipulating gaussian random variables, including:
 
     - :any:`evalcov`\ ``(g)`` --- compute covariance matrix.
 
-    - :any:`evalcov_cov`\ ``(g)`` --- compute diagonal blocks of covariance matrix.
+    - :any:`evalcov_blocks`\ ``(g)`` --- compute diagonal blocks of covariance matrix.
 
     - :any:`evalcorr`\ ``(g)`` --- compute correlation matrix.
 
@@ -79,7 +79,7 @@ manipulating gaussian random variables, including:
 
     - :any:`loads`\ ``(inputstr)`` --- reconstitute a collection of |GVar|\s from a string.
 
-    - :any:`disassmeble`\ ``(g)`` --- low-level routine to disassemble a collection of |GVar|\s.
+    - :any:`disassemble`\ ``(g)`` --- low-level routine to disassemble a collection of |GVar|\s.
 
     - :any:`reassemble`\ ``(data,cov)`` --- low-level routine to reassemble a collection of |GVar|\s.
 

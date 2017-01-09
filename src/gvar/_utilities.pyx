@@ -1,5 +1,5 @@
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-16 G. Peter Lepage.
+# Copyright (c) 2012-17 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -445,7 +445,7 @@ def evalcov_blocks(g):
         import numpy as np
         cov = np.empty((len(g), len(g)), float)
         for idx, bcov in evalcov_block(g):
-            cov[idx, idx[None,:].T] = bcov
+            cov[idx[:, None], idx] = bcov
 
     :func:`gvar.evalcov_blocks` is particularly useful when the covariance
     matrix is sparse; only nonzero elements are retained.

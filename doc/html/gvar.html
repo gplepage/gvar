@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gvar - Gaussian Random Variables &mdash; gvar 8.0.1 documentation</title>
+    <title>gvar - Gaussian Random Variables &mdash; gvar 8.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '8.0.1',
+        VERSION:     '8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 8.0.1 documentation" href="index.html" />
+    <link rel="top" title="gvar 8.1 documentation" href="index.html" />
     <link rel="next" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
     <link rel="prev" title="Overview and Tutorial" href="overview.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -90,7 +90,7 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.chi2" title="gvar.chi2"><code class="xref any py py-func docutils literal"><span class="pre">chi2</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <code class="docutils literal"><span class="pre">chi**2</span></code> of <code class="docutils literal"><span class="pre">g1-g2</span></code>.</li>
 <li><a class="reference internal" href="#gvar.equivalent" title="gvar.equivalent"><code class="xref any py py-func docutils literal"><span class="pre">equivalent</span></code></a><code class="docutils literal"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> &#8212; <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s the same in <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code>?</li>
 <li><a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref any py py-func docutils literal"><span class="pre">evalcov</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute covariance matrix.</li>
-<li><code class="xref any docutils literal"><span class="pre">evalcov_cov</span></code><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute diagonal blocks of covariance matrix.</li>
+<li><a class="reference internal" href="#gvar.evalcov_blocks" title="gvar.evalcov_blocks"><code class="xref any py py-func docutils literal"><span class="pre">evalcov_blocks</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute diagonal blocks of covariance matrix.</li>
 <li><a class="reference internal" href="#gvar.evalcorr" title="gvar.evalcorr"><code class="xref any py py-func docutils literal"><span class="pre">evalcorr</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; compute correlation matrix.</li>
 <li><a class="reference internal" href="#gvar.fmt_values" title="gvar.fmt_values"><code class="xref any py py-func docutils literal"><span class="pre">fmt_values</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; list values for printing.</li>
 <li><a class="reference internal" href="#gvar.fmt_errorbudget" title="gvar.fmt_errorbudget"><code class="xref any py py-func docutils literal"><span class="pre">fmt_errorbudget</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; create error-budget table for printing.</li>
@@ -103,7 +103,7 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal"><span class="pre">dumps</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; pickle a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in a string.</li>
 <li><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal"><span class="pre">load</span></code></a><code class="docutils literal"><span class="pre">(inputfile)</span></code> &#8212; reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from a file.</li>
 <li><a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref any py py-func docutils literal"><span class="pre">loads</span></code></a><code class="docutils literal"><span class="pre">(inputstr)</span></code> &#8212; reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from a string.</li>
-<li><code class="xref any docutils literal"><span class="pre">disassmeble</span></code><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
+<li><a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref any py py-func docutils literal"><span class="pre">disassemble</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref any py py-func docutils literal"><span class="pre">reassemble</span></code></a><code class="docutils literal"><span class="pre">(data,cov)</span></code> &#8212; low-level routine to reassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref any py py-func docutils literal"><span class="pre">raniter</span></code></a><code class="docutils literal"><span class="pre">(g,N)</span></code> &#8212; iterator for random numbers.</li>
 <li><a class="reference internal" href="#gvar.bootstrap_iter" title="gvar.bootstrap_iter"><code class="xref any py py-func docutils literal"><span class="pre">bootstrap_iter</span></code></a><code class="docutils literal"><span class="pre">(g,N)</span></code> &#8212; bootstrap iterator.</li>
@@ -407,6 +407,12 @@ If <code class="docutils literal"><span class="pre">g</span></code> is a diction
 </dd></dl>
 
 <dl class="function">
+<dt id="gvar.cov">
+<code class="descclassname">gvar.</code><code class="descname">cov</code><span class="sig-paren">(</span><em>g1</em>, <em>g2</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.cov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Covariance of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal"><span class="pre">g1</span></code> with <code class="docutils literal"><span class="pre">g2</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="gvar.evalcov_blocks">
 <code class="descclassname">gvar.</code><code class="descname">evalcov_blocks</code><span class="sig-paren">(</span><em>g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.evalcov_blocks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate covariance matrix for elements of <code class="docutils literal"><span class="pre">g</span></code>.</p>
@@ -416,7 +422,7 @@ decomposed into its block diagonal components, and a list of
 tuples <code class="docutils literal"><span class="pre">(idx,bcov)</span></code> is returned where <code class="docutils literal"><span class="pre">bcov</span></code> is a diagonal
 block of the covariance matrix and <code class="docutils literal"><span class="pre">idx</span></code> an array containing the
 corresponding indices in <code class="docutils literal"><span class="pre">g.flat</span></code> for that block. So to reassemble
-the blocks into a single matrix, for example, one would use:</p>
+the blocks into a single matrix <code class="docutils literal"><span class="pre">cov</span></code>, for example, one would use:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bcov</span> <span class="ow">in</span> <span class="n">evalcov_block</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
@@ -434,12 +440,6 @@ correlation matrix is to be determined.</td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Results::</dt>
-<dd>A list of tuples <code class="docutils literal"><span class="pre">(idx,bcov)</span></code> containing the indices <code class="docutils literal"><span class="pre">idx</span></code>
-and value <code class="docutils literal"><span class="pre">bcov</span></code> of the diagonal blocks of the covariance
-matrix.</dd>
-</dl>
 </dd></dl>
 
 <dl class="function">
@@ -456,6 +456,12 @@ If <code class="docutils literal"><span class="pre">g</span></code> is a diction
 <div class="highlight-python"><div class="highlight"><pre><span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="o">**</span> <span class="mf">0.5</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.corr">
+<code class="descclassname">gvar.</code><code class="descname">corr</code><span class="sig-paren">(</span><em>g1</em>, <em>g2</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.corr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation between <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal"><span class="pre">g1</span></code> and <code class="docutils literal"><span class="pre">g2</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1953,7 +1959,7 @@ also uses the <code class="xref py py-mod docutils literal"><span class="pre">nu
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.0.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
