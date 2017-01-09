@@ -14,6 +14,7 @@
 PIP = pip
 PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
+VERSION = `python -c 'import gvar; print gvar.__version__'`
 
 install :
 	$(PIP) install . --user
@@ -77,6 +78,11 @@ upload-git:
 	make doc-all
 	git commit -a -m "prep for upload"
 	git push origin master
+
+tag-git:
+	echo  "version $(VERSION)"
+	git tag -a v$(VERSION) -m "version $(VERSION)"
+	git push origin v$(VERSION)
 
 test-download:
 	-$(PIP) uninstall gvar
