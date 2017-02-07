@@ -1,2 +1,2 @@
 # File created by lsqfit setup.py
-version = '8.1'
+version = '8.2'
