@@ -1,3 +1,16 @@
+Version 8.2 2017-02-06
+========================
+Very small changes, mostly to support other modules.
+
+- gvar.dataset.Dataset can now read from files that use hdf5 format.
+
+- del g[k] and g.get(k) now implemented for any BufferDict g.
+
+- Can specify buffer data type when creating a BufferDict from
+  a dictionary or list of tuples: g = BufferDict(d, dtype=object).
+
+- Fixed small bug in gvar.tabulate (headers=False didn't work).
+
 Version 8.1 2017-01-09
 ===========================
 Mostly internal changes needed by other code.

@@ -4,7 +4,7 @@
 test-bufferdict.py
 
 """
-# Copyright (c) 2012-2016 G. Peter Lepage.
+# Copyright (c) 2012-2017 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         global b,bkeys,bvalues,bslices,bbuf
         b = None
 
-    def test_b_flat(self):
+    def test_flat(self):
         """ b.flat """
         global b,bkeys,bvalues,bslices,bbuf
         self.assert_arraysequal(b.flat,bbuf)
@@ -97,7 +97,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             b[k] = 10.
         self.assert_arraysequal(bbuf,bbuf_save)
 
-    def test_b_buf(self):
+    def test_buf(self):
         """ b.buf """
         global b,bkeys,bvalues,bslices,bbuf
         self.assert_arraysequal(b.flat,bbuf)
@@ -111,24 +111,24 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             b[k] = 10.
         self.assert_arraysequal(bbuf,np.zeros(bbuf.size)+10.)
 
-    def test_b_keys(self):
+    def test_keys(self):
         """ b.keys """
         global b,bkeys
         self.assertSequenceEqual(list(b.keys()),bkeys)
 
-    def test_b_slice(self):
+    def test_slice(self):
         """ b.slice(k) """
         global b,bkeys,bvalues,bslices,bbuf
         for k,sl in zip(bkeys,bslices):
             self.assertEqual(sl,b.slice(k))
 
-    def test_b_getitem(self):
+    def test_getitem(self):
         """ v = b[k] """
         global b,bkeys,bvalues,bslices,bbuf
         for k,v in zip(bkeys,bvalues):
             self.assert_arraysequal(b[k],v)
 
-    def test_b_setitem(self):
+    def test_setitem(self):
         """ b[k] = v """
         global b,bkeys,bvalues,bslices,bbuf
         for k,v in zip(bkeys,bvalues):
@@ -150,7 +150,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         outstr += "('tensor',array([[3.,4.],[5.,6.]]))])"
         self.assertEqual(''.join(repr(b).split()),outstr)
 
-    def test_bufferdict_b(self):
+    def testufferdict_b(self):
         """ BufferDict(b) """
         global b,bkeys,bvalues,bslices,bbuf
         nb = BufferDict(b)
@@ -170,7 +170,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         nbkeys = list(nb.keys())
         self.assertEqual(nbkeys, list(reversed(bkeys)))
 
-    def test_b_update(self):
+    def test_update(self):
         """ b.add(dict(..)) """
         global b,bkeys,bvalues,bslices,bbuf
         nb = BufferDict()
@@ -180,29 +180,57 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             nb[k] += 10.
             self.assert_arraysequal(nb[k] , b[k]+10.)
 
-    def test_b_add_err(self):
+    def test_del(self):
+        """ del b[k] """
+        global b
+        for k in b:
+            newb = BufferDict(b)
+            keys = list(b.keys())
+            del newb[k]
+            keys.remove(k)
+            self.assertEqual(keys, list(newb.keys()))
+            size = np.size(b[k])
+            self.assertEqual(len(b.buf) - size, len(newb.buf))
+            for l in newb:
+                self.assertTrue(np.all(newb[l] == b[l]))
+
+    def test_dtype(self):
+        """ BufferDict(d, dtype=X) """
+        global b
+        ib = BufferDict(b, dtype=np.intp)
+        self.assertTrue(np.all(ib.buf == b.buf))
+        self.assertTrue(isinstance(ib.buf[0], np.intp))
+        ib = BufferDict([(k, b[k]) for k in b], dtype=np.intp)
+        self.assertTrue(np.all(ib.buf == b.buf))
+        self.assertTrue(isinstance(ib.buf[0], np.intp))
+        ob = BufferDict([], dtype=object)
+        ob[0] = 1
+        ob[0] = gv.gvar('1(1)')
+
+    def test_get(self):
+        """ g.get(k) """
+        global b
+        for k in b:
+            self.assertTrue(np.all(b.get(k,133) == b[k]))
+        self.assertEqual(b.get(None, 12), 12)
+
+    def test_add_err(self):
         """ b.add err """
         global b
         with self.assertRaises(ValueError):
             b.add(bkeys[1],10.)
 
-    def test_b_getitem_err(self):
+    def test_getitem_err(self):
         """ b[k] err """
         global b
         with self.assertRaises(KeyError):
             x = b['pseudoscalar']
 
-    def test_b_buf_err(self):
+    def test_buf_err(self):
         """ b.flat assignment err """
         global b,bbuf
         with self.assertRaises(ValueError):
             b.buf = bbuf[:-1]
-
-    def test_b_del_err(self):
-        """ del b[k] """
-        global b
-        with self.assertRaises(NotImplementedError):
-            del b['scalar']
 
     def test_pickle(self):
         global b

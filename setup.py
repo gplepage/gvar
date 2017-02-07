@@ -1,6 +1,6 @@
 """
 Created by G. Peter Lepage (Cornell University) on 9/2011.
-Copyright (c) 2011-16 G. Peter Lepage.
+Copyright (c) 2011-17 G. Peter Lepage.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 import numpy
 
-GVAR_VERSION = '8.1'
+GVAR_VERSION = '8.2'
 
 # create gvar/_version.py so gvar knows its version number
 with open("src/gvar/_version.py","w") as version_file:
@@ -39,7 +39,7 @@ ext_args = dict(
     include_dirs=[numpy.get_include()],
     library_dirs=[],
     runtime_library_dirs=[],
-    extra_link_args=[] # ['-framework','vecLib'], # for Mac OSX ?
+    extra_link_args=[]
     )
 
 ext_modules = [

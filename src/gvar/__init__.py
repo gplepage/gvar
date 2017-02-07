@@ -134,11 +134,11 @@ from . import linalg
 from . import powerseries
 from . import root
 
-try:
-    # use lsqfit's gammaQ if available; otherwise use one in ._utilities
-    from lsqfit._utilities import gammaQ
-except:
-    pass
+# try:
+#     # use lsqfit's gammaQ if available; otherwise use one in ._utilities
+#     from lsqfit._utilities import gammaQ
+# except:
+#     pass
 
 _GVAR_LIST = []
 
@@ -752,7 +752,7 @@ def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None):
     ns = len(entries) - (ncol - 1) * nl
     ne = (ncol - 1) * [nl] + [ns]
     iter_entries = iter(entries)
-    if len(headers) != 2:
+    if headers is not False and len(headers) != 2:
         raise ValueError('headers must be True, False or a 2-tuple')
     for col in range(ncol):
         if headers is not False:

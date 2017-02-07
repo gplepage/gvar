@@ -131,13 +131,14 @@ class BufferDict(collections.OrderedDict):
             for k in kargs:
                 self[k] = kargs[k]
         elif len(args) == 1 and 'keys' in kargs and len(kargs) == 1:
-            self._buf = numpy.array([],numpy.intp)
+            self._buf = numpy.array([], numpy.intp)
             try:
                 for k in kargs['keys']:
                     self[k] = args[0][k]
             except KeyError:
                 raise KeyError('Dictionary does not contain key in keys: ' + str(k))
         else:
+            dtype = None
             if len(args)==2 and len(kargs)==0:
                 bd, buf = args
             elif len(args)==1 and len(kargs)==0:
@@ -146,6 +147,10 @@ class BufferDict(collections.OrderedDict):
             elif len(args)==1 and 'buf' in kargs and len(kargs)==1:
                 bd = args[0]
                 buf = kargs['buf']
+            elif len(args) == 1 and 'dtype' in kargs and len(kargs)==1:
+                bd = args[0]
+                buf = None
+                dtype = kargs['dtype']
             else:
                 raise ValueError("Bad arguments for BufferDict.")
             if isinstance(bd, BufferDict):
@@ -157,7 +162,7 @@ class BufferDict(collections.OrderedDict):
                         )
                 # copy buffer or use new one
                 self._buf = (
-                    numpy.array(bd._buf)
+                    numpy.array(bd._buf, dtype=dtype)
                     if buf is None else
                     numpy.asarray(buf)
                     )
@@ -168,7 +173,9 @@ class BufferDict(collections.OrderedDict):
                     raise ValueError("buf must be 1-d, not shape = %s"
                                      % (self._buf.shape,))
             elif buf is None:
-                self._buf = numpy.array([],numpy.intp)
+                self._buf = numpy.array(
+                    [], numpy.intp if dtype is None else dtype
+                    )
                 # add initial data
                 if hasattr(bd,"keys"):
                     # bd a dictionary
@@ -176,12 +183,10 @@ class BufferDict(collections.OrderedDict):
                         self[k] = bd[k]
                 else:
                     # bd an array of tuples
-                    if not all([(isinstance(bdi,tuple)
-                               and len(bdi)==2) for bdi in bd]):
-                        raise ValueError(
-                            "BufferDict argument must be dict or list of 2-tuples.")
-                    for ki,vi in bd:
+                    for ki, vi in bd:
                         self[ki] = vi
+                if dtype is not None and self._buf.dtype != dtype:
+                    self._buf = numpy.array(self._buf, dtype=dtype)
             else:
                 raise ValueError(
                     "bd must be a BufferDict in BufferDict(bd,buf), not %s"
@@ -279,7 +284,26 @@ class BufferDict(collections.OrderedDict):
                                      (str(v.shape),str(d.shape)))
 
     def __delitem__(self,k):
-        raise NotImplementedError("Cannot delete items from BufferDict.")
+        if k not in self:
+            raise ValueError('key not in BufferDict: ' + str(k))
+        size = numpy.size(self[k])
+        # fix buffer
+        self._buf = numpy.delete(self._buf, self.slice(k), 0)
+        # fix slices for keys after k
+        keys = list(self.keys())
+        idx = keys.index(k)
+        for kk in keys[idx + 1:]:
+            sl, sh = super(BufferDict, self).__getitem__(kk)
+            if isinstance(sl, slice):
+                newsl = slice(sl.start - size, sl.stop - size)
+            else:
+                newsl = sl - size
+            super(BufferDict, self).__setitem__(
+                kk, BUFFERDICTDATA(slice=newsl, shape=sh)
+                )
+        # delete k
+        super(BufferDict, self).__delitem__(k)
+        # raise NotImplementedError("Cannot delete items from BufferDict.")
 
     def __str__(self):
         ans = "{"
@@ -332,6 +356,12 @@ class BufferDict(collections.OrderedDict):
     def _getsize(self):
         """ Length of buffer. """
         return len(self._buf)
+
+    def get(self, k, d):
+        """ Return ``self[k]`` if ``k`` in ``self``, otherwise return ``d``. """
+        # items(), setdefault(), etc all use __getitem__, __setitem__
+        # but not get(), for some reason.
+        return self[k] if k in self else d
 
     size = property(_getsize,doc='Size of buffer array.')
     def slice(self,k):

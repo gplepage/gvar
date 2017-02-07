@@ -4,13 +4,13 @@
 test-dataset.py
 
 """
-# Copyright (c) 2012-15 G. Peter Lepage. 
+# Copyright (c) 2012-17 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version (see <http://www.gnu.org/licenses/>).
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,13 +28,19 @@ from gvar.dataset import *
 
 FAST = False
 
+try:
+    import h5py
+    NO_H5PY = False
+except:
+    NO_H5PY = True
+
 class ArrayTests(object):
     def __init__(self):
         pass
 
     def assert_gvclose(self,x,y,rtol=1e-5,atol=1e-8,prt=False):
         """ asserts that the means and sdevs of all x and y are close """
-        if hasattr(x,'keys') and hasattr(y,'keys'): 
+        if hasattr(x,'keys') and hasattr(y,'keys'):
             if sorted(x.keys())==sorted(y.keys()):
                 for k in x:
                     self.assert_gvclose(x[k],y[k],rtol=rtol,atol=atol)
@@ -119,7 +125,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
         #
         mean = avg_data([1,2])
         self.assertAlmostEqual(mean.mean,1.5)
-        self.assertAlmostEqual(mean.var,sum((vi-1.5)**2 
+        self.assertAlmostEqual(mean.var,sum((vi-1.5)**2
                                for vi in [1,2])/4.)
         mean2 = avg_data(np.array([1.,2.]))
         self.assertEqual(mean.mean,mean2.mean)
@@ -127,7 +133,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
         #
         mean = avg_data([1,2],spread=True)
         self.assertAlmostEqual(mean.mean,1.5)
-        self.assertAlmostEqual(mean.var,sum((vi-1.5)**2 
+        self.assertAlmostEqual(mean.var,sum((vi-1.5)**2
                                for vi in [1,2])/2.)
         #
         mean = avg_data([1,2],median=True)
@@ -140,7 +146,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
         #
         mean = avg_data([1,2,3])
         self.assertAlmostEqual(mean.mean,2.0)
-        self.assertAlmostEqual(mean.var,sum((vi-2.)**2 
+        self.assertAlmostEqual(mean.var,sum((vi-2.)**2
                                for vi in [1,2,3])/9.)
         #
         mean = avg_data([1,2,3], noerror=True)
@@ -148,15 +154,15 @@ class test_dataset(unittest.TestCase,ArrayTests):
         #
         mean = avg_data([[1],[2],[3]])
         self.assertAlmostEqual(mean[0].mean,2.0)
-        self.assertAlmostEqual(mean[0].var,sum((vi-2.)**2 
+        self.assertAlmostEqual(mean[0].var,sum((vi-2.)**2
                                for vi in [1,2,3])/9.)
-        
+
         mean = avg_data([[1],[2],[3]], noerror=True)
         self.assertAlmostEqual(mean[0], 2.0)
 
         mean = avg_data([1,2,3],spread=True)
         self.assertAlmostEqual(mean.mean,2.0)
-        self.assertAlmostEqual(mean.var,sum((vi-2.)**2 
+        self.assertAlmostEqual(mean.var,sum((vi-2.)**2
                                for vi in [1,2,3])/3.)
         #
         mean = avg_data([1,2,3],median=True)
@@ -170,23 +176,23 @@ class test_dataset(unittest.TestCase,ArrayTests):
         mean = avg_data([1,2,3],median=True,spread=True)
         self.assertAlmostEqual(mean.mean,2.0)
         self.assertAlmostEqual(mean.var,1.)
-        #            
+        #
         mean = avg_data([1,2,3,4,5,6,7,8,9],median=True)
         self.assertAlmostEqual(mean.mean,5)
         self.assertAlmostEqual(mean.var,3.**2/9.)
-        #            
+        #
         mean = avg_data([1,2,3,4,5,6,7,8,9],median=True,spread=True)
         self.assertAlmostEqual(mean.mean,5.)
         self.assertAlmostEqual(mean.var,3.**2)
-        #            
+        #
         mean = avg_data([1,2,3,4,5,6,7,8,9,10],median=True)
         self.assertAlmostEqual(mean.mean,5.5)
         self.assertAlmostEqual(mean.var,3.5**2/10.)
-        #            
+        #
         mean = avg_data([1,2,3,4,5,6,7,8,9,10],median=True,spread=True)
         self.assertAlmostEqual(mean.mean,5.5)
         self.assertAlmostEqual(mean.var,3.5**2)
-        # 
+        #
         data = dict(s=[1,2,3],v=[[1,1],[2,2],[3,3]])
         mean = avg_data(data,median=True,spread=True)
         self.assertAlmostEqual(mean['s'].mean,2.0)
@@ -348,11 +354,11 @@ class test_dataset(unittest.TestCase,ArrayTests):
         self.assertTrue('a' not in data)
         self.assertTrue('s' in data)
         self.assertEqual(data['s'],[1,2,3])
-        with self.assertRaises(TypeError): 
+        with self.assertRaises(TypeError):
             data = Dataset("xxx.input1","xxx.input2")
         os.remove(fin[0])
         os.remove(fin[1])
-    
+
     def test_dataset_init2(self):
         """ init from dictionaries or datasets """
         def assert_dset_equal(d1, d2):
@@ -361,18 +367,18 @@ class test_dataset(unittest.TestCase,ArrayTests):
             for k in d2:
                 assert k in d1, 'key mismatch'
                 self.assertTrue(np.all(np.array(d1[k]) == np.array(d2[k])))
-        data = Dataset(dict(a=[[1.,3.], [3.,4.]], b=[1., 2.])) 
+        data = Dataset(dict(a=[[1.,3.], [3.,4.]], b=[1., 2.]))
         data_reduced = Dataset(dict(a=[[1.,3.], [3.,4.]]))
-        data_binned = Dataset(dict(a=[[2.,3.5]], b=[1.5])) 
+        data_binned = Dataset(dict(a=[[2.,3.5]], b=[1.5]))
         data_empty = Dataset()
         self.assertEqual(data['a'], [[1.,3.], [3.,4.]])
         self.assertEqual(data['b'], [1., 2.])
         assert_dset_equal(data, Dataset(data))
         assert_dset_equal(data_reduced, Dataset(data,keys=['a']))
-        assert_dset_equal(data, 
+        assert_dset_equal(data,
             Dataset([('a', [[1.,3.], [3.,4.]]), ('b', [1., 2.])])
             )
-        assert_dset_equal(data, 
+        assert_dset_equal(data,
             Dataset([['a', [[1.,3.], [3.,4.]]], ['b', [1., 2.]]])
             )
         assert_dset_equal(data_reduced, Dataset(data, keys=['a']))
@@ -380,15 +386,15 @@ class test_dataset(unittest.TestCase,ArrayTests):
         assert_dset_equal(data_empty, Dataset(data, grep='[^b]', keys=['b']))
         assert_dset_equal(data_binned, Dataset(data, binsize=2))
         assert_dset_equal(
-            Dataset(data_binned, keys=['a']), 
+            Dataset(data_binned, keys=['a']),
             Dataset(data, binsize=2, keys=['a'])
             )
         assert_dset_equal(
-            Dataset(data_binned, keys=['a']), 
+            Dataset(data_binned, keys=['a']),
             Dataset(data, binsize=2, grep='[^b]')
             )
         assert_dset_equal(
-            Dataset(data_binned, keys=['a']), 
+            Dataset(data_binned, keys=['a']),
             Dataset(data, binsize=2, grep='[^b]', keys=['a'])
             )
         s = pickle.dumps(data)
@@ -468,7 +474,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
                 bs_mean.append(k,np.average(ai[k],axis=0))
                 for x in ai[k]:
                     self.assertTrue(   #
-                        x in numpy.asarray(dset[k]), 
+                        x in numpy.asarray(dset[k]),
                         "Bootstrap element not in original dataset.")
         a_bs = avg_data(bs_mean,bstrap=True)
 
@@ -487,10 +493,42 @@ class test_dataset(unittest.TestCase,ArrayTests):
             self.assertTrue(len(ai)==len(a0),"Bootstrap copy wrong length.")
             for x in ai:
                 self.assertTrue(    #
-                    x in numpy.asarray(a0), 
-                    "Bootstrap element not in original dataset.")        
+                    x in numpy.asarray(a0),
+                    "Bootstrap element not in original dataset.")
 
-
+    @unittest.skipIf(NO_H5PY,"skipping test_dataset_hdf5 --- no h5py modules")
+    def test_dataset_hdf5(self):
+        # make hdf5 file
+        s = [1., 2., 3., 4.]
+        v = list(np.array([[10.,11.], [12., 13.], [14., 15.], [16., 17.]]))
+        ref_dset = dict(s=s, v=v)
+        with h5py.File('test-gvar.h5', 'w') as h5file:
+            h5file['/run1/s'] = s
+            h5file['/run2/v'] = v
+        # everything
+        dset = Dataset('test-gvar.h5', h5group=['/run1', '/run2'])
+        self.assertEqual(list(dset.keys()), ['s', 'v'])
+        for k in dset:
+            self.assertEqual(str(dset[k]), str(ref_dset[k]))
+        # s only
+        dset = Dataset('test-gvar.h5', h5group=['/run1', '/run2'], grep='[^v]')
+        self.assertEqual(list(dset.keys()), ['s'])
+        for k in ['s']:
+            self.assertEqual(str(dset[k]), str(ref_dset[k]))
+        # v only
+        dset = Dataset('test-gvar.h5', h5group=['/run1', '/run2'], keys=['v'])
+        self.assertEqual(list(dset.keys()), ['v'])
+        for k in ['v']:
+            self.assertEqual(str(dset[k]), str(ref_dset[k]))
+        # binsize=2
+        dset = Dataset('test-gvar.h5', h5group=['/run1', '/run2'], binsize=2)
+        self.assertEqual(list(dset.keys()), ['s', 'v'])
+        self.assertEqual(dset['s'], [1.5, 3.5])
+        self.assertEqual(
+            str(dset['v']),
+            str([np.array([11., 12.]), np.array([15., 16.])])
+            )
+        os.remove('test-gvar.h5')
 
 if __name__ == '__main__':
 	unittest.main()

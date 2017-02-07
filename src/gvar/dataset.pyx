@@ -11,6 +11,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+import collections
 import fileinput
 import re
 import warnings
@@ -386,85 +387,75 @@ def bootstrap_iter(data, n=None):
             yield data[idx]
 
 
-
-try:
-    from collections import OrderedDict as _BASE_DICT
-except ImportError:
-    _BASE_DICT = dict
-
-class Dataset(_BASE_DICT):
+class Dataset(collections.OrderedDict):
     """ Dictionary for collecting random data.
 
-    This dictionary class simplifies the collection of random data. The
-    random data are stored in a dictionary, with each piece of random data
-    being a number or a :mod:`numpy` array of numbers. For example, consider a
-    situation where there are four random values for a scalar ``s`` and
+    A :class:`gvar.dataset.Dataset` is an ordered dictionary whose values
+    represent collections of random samples. Each value is  a :mod:`numpy`
+    array whose first index labels the random  sample. Random samples can be
+    numbers or arrays of numbers. The keys identify the quantity being
+    sampled.
+
+    A ``Dataset`` can be assembled piece by piece, as random data is
+    accumulated, or it can be read from a file. Consider a situation
+    where there are four random values for a scalar ``s`` and
     four random values for vector ``v``. These can be collected as
     follows::
 
-        >>> data = Dataset()
-        >>> data.append(s=1.1,v=[12.2,20.6])
-        >>> data.append(s=0.8,v=[14.1,19.2])
-        >>> data.append(s=0.95,v=[10.3,19.7])
-        >>> data.append(s=0.91,v=[8.2,21.0])
-        >>> print(data['s'])       # 4 random values of s
+        >>> dset = Dataset()
+        >>> dset.append(s=1.1, v=[12.2, 20.6])
+        >>> dset.append(s=0.8, v=[14.1, 19.2])
+        >>> dset.append(s=0.95, v=[10.3, 19.7])
+        >>> dset.append(s=0.91, v=[8.2, 21.0])
+        >>> print(dset['s'])       # 4 random values of s
         [ 1.1, 0.8, 0.95, 0.91]
-        >>> print(data['v'])       # 4 random vector-values of v
+        >>> print(dset['v'])       # 4 random vector-values of v
         [array([ 12.2,  20.6]), array([ 14.1,  19.2]), array([ 10.3,  19.7]), array([  8.2,  21. ])]
 
-    The argument to ``data.append()`` could be a dictionary: for example,
-    ``dd = dict(s=1.1,v=[12.2,20.6]); data.append(dd)`` is equivalent
-    to the first ``append`` statement above. This is useful, for
-    example, if the data comes from a function (that returns a dictionary).
-
-    One can also append data key-by-key: for example,
-    ``data.append('s',1.1); data.append('v',[12.2,20.6])``
-    is equivalent to the first ``append`` in the example above. One could
-    also achieve this with, for example,
-    ``data['s'].append(1.1); data['v'].append([12.2,20.6])``,
-    since each dictionary value is a list, but :class:`gvar.Dataset`'s
-    ``append`` checks for consistency between the new data and data already
-    collected and so is preferable.
+    The argument to ``dset.append()`` can also be a dictionary: for example,
+    ``dd = dict(s=1.1,v=[12.2,20.6]); dset.append(dd)`` is equivalent to the
+    first ``append`` statement above. One can also append data key-by-key: for
+    example, ``dset.append('s',1.1); dset.append('v',[12.2,20.6])`` is
+    equivalent to the first ``append`` in the example above.
 
     Use ``extend`` in place of ``append`` to add data in batches: for
     example, ::
 
-        >>> data = Dataset()
-        >>> data.extend(s=[1.1,0.8],v=[[12.2,20.6],[14.1,19.2]])
-        >>> data.extend(s=[0.95,0.91],v=[[10.3,19.7],[8.2,21.0]])
-        >>> print(data['s'])       # 4 random values of s
+        >>> dset = Dataset()
+        >>> dset.extend(s=[1.1, 0.8], v=[[12.2, 20.6], [14.1, 19.2]])
+        >>> dset.extend(s=[0.95, 0.91], v=[[10.3, 19.7],[8.2, 21.0]])
+        >>> print(dset['s'])       # 4 random values of s
         [ 1.1, 0.8, 0.95, 0.91]
 
     gives the same dataset as the first example above.
 
-    A :class:`Dataset` can also be created from a file where
-    every line is a new random sample. The data in the first example
-    above could have been stored in a file with the following content::
+    The same ``Dataset`` can also be created from a text file named
+    ``'datafile'`` with the following contents::
 
         # file: datafile
         s 1.1
-        v [12.2,20.6]
+        v [12.2, 20.6]
         s 0.8
-        v [14.1,19.2]
+        v [14.1, 19.2]
         s 0.95
-        v [10.3,19.7]
+        v [10.3, 19.7]
         s 0.91
-        v [8.2,21.0]
+        v [8.2, 21.0]
 
-    Lines that begin with ``#`` are ignored. Assuming the file is called
-    ``datafile``, we create a dataset identical to that above using the
-    code::
+    Here each line consists of a key  followed by a new random sample for that
+    key. Lines that begin with ``#`` are ignored. The file is  read using::
 
-        >>> data = Dataset('datafile')
-        >>> print(data['s'])
+        >>> dset = Dataset('datafile')
+        >>> print(dset['s'])
         [ 1.1, 0.8, 0.95, 0.91]
 
     Data can be binned while reading it in, which might be useful if
-    the data set is huge. To bin the data contained in file ``datafile`` in
-    bins of binsize 2 we use::
+    the data set is huge or if correlations are a concern.
+    To bin the data contained in file ``datafile`` in
+    bins of bin size 2 we use::
 
-        >>> data = Dataset('datafile',binsize=2)
-        >>> print(data['s'])
+        >>> dset = Dataset('datafile', binsize=2)
+        >>> print(dset['s'])
         [0.95, 0.93]
 
     The keys read from a data file are restricted to those listed in keyword
@@ -472,49 +463,111 @@ class Dataset(_BASE_DICT):
     expression ``grep`` if one or other of these is specified: for
     example, ::
 
-        >>> data = Dataset('datafile')
-        >>> print([k for k in a])
+        >>> dset = Dataset('datafile')
+        >>> print([k for k in dset])
         ['s', 'v']
-        >>> data = Dataset('datafile',keys=['v'])
-        >>> print([k for k in a])
+        >>> dset = Dataset('datafile', keys=['v'])
+        >>> print([k for k in dset])
         ['v']
-        >>> data = Dataset('datafile',grep='[^v]')
-        >>> print([k for k in a])
+        >>> dset = Dataset('datafile', grep='[^v]')
+        >>> print([k for k in dset])
         ['s']
-        >>> data = Dataset('datafile',keys=['v'],grep='[^v]')
-        >>> print([k for k in a])
+        >>> dset = Dataset('datafile', keys=['v'], grep='[^v]')
+        >>> print([k for k in dset])
         []
 
-    :class:`Dataset`\s can also be constructed from dictionaries, other
-    :class:`Dataset`\s, or lists of key-data tuples. For example, ::
+    In addition to text files, hdf5 files can also be read (provided
+    module :mod:`h5py` is available): for example, ::
 
-        >>> data = Dataset('datafile')
-        >>> data_binned = Dataset(data, binsize=2)
-        >>> data_v = Dataset(data, keys=['v'])
+        >>> dset = Dataset('datafile.h5', h5group='/mcdata')
 
-    reads data from file ``'datafile'`` into :class:`Dataset` ``data``,
-    and then creates a new :class:`Dataset` with the data binned
-    (``data_binned``), and another that only containes the data with
-    key ``'v'`` (``data_v``).
+    reads the hdf5 datasets in hdf5 group ``'/mcdata'``. An hdf5
+    equivalent to the text file above would contain two groups,
+    one with key ``'s'`` that is a one-dimensional array with shape (4,),
+    and another with key ``'v'`` that is a two-dimensional array
+    with shape (4, 2):
+
+        >>> import h5py
+        >>> for v in h5py.File('datafile.h5')['/mcdata'].values():
+        ...     print(v)
+        <HDF5 dataset "s": shape (4,), type "<f8">
+        <HDF5 dataset "v": shape (4, 2), type "<f8">
+
+    Finally, :class:`Dataset`\s can also be constructed from other
+    dictionaries (including other :class:`Dataset`\s), or lists of key-data
+    tuples. For example, ::
+
+        >>> dset = Dataset('datafile')
+        >>> dset_binned = Dataset(dset, binsize=2)
+        >>> dset_v = Dataset(dset, keys=['v'])
+
+    reads data from file ``'datafile'`` into :class:`Dataset` ``dset``, and
+    then creates a new :class:`Dataset` with the data binned
+    (``dset_binned``), and another that only contains the data with key
+    ``'v'`` (``dset_v``).
+
+    Args:
+        inputdata (str or list or dictionary): If ``inputdata`` is a string,
+            it is the name of a file containing datasets. Two formats are
+            supported. If the filename ends in '.h5', the file is in hdf5
+            format,  with datasets that are :mod:`numpy` arrays whose first
+            index labels the random sample.
+
+            The other file format is a text file where each line consists of
+            a key followed by a number or array of numbers representing a new
+            random sample associated  with that key. Lines beginning with
+            ``#`` are comments. A list of text file names can also be
+            supplied, and text files can be compressed (with names ending in
+            ``.gz`` or ``.bz2``).
+
+            If ``inputdata`` is a dictionary or a list of (key,value) tuples,
+            its keys and values are copied into the dataset. Its values should
+            be arrays whose first index labels the random sample.
+        binsize (int): Bin the random samples in bins of size ``binsize``.
+            Default value is ``binsize=1`` (*i.e.*, no binning).
+        grep (str or ``None``): If not ``None``, only keys that match or
+            partially match regular expression ``grep`` are retained in
+            the data set. Keys that don't match are ignored. Default is
+            ``grep=None``.
+        keys (list): List of keys to retain in data set. Keys that are not
+            in the list are ignored. Default is ``keys=None`` which implies
+            that all keys are kept.
+        h5group (str or list): Address within the hdf5 file identified by
+            ``inputdata`` that contains the relevant datasets. Every
+            hdf5 dataset in group ``h5group`` is
+            read into the dataset, with the same key as in ``h5group``.
+            Default is the top group in the file: ``h5group='/'``.
+            ``h5group`` can also be a list of groups, in which case
+            datasets from all of the groups are read.
     """
-    def __init__(self, *args, **kargs):
-        cdef INTP_TYPE binsize
-        if not args:
+    def __init__(
+        self, inputdata=None, int binsize=1, grep=None, keys=None, h5group='/',
+        nbin=None,
+        ):
+        if inputdata is None:
             super(Dataset, self).__init__()
             return
-        elif len(args)>1:
-            raise TypeError("Expected at most 1 argument, got %d."%len(args))
-        if 'nbin' in kargs and 'binsize' not in kargs:
-            binsize = int(kargs.get('nbin', 1))   # for legacy code
-        else:
-            binsize = int(kargs.get('binsize',1))
-        keys = set(kargs.get('keys',[]))
-        grep = kargs.get('grep', None)
+        if nbin is not None and binsize is 1:
+            binsize = nbin
         if grep is not None:
             grep = re.compile(grep)
+        if isinstance(inputdata, str) and inputdata[-3:] == '.h5':
+            try:
+                import h5py
+            except ImportError:
+                raise ImportError('need module h5py to read hpf5 .h5 file')
+            if isinstance(h5group, str):
+                h5group = [h5group]
+            with h5py.File(inputdata, 'r') as h5file:
+                inputdata = collections.OrderedDict()
+                for h5g in h5group:
+                    h5g = h5file[h5g]
+                    for k in h5g:
+                        if isinstance(h5g[k], h5py.Dataset):
+                            inputdata[k] = list(numpy.array(h5g[k]))
         try:
-            # args[0] = Dataset or dictionary
-            super(Dataset, self).__init__(args[0])
+            # inputdata = Dataset or dictionary
+            super(Dataset, self).__init__(inputdata)
             if grep is not None:
                 for k in self:
                     if grep.search(k) is None:
@@ -525,14 +578,19 @@ class Dataset(_BASE_DICT):
                         del self[k]
             if binsize > 1:
                 for k in self:
-                    self[k] = bin_data(self[k])
+                    self[k] = bin_data(self[k], binsize=binsize)
             return
         except ValueError:
-            # args[0] = files
-            super(Dataset, self).__init__()
+            pass
+        # inputdata = files
+        super(Dataset, self).__init__()
         if binsize>1:
             acc = {}
-        for line in fileinput.input(args[0], openhook=fileinput.hook_compressed):
+        if isinstance(inputdata, fileinput.FileInput):
+            finput = inputdata
+        else:
+            finput = fileinput.input(inputdata, openhook=fileinput.hook_compressed)
+        for line in finput:
             f = line.split()
             if len(f)<2 or f[0][0]=='#':
                 continue
@@ -545,7 +603,7 @@ class Dataset(_BASE_DICT):
                 d = eval(f[1])
             elif f[1][0] in "[(":
                 d = eval(" ".join(f[1:]), {}, {})
-            else: # except (NameError,SyntaxError):
+            else:
                 try:
                     d = [float(x) for x in f[1:]]
                 except ValueError:
@@ -560,8 +618,8 @@ class Dataset(_BASE_DICT):
                     self.append(k, d)
 
     def toarray(self):
-        """ Create dictionary ``d`` where ``d[k]=numpy.array(self[k])`` for all ``k``. """
-        ans = dict()
+        """ Create new dictionary ``d`` where ``d[k]=numpy.array(self[k])`` for all ``k``. """
+        ans = collections.OrderedDict()
         for k in self:
             ans[k] = numpy.array(self[k],numpy.float_)
         return ans
