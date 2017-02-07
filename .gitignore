@@ -3,6 +3,7 @@ build/
 __pycache__/
 *.c
 *.p
+avg.py
 xxx.*
 yyy.*
 zzz.*
