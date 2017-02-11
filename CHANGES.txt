@@ -2,7 +2,8 @@ Version 8.2.1 2017-02-11
 =========================
 
 - Fixed bug in gvar.gvar that mishandled GVars with standard
-  deviation exactly equal to 0, when they were in arrays.
+  deviation exactly equal to 0, when they were in arrays. This
+  caused segmentation faults occasionally.
 
 - Tiny fix to Dataset for use with hdf5 files.
 
