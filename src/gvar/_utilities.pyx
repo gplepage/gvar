@@ -1039,7 +1039,7 @@ class SVD(object):
         ``delta=None`` otherwise.
     :type compute_delta: boolean
     :param rescale: Rescale the input matrix to make its diagonal elements
-        equal to 1.0 before diagonalizing.
+        equal to +-1.0 before diagonalizing.
 
     The results are accessed using:
 
@@ -1085,7 +1085,7 @@ class SVD(object):
         self.svdnum = svdnum
         if rescale:
             mat = numpy.asarray(mat)
-            D = (mat.diagonal())**(-0.5)
+            D = (numpy.fabs(mat.diagonal()))**(-0.5)
             DmatD = mat*D
             DmatD = (DmatD.transpose()*D).transpose()
             self.D = D

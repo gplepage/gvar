@@ -558,6 +558,8 @@ class Dataset(collections.OrderedDict):
                 raise ImportError('need module h5py to read hpf5 .h5 file')
             if isinstance(h5group, str):
                 h5group = [h5group]
+            if h5group == [] or h5group is None:
+                h5group = '/'
             with h5py.File(inputdata, 'r') as h5file:
                 inputdata = collections.OrderedDict()
                 for h5g in h5group:

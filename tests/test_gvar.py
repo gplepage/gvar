@@ -672,6 +672,12 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(z.sdev,sqrt(z.var))
         # self.assertTrue(z.cov is cov)
 
+        # zero covariance
+        x = gvar([1.], [[0.]])
+        self.assertEqual(str(x), '[1(0)]')
+        x = gvar(1, 0.)
+        self.assertEqual(str(x), '1(0)')
+
     def t_gvar(self,args,xm,dx,xcov,xder):
         """ worker for test_gvar """
         gvar = gvar_factory()

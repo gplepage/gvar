@@ -308,8 +308,8 @@ cdef class smat:
         for i in range(nm):
             n_nonzero = 0
             for j in range(nm):
-                # only keep non-zero elements
-                if m[i, j] != 0.0:
+                # only keep non-zero elements + diagonal elements
+                if m[i, j] != 0.0 or i == j:
                     v[n_nonzero] = m[i, j]
                     idx[n_nonzero] = j + nr
                     n_nonzero += 1
