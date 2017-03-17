@@ -98,10 +98,7 @@ cdef class GVar:
 
         # special cases
         if numpy.isnan(v) or numpy.isnan(dv):
-            if numpy.isnan(v) != numpy.isnan(dv):
-                return '%g +- %g'%(v, dv) # mean or error is not nan
-            else:
-                return 'nan(nan)' # mean and error are nan
+            return '%g +- %g'%(v, dv)
         elif dv == float('inf'):
             return '%g +- inf' % v
         elif v == 0 and (dv >= 1e5 or dv < 1e-4):
