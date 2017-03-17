@@ -1,3 +1,14 @@
+Version 8.2.2 2017-03-17
+=========================
+Minor/rare bug fixes:
+
+- SVD(mat, rescale=True) works now when mat has a zero on the diagonal. Such
+  a zero is a very unusual occurrence so this fix will have no impact
+  on almost all codes. This repairs a bug introduced in v8.1.
+
+- GVars whose mean or standard deviation are nans will no longer cause
+  an exception when they are printed. Thanks to Daniel Hackett.
+
 Version 8.2.1 2017-02-11
 =========================
 

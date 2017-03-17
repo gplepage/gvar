@@ -97,7 +97,9 @@ cdef class GVar:
         v = self.mean
 
         # special cases
-        if dv == float('inf'):
+        if numpy.isnan(v) or numpy.isnan(dv):
+                return '%g +- %g' % (v, dv)
+        elif dv == float('inf'):
             return '%g +- inf' % v
         elif v == 0 and (dv >= 1e5 or dv < 1e-4):
             if dv == 0:

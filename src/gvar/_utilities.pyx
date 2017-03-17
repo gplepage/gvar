@@ -1085,7 +1085,9 @@ class SVD(object):
         self.svdnum = svdnum
         if rescale:
             mat = numpy.asarray(mat)
-            D = (numpy.fabs(mat.diagonal()))**(-0.5)
+            diag = numpy.fabs(mat.diagonal())
+            diag[diag==0.0] = 1.
+            D = (diag)**(-0.5)
             DmatD = mat*D
             DmatD = (DmatD.transpose()*D).transpose()
             self.D = D
@@ -1102,6 +1104,7 @@ class SVD(object):
             # warnings.warn('numpy.linalg.svd failed; trying numpy.linalg.eigh')
             val, vec = numpy.linalg.eigh(DmatD)
             vec = numpy.transpose(vec) # now 1st index labels eigenval
+            val = numpy.fabs(val)
             # guarantee that sorted, with smallest val[i] first
             indices = numpy.arange(val.size) # in case val[i]==val[j]
             val, indices, vec = zip(*sorted(zip(val, indices, vec)))

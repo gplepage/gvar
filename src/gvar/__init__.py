@@ -567,8 +567,6 @@ def svd(g, svdcut=1e-15, wgts=False):
         g = BufferDict(g)
     else:
         g = numpy.array(g)
-    # cov = evalcov(g.flat)      ### a bottle neck for lots of data -- sparse matrix???
-    # block_idx = find_diagonal_blocks(cov) ### might combine this with previous line to avoid making giant matrices
     idx_bcov = evalcov_blocks(g.flat)
     svd.logdet = 0.0
     svd.correction = numpy.zeros(len(g.flat), object)
@@ -588,8 +586,6 @@ def svd(g, svdcut=1e-15, wgts=False):
                 i_wgts[0][0].append(i)
                 i_wgts[0][1].append(block_cov[0, 0] ** (wgts * 0.5))
         else:
-            # idxT = idx[:, numpy.newaxis]
-            # block_cov = cov[idx, idxT]
             s = SVD(block_cov, svdcut=svdcut, rescale=True, compute_delta=True)
             if s.D is not None:
                 svd.logdet -= 2 * numpy.sum(numpy.log(di) for di in s.D)
@@ -612,7 +608,6 @@ def svd(g, svdcut=1e-15, wgts=False):
             svd.nmod += s.nmod
     svd.dof = len(g.flat) - lost_modes
     svd.nmod += lost_modes
-    # svd.blocks = block_idx
 
     # repack into numpy arrays
     if wgts is not False:

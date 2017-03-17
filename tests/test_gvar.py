@@ -1034,6 +1034,11 @@ class test_gvar2(unittest.TestCase,ArrayTests):
                              cov,rtol=1e-6)
         self.assertAlmostEqual(s.kappa,1/16.)
 
+        # on-axis 0
+        cov = np.array([[4.,0.0], [0.0, 0.0]])
+        s = SVD(cov, rescale=False, svdcut=None)
+        self.assertTrue(np.all(s.val == [0., 4.]))
+
         # singular case
         cov = evalcov([(x+y)/2**0.5,(x-y)/2**0.5,x,y])
         s = SVD(cov)
