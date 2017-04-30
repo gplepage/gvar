@@ -24,6 +24,11 @@ import numpy as np
 import random
 import gvar as gv
 from gvar import *
+try:
+    import vegas
+    have_vegas = True
+except:
+    have_vegas = False
 
 FAST = False
 
@@ -1477,13 +1482,11 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             np.all(np.fabs(gv.mean(diff)) < 5 * gv.sdev(diff))
             )
 
+
+    @unittest.skipIf(not have_vegas, "vegas not installed")
     @unittest.skipIf(FAST,"skipping test_pdfstatshist for speed")
     def test_pdfstatshist(self):
         " PDFStatistics(histogram) "
-        try:
-            import vegas
-        except ImportError:
-            return
         g = gv.gvar('2(1.0)')
         hist = PDFHistogram(g + 0.1, nbin=50, binwidth=0.2)
         integ = vegas.PDFIntegrator(g)
