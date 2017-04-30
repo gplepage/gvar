@@ -1,3 +1,12 @@
+Version 8.2.3  2017-04-30
+==========================
+
+- Slightly faster memory allocation for GVars.
+
+- Fixed problems in gvar.BufferDict caused by changes in Python's
+  dictionaries starting at Python 3.5. The new code has been tested
+  (and should work) with Python 3.4, 3.5 and 3.6.
+
 Version 8.2.2 2017-03-17
 =========================
 Minor/rare bug fixes:

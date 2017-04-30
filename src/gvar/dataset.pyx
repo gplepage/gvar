@@ -571,11 +571,11 @@ class Dataset(collections.OrderedDict):
             # inputdata = Dataset or dictionary
             super(Dataset, self).__init__(inputdata)
             if grep is not None:
-                for k in self:
+                for k in list(self.keys()):
                     if grep.search(k) is None:
                         del self[k]
             if keys:
-                for k in self:
+                for k in list(self.keys()):
                     if k not in keys:
                         del self[k]
             if binsize > 1:

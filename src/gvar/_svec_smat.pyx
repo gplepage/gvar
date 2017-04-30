@@ -17,7 +17,9 @@ import numpy
 cimport numpy
 cimport cython
 
-from libc.stdlib cimport malloc, realloc, free #, sizeof
+from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
+
+# from libc.stdlib cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free #, sizeof
 from libc.string cimport memset
 
 from numpy cimport npy_intp as INTP_TYPE
@@ -29,12 +31,12 @@ cdef class svec:
     # cdef readonly usigned int size ## number of elements in v
 
     def __cinit__(svec self, INTP_TYPE size, *arg, **karg):
-        self.v = <svec_element *> malloc(size * sizeof(self.v[0]))
+        self.v = <svec_element *> PyMem_Malloc(size * sizeof(self.v[0]))
         memset(self.v, 0, size * sizeof(self.v[0]))
         self.size = size
 
     def __dealloc__(self):
-        free(<void *> self.v)
+        PyMem_Free(<void *> self.v)
 
 
     def __reduce__(self):
@@ -110,7 +112,7 @@ cdef class svec:
                 j = j + 1
         if j < self.size:
             self.size = j
-            self.v = <svec_element *> realloc(
+            self.v = <svec_element *> PyMem_Realloc(
                 <void*> self.v, self.size * sizeof(self.v[0])
                 )
     def assign(self, v, idx):
@@ -128,7 +130,7 @@ cdef class svec:
                     j = j + 1
             if j < self.size:
                 self.size = j
-                self.v = <svec_element *> realloc(
+                self.v = <svec_element *> PyMem_Realloc(
                     <void*> self.v, self.size * sizeof(self.v[0])
                     )
 
@@ -218,7 +220,7 @@ cdef class svec:
                         ians += 1
                     break
         ans.size = ians
-        ans.v = <svec_element *> realloc(<void*> ans.v,
+        ans.v = <svec_element *> PyMem_Realloc(<void*> ans.v,
                                          ans.size*sizeof(self.v[0]))
         return ans
 

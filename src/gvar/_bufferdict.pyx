@@ -249,6 +249,14 @@ class BufferDict(collections.OrderedDict):
         ans = self._buf[d.slice]
         return ans if d.shape is () else ans.reshape(d.shape)
 
+    def values(self):
+        # needed for python3.5
+        return [self[k] for k in self]
+
+    def items(self):
+        # needed for python3.5
+        return [(k,self[k]) for k in self]
+
     def __setitem__(self,k,v):
         """ Set piece of buffer corresponding to ``k`` to value ``v``.
 
