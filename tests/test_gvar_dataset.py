@@ -484,7 +484,6 @@ class test_dataset(unittest.TestCase,ArrayTests):
         self.assertGreater(6*an_sdev/N**0.5,abs(an_mean-a_bs['n'].mean))
         self.assertGreater(6*an_sdev/N**0.5,abs(an_sdev-a_bs['n'].sdev))
 
-
     def test_array_bootstrap_iter(self):
         """ bootstrap_iter(data_array) """
         N = 100
@@ -529,6 +528,100 @@ class test_dataset(unittest.TestCase,ArrayTests):
             str([np.array([11., 12.]), np.array([15., 16.])])
             )
         os.remove('test-gvar.h5')
+
+    def test_svd_diagnosis(self):
+        " svd_diagnosis "
+        # random correlated data (10x10 correlation matrix)
+        chebval = np.polynomial.chebyshev.chebval
+        gv.ranseed(1)
+        x = np.linspace(-.9, .9, 10)
+        c = gv.raniter(gv.gvar(len(x) * ['0(1)']))
+
+        # small dataset (big svdcut)
+        dset = []
+        for n in range(15):
+            dset.append(chebval(x, next(c)))
+        gv.ranseed(2)
+        s = gv.dataset.svd_diagnosis(dset)
+        self.assertGreater(s.svdcut, 0.01)
+        # print(s.svdcut)
+        # s.plot_ratio(show=True)
+        # test with dictionary
+        gv.ranseed(2)
+        sd = gv.dataset.svd_diagnosis(dict(a=dset))
+        self.assertEqual(s.svdcut, sd.svdcut)
+
+        # large dataset (small or no svdcut)
+        dset = []
+        for n in range(100):
+            dset.append(chebval(x, next(c)))
+        gv.ranseed(3)
+        s = svd_diagnosis(dset)
+        self.assertGreater(0.01, s.svdcut)
+        # print(s.svdcut)
+        # s.plot_ratio(show=True)
+
+        # with models (only if lsqfit installed)
+        try:
+            import lsqfit
+        except:
+            return
+        class Linear(lsqfit.MultiFitterModel):
+            def __init__(self, datatag, x, intercept, slope):
+                super(Linear, self).__init__(datatag)
+                self.x = np.array(x)
+                self.intercept = intercept
+                self.slope = slope
+            def fitfcn(self, p):
+                return p[self.intercept] + p[self.slope] * self.x
+            def buildprior(self, prior, mopt=None, extend=False):
+                " Extract the model's parameters from prior. "
+                newprior = {}
+                newprior[self.intercept] = prior[self.intercept]
+                newprior[self.slope] = prior[self.slope]
+                return newprior
+            def builddata(self, data):
+                " Extract the model's fit data from data. "
+                return data[self.datatag]
+            def builddataset(self, dset):
+                " Extract the model's fit data from a dataset. "
+                return dset[self.datatag]
+        x = np.array([1., 2., 3., 4., 5., 6., 7., 8., 9., 10.])
+        y_samples = [
+            [2.8409,   4.8393,   6.8403,   8.8377,  10.8356,  12.8389,  14.8356,  16.8362,  18.8351,  20.8341],
+            [2.8639,   4.8612,   6.8597,   8.8559,  10.8537,  12.8525,  14.8498,  16.8487,  18.8460,  20.8447],
+            [3.1048,   5.1072,   7.1071,   9.1076,  11.1090,  13.1107,  15.1113,  17.1134,  19.1145,  21.1163],
+            [3.0710,   5.0696,   7.0708,   9.0705,  11.0694,  13.0681,  15.0693,  17.0695,  19.0667,  21.0678],
+            [3.0241,   5.0223,   7.0198,   9.0204,  11.0191,  13.0193,  15.0198,  17.0163,  19.0154,  21.0155],
+            [2.9719,   4.9700,   6.9709,   8.9706,  10.9707,  12.9705,  14.9699,  16.9686,  18.9676,  20.9686],
+            [3.0688,   5.0709,   7.0724,   9.0730,  11.0749,  13.0776,  15.0790,  17.0800,  19.0794,  21.0795],
+            [3.1471,   5.1468,   7.1452,   9.1451,  11.1429,  13.1445,  15.1450,  17.1435,  19.1425,  21.1432],
+            [3.0233,   5.0233,   7.0225,   9.0224,  11.0225,  13.0216,  15.0224,  17.0217,  19.0208,  21.0222],
+            [2.8797,   4.8792,   6.8803,   8.8794,  10.8800,  12.8797,  14.8801,  16.8797,  18.8803,  20.8812],
+            [3.0388,   5.0407,   7.0409,   9.0439,  11.0443,  13.0459,  15.0455,  17.0479,  19.0493,  21.0505],
+            [3.1353,   5.1368,   7.1376,   9.1367,  11.1360,  13.1377,  15.1369,  17.1400,  19.1384,  21.1396],
+            [3.0051,   5.0063,   7.0022,   9.0052,  11.0040,  13.0033,  15.0007,  16.9989,  18.9994,  20.9995],
+            [3.0221,   5.0197,   7.0193,   9.0183,  11.0179,  13.0184,  15.0164,  17.0177,  19.0159,  21.0155],
+            [3.0188,   5.0200,   7.0184,   9.0183,  11.0189,  13.0188,  15.0191,  17.0183,  19.0177,  21.0186],
+            ]
+        dset = dict(y=y_samples)
+        model = Linear('y', x, intercept='y0', slope='s')
+        prior = gv.gvar(dict(y0='1(1)', s='2(2)'))
+        gv.ranseed(4)
+        s = svd_diagnosis(dset , models=[model])
+        self.assertGreater(s.nmod, 0)
+        self.assertGreater(s.svdcut, s.val[s.nmod - 1] / s.val[-1])
+        self.assertGreater(s.val[s.nmod] / s.val[-1], s.svdcut)
+        return
+        # skip rest
+        fitter = lsqfit.MultiFitter(models=[model])
+        fit = fitter.lsqfit(prior=prior, svdcut=s.svdcut, data=s.avgdata)
+        print (fit)
+        # s.avgdata = gv.gvar(gv.mean(s.avgdata), gv.sdev(s.avgdata))
+        fit = fitter.lsqfit(prior=prior, data=s.avgdata)
+        print (fit)
+        s.plot_ratio(show=True)
+
 
 if __name__ == '__main__':
 	unittest.main()

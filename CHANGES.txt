@@ -1,3 +1,28 @@
+Version 8.3 2017-06-03
+======================
+Bug fixes and a little bit of new functionality.
+
+- A new utility gvar.dataset.svd_diagnosis() analyzes a dataset
+  containing Monte Carlo results for multiple variables to determine
+  whether or not an SVD cut is needed for the correlation matrix
+  describing these variables. The smallest eigenvalues of a correlation
+  matrix can be badly underestimated when the number of
+  Monte Carlo samples is insufficiently large. This makes the correlation
+  matrix more singular than it should be, which can lead to problems,
+  for example, when trying to fit the correlated data. This utility
+  estimates the size of the svd cut to use on the correlation matrix.
+
+- Fix plotting by PDFHistogram.make_plot to account for (incompatible)
+  change introduced in matplotlib-2.0.0's pyplot.bar.
+
+- gvar.dataset.bin_data(xx) returns a gvar.dataset.Dataset ordered
+  dictionary if xx is a dictionary.
+
+- pickle now works for (the mostly hidden classes) gvar.svec and gvar.smat
+  and therefore for x.internaldata where x is a GVar. Tricky to use
+  internaldata, however.
+
+
 Version 8.2.3  2017-04-30
 ==========================
 

@@ -38,15 +38,14 @@ cdef class svec:
     def __dealloc__(self):
         PyMem_Free(<void *> self.v)
 
-
-    def __reduce__(self):
+    def __getstate__(self):
         cdef numpy.ndarray[INTP_TYPE, ndim=1] idx = numpy.empty(self.size, numpy.intp)
         cdef numpy.ndarray[numpy.float_t, ndim=1] val = numpy.empty(self.size, numpy.float_)
         cdef INTP_TYPE i
         for i in range(self.size):
             idx[i] = self.v[i].i
             val[i] = self.v[i].v
-        return (svec, (self.size,), (val, idx))
+        return (val, idx)
 
     def __setstate__(self, data):
         cdef INTP_TYPE i
@@ -56,6 +55,9 @@ cdef class svec:
         for i in range(self.size):
             self.v[i].v = val[i]
             self.v[i].i = idx[i]
+
+    def __reduce_ex__(self, dummy):
+        return (svec, (self.size,), self.__getstate__())
 
     def __len__(self):
         """ """
@@ -246,16 +248,14 @@ cdef class smat:
         self.nrow = 0
         self.nrow_max = 2000
 
-    # def __init__(self):
-    #     self.rowlist = []
+    def __reduce_ex__(self, dummy):
+        return (smat, (), self.__getstate__())
 
-    def __reduce__(self):
-        return (smat, (), numpy.asarray(self.row))
-        # return (smat, (), self.rowlist)
+    def __getstate__(self):
+        return (self.nrow, self.nrow_max, numpy.asarray(self.row))
 
     def __setstate__(self, data):
-        self.row = data
-        # self.rowlist = data
+        self.nrow, self.nrow_max, self.row = data
 
     def __len__(self):
         """ Dimension of matrix. """

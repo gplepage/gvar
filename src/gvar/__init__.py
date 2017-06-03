@@ -1082,7 +1082,7 @@ class PDFHistogram(object):
 
     def make_plot(
         self, count, plot=None, show=False, plottype='probability',
-        bar=dict(alpha=0.15, color='b', linewidth=1),
+        bar=dict(alpha=0.15, color='b', linewidth=1.0, edgecolor='b'),
         errorbar=dict(fmt='b.'),
         gaussian=dict(ls='--', c='r')
         ):
@@ -1147,7 +1147,7 @@ class PDFHistogram(object):
                     data_mean = mean(data)
                     plot.errorbar(self.midpoints, data_mean, data_sdev, **errorbar)
             if bar is not None:
-                plot.bar(self.bins[:-1], mean(data), width=self.widths, **bar)
+                plot.bar(self.bins[:-1], mean(data), width=self.widths, align='edge', **bar)
         if gaussian is not None and self.g is not None:
             # spline goes through the errorbar points for gaussian stats
             if plottype == 'cumulative':

@@ -10,12 +10,13 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-   
+
    overview.rst
    gvar.rst
    gvar_dataset.rst
    gvar_other.rst
    case-pendulum.rst
+   case-svdcut.rst
 
 Indices and tables
 ==================

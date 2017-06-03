@@ -4,7 +4,7 @@
 test-gvar.py
 
 """
-# Copyright (c) 2012-16 G. Peter Lepage.
+# Copyright (c) 2012-17 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -156,6 +156,16 @@ class test_svec(unittest.TestCase,ArrayTests):
         v1.assign([1.,3.,2.],[0,4,1])
         self.assert_arraysequal(v1.mul(10).toarray(),[10,20,0,0,30])
 
+    def test_pickle(self):
+        v = svec(4)
+        v.assign([1.,2.,5.,22], [3,5,1,0])
+        with open('outputfile.p', 'wb') as ofile:
+            pickle.dump(v, ofile)
+        with open('outputfile.p', 'rb') as ifile:
+            newv = pickle.load(ifile)
+        self.assertEqual(type(v), type(newv))
+        self.assertTrue(np.all(v.toarray() == newv.toarray()))
+        os.remove('outputfile.p')
 
 class test_smat(unittest.TestCase,ArrayTests):
     def setUp(self):
@@ -205,6 +215,16 @@ class test_smat(unittest.TestCase,ArrayTests):
         nv = len(np_v)
         self.assertEqual(smat_m.expval(v),np.dot(np.dot(np_m[:nv,:nv],np_v),np_v))
 
+    def test_pickle(self):
+        """ pickle.dump(smat, outfile) """
+        global smat_m
+        with open('outputfile.p', 'wb') as ofile:
+            pickle.dump(smat_m, ofile)
+        with open('outputfile.p', 'rb') as ifile:
+            m = pickle.load(ifile)
+        self.assertEqual(type(smat_m), type(m))
+        self.assertTrue(np.all(smat_m.toarray() == m.toarray()))
+        os.remove('outputfile.p')
 
 class test_gvar1(unittest.TestCase,ArrayTests):
     """ gvar1 - part 1 """
@@ -1390,6 +1410,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             g4 = loads(gstr)
             self.assertEqual(str(g1), str(g4))
             self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
+        os.remove('outputfile.p')
 
     def test_gammaQ(self):
         " gammaQ(a, x) "
