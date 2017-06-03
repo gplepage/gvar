@@ -11,6 +11,7 @@ Bug fixes and a little bit of new functionality.
   matrix more singular than it should be, which can lead to problems,
   for example, when trying to fit the correlated data. This utility
   estimates the size of the svd cut to use on the correlation matrix.
+  A new case study illustrates its use.
 
 - Fix plotting by PDFHistogram.make_plot to account for (incompatible)
   change introduced in matplotlib-2.0.0's pyplot.bar.
