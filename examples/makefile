@@ -15,9 +15,12 @@ PYTHON = python
 run:
 	$(PYTHON) pendulum-clock.py > pendulum-clock.tmp
 	- diff -w -B -I svdcut pendulum-clock.out pendulum-clock.tmp
+	$(PYTHON) svdcut.py > svdcut.tmp
+	- diff -w -B -I svdcut svdcut.out svdcut.tmp
 
 update-all:
 	$(PYTHON) pendulum-clock.py > pendulum-clock.out
+	$(PYTHON) svdcut.py > svdcut.out
 
 clean:
 	rm -f *.pyc *.tmp *.p *.prof
