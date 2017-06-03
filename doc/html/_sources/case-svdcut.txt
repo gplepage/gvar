@@ -61,6 +61,8 @@ that are highly correlated::
 
 To extract a slope we fit these data using the :mod:`lsqfit` module::
 
+    import lsqfit
+
     def fcn(p):
         return p['y0'] + p['s'] * x
 
