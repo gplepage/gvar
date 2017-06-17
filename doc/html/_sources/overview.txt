@@ -481,23 +481,25 @@ saving them.
 This recipe works for ``g``\s that are: single |GVar|\s, arrays of |GVar|\s
 (any shape), or dictionaries whose values are |GVar|\s and/or arrays  of
 |GVar|\s. For convenience, it is implemented in functions :func:`gvar.dump`,
-:func:`gvar.dumps`, :func:`gvar.load`, and :func:`gvar.loads`.
+:func:`gvar.dumps`, :func:`gvar.load`, and :func:`gvar.loads`. These
+functions can also serialize |GVar|\s using :mod:`json` rather than
+:mod:`pickle`.
 
-Pickling is simplified if the |GVar|\s that need saving are all
-in a |BufferDict| since these can be serialized and saved to a file
-again using Python's :mod:`pickle` module. So if ``g`` is a
+|GVar|\s can also be pickled easily if they are stored in a
+|BufferDict| since this data type has explicit support for pickling.
+So if ``g`` is a
 |BufferDict| containing |GVar|\s (and/or arrays of |GVar|\s), ::
 
     >>> import pickle
     >>> pickle.dump(g, open('outputfile.p', 'wb'))
 
-saves the contents of ``g`` to a file named ``outputfile.p``.
-The |GVar|\s are retrieved using::
+saves the contents of ``g`` to a file named ``outputfile.p``, and
+the |GVar|\s are retrieved using ::
 
     >>> g = pickle.load(open('outputfile.p', 'rb'))
 
-|BufferDict|\s also have methods that allow saving their contents
-using Python's :mod:`json` module rather than :mod:`pickle`.
+.. |BufferDict|\s also have methods that allow saving their contents
+.. using Python's :mod:`json` module rather than :mod:`pickle`.
 
 
 Non-Gaussian Expectation Values

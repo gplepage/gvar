@@ -1398,8 +1398,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             g1 = gvar(g)
             gtuple = (mean(g1), evalcov(g1))
             gpickle = pickle.dumps(gtuple)
-            gtuple = pickle.loads(gpickle)
-            g2 = gvar(gtuple)
+            g2 = gvar(pickle.loads(gpickle))
             self.assertEqual(str(g1), str(g2))
             self.assertEqual(str(evalcov(g1)), str(evalcov(g2)))
             dump(g1, 'outputfile.p')
@@ -1411,6 +1410,40 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertEqual(str(g1), str(g4))
             self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
         os.remove('outputfile.p')
+
+    def test_json(self):
+        """ pickle strategies """
+        for g in [
+            '1(5)',
+            [['2(1)'], ['3(2)']],
+            dict(a='4(2)', b=[['5(5)', '6(9)']]),
+            ]:
+            g1 = gvar(g)
+            dump(g1, 'outputfile.json', use_json=True)
+            g3 = load('outputfile.json')
+            if hasattr(g1, 'keys'):
+                for k in g1:
+                    self.assertTrue(k in g3)
+                    self.assertEqual(str(g1[k]), str(g3[k]))
+                for k in g3:
+                    self.assertTrue(k in g1)
+                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g3.buf)))
+            else:
+                self.assertEqual(str(g1), str(g3))
+                self.assertEqual(str(evalcov(g1)), str(evalcov(g3)))
+            gstr = dumps(g1, use_json=True)
+            g4 = loads(gstr)
+            if hasattr(g1, 'keys'):
+                for k in g1:
+                    self.assertTrue(k in g4)
+                    self.assertEqual(str(g1[k]), str(g4[k]))
+                for k in g4:
+                    self.assertTrue(k in g1)
+                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g4.buf)))
+            else:
+                self.assertEqual(str(g1), str(g4))
+                self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
+        os.remove('outputfile.json')
 
     def test_gammaQ(self):
         " gammaQ(a, x) "

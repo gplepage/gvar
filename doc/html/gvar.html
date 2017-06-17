@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>gvar - Gaussian Random Variables &mdash; gvar 8.3 documentation</title>
+    <title>gvar - Gaussian Random Variables &mdash; gvar 8.3.1 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '8.3',
+        VERSION:     '8.3.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 8.3 documentation" href="index.html" />
+    <link rel="top" title="gvar 8.3.1 documentation" href="index.html" />
     <link rel="next" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
     <link rel="prev" title="Overview and Tutorial" href="overview.html" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
@@ -50,7 +50,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -99,8 +99,8 @@ manipulating gaussian random variables, including:</p>
 <li>class <a class="reference internal" href="#gvar.PDF" title="gvar.PDF"><code class="xref py py-class docutils literal"><span class="pre">PDF</span></code></a> &#8212; probability density function.</li>
 <li>class <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal"><span class="pre">PDFStatistics</span></code></a> &#8212; statistical analysis of moments of a random variable.</li>
 <li>class <a class="reference internal" href="#gvar.PDFHistogram" title="gvar.PDFHistogram"><code class="xref py py-class docutils literal"><span class="pre">PDFHistogram</span></code></a> &#8212; tool for building PDF histograms.</li>
-<li><a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref any py py-func docutils literal"><span class="pre">dump</span></code></a><code class="docutils literal"><span class="pre">(g,</span> <span class="pre">outputfile)</span></code> &#8212; pickle a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in file.</li>
-<li><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal"><span class="pre">dumps</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; pickle a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in a string.</li>
+<li><a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref any py py-func docutils literal"><span class="pre">dump</span></code></a><code class="docutils literal"><span class="pre">(g,</span> <span class="pre">outputfile)</span></code> &#8212; serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in file.</li>
+<li><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal"><span class="pre">dumps</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in a string.</li>
 <li><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal"><span class="pre">load</span></code></a><code class="docutils literal"><span class="pre">(inputfile)</span></code> &#8212; reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from a file.</li>
 <li><a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref any py py-func docutils literal"><span class="pre">loads</span></code></a><code class="docutils literal"><span class="pre">(inputstr)</span></code> &#8212; reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from a string.</li>
 <li><a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref any py py-func docutils literal"><span class="pre">disassemble</span></code></a><code class="docutils literal"><span class="pre">(g)</span></code> &#8212; low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
@@ -562,11 +562,11 @@ must agree with each other. Default is <code class="docutils literal"><span clas
 </table>
 </dd></dl>
 
-<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s can be stored (pickled) and retrieved from files (or strings) using:</p>
+<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s can be stored (serialized) and retrieved from files (or strings) using:</p>
 <dl class="function">
 <dt id="gvar.dump">
 <code class="descclassname">gvar.</code><code class="descname">dump</code><span class="sig-paren">(</span><em>g</em>, <em>outputfile</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>pickle a collection <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in file <code class="docutils literal"><span class="pre">outputfile</span></code>.</p>
+<dd><p>Serialize a collection <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s into file <code class="docutils literal"><span class="pre">outputfile</span></code>.</p>
 <p>The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are recovered using <a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref py py-func docutils literal"><span class="pre">gvar.load()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -575,8 +575,10 @@ must agree with each other. Default is <code class="docutils literal"><span clas
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>g</strong> &#8211; A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
 are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>outputfile</strong> (<em>string or file-like object</em>) &#8211; The name of a file or a file object in which the
-pickled <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are stored.</li>
+<li><strong>outputfile</strong> &#8211; The name of a file or a file object in which the
+serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are stored.</li>
+<li><strong>use_json</strong> (<em>bool</em>) &#8211; Data are serialized using <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> if
+<code class="docutils literal"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> if <code class="docutils literal"><span class="pre">True</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -587,14 +589,19 @@ pickled <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code 
 <dl class="function">
 <dt id="gvar.dumps">
 <code class="descclassname">gvar.</code><code class="descname">dumps</code><span class="sig-paren">(</span><em>g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dumps" title="Permalink to this definition">¶</a></dt>
-<dd><p>pickle a collection <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s and return as a string.</p>
+<dd><p>Serialize a collection <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s into a string.</p>
 <p>The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are recovered using <a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref py py-func docutils literal"><span class="pre">gvar.loads()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>g</strong> &#8211; A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
-are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>g</strong> &#8211; A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
+are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
+<li><strong>use_json</strong> (<em>bool</em>) &#8211; Data are serialized using <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> if
+<code class="docutils literal"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> if <code class="docutils literal"><span class="pre">True</span></code>.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -603,17 +610,23 @@ are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code clas
 <dl class="function">
 <dt id="gvar.load">
 <code class="descclassname">gvar.</code><code class="descname">load</code><span class="sig-paren">(</span><em>inputfile</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load and return pickled <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from file <code class="docutils literal"><span class="pre">inputfile</span></code>.</p>
+<dd><p>Load and return serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from file <code class="docutils literal"><span class="pre">inputfile</span></code>.</p>
 <p>This function recovers <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s pickled with <a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal"><span class="pre">gvar.dump()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>outputfile</strong> (<em>string or file-like object</em>) &#8211; The name of the file or a file object in which the
-pickled <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are stored.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputfile</strong> &#8211; The name of the file or a file object in which the
+serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s are stored.</li>
+<li><strong>use_json</strong> (<em>bool</em>) &#8211; Data assumed serialized using <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> if
+<code class="docutils literal"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> if <code class="docutils literal"><span class="pre">True</span></code>. If <code class="docutils literal"><span class="pre">use_json=None</span></code>
+(default) each of pickle and json is tried (in that order).</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -622,17 +635,23 @@ pickled <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code 
 <dl class="function">
 <dt id="gvar.loads">
 <code class="descclassname">gvar.</code><code class="descname">loads</code><span class="sig-paren">(</span><em>inputstring</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.loads" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load and return pickled <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from string <code class="docutils literal"><span class="pre">inputstring</span></code>.</p>
+<dd><p>Load and return serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s from string <code class="docutils literal"><span class="pre">inputstring</span></code>.</p>
 <p>This function recovers <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s pickled with <a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal"><span class="pre">gvar.dumps()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputstring</strong> &#8211; A string containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s pickled using
-<a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal"><span class="pre">gvar.dumps()</span></code></a>.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>inputstring</strong> &#8211; A string containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s serialized using
+<a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal"><span class="pre">gvar.dumps()</span></code></a>.</li>
+<li><strong>use_json</strong> (<em>bool</em>) &#8211; Data assumed serialized using <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> if
+<code class="docutils literal"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> if <code class="docutils literal"><span class="pre">True</span></code>. If <code class="docutils literal"><span class="pre">use_json=None</span></code>
+(default) each of pickle and json is tried (in that order).</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1424,47 +1443,6 @@ the shape is <code class="docutils literal"><span class="pre">None</span></code>
 <dd><p>Add contents of dictionary <code class="docutils literal"><span class="pre">d</span></code> to <code class="docutils literal"><span class="pre">self</span></code>.</p>
 </dd></dl>
 
-<dl class="staticmethod">
-<dt id="gvar.BufferDict.load">
-<em class="property">static </em><code class="descname">load</code><span class="sig-paren">(</span><em>fobj</em>, <em>use_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load serialized <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a> from file object <code class="docutils literal"><span class="pre">fobj</span></code>.
-Uses <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> unless <code class="docutils literal"><span class="pre">use_json</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, in which case
-it uses <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> (obvioulsy).</p>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="gvar.BufferDict.loads">
-<em class="property">static </em><code class="descname">loads</code><span class="sig-paren">(</span><em>s</em>, <em>use_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.loads" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load serialized <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a> from string object <code class="docutils literal"><span class="pre">s</span></code>.
-Uses <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> unless <code class="docutils literal"><span class="pre">use_json</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, in which case
-it uses <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> (obvioulsy).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="gvar.BufferDict.dump">
-<code class="descname">dump</code><span class="sig-paren">(</span><em>fobj</em>, <em>use_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a> in file object <code class="docutils literal"><span class="pre">fobj</span></code>.</p>
-<p>Uses <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> unless <code class="docutils literal"><span class="pre">use_json</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, in which case
-it uses <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> (obviously). <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> does not handle
-non-string valued keys very well. This attempts a workaround, but
-it will only work in simpler cases. Serialization only works when
-<code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> (or <code class="xref py py-mod docutils literal"><span class="pre">json</span></code>) knows how to serialize the data type
-stored in the <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a>&#8216;s buffer (or for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="gvar.BufferDict.dumps">
-<code class="descname">dumps</code><span class="sig-paren">(</span><em>use_json=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.dumps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serialize <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a> into string.</p>
-<p>Uses <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> unless <code class="docutils literal"><span class="pre">use_json</span></code> is <code class="docutils literal"><span class="pre">True</span></code>, in which case
-it uses <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> (obviously). <code class="xref py py-mod docutils literal"><span class="pre">json</span></code> does not handle
-non-string valued keys very well. This attempts a workaround, but
-it will only work in simpler cases (e.g., integers, tuples of
-integers, etc.). Serialization only works when <code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code> (or
-<code class="xref py py-mod docutils literal"><span class="pre">json</span></code>) knows how to serialize the data type stored in the
-<a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a>&#8216;s buffer (or for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s).</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -1960,7 +1938,7 @@ also uses the <code class="xref py py-mod docutils literal"><span class="pre">nu
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

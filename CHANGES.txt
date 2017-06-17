@@ -1,3 +1,14 @@
+Version 8.3.1 2017-06-16
+==========================
+A very minor updata:
+
+- gvar.dump, gvar.load, etc can now use json instead of pickle
+  for serializing collections of GVars. pickle is probably more
+  robust.
+
+- bug fix in evalcorr to deal with very rare condition that caused
+  the routine to crash (condition caused by std dev = 0.0 for a GVar).
+
 Version 8.3 2017-06-03
 ======================
 Bug fixes and a little bit of new functionality.

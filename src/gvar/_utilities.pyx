@@ -20,7 +20,17 @@ cimport numpy
 import warnings
 import pickle
 import json
+import collections
 from math import lgamma
+
+try:
+    # python 2
+    from StringIO import StringIO as _StringIO
+    _BytesIO = _StringIO
+except ImportError:
+    # python 3
+    from io import BytesIO as _BytesIO
+    from io import StringIO as _StringIO
 
 from libc.math cimport  log, exp  # don't put lgamma here -- old C compilers don't have it
 
@@ -321,6 +331,7 @@ def evalcorr(g):
         covflat = evalcov(g.buf)
         idx = numpy.arange(covflat.shape[0])
         sdevflat = covflat[idx, idx] ** 0.5
+        sdevflat[sdevflat == 0.0] = 1.          # don't rescale these rows/cols
         corrflat = covflat / numpy.outer(sdevflat, sdevflat)
         ans = BufferDict()
         for i in g:
@@ -339,6 +350,7 @@ def evalcorr(g):
         cov = evalcov(g.flat)
         idx = numpy.arange(cov.shape[0])
         sdev = cov[idx, idx] ** 0.5
+        sdev[sdev == 0.0] = 1.                  # don't rescale these rows/cols
         ans = (cov / numpy.outer(sdev, sdev)) # .reshape(2 * g.shape)
         return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
@@ -571,61 +583,115 @@ def evalcov(g):
             ans[b,a] = ans[a,b]
     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
-def dump(g, outputfile):
-    """ pickle a collection ``g`` of |GVar|\s in file ``outputfile``.
+def dump(g, outputfile, use_json=False):
+    """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
 
     The |GVar|\s are recovered using :func:`gvar.load`.
 
-    :param g: A |GVar|, array of |GVar|\s, or dictionary whose values
-        are |GVar|\s and/or arrays of |GVar|\s.
-    :param outputfile: The name of a file or a file object in which the
-        pickled |GVar|\s are stored.
-    :type outputfile: string or file-like object
+    Args:
+        g: A |GVar|, array of |GVar|\s, or dictionary whose values
+            are |GVar|\s and/or arrays of |GVar|\s.
+        outputfile: The name of a file or a file object in which the
+            serialized |GVar|\s are stored.
+        use_json (bool): Data are serialized using :mod:`pickle` if
+            ``False`` or :mod:`json` if ``True``.
     """
     if isinstance(outputfile, str):
-        outputfile = open(outputfile, 'wb')
-    pickle.dump((mean(g), evalcov(g)), outputfile)
-    outputfile.close()
+        with open(outputfile, 'w' if use_json else 'wb') as ofile:
+            return dump(g, ofile, use_json=use_json)
+    else:
+        ofile = outputfile
+    if use_json:
+        if hasattr(g, 'keys'):
+            if not isinstance(g, _gvar.BufferDict):
+                g = _gvar.BufferDict(g)
+            data = dict(
+                items=[(k, d.tolist()) for k,d in _gvar.mean(g).items()],
+                cov=_gvar.evalcov(g.buf).tolist(),
+                )
+        else:
+            data = (
+                numpy.array(_gvar.mean(g)).tolist(),
+                _gvar.evalcov(g).tolist()
+                )
+        return json.dump(data, ofile)
+    else:
+        pickle.dump((mean(g), evalcov(g)), ofile)
 
-def dumps(g):
-    """ pickle a collection ``g`` of |GVar|\s and return as a string.
+def dumps(g, use_json=False):
+    """ Serialize a collection ``g`` of |GVar|\s into a string.
 
     The |GVar|\s are recovered using :func:`gvar.loads`.
 
-    :param g: A |GVar|, array of |GVar|\s, or dictionary whose values
-        are |GVar|\s and/or arrays of |GVar|\s.
+    Args:
+        g: A |GVar|, array of |GVar|\s, or dictionary whose values
+            are |GVar|\s and/or arrays of |GVar|\s.
+        use_json (bool): Data are serialized using :mod:`pickle` if
+            ``False`` or :mod:`json` if ``True``.
     """
-    return pickle.dumps((mean(g), evalcov(g)))
+    f = _StringIO() if use_json else _BytesIO()
+    dump(g, f, use_json=use_json)
+    return f.getvalue()
 
-def load(inputfile):
-    """ Load and return pickled |GVar|\s from file ``inputfile``.
+def load(inputfile, use_json=None):
+    """ Load and return serialized |GVar|\s from file ``inputfile``.
 
     This function recovers |GVar|\s pickled with :func:`gvar.dump`.
 
-    :param outputfile: The name of the file or a file object in which the
-        pickled |GVar|\s are stored.
-    :type outputfile: string or file-like object
-    :returns: The reconstructed |GVar|, or array or dictionary of
-        |GVar|\s.
+    Args:
+        inputfile: The name of the file or a file object in which the
+            serialized |GVar|\s are stored.
+        use_json (bool): Data assumed serialized using :mod:`pickle` if
+            ``False`` or :mod:`json` if ``True``. If ``use_json=None``
+            (default) each of pickle and json is tried (in that order).
+
+    Returns:
+        The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
+    if use_json is None:
+        try:
+            return load(inputfile, use_json=False)
+        except:
+            return load(inputfile, use_json=True)
     if isinstance(inputfile, str):
-        inputfile = open(inputfile, 'rb')
-    ans = _gvar.gvar(pickle.load(inputfile))
-    inputfile.close()
+        with open(inputfile, 'r' if use_json else 'rb') as ifile:
+            return load(ifile, use_json=use_json)
+    else:
+        ifile = inputfile
+    if use_json:
+        data = json.load(ifile)
+        if hasattr(data, 'keys'):
+            ans = _gvar.BufferDict(data['items'])
+            err = _gvar.gvar(len(data['cov']) * [0.0], data['cov'])
+            ans = _gvar.BufferDict(ans, buf=ans.buf + err)
+        else:
+            ans = _gvar.gvar(*data)
+    else:
+        ans = _gvar.gvar(pickle.load(ifile))
     return ans
 
-def loads(inputstring):
-    """ Load and return pickled |GVar|\s from string ``inputstring``.
+def loads(inputstring, use_json=None):
+    """ Load and return serialized |GVar|\s from string ``inputstring``.
 
     This function recovers |GVar|\s pickled with :func:`gvar.dumps`.
 
-    :param inputstring: A string containing |GVar|\s pickled using
-        :func:`gvar.dumps`.
-    :type outputfile: string
-    :returns: The reconstructed |GVar|, or array or dictionary of
-        |GVar|\s.
+    Args:
+        inputstring: A string containing |GVar|\s serialized using
+            :func:`gvar.dumps`.
+        use_json (bool): Data assumed serialized using :mod:`pickle` if
+            ``False`` or :mod:`json` if ``True``. If ``use_json=None``
+            (default) each of pickle and json is tried (in that order).
+
+    Returns:
+        The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
-    return _gvar.gvar(pickle.loads(inputstring))
+    if use_json is None:
+        try:
+            return loads(inputstring, use_json=False)
+        except:
+            return loads(inputstring, use_json=True)
+    f = _StringIO(inputstring) if use_json else _BytesIO(inputstring)
+    return load(f, use_json=use_json)
 
 def disassemble(g):
     """ Disassemble collection ``g`` of |GVar|\s.

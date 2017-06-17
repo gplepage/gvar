@@ -21,7 +21,7 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 import numpy
 
-GVAR_VERSION = '8.3'
+GVAR_VERSION = '8.3.1'
 
 # create gvar/_version.py so gvar knows its version number
 with open("src/gvar/_version.py","w") as version_file:
@@ -98,6 +98,7 @@ setup(name='gvar',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Cython',
         'Topic :: Scientific/Engineering'

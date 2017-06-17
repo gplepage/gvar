@@ -71,9 +71,9 @@ manipulating gaussian random variables, including:
 
     - class :class:`PDFHistogram` --- tool for building PDF histograms.
 
-    - :any:`dump`\ ``(g, outputfile)`` --- pickle a collection of |GVar|\s in file.
+    - :any:`dump`\ ``(g, outputfile)`` --- serialize a collection of |GVar|\s in file.
 
-    - :any:`dumps`\ ``(g)`` --- pickle a collection of |GVar|\s in a string.
+    - :any:`dumps`\ ``(g)`` --- serialize a collection of |GVar|\s in a string.
 
     - :any:`load`\ ``(inputfile)`` --- reconstitute a collection of |GVar|\s from a file.
 
@@ -144,7 +144,7 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.equivalent(g1, g2, rtol=1e-10, atol=1e-10)
 
-|GVar|\s can be stored (pickled) and retrieved from files (or strings) using:
+|GVar|\s can be stored (serialized) and retrieved from files (or strings) using:
 
 .. autofunction:: gvar.dump(g, outputfile)
 
@@ -302,21 +302,21 @@ scalars) that supports Python pickling:
 
       Add contents of dictionary ``d`` to ``self``.
 
-   .. staticmethod:: BufferDict.load(fobj, use_json=False)
+   .. .. staticmethod:: BufferDict.load(fobj, use_json=False)
 
-      Load serialized |BufferDict| from file object ``fobj``.
-      Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-      it uses :mod:`json` (obvioulsy).
+   ..    Load serialized |BufferDict| from file object ``fobj``.
+   ..    Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
+   ..    it uses :mod:`json` (obvioulsy).
 
-   .. staticmethod:: loads(s, use_json=False)
+   .. .. staticmethod:: loads(s, use_json=False)
 
-      Load serialized |BufferDict| from string object ``s``.
-      Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-      it uses :mod:`json` (obvioulsy).
+   ..    Load serialized |BufferDict| from string object ``s``.
+   ..    Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
+   ..    it uses :mod:`json` (obvioulsy).
 
-   .. automethod:: dump(fobj, use_json=False)
+   .. .. automethod:: dump(fobj, use_json=False)
 
-   .. automethod:: dumps(use_json=False)
+   .. .. automethod:: dumps(use_json=False)
 
 :class:`gvar.SVD` Objects
 ---------------------------
