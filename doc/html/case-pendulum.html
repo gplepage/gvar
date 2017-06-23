@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Case Study: Pendulum Clock &mdash; gvar 8.3.1 documentation</title>
+    <title>Case Study: Pendulum Clock &#8212; gvar 8.3.2 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,26 +14,28 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '8.3.1',
+        VERSION:     '8.3.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 8.3.1 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Case Study: Correlations and SVD Cuts" href="case-svdcut.html" />
     <link rel="prev" title="Numerical Analysis Modules in gvar" href="gvar_other.html" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
 <link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -50,7 +52,7 @@
         <li class="right" >
           <a href="gvar_other.html" title="Numerical Analysis Modules in gvar"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -73,7 +75,7 @@ of at best ±0.5mm; and 2) irregularities in  the drive mechanism mean that the
 maximum angle of swing (π/6) is uncertain by ±0.025&nbsp;radians. The challenge
 is to determine how these uncertainties affect time-keeping over a day.</p>
 <p>The angle <code class="docutils literal"><span class="pre">theta(t)</span></code> of the pendulum satisfies a differential equation</p>
-<div class="highlight-python"><div class="highlight"><pre>d/dt d/dt theta(t) = -(g/l) sin(theta(t))
+<div class="highlight-default"><div class="highlight"><pre><span class="n">d</span><span class="o">/</span><span class="n">dt</span> <span class="n">d</span><span class="o">/</span><span class="n">dt</span> <span class="n">theta</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">g</span><span class="o">/</span><span class="n">l</span><span class="p">)</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">g</span></code> is the acceleration due to gravity and the <code class="docutils literal"><span class="pre">l</span></code> is the length
@@ -82,8 +84,8 @@ of the pendulum.</p>
 <div class="section" id="pendulum-dynamics-finding-the-period">
 <h2>Pendulum Dynamics; Finding the Period<a class="headerlink" href="#pendulum-dynamics-finding-the-period" title="Permalink to this headline">¶</a></h2>
 <p>We start by designing code to integrate the differential equation:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
 <span class="k">def</span> <span class="nf">make_pendulum</span><span class="p">(</span><span class="n">theta0</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create pendulum solution y(t) = [theta(t), d/dt theta(t)].</span>
@@ -104,7 +106,7 @@ of the pendulum.</p>
 we find the period of oscillation using <a class="reference internal" href="gvar_other.html#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a>: the period
 is the time at which the pendulum returns to its starting point and its
 velocity (<code class="docutils literal"><span class="pre">y(t)[1]</span></code>) vanishes:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">find_period</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">Tapprox</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="k">def</span> <span class="nf">find_period</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">Tapprox</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Find oscillation period of pendulum solution y(t).</span>
 
 <span class="sd">    Parameter Tapprox is the approximate period. The code finds the time</span>
@@ -121,23 +123,23 @@ velocity (<code class="docutils literal"><span class="pre">y(t)[1]</span></code>
 <div class="section" id="analysis">
 <h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h2>
 <p>The last piece of the code does the analysis:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">l</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0005</span><span class="p">)</span>               <span class="c"># length of pendulum</span>
     <span class="n">theta_max</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">)</span>   <span class="c"># max angle of swing</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">make_pendulum</span><span class="p">(</span><span class="n">theta_max</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>         <span class="c"># y(t) = [theta(t), d/dt  theta(t)]</span>
 
     <span class="c"># period in sec</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">find_period</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">Tapprox</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&#39;period T = {} sec&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s">&#39;period T = {} sec&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">T</span><span class="p">))</span>
 
     <span class="c"># uncertainty in minutes per day</span>
     <span class="n">fmt</span> <span class="o">=</span> <span class="s">&#39;uncertainty = {:.2f} min/day</span><span class="se">\n</span><span class="s">&#39;</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">T</span><span class="o">.</span><span class="n">sdev</span> <span class="o">/</span> <span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="o">*</span> <span class="mf">60.</span> <span class="o">*</span> <span class="mf">24.</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">T</span><span class="o">.</span><span class="n">sdev</span> <span class="o">/</span> <span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="o">*</span> <span class="mf">60.</span> <span class="o">*</span> <span class="mf">24.</span><span class="p">))</span>
 
     <span class="c"># error budget for T</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="n">l</span><span class="p">,</span> <span class="n">theta_max</span><span class="o">=</span><span class="n">theta_max</span><span class="p">)</span>
     <span class="n">outputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">fmt_errorbudget</span><span class="p">(</span><span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">fmt_errorbudget</span><span class="p">(</span><span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">))</span>
 
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
@@ -148,16 +150,16 @@ have uncertainties and are represented by <a class="reference internal" href="gv
 work their way through both the integration and root finding to give
 a final result for the period that is also a <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>. Running the code
 results in the following output:</p>
-<div class="highlight-python"><div class="highlight"><pre>period T = 1.0210(20) sec
-uncertainty = 2.79 min/day
+<div class="highlight-default"><div class="highlight"><pre><span class="n">period</span> <span class="n">T</span> <span class="o">=</span> <span class="mf">1.0210</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="n">sec</span>
+<span class="n">uncertainty</span> <span class="o">=</span> <span class="mf">2.79</span> <span class="nb">min</span><span class="o">/</span><span class="n">day</span>
 
-Partial % Errors:
-                   T
---------------------
-        l:      0.10
-theta_max:      0.17
---------------------
-    total:      0.19
+<span class="n">Partial</span> <span class="o">%</span> <span class="n">Errors</span><span class="p">:</span>
+                   <span class="n">T</span>
+<span class="o">--------------------</span>
+        <span class="n">l</span><span class="p">:</span>      <span class="mf">0.10</span>
+<span class="n">theta_max</span><span class="p">:</span>      <span class="mf">0.17</span>
+<span class="o">--------------------</span>
+    <span class="n">total</span><span class="p">:</span>      <span class="mf">0.19</span>
 </pre></div>
 </div>
 <p>The period is <code class="docutils literal"><span class="pre">T</span> <span class="pre">=</span> <span class="pre">1.0210(20)</span> <span class="pre">sec</span></code>, which has an uncertainty of
@@ -178,7 +180,7 @@ maximum angle of swing is π/36&nbsp;±&nbsp;0.025 rather
 than&nbsp;π/6&nbsp;±&nbsp;0.025.
 The period becomes independent of the maximum angle as that angle vanishes,
 and so becomes less sensitive to uncertainties in it. Taking the smaller angle
-reduces that part of the period&#8217;s error from 0.17% to 0.03%, thereby cutting
+reduces that part of the period’s error from 0.17% to 0.03%, thereby cutting
 the total error almost in half, to ±0.10% or about ±1.5&nbsp;min/day. Further
 improvement requires tighter control over the length of the pendulum.</p>
 </div>
@@ -186,23 +188,23 @@ improvement requires tighter control over the length of the pendulum.</p>
 <h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
 <p>We can check the error propagation analysis above using
 a simulation. Adding the following code at the end of <code class="docutils literal"><span class="pre">main()</span></code> above</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># check errors in T using a simulation</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="c"># check errors in T using a simulation</span>
 <span class="n">Tlist</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">make_pendulum</span><span class="p">(</span><span class="n">theta_max</span><span class="p">(),</span> <span class="n">l</span><span class="p">())</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">find_period</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">Tapprox</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="n">Tlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s">&#39;period T = {:.4f} +- {:.4f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Tlist</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Tlist</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s">&#39;period T = {:.4f} +- {:.4f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Tlist</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">Tlist</span><span class="p">)))</span>
 </pre></div>
 </div>
 <p>gives the following additional output:</p>
-<div class="highlight-python"><div class="highlight"><pre>period T = 1.0209 +- 0.0020
+<div class="highlight-default"><div class="highlight"><pre><span class="n">period</span> <span class="n">T</span> <span class="o">=</span> <span class="mf">1.0209</span> <span class="o">+-</span> <span class="mf">0.0020</span>
 </pre></div>
 </div>
 <p>The new code generates 100 different values for the period <code class="docutils literal"><span class="pre">T</span></code>, corresponding
 to randomly chosen values for <code class="docutils literal"><span class="pre">theta_max</span></code> and <code class="docutils literal"><span class="pre">l</span></code> drawn from the
 Gaussian distributions corresponding to their <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s. (In general, each
-call <code class="docutils literal"><span class="pre">x()</span></code> for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal"><span class="pre">x</span></code> is a new random number drawn from <code class="docutils literal"><span class="pre">x</span></code>&#8216;s
+call <code class="docutils literal"><span class="pre">x()</span></code> for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal"><span class="pre">x</span></code> is a new random number drawn from <code class="docutils literal"><span class="pre">x</span></code>’s
 Gaussian distribution.)
 The mean and
 standard deviation of the list of periods give us our final result.
@@ -241,14 +243,11 @@ generate random values from correlated <a class="reference internal" href="gvar.
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -270,12 +269,12 @@ generate random values from correlated <a class="reference internal" href="gvar.
         <li class="right" >
           <a href="gvar_other.html" title="Numerical Analysis Modules in gvar"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        &#169; Copyright 2009-2015, G. P. Lepage.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
     </div>
   </body>
 </html>

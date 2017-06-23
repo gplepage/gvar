@@ -26,8 +26,11 @@ import gvar
 # extensions = ['sphinx.ext.autodoc','sphinx.ext.jsmath']
 # jsmath_path = '/usr/local/share/jsmath/easy/load.js'
 # extensions = ['sphinx.ext.autodoc','sphinx.ext.mathjax']
-extensions = ['sphinx.ext.autodoc','sphinx.ext.napoleon', 'sphinx.ext.pngmath'] # ,'rst2pdf.pdfbuilder']
-pngmath_use_preview = True
+extensions = ['sphinx.ext.autodoc','sphinx.ext.napoleon', 'sphinx.ext.imgmath'] # ,'rst2pdf.pdfbuilder']
+imgmath_image_format = "png"
+imgmath_use_preview = True
+imgmath_latex_preamble = "\usepackage{arev}"
+imgmath_dvipng_args = ['-gamma', '0.35', '-D', '110', '-bg', 'Transparent']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

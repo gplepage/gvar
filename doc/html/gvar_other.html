@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Numerical Analysis Modules in gvar &mdash; gvar 8.3.1 documentation</title>
+    <title>Numerical Analysis Modules in gvar &#8212; gvar 8.3.2 documentation</title>
     
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,26 +14,28 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '8.3.1',
+        VERSION:     '8.3.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="gvar 8.3.1 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Case Study: Pendulum Clock" href="case-pendulum.html" />
     <link rel="prev" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
 <link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
 
   </head>
-  <body role="document">
+  <body>
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -50,7 +52,7 @@
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -71,19 +73,19 @@ More examples will follow with time.</p>
 <p>The sub-modules included here are:</p>
 <blockquote>
 <div><ul>
-<li><p class="first"><a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> &#8212; cubic splines for 1-d data.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> — cubic splines for 1-d data.</p>
 </li>
-<li><p class="first"><a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> &#8212; basic linear algebra.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> — basic linear algebra.</p>
 </li>
 <li><dl class="first docutils">
-<dt><a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> &#8212; integration of systems of ordinary differential equations;</dt>
-<dd><p class="first last"><a class="reference internal" href="#integral"><span>one-dimensional integrals</span></a>.</p>
+<dt><a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> — integration of systems of ordinary differential equations;</dt>
+<dd><p class="first last"><a class="reference internal" href="#integral"><span class="std std-ref">one-dimensional integrals</span></a>.</p>
 </dd>
 </dl>
 </li>
-<li><p class="first"><a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal"><span class="pre">gvar.powerseries</span></code></a> &#8212; power series representation of functions.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal"><span class="pre">gvar.powerseries</span></code></a> — power series representation of functions.</p>
 </li>
-<li><p class="first"><a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> &#8212; root-finding for one-dimensional functions.</p>
+<li><p class="first"><a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> — root-finding for one-dimensional functions.</p>
 </li>
 </ul>
 </div></blockquote>
@@ -96,9 +98,9 @@ interpolating one-dimensional data using cubic splines:</p>
 <em class="property">class </em><code class="descclassname">gvar.cspline.</code><code class="descname">CSpline</code><span class="sig-paren">(</span><em>xknots</em>, <em>yknots</em>, <em>deriv=(None</em>, <em>None)</em>, <em>extrap_order=3</em>, <em>warn=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.cspline.CSpline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cubic spline approximation to a function.</p>
 <p>Given <code class="docutils literal"><span class="pre">N</span></code> values of a function <code class="docutils literal"><span class="pre">yknot[i]</span></code> at <code class="docutils literal"><span class="pre">N</span></code> points
-<code class="docutils literal"><span class="pre">xknot[i]</span></code> for <code class="docutils literal"><span class="pre">i=0..N-1</span></code> (the &#8216;knots&#8217; of the spline),
+<code class="docutils literal"><span class="pre">xknot[i]</span></code> for <code class="docutils literal"><span class="pre">i=0..N-1</span></code> (the ‘knots’ of the spline),
 the code</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.cspline</span> <span class="kn">import</span> <span class="n">CSpline</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.cspline</span> <span class="k">import</span> <span class="n">CSpline</span>
 
 <span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">)</span>
 </pre></div>
@@ -111,7 +113,7 @@ Function <code class="docutils literal"><span class="pre">f(x)</span></code> is 
 derivative at the end points, <code class="docutils literal"><span class="pre">xknot[0]</span></code> and <code class="docutils literal"><span class="pre">xknot[-1]</span></code> (assuming
 the knots are sorted). More generally one can specify the derivatives
 of <code class="docutils literal"><span class="pre">f(x)</span></code> at one or both of the endpoints:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="n">dydx_i</span><span class="p">,</span> <span class="n">dydx_f</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="n">dydx_i</span><span class="p">,</span> <span class="n">dydx_f</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">dydx_i</span></code> is the derivative at <code class="docutils literal"><span class="pre">xknot[0]</span></code> and <code class="docutils literal"><span class="pre">dydx_f</span></code> is the
@@ -120,9 +122,9 @@ derivative at <code class="docutils literal"><span class="pre">xknot[-1]</span><
 derivative at that boundary (i.e., a <em>natural</em> boundary).</p>
 <p>Derivatives and integrals of the spline function can also be evaluated:</p>
 <blockquote>
-<div><p><code class="docutils literal"><span class="pre">f.D(x)</span></code> &#8212; first derivative at <code class="docutils literal"><span class="pre">x</span></code>;</p>
-<p><code class="docutils literal"><span class="pre">f.D2(x)</span></code> &#8212; second derivative at <code class="docutils literal"><span class="pre">x</span></code>;</p>
-<p><code class="docutils literal"><span class="pre">f.integ(x)</span></code> &#8212; integral from <code class="docutils literal"><span class="pre">xknot[0]</span></code> to <code class="docutils literal"><span class="pre">x</span></code>.</p>
+<div><p><code class="docutils literal"><span class="pre">f.D(x)</span></code> — first derivative at <code class="docutils literal"><span class="pre">x</span></code>;</p>
+<p><code class="docutils literal"><span class="pre">f.D2(x)</span></code> — second derivative at <code class="docutils literal"><span class="pre">x</span></code>;</p>
+<p><code class="docutils literal"><span class="pre">f.integ(x)</span></code> — integral from <code class="docutils literal"><span class="pre">xknot[0]</span></code> to <code class="docutils literal"><span class="pre">x</span></code>.</p>
 </div></blockquote>
 <p>Splines can be used outside the range covered by the defining
 <code class="docutils literal"><span class="pre">xknot</span></code> values. As this is often a bad idea, the <code class="xref py py-mod docutils literal"><span class="pre">CSpline</span></code>
@@ -136,12 +138,12 @@ setting parameter <code class="docutils literal"><span class="pre">extrap_order<
 less than 3; this is often a good idea.</p>
 <p class="rubric">Examples</p>
 <p>Typical usage is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.78539816</span><span class="p">,</span> <span class="mf">1.57079633</span><span class="p">,</span> <span class="mf">2.35619449</span><span class="p">,</span> <span class="mf">3.14159265</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">yknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="mf">0.7</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="mf">0.7</span><span class="p">))</span>
 <span class="go">0.644243383101 0.765592448296 -0.663236750777 0.234963942648</span>
 </pre></div>
 </div>
@@ -149,20 +151,20 @@ less than 3; this is often a good idea.</p>
 Tabulating results from the spline together with the exact results
 shows that this 5-knot spline gives a pretty good approximation
 of the function <code class="docutils literal"><span class="pre">sin(x)</span></code>, as well as its derivatives and integral:</p>
-<div class="highlight-python"><div class="highlight"><pre>x    f(x)    f.D(x)  f.D2(x) f.integ(x) | sin(x)  cos(x)  1-cos(x)
-------------------------------------------------------------------
-0.3  0.2951  0.9551  -0.2842 0.04458    | 0.2955  0.9553  0.04466
-0.5  0.4791  0.8793  -0.4737 0.1222     | 0.4794  0.8776  0.1224
-0.7  0.6442  0.7656  -0.6632 0.235      | 0.6442  0.7648  0.2352
-0.9  0.783   0.6176  -0.7891 0.3782     | 0.7833  0.6216  0.3784
-1.1  0.8902  0.452   -0.8676 0.5461     | 0.8912  0.4536  0.5464
-1.3  0.9627  0.2706  -0.9461 0.7319     | 0.9636  0.2675  0.7325
-1.5  0.9974  0.07352 -1.025  0.9286     | 0.9975  0.07074 0.9293
+<div class="highlight-default"><div class="highlight"><pre><span class="n">x</span>    <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>    <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="mi">1</span><span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">------------------------------------------------------------------</span>
+<span class="mf">0.3</span>  <span class="mf">0.2951</span>  <span class="mf">0.9551</span>  <span class="o">-</span><span class="mf">0.2842</span> <span class="mf">0.04458</span>    <span class="o">|</span> <span class="mf">0.2955</span>  <span class="mf">0.9553</span>  <span class="mf">0.04466</span>
+<span class="mf">0.5</span>  <span class="mf">0.4791</span>  <span class="mf">0.8793</span>  <span class="o">-</span><span class="mf">0.4737</span> <span class="mf">0.1222</span>     <span class="o">|</span> <span class="mf">0.4794</span>  <span class="mf">0.8776</span>  <span class="mf">0.1224</span>
+<span class="mf">0.7</span>  <span class="mf">0.6442</span>  <span class="mf">0.7656</span>  <span class="o">-</span><span class="mf">0.6632</span> <span class="mf">0.235</span>      <span class="o">|</span> <span class="mf">0.6442</span>  <span class="mf">0.7648</span>  <span class="mf">0.2352</span>
+<span class="mf">0.9</span>  <span class="mf">0.783</span>   <span class="mf">0.6176</span>  <span class="o">-</span><span class="mf">0.7891</span> <span class="mf">0.3782</span>     <span class="o">|</span> <span class="mf">0.7833</span>  <span class="mf">0.6216</span>  <span class="mf">0.3784</span>
+<span class="mf">1.1</span>  <span class="mf">0.8902</span>  <span class="mf">0.452</span>   <span class="o">-</span><span class="mf">0.8676</span> <span class="mf">0.5461</span>     <span class="o">|</span> <span class="mf">0.8912</span>  <span class="mf">0.4536</span>  <span class="mf">0.5464</span>
+<span class="mf">1.3</span>  <span class="mf">0.9627</span>  <span class="mf">0.2706</span>  <span class="o">-</span><span class="mf">0.9461</span> <span class="mf">0.7319</span>     <span class="o">|</span> <span class="mf">0.9636</span>  <span class="mf">0.2675</span>  <span class="mf">0.7325</span>
+<span class="mf">1.5</span>  <span class="mf">0.9974</span>  <span class="mf">0.07352</span> <span class="o">-</span><span class="mf">1.025</span>  <span class="mf">0.9286</span>     <span class="o">|</span> <span class="mf">0.9975</span>  <span class="mf">0.07074</span> <span class="mf">0.9293</span>
 </pre></div>
 </div>
 <p>Using the spline outside
 the range covered by the knots is less good:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
 <span class="go">gvar/cspline.py:164: UserWarning: x outside of spline range: [ 6.28318531]</span>
 <span class="go">1.7618635470106501</span>
 </pre></div>
@@ -171,14 +173,14 @@ the range covered by the knots is less good:</p>
 issues a warning. Working just outside the knot region is often fine,
 although it is usually a good idea to limit the order of the
 polynomial used in such regions: for example, setting</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">extrap_order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">extrap_order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>implies that quadratic polynomials are used outside the spline range.
 Finally one can specify the values of the first derivatives of the
 function at one or the other endpoints of the spline region, if they
 are known. Continuing from above, for example, one would take</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>since the derivatives of <code class="docutils literal"><span class="pre">sin(x)</span></code> at <code class="docutils literal"><span class="pre">x=0</span></code> and <code class="docutils literal"><span class="pre">x=3.14159265</span></code>
@@ -188,21 +190,21 @@ are 1 and -1, respectively.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>xknot</strong> (<em>1-d sequence of number</em>) &#8211; The knots of the spline, where the
+<li><strong>xknot</strong> (<em>1-d sequence of number</em>) – The knots of the spline, where the
 function values are specified. The knots are sorted (from small
 to large) if necessary.</li>
-<li><strong>yknot</strong> (<em>1-d sequence of number</em>) &#8211; Function values at the locations
+<li><strong>yknot</strong> (<em>1-d sequence of number</em>) – Function values at the locations
 specified by <code class="docutils literal"><span class="pre">xknot[i]</span></code>.</li>
-<li><strong>deriv</strong> (<em>2-component sequence</em>) &#8211; Derivatives at initial and final
+<li><strong>deriv</strong> (<em>2-component sequence</em>) – Derivatives at initial and final
 boundaries of the  region specified by <code class="docutils literal"><span class="pre">xknot[i]</span></code>.
 Default value is <code class="docutils literal"><span class="pre">None</span></code> for each boundary.</li>
-<li><strong>extrap_order</strong> (<em>int</em>) &#8211; Order of polynomial used for extrapolations
+<li><strong>extrap_order</strong> (<em>int</em>) – Order of polynomial used for extrapolations
 outside of the spline range. The polynomial is constructed from
-the spline&#8217;s value and derivatives at the (nearest) knot of the
+the spline’s value and derivatives at the (nearest) knot of the
 spline. The allowed range is <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">extrap_order</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>. The
 default value is 3 although it is common practice to use
 smaller values.</li>
-<li><strong>warn</strong> (<em>bool</em>) &#8211; If <code class="docutils literal"><span class="pre">True</span></code>, warnings are generated
+<li><strong>warn</strong> (<em>bool</em>) – If <code class="docutils literal"><span class="pre">True</span></code>, warnings are generated
 when the spline function is called for <code class="docutils literal"><span class="pre">x</span></code> values that
 fall outside of the original range of <code class="docutils literal"><span class="pre">xknot</span></code>s used to
 define the spline. Default value is <code class="docutils literal"><span class="pre">True</span></code>;
@@ -228,13 +230,12 @@ linear algebra with matrices whose elements can be either numbers or
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> &#8211; Two-dimensional, square matrix/array of numbers
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> – Two-dimensional, square matrix/array of numbers
 and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Deterimant of the matrix.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
-If matrix is not square and two-dimensional.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</td>
 </tr>
 </tbody>
 </table>
@@ -248,14 +249,16 @@ If matrix is not square and two-dimensional.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> &#8211; Two-dimensional, square matrix/array of numbers
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> – Two-dimensional, square matrix/array of numbers
 and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Tuple <code class="docutils literal"><span class="pre">(s,</span> <span class="pre">logdet)</span></code> where the determinant of matrix <code class="docutils literal"><span class="pre">a</span></code> is
-<code class="docutils literal"><span class="pre">s</span> <span class="pre">*</span> <span class="pre">exp(logdet)</span></code>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Tuple <code class="docutils literal"><span class="pre">(s,</span> <span class="pre">logdet)</span></code> where the determinant of matrix <code class="docutils literal"><span class="pre">a</span></code> is</dt>
+<dd><code class="docutils literal"><span class="pre">s</span> <span class="pre">*</span> <span class="pre">exp(logdet)</span></code>.</dd>
+</dl>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
-If matrix is not square and two-dimensional.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</td>
 </tr>
 </tbody>
 </table>
@@ -269,13 +272,12 @@ If matrix is not square and two-dimensional.</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> &#8211; Two-dimensional, square matrix/array of numbers
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> – Two-dimensional, square matrix/array of numbers
 and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The inverse of matrix <code class="docutils literal"><span class="pre">a</span></code>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
-If matrix is not square and two-dimensional.</td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</td>
 </tr>
 </tbody>
 </table>
@@ -290,9 +292,9 @@ If matrix is not square and two-dimensional.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> &#8211; Two-dimensional, square matrix/array of numbers
+<li><strong>a</strong> – Two-dimensional, square matrix/array of numbers
 and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>b</strong> &#8211; One-dimensional vector/array of numbers and/or
+<li><strong>b</strong> – One-dimensional vector/array of numbers and/or
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, or an array of such vectors.
 Requires <code class="docutils literal"><span class="pre">b.shape[0]</span> <span class="pre">==</span> <span class="pre">a.shape[1]</span></code>.</li>
 </ul>
@@ -303,10 +305,8 @@ to <code class="docutils literal"><span class="pre">inv(a).dot(b)</span></code>.
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
-If <code class="docutils literal"><span class="pre">a</span></code> is not square and two-dimensional.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
-If shape of <code class="docutils literal"><span class="pre">b</span></code> does not match that of <code class="docutils literal"><span class="pre">a</span></code>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If <code class="docutils literal"><span class="pre">a</span></code> is not square and two-dimensional.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If shape of <code class="docutils literal"><span class="pre">b</span></code> does not match that of <code class="docutils literal"><span class="pre">a</span></code>
 (that is <code class="docutils literal"><span class="pre">b.shape[0]</span> <span class="pre">!=</span> <span class="pre">a.shape[1]</span></code>).</li>
 </ul>
 </td>
@@ -324,9 +324,9 @@ If shape of <code class="docutils literal"><span class="pre">b</span></code> doe
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> &#8211; Two-dimensional, square matrix/array of numbers
+<li><strong>a</strong> – Two-dimensional, square matrix/array of numbers
 and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>eigvec</strong> (<em>bool</em>) &#8211; If <code class="docutils literal"><span class="pre">True</span></code>, method returns a tuple of arrays
+<li><strong>eigvec</strong> (<em>bool</em>) – If <code class="docutils literal"><span class="pre">True</span></code>, method returns a tuple of arrays
 <code class="docutils literal"><span class="pre">(val,</span> <span class="pre">vec)</span></code> where the <code class="docutils literal"><span class="pre">val[i]</span></code> are the
 eigenvalues. Arrays <code class="docutils literal"><span class="pre">vec[:,</span> <span class="pre">i]</span></code> are the corresponding
 eigenvectors of <code class="docutils literal"><span class="pre">a</span></code> when one ignores uncertainties (that is,
@@ -343,8 +343,7 @@ the corresponding eigenvectors of <code class="docutils literal"><span class="pr
 uncertainties (that is, they are eigenvectors of <code class="docutils literal"><span class="pre">gvar.mean(a)</span></code>).</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
-If matrix is not square and two-dimensional.</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</p>
 </td>
 </tr>
 </tbody>
@@ -366,12 +365,12 @@ other integrates dictionary-valued equations:</p>
 to obtain <code class="docutils literal"><span class="pre">y(x1)</span></code> from <code class="docutils literal"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal"><span class="pre">y</span></code> and <code class="docutils literal"><span class="pre">f(x,y)</span></code> can
 be scalars or <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays. Typical usage is illustrated
 by the following code for integrating <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">y</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="kn">import</span> <span class="n">Integrator</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">Integrator</span>
 
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">y</span>
 
-<span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">y0</span> <span class="o">=</span> <span class="mf">1.</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">))</span>
@@ -386,19 +385,19 @@ continues the integration from <code class="docutils literal"><span class="pre">
 then <code class="docutils literal"><span class="pre">odeint(y0,</span> <span class="pre">interval=[x0,</span> <span class="pre">x1,</span> <span class="pre">x2</span> <span class="pre">...])</span></code> in the example above
 returns an array of solutions for points <code class="docutils literal"><span class="pre">x1,</span> <span class="pre">x2</span> <span class="pre">...</span></code>. So the example
 above could have been written equivalently as</p>
-<div class="highlight-python"><div class="highlight"><pre>...
+<div class="highlight-default"><div class="highlight"><pre><span class="o">...</span>
 
-odeint = Integrator(deriv=f,  tol=1e-8)
-y0 = 1.
-y1, y2 ... = odeint(y0, interval=[0, 1., 2. ...])
+<span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">...</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span> <span class="o">...</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>An alternative interface creates a new function which is the
 solution of the differential equation for specific initial conditions.
 The code above could be rewritten:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x0</span> <span class="o">=</span> <span class="mf">0.</span>         <span class="c"># initial conditions</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">x0</span> <span class="o">=</span> <span class="mf">0.</span>         <span class="c"># initial conditions</span>
 <span class="n">y0</span> <span class="o">=</span> <span class="mf">1.</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span><span class="o">.</span><span class="n">solution</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">solution</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="o">...</span>
@@ -412,7 +411,7 @@ from  the last point at which <code class="docutils literal"><span class="pre">y
 also be called with an array of <code class="docutils literal"><span class="pre">x</span></code> values, in which case an
 array containing the corresponding <code class="docutils literal"><span class="pre">y</span></code> values is returned.</p>
 <p>The integrator uses an adaptive Runge-Kutta algorithm that adjusts
-the integrator&#8217;s step size to obtain relative accuracy <code class="docutils literal"><span class="pre">tol</span></code> in the solution.
+the integrator’s step size to obtain relative accuracy <code class="docutils literal"><span class="pre">tol</span></code> in the solution.
 An initial step size can be set in the <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> by specifying
 parameter <code class="docutils literal"><span class="pre">h</span></code>. A minimum step size <code class="docutils literal"><span class="pre">hmin</span></code> can also be specified;
 the <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> raises an exception if the step size becomes
@@ -422,15 +421,15 @@ bad steps, where <code class="docutils literal"><span class="pre">h</span></code
 <code class="docutils literal"><span class="pre">odeint.ngood</span></code> and <code class="docutils literal"><span class="pre">odeint.nbad</span></code>, respectively.</p>
 <p>A custom criterion for step-size changes can be implemented by
 specifying a function for parameter delta. This is a function
-<code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> &#8212; of the estimated error <code class="docutils literal"><span class="pre">yerr</span></code>
+<code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> — of the estimated error <code class="docutils literal"><span class="pre">yerr</span></code>
 after a given step, the proposed value for <code class="docutils literal"><span class="pre">y</span></code>, and the
-proposed change <code class="docutils literal"><span class="pre">delta_y</span></code> in <code class="docutils literal"><span class="pre">y</span></code> &#8212; that returns a number
+proposed change <code class="docutils literal"><span class="pre">delta_y</span></code> in <code class="docutils literal"><span class="pre">y</span></code> — that returns a number
 to compare with tolerance <code class="docutils literal"><span class="pre">tol</span></code>. The step size is
 decreased and the step repeated if <code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span> <span class="pre">&gt;</span> <span class="pre">tol</span></code>;
 otherwise the step is accepted and the step size increased.
 The default definition of <code class="docutils literal"><span class="pre">delta</span></code> is roughly equivalent to:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
 <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="n">yerr</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">delta_y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
@@ -455,21 +454,21 @@ Objects of type <a class="reference internal" href="#gvar.ode.Solution" title="g
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deriv</strong> &#8211; Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that returns <code class="docutils literal"><span class="pre">dy/dx</span></code>.
+<li><strong>deriv</strong> – Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that returns <code class="docutils literal"><span class="pre">dy/dx</span></code>.
 The return value should have the same shape as <code class="docutils literal"><span class="pre">y</span></code> if arrays
 are used.</li>
-<li><strong>tol</strong> (<em>float</em>) &#8211; Relative accuracy in <code class="docutils literal"><span class="pre">y</span></code> relative to <code class="docutils literal"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
+<li><strong>tol</strong> (<em>float</em>) – Relative accuracy in <code class="docutils literal"><span class="pre">y</span></code> relative to <code class="docutils literal"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
 for each step in the integration. Any integration step that achieves
 less precision is repeated with a smaller step size. The step size
 is increased if precision is higher than needed. Default is 1e-5.</li>
-<li><strong>h</strong> (<em>float or None</em>) &#8211; Absolute value of initial step size. The default value equals the
+<li><strong>h</strong> (<em>float</em><em> or </em><em>None</em>) – Absolute value of initial step size. The default value equals the
 entire width of the integration interval.</li>
-<li><strong>hmin</strong> (<em>float or None</em>) &#8211; Smallest step size allowed. A warning is raised
+<li><strong>hmin</strong> (<em>float</em><em> or </em><em>None</em>) – Smallest step size allowed. A warning is raised
 if a smaller step size is requested, and the step size is not
 decreased. This prevents infinite loops at singular points, but
 the solution may not be reliable when a warning has been issued. The
 default value is <code class="docutils literal"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
-<li><strong>delta</strong> &#8211; Function <code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> that returns
+<li><strong>delta</strong> – Function <code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> that returns
 a number to be compared  with <code class="docutils literal"><span class="pre">tol</span></code> at each integration step:
 if it is larger than <code class="docutils literal"><span class="pre">tol</span></code>, the step is repeated with a smaller
 step size; if it is smaller the step is accepted and a larger
@@ -477,7 +476,7 @@ step size used for the subsequent step. Here <code class="docutils literal"><spa
 estimate of the error in <code class="docutils literal"><span class="pre">y</span></code> on the last step; <code class="docutils literal"><span class="pre">y</span></code> is the
 proposed value; and <code class="docutils literal"><span class="pre">delta_y</span></code> is the change in <code class="docutils literal"><span class="pre">y</span></code> over
 the last step.</li>
-<li><strong>analyzer</strong> &#8211; Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that is called after each
+<li><strong>analyzer</strong> – Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that is called after each
 step of the integration. This can be used to analyze intermediate
 results.</li>
 </ul>
@@ -495,12 +494,12 @@ results.</li>
 to obtain <code class="docutils literal"><span class="pre">y(x1)</span></code> from <code class="docutils literal"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal"><span class="pre">y</span></code> and <code class="docutils literal"><span class="pre">f(x,y)</span></code> are
 dictionary types having the same keys, and containing scalars
 and/or <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays as values. Typical usage is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="kn">import</span> <span class="n">DictIntegrator</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">DictIntegrator</span>
 
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="o">...</span>
 
-<span class="n">odeint</span> <span class="o">=</span> <span class="n">DictIntegrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="n">odeint</span> <span class="o">=</span> <span class="n">DictIntegrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">))</span>
 <span class="o">...</span>
@@ -511,12 +510,12 @@ returning <code class="docutils literal"><span class="pre">y1=y(x1)</span></code
 to <code class="docutils literal"><span class="pre">x=x2</span></code>, returning <code class="docutils literal"><span class="pre">y2=y(x2)</span></code>. Multiple integration points
 can be specified in <code class="docutils literal"><span class="pre">interval</span></code>, in which case a list of the
 corresponding <code class="docutils literal"><span class="pre">y</span></code> values is returned: for example,</p>
-<div class="highlight-python"><div class="highlight"><pre>odeint = DictIntegrator(deriv=f,  tol=1e-8)
-y1, y2 ... = odeint(y0, interval=[x0, x1, x2 ...])
+<div class="highlight-default"><div class="highlight"><pre><span class="n">odeint</span> <span class="o">=</span> <span class="n">DictIntegrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">...</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">...</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>The integrator uses an adaptive Runge-Kutta algorithm that adjusts
-the integrator&#8217;s step size to obtain relative accuracy <code class="docutils literal"><span class="pre">tol</span></code> in the solution.
+the integrator’s step size to obtain relative accuracy <code class="docutils literal"><span class="pre">tol</span></code> in the solution.
 An initial step size can be set in the <a class="reference internal" href="#gvar.ode.DictIntegrator" title="gvar.ode.DictIntegrator"><code class="xref py py-class docutils literal"><span class="pre">DictIntegrator</span></code></a> by specifying
 parameter <code class="docutils literal"><span class="pre">h</span></code>. A minimum ste psize <code class="docutils literal"><span class="pre">hmin</span></code> can also be specified;
 the <a class="reference internal" href="#gvar.ode.Integrator" title="gvar.ode.Integrator"><code class="xref py py-class docutils literal"><span class="pre">Integrator</span></code></a> raises an exception if the step size becomes
@@ -534,22 +533,22 @@ Objects of type <a class="reference internal" href="#gvar.ode.Solution" title="g
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deriv</strong> &#8211; Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that returns <code class="docutils literal"><span class="pre">dy/dx</span></code>.
+<li><strong>deriv</strong> – Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that returns <code class="docutils literal"><span class="pre">dy/dx</span></code>.
 The return value should be a dictionary with the same
 keys as <code class="docutils literal"><span class="pre">y</span></code>, and values that have the same
 shape as the corresponding values in <code class="docutils literal"><span class="pre">y</span></code>.</li>
-<li><strong>tol</strong> (<em>float</em>) &#8211; Relative accuracy in <code class="docutils literal"><span class="pre">y</span></code> relative to <code class="docutils literal"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
+<li><strong>tol</strong> (<em>float</em>) – Relative accuracy in <code class="docutils literal"><span class="pre">y</span></code> relative to <code class="docutils literal"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
 for each step in the integration. Any integration step that achieves
 less precision is repeated with a smaller step size. The step size
 is increased if precision is higher than needed.</li>
-<li><strong>h</strong> (<em>float</em>) &#8211; Absolute value of initial step size. The default value equals the
+<li><strong>h</strong> (<em>float</em>) – Absolute value of initial step size. The default value equals the
 entire width of the integration interval.</li>
-<li><strong>hmin</strong> (<em>float</em>) &#8211; Smallest step size allowed. A warning is raised
+<li><strong>hmin</strong> (<em>float</em>) – Smallest step size allowed. A warning is raised
 if a smaller step size is requested, and the step size is not
 decreased. This prevents infinite loops at singular points, but
 the solution may not be reliable when a warning has been issued. The
 default value is <code class="docutils literal"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
-<li><strong>analyzer</strong> &#8211; Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that is called after each
+<li><strong>analyzer</strong> – Function of <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> that is called after each
 step of the integration. This can be used to analyze intermediate
 results.</li>
 </ul>
@@ -565,7 +564,7 @@ results.</li>
 <em class="property">class </em><code class="descclassname">gvar.ode.</code><code class="descname">Solution</code><a class="headerlink" href="#gvar.ode.Solution" title="Permalink to this definition">¶</a></dt>
 <dd><p>ODE analyzer for storing intermediate values.</p>
 <p>Usage: eg, given</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="n">soln</span> <span class="o">=</span> <span class="n">Solution</span><span class="p">()</span>
 <span class="n">y0</span> <span class="o">=</span> <span class="o">...</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="n">soln</span><span class="p">)</span>
@@ -586,34 +585,34 @@ one-dimensional integrals (using its adaptive Runge-Kutta algorithm):</p>
 <code class="descclassname">ode.</code><code class="descname">integral</code><span class="sig-paren">(</span><em>fcn</em>, <em>interval</em>, <em>fcnshape=None</em>, <em>tol=1e-08</em>, <em>hmin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.integral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute integral of <code class="docutils literal"><span class="pre">fcn(x)</span></code> on interval.</p>
 <p>Given a function <code class="docutils literal"><span class="pre">fcn(x)</span></code> the call</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>calculates the integral of <code class="docutils literal"><span class="pre">fcn(x)</span></code> from <code class="docutils literal"><span class="pre">x0</span></code> to <code class="docutils literal"><span class="pre">x1</span></code>.
 For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 <span class="go">0.500000002834</span>
 </pre></div>
 </div>
 <p>Function <code class="docutils literal"><span class="pre">fcn(x)</span></code> can return a scalar or an array (any shape):
 for example,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">])</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 <span class="go">[1. 0.5 0.25]</span>
 </pre></div>
 </div>
 <p>The function can also return dictionaries whose values are
 scalars or arrays: for example,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x3</span><span class="o">=</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 <span class="go">{&#39;x&#39;: 0.5,&#39;x3&#39;: 0.25}</span>
 </pre></div>
 </div>
@@ -622,17 +621,17 @@ scalars or arrays: for example,</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fcn</strong> &#8211; Function of scalar variable <code class="docutils literal"><span class="pre">x</span></code> that returns the integrand.
+<li><strong>fcn</strong> – Function of scalar variable <code class="docutils literal"><span class="pre">x</span></code> that returns the integrand.
 The return value should be either a scalar or an array, or a
 dictionary whose values are scalars and/or arrays.</li>
-<li><strong>interval</strong> &#8211; Contains the interval <code class="docutils literal"><span class="pre">(x0,x1)</span></code> over which the integral
+<li><strong>interval</strong> – Contains the interval <code class="docutils literal"><span class="pre">(x0,x1)</span></code> over which the integral
 is computed.</li>
-<li><strong>fcnshape</strong> &#8211; Contains the shape of the array returned by <code class="docutils literal"><span class="pre">f(x)</span></code> or
+<li><strong>fcnshape</strong> – Contains the shape of the array returned by <code class="docutils literal"><span class="pre">f(x)</span></code> or
 <code class="docutils literal"><span class="pre">()</span></code> if the function returns a scalar. Setting <code class="docutils literal"><span class="pre">fshape=None</span></code>
 (the default) results in an extra function evaluation to determine
 the shape.</li>
-<li><strong>tol</strong> &#8211; Relative accuracy of result.</li>
-<li><strong>hmin</strong> &#8211; Smallest step size allowed in adaptive integral. A warning is
+<li><strong>tol</strong> – Relative accuracy of result.</li>
+<li><strong>hmin</strong> – Smallest step size allowed in adaptive integral. A warning is
 raised if a smaller step size is requested, and the step size is not
 decreased. This prevents infinite loops at singular points, but
 the integral may not be accurate when a warning has been issued. The
@@ -648,11 +647,11 @@ default value is <code class="docutils literal"><span class="pre">None</span></c
 <div class="section" id="module-gvar.powerseries">
 <span id="power-series"></span><h2>Power Series<a class="headerlink" href="#module-gvar.powerseries" title="Permalink to this headline">¶</a></h2>
 <p>Module <a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal"><span class="pre">gvar.powerseries</span></code></a> provides tools for manipulating power series
-approximations of functions. A function&#8217;s power series is specified by the
+approximations of functions. A function’s power series is specified by the
 coefficients in its Taylor expansion with respect to an independent variable,
 say <code class="docutils literal"><span class="pre">x</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre>f(x) = f(0) + f&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;(0)/6)*x**3 + ...
-     = f0 + f1*x + f2*x**2 + f3*x**3 + ...
+<div class="highlight-default"><div class="highlight"><pre><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="s">&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
+     <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">f1</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">f2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">f3</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
 <p>In practice a power series is different from a polynomial because power
@@ -660,10 +659,10 @@ series, while infinite order in principle, are truncated at some finite
 order in numerical applications. The <code class="docutils literal"><span class="pre">order</span></code> of a power series is the
 highest power of <code class="docutils literal"><span class="pre">x</span></code> that is retained in the approximation; coefficients
 for still higher-order terms are assumed to be unknown (as opposed to zero).</p>
-<p>Taylor&#8217;s theorem can be used to generate power series for functions of
+<p>Taylor’s theorem can be used to generate power series for functions of
 power series:</p>
-<div class="highlight-python"><div class="highlight"><pre>g(f(x)) = g(f0) + g&#39;(f0)*(f(x)-f0) + (g&#39;&#39;(f0)/2)*(f(x)-f0)**2 + ...
-        = g0 + g1*x + g2*x**2 + ...
+<div class="highlight-default"><div class="highlight"><pre><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span><span class="s">&#39;(f0)*(f(x)-f0) + (g&#39;&#39;(f0)/2)*(f(x)-f0)**2 + ...</span>
+        <span class="o">=</span> <span class="n">g0</span> <span class="o">+</span> <span class="n">g1</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">g2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
 <p>This allows us to define a full calculus for power series, where arithmetic
@@ -676,19 +675,19 @@ calculus. <code class="docutils literal"><span class="pre">PowerSeries([f0,f1,f2
 a power series with coefficients <code class="docutils literal"><span class="pre">f0,</span> <span class="pre">f1,</span> <span class="pre">f2,</span> <span class="pre">f3...</span></code> (as in <code class="docutils literal"><span class="pre">f(x)</span></code>
 above). Thus, for example, we can define a 4th-order power series
 approximation <code class="docutils literal"><span class="pre">f</span></code> to <code class="docutils literal"><span class="pre">exp(x)=1+x+x**2/2+...</span></code> using</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">24.</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span>             <span class="c"># print the coefficients</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c"># print the coefficients</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667]</span>
 </pre></div>
 </div>
 <p>Arithmetic expressions involving instances of class <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> are
 themselves <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> as in, for example,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c"># power series for exp(-x)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c"># power series for exp(-x)</span>
 <span class="go">[ 1.         -1.          0.5        -0.16666667  0.04166667]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>        <span class="c"># power series for x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>        <span class="c"># power series for x</span>
 <span class="go">[ 0.  1.  0. -0.  0.]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="o">/</span><span class="n">f</span>           <span class="c"># power series for 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">/</span><span class="n">f</span>           <span class="c"># power series for 1</span>
 <span class="go">[ 1.  0.  0.  0.  0.]</span>
 </pre></div>
 </div>
@@ -698,9 +697,9 @@ the usual elementary functions (<code class="docutils literal"><span class="pre"
 <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a>; the order of the result is that of the operand with the
 lowest order.</p>
 <p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> can be differentiated and integrated:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>     <span class="c"># derivative of exp(x)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>     <span class="c"># derivative of exp(x)</span>
 <span class="go">[ 1.          1.          0.5         0.16666667]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">()</span>     <span class="c"># integral of exp(x) (from x=0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">()</span>     <span class="c"># integral of exp(x) (from x=0)</span>
 <span class="go">[ 0.          1.          0.5         0.16666667  0.04166667  0.00833333]</span>
 </pre></div>
 </div>
@@ -708,20 +707,20 @@ lowest order.</p>
 a function of a function is easily obtained. For example, assume <code class="docutils literal"><span class="pre">f</span></code>
 represents function <code class="docutils literal"><span class="pre">f(x)=exp(x)</span></code>, as above, and <code class="docutils literal"><span class="pre">g</span></code>
 represents <code class="docutils literal"><span class="pre">g(x)=log(1+x)</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">4.</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">4.</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Then <code class="docutils literal"><span class="pre">f(g)</span></code> gives the <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> for <code class="docutils literal"><span class="pre">exp(log(1+x))</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">x</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 <span class="go">[  1.0000e+00   1.0000e+00   0.0000e+00  -2.7755e-17 -7.6327e-17]</span>
 </pre></div>
 </div>
 <p>Individual coefficients from the powerseries can be accessed using
 array-element notation: for example,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 <span class="go">1.0 1.0 0.5 0.166666666667</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span>             <span class="c"># f is now the power series for exp(x)-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c"># f is now the power series for exp(x)-1</span>
 <span class="go">[ 0.          1.          0.5         0.16666667  0.04166667]</span>
 </pre></div>
 </div>
@@ -730,12 +729,12 @@ array-element notation: for example,</p>
 <h3>Numerical evaluation of power series<a class="headerlink" href="#numerical-evaluation-of-power-series" title="Permalink to this headline">¶</a></h3>
 <p>The power series can also be evaluated for a particular
 numerical value of x: continuing the example,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c"># should be exp(0.01)-1 approximately</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c"># should be exp(0.01)-1 approximately</span>
 <span class="go">0.0100501670833</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c"># verify that it is</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c"># verify that it is</span>
 <span class="go">0.0100501670842</span>
 </pre></div>
 </div>
@@ -752,18 +751,18 @@ expansion of a Python function <code class="docutils literal"><span class="pre">
 <code class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">PowerSeries([0.,1.],order=N)</span></code>. The Taylor series for function <code class="docutils literal"><span class="pre">g</span></code>
 is then given by <code class="docutils literal"><span class="pre">g_taylor</span> <span class="pre">=</span> <span class="pre">g(x)</span></code> which is a <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> instance.
 For example, consider:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>           <span class="c"># an example of a Python function</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>    <span class="c"># Taylor series for x</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">x</span>
 <span class="go">[ 0.  1.  0.  0.  0.  0.]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g_taylor</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>     <span class="c"># Taylor series for g(x) about x=0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">g_taylor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">g_taylor</span>
 <span class="go">[ 1.         0.         0.375      0.         0.2734375  0.       ]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">exp_taylor</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># Taylor series for exp(x) about x=0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">exp_taylor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp_taylor</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667  0.00833333]</span>
 </pre></div>
 </div>
@@ -773,7 +772,7 @@ For example, consider:</p>
 <em class="property">class </em><code class="descclassname">gvar.powerseries.</code><code class="descname">PowerSeries</code><span class="sig-paren">(</span><em>c=None</em>, <em>order=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Power series representation of a function.</p>
 <p>The power series created by <code class="docutils literal"><span class="pre">PowerSeries(c)</span></code> corresponds to:</p>
-<div class="highlight-python"><div class="highlight"><pre>c[0] + c[1]*x + c[2]*x**2 + ... .
+<div class="highlight-default"><div class="highlight"><pre><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span> <span class="o">.</span>
 </pre></div>
 </div>
 <p>The order of the power series is normally determined by the length of
@@ -797,27 +796,15 @@ and integrated (<code class="docutils literal"><span class="pre">p.integ()</span
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>c</strong> (<em>list or array</em>) &#8211; Power series coefficients (optional if parameter
+<li><strong>c</strong> (<em>list</em><em> or </em><em>array</em>) – Power series coefficients (optional if parameter
 <em>order</em> specified).</li>
-<li><strong>order</strong> (<em>integer</em>) &#8211; Highest power in power series (optional if parameter
+<li><strong>order</strong> (<em>integer</em>) – Highest power in power series (optional if parameter
 <em>c</em> specified).</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="gvar.powerseries.PowerSeries.__iter__">
-<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.__iter__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Iterate over coefficients of power series C{self}.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="gvar.powerseries.PowerSeries.__setitem__">
-<code class="descname">__setitem__</code><span class="sig-paren">(</span><em>i</em>, <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.__setitem__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set C{i}th coefficient of power series equal to C{val}.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="gvar.powerseries.PowerSeries.deriv">
 <code class="descname">deriv</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.deriv" title="Permalink to this definition">¶</a></dt>
@@ -826,7 +813,7 @@ and integrated (<code class="docutils literal"><span class="pre">p.integ()</span
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<em>positive integer</em>) &#8211; Number of derivatives.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<em>positive integer</em>) – Number of derivatives.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><em>n</em>-th derivative of <code class="docutils literal"><span class="pre">self</span></code>.</td>
 </tr>
@@ -845,8 +832,8 @@ integrating from point <em>x0</em>, is returned.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n</strong> (<em>integer</em>) &#8211; Number of integrations.</li>
-<li><strong>x0</strong> &#8211; Starting point for definite integral (optional).</li>
+<li><strong>n</strong> (<em>integer</em>) – Number of integrations.</li>
+<li><strong>x0</strong> – Starting point for definite integral (optional).</li>
 </ul>
 </td>
 </tr>
@@ -871,13 +858,13 @@ integrating from point <em>x0</em>, is returned.</p>
 <p>Module <a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> contains methods for finding the roots of
 of one-dimensional functions: that is, finding <code class="docutils literal"><span class="pre">x</span></code> such that
 <code class="docutils literal"><span class="pre">fcn(x)=0</span></code> for a given function <code class="docutils literal"><span class="pre">fcn</span></code>. Typical usage is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">interval</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>     <span class="c"># bracket root</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
 <span class="go">(3.1384283767210035, 3.4522712143931042)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="n">interval</span><span class="p">)</span>   <span class="c"># refine root</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 <span class="go">3.14159265359</span>
 </pre></div>
 </div>
@@ -890,31 +877,31 @@ since <code class="docutils literal"><span class="pre">sin(x)</span></code> is c
 The final root is found by refining the interval, using <code class="docutils literal"><span class="pre">gvar.root.refine</span></code>.
 By default, the root is refined iteratively to machine precision, but this
 requires only a small number (4) of iterations:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c"># number of iterations</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c"># number of iterations</span>
 <span class="go">4</span>
 </pre></div>
 </div>
 <p>The most challenging situations are ones where the function
-is extremely flat in the vicinity of the root &#8212; that is,
+is extremely flat in the vicinity of the root — that is,
 two or more of its leading derivatives vanish there. For
 example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">**</span> <span class="mi">11</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 <span class="go">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c"># number of iterations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c"># number of iterations</span>
 <span class="go">142</span>
 </pre></div>
 </div>
 <p>This routine also works with variables of type <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>:
 for example,</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">gv</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 <span class="go">3.14(31)</span>
 </pre></div>
 </div>
@@ -927,7 +914,7 @@ uncertainty in parameter <code class="docutils literal"><span class="pre">w</spa
 <dd><p>Search for and bracket root of one-dimensional function <code class="docutils literal"><span class="pre">fcn(x)</span></code>.</p>
 <p>This method searches for an interval in <code class="docutils literal"><span class="pre">x</span></code> that brackets
 a root of <code class="docutils literal"><span class="pre">fcn(x)=0</span></code>. It examines points</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fac</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">incr</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="n">x</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fac</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">incr</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">x[0]=x0</span></code> and <code class="docutils literal"><span class="pre">j=0...maxit-1</span></code>, looking for a pair
@@ -938,10 +925,10 @@ be refined using <code class="xref py py-meth docutils literal"><span class="pre
 <p class="rubric">Example</p>
 <p>The following code seeks to bracket the first zero of
 <code class="docutils literal"><span class="pre">sin(x)</span></code> with <code class="docutils literal"><span class="pre">x&gt;0.1</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">interval</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
 <span class="go">(3.0912680532870755, 3.4003948586157833)</span>
 </pre></div>
 </div>
@@ -952,16 +939,16 @@ at <code class="docutils literal"><span class="pre">pi</span></code>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fcn</strong> &#8211; One dimenionsal function whose root is sought.</li>
-<li><strong>x0</strong> (<em>float</em>) &#8211; Starting point for search.</li>
-<li><strong>incr</strong> (<em>float, optional</em>) &#8211; Increment used for linear searches. Default
+<li><strong>fcn</strong> – One dimenionsal function whose root is sought.</li>
+<li><strong>x0</strong> (<em>float</em>) – Starting point for search.</li>
+<li><strong>incr</strong> (<em>float</em><em>, </em><em>optional</em>) – Increment used for linear searches. Default
 value is 0.</li>
-<li><strong>fac</strong> (<em>float, optional</em>) &#8211; Rescaling factor for exponential searches.
+<li><strong>fac</strong> (<em>float</em><em>, </em><em>optional</em>) – Rescaling factor for exponential searches.
 Default value is 1.1.</li>
-<li><strong>maxit</strong> (<em>int, optional</em>) &#8211; Maximum number of steps allowed for search. An
+<li><strong>maxit</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of steps allowed for search. An
 exception is raised if a root is not found in time. Default
 value is 100.</li>
-<li><strong>analyzer</strong> &#8211; Optional function <code class="docutils literal"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
+<li><strong>analyzer</strong> – Optional function <code class="docutils literal"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
 for each point <code class="docutils literal"><span class="pre">x</span></code> that is examined. This can be used,
 for example, to monitor the search while debugging.
 Default is <code class="docutils literal"><span class="pre">None</span></code>.</li>
@@ -973,14 +960,13 @@ that a root occurs between <code class="docutils literal"><span class="pre">a</s
 function is continuous). The tuple has extra attributes
 that provide additional information about the search:</p>
 <ul class="simple">
-<li><strong>nit</strong> &#8212; Number of iterations used to find interval <code class="docutils literal"><span class="pre">(a,b)</span></code>.</li>
-<li><strong>fcnval</strong> &#8212; Tuple containing the function values at <code class="docutils literal"><span class="pre">(a,b)</span></code>.</li>
+<li><strong>nit</strong> — Number of iterations used to find interval <code class="docutils literal"><span class="pre">(a,b)</span></code>.</li>
+<li><strong>fcnval</strong> — Tuple containing the function values at <code class="docutils literal"><span class="pre">(a,b)</span></code>.</li>
 </ul>
 </p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> &#8211;
-If unable to find a root in <code class="docutils literal"><span class="pre">maxit</span></code> steps.</p>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code> – If unable to find a root in <code class="docutils literal"><span class="pre">maxit</span></code> steps.</p>
 </td>
 </tr>
 </tbody>
@@ -994,19 +980,19 @@ If unable to find a root in <code class="docutils literal"><span class="pre">max
 <p>This method finds a root <code class="docutils literal"><span class="pre">x</span></code> of <code class="docutils literal"><span class="pre">fcn(x)=0</span></code> inside an <code class="docutils literal"><span class="pre">interval=(a,b)</span></code>
 that brackets the root, with <code class="docutils literal"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>.</p>
 <p>This method is a pure Python adaptation of an algorithm
-from Richard Brent&#8217;s book &#8220;Algorithms for Minimization
-without Derivatives&#8221; (1973). Being pure Python it works with
+from Richard Brent’s book “Algorithms for Minimization
+without Derivatives” (1973). Being pure Python it works with
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>-valued functions and variables.</p>
 <p class="rubric">Example</p>
 <p>The following code finds a root of <code class="docutils literal"><span class="pre">sin(x)</span></code> in the interval
 <code class="docutils literal"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">4</span></code>, using 7 iterative refinements of the initial
 interval:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="kn">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 <span class="go">3.14159265359</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>
 <span class="go">7</span>
 </pre></div>
 </div>
@@ -1015,19 +1001,19 @@ interval:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fcn</strong> &#8211; One-dimensional function whose zero/root is sought.</li>
-<li><strong>interval</strong> &#8211; Tuple <code class="docutils literal"><span class="pre">(a,b)</span></code> specifying an interval containing
+<li><strong>fcn</strong> – One-dimensional function whose zero/root is sought.</li>
+<li><strong>interval</strong> – Tuple <code class="docutils literal"><span class="pre">(a,b)</span></code> specifying an interval containing
 the root, with <code class="docutils literal"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>. The search
 for a root is confined to this interval.</li>
-<li><strong>rtol</strong> (<em>float, optional</em>) &#8211; Relative tolerance for the root. The default
+<li><strong>rtol</strong> (<em>float</em><em>, </em><em>optional</em>) – Relative tolerance for the root. The default
 value is <code class="docutils literal"><span class="pre">None</span></code>, which sets <code class="docutils literal"><span class="pre">rtol</span></code> equal to machine
 precision (<code class="docutils literal"><span class="pre">sys.float_info.epsilon</span></code>). A larger value
 usually leads to less precision but is faster.</li>
-<li><strong>maxit</strong> (<em>int, optional</em>) &#8211; Maximum number of iterations used to find
+<li><strong>maxit</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of iterations used to find
 a root with the given tolerance. A warning is
 issued if the algorithm does not converge in time.
 (Default value is 1000.)</li>
-<li><strong>analyzer</strong> &#8211; Optional function <code class="docutils literal"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
+<li><strong>analyzer</strong> – Optional function <code class="docutils literal"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
 for each point <code class="docutils literal"><span class="pre">x</span></code> examined by the algorithm. This can
 be used, for example, to monitor convergence while
 debugging. Default is <code class="docutils literal"><span class="pre">None</span></code>.</li>
@@ -1038,20 +1024,18 @@ debugging. Default is <code class="docutils literal"><span class="pre">None</spa
 a <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> but with extra attributes that
 provide additional information about the root:</p>
 <ul class="simple">
-<li><strong>nit</strong> &#8212; Number of iterations used to find the root.</li>
-<li><strong>interval</strong> &#8212; Smallest interval <code class="docutils literal"><span class="pre">(b,c)</span></code> found containing
+<li><strong>nit</strong> — Number of iterations used to find the root.</li>
+<li><strong>interval</strong> — Smallest interval <code class="docutils literal"><span class="pre">(b,c)</span></code> found containing
 the root, where <code class="docutils literal"><span class="pre">b</span></code> is the root returned by the method.</li>
-<li><strong>fcnval</strong> &#8212; Value of <code class="docutils literal"><span class="pre">fcn(x)</span></code> at the root.</li>
+<li><strong>fcnval</strong> — Value of <code class="docutils literal"><span class="pre">fcn(x)</span></code> at the root.</li>
 </ul>
 </p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> &#8211;
-If <code class="docutils literal"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> for initial
+<li><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code> – If <code class="docutils literal"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> for initial
 interval <code class="docutils literal"><span class="pre">(a,b)</span></code>.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">UserWarning</span></code> &#8211;
-If the algorithm fails to converge
+<li><code class="xref py py-exc docutils literal"><span class="pre">UserWarning</span></code> – If the algorithm fails to converge
 after <code class="docutils literal"><span class="pre">maxit</span></code> iterations.</li>
 </ul>
 </td>
@@ -1096,14 +1080,11 @@ after <code class="docutils literal"><span class="pre">maxit</span></code> itera
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1125,12 +1106,12 @@ after <code class="docutils literal"><span class="pre">maxit</span></code> itera
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.1 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        &#169; Copyright 2009-2015, G. P. Lepage.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
     </div>
   </body>
 </html>

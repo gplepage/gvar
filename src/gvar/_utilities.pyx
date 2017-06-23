@@ -588,6 +588,12 @@ def dump(g, outputfile, use_json=False):
 
     The |GVar|\s are recovered using :func:`gvar.load`.
 
+    Unlike :mod:`pickle`, :mod:`json` can have trouble with dictionaries
+    whose keys are not strings. A workaround is used here that succeeds
+    provided ``eval(repr(k)) == k`` for every key ``k``, which is true for
+    strings and lots of other types of key. Use :mod:`pickle` where the
+    workaround fails.
+
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
             are |GVar|\s and/or arrays of |GVar|\s.
@@ -606,7 +612,10 @@ def dump(g, outputfile, use_json=False):
             if not isinstance(g, _gvar.BufferDict):
                 g = _gvar.BufferDict(g)
             data = dict(
-                items=[(k, d.tolist()) for k,d in _gvar.mean(g).items()],
+                items=[
+                    (repr(k), d.tolist())
+                    for k,d in _gvar.mean(g).items()
+                    ],
                 cov=_gvar.evalcov(g.buf).tolist(),
                 )
         else:
@@ -622,6 +631,12 @@ def dumps(g, use_json=False):
     """ Serialize a collection ``g`` of |GVar|\s into a string.
 
     The |GVar|\s are recovered using :func:`gvar.loads`.
+
+    Unlike :mod:`pickle`, :mod:`json` can have trouble with dictionaries
+    whose keys are not strings. A workaround is used here that succeeds
+    provided ``eval(repr(k)) == k`` for every key ``k``, which is true for
+    strings and lots of other types of key. Use :mod:`pickle` where the
+    workaround fails.
 
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
@@ -643,7 +658,7 @@ def load(inputfile, use_json=None):
             serialized |GVar|\s are stored.
         use_json (bool): Data assumed serialized using :mod:`pickle` if
             ``False`` or :mod:`json` if ``True``. If ``use_json=None``
-            (default) each of pickle and json is tried (in that order).
+            (default) each of pickle and json is tried.
 
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
@@ -661,11 +676,10 @@ def load(inputfile, use_json=None):
     if use_json:
         data = json.load(ifile)
         if hasattr(data, 'keys'):
-            ans = _gvar.BufferDict(data['items'])
-            err = _gvar.gvar(len(data['cov']) * [0.0], data['cov'])
-            ans = _gvar.BufferDict(ans, buf=ans.buf + err)
+            ans = _gvar.BufferDict([(eval(k), d) for k, d in data['items']])
+            ans.buf = _gvar.gvar(ans._buf, data['cov'])
         else:
-            ans = _gvar.gvar(*data)
+            ans = _gvar.gvar(*data)  # need * with json since it doesn't have tuples
     else:
         ans = _gvar.gvar(pickle.load(ifile))
     return ans
@@ -680,7 +694,7 @@ def loads(inputstring, use_json=None):
             :func:`gvar.dumps`.
         use_json (bool): Data assumed serialized using :mod:`pickle` if
             ``False`` or :mod:`json` if ``True``. If ``use_json=None``
-            (default) each of pickle and json is tried (in that order).
+            (default) each of pickle and json is tried.
 
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.

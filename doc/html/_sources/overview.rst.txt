@@ -498,9 +498,6 @@ the |GVar|\s are retrieved using ::
 
     >>> g = pickle.load(open('outputfile.p', 'rb'))
 
-.. |BufferDict|\s also have methods that allow saving their contents
-.. using Python's :mod:`json` module rather than :mod:`pickle`.
-
 
 Non-Gaussian Expectation Values
 --------------------------------------------------------

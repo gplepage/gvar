@@ -1,3 +1,10 @@
+Version 8.3.2 2017-06-22
+=========================
+json support in gvar.dump, gvar.load, etc was not quite right in v8.3.1 and so
+was unreliable. The situation is improved here. Note that these functions are
+meant to extend and improve on gvar.BufferDict.dump, etc which functions are
+still available but will get limited support going forward.
+
 Version 8.3.1 2017-06-16
 ==========================
 A very minor updata:

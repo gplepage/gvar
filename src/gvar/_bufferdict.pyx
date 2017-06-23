@@ -394,6 +394,7 @@ class BufferDict(collections.OrderedDict):
         :mod:`pickle` (or :mod:`json`) knows how to serialize the data type
         stored in the |BufferDict|'s buffer (or for |GVar|\s).
         """
+        # gv.dump(self, fobj, use_json=use_json)
         if not use_json:
             pickle.dump(self, fobj)
         else:
@@ -406,7 +407,7 @@ class BufferDict(collections.OrderedDict):
             d = {}
             keys = []
             for k in tmp:
-                jk = 's:' + k if str(k) == k else 'e:'+str(k)
+                jk = 's:' + k if str(k) == k else 'e:'+repr(k)
                 keys.append(jk)
                 d[jk] = tmp[k] if self.isscalar(k) else tmp[k].tolist()
             d['keys'] = keys
@@ -425,6 +426,7 @@ class BufferDict(collections.OrderedDict):
         :mod:`json`) knows how to serialize the data type stored in the
         |BufferDict|'s buffer (or for |GVar|\s).
         """
+        # return gv.dumps(self, use_json=use_json)
         f = _StringIO() if use_json else _BytesIO()
         self.dump(f, use_json=use_json)
         return f.getvalue()
@@ -436,6 +438,7 @@ class BufferDict(collections.OrderedDict):
         Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
         it uses :mod:`json` (obvioulsy).
         """
+        # return gv.load(fobj, use_json=use_json)
         if not use_json:
             return pickle.load(fobj)
         else:
@@ -445,7 +448,7 @@ class BufferDict(collections.OrderedDict):
                 k = str(jk[2:]) if jk[0] == 's' else eval(jk[2:])
                 ans[k] = d[jk]
             if 'cov' in d:
-                ans.buf = _gvar.gvar(ans._buf,d['cov'])
+                ans.buf = _gvar.gvar(ans._buf, d['cov'])
             return ans
 
     @staticmethod
@@ -455,6 +458,7 @@ class BufferDict(collections.OrderedDict):
         Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
         it uses :mod:`json` (obvioulsy).
         """
+        # return gv.loads(s, use_json=use_json)
         f = _StringIO(s) if use_json else _BytesIO(s)
         return BufferDict.load(f, use_json=use_json)
 

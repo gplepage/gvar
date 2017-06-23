@@ -1416,7 +1416,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         for g in [
             '1(5)',
             [['2(1)'], ['3(2)']],
-            dict(a='4(2)', b=[['5(5)', '6(9)']]),
+            {'a':'4(2)', 'b':[['5(5)', '6(9)']], (1,'2'):'7(8)'},
             ]:
             g1 = gvar(g)
             dump(g1, 'outputfile.json', use_json=True)
