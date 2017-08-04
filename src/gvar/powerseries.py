@@ -204,14 +204,14 @@ class PowerSeries(object):
         return len(self.c)-1
     order = property(_getorder,doc="Highest power in power series.")
 
-    # def _getcoeff(self):
-    #     return numpy.array(self.c)
-    # coeff = property(_getcoeff,
-    #             doc="Copy of power series coefficients (numpy.array).")
+    def _getcoeff(self):
+        return numpy.array(self.c)
+    coeff = property(_getcoeff,
+                doc="Copy of power series coefficients (numpy.array).")
 
-    # def __getitem__(self,i):
-    #     """ Return C{i}th coefficient of power series. """
-    #     return self.c[i]
+    def __getitem__(self,i):
+        """ Return C{i}th coefficient of power series. """
+        return self.c[i]
 
     def __setitem__(self,i,val):
         """ Set C{i}th coefficient of power series equal to C{val}. """

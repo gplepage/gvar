@@ -411,7 +411,7 @@ def correlate(g, corr):
             correlation between ``g[i]`` and ``g[j]``.
     """
     cdef INTP_TYPE ni, nj
-    cdef numpy.ndarray[numpy.float_t, ndim=2] covfalt
+    cdef numpy.ndarray[numpy.float_t, ndim=2] covflat
     cdef numpy.ndarray[numpy.float_t, ndim=1] sdevflat, mean, sdev
     if hasattr(g, 'keys'):
         g = _gvar.asbufferdict(g)

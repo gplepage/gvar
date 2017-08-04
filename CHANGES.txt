@@ -1,3 +1,8 @@
+Version 8.3.3 2017-08-03
+=========================
+Fixes typo in gvar.correlate that makes gvar compilation fail on some
+machines.
+
 Version 8.3.2 2017-06-22
 =========================
 json support in gvar.dump, gvar.load, etc was not quite right in v8.3.1 and so

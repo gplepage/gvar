@@ -64,10 +64,10 @@ The correlation between ``m`` and ``E`` is obvious from their covariance and
 correlation matrices, both of which have large
 off-diagonal elements::
 
-    >>> print gv.evalcov([m, E])            # covariance matrix
+    >>> print(gv.evalcov([m, E]))           # covariance matrix
     [[ 0.16        0.14867019]
     [ 0.14867019  0.14121635]]
-    >>> print gv.evalcorr([m, E])           # correlation matrix
+    >>> print(gv.evalcorr([m, E]))          # correlation matrix
     [[ 1.          0.98905722]
      [ 0.98905722  1.        ]]
 
@@ -633,7 +633,7 @@ This shows the actual probability associated with each ``f(p)`` bin,
 together with the
 shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
 It also shows the Gaussian distribution corresponding to correct mean
-and standard deviation (0.186(207)) of the distribution (black dotted line).
+and standard deviation (0.019(207)) of the distribution (black dotted line).
 
 Neither Gaussian in this plot is quite right: the first is more accurate close
 to the maximimum, while the second does better further out. From the histogram

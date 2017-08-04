@@ -111,10 +111,10 @@ the mass or energy separately.</p>
 <p>The correlation between <code class="docutils literal"><span class="pre">m</span></code> and <code class="docutils literal"><span class="pre">E</span></code> is obvious from their covariance and
 correlation matrices, both of which have large
 off-diagonal elements:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">gv</span><span class="o">.</span><span class="n">evalcov</span><span class="p">([</span><span class="n">m</span><span class="p">,</span> <span class="n">E</span><span class="p">])</span>            <span class="c"># covariance matrix</span>
+<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcov</span><span class="p">([</span><span class="n">m</span><span class="p">,</span> <span class="n">E</span><span class="p">]))</span>           <span class="c"># covariance matrix</span>
 <span class="go">[[ 0.16        0.14867019]</span>
 <span class="go">[ 0.14867019  0.14121635]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">([</span><span class="n">m</span><span class="p">,</span> <span class="n">E</span><span class="p">])</span>           <span class="c"># correlation matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">([</span><span class="n">m</span><span class="p">,</span> <span class="n">E</span><span class="p">]))</span>          <span class="c"># correlation matrix</span>
 <span class="go">[[ 1.          0.98905722]</span>
 <span class="go"> [ 0.98905722  1.        ]]</span>
 </pre></div>
@@ -646,7 +646,7 @@ values of <code class="docutils literal"><span class="pre">f(p)</span></code>:</
 together with the
 shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
 It also shows the Gaussian distribution corresponding to correct mean
-and standard deviation (0.186(207)) of the distribution (black dotted line).</p>
+and standard deviation (0.019(207)) of the distribution (black dotted line).</p>
 <p>Neither Gaussian in this plot is quite right: the first is more accurate close
 to the maximimum, while the second does better further out. From the histogram
 we can estimate that 68% of the probability lies within ±0.14 of 0.03,
