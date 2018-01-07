@@ -1,3 +1,8 @@
+Version 8.3.4a ?????
+=====================
+
+- Fixed formatting bug in gvar.fmt_errorbudget().
+
 Version 8.3.3 2017-08-03
 =========================
 Fixes typo in gvar.correlate that makes gvar compilation fail on some

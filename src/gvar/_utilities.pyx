@@ -938,10 +938,12 @@ def fmt_errorbudget(
         # find it by hand: w0 for 1st col, w for rest
         w = 10
         for ko in outputs_keys:
+            ko = str(ko)
             if len(ko) >= w:
                 w = len(ko) + 1
         w0 = 10
         for ki in inputs:
+            ki = str(ki)
             if len(ki) >= w0:
                 w0 = len(ki) + 1
     else:

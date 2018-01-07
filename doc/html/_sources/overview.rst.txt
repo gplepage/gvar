@@ -458,32 +458,40 @@ Storing |GVar|\s for Later Use; |BufferDict|\s
 --------------------------------------------------
 Storing |GVar|\s in a file for later use is complicated by the need to
 capture the covariances between different |GVar|\s as well as their
-means. To pickle an array or dictionary ``g`` of |GVar|\s, for example,
-we might use ::
+means. The easiest way to save an array or dictionary ``g``  of
+|GVar|\s is to use :func:`gvar.dump`: for example, ::
 
-    >>> gtuple = (gvar.mean(g), gvar.evalcov(g))
-    >>> import pickle
-    >>> pickle.dump(gtuple, open('outputfile.p', 'wb'))
+    >>> gvar.dump(g, 'gfile.p')
 
-to extract the means and covariance matrix into a tuple which then
-is saved in file ``'output.p'`` using Python's standard :mod:`pickle`
-module. To reassemble the |GVar|\s we use::
+saves the means and covariances from ``g`` in a Python :mod:`pickle`
+file named ``'gfile.p'``. To reassemble the |GVar|\s we use::
 
-    >>> g = gvar.gvar(pickle.load('outputfile.p', 'rb'))
-
-where :func:`pickle.load` reads ``gtuple`` back in, and :func:`gvar.gvar`
-converts it back into a collection of |GVar|\s. The correlations between
-different |GVar|\s  in the original array/dictionary ``g`` are preserved here,
-but their correlations with other |GVar|\s are lost. So it is important to
-include all |GVar|\s of  interest in a single array or dictionary before
-saving them.
+    >>> g = gvar.load('gfile.p')
 
 This recipe works for ``g``\s that are: single |GVar|\s, arrays of |GVar|\s
 (any shape), or dictionaries whose values are |GVar|\s and/or arrays  of
-|GVar|\s. For convenience, it is implemented in functions :func:`gvar.dump`,
-:func:`gvar.dumps`, :func:`gvar.load`, and :func:`gvar.loads`. These
-functions can also serialize |GVar|\s using :mod:`json` rather than
-:mod:`pickle`.
+|GVar|\s.
+
+The correlations between different |GVar|\s  in the original array/dictionary
+``g`` are preserved here, but their correlations with other |GVar|\s are lost.
+So it is important to include all |GVar|\s of  interest in a single array or
+dictionary before saving them. These functions can also serialize |GVar|\s
+using :mod:`json` rather than :mod:`pickle`.
+
+Function :func:`gvar.dump` is functionally equivalent to ::
+
+    >>> gtuple = (gvar.mean(g), gvar.evalcov(g))
+    >>> import pickle
+    >>> pickle.dump(gtuple, open('gfile.p', 'wb'))
+
+where  the means and covariance matrix are extracted into a tuple and then
+saved (pickled) in file ``'gfile.p'``. Function :func:`gvar.load` is
+equivalent to ::
+
+    >>> g = gvar.gvar(pickle.load('gfile.p', 'rb'))
+
+where :func:`pickle.load` reads ``gtuple`` back in, and :func:`gvar.gvar`
+converts it back into a collection of |GVar|\s.
 
 |GVar|\s can also be pickled easily if they are stored in a
 |BufferDict| since this data type has explicit support for pickling.
@@ -491,12 +499,12 @@ So if ``g`` is a
 |BufferDict| containing |GVar|\s (and/or arrays of |GVar|\s), ::
 
     >>> import pickle
-    >>> pickle.dump(g, open('outputfile.p', 'wb'))
+    >>> pickle.dump(g, open('gfile.p', 'wb'))
 
-saves the contents of ``g`` to a file named ``outputfile.p``, and
+saves the contents of ``g`` to a file named ``gfile.p``, and
 the |GVar|\s are retrieved using ::
 
-    >>> g = pickle.load(open('outputfile.p', 'rb'))
+    >>> g = pickle.load(open('gfile.p', 'rb'))
 
 
 Non-Gaussian Expectation Values
