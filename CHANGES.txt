@@ -1,9 +1,18 @@
-Version 8.3.4a ?????
+Version 8.3.4 ?????
 =====================
+- New setup.py that: a) does not require cython; b) works even if
+  numpy is not installed (by installing numpy before it is required).
+  Previous versions of setup.py did not work unless cython and numpy
+  were already installed. This version uses setuptools to install
+  numpy and, optionally, cython before they are used to build gvar.
+  cython is not used by default; to turn it on set USE_CYTHON=True in
+  setup.py.
 
 - Fixed formatting bug in gvar.fmt_errorbudget().
 
 - Modifications to support hosting documentation by ReadTheDocs.
+
+- Minor bug (error message) in gvar.Histogram.
 
 Version 8.3.3 2017-08-03
 =========================

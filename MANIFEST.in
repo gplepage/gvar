@@ -1,5 +1,6 @@
 include makefile README.rst INSTALLATION.txt LICENSE.txt MANIFEST.in CHANGES.txt
 include setup.py src/gvar.pxd src/gvar/*.pxd  src/*.pyx src/gvar/*.pyx
+include src/gvar/*.c
 include gdev-setup.py
 include doc/gvar.pdf
 

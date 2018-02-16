@@ -1063,7 +1063,7 @@ class PDFHistogram(object):
         elif len(count) != len(self.midpoints):
             raise ValueError(
                 'wrong data length: %s != %s'
-                    % (len(data), len(self.midpoints))
+                    % (len(count), len(self.midpoints))
                 )
         else:
             data = count

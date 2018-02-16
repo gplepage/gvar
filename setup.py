@@ -17,11 +17,26 @@ GNU General Public License for more details.
 
 from distutils.core import setup
 from distutils.extension import Extension
+from distutils.command.build_ext import build_ext as _build_ext
 
-from Cython.Build import cythonize
-import numpy
+# compile from existing .c files if USE_CYTHON is False
+USE_CYTHON = True
 
-GVAR_VERSION = '8.3.3'
+class build_ext(_build_ext):
+    # delays using numpy and cython until they are installed;
+    # cython is optional (set USE_CYTHON)
+    # this code adapted from https://github.com/pandas-dev/pandas setup.py
+    def build_extensions(self):
+        import numpy
+        if USE_CYTHON:
+            from Cython.Build import cythonize
+            self.extensions = cythonize(self.extensions)
+        numpy_include = numpy.get_include()
+        for ext in self.extensions:
+            ext.include_dirs.append(numpy_include)
+        _build_ext.build_extensions(self)
+
+GVAR_VERSION = '8.3.4'
 
 # create gvar/_version.py so gvar knows its version number
 with open("src/gvar/_version.py","w") as version_file:
@@ -36,18 +51,20 @@ with open("src/gvar/_version.py","w") as version_file:
 # or the numpy headers. This should not be necessary if
 # gsl and numpy are installed in standard locations.
 ext_args = dict(
-    include_dirs=[numpy.get_include()],
+    include_dirs=[],
     library_dirs=[],
     runtime_library_dirs=[],
     extra_link_args=[]
     )
 
+ext = '.pyx' if USE_CYTHON else '.c'
+
 ext_modules = [
-    Extension("gvar._gvarcore", ["src/gvar/_gvarcore.pyx"], **ext_args),
-    Extension( "gvar._svec_smat", ["src/gvar/_svec_smat.pyx"], **ext_args),
-    Extension("gvar._utilities", ["src/gvar/_utilities.pyx"], **ext_args),
-    Extension("gvar.dataset", ["src/gvar/dataset.pyx"], **ext_args),
-    Extension("gvar._bufferdict", ["src/gvar/_bufferdict.pyx"], **ext_args),
+    Extension("gvar._gvarcore", ["src/gvar/_gvarcore" + ext], **ext_args),
+    Extension( "gvar._svec_smat", ["src/gvar/_svec_smat" + ext], **ext_args),
+    Extension("gvar._utilities", ["src/gvar/_utilities" + ext], **ext_args),
+    Extension("gvar.dataset", ["src/gvar/dataset" + ext], **ext_args),
+    Extension("gvar._bufferdict", ["src/gvar/_bufferdict" + ext], **ext_args),
     ]
 
 # packages
@@ -60,11 +77,15 @@ setup(name='gvar',
     description='Utilities for manipulating correlated Gaussian random variables.',
     author='G. Peter Lepage',
     author_email='g.p.lepage@cornell.edu',
+    cmdclass={'build_ext':build_ext},
     packages=packages,
     package_dir=package_dir,
     package_data=package_data,
-    ext_modules= cythonize(ext_modules),
-    install_requires=['cython>=0.17', 'numpy>=1.7'], # for pip (distutils ignores)
+    ext_modules= ext_modules,
+    setup_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'], # for pip (distutils ignores)
+    install_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'], # for pip (distutils ignores)
+    # setup_requires=['cython>=0.17', 'numpy>=1.7'], # for pip (distutils ignores)
+    # install_requires=['cython>=0.17', 'numpy>=1.7'], # for pip (distutils ignores)
     requires=['cython (>=0.17)', 'numpy (>=1.7)'],   # for distutils
     url="https://github.com/gplepage/gvar.git",
     license='GPLv3+',

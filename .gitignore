@@ -1,7 +1,7 @@
 *.pyc
 build/
 __pycache__/
-*.c
+src/gdev.c
 *.p
 avg.py
 xxx.*
