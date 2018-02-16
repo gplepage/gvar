@@ -1,60 +1,27 @@
 To install:
 
-1. If not already installed, download and install the following packages:
+1. Use 'make install' to install gvar into the user's standard library
+	(as opposed to the system's library; use 'make install-sys' to install
+	to the system library). The installation process will install the
+	numpy Python module if it is not present.
 
-	a. The numpy python library - provides fast floating-point array
-		operations in python. Versions earlier than 1.6 may not work.
-		(http://numpy.scipy.org/)
+	N.B. Rather than using make and the makefile, one can instead use
+	standard python installation tools: 'pip install . --user'
+	to install to the user directory (or 'pip install .' to install to
+	the system directory) from within the main directory.
 
-	b. The cython python package - provides a variant of python that
-		compiles into C code that can itself be compiled and is faster (but
-        less flexible) than ordinary python. Versions earlier than 0.17
-		may not work.
-		(http://www.cython.org/)
-
-	c. pip is used for installing (and uninstalling) gvar. pip usually
-	    comes with python. pip can be used to install numpy and cython as
-	    well.
-	    (https://pypi.python.org/pypi/pip)
+	N.B. gvar uses cython to convert .pyx files to .c files. The .c files
+	are included in the distribution so cython is not required to install
+	gvar. To force regeneration of the .c files set USE_CYTHON=True in
+	setup.py.
 
 	The gvar code works for Python 2.6 and 2.7, and Python 3.2-3.6. It
 	does not work for Python versions 2.5.X or earlier. It has not been tested
 	for Python 3.0 and 3.1, but likely works at least with the latter. Some
 	of the tests don't work with Python 2.6.
 
-2. Use 'make install'. This will build the gvar packages and
-	then copy it into a standard directory in the user's space that
-	Python knows about. A list of the installed files is stored in file
-	files-gvar.python (in case, for example, you want to uninstall them).
-
-	N.B. Rather than using make and the makefile, one can instead use
-	standard python installation tools like 'pip install . --user'
-	(from within the main directory) or python distutils commands
-	like 'python setup.py install --user'.
-
-	N.B. If you have previously installed older versions of gvar,
-	consider removing the earlier package to make sure that the new ones are
-	used by Python. This will not be a problem if the new package overwrites
-	the older one, but could cause trouble if the new package is written
-	to a different place. Find out where the older package is stored by
-	using 'pydoc gvar' before installing the new software, and make sure
-	all vestiges of the old gvar are removed (pydoc lists the location of
-	the module under "FILE", at the end).
-
-	N.B. To install gvar with an alternative version of pip, say pip3
-	for example, use 'make PIP=pip3 install'. Python's standard
-	directories are structured in such a way that it is necessary to do
-	a separate installation for each python version that will be used for
-	gvar.
-
-	N.B. If you have old code that uses the gdev module, install gdev.so
-	using 'make install-gdev' (or 'python gdev-setup.py install --user').
-	This creates aliases, using the old names, for the critical elements of
-	the gvar package, thereby allowing most old code to run. Use gvar
-	instead of gdev for new code.
-
-3. (Optional) Run 'make tests' to test your installation of lsqfit if you
-	are using Python 2.7 or later (they don't work as well with Python 2.6).
+2. (Optional) Run 'make tests' to test your installation of gvar if you
+	are using Python 2.7 or later (it doesn't work as well with Python 2.6).
 	The tests have been successful if the output ends with "OK".
 	Some tests involve random numbers and so may occasionally --- less than
 	1 in 100 runs --- fail due to rare multi-sigma fluctuations; rerun the
@@ -81,7 +48,7 @@ Problems:
 	Contact Peter Lepage: g.p.lepage@cornell.edu
 
 
-# Copyright (c) 2008-2017 G. Peter Lepage.
+# Copyright (c) 2008-2018 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

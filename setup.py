@@ -82,11 +82,11 @@ setup(name='gvar',
     package_dir=package_dir,
     package_data=package_data,
     ext_modules= ext_modules,
-    setup_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'], # for pip (distutils ignores)
-    install_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'], # for pip (distutils ignores)
-    # setup_requires=['cython>=0.17', 'numpy>=1.7'], # for pip (distutils ignores)
-    # install_requires=['cython>=0.17', 'numpy>=1.7'], # for pip (distutils ignores)
-    requires=['cython (>=0.17)', 'numpy (>=1.7)'],   # for distutils
+    # for pip (distutils ignores):
+    setup_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'],
+    install_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'],
+    # for distutils:
+    requires=['cython (>=0.17)', 'numpy (>=1.7)'] if USE_CYTHON else ['numpy (>=1.7)'],
     url="https://github.com/gplepage/gvar.git",
     license='GPLv3+',
     platforms='Any',
