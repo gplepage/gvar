@@ -5,16 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>gvar - Gaussian Random Variables &#8212; gvar 8.3.3 documentation</title>
-    
+    <title>gvar - Gaussian Random Variables &#8212; gvar 8.3.4 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '8.3.3',
+        VERSION:     '8.3.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -52,7 +49,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.4 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -68,9 +65,9 @@
 <p>Objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> represent gaussian random variables,
 which are specified by a mean and standard deviation. They are created
 using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal"><span class="pre">gvar.gvar()</span></code></a>: for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>          <span class="c"># 0 +- 3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>          <span class="c"># 2 +- 4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                    <span class="c"># 2 +- 5</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>          <span class="c1"># 0 +- 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>          <span class="c1"># 2 +- 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                    <span class="c1"># 2 +- 5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 <span class="go">22.0(5.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
@@ -122,7 +119,7 @@ manipulating gaussian random variables, including:</p>
 <p>The function used to create Gaussian variable objects is:</p>
 <dl class="function">
 <dt id="gvar.gvar">
-<code class="descclassname">gvar.</code><code class="descname">gvar</code><span class="sig-paren">(</span><em>…</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.gvar" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">gvar</code><span class="sig-paren">(</span><em>...</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.gvar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create one or more new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
 <p>Each of the following creates new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s:</p>
 <dl class="function">
@@ -211,7 +208,7 @@ a dictionary whose values are <a class="reference internal" href="#gvar.GVar" ti
 whose values are floats or arrays of floats, respectively.</p>
 <p>This function is useful for creating functions that can accept
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s as arguments. For example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">math</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
 <span class="k">def</span> <span class="nf">sin</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -277,7 +274,7 @@ matrices and correlation/comparison information can be extracted from arrays
 
 <dl class="function">
 <dt id="gvar.fmt">
-<code class="descclassname">gvar.</code><code class="descname">fmt</code><span class="sig-paren">(</span><em>g</em>, <em>ndecimal=None</em>, <em>sep=”</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.fmt" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">fmt</code><span class="sig-paren">(</span><em>g</em>, <em>ndecimal=None</em>, <em>sep=''</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.fmt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal"><span class="pre">g</span></code>.</p>
 <p><code class="docutils literal"><span class="pre">g</span></code> can be a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>, an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary containing
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s. Each <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal"><span class="pre">gi</span></code> in <code class="docutils literal"><span class="pre">g</span></code> is replaced
@@ -287,28 +284,28 @@ structure as <code class="docutils literal"><span class="pre">g</span></code>.</
 
 <dl class="function">
 <dt id="gvar.tabulate">
-<code class="descclassname">gvar.</code><code class="descname">tabulate</code><span class="sig-paren">(</span><em>g</em>, <em>ncol=1</em>, <em>headers=True</em>, <em>offset=”</em>, <em>ndecimal=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.tabulate" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">tabulate</code><span class="sig-paren">(</span><em>g</em>, <em>ncol=1</em>, <em>headers=True</em>, <em>offset=''</em>, <em>ndecimal=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.tabulate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tabulate contents of an array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s.</p>
 <p>Given an array <code class="docutils literal"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or a dictionary whose values are
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal"><span class="pre">gvar.tabulate(g)</span></code> returns a
 string containing a table of the values of <code class="docutils literal"><span class="pre">g</span></code>’s entries.
 For example, the code</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">collections</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
 <span class="n">g</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">()</span>
-<span class="n">g</span><span class="p">[</span><span class="s">&#39;scalar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s">&#39;10.3(1)&#39;</span><span class="p">)</span>
-<span class="n">g</span><span class="p">[</span><span class="s">&#39;vector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s">&#39;0.52(3)&#39;</span><span class="p">,</span> <span class="s">&#39;0.09(10)&#39;</span><span class="p">,</span> <span class="s">&#39;1.2(1)&#39;</span><span class="p">])</span>
-<span class="n">g</span><span class="p">[</span><span class="s">&#39;tensor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span>
-    <span class="p">[</span><span class="s">&#39;0.01(50)&#39;</span><span class="p">,</span> <span class="s">&#39;0.001(20)&#39;</span><span class="p">,</span> <span class="s">&#39;0.033(15)&#39;</span><span class="p">],</span>
-    <span class="p">[</span><span class="s">&#39;0.001(20)&#39;</span><span class="p">,</span> <span class="s">&#39;2.00(5)&#39;</span><span class="p">,</span> <span class="s">&#39;0.12(52)&#39;</span><span class="p">],</span>
-    <span class="p">[</span><span class="s">&#39;0.007(45)&#39;</span><span class="p">,</span> <span class="s">&#39;0.237(4)&#39;</span><span class="p">,</span> <span class="s">&#39;10.23(75)&#39;</span><span class="p">],</span>
+<span class="n">g</span><span class="p">[</span><span class="s1">&#39;scalar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s1">&#39;10.3(1)&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="p">[</span><span class="s1">&#39;vector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;0.52(3)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.09(10)&#39;</span><span class="p">,</span> <span class="s1">&#39;1.2(1)&#39;</span><span class="p">])</span>
+<span class="n">g</span><span class="p">[</span><span class="s1">&#39;tensor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span>
+    <span class="p">[</span><span class="s1">&#39;0.01(50)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.001(20)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.033(15)&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;0.001(20)&#39;</span><span class="p">,</span> <span class="s1">&#39;2.00(5)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.12(52)&#39;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;0.007(45)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.237(4)&#39;</span><span class="p">,</span> <span class="s1">&#39;10.23(75)&#39;</span><span class="p">],</span>
     <span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">tabulate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>prints the following table:</p>
-<div class="highlight-default"><div class="highlight"><pre>   <span class="n">key</span><span class="o">/</span><span class="n">index</span>          <span class="n">value</span>     <span class="n">key</span><span class="o">/</span><span class="n">index</span>          <span class="n">value</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span>   <span class="n">key</span><span class="o">/</span><span class="n">index</span>          <span class="n">value</span>     <span class="n">key</span><span class="o">/</span><span class="n">index</span>          <span class="n">value</span>
 <span class="o">---------------------------</span>  <span class="o">---------------------------</span>
       <span class="n">scalar</span>     <span class="mf">10.30</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>           <span class="mi">1</span><span class="p">,</span><span class="mi">0</span>     <span class="mf">0.001</span> <span class="p">(</span><span class="mi">20</span><span class="p">)</span>
     <span class="n">vector</span> <span class="mi">0</span>     <span class="mf">0.520</span> <span class="p">(</span><span class="mi">30</span><span class="p">)</span>           <span class="mi">1</span><span class="p">,</span><span class="mi">1</span>     <span class="mf">2.000</span> <span class="p">(</span><span class="mi">50</span><span class="p">)</span>
@@ -355,26 +352,26 @@ using the correlations specified in <code class="docutils literal"><span class="
 <p>A typical application involves the construction of correlated
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s give the means and standard deviations, together with
 a correlation matrix:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s">&#39;1(1)&#39;</span><span class="p">,</span> <span class="s">&#39;2(10)&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>           <span class="c"># uncorrelated</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;1(1)&#39;</span><span class="p">,</span> <span class="s1">&#39;2(10)&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>           <span class="c1"># uncorrelated</span>
 <span class="go">[[ 1.  0.]</span>
 <span class="go"> [ 0.  1.]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span>  <span class="n">gv</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">[[</span><span class="mf">1.</span> <span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>           <span class="c"># correlated</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>           <span class="c1"># correlated</span>
 <span class="go">[[ 1.   0.1]</span>
 <span class="go"> [ 0.1  1. ]]</span>
 </pre></div>
 </div>
 <p>This also works when <code class="docutils literal"><span class="pre">g</span></code> and <code class="docutils literal"><span class="pre">corr</span></code> are dictionaries:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;1(1)&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="s">&#39;2(10)&#39;</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;1(1)&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="s1">&#39;2(10)&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
 <span class="go">{(&#39;a&#39;, &#39;a&#39;): array([[ 1.]]),(&#39;a&#39;, &#39;b&#39;): array([[ 0.]]),(&#39;b&#39;, &#39;a&#39;): array([[ 0.]]),(&#39;b&#39;, &#39;b&#39;): array([[ 1.]])}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">correlate</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">corr</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
 <span class="go">{(&#39;a&#39;, &#39;a&#39;): array([[ 1.]]),(&#39;a&#39;, &#39;b&#39;): array([[ 0.1]]),(&#39;b&#39;, &#39;a&#39;): array([[ 0.1]]),(&#39;b&#39;, &#39;b&#39;): array([[ 1.]])}</span>
@@ -425,10 +422,10 @@ tuples <code class="docutils literal"><span class="pre">(idx,bcov)</span></code>
 block of the covariance matrix and <code class="docutils literal"><span class="pre">idx</span></code> an array containing the
 corresponding indices in <code class="docutils literal"><span class="pre">g.flat</span></code> for that block. So to reassemble
 the blocks into a single matrix <code class="docutils literal"><span class="pre">cov</span></code>, for example, one would use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bcov</span> <span class="ow">in</span> <span class="n">evalcov_block</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
-    <span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">[:,</span> <span class="k">None</span><span class="p">],</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcov</span>
+    <span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcov</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="#gvar.evalcov_blocks" title="gvar.evalcov_blocks"><code class="xref py py-func docutils literal"><span class="pre">gvar.evalcov_blocks()</span></code></a> is particularly useful when the covariance
@@ -454,7 +451,7 @@ If <code class="docutils literal"><span class="pre">g</span></code> is a diction
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s, the result is a doubly-indexed dictionary where
 <code class="docutils literal"><span class="pre">corr[k1,k2]</span></code> is the correlation for <code class="docutils literal"><span class="pre">g[k1]</span></code> and <code class="docutils literal"><span class="pre">g[k2]</span></code>.</p>
 <p>The correlation matrix is related to the covariance matrix by:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="o">**</span> <span class="mf">0.5</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span> <span class="o">**</span> <span class="mf">0.5</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -528,7 +525,7 @@ attribute <code class="docutils literal"><span class="pre">logGBF</span></code>.
 <p>Compares sums and differences of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s stored in <code class="docutils literal"><span class="pre">g1</span></code>
 and <code class="docutils literal"><span class="pre">g2</span></code> to see if they agree with tolerances. Operationally,
 agreement means that:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">summ</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rtol</span> <span class="o">+</span> <span class="n">atol</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">summ</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rtol</span> <span class="o">+</span> <span class="n">atol</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">diff</span></code> and <code class="docutils literal"><span class="pre">summ</span></code> are the difference and sum of the
@@ -908,7 +905,7 @@ of a set of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><c
 <code class="descclassname">gvar.</code><code class="descname">svd</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-15</em>, <em>wgts=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.svd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply svd cuts to collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal"><span class="pre">g</span></code>.</p>
 <p>Standard usage is, for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">svdcut</span> <span class="o">=</span> <span class="o">...</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">svdcut</span> <span class="o">=</span> <span class="o">...</span>
 <span class="n">gmod</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">svdcut</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -940,32 +937,32 @@ entries, <code class="docutils literal"><span class="pre">i,</span> <span class=
 to block-diagonal sub-matrices, where <code class="docutils literal"><span class="pre">i</span></code> is the list of
 indices corresponding to the block, and <code class="docutils literal"><span class="pre">wgts[j]</span></code> are eigenvectors of
 the sub-matrix rescaled so that</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">wi</span><span class="p">,</span> <span class="n">wi</span><span class="p">)</span> <span class="k">for</span> <span class="n">wi</span> <span class="ow">in</span> <span class="n">wgts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">wi</span><span class="p">,</span> <span class="n">wi</span><span class="p">)</span> <span class="k">for</span> <span class="n">wi</span> <span class="ow">in</span> <span class="n">wgts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>is the sub-matrix (<code class="docutils literal"><span class="pre">wgts=1</span></code>) or its inverse (<code class="docutils literal"><span class="pre">wgts=-1</span></code>).</p>
 <p>To compute the inverse of the covariance matrix from <code class="docutils literal"><span class="pre">i_wgts</span></code>,
 for example, one could use code like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">gmod</span><span class="p">,</span> <span class="n">i_wgts</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">svdcut</span><span class="p">,</span> <span class="n">wgts</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gmod</span><span class="p">,</span> <span class="n">i_wgts</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">svdcut</span><span class="p">,</span> <span class="n">wgts</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">inv_cov</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="nb">float</span><span class="p">)</span>
-<span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="o">=</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                       <span class="c"># 1x1 sub-matrices</span>
+<span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="o">=</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                       <span class="c1"># 1x1 sub-matrices</span>
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
     <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wgts</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="ow">in</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>                <span class="c"># nxn sub-matrices (n&gt;1)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="ow">in</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>                <span class="c1"># nxn sub-matrices (n&gt;1)</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wgts</span><span class="p">:</span>
-        <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">[:,</span> <span class="k">None</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+        <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This sets <code class="docutils literal"><span class="pre">inv_cov</span></code> equal to the inverse of the covariance matrix of
 the <code class="docutils literal"><span class="pre">gmod</span></code>s. Similarly, we can  compute the expectation value,
 <code class="docutils literal"><span class="pre">u.dot(inv_cov.dot(v))</span></code>, between two vectors (<code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays)
 using:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="o">=</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                       <span class="c"># 1x1 sub-matrices</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="o">=</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                       <span class="c1"># 1x1 sub-matrices</span>
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
     <span class="n">result</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">wgts</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">wgts</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="ow">in</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>                <span class="c"># nxn sub-matrices (n&gt;1)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="ow">in</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>                <span class="c1"># nxn sub-matrices (n&gt;1)</span>
     <span class="n">result</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wgts</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">wgts</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
 </pre></div>
 </div>
@@ -1065,7 +1062,7 @@ as those in <code class="docutils literal"><span class="pre">g</span></code>, bu
 in <code class="docutils literal"><span class="pre">g</span></code>.</p>
 <p>If <code class="docutils literal"><span class="pre">corr</span></code> is nonzero, <code class="docutils literal"><span class="pre">rebuild</span></code> will introduce correlations
 wherever there aren’t any using</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">corr</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">cov</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">corr</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">cov</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>wherever <code class="docutils literal"><span class="pre">cov[i,j]==0.0</span></code> initially. Positive values for <code class="docutils literal"><span class="pre">corr</span></code>
@@ -1249,7 +1246,7 @@ has the form <code class="docutils literal"><span class="pre">'mean</span> <span
 
 <dl class="method">
 <dt id="gvar.GVar.fmt">
-<code class="descname">fmt</code><span class="sig-paren">(</span><em>ndecimal=None</em>, <em>sep=”</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.fmt" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fmt</code><span class="sig-paren">(</span><em>ndecimal=None</em>, <em>sep=''</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.fmt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert to string with format: <code class="docutils literal"><span class="pre">mean(sdev)</span></code>.</p>
 <p>Leading zeros in the standard deviation are omitted: for example,
 <code class="docutils literal"><span class="pre">25.67</span> <span class="pre">+-</span> <span class="pre">0.02</span></code> becomes <code class="docutils literal"><span class="pre">25.67(2)</span></code>. Parameter <code class="docutils literal"><span class="pre">ndecimal</span></code>
@@ -1302,30 +1299,30 @@ either be scalars or arrays (like <code class="xref py py-mod docutils literal">
 shapes). The scalars and arrays are assembled into different parts of a
 single one-dimensional buffer. The various scalars and arrays are
 retrieved using keys: <em>e.g.</em>,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s">&#39;scalar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s">&#39;vector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s">&#39;tensor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>              <span class="c"># print a&#39;s buffer</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;scalar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;vector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;tensor&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>              <span class="c1"># print a&#39;s buffer</span>
 <span class="go">[ 0.  1.  2.  3.  4.  5.  6.]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>                     <span class="c"># iterate over keys in a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>                     <span class="c1"># iterate over keys in a</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
 <span class="go">scalar 0.0</span>
 <span class="go">vector [ 1.  2.]</span>
 <span class="go">tensor [[ 3.  4.]</span>
 <span class="go"> [ 5.  6.]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s">&#39;vector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s">&#39;vector&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span>    <span class="c"># change the &#39;vector&#39; part of a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;vector&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s1">&#39;vector&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span>    <span class="c1"># change the &#39;vector&#39; part of a</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
 <span class="go">[  0.  10.  20.   3.   4.   5.   6.]</span>
 </pre></div>
 </div>
 <p>The first four lines here could have been collapsed to one statement:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">scalar</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">vector</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">],</span><span class="n">tensor</span><span class="o">=</span><span class="p">[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">scalar</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">vector</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">],</span><span class="n">tensor</span><span class="o">=</span><span class="p">[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]])</span>
 </pre></div>
 </div>
 <p>or</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">([(</span><span class="s">&#39;scalar&#39;</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),(</span><span class="s">&#39;vector&#39;</span><span class="p">,[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">]),</span>
-                <span class="p">(</span><span class="s">&#39;tensor&#39;</span><span class="p">,[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]])])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">([(</span><span class="s1">&#39;scalar&#39;</span><span class="p">,</span><span class="mf">0.0</span><span class="p">),(</span><span class="s1">&#39;vector&#39;</span><span class="p">,[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">]),</span>
+                <span class="p">(</span><span class="s1">&#39;tensor&#39;</span><span class="p">,[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]])])</span>
 </pre></div>
 </div>
 <p>where in the second case the order of the keys is preserved in <code class="docutils literal"><span class="pre">a</span></code>
@@ -1333,12 +1330,12 @@ retrieved using keys: <em>e.g.</em>,</p>
 <p>The keys and associated shapes in a <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a> can be transferred to a
 different buffer, creating a new <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a>: <em>e.g.</em>, using <code class="docutils literal"><span class="pre">a</span></code> from
 above,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="p">,</span><span class="mf">20.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">40.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mf">60.</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>          <span class="c"># clone a but with new buffer</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="s">&#39;tensor&#39;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">buf</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">10.</span><span class="p">,</span><span class="mf">20.</span><span class="p">,</span><span class="mf">30.</span><span class="p">,</span><span class="mf">40.</span><span class="p">,</span><span class="mf">50.</span><span class="p">,</span><span class="mf">60.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="n">buf</span><span class="p">)</span>          <span class="c1"># clone a but with new buffer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;tensor&#39;</span><span class="p">])</span>
 <span class="go">[[ 30.  40.]</span>
 <span class="go"> [ 50.  60.]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s">&#39;scalar&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;scalar&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
 <span class="go">[  1.  10.  20.  30.  40.  50.  60.]</span>
 </pre></div>
@@ -1346,11 +1343,11 @@ above,</p>
 <p>Note how <code class="docutils literal"><span class="pre">b</span></code> references <code class="docutils literal"><span class="pre">buf</span></code> and can modify it. One can also
 replace the buffer in the original <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a> using, for example,
 <code class="docutils literal"><span class="pre">a.buf</span> <span class="pre">=</span> <span class="pre">buf</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">buf</span> <span class="o">=</span> <span class="n">buf</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s">&#39;tensor&#39;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">buf</span> <span class="o">=</span> <span class="n">buf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;tensor&#39;</span><span class="p">])</span>
 <span class="go">[[ 30.  40.]</span>
 <span class="go"> [ 50.  60.]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s">&#39;tensor&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">10.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;tensor&#39;</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">10.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
 <span class="go">[  1.  10.  20.  300.  400.  500.  600.]</span>
 </pre></div>
@@ -1364,10 +1361,10 @@ copy of the buffer.</p>
 <p>When creating a <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a> from a dictionary (or another <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal"><span class="pre">gvar.BufferDict</span></code></a>),
 the keys included and their order can be specified using a list of keys:
 for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="p">[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]],</span><span class="n">d</span><span class="o">=</span><span class="k">None</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="p">[[</span><span class="mf">3.</span><span class="p">,</span><span class="mf">4.</span><span class="p">],[</span><span class="mf">5.</span><span class="p">,</span><span class="mf">6.</span><span class="p">]],</span><span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
 <span class="go">{&#39;a&#39;: 0.0, &#39;c&#39;: [[3.0, 4.0], [5.0, 6.0]], &#39;b&#39;: [1.0, 2.0], &#39;d&#39;: None}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
 <span class="go">d None</span>
@@ -1468,25 +1465,25 @@ the shape is <code class="docutils literal"><span class="pre">None</span></code>
 eigenvectors of a positive symmetric matrix <code class="docutils literal"><span class="pre">mat</span></code>. Eigenvalues that
 are small (or negative, because of roundoff) can be eliminated or
 modified using <em>svd</em> cuts. Typical usage is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span><span class="o">.</span><span class="mi">25</span><span class="p">],[</span><span class="o">.</span><span class="mi">25</span><span class="p">,</span><span class="mf">2.</span><span class="p">]]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mat</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span><span class="o">.</span><span class="mi">25</span><span class="p">],[</span><span class="o">.</span><span class="mi">25</span><span class="p">,</span><span class="mf">2.</span><span class="p">]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SVD</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>             <span class="c"># eigenvalues</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>             <span class="c1"># eigenvalues</span>
 <span class="go">[ 0.94098301  2.05901699]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c"># 1st eigenvector (for s.val[0])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c1"># 1st eigenvector (for s.val[0])</span>
 <span class="go">[ 0.97324899 -0.22975292]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>          <span class="c"># 2nd eigenvector (for s.val[1])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vec</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>          <span class="c1"># 2nd eigenvector (for s.val[1])</span>
 <span class="go">[ 0.22975292  0.97324899]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SVD</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">svdcut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>  <span class="c"># force s.val[i]&gt;=s.val[-1]*0.6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SVD</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">svdcut</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>  <span class="c1"># force s.val[i]&gt;=s.val[-1]*0.6</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
 <span class="go">[ 1.2354102   2.05901699]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c"># eigenvector unchanged</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c1"># eigenvector unchanged</span>
 <span class="go">[ 0.97324899 -0.22975292]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SVD</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">decomp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>         <span class="c"># decomposition of inverse of mat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">decomp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>         <span class="c1"># decomposition of inverse of mat</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">invmat</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">wj</span><span class="p">,</span><span class="n">wj</span><span class="p">)</span> <span class="k">for</span> <span class="n">wj</span> <span class="ow">in</span> <span class="n">w</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">invmat</span><span class="p">))</span>    <span class="c"># should be unit matrix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">invmat</span><span class="p">))</span>    <span class="c1"># should be unit matrix</span>
 <span class="go">[[  1.00000000e+00   2.77555756e-17]</span>
 <span class="go"> [  1.66533454e-16   1.00000000e+00]]</span>
 </pre></div>
@@ -1708,14 +1705,14 @@ to <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDF
 density functions associated with <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s. The following code,
 for example, makes a histogram of probabilities for the Gaussian
 distribution corresponding to <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a> 1.0(5):</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s">&#39;1.0(5)&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s1">&#39;1.0(5)&#39;</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)]</span>
 
 <span class="n">hist</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFHistogram</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 <span class="n">count</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s">&#39;probabilities:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">prob</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s">&#39;statistics:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;probabilities:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">prob</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;statistics:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Here <code class="docutils literal"><span class="pre">hist</span></code> defines a histogram with 8 bins, centered on
@@ -1726,7 +1723,7 @@ The number of data elements in each bin is determined by
 <code class="docutils literal"><span class="pre">hist.analyze(count)</span></code>. The probabilities (<code class="docutils literal"><span class="pre">a.prob</span></code>) and
 a statistical analysis of the probability distribution based
 on the histogram (<code class="docutils literal"><span class="pre">a.stats</span></code>) are then printed out:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">probabilities</span><span class="p">:</span> <span class="p">[</span> <span class="mf">0.0017</span>  <span class="mf">0.0213</span>  <span class="mf">0.1358</span>  <span class="mf">0.3401</span>  <span class="mf">0.3418</span>  <span class="mf">0.1351</span>  <span class="mf">0.0222</span>  <span class="mf">0.0018</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">probabilities</span><span class="p">:</span> <span class="p">[</span> <span class="mf">0.0017</span>  <span class="mf">0.0213</span>  <span class="mf">0.1358</span>  <span class="mf">0.3401</span>  <span class="mf">0.3418</span>  <span class="mf">0.1351</span>  <span class="mf">0.0222</span>  <span class="mf">0.0018</span><span class="p">]</span>
 <span class="n">statistics</span><span class="p">:</span>
       <span class="n">mean</span> <span class="o">=</span> <span class="mf">1.001</span>   <span class="n">sdev</span> <span class="o">=</span> <span class="mf">0.52334</span>   <span class="n">skew</span> <span class="o">=</span> <span class="mf">0.0069999</span>   <span class="n">ex_kurt</span> <span class="o">=</span> <span class="mf">0.034105</span>
    <span class="n">median</span> <span class="o">=</span> <span class="mf">1.00141666398</span>   <span class="n">plus</span> <span class="o">=</span> <span class="mf">0.499891542549</span>   <span class="n">minus</span> <span class="o">=</span> <span class="mf">0.501710986504</span>
@@ -1734,9 +1731,9 @@ on the histogram (<code class="docutils literal"><span class="pre">a.stats</span
 </div>
 <p>A plot of the histogram can be created and displayed using,
 for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">plt</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">make_plot</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;probabilities&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">plt</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">make_plot</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;probabilities&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1845,7 +1842,7 @@ for the <code class="docutils literal"><span class="pre">i</span></code>-th bin 
 
 <dl class="method">
 <dt id="gvar.PDFHistogram.make_plot">
-<code class="descname">make_plot</code><span class="sig-paren">(</span><em>count</em>, <em>plot=None</em>, <em>show=False</em>, <em>plottype=’probability’</em>, <em>bar=dict(alpha=0.15</em>, <em>color=’b’)</em>, <em>errorbar=dict(fmt=’b.’)</em>, <em>gaussian=dict(ls=’–’</em>, <em>c=’r’)</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.make_plot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">make_plot</code><span class="sig-paren">(</span><em>count</em>, <em>plot=None</em>, <em>show=False</em>, <em>plottype='probability'</em>, <em>bar=dict(alpha=0.15</em>, <em>color='b')</em>, <em>errorbar=dict(fmt='b.')</em>, <em>gaussian=dict(ls='--'</em>, <em>c='r')</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.make_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert histogram counts in array <code class="docutils literal"><span class="pre">count</span></code> into a plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1946,12 +1943,12 @@ also uses the <code class="xref py py-mod docutils literal"><span class="pre">nu
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.4 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

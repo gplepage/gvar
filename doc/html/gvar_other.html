@@ -5,16 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Numerical Analysis Modules in gvar &#8212; gvar 8.3.3 documentation</title>
-    
+    <title>Numerical Analysis Modules in gvar &#8212; gvar 8.3.4 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '8.3.3',
+        VERSION:     '8.3.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -52,7 +49,7 @@
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.4 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -72,21 +69,16 @@ to work with <a class="reference internal" href="gvar.html#gvar.GVar" title="gva
 More examples will follow with time.</p>
 <p>The sub-modules included here are:</p>
 <blockquote>
-<div><ul>
-<li><p class="first"><a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> — cubic splines for 1-d data.</p>
-</li>
-<li><p class="first"><a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> — basic linear algebra.</p>
-</li>
+<div><ul class="simple">
+<li><a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal"><span class="pre">gvar.cspline</span></code></a> — cubic splines for 1-d data.</li>
+<li><a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal"><span class="pre">gvar.linalg</span></code></a> — basic linear algebra.</li>
 <li><dl class="first docutils">
 <dt><a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal"><span class="pre">gvar.ode</span></code></a> — integration of systems of ordinary differential equations;</dt>
-<dd><p class="first last"><a class="reference internal" href="#integral"><span class="std std-ref">one-dimensional integrals</span></a>.</p>
-</dd>
+<dd><a class="reference internal" href="#integral"><span class="std std-ref">one-dimensional integrals</span></a>.</dd>
 </dl>
 </li>
-<li><p class="first"><a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal"><span class="pre">gvar.powerseries</span></code></a> — power series representation of functions.</p>
-</li>
-<li><p class="first"><a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> — root-finding for one-dimensional functions.</p>
-</li>
+<li><a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal"><span class="pre">gvar.powerseries</span></code></a> — power series representation of functions.</li>
+<li><a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> — root-finding for one-dimensional functions.</li>
 </ul>
 </div></blockquote>
 <span class="target" id="module-gvar.cspline"></span><div class="section" id="cubic-splines">
@@ -100,7 +92,7 @@ interpolating one-dimensional data using cubic splines:</p>
 <p>Given <code class="docutils literal"><span class="pre">N</span></code> values of a function <code class="docutils literal"><span class="pre">yknot[i]</span></code> at <code class="docutils literal"><span class="pre">N</span></code> points
 <code class="docutils literal"><span class="pre">xknot[i]</span></code> for <code class="docutils literal"><span class="pre">i=0..N-1</span></code> (the ‘knots’ of the spline),
 the code</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.cspline</span> <span class="k">import</span> <span class="n">CSpline</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.cspline</span> <span class="k">import</span> <span class="n">CSpline</span>
 
 <span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">)</span>
 </pre></div>
@@ -113,7 +105,7 @@ Function <code class="docutils literal"><span class="pre">f(x)</span></code> is 
 derivative at the end points, <code class="docutils literal"><span class="pre">xknot[0]</span></code> and <code class="docutils literal"><span class="pre">xknot[-1]</span></code> (assuming
 the knots are sorted). More generally one can specify the derivatives
 of <code class="docutils literal"><span class="pre">f(x)</span></code> at one or both of the endpoints:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="n">dydx_i</span><span class="p">,</span> <span class="n">dydx_f</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="n">dydx_i</span><span class="p">,</span> <span class="n">dydx_f</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">dydx_i</span></code> is the derivative at <code class="docutils literal"><span class="pre">xknot[0]</span></code> and <code class="docutils literal"><span class="pre">dydx_f</span></code> is the
@@ -138,7 +130,7 @@ setting parameter <code class="docutils literal"><span class="pre">extrap_order<
 less than 3; this is often a good idea.</p>
 <p class="rubric">Examples</p>
 <p>Typical usage is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.78539816</span><span class="p">,</span> <span class="mf">1.57079633</span><span class="p">,</span> <span class="mf">2.35619449</span><span class="p">,</span> <span class="mf">3.14159265</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">yknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
@@ -151,7 +143,7 @@ less than 3; this is often a good idea.</p>
 Tabulating results from the spline together with the exact results
 shows that this 5-knot spline gives a pretty good approximation
 of the function <code class="docutils literal"><span class="pre">sin(x)</span></code>, as well as its derivatives and integral:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">x</span>    <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>    <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="mi">1</span><span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span>    <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>    <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="mi">1</span><span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="o">------------------------------------------------------------------</span>
 <span class="mf">0.3</span>  <span class="mf">0.2951</span>  <span class="mf">0.9551</span>  <span class="o">-</span><span class="mf">0.2842</span> <span class="mf">0.04458</span>    <span class="o">|</span> <span class="mf">0.2955</span>  <span class="mf">0.9553</span>  <span class="mf">0.04466</span>
 <span class="mf">0.5</span>  <span class="mf">0.4791</span>  <span class="mf">0.8793</span>  <span class="o">-</span><span class="mf">0.4737</span> <span class="mf">0.1222</span>     <span class="o">|</span> <span class="mf">0.4794</span>  <span class="mf">0.8776</span>  <span class="mf">0.1224</span>
@@ -164,7 +156,7 @@ of the function <code class="docutils literal"><span class="pre">sin(x)</span></
 </div>
 <p>Using the spline outside
 the range covered by the knots is less good:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
 <span class="go">gvar/cspline.py:164: UserWarning: x outside of spline range: [ 6.28318531]</span>
 <span class="go">1.7618635470106501</span>
 </pre></div>
@@ -173,14 +165,14 @@ the range covered by the knots is less good:</p>
 issues a warning. Working just outside the knot region is often fine,
 although it is usually a good idea to limit the order of the
 polynomial used in such regions: for example, setting</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">extrap_order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">extrap_order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>implies that quadratic polynomials are used outside the spline range.
 Finally one can specify the values of the first derivatives of the
 function at one or the other endpoints of the spline region, if they
 are known. Continuing from above, for example, one would take</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>since the derivatives of <code class="docutils literal"><span class="pre">sin(x)</span></code> at <code class="docutils literal"><span class="pre">x=0</span></code> and <code class="docutils literal"><span class="pre">x=3.14159265</span></code>
@@ -365,12 +357,12 @@ other integrates dictionary-valued equations:</p>
 to obtain <code class="docutils literal"><span class="pre">y(x1)</span></code> from <code class="docutils literal"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal"><span class="pre">y</span></code> and <code class="docutils literal"><span class="pre">f(x,y)</span></code> can
 be scalars or <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays. Typical usage is illustrated
 by the following code for integrating <code class="docutils literal"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">y</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">Integrator</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">Integrator</span>
 
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">y</span>
 
-<span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
 <span class="n">y0</span> <span class="o">=</span> <span class="mf">1.</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">))</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">))</span>
@@ -385,9 +377,9 @@ continues the integration from <code class="docutils literal"><span class="pre">
 then <code class="docutils literal"><span class="pre">odeint(y0,</span> <span class="pre">interval=[x0,</span> <span class="pre">x1,</span> <span class="pre">x2</span> <span class="pre">...])</span></code> in the example above
 returns an array of solutions for points <code class="docutils literal"><span class="pre">x1,</span> <span class="pre">x2</span> <span class="pre">...</span></code>. So the example
 above could have been written equivalently as</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="o">...</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...</span>
 
-<span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
 <span class="n">y0</span> <span class="o">=</span> <span class="mf">1.</span>
 <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">...</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span> <span class="o">...</span><span class="p">])</span>
 </pre></div>
@@ -395,9 +387,9 @@ above could have been written equivalently as</p>
 <p>An alternative interface creates a new function which is the
 solution of the differential equation for specific initial conditions.
 The code above could be rewritten:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">x0</span> <span class="o">=</span> <span class="mf">0.</span>         <span class="c"># initial conditions</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x0</span> <span class="o">=</span> <span class="mf">0.</span>         <span class="c1"># initial conditions</span>
 <span class="n">y0</span> <span class="o">=</span> <span class="mf">1.</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">solution</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span><span class="o">.</span><span class="n">solution</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="o">...</span>
@@ -428,7 +420,7 @@ to compare with tolerance <code class="docutils literal"><span class="pre">tol</
 decreased and the step repeated if <code class="docutils literal"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span> <span class="pre">&gt;</span> <span class="pre">tol</span></code>;
 otherwise the step is accepted and the step size increased.
 The default definition of <code class="docutils literal"><span class="pre">delta</span></code> is roughly equivalent to:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
 <span class="k">def</span> <span class="nf">delta</span><span class="p">(</span><span class="n">yerr</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">delta_y</span><span class="p">):</span>
@@ -494,12 +486,12 @@ results.</li>
 to obtain <code class="docutils literal"><span class="pre">y(x1)</span></code> from <code class="docutils literal"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal"><span class="pre">y</span></code> and <code class="docutils literal"><span class="pre">f(x,y)</span></code> are
 dictionary types having the same keys, and containing scalars
 and/or <code class="xref py py-mod docutils literal"><span class="pre">numpy</span></code> arrays as values. Typical usage is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">DictIntegrator</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">DictIntegrator</span>
 
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="o">...</span>
 
-<span class="n">odeint</span> <span class="o">=</span> <span class="n">DictIntegrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">odeint</span> <span class="o">=</span> <span class="n">DictIntegrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
 <span class="n">y2</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">))</span>
 <span class="o">...</span>
@@ -510,7 +502,7 @@ returning <code class="docutils literal"><span class="pre">y1=y(x1)</span></code
 to <code class="docutils literal"><span class="pre">x=x2</span></code>, returning <code class="docutils literal"><span class="pre">y2=y(x2)</span></code>. Multiple integration points
 can be specified in <code class="docutils literal"><span class="pre">interval</span></code>, in which case a list of the
 corresponding <code class="docutils literal"><span class="pre">y</span></code> values is returned: for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">odeint</span> <span class="o">=</span> <span class="n">DictIntegrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">odeint</span> <span class="o">=</span> <span class="n">DictIntegrator</span><span class="p">(</span><span class="n">deriv</span><span class="o">=</span><span class="n">f</span><span class="p">,</span>  <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
 <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">...</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">[</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">...</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -564,7 +556,7 @@ results.</li>
 <em class="property">class </em><code class="descclassname">gvar.ode.</code><code class="descname">Solution</code><a class="headerlink" href="#gvar.ode.Solution" title="Permalink to this definition">¶</a></dt>
 <dd><p>ODE analyzer for storing intermediate values.</p>
 <p>Usage: eg, given</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">odeint</span> <span class="o">=</span> <span class="n">Integrator</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="n">soln</span> <span class="o">=</span> <span class="n">Solution</span><span class="p">()</span>
 <span class="n">y0</span> <span class="o">=</span> <span class="o">...</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">odeint</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">analyzer</span><span class="o">=</span><span class="n">soln</span><span class="p">)</span>
@@ -585,12 +577,12 @@ one-dimensional integrals (using its adaptive Runge-Kutta algorithm):</p>
 <code class="descclassname">ode.</code><code class="descname">integral</code><span class="sig-paren">(</span><em>fcn</em>, <em>interval</em>, <em>fcnshape=None</em>, <em>tol=1e-08</em>, <em>hmin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.integral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute integral of <code class="docutils literal"><span class="pre">fcn(x)</span></code> on interval.</p>
 <p>Given a function <code class="docutils literal"><span class="pre">fcn(x)</span></code> the call</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>calculates the integral of <code class="docutils literal"><span class="pre">fcn(x)</span></code> from <code class="docutils literal"><span class="pre">x0</span></code> to <code class="docutils literal"><span class="pre">x1</span></code>.
 For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -599,7 +591,7 @@ For example:</p>
 </div>
 <p>Function <code class="docutils literal"><span class="pre">fcn(x)</span></code> can return a scalar or an array (any shape):
 for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">])</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
@@ -609,7 +601,7 @@ for example,</p>
 </div>
 <p>The function can also return dictionaries whose values are
 scalars or arrays: for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">x3</span><span class="o">=</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -650,7 +642,7 @@ default value is <code class="docutils literal"><span class="pre">None</span></c
 approximations of functions. A function’s power series is specified by the
 coefficients in its Taylor expansion with respect to an independent variable,
 say <code class="docutils literal"><span class="pre">x</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="s">&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="s1">&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
      <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">f1</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">f2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">f3</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
@@ -661,7 +653,7 @@ highest power of <code class="docutils literal"><span class="pre">x</span></code
 for still higher-order terms are assumed to be unknown (as opposed to zero).</p>
 <p>Taylor’s theorem can be used to generate power series for functions of
 power series:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span><span class="s">&#39;(f0)*(f(x)-f0) + (g&#39;&#39;(f0)/2)*(f(x)-f0)**2 + ...</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span><span class="s1">&#39;(f0)*(f(x)-f0) + (g&#39;&#39;(f0)/2)*(f(x)-f0)**2 + ...</span>
         <span class="o">=</span> <span class="n">g0</span> <span class="o">+</span> <span class="n">g1</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">g2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
@@ -675,19 +667,19 @@ calculus. <code class="docutils literal"><span class="pre">PowerSeries([f0,f1,f2
 a power series with coefficients <code class="docutils literal"><span class="pre">f0,</span> <span class="pre">f1,</span> <span class="pre">f2,</span> <span class="pre">f3...</span></code> (as in <code class="docutils literal"><span class="pre">f(x)</span></code>
 above). Thus, for example, we can define a 4th-order power series
 approximation <code class="docutils literal"><span class="pre">f</span></code> to <code class="docutils literal"><span class="pre">exp(x)=1+x+x**2/2+...</span></code> using</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">24.</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c"># print the coefficients</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># print the coefficients</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667]</span>
 </pre></div>
 </div>
 <p>Arithmetic expressions involving instances of class <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> are
 themselves <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> as in, for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c"># power series for exp(-x)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for exp(-x)</span>
 <span class="go">[ 1.         -1.          0.5        -0.16666667  0.04166667]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>        <span class="c"># power series for x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>        <span class="c1"># power series for x</span>
 <span class="go">[ 0.  1.  0. -0.  0.]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">/</span><span class="n">f</span>           <span class="c"># power series for 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for 1</span>
 <span class="go">[ 1.  0.  0.  0.  0.]</span>
 </pre></div>
 </div>
@@ -697,9 +689,9 @@ the usual elementary functions (<code class="docutils literal"><span class="pre"
 <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a>; the order of the result is that of the operand with the
 lowest order.</p>
 <p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> can be differentiated and integrated:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>     <span class="c"># derivative of exp(x)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>     <span class="c1"># derivative of exp(x)</span>
 <span class="go">[ 1.          1.          0.5         0.16666667]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">()</span>     <span class="c"># integral of exp(x) (from x=0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">()</span>     <span class="c1"># integral of exp(x) (from x=0)</span>
 <span class="go">[ 0.          1.          0.5         0.16666667  0.04166667  0.00833333]</span>
 </pre></div>
 </div>
@@ -707,20 +699,20 @@ lowest order.</p>
 a function of a function is easily obtained. For example, assume <code class="docutils literal"><span class="pre">f</span></code>
 represents function <code class="docutils literal"><span class="pre">f(x)=exp(x)</span></code>, as above, and <code class="docutils literal"><span class="pre">g</span></code>
 represents <code class="docutils literal"><span class="pre">g(x)=log(1+x)</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">4.</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">4.</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Then <code class="docutils literal"><span class="pre">f(g)</span></code> gives the <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> for <code class="docutils literal"><span class="pre">exp(log(1+x))</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">x</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 <span class="go">[  1.0000e+00   1.0000e+00   0.0000e+00  -2.7755e-17 -7.6327e-17]</span>
 </pre></div>
 </div>
 <p>Individual coefficients from the powerseries can be accessed using
 array-element notation: for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 <span class="go">1.0 1.0 0.5 0.166666666667</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c"># f is now the power series for exp(x)-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># f is now the power series for exp(x)-1</span>
 <span class="go">[ 0.          1.          0.5         0.16666667  0.04166667]</span>
 </pre></div>
 </div>
@@ -729,12 +721,12 @@ array-element notation: for example,</p>
 <h3>Numerical evaluation of power series<a class="headerlink" href="#numerical-evaluation-of-power-series" title="Permalink to this headline">¶</a></h3>
 <p>The power series can also be evaluated for a particular
 numerical value of x: continuing the example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c"># should be exp(0.01)-1 approximately</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># should be exp(0.01)-1 approximately</span>
 <span class="go">0.0100501670833</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c"># verify that it is</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c1"># verify that it is</span>
 <span class="go">0.0100501670842</span>
 </pre></div>
 </div>
@@ -751,17 +743,17 @@ expansion of a Python function <code class="docutils literal"><span class="pre">
 <code class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">PowerSeries([0.,1.],order=N)</span></code>. The Taylor series for function <code class="docutils literal"><span class="pre">g</span></code>
 is then given by <code class="docutils literal"><span class="pre">g_taylor</span> <span class="pre">=</span> <span class="pre">g(x)</span></code> which is a <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal"><span class="pre">PowerSeries</span></code></a> instance.
 For example, consider:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>           <span class="c"># an example of a Python function</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>           <span class="c1"># an example of a Python function</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>    <span class="c"># Taylor series for x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>    <span class="c1"># Taylor series for x</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">x</span>
 <span class="go">[ 0.  1.  0.  0.  0.  0.]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g_taylor</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>     <span class="c"># Taylor series for g(x) about x=0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g_taylor</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>     <span class="c1"># Taylor series for g(x) about x=0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">g_taylor</span>
 <span class="go">[ 1.         0.         0.375      0.         0.2734375  0.       ]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_taylor</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># Taylor series for exp(x) about x=0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_taylor</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># Taylor series for exp(x) about x=0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp_taylor</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667  0.00833333]</span>
 </pre></div>
@@ -772,7 +764,7 @@ For example, consider:</p>
 <em class="property">class </em><code class="descclassname">gvar.powerseries.</code><code class="descname">PowerSeries</code><span class="sig-paren">(</span><em>c=None</em>, <em>order=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Power series representation of a function.</p>
 <p>The power series created by <code class="docutils literal"><span class="pre">PowerSeries(c)</span></code> corresponds to:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span> <span class="o">.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span> <span class="o">.</span>
 </pre></div>
 </div>
 <p>The order of the power series is normally determined by the length of
@@ -864,12 +856,12 @@ integrating from point <em>x0</em>, is returned.</p>
 <p>Module <a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal"><span class="pre">gvar.root</span></code></a> contains methods for finding the roots of
 of one-dimensional functions: that is, finding <code class="docutils literal"><span class="pre">x</span></code> such that
 <code class="docutils literal"><span class="pre">fcn(x)=0</span></code> for a given function <code class="docutils literal"><span class="pre">fcn</span></code>. Typical usage is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">interval</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>     <span class="c"># bracket root</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interval</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>     <span class="c1"># bracket root</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
 <span class="go">(3.1384283767210035, 3.4522712143931042)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="n">interval</span><span class="p">)</span>   <span class="c"># refine root</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="n">interval</span><span class="p">)</span>   <span class="c1"># refine root</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 <span class="go">3.14159265359</span>
 </pre></div>
@@ -883,7 +875,7 @@ since <code class="docutils literal"><span class="pre">sin(x)</span></code> is c
 The final root is found by refining the interval, using <code class="docutils literal"><span class="pre">gvar.root.refine</span></code>.
 By default, the root is refined iteratively to machine precision, but this
 requires only a small number (4) of iterations:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c"># number of iterations</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c1"># number of iterations</span>
 <span class="go">4</span>
 </pre></div>
 </div>
@@ -891,19 +883,19 @@ requires only a small number (4) of iterations:</p>
 is extremely flat in the vicinity of the root — that is,
 two or more of its leading derivatives vanish there. For
 example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">**</span> <span class="mi">11</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 <span class="go">0.5</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c"># number of iterations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">nit</span><span class="p">)</span>                             <span class="c1"># number of iterations</span>
 <span class="go">142</span>
 </pre></div>
 </div>
 <p>This routine also works with variables of type <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>:
 for example,</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="o">=</span><span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">gv</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
@@ -920,7 +912,7 @@ uncertainty in parameter <code class="docutils literal"><span class="pre">w</spa
 <dd><p>Search for and bracket root of one-dimensional function <code class="docutils literal"><span class="pre">fcn(x)</span></code>.</p>
 <p>This method searches for an interval in <code class="docutils literal"><span class="pre">x</span></code> that brackets
 a root of <code class="docutils literal"><span class="pre">fcn(x)=0</span></code>. It examines points</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="n">x</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fac</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">incr</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fac</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">incr</span>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">x[0]=x0</span></code> and <code class="docutils literal"><span class="pre">j=0...maxit-1</span></code>, looking for a pair
@@ -931,7 +923,7 @@ be refined using <code class="xref py py-meth docutils literal"><span class="pre
 <p class="rubric">Example</p>
 <p>The following code seeks to bracket the first zero of
 <code class="docutils literal"><span class="pre">sin(x)</span></code> with <code class="docutils literal"><span class="pre">x&gt;0.1</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">interval</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
@@ -993,7 +985,7 @@ without Derivatives” (1973). Being pure Python it works with
 <p>The following code finds a root of <code class="docutils literal"><span class="pre">sin(x)</span></code> in the interval
 <code class="docutils literal"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">4</span></code>, using 7 iterative refinements of the initial
 interval:</p>
-<div class="highlight-default"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
@@ -1112,12 +1104,12 @@ after <code class="docutils literal"><span class="pre">maxit</span></code> itera
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.4 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>
