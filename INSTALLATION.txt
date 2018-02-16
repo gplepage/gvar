@@ -1,14 +1,14 @@
 To install:
 
-1. Use 'make install' to install gvar into the user's standard library
-	(as opposed to the system's library; use 'make install-sys' to install
+1. Use 'make install' to install gvar into the system's standard library
+	(as opposed to the user's library; use 'make install-user' to install
 	to the system library). The installation process will install the
 	numpy Python module if it is not present.
 
 	N.B. Rather than using make and the makefile, one can instead use
-	standard python installation tools: 'pip install . --user'
-	to install to the user directory (or 'pip install .' to install to
-	the system directory) from within the main directory.
+	standard python installation tools: run 'pip install .' to install
+	to the system library (or 'pip install . --user' to install to
+	the user's directory) from within the top directory.
 
 	N.B. gvar uses cython to convert .pyx files to .c files. The .c files
 	are included in the distribution so cython is not required to install

@@ -36,7 +36,7 @@ class build_ext(_build_ext):
             ext.include_dirs.append(numpy_include)
         _build_ext.build_extensions(self)
 
-GVAR_VERSION = '8.3.4'
+GVAR_VERSION = '8.3.5'
 
 # create gvar/_version.py so gvar knows its version number
 with open("src/gvar/_version.py","w") as version_file:
@@ -83,9 +83,8 @@ setup(name='gvar',
     package_data=package_data,
     ext_modules= ext_modules,
     # for pip (distutils ignores):
-    setup_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'],
     install_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'],
-    # for distutils:
+    # for distutils (pip ignores):
     requires=['cython (>=0.17)', 'numpy (>=1.7)'] if USE_CYTHON else ['numpy (>=1.7)'],
     url="https://github.com/gplepage/gvar.git",
     license='GPLv3+',

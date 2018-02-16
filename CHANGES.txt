@@ -1,5 +1,9 @@
-Version 8.3.4 ?????
-=====================
+Version 8.3.5 2018-02-15
+========================
+- More improvements for setup.py.
+
+Version 8.3.4 2018-02-15
+=========================
 - New setup.py that: a) does not require cython; b) works even if
   numpy is not installed (by installing numpy before it is required).
   Previous versions of setup.py did not work unless cython and numpy

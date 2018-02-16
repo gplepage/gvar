@@ -16,10 +16,10 @@ PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
 VERSION = `python -c 'import gvar; print gvar.__version__'`
 
-install :
+install-user :
 	$(PIP) install . --user
 
-install-sys :
+install install-sys :
 	$(PIP) install .
 
 # $(PYTHON) setup.py install --record files-gvar.$(PYTHONVERSION)
