@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-# from setuptools import setup, Extension
+GVAR_VERSION = '8.3.5'
 
 from distutils.core import setup
 from distutils.extension import Extension
@@ -36,7 +36,6 @@ class build_ext(_build_ext):
             ext.include_dirs.append(numpy_include)
         _build_ext.build_extensions(self)
 
-GVAR_VERSION = '8.3.5'
 
 # create gvar/_version.py so gvar knows its version number
 with open("src/gvar/_version.py","w") as version_file:
