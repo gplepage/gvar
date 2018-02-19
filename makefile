@@ -16,6 +16,9 @@ PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
 VERSION = `python -c 'import gvar; print gvar.__version__'`
 
+DOCFILES :=  $(shell ls doc/source/conf.py doc/source/*.{rst,png})
+SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})
+
 install-user :
 	$(PIP) install . --user
 
@@ -40,10 +43,17 @@ install-gdev :
 install-gdev-sys :
 	$(PYTHON) gdev-setup.py install --record files-gdev.$(PYTHONVERSION)
 
+
 doc-html:
+	make doc/html/index.html
+
+doc/html/index.html : $(SRCFILES) $(DOCFILES)
 	rm -rf doc/html; sphinx-build -b html doc/source doc/html
 
 doc-pdf:
+	make doc/gvar.pdf
+
+doc/gvar.pdf : $(SRCFILES) $(DOCFILES)
 	rm -rf doc/gvar.pdf
 	sphinx-build -b latex doc/source doc/latex
 	cd doc/latex; make gvar.pdf; mv gvar.pdf ..
@@ -51,7 +61,7 @@ doc-pdf:
 doc-zip doc.zip:
 	cd doc/html; zip -r doc *; mv doc.zip ../..
 
-doc-all: doc-html doc-pdf doc-zip
+doc-all: doc-html doc-pdf
 
 sdist:			# source distribution
 	$(PYTHON) setup.py sdist
@@ -75,8 +85,9 @@ upload-pypi:
 	python setup.py sdist upload
 
 upload-git:
-	make doc-all
-	git commit -a -m "prep for upload"
+	make doc-html doc-pdf
+	git diff --exit-code
+	git diff --cached --exit-code
 	git push origin master
 
 tag-git:
@@ -91,10 +102,9 @@ test-download:
 clean:
 	rm -f -r build
 	rm -rf __pycache__
-	rm -f *.so *.tmp *.pyc *.prof *.c .coverage doc.zip
+	rm -f *.so *.tmp *.pyc *.prof .coverage doc.zip
 	rm -f -r dist
 	rm -f -r doc/build
-	rm -f -r src/gvar/*.c
 	$(MAKE) -C doc/source clean
 	$(MAKE) -C tests clean
 	$(MAKE) -C examples clean
