@@ -85,6 +85,7 @@ upload-pypi:
 	python setup.py sdist upload
 
 upload-git:
+	echo  "version $(VERSION)"
 	make doc-html doc-pdf
 	git diff --exit-code
 	git diff --cached --exit-code
