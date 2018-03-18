@@ -85,8 +85,6 @@ upload-pypi:
 	python setup.py sdist upload
 
 upload-twine:
-	rm -rf dist
-	python setup.py sdist
 	twine upload dist/*
 
 upload-git:
