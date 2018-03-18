@@ -549,6 +549,7 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
         self.assert_close((x + y) - x, y)
         self.assert_close(x + y - x - y, self.zero)
         self.assert_close(x ** 2, self.x2)
+        self.assert_close((1 + x) ** 2., 1 + 2*x + self.x2)
         self.assert_close(y * y * y, y ** 3)
         self.assert_close(2 ** x, self.exp_x ** log(2.))
         self.assert_close(y + y, 2 * y)
@@ -622,7 +623,10 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
 
     def test_str(self):
         " str(p) repr(p) "
-        self.assertEqual(str(self.x), "[ 0.  1.  0.  0.  0.  0.  0.  0.  0.  0.  0.]")
+        self.assertEqual(
+            str(self.x),
+            str(np.array([ 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.]))
+            )
         y = eval(repr(self.exp_x))
         self.assert_close(y, self.exp_x)
 

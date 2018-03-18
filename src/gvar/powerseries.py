@@ -136,7 +136,6 @@ For example, consider:
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-__version__ = "1.0"
 import numpy
 import math
 from numpy import exp, log, sqrt, sin, cos, tan, arcsin, arccos, arctan
@@ -315,7 +314,7 @@ class PowerSeries(object):
     def __pow__(self,alpha):
         # use Taylor expn around x=c[0] to get answer
         # unless alpha is an integer (then multiply out)
-        if numpy.issubdtype(type(alpha), int):
+        if numpy.issubdtype(type(alpha), numpy.int_):
             if alpha == 0:
                 return 1.
             elif alpha < 0:

@@ -447,7 +447,7 @@ def evalcov_blocks(g):
     """ Evaluate covariance matrix for elements of ``g``.
 
     Evaluates the covariance matrices for |GVar|\s stored in
-    array or dictionary of arrays ``g``. The covariance matrix is
+    array or dictionary of arrays/|GVar|\s ``g``. The covariance matrix is
     decomposed into its block diagonal components, and a list of
     tuples ``(idx,bcov)`` is returned where ``bcov`` is a diagonal
     block of the covariance matrix and ``idx`` an array containing the
@@ -461,10 +461,6 @@ def evalcov_blocks(g):
 
     :func:`gvar.evalcov_blocks` is particularly useful when the covariance
     matrix is sparse; only nonzero elements are retained.
-
-    Args::
-        g (dictionary, array, or gvar.GVar): Collection of |GVar|\s whose
-            correlation matrix is to be determined.
     """
     cdef INTP_TYPE a, b
     cdef GVar ga, gb
