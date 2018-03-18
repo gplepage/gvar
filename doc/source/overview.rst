@@ -1,7 +1,7 @@
 Overview and Tutorial
 =============================
 
-.. |GVar| replace:: :class:`gvar.GVar`
+.. |GVar|  replace:: :class:`gvar.GVar`
 
 .. |BufferDict| replace:: :class:`gvar.BufferDict`
 
