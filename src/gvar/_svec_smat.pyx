@@ -280,7 +280,7 @@ cdef class smat:
         idx = numpy.zeros(1, numpy.intp)
         nr = self.nrow # len(self.rowlist)
         v = numpy.zeros(1, numpy.float_)
-        vrange = numpy.arange(nr,nr+d.shape[0],dtype=numpy.intp)
+        vrange = numpy.arange(nr, nr+d.shape[0], dtype=numpy.intp)
         for i in range(d.shape[0]):
             v[0] = d[i]
             idx[0] = self.nrow # len(self.rowlist)
@@ -344,8 +344,8 @@ cdef class smat:
         cdef INTP_TYPE nr, size, i
         cdef svec row
         nr = self.nrow # len(self.rowlist)
-        v = numpy.zeros(nr,numpy.float_)
-        idx = numpy.zeros(nr,numpy.intp)
+        v = numpy.zeros(nr, numpy.float_)
+        idx = numpy.zeros(nr, numpy.intp)
         size = 0
         for i in range(nr):
             row = self.row[i] # self.rowlist[i]

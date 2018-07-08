@@ -19,7 +19,8 @@ import warnings
 import numpy
 import gvar
 
-TINY = sys.float_info.min
+# sqrt needed for 0(0)/(0(0) + TINY)
+TINY = sys.float_info.min ** 0.5
 
 class Integrator(object):
     """ Integrate ``dy/dx = deriv(x,y)``.

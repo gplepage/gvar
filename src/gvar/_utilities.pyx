@@ -1,5 +1,5 @@
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-17 G. Peter Lepage.
+# Copyright (c) 2012-18 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -465,7 +465,8 @@ def evalcov_blocks(g):
     cdef INTP_TYPE a, b
     cdef GVar ga, gb
     cdef smat master_cov
-    cdef numpy.ndarray[numpy.npy_intp, ndim=1] idx, ga_d_indices
+    # cdef numpy.ndarray[numpy.npy_intp, ndim=1] idx, ga_d_indices
+    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx, ga_d_indices
     cdef numpy.ndarray[object, ndim=1] gf, g_indices
     # find blocks
     if hasattr(g, 'keys'):
@@ -517,7 +518,7 @@ def evalcov_blocks(g):
             gb = gf[b]
             ans.append((numpy.array([b]), numpy.array([[gb.var]])))
         else:
-            idx = numpy.array([b for b in bl])
+            idx = numpy.array([b for b in bl], dtype=numpy.intp)
             ans.append((idx, evalcov(gf[idx])))
     return ans
 
@@ -532,9 +533,9 @@ def evalcov(g):
     ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.
     """
     cdef INTP_TYPE a,b,ng,i,j,nc
-    cdef numpy.ndarray[numpy.float_t,ndim=2] ans
-    cdef numpy.ndarray[object,ndim=1] covd
-    cdef numpy.ndarray[numpy.int8_t,ndim=1] imask
+    cdef numpy.ndarray[numpy.float_t, ndim=2] ans
+    cdef numpy.ndarray[object, ndim=1] covd
+    cdef numpy.ndarray[numpy.int8_t, ndim=1] imask
     cdef GVar ga,gb
     cdef svec da,db
     cdef smat cov
@@ -970,7 +971,7 @@ def fmt_errorbudget(
     return ans
 
 # bootstrap_iter, raniter, svd, valder
-def bootstrap_iter(g, n=None, svdcut=None):
+def bootstrap_iter(g, n=None, svdcut=1e-15):
     """ Return iterator for bootstrap copies of ``g``.
 
     The gaussian variables (|GVar| objects) in array (or dictionary) ``g``
@@ -994,7 +995,7 @@ def bootstrap_iter(g, n=None, svdcut=None):
         correlation matrix with ``max(eig, svdcut * max_eig)`` where
         ``max_eig`` is the largest eigenvalue; if negative,
         discard eigenmodes with eigenvalues smaller
-        than ``|svdcut| * max_eig``. Default is ``None``.
+        than ``|svdcut| * max_eig``. Default is ``1e-15``.
     :type svdcut: ``None`` or number
     :returns: An iterator that returns bootstrap copies of ``g``.
     """
@@ -1019,7 +1020,7 @@ def bootstrap_iter(g, n=None, svdcut=None):
             yield buf.reshape(g.shape)
     raise StopIteration
 
-def raniter(g, n=None, svdcut=None):
+def raniter(g, n=None, svdcut=1e-15):
     """ Return iterator for random samples from distribution ``g``
 
     The gaussian variables (|GVar| objects) in array (or dictionary) ``g``
@@ -1045,7 +1046,7 @@ def raniter(g, n=None, svdcut=None):
         correlation matrix with ``max(eig, svdcut * max_eig)`` where
         ``max_eig`` is the largest eigenvalue; if negative,
         discard eigenmodes with eigenvalues smaller
-        than ``|svdcut| * max_eig``. Default is ``None``.
+        than ``|svdcut| * max_eig``. Default is ``1e-15``.
     :type svdcut: ``None`` or number
     :returns: An iterator that returns random arrays or dictionaries
         with the same shape as ``g`` drawn from the gaussian distribution

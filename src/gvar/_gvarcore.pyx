@@ -157,12 +157,10 @@ cdef class GVar:
     def __hash__(self):
         return id(self)
 
-    def __richcmp__(xx, yy, op):
+    def __richcmp__(x, y, op):
         """ Compare mean values. """
-        if isinstance(xx, GVar):
-            xx = xx.mean
-        if isinstance(yy, GVar):
-            yy = yy.mean
+        xx = x.mean if isinstance(x, GVar) else x
+        yy = y.mean if isinstance(y, GVar) else y
         if op == 0:
             return xx < yy
         elif op == 2:

@@ -824,8 +824,8 @@ obtained using :func:`gvar.switch_gvar`: for example, ::
     z = f(x, y)
     ... other manipulations involving x and y ...
     gvar.switch_gvar()
-    a = gvar(...)
-    b = gvar(...)
+    a = gvar.gvar(...)
+    b = gvar.gvar(...)
     c = g(a, b)
     ... other manipulations involving a and b (but not x and y) ...
 
@@ -840,4 +840,5 @@ slightly slower than with the ``switch_gvar`` line. Usually the difference
 is negligible --- it used to be more important, in earlier implementations
 of |GVar| before sparse matrices were introduced to keep track of
 covariances. Note that the previous :func:`gvar.gvar` can be restored using
-:func:`gvar.restore_gvar`.
+:func:`gvar.restore_gvar`. Function :func:`gvar.gvar_factory` can also
+be used to create new versions of :func:`gvar.gvar`.

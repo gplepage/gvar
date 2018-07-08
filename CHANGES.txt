@@ -1,10 +1,31 @@
+Version 8.3.7 2018-07-08
+========================
+Bug fixes.
+
+- Bug fix in evalcov_blocks() that affects some Windows installations
+  (mismatched integer types in cython code).
+
+- Bug fix for ode to deal with 0(0)/0(0) fringe case.
+
+- Minor documentation fixes.
+
+- Bug fix in GVar.__richcmp__ for Python 2.7 on macOS 10.13.5.
+
+- Default svdcut=1e-15 added to raniter. Having a small non-zero
+  svdcut is standard elsewhere in code.
+
+- Improved handling of cython in makefile.
+
+
 Version 8.3.6 2018-03-18
 ============================
 Minor update to keep up with changes in numpy.
 
+
 Version 8.3.5 2018-02-15
 ========================
 - More improvements for setup.py.
+
 
 Version 8.3.4 2018-02-15
 =========================
@@ -21,6 +42,7 @@ Version 8.3.4 2018-02-15
 - Modifications to support hosting documentation by ReadTheDocs.
 
 - Minor bug (error message) in gvar.Histogram.
+
 
 Version 8.3.3 2017-08-03
 =========================

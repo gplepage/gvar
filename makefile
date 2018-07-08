@@ -18,12 +18,28 @@ VERSION = `python -c 'import gvar; print gvar.__version__'`
 
 DOCFILES :=  $(shell ls doc/source/conf.py doc/source/*.{rst,png})
 SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})
+CYTHONFILES := src/gvar/_bufferdict.c src/gvar/_gvarcore.c src/gvar/_svec_smat.c src/gvar/_utilities.c src/gvar/dataset.c
 
-install-user :
+install-user : $(CYTHONFILES)
 	$(PIP) install . --user
 
-install install-sys :
+install install-sys : $(CYTHONFILES)
 	$(PIP) install .
+
+src/gvar/_gvarcore.c : src/gvar/_gvarcore.pyx src/gvar/_gvarcore.pxd
+	cd src/gvar; cython _gvarcore.pyx
+
+src/gvar/_svec_smat.c : src/gvar/_svec_smat.pyx src/gvar/_svec_smat.pxd
+	cd src/gvar; cython _svec_smat.pyx
+
+src/gvar/_bufferdict.c : src/gvar/_bufferdict.pyx
+	cd src/gvar; cython _bufferdict.pyx
+
+src/gvar/_utilities.c : src/gvar/_utilities.pyx
+	cd src/gvar; cython _utilities.pyx
+
+src/gvar/dataset.c : src/gvar/dataset.pyx
+	cd src/gvar; cython dataset.pyx
 
 # $(PYTHON) setup.py install --record files-gvar.$(PYTHONVERSION)
 
@@ -63,7 +79,7 @@ doc-zip doc.zip:
 
 doc-all: doc-html doc-pdf
 
-sdist:			# source distribution
+sdist: $(CYTHONFILES) # source distribution
 	$(PYTHON) setup.py sdist
 
 .PHONY: tests
@@ -81,13 +97,13 @@ run run-examples:
 register-pypi:
 	python setup.py register # use only once, first time
 
-upload-pypi:
-	python setup.py sdist upload
+# upload-pypi: $(CYTHONFILES)
+# 	python setup.py sdist upload
 
-upload-twine:
-	twine upload dist/*
+upload-twine: $(CYTHONFILES)
+	twine upload dist/gvar-$(VERSION).tar.gz
 
-upload-git:
+upload-git: $(CYTHONFILES)
 	echo  "version $(VERSION)"
 	make doc-html doc-pdf
 	git diff --exit-code

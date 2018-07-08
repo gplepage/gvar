@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 8.3.6 documentation</title>
+    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 8.3.7 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '8.3.6',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -30,8 +22,7 @@
 <link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
 <![endif]-->
 
-  </head>
-  <body>
+  </head><body>
 
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -45,7 +36,7 @@
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Pendulum Clock"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.7 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -63,13 +54,13 @@ to fix the problem using an SVD&nbsp;cut.</p>
 <h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
 <p>We want to determine the slope indicated by measurements of a
 quantity</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">y</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">s</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">s</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>for <code class="docutils literal"><span class="pre">x=[1,2...10]</span></code>. The
-measurements are noisy so we average 15 sets <code class="docutils literal"><span class="pre">y_sample[j]</span></code>
+<p>for <code class="docutils literal notranslate"><span class="pre">x=[1,2...10]</span></code>. The
+measurements are noisy so we average 15 sets <code class="docutils literal notranslate"><span class="pre">y_sample[j]</span></code>
 of independent measurements:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">])</span>
@@ -93,22 +84,22 @@ of independent measurements:</p>
 <span class="n">y</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">avg_data</span><span class="p">(</span><span class="n">y_samples</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The result is an array of 10 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal"><span class="pre">gvar.GVar</span></code></a>s,</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<p>The result is an array of 10 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 <span class="go">[3.014(23) 5.014(23) 7.014(23) 9.014(24) 11.013(24) 13.014(24) 15.013(24)</span>
 <span class="go"> 17.013(24) 19.013(24) 21.013(24)]</span>
 </pre></div>
 </div>
 <p>that are highly correlated:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">y</span><span class="p">)[:</span><span class="mi">4</span><span class="p">,:</span><span class="mi">4</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">y</span><span class="p">)[:</span><span class="mi">4</span><span class="p">,:</span><span class="mi">4</span><span class="p">])</span>
 <span class="go">[[ 1.          0.9998438   0.99973225  0.99965233]</span>
 <span class="go"> [ 0.9998438   1.          0.99991873  0.99985194]</span>
 <span class="go"> [ 0.99973225  0.99991873  1.          0.99997514]</span>
 <span class="go"> [ 0.99965233  0.99985194  0.99997514  1.        ]]</span>
 </pre></div>
 </div>
-<p>To extract a slope we fit these data using the <code class="xref py py-mod docutils literal"><span class="pre">lsqfit</span></code> module:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lsqfit</span>
+<p>To extract a slope we fit these data using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">lsqfit</span></code> module:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lsqfit</span>
 
 <span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;y0&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
@@ -118,9 +109,9 @@ of independent measurements:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The fit, however, is very poor, with a <code class="docutils literal"><span class="pre">chi**2</span></code> per degree of freedom
+<p>The fit, however, is very poor, with a <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> per degree of freedom
 of&nbsp;11:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Least</span> <span class="n">Square</span> <span class="n">Fit</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Least</span> <span class="n">Square</span> <span class="n">Fit</span><span class="p">:</span>
   <span class="n">chi2</span><span class="o">/</span><span class="n">dof</span> <span class="p">[</span><span class="n">dof</span><span class="p">]</span> <span class="o">=</span> <span class="mi">11</span> <span class="p">[</span><span class="mi">10</span><span class="p">]</span>    <span class="n">Q</span> <span class="o">=</span> <span class="mf">4.1e-19</span>    <span class="n">logGBF</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.7451</span>
 
 <span class="n">Parameters</span><span class="p">:</span>
@@ -131,26 +122,26 @@ of&nbsp;11:</p>
   <span class="n">svdcut</span><span class="o">/</span><span class="n">n</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="o">/</span><span class="mi">0</span>    <span class="n">tol</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1e-08</span><span class="o">*</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">)</span>    <span class="p">(</span><span class="n">itns</span><span class="o">/</span><span class="n">time</span> <span class="o">=</span> <span class="mi">5</span><span class="o">/</span><span class="mf">0.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The problem is that we do not have enough samples in <code class="docutils literal"><span class="pre">y_sample</span></code> to determine
+<p>The problem is that we do not have enough samples in <code class="docutils literal notranslate"><span class="pre">y_sample</span></code> to determine
 the correlation matrix sufficiently accurately. The smallest
 eigenvalues of the correlation matrix tend to be underestimated with small
 samples. Indeed the smallest eigenvalues go to zero when the sample size is
-smaller than the dimension of <code class="docutils literal"><span class="pre">y</span></code> (i.e., 10&nbsp;here). The underestimated
-eigenvalues result in contributions to the <code class="docutils literal"><span class="pre">chi**2</span></code>
+smaller than the dimension of <code class="docutils literal notranslate"><span class="pre">y</span></code> (i.e., 10&nbsp;here). The underestimated
+eigenvalues result in contributions to the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code>
 function in the fit that are both spurious and large.</p>
 </div>
 <div class="section" id="a-poor-solution">
 <h2>A Poor Solution<a class="headerlink" href="#a-poor-solution" title="Permalink to this headline">¶</a></h2>
 <p>One solution is to declare the correlations unreliable and to discard them,
 keeping just the individual standard deviations:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">gv</span><span class="o">.</span><span class="n">sdev</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">gv</span><span class="o">.</span><span class="n">sdev</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
 <span class="n">fit</span> <span class="o">=</span> <span class="n">lsqfit</span><span class="o">.</span><span class="n">nonlinear_fit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">fcn</span><span class="o">=</span><span class="n">fcn</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="n">prior</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This gives an acceptable fit,</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Least</span> <span class="n">Square</span> <span class="n">Fit</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Least</span> <span class="n">Square</span> <span class="n">Fit</span><span class="p">:</span>
   <span class="n">chi2</span><span class="o">/</span><span class="n">dof</span> <span class="p">[</span><span class="n">dof</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="p">[</span><span class="mi">10</span><span class="p">]</span>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">1</span>    <span class="n">logGBF</span> <span class="o">=</span> <span class="mf">14.067</span>
 
 <span class="n">Parameters</span><span class="p">:</span>
@@ -161,7 +152,7 @@ keeping just the individual standard deviations:</p>
   <span class="n">svdcut</span><span class="o">/</span><span class="n">n</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="o">/</span><span class="mi">0</span>    <span class="n">tol</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1e-08</span><span class="o">*</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">)</span>    <span class="p">(</span><span class="n">itns</span><span class="o">/</span><span class="n">time</span> <span class="o">=</span> <span class="mi">5</span><span class="o">/</span><span class="mf">0.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>but the very small <code class="docutils literal"><span class="pre">chi**2</span></code> confirms what we suspect: that we are ignoring
+<p>but the very small <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> confirms what we suspect: that we are ignoring
 very strong correlations that are relevant to the fit.
 Not surprisingly, the accuracy of our slope determination is quite
 sensitive to these correlations.</p>
@@ -170,10 +161,10 @@ sensitive to these correlations.</p>
 <h2>A Better Solution<a class="headerlink" href="#a-better-solution" title="Permalink to this headline">¶</a></h2>
 <p>A better solution is to determine which of the correlation matrix’s
 eigenvalues are accurate and retain those in the fit. We do this
-with <a class="reference internal" href="gvar_dataset.html#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-func docutils literal"><span class="pre">gvar.dataset.svd_diagnosis()</span></code></a> which uses a bootstrap
+with <a class="reference internal" href="gvar_dataset.html#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis()</span></code></a> which uses a bootstrap
 analysis to investigate the accuracy and stability of the eigenvalues.
 Adding the code</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">svd</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">svd_diagnosis</span><span class="p">(</span><span class="n">y_samples</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svd</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">svd_diagnosis</span><span class="p">(</span><span class="n">y_samples</span><span class="p">)</span>
 <span class="n">svd</span><span class="o">.</span><span class="n">plot_ratio</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -193,23 +184,23 @@ determined given the sample size.</p>
 the eigenvalues that are smaller than roughly 10<sup>-5</sup>&nbsp;times
 the largest
 eigenvalue. To address this problem we introduce an SVD cut
-using <a class="reference internal" href="gvar.html#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal"><span class="pre">gvar.svd()</span></code></a> with a value for <code class="docutils literal"><span class="pre">svdcut</span></code> suggested
-by <a class="reference internal" href="gvar_dataset.html#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-func docutils literal"><span class="pre">gvar.dataset.svd_diagnosis()</span></code></a> (dotted red line in the figure):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">svd</span><span class="o">.</span><span class="n">svdcut</span><span class="p">)</span>
+using <a class="reference internal" href="gvar.html#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a> with a value for <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> suggested
+by <a class="reference internal" href="gvar_dataset.html#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis()</span></code></a> (dotted red line in the figure):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">svd</span><span class="o">.</span><span class="n">svdcut</span><span class="p">)</span>
 
 <span class="n">fit</span> <span class="o">=</span> <span class="n">lsqfit</span><span class="o">.</span><span class="n">nonlinear_fit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">fcn</span><span class="o">=</span><span class="n">fcn</span><span class="p">,</span> <span class="n">prior</span><span class="o">=</span><span class="n">prior</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">gv.svd(y,</span> <span class="pre">svdcut=svd.svdcut)</span></code> creates a new version of the
-data <code class="docutils literal"><span class="pre">y</span></code> with a correlation matrix whose large eigenvalues are
-unchanged but whose small eigenvalues, below <code class="docutils literal"><span class="pre">svdcut*max_eig</span></code>,
-are all set equal to <code class="docutils literal"><span class="pre">svdcut*max_eig</span></code>
-(where <code class="docutils literal"><span class="pre">max_eig</span></code> is the largest eigenvalue). This probably
+<p><code class="docutils literal notranslate"><span class="pre">gv.svd(y,</span> <span class="pre">svdcut=svd.svdcut)</span></code> creates a new version of the
+data <code class="docutils literal notranslate"><span class="pre">y</span></code> with a correlation matrix whose large eigenvalues are
+unchanged but whose small eigenvalues, below <code class="docutils literal notranslate"><span class="pre">svdcut*max_eig</span></code>,
+are all set equal to <code class="docutils literal notranslate"><span class="pre">svdcut*max_eig</span></code>
+(where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the largest eigenvalue). This probably
 overestimates the uncertainties associated with the small eigenvalues,
 and so is a conservative move.
 It makes the correlation matrix less singular, and fixes the fit:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Least</span> <span class="n">Square</span> <span class="n">Fit</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Least</span> <span class="n">Square</span> <span class="n">Fit</span><span class="p">:</span>
   <span class="n">chi2</span><span class="o">/</span><span class="n">dof</span> <span class="p">[</span><span class="n">dof</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.2</span> <span class="p">[</span><span class="mi">10</span><span class="p">]</span>    <span class="n">Q</span> <span class="o">=</span> <span class="mf">0.28</span>    <span class="n">logGBF</span> <span class="o">=</span> <span class="mf">44.774</span>
 
 <span class="n">Parameters</span><span class="p">:</span>
@@ -220,18 +211,18 @@ It makes the correlation matrix less singular, and fixes the fit:</p>
   <span class="n">svdcut</span><span class="o">/</span><span class="n">n</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="o">/</span><span class="mi">0</span>    <span class="n">tol</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1e-08</span><span class="o">*</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">,</span><span class="mf">1e-10</span><span class="p">)</span>    <span class="p">(</span><span class="n">itns</span><span class="o">/</span><span class="n">time</span> <span class="o">=</span> <span class="mi">5</span><span class="o">/</span><span class="mf">0.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Our final estimate for the slope is <code class="docutils literal"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.99998(19)</span></code>, whose uncertainty
+<p>Our final estimate for the slope is <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">1.99998(19)</span></code>, whose uncertainty
 is more than an order-of-magnitude smaller than what we obtained from
 the uncorrelated fit.</p>
 <p>This simple problem can be approached in different ways. For example,
-we could estimate the slope from <code class="docutils literal"><span class="pre">y[i+1]</span> <span class="pre">-</span> <span class="pre">y[i]</span></code>, doing a weighted
-average over all values of&nbsp;<code class="docutils literal"><span class="pre">i</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">slope</span> <span class="o">=</span> <span class="n">lsqfit</span><span class="o">.</span><span class="n">wavg</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+we could estimate the slope from <code class="docutils literal notranslate"><span class="pre">y[i+1]</span> <span class="pre">-</span> <span class="pre">y[i]</span></code>, doing a weighted
+average over all values of&nbsp;<code class="docutils literal notranslate"><span class="pre">i</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">slope</span> <span class="o">=</span> <span class="n">lsqfit</span><span class="o">.</span><span class="n">wavg</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This again gives a slope of <code class="docutils literal"><span class="pre">1.99998(19)</span></code> provided an SVD cut has
-first been applied to <code class="docutils literal"><span class="pre">y</span></code>.</p>
+<p>This again gives a slope of <code class="docutils literal notranslate"><span class="pre">1.99998(19)</span></code> provided an SVD cut has
+first been applied to <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
 <p>SVD cuts are often necessary when using correlation matrices constructed
 from random samples. Typically large numbers of samples are needed to
 calculate all of a correlation matrix’s eigenvalues accurately —
@@ -260,14 +251,23 @@ be essential for a usable correlation matrix.</p>
   <h4>Previous topic</h4>
   <p class="topless"><a href="case-pendulum.html"
                         title="previous chapter">Case Study: Pendulum Clock</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/case-svdcut.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -286,12 +286,12 @@ be essential for a usable correlation matrix.</p>
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Pendulum Clock"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.3.7 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>
