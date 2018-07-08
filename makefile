@@ -66,18 +66,18 @@ doc-html:
 doc/html/index.html : $(SRCFILES) $(DOCFILES)
 	rm -rf doc/html; sphinx-build -b html doc/source doc/html
 
-doc-pdf:
-	make doc/gvar.pdf
+# doc-pdf:
+# 	make doc/gvar.pdf
 
-doc/gvar.pdf : $(SRCFILES) $(DOCFILES)
-	rm -rf doc/gvar.pdf
-	sphinx-build -b latex doc/source doc/latex
-	cd doc/latex; make gvar.pdf; mv gvar.pdf ..
+# doc/gvar.pdf : $(SRCFILES) $(DOCFILES)
+# 	rm -rf doc/gvar.pdf
+# 	sphinx-build -b latex doc/source doc/latex
+# 	cd doc/latex; make gvar.pdf; mv gvar.pdf ..
 
 doc-zip doc.zip:
 	cd doc/html; zip -r doc *; mv doc.zip ../..
 
-doc-all: doc-html doc-pdf
+doc-all: doc-html # doc-pdf
 
 sdist: $(CYTHONFILES) # source distribution
 	$(PYTHON) setup.py sdist
@@ -105,7 +105,7 @@ upload-twine: $(CYTHONFILES)
 
 upload-git: $(CYTHONFILES)
 	echo  "version $(VERSION)"
-	make doc-html doc-pdf
+	make doc-html # doc-pdf
 	git diff --exit-code
 	git diff --cached --exit-code
 	git push origin master
