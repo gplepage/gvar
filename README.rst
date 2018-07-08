@@ -8,27 +8,24 @@ expressions/functions create new Gaussian random variables
 while automatically tracking statistical correlations between the new
 and old variables. This data type is useful for simple error propagation,
 but also is heavily used by the Bayesian least-squares fitting module
-lsqfit.py — to define priors and specify fit results, while accounting
+``lsqfit.py`` to define priors and specify fit results, while accounting
 for correlations between all variables. Documentation can is in the
-``doc/`` subdirectory (see ``doc/html/index.html``
-or look online at <https://gvar.readthedocs.io>).
+``doc/`` subdirectory: see ``doc/html/index.html``
+or look online at <https://gvar.readthedocs.io>.
 
-These packages use numpy for efficient array arithmetic, and cython
+These packages use ``numpy`` for efficient array arithmetic, and ``cython``
 to compile efficient code. ``gvar`` uses automatic differentiation to
 track covariances through arbitrary arithmetic.
 
 Information on how to install the components is in the ``INSTALLATION`` file.
 
-To test the libraries try ``make tests``. (Some tests involve random
-numbers and so may occasionally — less than 1 in 100 runs — fail due to
-rare multi-sigma fluctuations; rerun the tests if they do fail.) Some
+To test the libraries try ``make tests``. Some
 examples are give in the ``examples/`` subdirectory.
 
-Versioning: Version numbers for ``gvar`` are now (5.0 and later) based upon
-*semantic  versioning* (http://semver.org). Incompatible changes will be
-signaled by incrementing the major version number, where version numbers have
-the form major.minor.patch. The minor number signals new features, and the
-patch number bug fixes.
+``gvar`` version numbers have the form ``major.minor.patch`` where:
+incompatible changes are signaled by incrementing the ``major`` version
+number, the ``minor`` number signals new features, and the ``patch`` number
+signals bug fixes.
 
 | Created by G. Peter Lepage (Cornell University) 2008
 | Copyright (c) 2008-2018 G. Peter Lepage

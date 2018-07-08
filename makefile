@@ -119,6 +119,9 @@ test-download:
 	-$(PIP) uninstall gvar
 	$(PIP) install gvar --no-cache-dir
 
+test-readme:
+	python setup.py --long-description | rst2html.py > README.html
+
 clean:
 	rm -f -r build
 	rm -rf __pycache__

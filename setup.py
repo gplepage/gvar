@@ -71,6 +71,10 @@ packages = ["gvar"]
 package_dir = dict(gvar="src/gvar")
 package_data = dict(gvar=['../gvar.pxd', '_svec_smat.pxd', '_gvarcore.pxd'])
 
+# pypi
+with open('README.rst', 'r') as file:
+    long_description = file.read()
+
 setup(name='gvar',
     version=GVAR_VERSION,
     description='Utilities for manipulating correlated Gaussian random variables.',
@@ -88,22 +92,7 @@ setup(name='gvar',
     url="https://github.com/gplepage/gvar.git",
     license='GPLv3+',
     platforms='Any',
-    long_description="""\
-    This package facilitates the creation and manipulation of arbitrarily
-    complicated (correlated) multi-dimensional Gaussian random variables.
-    The random variables are represented by a new data type that can be used
-    in arithmetic expressions and pure Python functions. Such
-    expressions/functions create new Gaussian random variables
-    while automatically tracking statistical correlations between the new
-    and old variables. This data type is useful for simple error propagation
-    but also is heavily used by the Bayesian least-squares fitting module
-    lsqfit.py (to define priors and specify fit results, while accounting
-    for correlations between all variables).
-
-    This package uses numpy for efficient array arithmetic, and cython to
-    compile efficient core routines and interface code.
-    """
-    ,
+    long_description=long_description,
     classifiers = [                     #
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
