@@ -4,6 +4,8 @@ Version 8.4 2018-07-15
 - New functions eigh, svd, lstsq added to gvar.linalg. Also have a faster
   version of solve.
 
+- gvar.load and gvar.dump now work with yaml as well as with pickle and json.
+
 Version 8.3.7 2018-07-08
 ========================
 Bug fixes.

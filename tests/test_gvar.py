@@ -4,7 +4,7 @@
 test-gvar.py
 
 """
-# Copyright (c) 2012-17 G. Peter Lepage.
+# Copyright (c) 2012-18 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1419,7 +1419,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             {'a':'4(2)', 'b':[['5(5)', '6(9)']], (1,'2'):'7(8)'},
             ]:
             g1 = gvar(g)
-            dump(g1, 'outputfile.json', use_json=True)
+            dump(g1, 'outputfile.json', method='json')
             g3 = load('outputfile.json')
             if hasattr(g1, 'keys'):
                 for k in g1:
@@ -1431,7 +1431,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             else:
                 self.assertEqual(str(g1), str(g3))
                 self.assertEqual(str(evalcov(g1)), str(evalcov(g3)))
-            gstr = dumps(g1, use_json=True)
+            gstr = dumps(g1, method='json')
             g4 = loads(gstr)
             if hasattr(g1, 'keys'):
                 for k in g1:
@@ -1444,6 +1444,44 @@ class test_gvar2(unittest.TestCase,ArrayTests):
                 self.assertEqual(str(g1), str(g4))
                 self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
         os.remove('outputfile.json')
+
+    def test_yaml(self):
+        """ pickle strategies """
+        try:
+            import yaml
+        except ImportError:
+            return
+        for g in [
+            '1(5)',
+            [['2(1)'], ['3(2)']],
+            {'a':'4(2)', 'b':[['5(5)', '6(9)']], (1,'2'):'7(8)'},
+            ]:
+            g1 = gvar(g)
+            dump(g1, 'outputfile.yaml', method='yaml')
+            g3 = load('outputfile.yaml')
+            if hasattr(g1, 'keys'):
+                for k in g1:
+                    self.assertTrue(k in g3)
+                    self.assertEqual(str(g1[k]), str(g3[k]))
+                for k in g3:
+                    self.assertTrue(k in g1)
+                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g3.buf)))
+            else:
+                self.assertEqual(str(g1), str(g3))
+                self.assertEqual(str(evalcov(g1)), str(evalcov(g3)))
+            gstr = dumps(g1, method='yaml')
+            g4 = loads(gstr)
+            if hasattr(g1, 'keys'):
+                for k in g1:
+                    self.assertTrue(k in g4)
+                    self.assertEqual(str(g1[k]), str(g4[k]))
+                for k in g4:
+                    self.assertTrue(k in g1)
+                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g4.buf)))
+            else:
+                self.assertEqual(str(g1), str(g4))
+                self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
+        os.remove('outputfile.yaml')
 
     def test_gammaQ(self):
         " gammaQ(a, x) "

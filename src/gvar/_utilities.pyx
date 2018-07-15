@@ -24,6 +24,11 @@ import collections
 from math import lgamma
 
 try:
+    import yaml
+except ImportError:
+    yaml = None
+
+try:
     # python 2
     from StringIO import StringIO as _StringIO
     _BytesIO = _StringIO
@@ -580,72 +585,90 @@ def evalcov(g):
             ans[b,a] = ans[a,b]
     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
-def dump(g, outputfile, use_json=False):
+def dump(g, outputfile, method='pickle', use_json=False):
     """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
 
     The |GVar|\s are recovered using :func:`gvar.load`.
 
-    Unlike :mod:`pickle`, :mod:`json` can have trouble with dictionaries
-    whose keys are not strings. A workaround is used here that succeeds
-    provided ``eval(repr(k)) == k`` for every key ``k``, which is true for
-    strings and lots of other types of key. Use :mod:`pickle` where the
-    workaround fails.
+    Three serialization methods are available: :mod:`pickle`, mod:`json`,
+    and :mod:`yaml` (provided the :mod:`yaml` module is installed).
+
+    :mod:`json` can have trouble with dictionaries whose keys are not
+    strings. A workaround is used here that succeeds provided
+    ``eval(repr(k)) == k`` for every key ``k``, which is true for strings and
+    lots of other types of key. Use :mod:`pickle` where the workaround fails.
 
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
             are |GVar|\s and/or arrays of |GVar|\s.
         outputfile: The name of a file or a file object in which the
             serialized |GVar|\s are stored.
-        use_json (bool): Data are serialized using :mod:`pickle` if
-            ``False`` or :mod:`json` if ``True``.
+        method (str): Serialization method, which should be one of
+            ``['pickle', 'json', 'yaml']``.
     """
+    if use_json is True:  # for legacy code
+        method = 'json'
+    if yaml is None and method == 'yaml':
+        raise RuntimeError('yaml module not installed')
     if isinstance(outputfile, str):
-        with open(outputfile, 'w' if use_json else 'wb') as ofile:
-            return dump(g, ofile, use_json=use_json)
+        with open(outputfile, 'w' if method in ['json', 'yaml'] else 'wb') as ofile:
+            return dump(g, ofile, method=method)
     else:
         ofile = outputfile
-    if use_json:
+    if method in ['json', 'yaml']:
         if hasattr(g, 'keys'):
             if not isinstance(g, _gvar.BufferDict):
                 g = _gvar.BufferDict(g)
-            data = dict(
-                items=[
-                    (repr(k), d.tolist())
+            tag = method, 'dict'
+            gmean = [
+                    (repr(k) if method == 'json' else k, d.tolist())
                     for k,d in _gvar.mean(g).items()
-                    ],
-                cov=_gvar.evalcov(g.buf).tolist(),
-                )
+                    ]
+            gcov = _gvar.evalcov(g.buf).tolist()
         else:
-            data = (
-                numpy.array(_gvar.mean(g)).tolist(),
-                _gvar.evalcov(g).tolist()
-                )
-        return json.dump(data, ofile)
+            tag = method, 'array'
+            gmean = numpy.array(_gvar.mean(g)).tolist()
+            gcov = _gvar.evalcov(g).tolist()
+        data = dict(tag=tag, gmean=gmean, gcov=gcov)
+        return (
+            json.dump(data, ofile) if method == 'json' else
+            yaml.dump(data, ofile)
+            )
+    elif method == 'pickle':
+        pickle.dump(
+            dict(tag=('pickle', None), gmean=mean(g), gcov=evalcov(g)), ofile
+            )
     else:
-        pickle.dump((mean(g), evalcov(g)), ofile)
+        raise ValueError('unknown method: ' + str(method))
 
-def dumps(g, use_json=False):
+def dumps(g, method='pickle', use_json=False):
     """ Serialize a collection ``g`` of |GVar|\s into a string.
 
     The |GVar|\s are recovered using :func:`gvar.loads`.
 
-    Unlike :mod:`pickle`, :mod:`json` can have trouble with dictionaries
-    whose keys are not strings. A workaround is used here that succeeds
-    provided ``eval(repr(k)) == k`` for every key ``k``, which is true for
-    strings and lots of other types of key. Use :mod:`pickle` where the
-    workaround fails.
+    Three serialization methods are available: :mod:`pickle`, mod:`json`,
+    and :mod:`yaml` (provided the :mod:`yaml` module is installed).
+
+    :mod:`json` can have trouble with dictionaries whose keys are not
+    strings. A workaround is used here that succeeds provided
+    ``eval(repr(k)) == k`` for every key ``k``, which is true for strings and
+    lots of other types of key. Use :mod:`pickle` where the workaround fails.
 
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
             are |GVar|\s and/or arrays of |GVar|\s.
-        use_json (bool): Data are serialized using :mod:`pickle` if
-            ``False`` or :mod:`json` if ``True``.
+        method (str): Serialization method, which should be one of
+            ``['pickle', 'json', 'yaml']``.
     """
-    f = _StringIO() if use_json else _BytesIO()
-    dump(g, f, use_json=use_json)
+    if use_json is True:  # for legacy code
+        method = 'json'
+    if yaml is None and method == 'yaml':
+        raise RuntimeError('yaml module not installed')
+    f = _StringIO() if method in ['json', 'yaml'] else _BytesIO()
+    dump(g, f, method=method)
     return f.getvalue()
 
-def load(inputfile, use_json=None):
+def load(inputfile, method=None, use_json=None):
     """ Load and return serialized |GVar|\s from file ``inputfile``.
 
     This function recovers |GVar|\s pickled with :func:`gvar.dump`.
@@ -653,35 +676,59 @@ def load(inputfile, use_json=None):
     Args:
         inputfile: The name of the file or a file object in which the
             serialized |GVar|\s are stored.
-        use_json (bool): Data assumed serialized using :mod:`pickle` if
-            ``False`` or :mod:`json` if ``True``. If ``use_json=None``
-            (default) each of pickle and json is tried.
+        method (str or None): Serialization method, which should be one of
+            ``['pickle', 'json', 'yaml']``. If ``method=None``, then each
+            method is tried in turn.
 
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
-    if use_json is None:
+    if use_json is True: # for legacy code
+        method = 'json'
+    elif use_json is False:
+        method = 'pickle'
+    if method is None:
         try:
-            return load(inputfile, use_json=False)
+            return load(inputfile, method='pickle')
         except:
-            return load(inputfile, use_json=True)
+            pass
+        try:
+            return load(inputfile, method='json')
+        except:
+            pass
+        if yaml is not None:
+            try:
+                return load(inputfile, method='yaml')
+            except:
+                raise RuntimeError('cannot read in file')
+        else:
+            raise RuntimeError('cannot read in file')
+    if yaml is None and method == 'yaml':
+        raise RuntimeError('yaml module not installed')
     if isinstance(inputfile, str):
-        with open(inputfile, 'r' if use_json else 'rb') as ifile:
-            return load(ifile, use_json=use_json)
+        with open(inputfile, 'rb' if method == 'pickle' else 'r') as ifile:
+            return load(ifile, method=method)
     else:
         ifile = inputfile
-    if use_json:
-        data = json.load(ifile)
-        if hasattr(data, 'keys'):
-            ans = _gvar.BufferDict([(eval(k), d) for k, d in data['items']])
-            ans.buf = _gvar.gvar(ans._buf, data['cov'])
+    if method in ['json', 'yaml']:
+        data = json.load(ifile) if method == 'json' else yaml.load(ifile)
+        assert data['tag'][0] == method
+        if data['tag'][1] == 'dict':
+            if method == 'json':
+                data['gmean'] = [(eval(k, {}, {}), d) for k, d in data['gmean']]
+            ans = _gvar.BufferDict(data['gmean'])
+            ans.buf = _gvar.gvar(ans._buf, data['gcov'])
         else:
-            ans = _gvar.gvar(*data)  # need * with json since it doesn't have tuples
+            ans = _gvar.gvar(data['gmean'], data['gcov'])
+    elif method == 'pickle':
+        data = pickle.load(ifile)
+        assert data['tag'][0] == 'pickle'
+        ans = _gvar.gvar(data['gmean'], data['gcov'])
     else:
-        ans = _gvar.gvar(pickle.load(ifile))
+        raise ValueError('unknown method: ' + str(method))
     return ans
 
-def loads(inputstring, use_json=None):
+def loads(inputstring, method=None, use_json=None):
     """ Load and return serialized |GVar|\s from string ``inputstring``.
 
     This function recovers |GVar|\s pickled with :func:`gvar.dumps`.
@@ -696,13 +743,33 @@ def loads(inputstring, use_json=None):
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
-    if use_json is None:
+    if use_json is True: # for legacy code
+        method = 'json'
+    elif use_json is False:
+        method = 'pickle'
+    if method is None:
         try:
-            return loads(inputstring, use_json=False)
+            return loads(inputstring, method='pickle')
         except:
-            return loads(inputstring, use_json=True)
-    f = _StringIO(inputstring) if use_json else _BytesIO(inputstring)
-    return load(f, use_json=use_json)
+            pass
+        try:
+            return loads(inputstring, method='json')
+        except:
+            pass
+        if yaml is not None:
+            try:
+                return loads(inputstring, method='yaml')
+            except:
+                raise RuntimeError('cannot read string')
+        else:
+            raise RuntimeError('cannot read string')
+
+    f = (
+        _StringIO(inputstring) if method in ['json', 'yaml'] else
+        _BytesIO(inputstring)
+        )
+    return load(f, method=method)
+
 
 def disassemble(g):
     """ Disassemble collection ``g`` of |GVar|\s.
