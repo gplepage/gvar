@@ -3,7 +3,7 @@
 # remove extra # above for profiling
 
 # Created by Peter Lepage (Cornell University) on 2011-08-17.
-# Copyright (c) 2011-2017 G. Peter Lepage.
+# Copyright (c) 2011-2018 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -818,7 +818,9 @@ class GVarFactory:
                     x = numpy.asarray(args[0],numpy.float_)
                     xsdev = numpy.asarray(args[1],numpy.float_)
                 except (ValueError,TypeError):
-                    raise TypeError("Arguments must be numbers or arrays of numbers")
+                    raise TypeError(
+                        "arguments must be numbers or arrays of numbers"
+                        )
 
                 if len(x.shape)==0:
                     # single gvar from x and xsdev

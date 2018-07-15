@@ -14,7 +14,7 @@
 PIP = python -m pip
 PYTHON = python
 PYTHONVERSION = python`python -c 'import platform; print(platform.python_version())'`
-VERSION = `python -c 'import gvar; print gvar.__version__'`
+VERSION = `python -c 'import gvar; print (gvar.__version__)'`
 
 DOCFILES :=  $(shell ls doc/source/conf.py doc/source/*.{rst,png})
 SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})

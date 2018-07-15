@@ -414,7 +414,11 @@ def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
 
     # check derivatives
     for ai, di in zip(avgg, diff):
-        if not numpy.all(numpy.abs(di.der) < (numpy.abs(ai.der) * rtol + atol)):
+        # focus on large derivatives to avoid comparing noise to noise
+        ai_der = numpy.abs(ai.der)
+        di_der = numpy.abs(di.der)
+        idx = (ai_der > rtol * max(ai_der))
+        if not numpy.all(di_der[idx] < ai_der[idx] * rtol + atol):
             return False
     return True
 

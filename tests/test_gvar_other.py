@@ -1,4 +1,4 @@
-# Copyright (c) 2012-15 G. Peter Lepage.
+# Copyright (c) 2012-18 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -728,6 +728,8 @@ class test_linalg(unittest.TestCase, ArrayTests):
         self.assertTrue(gv.equivalent(m.dot(x), b))
 
     def test_eigvalsh(self):
+        " linalg.eigvalsh(a) "
+        # just eigenvalues
         m = gv.gvar([['2.1(1)', '0(0)'], ['0(0)', '0.5(3)']])
         th = 0.92
         cth = numpy.cos(th)
@@ -737,13 +739,64 @@ class test_linalg(unittest.TestCase, ArrayTests):
         val =  linalg.eigvalsh(mrot)
         self.assertTrue(gv.equivalent(val[0], m[1, 1]))
         self.assertTrue(gv.equivalent(val[1], m[0, 0]))
-        val, vec = linalg.eigvalsh(mrot, eigvec=True)
-        np.testing.assert_allclose(
-            gv.mean(mrot).dot(vec[:, 0]), val[0].mean * vec[:, 0]
-            )
-        np.testing.assert_allclose(
-            gv.mean(mrot).dot(vec[:, 1]), val[1].mean * vec[:, 1]
-            )
+
+    def test_eigh(self):
+        " linalg.eigh(a) "
+        m = gv.gvar([
+            ['2.0000001(1)', '0(0)', '0(0)'],
+            ['0(0)', '2.0(3)', '0(0)'],
+            ['0(0)', '0(0)', '5.0(2)']])
+        th = 0.92
+        cth = numpy.cos(th) * gv.gvar('1.0(1)')
+        sth = numpy.sin(th) * gv.gvar('1.0(1)')
+        u = numpy.array([[cth, sth], [-sth, cth]])
+        mrot = np.array(m)
+        mrot[:2, :2] = u.T.dot(m[:2, :2].dot(u))
+        mrot[-2:, -2:] = u.T.dot(mrot[-2:, -2:].dot(u))
+        val, vec = linalg.eigh(mrot)
+        self.assertTrue(gv.equivalent(
+            mrot.dot(vec[:, 0]), val[0] * vec[:, 0]
+            ))
+        self.assertTrue(gv.equivalent(
+            mrot.dot(vec[:, 1]), val[1] * vec[:, 1]
+            ))
+        # test against numpy
+        valnp, vecnp = np.linalg.eigh(gv.mean(mrot))
+        np.testing.assert_allclose(valnp, gv.mean(val))
+        np.testing.assert_allclose(vecnp, gv.mean(vec))
+
+
+    def test_svd(self):
+        " linalg.svd(a) "
+        def reassemble(u,s,vT):
+            ans = 0
+            for i in range(len(s)):
+                ans += u[:, i][:, None] * s[i] * vT[i, :][None, :]
+            return ans
+        aa = np.array([[1.,2.,3.], [2.5, 4., 5.], [3., 5., 6.]])
+        aa = self.make_random(aa)
+        for a in [aa, aa[:, :2], aa[:2, :], aa[:, :1], aa[:1, :]]:
+            u, s, vT = linalg.svd(a)
+            self.assertTrue(gv.equivalent(reassemble(u,s,vT), a))
+            # test against numpy
+            unp, snp, vTnp = np.linalg.svd(gv.mean(a), full_matrices=False)
+            np.testing.assert_allclose(unp, gv.mean(u))
+            np.testing.assert_allclose(vTnp, gv.mean(vT))
+            np.testing.assert_allclose(snp, gv.mean(s))
+
+    def test_lstsq(self):
+        " linalg.lstsq(a) "
+        x = np.arange(0.1, 1.1, .1)
+        y = self.make_random(2 + x, '1.0000(1)')
+        M = np.array([np.ones(len(x), float), x]).T
+        c, residual, rank, s = linalg.lstsq(M, y, extrainfo=True,rcond=0)
+        self.assertTrue(abs(c[0].mean - 2) < 5 * c[0].sdev)
+        self.assertTrue(abs(c[1].mean - 1) < 5 * c[1].sdev)
+        self.assertEqual(rank, 2)
+        # test against numpy
+        cnp, residual, rank, s = np.linalg.lstsq(M, gv.mean(y), rcond=None)
+        np.testing.assert_allclose(cnp, gv.mean(c))
+
 
 if __name__ == '__main__':
     unittest.main()

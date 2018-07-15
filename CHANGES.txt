@@ -1,3 +1,9 @@
+Version 8.4 2018-07-13
+======================
+
+- New functions eigh, svd, lstsq added to gvar.linalg. These are still
+  somewhat experimental.
+
 Version 8.3.7 2018-07-08
 ========================
 Bug fixes.
