@@ -49,15 +49,22 @@ Module :mod:`gvar.linalg` implements several methods for doing basic
 linear algebra with matrices whose elements can be either numbers or
 :class:`gvar.GVar`\s:
 
-.. automethod:: gvar.linalg.det
+.. automethod:: gvar.linalg.det(a)
 
-.. automethod:: gvar.linalg.slogdet
+.. automethod:: gvar.linalg.slogdet(a)
 
-.. automethod:: gvar.linalg.inv
+.. automethod:: gvar.linalg.inv(a)
 
-.. automethod:: gvar.linalg.solve
+.. automethod:: gvar.linalg.solve(a, b)
 
-.. automethod:: gvar.linalg.eigvalsh
+.. automethod:: gvar.linalg.lstsq(a, b, rcond=None, extrainfo=False)
+
+.. automethod:: gvar.linalg.eigvalsh(a, eigvec=False)
+
+.. automethod:: gvar.linalg.eigh(a, eigvec=True, rcond=None)
+
+.. automethod:: gvar.linalg.svd(a, b, compute_uv=True, rcond=None)
+
 
 
 .. module:: gvar.ode

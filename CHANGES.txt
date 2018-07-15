@@ -1,8 +1,8 @@
-Version 8.4 2018-07-13
+Version 8.4 2018-07-15
 ======================
 
-- New functions eigh, svd, lstsq added to gvar.linalg. These are still
-  somewhat experimental.
+- New functions eigh, svd, lstsq added to gvar.linalg. Also have a faster
+  version of solve.
 
 Version 8.3.7 2018-07-08
 ========================
