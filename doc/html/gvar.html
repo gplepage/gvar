@@ -549,11 +549,12 @@ must agree with each other. Default is <code class="docutils literal notranslate
 <code class="descclassname">gvar.</code><code class="descname">dump</code><span class="sig-paren">(</span><em>g</em>, <em>outputfile</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialize a collection <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s into file <code class="docutils literal notranslate"><span class="pre">outputfile</span></code>.</p>
 <p>The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are recovered using <a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.load()</span></code></a>.</p>
-<p>Unlike <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> can have trouble with dictionaries
-whose keys are not strings. A workaround is used here that succeeds
-provided <code class="docutils literal notranslate"><span class="pre">eval(repr(k))</span> <span class="pre">==</span> <span class="pre">k</span></code> for every key <code class="docutils literal notranslate"><span class="pre">k</span></code>, which is true for
-strings and lots of other types of key. Use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> where the
-workaround fails.</p>
+<p>Three serialization methods are available: <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code>,
+and <code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code> (provided the <code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code> module is installed).</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> can have trouble with dictionaries whose keys are not
+strings. A workaround is used here that succeeds provided
+<code class="docutils literal notranslate"><span class="pre">eval(repr(k))</span> <span class="pre">==</span> <span class="pre">k</span></code> for every key <code class="docutils literal notranslate"><span class="pre">k</span></code>, which is true for strings and
+lots of other types of key. Use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> where the workaround fails.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -563,8 +564,8 @@ workaround fails.</p>
 are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><strong>outputfile</strong> – The name of a file or a file object in which the
 serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are stored.</li>
-<li><strong>use_json</strong> (<em>bool</em>) – Data are serialized using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> if
-<code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> if <code class="docutils literal notranslate"><span class="pre">True</span></code>.</li>
+<li><strong>method</strong> (<em>str</em>) – Serialization method, which should be one of
+<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -577,11 +578,12 @@ serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><co
 <code class="descclassname">gvar.</code><code class="descname">dumps</code><span class="sig-paren">(</span><em>g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dumps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serialize a collection <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s into a string.</p>
 <p>The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are recovered using <a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.loads()</span></code></a>.</p>
-<p>Unlike <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> can have trouble with dictionaries
-whose keys are not strings. A workaround is used here that succeeds
-provided <code class="docutils literal notranslate"><span class="pre">eval(repr(k))</span> <span class="pre">==</span> <span class="pre">k</span></code> for every key <code class="docutils literal notranslate"><span class="pre">k</span></code>, which is true for
-strings and lots of other types of key. Use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> where the
-workaround fails.</p>
+<p>Three serialization methods are available: <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code>,
+and <code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code> (provided the <code class="xref py py-mod docutils literal notranslate"><span class="pre">yaml</span></code> module is installed).</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> can have trouble with dictionaries whose keys are not
+strings. A workaround is used here that succeeds provided
+<code class="docutils literal notranslate"><span class="pre">eval(repr(k))</span> <span class="pre">==</span> <span class="pre">k</span></code> for every key <code class="docutils literal notranslate"><span class="pre">k</span></code>, which is true for strings and
+lots of other types of key. Use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> where the workaround fails.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -589,8 +591,8 @@ workaround fails.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
 are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>use_json</strong> (<em>bool</em>) – Data are serialized using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> if
-<code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> if <code class="docutils literal notranslate"><span class="pre">True</span></code>.</li>
+<li><strong>method</strong> (<em>str</em>) – Serialization method, which should be one of
+<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -610,9 +612,9 @@ are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code clas
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>inputfile</strong> – The name of the file or a file object in which the
 serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are stored.</li>
-<li><strong>use_json</strong> (<em>bool</em>) – Data assumed serialized using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> if
-<code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> if <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">use_json=None</span></code>
-(default) each of pickle and json is tried.</li>
+<li><strong>method</strong> (<em>str</em><em> or </em><em>None</em>) – Serialization method, which should be one of
+<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. If <code class="docutils literal notranslate"><span class="pre">method=None</span></code>, then each
+method is tried in turn.</li>
 </ul>
 </td>
 </tr>
@@ -635,9 +637,9 @@ serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><co
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>inputstring</strong> – A string containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s serialized using
 <a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dumps()</span></code></a>.</li>
-<li><strong>use_json</strong> (<em>bool</em>) – Data assumed serialized using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> if
-<code class="docutils literal notranslate"><span class="pre">False</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> if <code class="docutils literal notranslate"><span class="pre">True</span></code>. If <code class="docutils literal notranslate"><span class="pre">use_json=None</span></code>
-(default) each of pickle and json is tried.</li>
+<li><strong>method</strong> (<em>str</em><em> or </em><em>None</em>) – Serialization method, which should be one of
+<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. If <code class="docutils literal notranslate"><span class="pre">method=None</span></code>, then each
+method is tried in turn.</li>
 </ul>
 </td>
 </tr>

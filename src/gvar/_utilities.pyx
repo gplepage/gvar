@@ -590,7 +590,7 @@ def dump(g, outputfile, method='pickle', use_json=False):
 
     The |GVar|\s are recovered using :func:`gvar.load`.
 
-    Three serialization methods are available: :mod:`pickle`, mod:`json`,
+    Three serialization methods are available: :mod:`pickle`, :mod:`json`,
     and :mod:`yaml` (provided the :mod:`yaml` module is installed).
 
     :mod:`json` can have trouble with dictionaries whose keys are not
@@ -604,7 +604,7 @@ def dump(g, outputfile, method='pickle', use_json=False):
         outputfile: The name of a file or a file object in which the
             serialized |GVar|\s are stored.
         method (str): Serialization method, which should be one of
-            ``['pickle', 'json', 'yaml']``.
+            ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.
     """
     if use_json is True:  # for legacy code
         method = 'json'
@@ -646,7 +646,7 @@ def dumps(g, method='pickle', use_json=False):
 
     The |GVar|\s are recovered using :func:`gvar.loads`.
 
-    Three serialization methods are available: :mod:`pickle`, mod:`json`,
+    Three serialization methods are available: :mod:`pickle`, :mod:`json`,
     and :mod:`yaml` (provided the :mod:`yaml` module is installed).
 
     :mod:`json` can have trouble with dictionaries whose keys are not
@@ -658,7 +658,7 @@ def dumps(g, method='pickle', use_json=False):
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
             are |GVar|\s and/or arrays of |GVar|\s.
         method (str): Serialization method, which should be one of
-            ``['pickle', 'json', 'yaml']``.
+            ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.
     """
     if use_json is True:  # for legacy code
         method = 'json'
@@ -736,10 +736,9 @@ def loads(inputstring, method=None, use_json=None):
     Args:
         inputstring: A string containing |GVar|\s serialized using
             :func:`gvar.dumps`.
-        use_json (bool): Data assumed serialized using :mod:`pickle` if
-            ``False`` or :mod:`json` if ``True``. If ``use_json=None``
-            (default) each of pickle and json is tried.
-
+        method (str or None): Serialization method, which should be one of
+            ``['pickle', 'json', 'yaml']``. If ``method=None``, then each
+            method is tried in turn.
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
