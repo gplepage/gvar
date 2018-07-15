@@ -125,7 +125,6 @@ from ._bufferdict import ExtendedDict, trim_redundant_keys
 from ._bufferdict import del_parameter_distribution, add_parameter_distribution
 from ._bufferdict import add_parameter_parentheses, nonredundant_keys
 from ._utilities import *
-from ._version import version as __version__
 
 from . import dataset
 from . import ode
