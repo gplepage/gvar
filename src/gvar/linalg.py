@@ -224,8 +224,15 @@ def svd(a, compute_uv=True, rcond=None):
         return s
 
 
-def lstsq(a, b, rcond=None, extrainfo=False):
-    """ Least squares solution ``x`` to ``a @ x = b`` for |GVar|\s.
+def lstsq(a, b, rcond=None, weighted=False, extrainfo=False):
+    """ Least-squares solution ``x`` to ``a @ x = b`` for |GVar|\s.
+
+    Here ``x`` is defined to be the solution that minimizes ``||b - a @ x||``.
+    If ``b`` has a covariance matrix, another option is to weight the
+    norm with the inverse covariance matrix: i.e., minimize
+    ``|| isig @ b - isig @ a @ x||`` where ``isig`` is the square root of the
+    inverse of ``b``'s covariance matrix. Set parameter ``weighted=True`` to
+    obtain the weighted-least-squares solution.
 
     Args:
         a : Matrix/array of shape ``(M,N)`` containing numbers and/or |GVar|\s.
@@ -233,6 +240,8 @@ def lstsq(a, b, rcond=None, extrainfo=False):
         rcond (float): Cutoff for singular values of ``a``. Singular values
             smaller than ``rcond`` times the maximum eigenvalue are ignored.
             Default (``rcond=None``) is ``max(M,N)`` times machine precision.
+        weighted (bool): If ``True``, use weighted least squares; otherwise
+            use unweighted least squares.
         extrainfo (bool): If ``False`` (default) only ``x`` is returned;
             otherwise ``(x, residual, rank, s)`` is returned.
     Returns:
@@ -254,20 +263,32 @@ def lstsq(a, b, rcond=None, extrainfo=False):
             )
     if rcond is None:
         rcond = numpy.finfo(float).eps * max(a.shape)
-    ata = a.T.dot(a)
-    atb = a.T.dot(b)
+    if weighted:
+        try:
+            cov = gvar.evalcov(b)
+        except ValueError:
+            raise ValueError('b does not have a covariance matrix')
+        try:
+            icov = numpy.linalg.inv(cov)
+        except numpy.linalg.LinAlgError:
+            raise ValueError("b's covariance matrix cannot be inverted")
+        ata = a.T.dot(icov.dot(a))
+        atb = a.T.dot(icov.dot(b))
+    else:
+        ata = a.T.dot(a)
+        atb = a.T.dot(b)
     val, vec = gvar.linalg.eigh(ata)
-    maxval = numpy.max(numpy.fabs(gvar.mean(val)))
+    maxval = numpy.max(gvar.mean(val))  # N.B. val > 0 required
     ans = 0
     for i in range(len(val)):
-        if abs(gvar.mean(val[i])) < rcond * maxval:
-            # val[i] *= 0
+        if gvar.mean(val[i]) < rcond * maxval:
             continue
         ans += vec[:, i] * vec[:, i].dot(atb) / val[i]
     if not extrainfo:
         return ans
-    val = val[numpy.fabs(val) >= rcond * maxval]
-    residual = numpy.sum((a.dot(ans) - b) ** 2)
+    val = val[val >= rcond * maxval] ** 0.5
+    d = a.dot(ans) - b
+    residual = d.dot(icov.dot(d)) if weighted else d.dot(d)
     k = len(val)
     return ans, residual, k, val
 

@@ -567,7 +567,10 @@ def evalcov(g):
     g = g.flat
     ng = len(g)
     ans = numpy.zeros((ng,ng),numpy.float_)
-    cov = g[0].cov
+    if hasattr(g[0], 'cov'):
+        cov = g[0].cov
+    else:
+        raise ValueError("g does not contain GVar's")
     nc = cov.nrow # len(cov.rowlist)
     imask = numpy.zeros(nc, numpy.int8)
     for a in range(ng):

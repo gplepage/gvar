@@ -787,15 +787,20 @@ class test_linalg(unittest.TestCase, ArrayTests):
     def test_lstsq(self):
         " linalg.lstsq(a) "
         x = np.arange(0.1, 1.1, .1)
-        y = self.make_random(2 + x, '1.0000(1)')
+        y = self.make_random(2 + x, '1.00(1)') * gv.gvar('1.00(1)')
+        x = self.make_random(x, '1.00(1)')
         M = np.array([np.ones(len(x), float), x]).T
-        c, residual, rank, s = linalg.lstsq(M, y, extrainfo=True,rcond=0)
+        c = linalg.lstsq(M, y, extrainfo=False, rcond=0, weighted=True)
+        self.assertTrue(abs(c[0].mean - 2) < 5 * c[0].sdev)
+        self.assertTrue(abs(c[1].mean - 1) < 5 * c[1].sdev)
+        c, residual, rank, s = linalg.lstsq(M, y, extrainfo=True,rcond=0, weighted=False)
         self.assertTrue(abs(c[0].mean - 2) < 5 * c[0].sdev)
         self.assertTrue(abs(c[1].mean - 1) < 5 * c[1].sdev)
         self.assertEqual(rank, 2)
         # test against numpy
-        cnp, residual, rank, s = np.linalg.lstsq(M, gv.mean(y), rcond=None)
+        cnp, residual, rank, s = np.linalg.lstsq(gv.mean(M), gv.mean(y), rcond=None)
         np.testing.assert_allclose(cnp, gv.mean(c))
+
 
 
 if __name__ == '__main__':
