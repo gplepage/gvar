@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Numerical Analysis Modules in gvar &#8212; gvar 8.4 documentation</title>
+    <title>Numerical Analysis Modules in gvar &#8212; gvar 8.5 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -301,7 +301,13 @@ to <code class="docutils literal notranslate"><span class="pre">inv(a).dot(b)</s
 <dl class="method">
 <dt id="gvar.linalg.lstsq">
 <code class="descclassname">linalg.</code><code class="descname">lstsq</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>rcond=None</em>, <em>extrainfo=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.lstsq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Least squares solution <code class="docutils literal notranslate"><span class="pre">x</span></code> to <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">b</span></code> for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<dd><p>Least-squares solution <code class="docutils literal notranslate"><span class="pre">x</span></code> to <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">b</span></code> for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>Here <code class="docutils literal notranslate"><span class="pre">x</span></code> is defined to be the solution that minimizes <code class="docutils literal notranslate"><span class="pre">||b</span> <span class="pre">-</span> <span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x||</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">b</span></code> has a covariance matrix, another option is to weight the
+norm with the inverse covariance matrix: i.e., minimize
+<code class="docutils literal notranslate"><span class="pre">||</span> <span class="pre">isig</span> <span class="pre">&#64;</span> <span class="pre">b</span> <span class="pre">-</span> <span class="pre">isig</span> <span class="pre">&#64;</span> <span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x||</span></code> where <code class="docutils literal notranslate"><span class="pre">isig</span></code> is the square root of the
+inverse of <code class="docutils literal notranslate"><span class="pre">b</span></code>’s covariance matrix. Set parameter <code class="docutils literal notranslate"><span class="pre">weighted=True</span></code> to
+obtain the weighted-least-squares solution.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -312,6 +318,8 @@ to <code class="docutils literal notranslate"><span class="pre">inv(a).dot(b)</s
 <li><strong>rcond</strong> (<em>float</em>) – Cutoff for singular values of <code class="docutils literal notranslate"><span class="pre">a</span></code>. Singular values
 smaller than <code class="docutils literal notranslate"><span class="pre">rcond</span></code> times the maximum eigenvalue are ignored.
 Default (<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code>) is <code class="docutils literal notranslate"><span class="pre">max(M,N)</span></code> times machine precision.</li>
+<li><strong>weighted</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use weighted least squares; otherwise
+use unweighted least squares.</li>
 <li><strong>extrainfo</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default) only <code class="docutils literal notranslate"><span class="pre">x</span></code> is returned;
 otherwise <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">residual,</span> <span class="pre">rank,</span> <span class="pre">s)</span></code> is returned.</li>
 </ul>
@@ -1212,7 +1220,7 @@ after <code class="docutils literal notranslate"><span class="pre">maxit</span><
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

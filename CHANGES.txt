@@ -1,5 +1,5 @@
-Version 8.5
-=============
+Version 8.5 2018-07-21
+======================
 Very minor enhancement.
 
 - gvar.linalg.lstsq now supports both weighted and unweighted least squares
