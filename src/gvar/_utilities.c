@@ -1283,7 +1283,7 @@ struct __pyx_obj_4gvar_9_gvarcore_GVar {
 /* "gvar/_utilities.pyx":1043
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -1343,7 +1343,7 @@ struct __pyx_obj_4gvar_10_utilities___pyx_scope_struct_2_genexpr {
 /* "gvar/_utilities.pyx":1092
  *     raise StopIteration
  * 
- * def raniter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -3562,7 +3562,7 @@ static PyObject *__pyx_float_0_5;
 static PyObject *__pyx_float_1_0;
 static PyObject *__pyx_float_100_;
 static PyObject *__pyx_float_0_001;
-static PyObject *__pyx_float_1eneg_15;
+static PyObject *__pyx_float_1eneg_12;
 static PyObject *__pyx_float_neg_0_5;
 static PyObject *__pyx_int_0;
 static PyObject *__pyx_int_1;
@@ -24927,7 +24927,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_48generator(__pyx_CoroutineObject *
 /* "gvar/_utilities.pyx":1043
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -24947,7 +24947,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_47bootstrap_iter(PyObject *__pyx_se
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_svdcut,0};
     PyObject* values[3] = {0,0,0};
     values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)__pyx_float_1eneg_15);
+    values[2] = ((PyObject *)__pyx_float_1eneg_12);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -25439,7 +25439,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_14bootstrap_iter_5generator3(__pyx_
 /* "gvar/_utilities.pyx":1043
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -26233,7 +26233,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_48generator(__pyx_CoroutineObject *
  *             yield buf.reshape(g.shape)
  *     raise StopIteration             # <<<<<<<<<<<<<<
  * 
- * def raniter(g, n=None, svdcut=1e-15):
+ * def raniter(g, n=None, svdcut=1e-12):
  */
   __Pyx_Raise(__pyx_builtin_StopIteration, 0, 0, 0);
   __PYX_ERR(0, 1090, __pyx_L1_error)
@@ -26242,7 +26242,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_48generator(__pyx_CoroutineObject *
   /* "gvar/_utilities.pyx":1043
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -26267,7 +26267,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_51generator1(__pyx_CoroutineObject 
 /* "gvar/_utilities.pyx":1092
  *     raise StopIteration
  * 
- * def raniter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -26287,7 +26287,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_50raniter(PyObject *__pyx_self, PyO
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_svdcut,0};
     PyObject* values[3] = {0,0,0};
     values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)__pyx_float_1eneg_15);
+    values[2] = ((PyObject *)__pyx_float_1eneg_12);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -26779,7 +26779,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_7raniter_5generator5(__pyx_Coroutin
 /* "gvar/_utilities.pyx":1092
  *     raise StopIteration
  * 
- * def raniter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -27625,7 +27625,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_51generator1(__pyx_CoroutineObject 
   /* "gvar/_utilities.pyx":1092
  *     raise StopIteration
  * 
- * def raniter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -50327,7 +50327,7 @@ static int __Pyx_InitCachedConstants(void) {
   /* "gvar/_utilities.pyx":1043
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -50339,7 +50339,7 @@ static int __Pyx_InitCachedConstants(void) {
   /* "gvar/_utilities.pyx":1092
  *     raise StopIteration
  * 
- * def raniter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -50510,7 +50510,7 @@ static int __Pyx_InitGlobals(void) {
   __pyx_float_1_0 = PyFloat_FromDouble(1.0); if (unlikely(!__pyx_float_1_0)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_100_ = PyFloat_FromDouble(100.); if (unlikely(!__pyx_float_100_)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_0_001 = PyFloat_FromDouble(0.001); if (unlikely(!__pyx_float_0_001)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_float_1eneg_15 = PyFloat_FromDouble(1e-15); if (unlikely(!__pyx_float_1eneg_15)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_float_1eneg_12 = PyFloat_FromDouble(1e-12); if (unlikely(!__pyx_float_1eneg_12)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_float_neg_0_5 = PyFloat_FromDouble(-0.5); if (unlikely(!__pyx_float_neg_0_5)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_0 = PyInt_FromLong(0); if (unlikely(!__pyx_int_0)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -51574,7 +51574,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_utilities.pyx":1043
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -51586,7 +51586,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_utilities.pyx":1092
  *     raise StopIteration
  * 
- * def raniter(g, n=None, svdcut=1e-15):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */

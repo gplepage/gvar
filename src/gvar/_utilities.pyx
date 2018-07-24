@@ -1040,7 +1040,7 @@ def fmt_errorbudget(
     return ans
 
 # bootstrap_iter, raniter, svd, valder
-def bootstrap_iter(g, n=None, svdcut=1e-15):
+def bootstrap_iter(g, n=None, svdcut=1e-12):
     """ Return iterator for bootstrap copies of ``g``.
 
     The gaussian variables (|GVar| objects) in array (or dictionary) ``g``
@@ -1089,7 +1089,7 @@ def bootstrap_iter(g, n=None, svdcut=1e-15):
             yield buf.reshape(g.shape)
     raise StopIteration
 
-def raniter(g, n=None, svdcut=1e-15):
+def raniter(g, n=None, svdcut=1e-12):
     """ Return iterator for random samples from distribution ``g``
 
     The gaussian variables (|GVar| objects) in array (or dictionary) ``g``

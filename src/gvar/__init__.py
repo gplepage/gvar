@@ -204,7 +204,7 @@ def gvar_factory(cov=None):
     """
     return GVarFactory(cov)
 
-def chi2(g1, g2=None, svdcut=1e-15, nocorr=False, fmt=False):
+def chi2(g1, g2=None, svdcut=1e-12, nocorr=False):
     """ Compute chi**2 of ``g1-g2``.
 
     ``chi**2`` is a measure of whether the multi-dimensional
@@ -255,6 +255,13 @@ def chi2(g1, g2=None, svdcut=1e-15, nocorr=False, fmt=False):
 
     # leaving nocorr (turn off correlations) undocumented because I
     #   suspect I will remove it
+    if hasattr(g1, 'keys') and isinstance(g1, ExtendedDict):
+        g1 = trim_redundant_keys(g1)
+        if hasattr(g2, 'keys'):
+            g2 = trim_redundant_keys(g2)
+    elif hasattr(g2, 'keys') and isinstance(g2, ExtendedDict):
+        g1 = trim_redundant_keys(g1)
+        g2 = trim_redundant_keys(g2)
     if g2 is None:
         diff = BufferDict(g1).buf if hasattr(g1, 'keys') else numpy.asarray(g1).flatten()
     elif hasattr(g1, 'keys') and hasattr(g2, 'keys'):
@@ -438,7 +445,7 @@ def fmt_chi2(f):
         chi2_dof = f.chi2 / f.dof if f.dof != 0 else 0
         return fmt % (chi2_dof, f.dof, f.Q)
 
-def svd(g, svdcut=1e-15, wgts=False):
+def svd(g, svdcut=1e-12, wgts=False):
     """ Apply svd cuts to collection of |GVar|\s in ``g``.
 
     Standard usage is, for example, ::
@@ -830,7 +837,7 @@ class PDF(object):
             Setting ``svdcut=None`` or ``svdcut=0`` leaves the
             covariance matrix unchanged. Default is ``1e-15``.
     """
-    def __init__(self, g, svdcut=1e-15):
+    def __init__(self, g, svdcut=1e-12):
         self.extend = False
         if hasattr(g, 'keys'):
             # g is a dict

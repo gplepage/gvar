@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 8.5 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 8.5.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.5.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -456,7 +456,7 @@ of <code class="docutils literal notranslate"><span class="pre">g1</span></code>
 
 <dl class="function">
 <dt id="gvar.chi2">
-<code class="descclassname">gvar.</code><code class="descname">chi2</code><span class="sig-paren">(</span><em>g1</em>, <em>g2</em>, <em>svdcut=1e-15</em>, <em>fmt=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.chi2" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">chi2</code><span class="sig-paren">(</span><em>g1</em>, <em>g2</em>, <em>svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.chi2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute chi**2 of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">chi**2</span></code> is a measure of whether the multi-dimensional
 Gaussian distributions <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> (dictionaries or arrays)
@@ -887,7 +887,7 @@ in <code class="docutils literal notranslate"><span class="pre">outputs</span></
 of a set of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s:</p>
 <dl class="function">
 <dt id="gvar.svd">
-<code class="descclassname">gvar.</code><code class="descname">svd</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-15</em>, <em>wgts=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.svd" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">svd</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-12</em>, <em>wgts=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.svd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply svd cuts to collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>Standard usage is, for example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svdcut</span> <span class="o">=</span> <span class="o">...</span>
@@ -1574,7 +1574,7 @@ module (for multi-dimensional integration) and class
 <code class="xref py py-class docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code>. Related classes are:</p>
 <dl class="class">
 <dt id="gvar.PDF">
-<em class="property">class </em><code class="descclassname">gvar.</code><code class="descname">PDF</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-15</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">gvar.</code><code class="descname">PDF</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Probability density function (PDF) for <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>Given an array or dictionary <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal notranslate"><span class="pre">pdf=PDF(g)</span></code> is
 the probability density function for the (usually correlated)
@@ -1937,7 +1937,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 8.5.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

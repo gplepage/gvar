@@ -1,3 +1,11 @@
+Version 8.5.1 2018-07-21
+========================
+Very minor fixes.
+
+- Small improvement to gvar.chi2(...).
+
+- Default svdcut changed to 1e-12 everywhere.
+
 Version 8.5 2018-07-21
 ======================
 Very minor enhancement.

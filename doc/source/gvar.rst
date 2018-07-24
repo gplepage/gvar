@@ -136,7 +136,7 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.uncorrelated(g1, g2)
 
-.. autofunction:: gvar.chi2(g1, g2, svdcut=1e-15, fmt=False)
+.. autofunction:: gvar.chi2(g1, g2, svdcut=1e-12)
 
 .. autofunction:: gvar.fmt_chi2(f)
 
@@ -333,7 +333,7 @@ collections of |GVar|\s can be evaluated using the :mod:`vegas`
 module (for multi-dimensional integration) and class
 :class:`vegas.PDFIntegrator`. Related classes are:
 
-.. autoclass:: gvar.PDF(g, svdcut=1e-15)
+.. autoclass:: gvar.PDF(g, svdcut=1e-12)
 
 .. autoclass:: gvar.PDFStatistics(moments=None, histogram=None)
 
