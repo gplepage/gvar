@@ -1376,17 +1376,6 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(ans.dof, 2)
         self.assertAlmostEqual(ans.Q, 0.81873075, places=2)
 
-        # ExtendedDict
-        g1 = ExtendedDict(gv.gvar({'log(a)':'2(1)', 'b':'1.5(1)'}))
-        g2 = gv.gvar({'log(a)':'2(1)', 'b':'1.5(1)', 'a':'100(1)'})
-        self.assertEqual(chi2(g1, g2), 0.0)
-        g1 = BufferDict(g1)
-        self.assertNotEqual(chi2(g1, g2), 0.0)
-        g3 = ExtendedDict(gv.gvar({'log(a)':'0(1)', 'b':'0(1)'}))
-        self.assertEqual(chi2(g3), 0.0)
-        g3 = BufferDict(g3)
-        self.assertNotEqual(chi2(g3), 0.0)
-
     def test_corr(self):
         """ rebuild (corr!=0) """
         a = gvar([1., 2.], [3., 4.])

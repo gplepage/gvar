@@ -27,103 +27,62 @@ except ImportError:
     from io import StringIO as _StringIO
 import gvar as _gvar
 
+try:
+    from collections import MutableMapping as collections_MMapping
+except ImportError:
+    from collections.abc import MutableMapping as collections_MMapping
+
 BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])
 """ Data type for BufferDict._data[k]. Note shape==() implies a scalar. """
 
-class BufferDict(collections.OrderedDict):
-    """ Ordered dictionary whose data are packed into a 1-d buffer (numpy.array).
+class BufferDict(collections_MMapping):
+    """ Ordered dictionary whose data are packed into a 1-d buffer.
 
-    A |BufferDict| object is an ordered dictionary whose values must
-    either be scalars or arrays (like :mod:`numpy` arrays, with arbitrary
-    shapes). The scalars and arrays are assembled into different parts of a
-    single one-dimensional buffer. The various scalars and arrays are
-    retrieved using keys: *e.g.*,
+    |BufferDict|\s can be created in the usual way dictionaries are created::
 
-        >>> a = BufferDict()
-        >>> a['scalar'] = 0.0
-        >>> a['vector'] = [1.,2.]
-        >>> a['tensor'] = [[3.,4.],[5.,6.]]
-        >>> print(a.flatten())              # print a's buffer
-        [ 0.  1.  2.  3.  4.  5.  6.]
-        >>> for k in a:                     # iterate over keys in a
-        ...     print(k,a[k])
-        scalar 0.0
-        vector [ 1.  2.]
-        tensor [[ 3.  4.]
-         [ 5.  6.]]
-        >>> a['vector'] = a['vector']*10    # change the 'vector' part of a
-        >>> print(a.flatten())
-        [  0.  10.  20.   3.   4.   5.   6.]
+        >>> b = BufferDict()
+        >>> b['a'] = 1.
+        >>> b['b'] = 2
+        >>> print(b)
+        {'a': 1.0,'b':2.0}
+        >>> b = BufferDict(a=1., b=2.)
+        >>> b = BufferDict([('a',1.), ('b',2.)])
 
-    The first four lines here could have been collapsed to one statement::
+    They can also be created from other dictionaries or |BufferDict|\s::
 
-        a = BufferDict(scalar=0.0,vector=[1.,2.],tensor=[[3.,4.],[5.,6.]])
+        >>> c = BufferDict(b)
+        >>> print(c)
+        {'a': 1.0,'b': 2.0}
+        >>> c = BufferDict(b, keys=['b'])
+        >>> print(c)
+        {'b': 2.0}
 
-    or ::
+    The values in a |BufferDict| are scalars or arrays of a scalar type
+    (|GVar|, ``float``, ``int``, etc.). The data type is normally inferred
+    (dynamically) from the data itself, but can be specified when
+    creating the |BufferDict| from another dictionary or list,
+    using keyword ``dtype``::
 
-        a = BufferDict([('scalar',0.0),('vector',[1.,2.]),
-                        ('tensor',[[3.,4.],[5.,6.]])])
+        >>> b = BufferDict(dict(a=1.2), dtype=int)
+        >>> print(b, b.dtype)
+        {'a': 1} int64
 
-    where in the second case the order of the keys is preserved in ``a``
-    (since ``BufferDict`` is an ordered dictionary).
+    Finally a |BufferDict| can be cloned from another one but with
+    a different buffer (containing different values)::
 
-    The keys and associated shapes in a |BufferDict| can be transferred to a
-    different buffer, creating a new |BufferDict|: *e.g.*, using ``a`` from
-    above,
-
-        >>> buf = numpy.array([0.,10.,20.,30.,40.,50.,60.])
-        >>> b = BufferDict(a, buf=buf)          # clone a but with new buffer
-        >>> print(b['tensor'])
-        [[ 30.  40.]
-         [ 50.  60.]]
-        >>> b['scalar'] += 1
-        >>> print(buf)
-        [  1.  10.  20.  30.  40.  50.  60.]
-
-    Note how ``b`` references ``buf`` and can modify it. One can also
-    replace the buffer in the original |BufferDict| using, for example,
-    ``a.buf = buf``:
-
-        >>> a.buf = buf
-        >>> print(a['tensor'])
-        [[ 30.  40.]
-         [ 50.  60.]]
-        >>> a['tensor'] *= 10.
-        >>> print(buf)
-        [  1.  10.  20.  300.  400.  500.  600.]
-
-    ``a.buf`` is the numpy array used for ``a``'s buffer. It can be used to
-    access and change the buffer directly. In ``a.buf = buf``, the new
-    buffer ``buf`` must be a :mod:`numpy` array of the correct shape. The
-    buffer can also be accessed through iterator ``a.flat`` (in analogy
-    with :mod:`numpy` arrays), and through ``a.flatten()`` which returns a
-    copy of the buffer.
-
-    When creating a |BufferDict| from a dictionary (or another |BufferDict|),
-    the keys included and their order can be specified using a list of keys:
-    for example, ::
-
-        >>> d = dict(a=0.0,b=[1.,2.],c=[[3.,4.],[5.,6.]],d=None)
-        >>> print(d)
-        {'a': 0.0, 'c': [[3.0, 4.0], [5.0, 6.0]], 'b': [1.0, 2.0], 'd': None}
-        >>> a = BufferDict(d, keys=['d', 'b', 'a'])
-        >>> for k in a:
-        ...     print(k, a[k])
-        d None
-        b [1.0 2.0]
-        a 0.0
-
-    A |BufferDict| functions like a dictionary except: a) items cannot be
-    deleted once inserted; b) all values must be either scalars or arrays
-    of scalars, where the scalars can be any noniterable type that works
-    with :mod:`numpy` arrays; and c) any new value assigned to an existing
-    key must have the same size and shape as the original value.
-
-    Note that |BufferDict|\s can be pickled and unpickled even when they
-    store |GVar|\s (which themselves cannot be pickled separately).
+        >>> b = BufferDict(a=1., b=2.)
+        >>> c = BufferDict(b, buf=[10, 20])
+        >>> print(c)
+        {'a': 10,'b': 20}
     """
+
+    extension_pattern = re.compile('^([^()]+)\((.+)\)$')
+    extension_fcn = {}
+
     def __init__(self, *args, **kargs):
-        super(BufferDict, self).__init__()
+        # super(BufferDict, self).__init__()
+        self._odict = collections.OrderedDict()
+        self._extension = {}
         self.shape = None
         if len(args)==0:
             # kargs are dictionary entries
@@ -157,9 +116,7 @@ class BufferDict(collections.OrderedDict):
                 # make copy of BufferDict bd, possibly with new buffer
                 # copy keys, slices and shapes
                 for k in bd:
-                    super(BufferDict, self).__setitem__(
-                        k, super(BufferDict, bd).__getitem__(k)
-                        )
+                    self._odict.__setitem__(k, bd._odict.__getitem__(k))
                 # copy buffer or use new one
                 self._buf = (
                     numpy.array(bd._buf, dtype=dtype)
@@ -201,7 +158,7 @@ class BufferDict(collections.OrderedDict):
         else:
             state['buf'] = numpy.asarray(buf)
         layout = collections.OrderedDict()
-        od = super(BufferDict, self)
+        od = self._odict
         for k in self:
             layout[k] = (od.__getitem__(k).slice, od.__getitem__(k).shape)
         state['layout'] = layout
@@ -214,7 +171,7 @@ class BufferDict(collections.OrderedDict):
         if isinstance(buf, tuple):
             buf = _gvar.gvar(*buf)
         for k in layout:
-            super(BufferDict, self).__setitem__(
+            self._odict.__setitem__(
                 k,
                 BUFFERDICTDATA(
                     slice=layout[k][0],
@@ -222,6 +179,8 @@ class BufferDict(collections.OrderedDict):
                     )
                 )
         self._buf = buf
+        self._extension = {}
+        self.shape = None
 
     def __reduce_ex__(self, dummy):
         return (BufferDict, (), self.__getstate__())
@@ -243,11 +202,40 @@ class BufferDict(collections.OrderedDict):
 
     def __getitem__(self,k):
         """ Return piece of buffer corresponding to key ``k``. """
-        if not super(BufferDict, self).__contains__(k):
-            raise KeyError("undefined key: %s" % str(k))
-        d = super(BufferDict, self).__getitem__(k)
-        ans = self._buf[d.slice]
-        return ans if d.shape is () else ans.reshape(d.shape)
+        try:
+            d = self._odict.__getitem__(k)
+            ans = self._buf[d.slice]
+            return ans if d.shape is () else ans.reshape(d.shape)
+        except KeyError:
+            pass
+        try:
+            return self._extension[k]
+        except KeyError:
+            pass
+        for f in BufferDict.extension_fcn:
+            altk = f + '(' + str(k) + ')'
+            try:
+                d = self._odict.__getitem__(altk)
+                ans = self._buf[d.slice]
+                if d.shape != ():
+                    ans = ans.reshape(d.shape)
+                ans = BufferDict.extension_fcn[f](ans)
+                self._extension[k] = ans
+                return ans
+            except KeyError:
+                pass
+        raise KeyError("undefined key: %s" % str(k))
+
+    def extension_keys(self):
+        ans = []
+        for k in self:
+            m = re.match(BufferDict.extension_pattern, k)
+            if m is None:
+                continue
+            k_fcn, k_stripped = m.groups()
+            if k_fcn in BufferDict.extension_fcn:
+                ans.append(k_stripped)
+        return ans
 
     def values(self):
         # needed for python3.5
@@ -263,33 +251,44 @@ class BufferDict(collections.OrderedDict):
         The shape of ``v`` must equal that of ``self[k]`` if key ``k``
         is already in ``self``.
         """
+        self._extension = {}
         if k not in self:
             v = numpy.asarray(v)
             if v.shape==():
                 # add single piece of data
-                super(BufferDict, self).__setitem__(k, BUFFERDICTDATA(slice=len(self._buf),shape=()))
+                self._odict.__setitem__(
+                    k, BUFFERDICTDATA(slice=len(self._buf), shape=())
+                    )
                 self._buf = numpy.append(self._buf,v)
             else:
                 # add array
                 n = numpy.size(v)
                 i = len(self._buf)
-                super(BufferDict, self).__setitem__(k, BUFFERDICTDATA(slice=slice(i,i+n),shape=tuple(v.shape)))
-                self._buf = numpy.append(self._buf,v)
+                self._odict.__setitem__(
+                    k, BUFFERDICTDATA(slice=slice(i,i+n), shape=tuple(v.shape))
+                    )
+                self._buf = numpy.append(self._buf, v)
         else:
-            d = super(BufferDict, self).__getitem__(k)
+            d = self._odict.__getitem__(k)
             if d.shape is ():
                 try:
                     self._buf[d.slice] = v
                 except ValueError:
-                    raise ValueError("*** Not a scalar? Shape=%s"
-                                     % str(numpy.shape(v)))
+                    raise ValueError(
+                        'not a scalar: shape={}'.format(str(numpy.shape(v)))
+                        )
+                except TypeError:
+                    raise TypeError('wrong type: {} not {}'.format(
+                        str(type(v)), str(self.dtype)
+                        ))
             else:
                 v = numpy.asarray(v)
                 try:
                     self._buf[d.slice] = v.flat
                 except ValueError:
-                    raise ValueError("*** Shape mismatch? %s not %s" %
-                                     (str(v.shape),str(d.shape)))
+                    raise ValueError('shape mismatch: {} not {}'.format(
+                            str(v.shape),str(d.shape)
+                            ))
 
     def __delitem__(self,k):
         if k not in self:
@@ -301,17 +300,24 @@ class BufferDict(collections.OrderedDict):
         keys = list(self.keys())
         idx = keys.index(k)
         for kk in keys[idx + 1:]:
-            sl, sh = super(BufferDict, self).__getitem__(kk)
+            sl, sh = self._odict.__getitem__(kk)
             if isinstance(sl, slice):
                 newsl = slice(sl.start - size, sl.stop - size)
             else:
                 newsl = sl - size
-            super(BufferDict, self).__setitem__(
+            self._odict.__setitem__(
                 kk, BUFFERDICTDATA(slice=newsl, shape=sh)
                 )
-        # delete k
-        super(BufferDict, self).__delitem__(k)
-        # raise NotImplementedError("Cannot delete items from BufferDict.")
+        self._odict.__delitem__(k)
+
+    def __len__(self):
+        return len(self._odict)
+
+    def __iter__(self):
+        return iter(self._odict)
+
+    def __contains__(self, k):
+        return k in self._odict
 
     def __str__(self):
         ans = "{"
@@ -327,10 +333,12 @@ class BufferDict(collections.OrderedDict):
         return cn+"("+repr([k for k in self.items()])+")"
 
     def _getflat(self):
+        self._extension = {}
         return self._buf.flat
 
     def _setflat(self,buf):
         """ Assigns buffer with buf if same size. """
+        self._extension = {}
         self._buf.flat = buf
 
     flat = property(_getflat,_setflat,doc='Buffer array iterator.')
@@ -344,6 +352,7 @@ class BufferDict(collections.OrderedDict):
     dtype = property(_getdtype, doc='Data type of buffer array elements.')
 
     def _getbuf(self):
+        self._extension = {}
         return self._buf
 
     def _setbuf(self,buf):
@@ -352,6 +361,7 @@ class BufferDict(collections.OrderedDict):
         ``buf`` must be a 1-dimensional :mod:`numpy` array of the same size
         as ``self._buf``.
         """
+        self._extension = {}
         if isinstance(buf,numpy.ndarray) and buf.shape == self._buf.shape:
             self._buf = buf
         else:
@@ -360,257 +370,154 @@ class BufferDict(collections.OrderedDict):
                 % (type(buf), numpy.shape(buf),
                 type(self._buf), self._buf.shape))
 
-    buf = property(_getbuf,_setbuf,doc='The buffer array (not a copy).')
+    buf = property(_getbuf,_setbuf,doc='Buffer array (not a copy).')
+
     def _getsize(self):
         """ Length of buffer. """
         return len(self._buf)
 
-    def get(self, k, d):
-        """ Return ``self[k]`` if ``k`` in ``self``, otherwise return ``d``. """
-        # items(), setdefault(), etc all use __getitem__, __setitem__
-        # but not get(), for some reason.
-        return self[k] if k in self else d
-
     size = property(_getsize,doc='Size of buffer array.')
+
     def slice(self,k):
         """ Return slice/index in ``self.flat`` corresponding to key ``k``."""
-        return super(BufferDict, self).__getitem__(k).slice
+        self._extension = {}
+        return self._odict.__getitem__(k).slice
 
     def slice_shape(self,k):
         """ Return tuple ``(slice/index, shape)`` corresponding to key ``k``."""
-        return super(BufferDict, self).__getitem__(k)
+        self._extension = {}
+        return self._odict.__getitem__(k)
 
-    def isscalar(self,k):
-        """ Return ``True`` if ``self[k]`` is scalar else ``False``."""
-        return super(BufferDict, self).__getitem__(k).shape is ()
+    def has_dictkey(self, k):
+        """ Returns ``True`` if ``self[k]`` is defined; ``False`` otherwise.
 
-    def dump(self, fobj, use_json=False):
-        """ Serialize |BufferDict| in file object ``fobj``.
-
-        Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-        it uses :mod:`json` (obviously). :mod:`json` does not handle
-        non-string valued keys very well. This attempts a workaround, but
-        it will only work in simpler cases. Serialization only works when
-        :mod:`pickle` (or :mod:`json`) knows how to serialize the data type
-        stored in the |BufferDict|'s buffer (or for |GVar|\s).
+        Note that ``k`` may be a key or it may be related to a
+        related key associated with a non-Gaussian distribution
+        (e.g., ``'log(k)'``; see :func:`gvar.BufferDict.add_distribution`
+        for more information).
         """
-        # gv.dump(self, fobj, use_json=use_json)
-        if not use_json:
-            pickle.dump(self, fobj)
-        else:
-            if isinstance(self._buf[0], _gvar.GVar):
-                tmp = _gvar.mean(self)
-                cov = _gvar.evalcov(self._buf)
-            else:
-                tmp = self
-                cov = None
-            d = {}
-            keys = []
-            for k in tmp:
-                jk = 's:' + k if str(k) == k else 'e:'+repr(k)
-                keys.append(jk)
-                d[jk] = tmp[k] if self.isscalar(k) else tmp[k].tolist()
-            d['keys'] = keys
-            if cov is not None:
-                d['cov'] = cov.tolist()
-            json.dump(d, fobj)
-
-    def dumps(self, use_json=False):
-        """ Serialize |BufferDict| into string.
-
-        Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-        it uses :mod:`json` (obviously). :mod:`json` does not handle
-        non-string valued keys very well. This attempts a workaround, but
-        it will only work in simpler cases (e.g., integers, tuples of
-        integers, etc.). Serialization only works when :mod:`pickle` (or
-        :mod:`json`) knows how to serialize the data type stored in the
-        |BufferDict|'s buffer (or for |GVar|\s).
-        """
-        # return gv.dumps(self, use_json=use_json)
-        f = _StringIO() if use_json else _BytesIO()
-        self.dump(f, use_json=use_json)
-        return f.getvalue()
+        return _gvar.has_dictkey(self, k)
 
     @staticmethod
-    def load(fobj, use_json=False):
-        """ Load serialized |BufferDict| from file object ``fobj``.
+    def add_distribution(name, invfcn):
+        """ Add new parameter distribution.
 
-        Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-        it uses :mod:`json` (obvioulsy).
+        |BufferDict|\s can be used to represent a  restricted
+        class of  non-Gaussian distributions. For example, the code ::
+
+            import gvar as gv
+            gv.BufferDict.add_distribution('log', gv.exp)
+
+        enables the use of log-normal distributions for parameters. So
+        defining, for example, ::
+
+            b = gv.BufferDict()
+            b['log(a)'] = gv.gvar('1(1)')
+
+        means that ``b['a']`` has a value (equal to ``exp(b['log(a)']``)
+        even though ``'a'`` is not a key in the dictionary.
+
+        The distributions available by default correspond to::
+
+            gv.BufferDict.add_distribution('log', gv.exp)
+            gv.BufferDict.add_distribution('sqrt', gv.square)
+            gv.BufferDict.add_distribution('erfinv', gv.erf)
+
+        Additional distributions can be added by specifying:
+
+        Args:
+            name (str): Distributions' function name.
+            invfcn (callable): Inverse of the transformation function.
         """
-        # return gv.load(fobj, use_json=use_json)
-        if not use_json:
-            return pickle.load(fobj)
-        else:
-            d = json.load(fobj)
-            ans = BufferDict()
-            for jk in d['keys']:
-                k = str(jk[2:]) if jk[0] == 's' else eval(jk[2:])
-                ans[k] = d[jk]
-            if 'cov' in d:
-                ans.buf = _gvar.gvar(ans._buf, d['cov'])
-            return ans
+        BufferDict.extension_fcn[name] = invfcn
 
     @staticmethod
-    def loads(s, use_json=False):
-        """ Load serialized |BufferDict| from file object ``fobj``.
+    def del_distribution(name):
+        """ Delete |BufferDict| distribution ``name``. """
+        del BufferDict.extension_fcn[name]
 
-        Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-        it uses :mod:`json` (obvioulsy).
-        """
-        # return gv.loads(s, use_json=use_json)
-        f = _StringIO(s) if use_json else _BytesIO(s)
-        return BufferDict.load(f, use_json=use_json)
-
-
-def asbufferdict(g, keylist=None):
+def asbufferdict(g, dtype=None):
     """ Convert ``g`` to a BufferDict, keeping only ``g[k]`` for ``k in keylist``.
 
     ``asbufferdict(g)`` will return ``g`` if it is already a
     :class:`gvar.BufferDict`; otherwise it will convert the dictionary-like
-    object into a :class:`gvar.BufferDict`. If ``keylist`` is not ``None``,
-    only objects ``g[k]`` for which ``k in keylist`` are kept.
+    object into a :class:`gvar.BufferDict`. The data can also be
+    specified: e.g., ``asbufferdict(g, dtype=int)``.
     """
-    if isinstance(g, BufferDict) and keylist is None:
+    if isinstance(g, BufferDict) and dtype is None:
         return g
-    if keylist is None:
-        return BufferDict(g)
-    ans = BufferDict()
-    for k in keylist:
-        ans[k] = g[k]
+    kargs = {} if dtype is None else dict(dtype=dtype)
+    return BufferDict(g, **kargs)
+
+def get_dictkeys(bdict, klist):
+    """ Same as ``[dictkey(bdict, k) for k in klist]``. """
+    ans = []
+    for k in klist:
+        if k not in bdict:
+            for f in BufferDict.extension_fcn:
+                newk = f + '(' + str(k) + ')'
+                if newk in bdict:
+                    break
+            else:
+                raise KeyError('bad key: ' + str(k))
+            ans.append(newk)
+        else:
+            ans.append(k)
     return ans
 
-class ExtendedDict(BufferDict):
-    """ |BufferDict| that supports variables from extended distributions.
+def dictkey(bdict, k):
+    """ Find key in ``bdict`` corresponding to ``k``.
 
-    Used for parameters when there may be log-normal/sqrt-normal/...  variables.
-    The exponentiated/squared/... values of those variables are included in the
-    BufferDict, together with  the original variables. Setting ``p.buf=buf``
-    assigns a new buffer and fills in the exponentiated/squared/... values.
-    (The buffer is resized if ``buf`` is sized for just the original variables.)
-    Use ``p.stripped_buf`` to access the part of the buffer that has only
-    the original variables.
-
-    Use function :meth:`gvar.add_parameter_distribution` to add distributions.
-
-    It is a bad idea to change the values of any of the entries
-    separately: eg, ``p['a'] = 2.6``. I haven't redesigned setitem to
-    check whether or not something else needs updating, and probably
-    won't. The only "correct" way to change the values in an
-    ExtendedDict is by overwriting the buffer: ``p.buf = buf``. This
-    class is not really for public use; it has a very specific
-    behind-the-scenes function. Might change its name to _ExtendedDict
-    to emphasize this.
-
-    N.B. ExtendedDict is *not* part of the public api yet (or maybe ever).
-
-    Args:
-        p0 : BufferDict whose keys are *not* redundant.
-        buf: New buffer sized for p0 or ``None``.
+    Could be ``k`` itself or one of the standard extensions,
+    such as ``log(k)`` or ``sqrt(k)``.
     """
-
-    extension_pattern = re.compile('^([^()]+)\((.+)\)$')
-    extension_fcn = {}
-
-    def __init__(self, p0, buf=None):
-        super(ExtendedDict, self).__init__(p0)
-        if isinstance(p0, ExtendedDict):
-            self.extensions = list(p0.extensions)
-            self._newkeys = list(p0._newkeys)
-            self.stripped_buf_size = p0.stripped_buf_size
-        else:
-            self.stripped_buf_size = self.buf.size
-            extensions = []
-            newkeys = []
-            for k in p0.keys():
-                k_stripped, k_fcn = ExtendedDict.stripkey(k)
-                if k_fcn is not None:
-                    if k_stripped in p0:
-                        raise ValueError('Redundant key in p0: ' + str(k_stripped))
-                    self[k_stripped] = k_fcn(self[k])
-                    extensions.append(
-                        (self.slice(k_stripped), k_fcn, self.slice(k))
-                        )
-                    newkeys.append(k_stripped)
-            self.extensions = extensions
-            self._newkeys = newkeys
-        if buf is not None:
-            self.buf = buf
-
-    def _getbuf(self):
-        return self._buf
-
-    def _setbuf(self, buf):
-        """ Replace buffer with ``buf``.
-
-        ``buf`` must be a 1-dimensional array of the same size
-        as ``self._buf`` or size ``self.stripped_buf_size``
-        """
-        if not isinstance(buf, numpy.ndarray):
-            buf = numpy.array(buf)
-        if buf.ndim != 1:
-            raise ValueError('New buffer not a 1-d array.')
-        if len(buf) == self.stripped_buf_size:
-            if self._buf.dtype == buf.dtype:
-                self._buf[:self.stripped_buf_size] = buf
-            else:
-                self._buf = numpy.resize(buf, self._buf.size)
-        elif len(buf) == self._buf.size:
-            self._buf = buf
-        else:
-            raise ValueError(
-                'New buffer wrong size: {} != {} or {}'.format(
-                    buf.size,self.stripped_buf_size, self._buf.size
-                    )
-                )
-        # restore derived values
-        for s1, f, s2 in self.extensions:
-            self.buf[s1] = f(self.buf[s2])
-
-    buf = property(_getbuf, _setbuf, doc='The buffer array (not a copy).')
-
-    def _getstrippedbuf(self):
-        return self._buf[:self.stripped_buf_size]
-
-    stripped_buf = property(_getstrippedbuf, doc='Part of buffer array for nonredundant keys.')
-
-    def newkeys(self):
-        " Iterator containing new keys generated by :class:`ExtendedDict`. "
-        return iter(self._newkeys)
-
-    @staticmethod
-    def basekey(prior, k):
-        """ Find base key in ``prior`` corresponding to ``k``. """
-        if not isinstance(k, str):
-            return k
-        for f in ExtendedDict.extension_fcn:
-            newk = f + '(' + k + ')'
-            if newk in prior:
+    if k not in bdict:
+        for f in BufferDict.extension_fcn:
+            newk = f + '(' + str(k) + ')'
+            if newk in bdict:
                 return newk
+        raise KeyError('key not used: ' + str(k))
+    else:
         return k
 
-    @staticmethod
-    def stripkey(k):
-        """ Return (stripped key, fcn) where fcn is exp or square or ...
+def has_dictkey(b, k):
+    """ Returns ``True`` if ``b[k]`` is defined; ``False`` otherwise.
 
-        Strip off any ``"log"`` or ``"sqrt"`` or ... prefix.
-        """
-        if not isinstance(k, str):
-            return k, None
-        m = re.match(ExtendedDict.extension_pattern, k)
-        if m is None:
-            return k, None
-        k_fcn, k_stripped = m.groups()
-        if k_fcn not in ExtendedDict.extension_fcn:
-            return k, None
-        return k_stripped, ExtendedDict.extension_fcn[k_fcn]
+    Note that ``k`` may be a key or it may be related to a
+    related key associated with a non-Gaussian distribution
+    (e.g., ``'log(k)'``; see :func:`gvar.MultiFitter.add_distribution`).
+    """
+    if k in b:
+        return True
+    else:
+        for f in BufferDict.extension_fcn:
+            newk = f + '(' + str(k) + ')'
+            if newk in b:
+                return True
+        return False
+
+def _stripkey(k):
+    """ Return (stripped key, fcn) where fcn is exp or square or ...
+
+    Strip off any ``"log"`` or ``"sqrt"`` or ... prefix.
+    """
+    if not isinstance(k, str):
+        return k, None
+    m = re.match(BufferDict.extension_pattern, k)
+    if m is None:
+        return k, None
+    k_fcn, k_stripped = m.groups()
+    if k_fcn not in BufferDict.extension_fcn:
+        return k, None
+    return k_stripped, BufferDict.extension_fcn[k_fcn]
+
 
 def nonredundant_keys(keys):
     """ Return list containing only nonredundant keys in list ``keys``. """
     discards = set()
     for k in keys:
         if isinstance(k, str):
-            m = re.match(ExtendedDict.extension_pattern, k)
+            m = re.match(BufferDict.extension_pattern, k)
             if m is not None:
                 discards.add(m.groups()[1])
     ans = []
@@ -635,46 +542,14 @@ def add_parameter_parentheses(p):
     newp = BufferDict()
     for k in p:
         if isinstance(k, str):
-            if k[:3] == 'log' and ExtendedDict.stripkey(k)[1] is None:
+            if k[:3] == 'log' and _stripkey(k)[1] is None:
                 newk = 'log(' + k[3:] + ')'
-            elif k[:4] == 'sqrt' and ExtendedDict.stripkey(k)[1] is None:
+            elif k[:4] == 'sqrt' and _stripkey(k)[1] is None:
                 newk = 'sqrt(' + k[4:] + ')'
             else:
                 newk = k
             newp[newk] = p[k]
     return newp
-
-def add_parameter_distribution(name, invfcn):
-    """ Add new parameter distribution for use in fits.
-
-    This function adds new distributions for the parameters used in
-    :class:`lsqfit.nonlinear_fit`. For example, the code ::
-
-        import gvar as gv
-        gv.add_parameter_distribution('log', gv.exp)
-
-    enables the use of log-normal distributions for parameters. The log-normal
-    distribution is invoked for a parameter ``p`` by including ``log(p)``
-    rather than ``p`` itself in the fit prior. log-normal, sqrt-normal,  and
-    erfinv-normal distributions are included by default. (Setting  a prior
-    ``prior[erfinv(w)]`` equal to ``gv.gvar('0(1)') / gv.sqrt(2)``  means that
-    the prior probability for ``w`` is distributed uniformly between -1 and 1,
-    and is zero elsewhere.)
-
-    These distributions are implemented by replacing a fit parameter ``p``
-    by a new fit parameter ``fcn(p)`` where ``fcn`` is some function. ``fcn(p)``
-    is assumed to have a Gaussian distribution, and parameter ``p`` is
-    recovered using the inverse function ``invfcn`` where ``p=invfcn(fcn(p))``.
-
-    :param name: Distribution's name.
-    :type name: str
-    :param invfcn: Inverse of the transformation function.
-    """
-    ExtendedDict.extension_fcn[name] = invfcn
-
-def del_parameter_distribution(name):
-    """ Delete parameter distribution ``name``. """
-    del ExtendedDict.extension_fcn[name]
 
 def trim_redundant_keys(p):
     """ Remove redundant keys from dictionary ``p``.

@@ -256,9 +256,73 @@ The fundamental class for representing Gaussian variables is:
 
 :class:`gvar.BufferDict` Objects
 ----------------------------------
-The following class is a specialized form of an ordered dictionary for
-holding |GVar|\s (or other scalars) and arrays of |GVar|\s (or other
-scalars) that supports Python pickling:
+|BufferDict| objects are ordered dictionaries that are heavily used
+in :mod:`gvar`'s implementation. They provide the most flexible
+representation for multi-dimensional Gaussian distributions.
+
+|BufferDict| objects differ from ordinary dictionaries in two respects. The
+first difference is that the dictionary's values must be scalars or :mod:`numpy`
+arrays (any shape) of scalars. The scalars can be ordinary integers or floats,
+but the dictionary was designed especially for |GVar|\s.
+These values are packed into different parts of a single
+one-dimensional array or buffer. Items can be added one at a time as in other
+dictionaries, ::
+
+  >>> import gvar as gv
+  >>> b = gv.BufferDict()
+  >>> b['s'] = 0.0
+  >>> b['v'] = [1., 2.]
+  >>> b['t'] = [[3., 4.], [5., 6.]]
+  >>> print(b)
+  {'s': 0.0,'v': array([1., 2.]),'t': array([[3., 4.],
+         [5., 6.]])}
+
+but the values can also be accessed all at once through the buffer::
+
+  >>> print(b.buf)
+  [0. 1. 2. 3. 4. 5. 6.]
+
+The size, shape, and type of the data associated with a given key cannot be
+changed by later assignments. For example, here ``b['s'] = [10., 20.]`` would
+generate a ``ValueError`` exception. The actual value can, of course,
+be modified: ``b['s'] = 22.`` is fine.
+
+The second difference between |BufferDict|\s and other dictionaries is
+illustrated by the following code::
+
+  >>> b = gv.BufferDict()
+  >>> b['log(a)'] = gvar('(1(1)')
+  >>> print(b)
+  >>> print(b['a'], b['log(a)'])
+  2.7(2.7) 1.0(1.0)
+
+Even though ``'a'`` is not a key in the dictionary, ``b['a']`` is still
+defined: it equals ``exp(b['log(a)'])``. This feature is used to provide
+(limited) support for non-Gaussian distributions. Here |BufferDict| ``b``
+specifies a distribution that is Gaussain for ``p['log(a)']``, and
+therefore log-normal for ``p['a']``. Thus, for example, ::
+
+  >>> [x['a'] for x in gv.raniter(b, n=4)]
+  [2.1662650927997817, 2.3350022125310317, 8.732161128765775, 3.578188553455522]
+
+creates a list of four random numbers drawn from a log-normal distribution.
+Note that ``'a'`` in this
+example is *not* a key in dictionary ``b``, even though both ``b['a']``
+and ``b.get('a')`` return values::
+
+  >>> print('a' in b)
+  False
+  >>> print('log(a)' in b)
+  True
+  >>> print(list(b))
+  ['log(a)']
+  >>> print(b['a'], b.get('a'))
+  2.7(2.7) 2.7(2.7)
+
+This functionality is used routinely by other modules (e.g., :mod:`lsqfit`).
+The supported distributions, and methods for adding new ones, are
+described in the documentation for :func:`gvar.BufferDict.add_distribution`,
+below.
 
 .. autoclass:: gvar.BufferDict
 
@@ -288,7 +352,7 @@ scalars) that supports Python pickling:
       they do not have shapes in the sense of :mod:`numpy` arrays (hence
       the shape is ``None``).
 
-   The main methods are:
+   In addition to standard dictionary methods, the main methods here are:
 
    .. automethod:: flatten()
 
@@ -296,27 +360,11 @@ scalars) that supports Python pickling:
 
    .. automethod:: slice_shape(k)
 
-   .. automethod:: isscalar(k)
+   .. automethod:: has_dictkey(k)
 
-   .. method:: update(d)
+   .. automethod:: add_distribution(name, invfcn)
 
-      Add contents of dictionary ``d`` to ``self``.
-
-   .. .. staticmethod:: BufferDict.load(fobj, use_json=False)
-
-   ..    Load serialized |BufferDict| from file object ``fobj``.
-   ..    Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-   ..    it uses :mod:`json` (obvioulsy).
-
-   .. .. staticmethod:: loads(s, use_json=False)
-
-   ..    Load serialized |BufferDict| from string object ``s``.
-   ..    Uses :mod:`pickle` unless ``use_json`` is ``True``, in which case
-   ..    it uses :mod:`json` (obvioulsy).
-
-   .. .. automethod:: dump(fobj, use_json=False)
-
-   .. .. automethod:: dumps(use_json=False)
+   .. automethod:: del_distribution(invfcn)
 
 :class:`gvar.SVD` Objects
 ---------------------------

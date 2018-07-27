@@ -43,7 +43,7 @@ cdef extern from "math.h":
 import numpy
 from numpy import sin, cos, tan, exp, log, sqrt, fabs
 from numpy import sinh, cosh, tanh, arcsin, arccos, arctan, arctan2
-from numpy import arcsinh, arccosh, arctanh
+from numpy import arcsinh, arccosh, arctanh, square
 # from re import compile as _compile
 import copy
 
@@ -623,6 +623,11 @@ cdef class GVar:
         """
         ans = self.partialvar(*args)
         return ans**0.5 if ans>0 else -(-ans)**0.5
+
+    property shape:
+        """ Shape = () """
+        def __get__(self):
+            return ()
 
     property val:
         """ Mean value. """

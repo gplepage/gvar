@@ -20,7 +20,7 @@ import unittest
 import pickle as pckl
 import numpy as np
 import gvar as gv
-from gvar import BufferDict, ExtendedDict, add_parameter_parentheses, trim_redundant_keys
+from gvar import BufferDict, add_parameter_parentheses, trim_redundant_keys
 from gvar import nonredundant_keys
 
 class ArrayTests(object):
@@ -114,7 +114,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
     def test_keys(self):
         """ b.keys """
         global b,bkeys
-        self.assertSequenceEqual(list(b.keys()),bkeys)
+        self.assertSequenceEqual(list(b), bkeys)
 
     def test_slice(self):
         """ b.slice(k) """
@@ -239,14 +239,14 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         for k in b:
             self.assert_arraysequal(b[k],c[k])
 
-    def test_dump(self):
-        global b
-        b[0,1] = 2.
-        for use_json in [True,False]:
-            sb = b.dumps(use_json=use_json)
-            c = BufferDict.loads(sb, use_json=use_json)
-            for k in b:
-                self.assert_arraysequal(b[k],c[k])
+    # def test_dump(self):
+    #     global b
+    #     b[0,1] = 2.
+    #     for use_json in [True,False]:
+    #         sb = b.dumps(use_json=use_json)
+    #         c = BufferDict.loads(sb, use_json=use_json)
+    #         for k in b:
+    #             self.assert_arraysequal(b[k],c[k])
 
     def test_pickle_gvar(self):
         b = BufferDict(dict(a=gv.gvar(1,2),b=[gv.gvar(3,4),gv.gvar(5,6)]))
@@ -255,37 +255,63 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         for k in b:
             self.assert_gvclose(b[k],c[k],rtol=1e-6)
 
-    def test_dump_gvar(self):
-        b = BufferDict(dict(a=gv.gvar(1,2),b=[gv.gvar(3,4),gv.gvar(5,6)]))
-        b[0,1] = b['a']+10*b['b'][0]
-        for use_json in [True,False]:
-            sb = b.dumps(use_json=use_json)
-            c = BufferDict.loads(sb, use_json=use_json)
-            for k in b:
-                self.assert_gvclose(b[k],c[k],rtol=1e-6)
-            self.assert_gvclose((c[0,1]-10*c['b'][0])/c['a'],
-                                gv.gvar(1.0,0.0), rtol=1e-6)
+    # def test_dump_gvar(self):
+    #     b = BufferDict(dict(a=gv.gvar(1,2),b=[gv.gvar(3,4),gv.gvar(5,6)]))
+    #     b[0,1] = b['a']+10*b['b'][0]
+    #     for use_json in [True,False]:
+    #         sb = b.dumps(use_json=use_json)
+    #         c = BufferDict.loads(sb, use_json=use_json)
+    #         for k in b:
+    #             self.assert_gvclose(b[k],c[k],rtol=1e-6)
+    #         self.assert_gvclose((c[0,1]-10*c['b'][0])/c['a'],
+    #                             gv.gvar(1.0,0.0), rtol=1e-6)
 
-    def test_ExtendedDict(self):
-        " ExtendedDict "
-        # check ExtendedDict() and refill_buf
+    def test_extension_mapping(self):
+        " BufferDict extension and mapping properties  "
         p = BufferDict()
         p['a'] = 1.
         p['b'] = [2., 3.]
         p['log(c)'] = 0.
         p['sqrt(d)'] = [5., 6.]
         p['erfinv(e)'] = [[33.]]
-        newp = ExtendedDict(p)
+        newp = BufferDict(p)
         for i in range(2):
             for k in p:
                 assert np.all(p[k] == newp[k])
             assert newp['c'] == np.exp(newp['log(c)'])
             assert np.all(newp['d'] == np.square(newp['sqrt(d)']))
             assert np.all(newp['e'] == gv.erf(newp['erfinv(e)']))
-            assert np.all(p.buf == newp.stripped_buf)
+            assert np.all(p.buf == newp.buf)
             p.buf[:] = [10., 20., 30., 1., 2., 3., 4.]
-            newp.buf = np.array(p.buf.tolist() + i * [114., 135., 4223., 0.7])
+            newp.buf = np.array(p.buf.tolist())
+        self.assertEqual(
+            gv.get_dictkeys(p, ['c', 'a', 'log(c)', 'e', 'd']),
+            ['log(c)', 'a', 'log(c)', 'erfinv(e)', 'sqrt(d)']
+            )
+        self.assertEqual(
+            [gv.dictkey(p, k)  for k in [
+                'c', 'a', 'log(c)', 'e', 'd'
+                ]],
+            ['log(c)', 'a', 'log(c)', 'erfinv(e)', 'sqrt(d)']
+            )
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'a'))
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'b'))
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'c'))
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'd'))
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'e'))
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'log(c)'))
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'sqrt(d)'))
+        self.assertTrue(gv.BufferDict.has_dictkey(p, 'erfinv(e)'))
+        self.assertTrue(not gv.BufferDict.has_dictkey(p, 'log(a)'))
+        self.assertTrue(not gv.BufferDict.has_dictkey(p, 'sqrt(b)'))
+        self.assertEqual(list(p), ['a', 'b', 'log(c)', 'sqrt(d)', 'erfinv(e)'])
+        np.testing.assert_equal(
+            list(p.values()),
+            [10.0, [20., 30.], 1.0, [2., 3.], [[4.]]]
+            )
+        self.assertEqual(p.get('c'), p['c'])
 
+        # the rest is not so important
         # trim redundant keys
         oldp = trim_redundant_keys(newp)
         assert 'c' not in oldp
@@ -300,7 +326,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             ('aa', np.exp, 'log(aa)'),
             ('aa', np.square, 'sqrt(aa)'),
             ]:
-            assert (ks, f) == ExtendedDict.stripkey(k)
+            assert (ks, f) == gv._bufferdict._stripkey(k)
 
         # addparentheses
         pvar = BufferDict()
@@ -322,9 +348,11 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         for k in pvar:
             assert k in p
         pvar['log(c(23))'] = 1.2
-        pvar = ExtendedDict(pvar)
-        assert 'c(23)' in pvar
+        pvar = BufferDict(pvar)
+        assert 'c(23)' not in pvar
         assert 'log(c(23))' in pvar
+        self.assertAlmostEqual(gv.exp(pvar['log(c(23))']), pvar['c(23)'])
+
 
 
 

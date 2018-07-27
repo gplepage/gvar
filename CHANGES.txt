@@ -1,3 +1,18 @@
+Version 9.0 2018-07-2???
+=========================
+The new BufferDicts are mostly but not completely compatible with
+the old. The differences are in obscure features that were mostly
+unused.
+
+- BufferDicts reimplemented to give them more conventional/consistent
+  dictionary behavior. Also have added functionality to support
+  (limited) non-Gaussian distributions. Better documentation for
+  BufferDicts.
+
+- Internal data type ExtendedDict is now gone because BufferDict can
+  provide the needed functionality in a much more robust fashion.
+
+
 Version 8.5.1 2018-07-21
 ========================
 Very minor fixes.

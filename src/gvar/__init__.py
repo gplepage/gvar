@@ -98,7 +98,7 @@ tools for use with |GVar|\s (or ``float``\s):
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-17 G. Peter Lepage.
+# Copyright (c) 2012-18 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -121,9 +121,9 @@ gvar = GVarFactory()            # order matters for this statement
 
 from ._svec_smat import *
 from ._bufferdict import BufferDict, asbufferdict
-from ._bufferdict import ExtendedDict, trim_redundant_keys
-from ._bufferdict import del_parameter_distribution, add_parameter_distribution
-from ._bufferdict import add_parameter_parentheses, nonredundant_keys
+from ._bufferdict import has_dictkey, dictkey, get_dictkeys
+from ._bufferdict import trim_redundant_keys    # legacy
+from ._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
 from ._utilities import *
 
 from . import dataset
@@ -255,13 +255,6 @@ def chi2(g1, g2=None, svdcut=1e-12, nocorr=False):
 
     # leaving nocorr (turn off correlations) undocumented because I
     #   suspect I will remove it
-    if hasattr(g1, 'keys') and isinstance(g1, ExtendedDict):
-        g1 = trim_redundant_keys(g1)
-        if hasattr(g2, 'keys'):
-            g2 = trim_redundant_keys(g2)
-    elif hasattr(g2, 'keys') and isinstance(g2, ExtendedDict):
-        g1 = trim_redundant_keys(g1)
-        g2 = trim_redundant_keys(g2)
     if g2 is None:
         diff = BufferDict(g1).buf if hasattr(g1, 'keys') else numpy.asarray(g1).flatten()
     elif hasattr(g1, 'keys') and hasattr(g2, 'keys'):
@@ -712,9 +705,9 @@ def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None):
     if hasattr(g, 'keys'):
         if headers is True:
             headers = ('key/index', 'value')
-        g = asbufferdict(g, keylist=g.keys())
+        g = BufferDict(g)
         for k in g:
-            if g.isscalar(k):
+            if g[k].shape == ():
                 entries.append((
                     str(k), fmt(g[k], sep=' ', ndecimal=ndecimal)
                     ))
@@ -808,9 +801,9 @@ def erf(x):
         return ans
 
 # default extensions
-add_parameter_distribution('log', numpy.exp)
-add_parameter_distribution('sqrt', numpy.square)
-add_parameter_distribution('erfinv', erf)
+BufferDict.add_distribution('log', numpy.exp)
+BufferDict.add_distribution('sqrt', numpy.square)
+BufferDict.add_distribution('erfinv', erf)
 
 class PDF(object):
     """ Probability density function (PDF) for ``g``.
@@ -838,14 +831,9 @@ class PDF(object):
             covariance matrix unchanged. Default is ``1e-15``.
     """
     def __init__(self, g, svdcut=1e-12):
-        self.extend = False
         if hasattr(g, 'keys'):
             # g is a dict
-            if isinstance(g, ExtendedDict):
-                self.extend = True
-                g = trim_redundant_keys(g)
-            elif not isinstance(g, BufferDict):
-                g = BufferDict(g)
+            g = BufferDict(g)
             gflat = g.buf
         else:
             # g is an array

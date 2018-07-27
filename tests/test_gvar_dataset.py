@@ -574,7 +574,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
                 self.slope = slope
             def fitfcn(self, p):
                 return p[self.intercept] + p[self.slope] * self.x
-            def buildprior(self, prior, mopt=None, extend=False):
+            def buildprior(self, prior, mopt=None):
                 " Extract the model's parameters from prior. "
                 newprior = {}
                 newprior[self.intercept] = prior[self.intercept]
