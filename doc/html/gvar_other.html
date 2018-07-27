@@ -300,7 +300,7 @@ to <code class="docutils literal notranslate"><span class="pre">inv(a).dot(b)</s
 
 <dl class="method">
 <dt id="gvar.linalg.lstsq">
-<code class="descclassname">linalg.</code><code class="descname">lstsq</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>rcond=None</em>, <em>extrainfo=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.lstsq" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">linalg.</code><code class="descname">lstsq</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>rcond=None</em>, <em>weighted=False</em>, <em>extrainfo=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.lstsq" title="Permalink to this definition">¶</a></dt>
 <dd><p>Least-squares solution <code class="docutils literal notranslate"><span class="pre">x</span></code> to <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">b</span></code> for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 <p>Here <code class="docutils literal notranslate"><span class="pre">x</span></code> is defined to be the solution that minimizes <code class="docutils literal notranslate"><span class="pre">||b</span> <span class="pre">-</span> <span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x||</span></code>.
 If <code class="docutils literal notranslate"><span class="pre">b</span></code> has a covariance matrix, another option is to weight the

@@ -146,13 +146,13 @@ matrices and correlation/comparison information can be extracted from arrays
 
 |GVar|\s can be stored (serialized) and retrieved from files (or strings) using:
 
-.. autofunction:: gvar.dump(g, outputfile)
+.. autofunction:: gvar.dump(g, outputfile, method='pickle')
 
-.. autofunction:: gvar.dumps(g)
+.. autofunction:: gvar.dumps(g, method='pickle')
 
-.. autofunction:: gvar.load(inputfile)
+.. autofunction:: gvar.load(inputfile, method=None)
 
-.. autofunction:: gvar.loads(inputstring)
+.. autofunction:: gvar.loads(inputstring, method=None)
 
 .. autofunction:: gvar.disassemble(g)
 
@@ -264,7 +264,7 @@ representation for multi-dimensional Gaussian distributions.
 first difference is that the dictionary's values must be scalars or :mod:`numpy`
 arrays (any shape) of scalars. The scalars can be ordinary integers or floats,
 but the dictionary was designed especially for |GVar|\s.
-The dictionary's values are packed into different parts of a single
+The dictionary's  values are packed into different parts of a single
 one-dimensional array or buffer. Items can be added one at a time as in other
 dictionaries, ::
 
@@ -291,8 +291,9 @@ The second difference between |BufferDict|\s and other dictionaries is
 illustrated by the following code::
 
   >>> b = gv.BufferDict()
-  >>> b['log(a)'] = gvar('(1(1)')
+  >>> b['log(a)'] = gv.gvar('1(1)')
   >>> print(b)
+  {'log(a)': 1.0(1.0)}
   >>> print(b['a'], b['log(a)'])
   2.7(2.7) 1.0(1.0)
 

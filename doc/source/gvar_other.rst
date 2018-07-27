@@ -57,15 +57,13 @@ linear algebra with matrices whose elements can be either numbers or
 
 .. automethod:: gvar.linalg.solve(a, b)
 
-.. automethod:: gvar.linalg.lstsq(a, b, rcond=None, extrainfo=False)
+.. automethod:: gvar.linalg.lstsq(a, b, rcond=None, weighted=False, extrainfo=False)
 
 .. automethod:: gvar.linalg.eigvalsh(a, eigvec=False)
 
 .. automethod:: gvar.linalg.eigh(a, eigvec=True, rcond=None)
 
 .. automethod:: gvar.linalg.svd(a, b, compute_uv=True, rcond=None)
-
-
 
 .. module:: gvar.ode
    :synopsis: Ordinary differential equations.

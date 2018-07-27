@@ -4,7 +4,7 @@
 test-bufferdict.py
 
 """
-# Copyright (c) 2012-2017 G. Peter Lepage.
+# Copyright (c) 2012-2018 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -311,12 +311,26 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             )
         self.assertEqual(p.get('c'), p['c'])
 
+        # tracking?
+        self.assertAlmostEqual(p['c'], np.exp(1))
+        self.assertAlmostEqual(p['log(c)'], 1.)
+        p['log(c)'] = 2.
+        self.assertAlmostEqual(p['c'], np.exp(2))
+        self.assertAlmostEqual(p['log(c)'], 2.)
+        p['a'] = 12.
+        self.assertAlmostEqual(p['c'], np.exp(2))
+        self.assertAlmostEqual(p['log(c)'], 2.)
+        self.assertEqual(
+            list(p),
+            ['a', 'b', 'log(c)', 'sqrt(d)', 'erfinv(e)'],
+            )
+
         # the rest is not so important
         # trim redundant keys
         oldp = trim_redundant_keys(newp)
         assert 'c' not in oldp
         assert 'd' not in oldp
-        assert np.all(oldp.buf == p.buf)
+        assert np.all(oldp.buf == newp.buf)
 
         # nonredundant keys
         assert set(nonredundant_keys(newp.keys())) == set(p.keys())
