@@ -115,6 +115,17 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         """ b.keys """
         global b,bkeys
         self.assertSequenceEqual(list(b), bkeys)
+        # check unusual keys
+        bb = BufferDict()
+        bb[('a',1)] = 2.
+        bb[(3,4,5)] = 3.
+        bb[('a', 'b')] = 22.
+        bb[0] = 2.
+        bb['log(c)'] = 5.
+        bb['c'] = 75.
+        self.assertSequenceEqual(
+            list(bb.keys()),
+            [('a', 1), (3, 4, 5), ('a', 'b'), 0, 'log(c)', 'c'])
 
     def test_slice(self):
         """ b.slice(k) """

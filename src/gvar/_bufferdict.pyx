@@ -229,7 +229,10 @@ class BufferDict(collections_MMapping):
     def extension_keys(self):
         ans = []
         for k in self:
-            m = re.match(BufferDict.extension_pattern, k)
+            try:
+                m = re.match(BufferDict.extension_pattern, str(k))
+            except TypeError:
+                continue
             if m is None:
                 continue
             k_fcn, k_stripped = m.groups()

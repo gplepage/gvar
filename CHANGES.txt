@@ -1,4 +1,9 @@
-Version 9.0 2018-07-2???
+Version 9.0.1 2018-08-01
+=========================
+Fixes small bug in BufferDict that made certain types of dictionary key fail.
+
+
+Version 9.0 2018-07-27
 =========================
 Introduces new BufferDicts that are mostly but not completely compatible with
 the old. The incompatible differences are in obscure features that were mostly

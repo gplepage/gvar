@@ -18,6 +18,11 @@ import warnings
 
 import numpy
 
+try:
+    import matplotlib.pyplot as _PLOT
+except ImportError:
+    _PLOT = None
+
 import gvar as _gvar
 
 cimport numpy, cython
@@ -985,9 +990,9 @@ class svd_diagnosis(object):
             minx: Minimum ``x`` value in plot (default is 1e-14).
         """
         if plot is None:
-            try:
-                import matplotlib.pyplot as plot
-            except:
+            if _PLOT is not None:
+                plot = _PLOT
+            else:
                 warnings.warn('Need matplotlib library to make plots')
                 return None
         x = self.val / self.val[-1]
