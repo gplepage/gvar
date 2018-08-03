@@ -116,22 +116,22 @@ import sys
 
 import numpy
 
-from ._gvarcore import *
+from gvar._gvarcore import *
 gvar = GVarFactory()            # order matters for this statement
 
-from ._svec_smat import *
-from ._bufferdict import BufferDict, asbufferdict
-from ._bufferdict import has_dictkey, dictkey, get_dictkeys
-from ._bufferdict import trim_redundant_keys    # legacy
-from ._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
-from ._utilities import *
+from gvar._svec_smat import *
+from gvar._bufferdict import BufferDict, asbufferdict
+from gvar._bufferdict import has_dictkey, dictkey, get_dictkeys
+from gvar._bufferdict import trim_redundant_keys    # legacy
+from gvar._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
+from gvar._utilities import *
 
-from . import dataset
-from . import ode
-from . import cspline
-from . import linalg
-from . import powerseries
-from . import root
+from gvar import dataset
+from gvar import ode
+from gvar import cspline
+from gvar import linalg
+from gvar import powerseries
+from gvar import root
 
 # try:
 #     # use lsqfit's gammaQ if available; otherwise use one in ._utilities
@@ -313,7 +313,7 @@ def chi2(g1, g2=None, svdcut=1e-12, nocorr=False):
             chi2 += numpy.sum((diffmean[i] * wgts) ** 2)
         for i, wgts in i_wgts[1:]:
             chi2 += numpy.sum(wgts.dot(diffmean[i]) ** 2)
-        dof = numpy.sum(len(wgts) for i, wgts in i_wgts)
+        dof = sum(len(wgts) for i, wgts in i_wgts)
     Q = gammaQ(dof/2., chi2/2.)
     return ans(chi2, dof=dof, Q=Q)
 
@@ -591,8 +591,8 @@ def svd(g, svdcut=1e-12, wgts=False):
         else:
             s = SVD(block_cov, svdcut=svdcut, rescale=True, compute_delta=True)
             if s.D is not None:
-                svd.logdet -= 2 * numpy.sum(numpy.log(di) for di in s.D)
-            svd.logdet += numpy.sum(numpy.log(vali) for vali in s.val)
+                svd.logdet -= 2 * sum(numpy.log(di) for di in s.D)
+            svd.logdet += sum(numpy.log(vali) for vali in s.val)
             if s.delta is not None:
                 svd.correction[idx] = s.delta
                 g.flat[idx] += s.delta

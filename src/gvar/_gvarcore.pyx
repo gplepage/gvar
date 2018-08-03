@@ -16,8 +16,8 @@
 # GNU General Public License for more details.
 
 import re
-from ._svec_smat import svec, smat
-from ._bufferdict import BufferDict
+from gvar._svec_smat import svec, smat
+from gvar._bufferdict import BufferDict
 
 cimport numpy
 cimport cython

@@ -1094,16 +1094,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
                 diag = np.diag(s.D)
                 self.assert_arraysclose(np.diag(np.dot(diag,np.dot(mat,diag))),
                                     [1.,1.])
-            self.assert_arraysclose(mat,np.sum(np.outer(wj,wj) for wj in s.decomp(1)))
+            self.assert_arraysclose(mat, sum(np.outer(wj,wj) for wj in s.decomp(1)))
             s = SVD(mat,svdcut=0.9,compute_delta=True,rescale=rescale)
-            mout = np.sum(np.outer(wj,wj) for wj in s.decomp(1))
+            mout = sum(np.outer(wj,wj) for wj in s.decomp(1))
             self.assert_arraysclose(mat+evalcov(s.delta),mout)
             self.assertTrue(not np.allclose(mat,mout))
             s = SVD(mat,rescale=rescale)
-            minv = np.sum(np.outer(wj,wj) for wj in s.decomp(-1))
+            minv = sum(np.outer(wj,wj) for wj in s.decomp(-1))
             self.assert_arraysclose([[1.,0.],[0.,1.]],np.dot(mat,minv))
             if rescale==False:
-                m2 = np.sum(np.outer(wj,wj) for wj in s.decomp(2))
+                m2 = sum(np.outer(wj,wj) for wj in s.decomp(2))
                 self.assert_arraysclose(mat,np.dot(m2,minv))
 
     def test_diagonal_blocks(self):
@@ -1149,6 +1149,22 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         compare_blocks(
             find_diagonal_blocks(m), [[6], [7], [0, 1, 2, 3] , [4, 5]]
             )
+
+    def test_evalcov_blocks(self):
+        def test_cov(g):
+            g = g.flat[:]
+            cov = np.zeros((len(g), len(g)), dtype=float)
+            for idx, bcov in evalcov_blocks(g):
+                cov[idx[:,None], idx] = bcov
+            np.testing.assert_allclose(evalcov(g), cov)
+        g = gv.gvar(5 * ['1(1)'])
+        test_cov(g)
+        g[-1] = g[0] + g[1]
+        test_cov(g)
+        test_cov(g * gv.gvar('2(1)'))
+        g = gv.gvar(5 * ['1(1)'])
+        g[0] = g[-1] + g[-2]
+        test_cov(g)
 
     def test_svd(self):
         """ svd """

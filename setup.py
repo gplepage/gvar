@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-GVAR_VERSION = '9.0.1'
+GVAR_VERSION = '9.0.2'
 
 from distutils.core import setup
 from distutils.extension import Extension
@@ -21,7 +21,7 @@ from distutils.command.build_ext import build_ext as _build_ext
 from distutils.command.build_py import build_py as _build_py
 
 # compile from existing .c files if USE_CYTHON is False
-USE_CYTHON = False
+USE_CYTHON = True
 
 class build_ext(_build_ext):
     # delays using numpy and cython until they are installed;

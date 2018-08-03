@@ -1,7 +1,13 @@
+Version 9.0.2 2018-08-03
+========================
+- Fixes bug in evalcov_blocks that missed out correlations in certain
+  unusual situations. This affects svd.
+
+- Fixes incompatibility with latest numpy.
+
 Version 9.0.1 2018-08-01
 =========================
-Fixes small bug in BufferDict that made certain types of dictionary key fail.
-
+Fixes bug in BufferDict that made certain types of dictionary key fail.
 
 Version 9.0 2018-07-27
 =========================

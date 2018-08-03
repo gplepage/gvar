@@ -224,7 +224,7 @@ class CSpline:
                     continue
                 coef = coef[:self.extrap_order + 1]
                 dx = x[idx] - x0
-                ans[idx] = numpy.sum(
+                ans[idx] = sum(
                     cn * dx ** n for n, cn in enumerate(coef)
                     )
             ans[middle] = self(x[middle])
@@ -272,7 +272,7 @@ class CSpline:
                     continue
                 coef = coef[:self.extrap_order + 1] * cfac
                 dx = x[idx] - x0
-                ans[idx] = numpy.sum(
+                ans[idx] = sum(
                     cn * dx ** (n+1) for n, cn in enumerate(coef)
                     )
             ans[right] += self.intydx[-1]

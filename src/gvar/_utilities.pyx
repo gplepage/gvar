@@ -12,8 +12,8 @@
 # GNU General Public License for more details.
 
 import gvar as _gvar
-from ._gvarcore import GVar
-from ._gvarcore cimport GVar
+from gvar._gvarcore import GVar
+from gvar._gvarcore cimport GVar
 
 import numpy
 cimport numpy
@@ -488,34 +488,38 @@ def evalcov_blocks(g):
         return []
     unassigned_indices = set(numpy.arange(0, len(gf)))
     # set containing xcov indices for each g[a] is g_indices[a]
-    g_indices = numpy.zeros(len(g), object)
+    g_indices = numpy.zeros(len(gf), object)
     blocks = []
     master_cov = gf[0].cov
     while unassigned_indices:
         a = unassigned_indices.pop()
         # gcov indices in current block = gcov_indices
         gcov_indices = set([a])
-        ga = gf[a]
-        # xcov indices in the current gcov block = xcov_indices
-        ga_d_indices = ga.d.indices()
-        xcov_indices = set(ga_d_indices)
-        # find all indices connected to xcov_indices by the master cov
-        for i in ga_d_indices:
-            xcov_indices.update(master_cov.row[i].indices())
-        # new_indices = indices added to gcov_indices in the for-b loop
-        new_indices = set()
-        for b in unassigned_indices:
-            if g_indices[b] == 0:
-                gb = gf[b]
-                g_indices[b] = set(gb.d.indices())
-            if g_indices[b].isdisjoint(xcov_indices):
-                continue
-            else:
-                xcov_indices.update(g_indices[b])
-                gcov_indices.add(b)
-                new_indices.add(b)
+        unprocessed_indices = set([a])
+        while unprocessed_indices:
+            a = unprocessed_indices.pop()
+            ga = gf[a]
+            # xcov indices in the current gcov block = xcov_indices
+            ga_d_indices = ga.d.indices()
+            xcov_indices = set(ga_d_indices)
+            # find all indices connected to xcov_indices by the master cov
+            for i in ga_d_indices:
+                xcov_indices.update(master_cov.row[i].indices())
+            # new_indices = indices added to gcov_indices in the for-b loop
+            new_indices = set()
+            for b in unassigned_indices:
+                if g_indices[b] == 0:
+                    gb = gf[b]
+                    g_indices[b] = set(gb.d.indices())
+                if g_indices[b].isdisjoint(xcov_indices):
+                    continue
+                else:
+                    new_indices.add(b)
+                    xcov_indices.update(g_indices[b])
+            gcov_indices.update(new_indices)
+            unprocessed_indices.update(new_indices)
+            unassigned_indices.difference_update(new_indices)
         blocks.append(gcov_indices)
-        unassigned_indices.difference_update(new_indices)
     ans = []
     for bl in blocks:
         if len(bl) == 1:
