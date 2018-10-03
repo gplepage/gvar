@@ -707,9 +707,11 @@ def load(inputfile, method=None, use_json=None):
             try:
                 return load(inputfile, method='yaml')
             except:
-                raise RuntimeError('cannot read in file')
-        else:
-            raise RuntimeError('cannot read in file')
+                pass
+        try:
+            return _oldload(inputfile)
+        except:
+            raise RuntimeError('cannot read file')
     if yaml is None and method == 'yaml':
         raise RuntimeError('yaml module not installed')
     if isinstance(inputfile, str):
@@ -766,16 +768,56 @@ def loads(inputstring, method=None, use_json=None):
             try:
                 return loads(inputstring, method='yaml')
             except:
-                raise RuntimeError('cannot read string')
-        else:
+                pass
+        try:
+            return _oldloads(inputstring)
+        except:
             raise RuntimeError('cannot read string')
-
     f = (
         _StringIO(inputstring) if method in ['json', 'yaml'] else
         _BytesIO(inputstring)
         )
     return load(f, method=method)
 
+
+def _oldload(inputfile, use_json=None):
+    """
+    Previous version of :func:`load`, included to allow loading
+    of previously dumped data.
+    """
+    if use_json is None:
+        try:
+            return _oldload(inputfile, use_json=False)
+        except:
+            return _oldload(inputfile, use_json=True)
+    if isinstance(inputfile, str):
+        with open(inputfile, 'r' if use_json else 'rb') as ifile:
+            return _oldload(ifile, use_json=use_json)
+    else:
+        ifile = inputfile
+    if use_json:
+        data = json.load(ifile)
+        if hasattr(data, 'keys'):
+            ans = _gvar.BufferDict([(eval(k), d) for k, d in data['items']])
+            ans.buf = _gvar.gvar(ans._buf, data['cov'])
+        else:
+            ans = _gvar.gvar(*data)  # need * with json since it doesn't have tuples
+    else:
+        ans = _gvar.gvar(pickle.load(ifile))
+    return ans
+
+def _oldloads(inputstring, use_json=None):
+    """
+    Previous version of :func:`loads`, included to allow loading
+    of previously dumped data.
+    """
+    if use_json is None:
+        try:
+            return _oldloads(inputstring, use_json=False)
+        except:
+            return _oldloads(inputstring, use_json=True)
+    f = _StringIO(inputstring) if use_json else _BytesIO(inputstring)
+    return _oldload(f, use_json=use_json)
 
 def disassemble(g):
     """ Disassemble collection ``g`` of |GVar|\s.

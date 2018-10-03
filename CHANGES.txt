@@ -1,3 +1,14 @@
+Version 9.0.3 2018-10-03
+========================
+Very minor update.
+
+- Fixes small inefficiency in installation script.
+
+- Small optimization for cloning BufferDicts.
+
+- load and loads now able to load files dumped using versions of
+  gvar older than 8.4. The old format is different.
+
 Version 9.0.2 2018-08-03
 ========================
 - Fixes bug in evalcov_blocks that missed out correlations in certain
