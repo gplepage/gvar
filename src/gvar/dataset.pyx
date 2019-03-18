@@ -61,12 +61,12 @@ def _vec_median(v, spread=False, noerror=False):
     return _gvar.gvar(median,sdev)
 
 
-def bin_data(random_data, binsize=2):
+def bin_data(dataset, binsize=2):
     """ Bin random data.
 
-    ``random_data`` is a list of random numbers or random arrays, or a
+    ``dataset`` is a list of random numbers or random arrays, or a
     dictionary of lists of random numbers/arrays.
-    ``bin_data(random_data, binsize)`` replaces consecutive groups of
+    ``bin_data(dataset, binsize)`` replaces consecutive groups of
     ``binsize`` numbers/arrays by the average of those numbers/arrays. The
     result is new data list (or dictionary) with ``1/binsize`` times as much
     random data: for example, ::
@@ -81,36 +81,36 @@ def bin_data(random_data, binsize=2):
     faster and to reduce measurement-to-measurement correlations, if they
     exist. Over-binning erases useful information.
     """
-    if hasattr(random_data,'keys'):
-        # random_data is a dictionary
-        if not random_data:
+    if hasattr(dataset,'keys'):
+        # dataset is a dictionary
+        if not dataset:
             return Dataset()
         newdata = Dataset()
-        for k in random_data:
-            newdata[k] = bin_data(random_data[k],binsize=binsize)
+        for k in dataset:
+            newdata[k] = bin_data(dataset[k],binsize=binsize)
         return newdata
 
-    # random_data is a list
-    if len(random_data) == 0:
+    # dataset is a list
+    if len(dataset) == 0:
         return []
-    # force random_data into a numpy array of floats
+    # force dataset into a numpy array of floats
     try:
-        random_data = numpy.asarray(random_data, numpy.float_)
+        dataset = numpy.asarray(dataset, numpy.float_)
     except ValueError:
-        raise ValueError("Inconsistent array shapes or data types in random_data.")
+        raise ValueError("Inconsistent array shapes or data types in dataset.")
 
-    nd = random_data.shape[0] - random_data.shape[0] % binsize
+    nd = dataset.shape[0] - dataset.shape[0] % binsize
     accum = 0.0
     for i in range(binsize):
-        accum += random_data[i:nd:binsize]
+        accum += dataset[i:nd:binsize]
     return list(accum/float(binsize))
 
 
 
-def avg_data(random_data, median=False, spread=False, bstrap=False, noerror=False, warn=True):
-    """ Average ``random_data`` to estimate means and covariance.
+def avg_data(dataset, median=False, spread=False, bstrap=False, noerror=False, warn=True):
+    """ Average ``dataset`` to estimate means and covariance.
 
-    ``random_data`` is a list of random numbers, a list of random arrays, or a dictionary
+    ``dataset`` is a list of random numbers, a list of random arrays, or a dictionary
     of lists of random numbers and/or arrays: for example, ::
 
         >>> random_numbers = [1.60, 0.99, 1.28, 1.30, 0.54, 2.15]
@@ -134,10 +134,10 @@ def avg_data(random_data, median=False, spread=False, bstrap=False, noerror=Fals
     The arrays in ``random_arrays`` are one dimensional; in general, they
     can have any shape.
 
-    ``avg_data(random_data)`` also estimates any correlations between different
-    quantities in ``random_data``. When ``random_data`` is a dictionary, it does this by
+    ``avg_data(dataset)`` also estimates any correlations between different
+    quantities in ``dataset``. When ``dataset`` is a dictionary, it does this by
     assuming that the lists of random numbers/arrays for the different
-    ``random_data[k]``\s are synchronized, with the first element in one list
+    ``dataset[k]``\s are synchronized, with the first element in one list
     corresponding to the first elements in all other lists, and so on. If
     some lists are shorter than others, the longer lists are truncated to
     the same length as the shortest list (discarding data samples).
@@ -182,12 +182,12 @@ def avg_data(random_data, median=False, spread=False, bstrap=False, noerror=Fals
     if bstrap:
         median = True
         spread = True
-    if hasattr(random_data,'keys'):
-        # random_data is a dictionary
-        if not random_data:
+    if hasattr(dataset,'keys'):
+        # dataset is a dictionary
+        if not dataset:
             return _gvar.BufferDict()
-        newdata = []                    # random_data repacked as a list of arrays
-        samplesize_list = [len(random_data[k]) for k in random_data]
+        newdata = []                    # dataset repacked as a list of arrays
+        samplesize_list = [len(dataset[k]) for k in dataset]
         samplesize = min(samplesize_list)
         if warn and samplesize != max(samplesize_list):
             warnings.warn(
@@ -199,8 +199,8 @@ def avg_data(random_data, median=False, spread=False, bstrap=False, noerror=Fals
                 "Largest consistent sample size is zero --- no data."
                 )
         bd = _gvar.BufferDict()
-        for k in random_data:
-            data_k = numpy.asarray(random_data[k][:samplesize])
+        for k in dataset:
+            data_k = numpy.asarray(dataset[k][:samplesize])
             bd[k] = data_k[0]
             newdata.append(data_k.reshape(samplesize,-1))
         newdata = numpy.concatenate(tuple(newdata),axis=1)
@@ -209,29 +209,29 @@ def avg_data(random_data, median=False, spread=False, bstrap=False, noerror=Fals
             buf=avg_data(newdata, median=median, spread=spread, noerror=noerror)
             )
 
-    # random_data is list
-    if len(random_data) == 0:
+    # dataset is list
+    if len(dataset) == 0:
         return None
-    # force random_data into a numpy array of floats
+    # force dataset into a numpy array of floats
     try:
-        random_data = numpy.asarray(random_data,numpy.float_)
+        dataset = numpy.asarray(dataset,numpy.float_)
     except ValueError:
-        raise ValueError("Inconsistent array shapes or data types in random_data.")
+        raise ValueError("Inconsistent array shapes or data types in dataset.")
 
-    # avg_data.nmeas = len(random_data)
+    # avg_data.nmeas = len(dataset)
     if median:
         # use median and spread
-        if len(random_data.shape)==1:
-            return _vec_median(random_data,spread=spread, noerror=noerror)
+        if len(dataset.shape)==1:
+            return _vec_median(dataset,spread=spread, noerror=noerror)
         else:
-            tdata = random_data.transpose()
-            tans = numpy.empty(random_data.shape[1:],object).transpose()
+            tdata = dataset.transpose()
+            tans = numpy.empty(dataset.shape[1:],object).transpose()
             for ij in numpy.ndindex(tans.shape):
                 tans[ij] = _vec_median(tdata[ij],spread=spread, noerror=noerror)
             ans = tans.transpose()
             if noerror:
                 return ans
-            cov = numpy.cov(random_data.reshape(random_data.shape[0],ans.size),
+            cov = numpy.cov(dataset.reshape(dataset.shape[0],ans.size),
                             rowvar=False,bias=True)
             if ans.size==1:                 # rescale std devs
                 D = _gvar.sdev(ans)/cov**0.5
@@ -242,13 +242,13 @@ def avg_data(random_data, median=False, spread=False, bstrap=False, noerror=Fals
 
     else:
         # use mean and standard deviation
-        means = random_data.mean(axis=0)
+        means = dataset.mean(axis=0)
         if noerror:
             return means
-        norm = 1.0 if spread else float(len(random_data))
-        if len(random_data)>=2:
+        norm = 1.0 if spread else float(len(dataset))
+        if len(dataset)>=2:
             cov = numpy.cov(
-                random_data.reshape(random_data.shape[0], means.size),
+                dataset.reshape(dataset.shape[0], means.size),
                 rowvar=False, bias=True
                 ) / norm
         else:
@@ -258,15 +258,15 @@ def avg_data(random_data, median=False, spread=False, bstrap=False, noerror=Fals
         return _gvar.gvar(means, cov.reshape(means.shape+means.shape))
 
 
-def autocorr(random_data):
-    """ Compute autocorrelation in ``random_data``.
+def autocorr(dataset):
+    """ Compute autocorrelation in ``dataset``.
 
-    ``random_data`` is a list of random numbers or random arrays, or a dictionary
+    ``dataset`` is a list of random numbers or random arrays, or a dictionary
     of lists of random numbers/arrays.
 
-    When ``random_data`` is a list of random numbers, ``autocorr(random_data)`` returns
-    an array where ``autocorr(random_data)[i]`` is the correlation between
-    elements in ``random_data`` that are separated by distance ``i`` in the list:
+    When ``dataset`` is a list of random numbers, ``autocorr(dataset)`` returns
+    an array where ``autocorr(dataset)[i]`` is the correlation between
+    elements in ``dataset`` that are separated by distance ``i`` in the list:
     for example, ::
 
         >>> print(autocorr([2,-2,2,-2,2,-2]))
@@ -276,33 +276,33 @@ def autocorr(random_data):
     interval in the list, and perfect anticorrelation between elements by
     an odd interval.
 
-    ``autocorr(random_data)`` returns a list of arrays of autocorrelation
-    coefficients when ``random_data`` is a list of random arrays. Again
-    ``autocorr(random_data)[i]`` gives the autocorrelations for ``random_data`` elements
-    separated by distance ``i`` in the list. Similarly ``autocorr(random_data)``
-    returns a dictionary when ``random_data`` is a dictionary.
+    ``autocorr(dataset)`` returns a list of arrays of autocorrelation
+    coefficients when ``dataset`` is a list of random arrays. Again
+    ``autocorr(dataset)[i]`` gives the autocorrelations for ``dataset`` elements
+    separated by distance ``i`` in the list. Similarly ``autocorr(dataset)``
+    returns a dictionary when ``dataset`` is a dictionary.
 
-    ``autocorr(random_data)`` uses FFTs to compute the autocorrelations; the cost
+    ``autocorr(dataset)`` uses FFTs to compute the autocorrelations; the cost
     of computing the autocorrelations should grow roughly linearly with the
-    number of random samples in ``random_data`` (up to logarithms).
+    number of random samples in ``dataset`` (up to logarithms).
     """
-    if hasattr(random_data,'keys'):
-        # random_data is a dictionary
+    if hasattr(dataset,'keys'):
+        # dataset is a dictionary
         ans = dict()
-        for k in random_data:
-            ans[k] = autocorr(random_data[k])
+        for k in dataset:
+            ans[k] = autocorr(dataset[k])
 
         return ans
-    # random_data is an array
-    if numpy.ndim(random_data) < 1 or len(random_data) < 2:
+    # dataset is an array
+    if numpy.ndim(dataset) < 1 or len(dataset) < 2:
         raise ValueError("Need at least two samples to compute autocorr.")
-    # force random_data into a numpy array of floats
+    # force dataset into a numpy array of floats
     try:
-        random_data = numpy.asarray(random_data,numpy.float_)
+        dataset = numpy.asarray(dataset,numpy.float_)
     except ValueError:
-        raise ValueError("Inconsistent array shapes or data types in random_data.")
+        raise ValueError("Inconsistent array shapes or data types in dataset.")
 
-    datat = random_data.transpose()
+    datat = dataset.transpose()
     ans = numpy.zeros(datat.shape,numpy.float_)
     idxlist = numpy.ndindex(datat.shape[:-1])
     for idx in numpy.ndindex(datat.shape[:-1]):
@@ -313,31 +313,31 @@ def autocorr(random_data):
 
 
 
-def bootstrap_iter(random_data, n=None):
-    """ Create iterator that returns bootstrap copies of ``random_data``.
+def bootstrap_iter(dataset, n=None):
+    """ Create iterator that returns bootstrap copies of ``dataset``.
 
-    ``random_data`` is a list of random numbers or random arrays, or a dictionary
-    of lists of random numbers/arrays. ``bootstrap_iter(random_data,n)`` is an
-    iterator that returns ``n`` bootstrap copies of ``random_data``. The random
+    ``dataset`` is a list of random numbers or random arrays, or a dictionary
+    of lists of random numbers/arrays. ``bootstrap_iter(dataset,n)`` is an
+    iterator that returns ``n`` bootstrap copies of ``dataset``. The random
     numbers/arrays in a bootstrap copy are drawn at random (with repetition
-    allowed) from among the samples in ``random_data``: for example, ::
+    allowed) from among the samples in ``dataset``: for example, ::
 
-        >>> random_data = [1.1, 2.3, 0.5, 1.9]
-        >>> data_iter = bootstrap_iter(random_data)
+        >>> dataset = [1.1, 2.3, 0.5, 1.9]
+        >>> data_iter = bootstrap_iter(dataset)
         >>> print(next(data_iter))
         [ 1.1  1.1  0.5  1.9]
         >>> print(next(data_iter))
         [ 0.5  2.3  1.9  0.5]
 
-        >>> random_data = dict(a=[1,2,3,4],b=[1,2,3,4])
-        >>> data_iter = bootstrap_iter(random_data)
+        >>> dataset = dict(a=[1,2,3,4],b=[1,2,3,4])
+        >>> data_iter = bootstrap_iter(dataset)
         >>> print(next(data_iter))
         {'a': array([3, 3, 1, 2]), 'b': array([3, 3, 1, 2])}
         >>> print(next(data_iter))
         {'a': array([1, 3, 3, 2]), 'b': array([1, 3, 3, 2])}
 
-        >>> random_data = [[1,2],[3,4],[5,6],[7,8]]
-        >>> data_iter = bootstrap_iter(random_data)
+        >>> dataset = [[1,2],[3,4],[5,6],[7,8]]
+        >>> data_iter = bootstrap_iter(dataset)
         >>> print(next(data_iter))
         [[ 7.  8.]
          [ 1.  2.]
@@ -350,23 +350,23 @@ def bootstrap_iter(random_data, n=None):
          [ 1.  2.]]
 
     The distribution of bootstrap copies is an approximation to the
-    distribution from which ``random_data`` was drawn. Consequently means,
+    distribution from which ``dataset`` was drawn. Consequently means,
     variances and correlations for bootstrap copies should be similar to
-    those in ``random_data``. Analyzing variations from bootstrap copy to copy is
+    those in ``dataset``. Analyzing variations from bootstrap copy to copy is
     often useful when dealing with non-gaussian behavior or complicated
     correlations between different quantities.
 
     Parameter ``n`` specifies the maximum number of copies; there is no
     maximum if ``n is None``.
     """
-    if hasattr(random_data,'keys'):
-        # random_data is a dictionary
-        if not random_data:
+    if hasattr(dataset,'keys'):
+        # dataset is a dictionary
+        if not dataset:
             return
-        ns = min(len(random_data[k]) for k in random_data)  # number of samples
+        ns = min(len(dataset[k]) for k in dataset)  # number of samples
         datadict = {}
-        for k in random_data:
-            datadict[k] = numpy.asarray(random_data[k],numpy.float_)
+        for k in dataset:
+            datadict[k] = numpy.asarray(dataset[k],numpy.float_)
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
@@ -376,21 +376,21 @@ def bootstrap_iter(random_data, n=None):
                 ans[k] = datadict[k][idx]
             yield ans
     else:
-        # random_data is an array
-        if len(random_data) == 0:
+        # dataset is an array
+        if len(dataset) == 0:
             return
-        # force random_data into a numpy array of floats
+        # force dataset into a numpy array of floats
         try:
-            random_data = numpy.asarray(random_data,numpy.float_)
+            dataset = numpy.asarray(dataset,numpy.float_)
         except ValueError:
             raise ValueError( #
-                "Inconsistent array shapes or data types in random_data.")
-        ns = len(random_data)
+                "Inconsistent array shapes or data types in dataset.")
+        ns = len(dataset)
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
             idx = numpy.random.randint(0,ns,ns)
-            yield random_data[idx]
+            yield dataset[idx]
 
 
 class Dataset(collections.OrderedDict):
@@ -873,10 +873,10 @@ class svd_diagnosis(object):
     """ Diagnose the need for an SVD cut.
 
     :class:`gvar.dataset.svd_diagnosis` bootstraps the spectrum of
-    the correlation matrix for the data in ``data`` to determine
+    the correlation matrix for the data in ``dataset`` to determine
     how much of that spectrum is reliably determined by this data.
 
-    Here ``data`` is a list of random arrays or a dictionary
+    Here ``dataset`` is a list of random arrays or a dictionary
     (e.g., :class:`gvar.dataset.Dataset`) whose values are lists
     of random numbers or random arrays. The random numbers or
     arrays are averaged (using :func:`gvar.dataset.avg_data`)
@@ -892,7 +892,7 @@ class svd_diagnosis(object):
 
         import gvar as gv
 
-        s = gv.dataset.svd_diagnosis(data)
+        s = gv.dataset.svd_diagnosis(dataset)
         avgdata = gv.svd(s.avgdata, svdcut=s.svdcut)
         s.plot_ratio(show=True)
 
@@ -902,9 +902,14 @@ class svd_diagnosis(object):
     by the ``s.plot_ratio`` command.
 
     Args:
-        random_data: List of random arrays or a dictionary
+        dataset: List of random arrays or a dictionary
             (e.g., :class:`gvar.dataset.Dataset`) whose values are lists
-            of random numbers or random arrays.
+            of random numbers or random arrays. Alternatively it can
+            be a tuple ``(g, Ns)`` where: ``g`` is an array of
+            |GVar|\s or a dictionary whose values are |GVar|\s or
+            arrays of |GVar|\s; and ``Ns`` is the number of random
+            samples. Then the list of random data that is analyzed is
+            created is created using ``gvar.raniter(g, n=Ns)``.
 
         nbstrap: Number of bootstrap copies used (default is 50).
 
@@ -922,12 +927,18 @@ class svd_diagnosis(object):
 
     Attributes:
         svdcut: SVD cut for bad eigenvalues in correlation matrix.
-        avgdata: Averaged data (``gvar.dataset.avg_data(random_data)``).
+        avgdata: Averaged data (``gvar.dataset.avg_data(dataset)``).
         val: Eigenvalues of the correlation matrix.
         bsval: Bootstrap average of correlation matrix eigenvalues.
         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
     """
-    def __init__(self, random_data, nbstrap=50, mincut=1e-14, models=None):
+    def __init__(self, dataset, nbstrap=50, mincut=1e-14, models=None):
+        if isinstance(dataset, tuple):
+            data, ns = dataset
+            tset = _gvar.dataset.Dataset()
+            for d in _gvar.raniter(data, n=ns):
+                tset.append(d)
+            dataset = tset
         if models is None or models == []:
             avg_data = _gvar.dataset.avg_data
         else:
@@ -937,7 +948,7 @@ class svd_diagnosis(object):
                 raise ValueError('Need lsqfit module to use models.')
             def avg_data(dset, models=models):
                 return lsqfit.MultiFitter.process_dataset(dset, models)
-        avgdata = avg_data(random_data)
+        avgdata = avg_data(dataset)
         self.avgdata = avgdata
         self.mincut = mincut
         if hasattr(avgdata, 'keys'):
@@ -954,27 +965,41 @@ class svd_diagnosis(object):
             isdict = False
         self.val = _gvar.SVD(_gvar.evalcorr(avgdata)).val
         bsval_list = []
-        for bsdata in _gvar.dataset.bootstrap_iter(random_data, n=nbstrap):
+        for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):
             bsavgdata = avg_data(bsdata)
             if isdict:
                 bsavgdata = bsavgdata.buf
             bsval_list.append(_gvar.SVD(_gvar.evalcorr(bsavgdata)).val)
         self.bsval = _gvar.dataset.avg_data(bsval_list, bstrap=True)
-        ratio = self.bsval / self.val
+        # use heuristic to find recommended svdcut
+        ratio = _gvar.mean(self.bsval) / self.val
         cuts = self.val / self.val[-1]
-        idx = cuts > self.mincut
-        ratio = ratio[idx]
-        cuts = cuts[idx]
+        chi_sig = (2. / self.avgdata.size) ** 0.5
+        # 1) find last place that is 2 sig down
         idx = numpy.where(
-            _gvar.fabs(_gvar.mean(ratio) - 1.) / _gvar.sdev(ratio) < 1.
+            ratio < 1. - 2 * chi_sig
+            )[0]
+        if len(idx) > 0:
+            ratio = ratio[idx[-1]:]
+            cuts = cuts[idx[-1]:]
+        # 2) find first place (after position 1) where 1 sig down
+        idx = numpy.where(
+            ratio >= 1. - chi_sig
             )[0]
         if len(idx) == 0:
-            idx = [len(self.val) - 1]
-        if idx[0] > 0:
+            self.svdcut = cuts[0]
+        elif idx[0] > 0:
             self.svdcut = (cuts[idx[0]] + cuts[idx[0] - 1]) / 2.
         else:
-            self.svdcut = 0.9 * cuts[idx[0]]
-        self.nmod = idx[0]
+            self.svdcut = cuts[idx[0]]
+        # determine nmod
+        idx = numpy.where(
+            self.val < self.svdcut * self.val[-1]
+            )[0]
+        if len(idx) == 0:
+            self.nmod = 0
+        else:
+            self.nmod = idx[-1] + 1
 
     def plot_ratio(self, plot=None, show=False):
         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
@@ -987,7 +1012,6 @@ class svd_diagnosis(object):
             plot: :class:`matplotlib` plotter used to make plot.
                 Uses ``plot = matplotlib.pyplot`` if ``plot=None`` (default).
             show: Displays the plot if ``show=True`` (default ``False``).
-            minx: Minimum ``x`` value in plot (default is 1e-14).
         """
         if plot is None:
             if _PLOT is not None:
@@ -1003,7 +1027,9 @@ class svd_diagnosis(object):
         y = _gvar.mean(ratio)
         yerr = _gvar.sdev(ratio)
         plot.errorbar(x=x, y=y, yerr=yerr, fmt='+', color='b')
+        sig = (2. / len(self.val)) ** 0.5
         plot.plot([x[0], x[-1]], [1., 1.], 'k--')
+        plot.plot([x[0], x[-1]], [1. - sig, 1. - sig], 'k:')
         plot.ylabel('(bootstrap / exact) for eigenvalues')
         plot.xlabel('eigenvalue / largest eigenvalue')
         plot.xscale('log')

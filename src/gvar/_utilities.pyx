@@ -1110,7 +1110,7 @@ def bootstrap_iter(g, n=None, svdcut=1e-12):
         correlation matrix with ``max(eig, svdcut * max_eig)`` where
         ``max_eig`` is the largest eigenvalue; if negative,
         discard eigenmodes with eigenvalues smaller
-        than ``|svdcut| * max_eig``. Default is ``1e-15``.
+        than ``|svdcut| * max_eig``. Default is ``1e-12``.
     :type svdcut: ``None`` or number
     :returns: An iterator that returns bootstrap copies of ``g``.
     """
@@ -1239,13 +1239,21 @@ class SVD(object):
 
     ..  attribute:: val
 
-        An ordered array containing the eigenvalues or ``mat``. Note
+        An ordered array containing the eigenvalues of ``mat``. Note
         that ``val[i]<=val[i+1]``.
 
     ..  attribute:: vec
 
         Eigenvectors ``vec[i]`` corresponding to the eigenvalues
         ``val[i]``.
+
+    ..  attribute:: valmin
+
+        Minimum eigenvalue allowed in the modified matrix.
+
+    ..  attribute:: valorig
+
+        Eigenvalues of original matrix.
 
     ..  attribute:: D
 
@@ -1308,6 +1316,7 @@ class SVD(object):
         self.eigen_range = self.kappa
         self.delta = None
         self.nmod = 0
+        self.valorig = numpy.array(val)
         # svd cuts
         if (svdcut is None or svdcut==0.0) and (svdnum is None or svdnum<=0):
             self.val = val
@@ -1339,6 +1348,7 @@ class SVD(object):
                     break
             self.val = val
             self.vec = vec
+            self.valmin = valmin
             self.delta = dely if (self.D is None or dely is None) else dely/self.D
             return
         else:

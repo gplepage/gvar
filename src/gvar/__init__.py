@@ -438,8 +438,8 @@ def fmt_chi2(f):
         chi2_dof = f.chi2 / f.dof if f.dof != 0 else 0
         return fmt % (chi2_dof, f.dof, f.Q)
 
-def svd(g, svdcut=1e-12, wgts=False):
-    """ Apply svd cuts to collection of |GVar|\s in ``g``.
+def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
+    """ Apply SVD cuts to collection of |GVar|\s in ``g``.
 
     Standard usage is, for example, ::
 
@@ -456,6 +456,20 @@ def svd(g, svdcut=1e-12, wgts=False):
     to each block-diagonal sub-matrix of the correlation matrix,
     increases the variance of the eigenmodes with eigenvalues smaller
     than ``svdcut * max_eig``.
+
+    The modification of ``g``'s covariance matrix is implemented by adding
+    (to ``g``) a set of |GVar|\s with zero means::
+
+        gmod.flat = g.flat + gmod.svdcorrection
+
+    where ``gmod.svdcorrection`` is an array containing the |GVar|\s. If
+    parameter ``add_svdnoise=True``, noise is included in ``gmod.svdcorrection``,
+    ::
+
+        gmod.svdcorrection += next(gv.raniter(gmod.svdcorrection)),
+
+    before it is added to ``g.flat``. The noise can be useful for testing fits
+    and other applications.
 
     When ``svdcut`` is negative, eigenmodes of the correlation matrix
     whose eigenvalues are smaller than ``|svdcut| * max_eig`` are dropped
@@ -508,109 +522,144 @@ def svd(g, svdcut=1e-12, wgts=False):
 
     where ``result`` is the desired expectation value.
 
-    The input parameters are :
+    Args:
 
-    :param g: An array of |GVar|\s or a dicitionary whose values are
-        |GVar|\s and/or arrays of |GVar|\s.
-    :param svdcut: If positive, replace eigenvalues ``eig`` of the correlation
-        matrix with ``max(eig, svdcut * max_eig)`` where ``max_eig`` is
-        the largest eigenvalue; if negative,
-        discard eigenmodes with eigenvalues smaller
-        than ``|svdcut| * max_eig``. Default is 1e-15.
-    :type svdcut: ``None`` or number ``(|svdcut|<=1)``.
-    :param wgts: Setting ``wgts=1`` causes :func:`gvar.svd` to compute
-        and return a spectral decomposition of the covariance matrix of
-        the modified |GVar|\s, ``gmod``. Setting ``wgts=-1`` results in
-        a decomposition of the inverse of the covariance matrix. The
-        default value is ``False``, in which case only ``gmod`` is returned.
-    :returns: A copy ``gmod`` of ``g`` whose correlation matrix is modified by
-        *svd* cuts. If ``wgts`` is not ``False``,
+        g: An array of |GVar|\s or a dicitionary whose values are
+            |GVar|\s and/or arrays of |GVar|\s.
+        svdcut (None or float): If positive, replace eigenvalues ``eig``
+            of the correlation matrix with ``max(eig, svdcut * max_eig)``
+            where ``max_eig`` is the largest eigenvalue; if negative, discard
+            eigenmodes with eigenvalues smaller than ``|svdcut| * max_eig``.
+            Note ``|svdcut| < 1``. Default is 1e-12.
+        wgts: Setting ``wgts=1`` causes :func:`gvar.svd` to compute
+            and return a spectral decomposition of the covariance matrix of
+            the modified |GVar|\s, ``gmod``. Setting ``wgts=-1`` results in
+            a decomposition of the inverse of the covariance matrix. The
+            default value is ``False``, in which case only ``gmod`` is returned.
+        add_svdnoise: If ``True``, noise is added to the SVD correction (see
+            above).
+
+    Returns:
+        A copy ``gmod`` of ``g`` whose correlation matrix is modified by
+        SVD cuts. If ``wgts`` is not ``False``,
         a tuple ``(g, i_wgts)`` is returned where ``i_wgts``
         contains a spectral decomposition of ``gmod``'s
         covariance matrix or its inverse.
 
-    Data from the *svd* analysis of ``g``'s covariance matrix is stored in
-    ``svd`` itself:
+    Data from the SVD analysis is stored in ``gmod``:
 
-    .. attribute:: svd.dof
+    .. attribute:: gmod.svdcut
+
+        SVD cut used to create ``gmod``.
+
+    .. attribute:: gmod.dof
 
         Number of independent degrees of freedom left after the
-        *svd* cut. This is the same as the number initially unless
+        SVD cut. This is the same as the number initially unless
         ``svdcut < 0`` in which case it may be smaller.
 
-    .. attribute:: svd.nmod
+    .. attribute:: gmod.nmod
 
         Number of modes whose eignevalue was modified by the
-        *svd* cut.
+        SVD cut.
 
-    .. attribute:: svd.nblocks
+    .. attribute:: gmod.nblocks
 
-        A dictionary where ``svd.nblocks[s]`` contains the number of
+        A dictionary where ``gmod.nblocks[s]`` contains the number of
         block-diagonal ``s``-by-``s`` sub-matrices in the correlation
         matrix.
 
-    .. attribute:: svd.eigen_range
+    .. attribute:: gmod.eigen_range
 
-        Ratio of the smallest to largest eigenvalue before *svd* cuts are
+        Ratio of the smallest to largest eigenvalue before SVD cuts are
         applied (but after rescaling).
 
-    .. attribute:: svd.logdet
+    .. attribute:: gmod.logdet
 
-        Logarithm of the determinant of the covariance matrix after *svd*
+        Logarithm of the determinant of the covariance matrix after SVD
         cuts are applied (excluding any omitted modes when
-        ``svdcut < 0``).
+        ``svdcut < 0`` and any diagonal zero modes).
 
-    .. attribute:: svd.correction
+    .. attribute:: gmod.svdcorrection
 
-        Array containing the *svd* corrections that were added to ``g.flat``
-        to create the modified ``g``\s.
+        Array containing the SVD corrections added to ``g.flat``
+        to create ``gmod``: ``gmod.flat = g.flat + gmod.svdcorrection``.
     """
     # replace g by a copy of g
     if hasattr(g,'keys'):
         g = BufferDict(g)
     else:
-        g = numpy.array(g)
+        class svdarray(numpy.ndarray):
+            def __new__(cls, inputarray):
+                obj = numpy.array(g).view(cls)
+                return obj
+        g = svdarray(g)
     idx_bcov = evalcov_blocks(g.flat)
-    svd.logdet = 0.0
-    svd.correction = numpy.zeros(len(g.flat), object)
-    svd.correction[:] = gvar(0, 0)
-    svd.eigen_range = 1.
-    svd.nmod = 0
+    g.logdet = 0.0
+    g.svdcorrection = numpy.zeros(len(g.flat), object)
+    g.svdcorrection[:] = gvar(0, 0)
+    g.eigen_range = 1.
+    g.nmod = 0
+    if add_svdnoise and svdcut is not None and svdcut > 0:
+        g.svdoffsets = numpy.zeros(len(g.flat), float)
+    else:
+        g.svdoffsets = 0.0
     if wgts is not False:
         i_wgts = [([], [])] # 1st entry for all 1x1 blocks
     lost_modes = 0
-    svd.nblocks = {}
+    g.nblocks = {}
     for idx, block_cov in idx_bcov:
-        svd.nblocks[len(idx)] = svd.nblocks.get(len(idx), 0) + 1
+        g.nblocks[len(idx)] = g.nblocks.get(len(idx), 0) + 1
         if len(idx) == 1:
             i = idx[0]
-            svd.logdet += numpy.log(block_cov[0, 0])
+            if block_cov[0, 0] == 0:
+                g.logdet = numpy.inf
+            else:
+                g.logdet += numpy.log(block_cov[0, 0])
             if wgts is not False:
                 i_wgts[0][0].append(i)
                 i_wgts[0][1].append(block_cov[0, 0] ** (wgts * 0.5))
         else:
             s = SVD(block_cov, svdcut=svdcut, rescale=True, compute_delta=True)
             if s.D is not None:
-                svd.logdet -= 2 * sum(numpy.log(di) for di in s.D)
-            svd.logdet += sum(numpy.log(vali) for vali in s.val)
+                g.logdet -= 2 * sum(numpy.log(di) for di in s.D)
+            g.logdet += sum(numpy.log(vali) for vali in s.val)
+            g.nmod += s.nmod
             if s.delta is not None:
-                svd.correction[idx] = s.delta
+                if add_svdnoise:
+                    for vali, valorigi, veci in zip(s.val, s.valorig, s.vec):
+                        if vali > valorigi:
+                            # add next(raniter(s.delta)) to s.delta in g.svdcorrection
+                            s.delta += (veci / s.D) * (
+                                numpy.random.normal(0.0, (vali - valorigi) ** 0.5)
+                                )
+                g.svdcorrection[idx] = s.delta
                 g.flat[idx] += s.delta
+            elif svdcut is not None and svdcut < 0:
+                newg = numpy.zeros(len(idx), object)
+                for veci in s.vec:
+                    veci_D = veci / s.D
+                    newg += veci_D * (veci.dot(s.D * g.flat[idx]))
+                lost_modes += len(idx) - len(s.vec)
+                g.flat[idx] = newg
             if wgts is not False:
                 i_wgts.append(
                     (idx, [w for w in s.decomp(wgts)[::-1]])
                     )
-            if svdcut is not None and svdcut < 0:
-                newg = numpy.zeros(len(idx), object)
-                for w in s.vec:
-                    newg += (w / s.D) * (w.dot(s.D * g.flat[idx]))
-                lost_modes += len(idx) - len(s.vec)
-                g.flat[idx] = newg
-            if s.eigen_range < svd.eigen_range:
-                svd.eigen_range = s.eigen_range
-            svd.nmod += s.nmod
-    svd.dof = len(g.flat) - lost_modes
-    svd.nmod += lost_modes
+            if s.eigen_range < g.eigen_range:
+                g.eigen_range = s.eigen_range
+    g.nmod += lost_modes
+    g.dof = len(g.flat) - lost_modes
+    g.svdcut = svdcut
+
+    ##### for legacy code (don't use)
+    svd.dof = g.dof
+    svd.nmod = g.nmod
+    svd.eigen_range = g.eigen_range
+    svd.logdet = g.logdet
+    svd.correction = g.svdcorrection
+    svd.nblocks = g.nblocks
+    ##### end of legacy code
 
     # repack into numpy arrays
     if wgts is not False:
@@ -623,35 +672,6 @@ def svd(g, svdcut=1e-12, wgts=False):
         return (g, i_wgts)
     else:
         return g
-
-def find_diagonal_blocks(m):
-    """ Find block-diagonal components of matrix m.
-
-    Returns a list of index arrays identifying the blocks. The 1x1
-    blocks are listed first.
-
-    Used by svd.
-    """
-    unassigned_indices = set(range(m.shape[0]))
-    non_zero = []
-    blocks = []
-    for i in range(m.shape[0]):
-        non_zero.append(set(m[i].nonzero()[0]))
-        non_zero[i].add(i)
-        if len(non_zero[i]) == 1:
-            # diagonal element
-            blocks.append(non_zero[i])
-            unassigned_indices.remove(i)
-    while unassigned_indices:
-        new_block = non_zero[unassigned_indices.pop()]
-        for j in unassigned_indices:
-            if not new_block.isdisjoint(non_zero[j]):
-                new_block.update(non_zero[j])
-        unassigned_indices.difference_update(new_block)
-        blocks.append(new_block)
-    for i in range(len(blocks)):
-        blocks[i] = numpy.array(sorted(blocks[i]))
-    return blocks
 
 def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None):
     """ Tabulate contents of an array or dictionary of |GVar|\s.
@@ -1324,14 +1344,19 @@ def make_fake_data(g, fac=1.0):
         return BufferDict(g, buf=make_fake_data(g.buf, fac))
     else:
         g_shape = numpy.shape(g)
-        g_flat = numpy.asarray(g).flat
+        g_flat = numpy.array(g).flat
         zero = numpy.zeros(len(g_flat), float)
-        dg = 0.5 * gvar(zero, evalcov(g_flat))
-        g_flat = mean(g_flat) +  next(raniter(dg))
-        dg *=  fac
+        dg = (2. ** -0.5) * gvar(zero, evalcov(g_flat))
+        dg *= fac
         noise = gvar(zero, sdev(dg))
-        g_flat = g_flat + dg + noise + next(raniter(noise))
+        g_flat = mean(g_flat) + dg + noise + next(raniter(dg + noise))
         return g_flat[0] if g_shape == () else g_flat.reshape(g_shape)
+
+def make_fake_sample_iter(g, n, fac=1.0):
+    y = make_fake_data(g, fac=fac)
+    y.flat = gvar(mean(y.flat), evalcov(y.flat) * n)
+    for yi in raniter(y, n=n):
+        yield yi
 
 # legacy code support
 fmt_partialsdev = fmt_errorbudget

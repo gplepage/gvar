@@ -538,9 +538,12 @@ cdef class GVar:
         correlated |GVar|\s cannot be disentangled into contributions
         corresponding to each variable separately.)
 
-        :param args[i]: Variables contributing to the partial variance.
-        :type args[i]: |GVar| or array/dictionary of |GVar|\s
-        :returns: Partial variance due to all of ``args``.
+        Args:
+            args[i]: A |GVar| or array/dictionary of |GVar|\s
+                 contributing to the partial variance.
+
+        Returns:
+            Partial variance due to all of ``args``.
         """
         cdef GVar ai
         cdef svec md

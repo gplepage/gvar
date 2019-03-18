@@ -19,7 +19,7 @@ quantity ::
     y(x[i]) = y0 + s * x[i]
 
 for ``x=[1,2...10]``. The
-measurements are noisy so we average 15 sets ``y_sample[j]``
+measurements are noisy so we average 13 sets ``y_sample[j]``
 of independent measurements::
 
     import numpy as np
@@ -40,24 +40,22 @@ of independent measurements::
         [3.0388,  5.0407,  7.0409,  9.0439, 11.0443, 13.0459, 15.0455, 17.0479, 19.0493, 21.0505],
         [3.1353,  5.1368,  7.1376,  9.1367, 11.1360, 13.1377, 15.1369, 17.1400, 19.1384, 21.1396],
         [3.0051,  5.0063,  7.0022,  9.0052, 11.0040, 13.0033, 15.0007, 16.9989, 18.9994, 20.9995],
-        [3.0221,  5.0197,  7.0193,  9.0183, 11.0179, 13.0184, 15.0164, 17.0177, 19.0159, 21.0155],
-        [3.0188,  5.0200,  7.0184,  9.0183, 11.0189, 13.0188, 15.0191, 17.0183, 19.0177, 21.0186],
         ]
     y = gv.dataset.avg_data(y_samples)
 
-The result is an array of 10 |GVar|\s, ::
+The result is an array of 10 |GVar|\s ::
 
     >>> print(y)
-    [3.014(23) 5.014(23) 7.014(23) 9.014(24) 11.013(24) 13.014(24) 15.013(24)
-     17.013(24) 19.013(24) 21.013(24)]
+    [3.013(27) 5.013(27) 7.013(27) 9.013(27) 11.012(27) 13.013(27) 15.013(28)
+     17.013(28) 19.012(28) 21.013(28)]
 
 that are highly correlated::
 
     >>> print(gv.evalcorr(y)[:4,:4])
-    [[ 1.          0.9998438   0.99973225  0.99965233]
-     [ 0.9998438   1.          0.99991873  0.99985194]
-     [ 0.99973225  0.99991873  1.          0.99997514]
-     [ 0.99965233  0.99985194  0.99997514  1.        ]]
+    [[1.         0.99990406 0.99973156 0.99959261]
+     [0.99990406 1.         0.99985848 0.99982468]
+     [0.99973156 0.99985848 1.         0.99987618]
+     [0.99959261 0.99982468 0.99987618 1.        ]]
 
 To extract a slope we fit these data using the :mod:`lsqfit` module::
 
@@ -71,17 +69,17 @@ To extract a slope we fit these data using the :mod:`lsqfit` module::
     print(fit)
 
 The fit, however, is very poor, with a ``chi**2`` per degree of freedom
-of |~| 11::
+of |~| 8.3::
 
-    Least Square Fit:
-      chi2/dof [dof] = 11 [10]    Q = 4.1e-19    logGBF = -1.7451
+  Least Square Fit:
+    chi2/dof [dof] = 8.3 [10]    Q = 1.1e-13    logGBF = 11.816
 
-    Parameters:
-                 y0     0.967 (11)      [  0.0 (5.0) ]
-                  s   2.00079 (16)      [  0.0 (5.0) ]
+  Parameters:
+               y0     0.963 (12)      [  0.0 (5.0) ]
+                s   2.00078 (18)      [  0.0 (5.0) ]
 
-    Settings:
-      svdcut/n = 1e-12/0    tol = (1e-08*,1e-10,1e-10)    (itns/time = 5/0.0)
+  Settings:
+    svdcut/n = 1e-12/0    tol = (1e-08*,1e-10,1e-10)    (itns/time = 5/0.0)
 
 The problem is that we do not have enough samples in ``y_sample`` to determine
 the correlation matrix sufficiently accurately. The smallest
@@ -103,15 +101,15 @@ keeping just the individual standard deviations::
 
 This gives an acceptable fit, ::
 
-    Least Square Fit:
-      chi2/dof [dof] = 0.02 [10]    Q = 1    logGBF = 14.067
+  Least Square Fit:
+    chi2/dof [dof] = 0.02 [10]    Q = 1    logGBF = 12.924
 
-    Parameters:
-                 y0    1.014 (16)     [  0.0 (5.0) ]
-                  s   1.9998 (26)     [  0.0 (5.0) ]
+  Parameters:
+               y0    1.013 (18)     [  0.0 (5.0) ]
+                s   1.9999 (30)     [  0.0 (5.0) ]
 
-    Settings:
-      svdcut/n = 1e-12/0    tol = (1e-08*,1e-10,1e-10)    (itns/time = 5/0.0)
+  Settings:
+    svdcut/n = 1e-12/0    tol = (1e-08*,1e-10,1e-10)    (itns/time = 5/0.0)
 
 but the very small ``chi**2`` confirms what we suspect: that we are ignoring
 very strong correlations that are relevant to the fit.
@@ -136,17 +134,19 @@ eigenvalue divided by the real eigenvalue:
    :width: 80%
 
 
-The bootstrap tests the stability of eigenvalues against changes in
-the sample size (because it reduces the effective sample size).
+The bootstrap tests the stability of eigenvalues with limited sample sizes.
 Bootstrap estimates that are significantly lower than the real values
 indicate eigenvalues that are likely unreliable. Here
 bootstrap eigenvalues agree well with the real values for the
 upper half of the spectrum, but are all low for the lower half.
+The standard deviation for the chi-squared per degree of freedom
+is indicated by the dotted (bottom) line in the plot; the SVD cut is chosen
+so that (most) eigenvalues that fall below this line are modified.
 The bootstrap errors
 give a sense for how accurately the underlying eigenvalues are
 determined given the sample size.
 
-From the plot we see that the fitting problem lies with
+The plot shows that the fitting problem lies with
 the eigenvalues that are smaller than roughly 10\ :sup:`-5` |~| times
 the largest
 eigenvalue. To address this problem we introduce an SVD cut
@@ -167,17 +167,18 @@ overestimates the uncertainties associated with the small eigenvalues,
 and so is a conservative move.
 It makes the correlation matrix less singular, and fixes the fit::
 
-    Least Square Fit:
-      chi2/dof [dof] = 1.2 [10]    Q = 0.28    logGBF = 44.774
+  Least Square Fit:
+    chi2/dof [dof] = 0.9 [10]    Q = 0.53    logGBF = 45.208
 
-    Parameters:
-                 y0     1.009 (19)      [  0.0 (5.0) ]
-                  s   1.99998 (19)      [  0.0 (5.0) ]
+  Parameters:
+               y0     1.008 (22)      [  0.0 (5.0) ]
+                s   2.00001 (22)      [  0.0 (5.0) ]
 
-    Settings:
-      svdcut/n = 1e-12/0    tol = (1e-08*,1e-10,1e-10)    (itns/time = 5/0.0)
+  Settings:
+    svdcut/n = 1e-12/0    tol = (1e-08*,1e-10,1e-10)    (itns/time = 5/0.0)
 
-Our final estimate for the slope is ``s = 1.99998(19)``, whose uncertainty
+
+Our final estimate for the slope is ``s = 2.00001(22)``, whose uncertainty
 is more than an order-of-magnitude smaller than what we obtained from
 the uncorrelated fit.
 
@@ -188,7 +189,7 @@ average over all values of |~| ``i``::
     slope = lsqfit.wavg(y[1:] - y[:-1])
     print(slope)
 
-This again gives a slope of ``1.99998(19)`` provided an SVD cut has
+This again gives a slope of ``2.00001(22)`` provided an SVD cut has
 first been applied to ``y``.
 
 SVD cuts are often necessary when using correlation matrices constructed

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 9.0.3 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 9.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -773,7 +773,7 @@ which case the resulting iterator returns bootstrap copies of the
 correlation matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where
 <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the largest eigenvalue; if negative,
 discard eigenmodes with eigenvalues smaller
-than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-15</span></code>.</li>
+than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -887,8 +887,8 @@ in <code class="docutils literal notranslate"><span class="pre">outputs</span></
 of a set of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s:</p>
 <dl class="function">
 <dt id="gvar.svd">
-<code class="descclassname">gvar.</code><code class="descname">svd</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-12</em>, <em>wgts=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.svd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply svd cuts to collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<code class="descclassname">gvar.</code><code class="descname">svd</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-12</em>, <em>wgts=False</em>, <em>add_svdnoise=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.svd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply SVD cuts to collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>Standard usage is, for example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">svdcut</span> <span class="o">=</span> <span class="o">...</span>
 <span class="n">gmod</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">svdcut</span><span class="p">)</span>
@@ -904,6 +904,18 @@ the largest eigenvalue. This SVD cut, which is applied separately
 to each block-diagonal sub-matrix of the correlation matrix,
 increases the variance of the eigenmodes with eigenvalues smaller
 than <code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.</p>
+<p>The modification of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s covariance matrix is implemented by adding
+(to <code class="docutils literal notranslate"><span class="pre">g</span></code>) a set of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s with zero means:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmod</span><span class="o">.</span><span class="n">flat</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">flat</span> <span class="o">+</span> <span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code> is an array containing the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. If
+parameter <code class="docutils literal notranslate"><span class="pre">add_svdnoise=True</span></code>, noise is included in <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code>,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span> <span class="o">+=</span> <span class="nb">next</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">raniter</span><span class="p">(</span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span><span class="p">)),</span>
+</pre></div>
+</div>
+<p>before it is added to <code class="docutils literal notranslate"><span class="pre">g.flat</span></code>. The noise can be useful for testing fits
+and other applications.</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> is negative, eigenmodes of the correlation matrix
 whose eigenvalues are smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code> are dropped
 from the new matrix and the corresponding components of <code class="docutils literal notranslate"><span class="pre">g</span></code> are
@@ -952,7 +964,6 @@ using:</p>
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">result</span></code> is the desired expectation value.</p>
-<p>The input parameters are :</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -960,21 +971,23 @@ using:</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>g</strong> – An array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dicitionary whose values are
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number <code class="docutils literal notranslate"><span class="pre">(|svdcut|&lt;=1)</span></code>.) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code> of the correlation
-matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is
-the largest eigenvalue; if negative,
-discard eigenmodes with eigenvalues smaller
-than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>. Default is 1e-15.</li>
+<li><strong>svdcut</strong> (<em>None</em><em> or </em><em>float</em>) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code>
+of the correlation matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code>
+where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the largest eigenvalue; if negative, discard
+eigenmodes with eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.
+Note <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>. Default is 1e-12.</li>
 <li><strong>wgts</strong> – Setting <code class="docutils literal notranslate"><span class="pre">wgts=1</span></code> causes <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a> to compute
 and return a spectral decomposition of the covariance matrix of
 the modified <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal notranslate"><span class="pre">gmod</span></code>. Setting <code class="docutils literal notranslate"><span class="pre">wgts=-1</span></code> results in
 a decomposition of the inverse of the covariance matrix. The
 default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>, in which case only <code class="docutils literal notranslate"><span class="pre">gmod</span></code> is returned.</li>
+<li><strong>add_svdnoise</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, noise is added to the SVD correction (see
+above).</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A copy <code class="docutils literal notranslate"><span class="pre">gmod</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code> whose correlation matrix is modified by
-<em>svd</em> cuts. If <code class="docutils literal notranslate"><span class="pre">wgts</span></code> is not <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+SVD cuts. If <code class="docutils literal notranslate"><span class="pre">wgts</span></code> is not <code class="docutils literal notranslate"><span class="pre">False</span></code>,
 a tuple <code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">i_wgts)</span></code> is returned where <code class="docutils literal notranslate"><span class="pre">i_wgts</span></code>
 contains a spectral decomposition of <code class="docutils literal notranslate"><span class="pre">gmod</span></code>’s
 covariance matrix or its inverse.</p>
@@ -982,51 +995,56 @@ covariance matrix or its inverse.</p>
 </tr>
 </tbody>
 </table>
-<p>Data from the <em>svd</em> analysis of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s covariance matrix is stored in
-<code class="docutils literal notranslate"><span class="pre">svd</span></code> itself:</p>
+<p>Data from the SVD analysis is stored in <code class="docutils literal notranslate"><span class="pre">gmod</span></code>:</p>
 <dl class="attribute">
-<dt id="gvar.svd.dof">
-<code class="descclassname">svd.</code><code class="descname">dof</code><a class="headerlink" href="#gvar.svd.dof" title="Permalink to this definition">¶</a></dt>
+<dt id="gvar.gmod.svdcut">
+<code class="descclassname">gmod.</code><code class="descname">svdcut</code><a class="headerlink" href="#gvar.gmod.svdcut" title="Permalink to this definition">¶</a></dt>
+<dd><p>SVD cut used to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gvar.gmod.dof">
+<code class="descclassname">gmod.</code><code class="descname">dof</code><a class="headerlink" href="#gvar.gmod.dof" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of independent degrees of freedom left after the
-<em>svd</em> cut. This is the same as the number initially unless
+SVD cut. This is the same as the number initially unless
 <code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> in which case it may be smaller.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.svd.nmod">
-<code class="descclassname">svd.</code><code class="descname">nmod</code><a class="headerlink" href="#gvar.svd.nmod" title="Permalink to this definition">¶</a></dt>
+<dt id="gvar.gmod.nmod">
+<code class="descclassname">gmod.</code><code class="descname">nmod</code><a class="headerlink" href="#gvar.gmod.nmod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of modes whose eignevalue was modified by the
-<em>svd</em> cut.</p>
+SVD cut.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.svd.nblocks">
-<code class="descclassname">svd.</code><code class="descname">nblocks</code><a class="headerlink" href="#gvar.svd.nblocks" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dictionary where <code class="docutils literal notranslate"><span class="pre">svd.nblocks[s]</span></code> contains the number of
+<dt id="gvar.gmod.nblocks">
+<code class="descclassname">gmod.</code><code class="descname">nblocks</code><a class="headerlink" href="#gvar.gmod.nblocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary where <code class="docutils literal notranslate"><span class="pre">gmod.nblocks[s]</span></code> contains the number of
 block-diagonal <code class="docutils literal notranslate"><span class="pre">s</span></code>-by-<code class="docutils literal notranslate"><span class="pre">s</span></code> sub-matrices in the correlation
 matrix.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.svd.eigen_range">
-<code class="descclassname">svd.</code><code class="descname">eigen_range</code><a class="headerlink" href="#gvar.svd.eigen_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ratio of the smallest to largest eigenvalue before <em>svd</em> cuts are
+<dt id="gvar.gmod.eigen_range">
+<code class="descclassname">gmod.</code><code class="descname">eigen_range</code><a class="headerlink" href="#gvar.gmod.eigen_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ratio of the smallest to largest eigenvalue before SVD cuts are
 applied (but after rescaling).</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.svd.logdet">
-<code class="descclassname">svd.</code><code class="descname">logdet</code><a class="headerlink" href="#gvar.svd.logdet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the determinant of the covariance matrix after <em>svd</em>
+<dt id="gvar.gmod.logdet">
+<code class="descclassname">gmod.</code><code class="descname">logdet</code><a class="headerlink" href="#gvar.gmod.logdet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the determinant of the covariance matrix after SVD
 cuts are applied (excluding any omitted modes when
-<code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">&lt;</span> <span class="pre">0</span></code>).</p>
+<code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> and any diagonal zero modes).</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="gvar.svd.correction">
-<code class="descclassname">svd.</code><code class="descname">correction</code><a class="headerlink" href="#gvar.svd.correction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Array containing the <em>svd</em> corrections that were added to <code class="docutils literal notranslate"><span class="pre">g.flat</span></code>
-to create the modified <code class="docutils literal notranslate"><span class="pre">g</span></code>s.</p>
+<dt id="gvar.gmod.svdcorrection">
+<code class="descclassname">gmod.</code><code class="descname">svdcorrection</code><a class="headerlink" href="#gvar.gmod.svdcorrection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array containing the SVD corrections added to <code class="docutils literal notranslate"><span class="pre">g.flat</span></code>
+to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code>: <code class="docutils literal notranslate"><span class="pre">gmod.flat</span> <span class="pre">=</span> <span class="pre">g.flat</span> <span class="pre">+</span> <span class="pre">gmod.svdcorrection</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1161,7 +1179,8 @@ corresponding to each variable separately.)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong><strong>[</strong><strong>i</strong><strong>]</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s) – Variables contributing to the partial variance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong><strong>[</strong><strong>i</strong><strong>]</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+contributing to the partial variance.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Partial variance due to all of <code class="docutils literal notranslate"><span class="pre">args</span></code>.</td>
 </tr>
@@ -1556,7 +1575,7 @@ equal to +-1.0 before diagonalizing.</li>
 <dl class="attribute">
 <dt id="gvar.SVD.val">
 <code class="descname">val</code><a class="headerlink" href="#gvar.SVD.val" title="Permalink to this definition">¶</a></dt>
-<dd><p>An ordered array containing the eigenvalues or <code class="docutils literal notranslate"><span class="pre">mat</span></code>. Note
+<dd><p>An ordered array containing the eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat</span></code>. Note
 that <code class="docutils literal notranslate"><span class="pre">val[i]&lt;=val[i+1]</span></code>.</p>
 </dd></dl>
 
@@ -1565,6 +1584,18 @@ that <code class="docutils literal notranslate"><span class="pre">val[i]&lt;=val
 <code class="descname">vec</code><a class="headerlink" href="#gvar.SVD.vec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Eigenvectors <code class="docutils literal notranslate"><span class="pre">vec[i]</span></code> corresponding to the eigenvalues
 <code class="docutils literal notranslate"><span class="pre">val[i]</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gvar.SVD.valmin">
+<code class="descname">valmin</code><a class="headerlink" href="#gvar.SVD.valmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum eigenvalue allowed in the modified matrix.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gvar.SVD.valorig">
+<code class="descname">valorig</code><a class="headerlink" href="#gvar.SVD.valorig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Eigenvalues of original matrix.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1995,7 +2026,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

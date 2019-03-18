@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 9.0.3 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 9.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -183,9 +183,9 @@ sample in code: for example,</p>
 <p>The functions defined in the module are:</p>
 <dl class="function">
 <dt id="gvar.dataset.avg_data">
-<code class="descclassname">gvar.dataset.</code><code class="descname">avg_data</code><span class="sig-paren">(</span><em>random_data</em>, <em>spread=False</em>, <em>median=False</em>, <em>bstrap=False</em>, <em>noerror=False</em>, <em>warn=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Average <code class="docutils literal notranslate"><span class="pre">random_data</span></code> to estimate means and covariance.</p>
-<p><code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a list of random numbers, a list of random arrays, or a dictionary
+<code class="descclassname">gvar.dataset.</code><code class="descname">avg_data</code><span class="sig-paren">(</span><em>dataset</em>, <em>spread=False</em>, <em>median=False</em>, <em>bstrap=False</em>, <em>noerror=False</em>, <em>warn=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Average <code class="docutils literal notranslate"><span class="pre">dataset</span></code> to estimate means and covariance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers, a list of random arrays, or a dictionary
 of lists of random numbers and/or arrays: for example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">random_numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.60</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">,</span> <span class="mf">1.28</span><span class="p">,</span> <span class="mf">1.30</span><span class="p">,</span> <span class="mf">0.54</span><span class="p">,</span> <span class="mf">2.15</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">random_arrays</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">12.2</span><span class="p">,</span><span class="mf">121.3</span><span class="p">],[</span><span class="mf">13.4</span><span class="p">,</span><span class="mf">149.2</span><span class="p">],[</span><span class="mf">11.7</span><span class="p">,</span><span class="mf">135.3</span><span class="p">],</span>
@@ -208,10 +208,10 @@ estimates. The results are returned as a <a class="reference internal" href="gva
 </div>
 <p>The arrays in <code class="docutils literal notranslate"><span class="pre">random_arrays</span></code> are one dimensional; in general, they
 can have any shape.</p>
-<p><code class="docutils literal notranslate"><span class="pre">avg_data(random_data)</span></code> also estimates any correlations between different
-quantities in <code class="docutils literal notranslate"><span class="pre">random_data</span></code>. When <code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a dictionary, it does this by
+<p><code class="docutils literal notranslate"><span class="pre">avg_data(dataset)</span></code> also estimates any correlations between different
+quantities in <code class="docutils literal notranslate"><span class="pre">dataset</span></code>. When <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a dictionary, it does this by
 assuming that the lists of random numbers/arrays for the different
-<code class="docutils literal notranslate"><span class="pre">random_data[k]</span></code>s are synchronized, with the first element in one list
+<code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code>s are synchronized, with the first element in one list
 corresponding to the first elements in all other lists, and so on. If
 some lists are shorter than others, the longer lists are truncated to
 the same length as the shortest list (discarding data samples).</p>
@@ -251,13 +251,13 @@ different components of a dictionary data set have different sample sizes.</p>
 
 <dl class="function">
 <dt id="gvar.dataset.autocorr">
-<code class="descclassname">gvar.dataset.</code><code class="descname">autocorr</code><span class="sig-paren">(</span><em>random_data</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.autocorr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute autocorrelation in <code class="docutils literal notranslate"><span class="pre">random_data</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a list of random numbers or random arrays, or a dictionary
+<code class="descclassname">gvar.dataset.</code><code class="descname">autocorr</code><span class="sig-paren">(</span><em>dataset</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.autocorr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute autocorrelation in <code class="docutils literal notranslate"><span class="pre">dataset</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers or random arrays, or a dictionary
 of lists of random numbers/arrays.</p>
-<p>When <code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a list of random numbers, <code class="docutils literal notranslate"><span class="pre">autocorr(random_data)</span></code> returns
-an array where <code class="docutils literal notranslate"><span class="pre">autocorr(random_data)[i]</span></code> is the correlation between
-elements in <code class="docutils literal notranslate"><span class="pre">random_data</span></code> that are separated by distance <code class="docutils literal notranslate"><span class="pre">i</span></code> in the list:
+<p>When <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers, <code class="docutils literal notranslate"><span class="pre">autocorr(dataset)</span></code> returns
+an array where <code class="docutils literal notranslate"><span class="pre">autocorr(dataset)[i]</span></code> is the correlation between
+elements in <code class="docutils literal notranslate"><span class="pre">dataset</span></code> that are separated by distance <code class="docutils literal notranslate"><span class="pre">i</span></code> in the list:
 for example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">autocorr</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span>
 <span class="go">[ 1. -1.  1. -1.  1. -1.]</span>
@@ -266,23 +266,23 @@ for example,</p>
 <p>shows perfect correlation between elements separated by an even
 interval in the list, and perfect anticorrelation between elements by
 an odd interval.</p>
-<p><code class="docutils literal notranslate"><span class="pre">autocorr(random_data)</span></code> returns a list of arrays of autocorrelation
-coefficients when <code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a list of random arrays. Again
-<code class="docutils literal notranslate"><span class="pre">autocorr(random_data)[i]</span></code> gives the autocorrelations for <code class="docutils literal notranslate"><span class="pre">random_data</span></code> elements
-separated by distance <code class="docutils literal notranslate"><span class="pre">i</span></code> in the list. Similarly <code class="docutils literal notranslate"><span class="pre">autocorr(random_data)</span></code>
-returns a dictionary when <code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a dictionary.</p>
-<p><code class="docutils literal notranslate"><span class="pre">autocorr(random_data)</span></code> uses FFTs to compute the autocorrelations; the cost
+<p><code class="docutils literal notranslate"><span class="pre">autocorr(dataset)</span></code> returns a list of arrays of autocorrelation
+coefficients when <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random arrays. Again
+<code class="docutils literal notranslate"><span class="pre">autocorr(dataset)[i]</span></code> gives the autocorrelations for <code class="docutils literal notranslate"><span class="pre">dataset</span></code> elements
+separated by distance <code class="docutils literal notranslate"><span class="pre">i</span></code> in the list. Similarly <code class="docutils literal notranslate"><span class="pre">autocorr(dataset)</span></code>
+returns a dictionary when <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a dictionary.</p>
+<p><code class="docutils literal notranslate"><span class="pre">autocorr(dataset)</span></code> uses FFTs to compute the autocorrelations; the cost
 of computing the autocorrelations should grow roughly linearly with the
-number of random samples in <code class="docutils literal notranslate"><span class="pre">random_data</span></code> (up to logarithms).</p>
+number of random samples in <code class="docutils literal notranslate"><span class="pre">dataset</span></code> (up to logarithms).</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gvar.dataset.bin_data">
-<code class="descclassname">gvar.dataset.</code><code class="descname">bin_data</code><span class="sig-paren">(</span><em>random_data</em>, <em>binsize=2</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bin_data" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.dataset.</code><code class="descname">bin_data</code><span class="sig-paren">(</span><em>dataset</em>, <em>binsize=2</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bin_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin random data.</p>
-<p><code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a list of random numbers or random arrays, or a
+<p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers or random arrays, or a
 dictionary of lists of random numbers/arrays.
-<code class="docutils literal notranslate"><span class="pre">bin_data(random_data,</span> <span class="pre">binsize)</span></code> replaces consecutive groups of
+<code class="docutils literal notranslate"><span class="pre">bin_data(dataset,</span> <span class="pre">binsize)</span></code> replaces consecutive groups of
 <code class="docutils literal notranslate"><span class="pre">binsize</span></code> numbers/arrays by the average of those numbers/arrays. The
 result is new data list (or dictionary) with <code class="docutils literal notranslate"><span class="pre">1/binsize</span></code> times as much
 random data: for example,</p>
@@ -300,29 +300,29 @@ exist. Over-binning erases useful information.</p>
 
 <dl class="function">
 <dt id="gvar.dataset.bootstrap_iter">
-<code class="descclassname">gvar.dataset.</code><code class="descname">bootstrap_iter</code><span class="sig-paren">(</span><em>random_data</em>, <em>n=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bootstrap_iter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create iterator that returns bootstrap copies of <code class="docutils literal notranslate"><span class="pre">random_data</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">random_data</span></code> is a list of random numbers or random arrays, or a dictionary
-of lists of random numbers/arrays. <code class="docutils literal notranslate"><span class="pre">bootstrap_iter(random_data,n)</span></code> is an
-iterator that returns <code class="docutils literal notranslate"><span class="pre">n</span></code> bootstrap copies of <code class="docutils literal notranslate"><span class="pre">random_data</span></code>. The random
+<code class="descclassname">gvar.dataset.</code><code class="descname">bootstrap_iter</code><span class="sig-paren">(</span><em>dataset</em>, <em>n=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bootstrap_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create iterator that returns bootstrap copies of <code class="docutils literal notranslate"><span class="pre">dataset</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers or random arrays, or a dictionary
+of lists of random numbers/arrays. <code class="docutils literal notranslate"><span class="pre">bootstrap_iter(dataset,n)</span></code> is an
+iterator that returns <code class="docutils literal notranslate"><span class="pre">n</span></code> bootstrap copies of <code class="docutils literal notranslate"><span class="pre">dataset</span></code>. The random
 numbers/arrays in a bootstrap copy are drawn at random (with repetition
-allowed) from among the samples in <code class="docutils literal notranslate"><span class="pre">random_data</span></code>: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">random_data</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.9</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data_iter</span> <span class="o">=</span> <span class="n">bootstrap_iter</span><span class="p">(</span><span class="n">random_data</span><span class="p">)</span>
+allowed) from among the samples in <code class="docutils literal notranslate"><span class="pre">dataset</span></code>: for example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.9</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_iter</span> <span class="o">=</span> <span class="n">bootstrap_iter</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">data_iter</span><span class="p">))</span>
 <span class="go">[ 1.1  1.1  0.5  1.9]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">data_iter</span><span class="p">))</span>
 <span class="go">[ 0.5  2.3  1.9  0.5]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">random_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data_iter</span> <span class="o">=</span> <span class="n">bootstrap_iter</span><span class="p">(</span><span class="n">random_data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_iter</span> <span class="o">=</span> <span class="n">bootstrap_iter</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">data_iter</span><span class="p">))</span>
 <span class="go">{&#39;a&#39;: array([3, 3, 1, 2]), &#39;b&#39;: array([3, 3, 1, 2])}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">data_iter</span><span class="p">))</span>
 <span class="go">{&#39;a&#39;: array([1, 3, 3, 2]), &#39;b&#39;: array([1, 3, 3, 2])}</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">random_data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data_iter</span> <span class="o">=</span> <span class="n">bootstrap_iter</span><span class="p">(</span><span class="n">random_data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data_iter</span> <span class="o">=</span> <span class="n">bootstrap_iter</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">data_iter</span><span class="p">))</span>
 <span class="go">[[ 7.  8.]</span>
 <span class="go"> [ 1.  2.]</span>
@@ -336,9 +336,9 @@ allowed) from among the samples in <code class="docutils literal notranslate"><s
 </pre></div>
 </div>
 <p>The distribution of bootstrap copies is an approximation to the
-distribution from which <code class="docutils literal notranslate"><span class="pre">random_data</span></code> was drawn. Consequently means,
+distribution from which <code class="docutils literal notranslate"><span class="pre">dataset</span></code> was drawn. Consequently means,
 variances and correlations for bootstrap copies should be similar to
-those in <code class="docutils literal notranslate"><span class="pre">random_data</span></code>. Analyzing variations from bootstrap copy to copy is
+those in <code class="docutils literal notranslate"><span class="pre">dataset</span></code>. Analyzing variations from bootstrap copy to copy is
 often useful when dealing with non-gaussian behavior or complicated
 correlations between different quantities.</p>
 <p>Parameter <code class="docutils literal notranslate"><span class="pre">n</span></code> specifies the maximum number of copies; there is no
@@ -661,9 +661,9 @@ shape).</p>
 <em class="property">class </em><code class="descclassname">gvar.dataset.</code><code class="descname">svd_diagnosis</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Diagnose the need for an SVD cut.</p>
 <p><a class="reference internal" href="#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis</span></code></a> bootstraps the spectrum of
-the correlation matrix for the data in <code class="docutils literal notranslate"><span class="pre">data</span></code> to determine
+the correlation matrix for the data in <code class="docutils literal notranslate"><span class="pre">dataset</span></code> to determine
 how much of that spectrum is reliably determined by this data.</p>
-<p>Here <code class="docutils literal notranslate"><span class="pre">data</span></code> is a list of random arrays or a dictionary
+<p>Here <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random arrays or a dictionary
 (e.g., <a class="reference internal" href="#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.Dataset</span></code></a>) whose values are lists
 of random numbers or random arrays. The random numbers or
 arrays are averaged (using <a class="reference internal" href="#gvar.dataset.avg_data" title="gvar.dataset.avg_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dataset.avg_data()</span></code></a>)
@@ -677,7 +677,7 @@ variables.</p>
 <p>Typical usage is</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
-<span class="n">s</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">svd_diagnosis</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">svd_diagnosis</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="n">avgdata</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">avgdata</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">svdcut</span><span class="p">)</span>
 <span class="n">s</span><span class="o">.</span><span class="n">plot_ratio</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -691,9 +691,14 @@ by the <code class="docutils literal notranslate"><span class="pre">s.plot_ratio
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>random_data</strong> – List of random arrays or a dictionary
+<li><strong>dataset</strong> – List of random arrays or a dictionary
 (e.g., <a class="reference internal" href="#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.Dataset</span></code></a>) whose values are lists
-of random numbers or random arrays.</li>
+of random numbers or random arrays. Alternatively it can
+be a tuple <code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">Ns)</span></code> where: <code class="docutils literal notranslate"><span class="pre">g</span></code> is an array of
+<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary whose values are <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or
+arrays of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s; and <code class="docutils literal notranslate"><span class="pre">Ns</span></code> is the number of random
+samples. Then the list of random data that is analyzed is
+created is created using <code class="docutils literal notranslate"><span class="pre">gvar.raniter(g,</span> <span class="pre">n=Ns)</span></code>.</li>
 <li><strong>nbstrap</strong> – Number of bootstrap copies used (default is 50).</li>
 <li><strong>models</strong> – For use in conjunction with <code class="xref py py-class docutils literal notranslate"><span class="pre">lsqfit.MultiFitter</span></code>;
 ignored when not specified. When specified, it is a list of multi-
@@ -718,7 +723,7 @@ for use with a multi-fitter using keyword <code class="docutils literal notransl
 <dl class="attribute">
 <dt id="gvar.dataset.svd_diagnosis.avgdata">
 <code class="descname">avgdata</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis.avgdata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Averaged data (<code class="docutils literal notranslate"><span class="pre">gvar.dataset.avg_data(random_data)</span></code>).</p>
+<dd><p>Averaged data (<code class="docutils literal notranslate"><span class="pre">gvar.dataset.avg_data(dataset)</span></code>).</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -755,7 +760,6 @@ position of the proposed SVD cut. The plot object is returned.</p>
 <li><strong>plot</strong> – <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib</span></code> plotter used to make plot.
 Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <span class="pre">=</span> <span class="pre">matplotlib.pyplot</span></code> if <code class="docutils literal notranslate"><span class="pre">plot=None</span></code> (default).</li>
 <li><strong>show</strong> – Displays the plot if <code class="docutils literal notranslate"><span class="pre">show=True</span></code> (default <code class="docutils literal notranslate"><span class="pre">False</span></code>).</li>
-<li><strong>minx</strong> – Minimum <code class="docutils literal notranslate"><span class="pre">x</span></code> value in plot (default is 1e-14).</li>
 </ul>
 </td>
 </tr>
@@ -828,7 +832,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

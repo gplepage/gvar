@@ -4,7 +4,7 @@
    :trim:
 
 
-Case Study: Pendulum Clock
+Case Study:  Numerical Analysis --- Pendulum Clock
 =====================================================
 This case study illustrates how to mix |GVar|\s with numerical routines
 for integrating differential equations (:any:`gvar.ode <ode>`) and for

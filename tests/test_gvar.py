@@ -1117,7 +1117,8 @@ class test_gvar2(unittest.TestCase,ArrayTests):
                 j = i + m.shape[0]
                 ans[i:j, i:j] = m
                 i = j
-            return ans
+            # mean is irrelevant
+            return gvar(ans[0], ans)
         def compare_blocks(b1, b2):
             s1 = set([tuple(list(b1i)) for b1i in b1])
             s2 = set([tuple(list(b2i)) for b2i in b2])
@@ -1127,16 +1128,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             [[1, 1], [1, 1]],
             [[1]]
             )
-        compare_blocks(find_diagonal_blocks(m), [[0], [3], [1, 2]])
+        idx = [idx.tolist() for idx,bcov in evalcov_blocks(m)]
+        compare_blocks(idx, [[0], [3], [1, 2]])
         m = make_blocks(
             [[1, 0, 1], [0, 1, 0], [1, 0, 1]],
             [[1, 1], [1, 1]],
             [[1]],
             [[1]]
             )
-        compare_blocks(
-            find_diagonal_blocks(m), [[1], [5], [6], [0, 2], [3, 4]]
-            )
+        idx = [idx.tolist() for idx,bcov in evalcov_blocks(m)]
+        compare_blocks(idx, [[1], [5], [6], [0, 2], [3, 4]])
         m = make_blocks(
             [[1, 0, 1, 1],
              [0, 1, 0, 1],
@@ -1146,9 +1147,8 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             [[1]],
             [[1]]
             )
-        compare_blocks(
-            find_diagonal_blocks(m), [[6], [7], [0, 1, 2, 3] , [4, 5]]
-            )
+        idx = [idx.tolist() for idx,bcov in evalcov_blocks(m)]
+        compare_blocks(idx, [[6], [7], [0, 1, 2, 3] , [4, 5]])
 
     def test_evalcov_blocks(self):
         def test_cov(g):
@@ -1275,7 +1275,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(svd.nblocks[2], 1)
 
         # remove svd correction
-        g.flat -= svd.correction
+        g.flat -= g.svdcorrection
         y = g[1] + g[3] * 10.
         dy = g[1] - g[3] * 10.
         test_gvar(y, x)
@@ -1283,6 +1283,19 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         test_gvar(g[0], g2)
         test_gvar(g[2], g4)
         np.testing.assert_allclose(evalcov(g.flat), evalcov(orig_g), atol=1e-7)
+
+        # compute_svdnoise=True
+        x, dx = gvar(['1(1)', '0.01(1)'])
+        g, wgts = svd([(x+dx)/2, (x-dx)/2.], svdcut=0.2 ** 2, wgts=-1, add_svdnoise=True)
+        y = g[0] + g[1]
+        dy = g[0] - g[1]
+        self.assertEqual(g.nmod, 1)
+        self.assertAlmostEqual(g.svdoffsets[0], -g.svdoffsets[1])
+        self.assertGreater(chi2(g.svdcorrection[0]).Q, 0.01)
+        self.assertLess(chi2(g.svdcorrection[0]).Q, 0.99)
+        with self.assertRaises(AssertionError):
+            test_gvar(y, x)
+            test_gvar(dy, gvar('0.01(20)'))
 
         # bufferdict
         g = {}
