@@ -96,8 +96,10 @@ manipulating gaussian random variables, including:</p>
 <li><a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">disassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">reassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(data,cov)</span></code> — low-level routine to reassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">raniter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,N)</span></code> — iterator for random numbers.</li>
+<li><a class="reference internal" href="#gvar.ranseed" title="gvar.ranseed"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ranseed</span></code></a><code class="docutils literal notranslate"><span class="pre">(seed)</span></code> — seed random number generator.</li>
+<li><a class="reference internal" href="#gvar.sample" title="gvar.sample"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sample</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — random sample from collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
 <li><a class="reference internal" href="#gvar.bootstrap_iter" title="gvar.bootstrap_iter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">bootstrap_iter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,N)</span></code> — bootstrap iterator.</li>
-<li><a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref any py py-func docutils literal notranslate"><span class="pre">svd</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — SVD modification of correlation matrix.</li>
+<li><a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref any py py-func docutils literal notranslate"><span class="pre">svd</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">svdcut)</span></code> — SVD modification of correlation matrix.</li>
 <li><a class="reference internal" href="gvar_dataset.html#gvar.dataset.bin_data" title="gvar.dataset.bin_data"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.bin_data</span></code></a><code class="docutils literal notranslate"><span class="pre">(data)</span></code> — bin random sample data.</li>
 <li><a class="reference internal" href="gvar_dataset.html#gvar.dataset.avg_data" title="gvar.dataset.avg_data"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.avg_data</span></code></a><code class="docutils literal notranslate"><span class="pre">(data)</span></code> — estimate means of random sample data.</li>
 <li><a class="reference internal" href="gvar_dataset.html#gvar.dataset.bootstrap_iter" title="gvar.dataset.bootstrap_iter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.bootstrap_iter</span></code></a><code class="docutils literal notranslate"><span class="pre">(data,N)</span></code> — bootstrap random sample data.</li>
@@ -702,12 +704,12 @@ function <code class="docutils literal notranslate"><span class="pre">f(x)</span
 only one nonzero entry.)</p>
 </dd></dl>
 
-<p>The following function creates an iterator that generates random arrays
+<p>The following functions are used to generate random arrays or dictionaries
 from the distribution defined by array (or dictionary) <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.
 The random numbers incorporate any correlations implied by the <code class="docutils literal notranslate"><span class="pre">g</span></code>s.</p>
 <dl class="function">
 <dt id="gvar.raniter">
-<code class="descclassname">gvar.</code><code class="descname">raniter</code><span class="sig-paren">(</span><em>g</em>, <em>n=None</em>, <em>svdcut=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.raniter" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">raniter</code><span class="sig-paren">(</span><em>g</em>, <em>n=None</em>, <em>svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.raniter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return iterator for random samples from distribution <code class="docutils literal notranslate"><span class="pre">g</span></code></p>
 <p>The gaussian variables (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects) in array (or dictionary) <code class="docutils literal notranslate"><span class="pre">g</span></code>
 collectively define a multidimensional gaussian distribution. The
@@ -726,19 +728,21 @@ distribution specified by <code class="docutils literal notranslate"><span class
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>g</strong> (<em>array</em><em> or </em><em>dictionary</em><em> or </em><a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><em>BufferDict</em></a><em> or </em><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><em>GVar</em></a>) – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>; or a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</li>
-<li><strong>n</strong> – Maximum number of random iterations. Setting <code class="docutils literal notranslate"><span class="pre">n=None</span></code>
-(the default) implies there is no maximum number.</li>
-<li><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s
-correlation matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where
-<code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the largest eigenvalue; if negative,
-discard eigenmodes with eigenvalues smaller
-than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-15</span></code>.</li>
+<li><strong>g</strong> – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>; or a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</li>
+<li><strong>n</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Maximum number of random iterations.
+Setting <code class="docutils literal notranslate"><span class="pre">n=None</span></code> (the default) implies there is
+no maximum number.</li>
+<li><strong>svdcut</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – If positive, replace eigenvalues
+<code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s correlation matrix with
+<code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the
+largest eigenvalue; if negative, discard eigenmodes with
+eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An iterator that returns random arrays or dictionaries
-with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code> drawn from the gaussian distribution
+with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code> drawn from the Gaussian distribution
 defined by <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 </td>
 </tr>
@@ -747,8 +751,36 @@ defined by <code class="docutils literal notranslate"><span class="pre">g</span>
 </dd></dl>
 
 <dl class="function">
+<dt id="gvar.sample">
+<code class="descclassname">gvar.</code><code class="descname">sample</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate random sample from distribution <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<p>Equivalent to <code class="docutils literal notranslate"><span class="pre">next(gvar.raniter(g,</span> <span class="pre">svdcut=svdcut))</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>g</strong> – An array or dictionary of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>; or a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</li>
+<li><strong>svdcut</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – If positive, replace eigenvalues
+<code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s correlation matrix with
+<code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the
+largest eigenvalue; if negative, discard eigenmodes with
+eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A random array or dictionary, with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code>,
+drawn from the Gaussian distribution defined by <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="gvar.bootstrap_iter">
-<code class="descclassname">gvar.</code><code class="descname">bootstrap_iter</code><span class="sig-paren">(</span><em>g</em>, <em>n=None</em>, <em>svdcut=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.bootstrap_iter" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gvar.</code><code class="descname">bootstrap_iter</code><span class="sig-paren">(</span><em>g</em>, <em>n=None</em>, <em>svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.bootstrap_iter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return iterator for bootstrap copies of <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>The gaussian variables (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects) in array (or dictionary) <code class="docutils literal notranslate"><span class="pre">g</span></code>
 collectively define a multidimensional gaussian distribution. The
@@ -784,6 +816,7 @@ than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span
 </table>
 </dd></dl>
 
+<p>This function is used to seed the random number generator used by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>:</p>
 <dl class="function">
 <dt id="gvar.ranseed">
 <code class="descclassname">gvar.</code><code class="descname">ranseed</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ranseed" title="Permalink to this definition">¶</a></dt>
@@ -911,7 +944,7 @@ than <code class="docutils literal notranslate"><span class="pre">svdcut</span> 
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code> is an array containing the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. If
 parameter <code class="docutils literal notranslate"><span class="pre">add_svdnoise=True</span></code>, noise is included in <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code>,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span> <span class="o">+=</span> <span class="nb">next</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">raniter</span><span class="p">(</span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span><span class="p">)),</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span> <span class="o">+=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span><span class="p">),</span>
 </pre></div>
 </div>
 <p>before it is added to <code class="docutils literal notranslate"><span class="pre">g.flat</span></code>. The noise can be useful for testing fits

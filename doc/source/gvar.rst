@@ -85,9 +85,13 @@ manipulating gaussian random variables, including:
 
     - :any:`raniter`\ ``(g,N)`` --- iterator for random numbers.
 
+    - :any:`ranseed`\ ``(seed)`` --- seed random number generator.
+
+    - :any:`sample`\ ``(g)`` --- random sample from collection of |GVar|\s.
+
     - :any:`bootstrap_iter`\ ``(g,N)`` --- bootstrap iterator.
 
-    - :any:`svd`\ ``(g)`` --- SVD modification of correlation matrix.
+    - :any:`svd`\ ``(g, svdcut)`` --- SVD modification of correlation matrix.
 
     - :any:`dataset.bin_data`\ ``(data)`` --- bin random sample data.
 
@@ -163,13 +167,17 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.deriv(g, x)
 
-The following function creates an iterator that generates random arrays
+The following functions are used to generate random arrays or dictionaries
 from the distribution defined by array (or dictionary) ``g`` of |GVar|\s.
 The random numbers incorporate any correlations implied by the ``g``\s.
 
-.. autofunction:: gvar.raniter(g, n=None, svdcut=None)
+.. autofunction:: gvar.raniter(g, n=None, svdcut=1e-12)
 
-.. autofunction:: gvar.bootstrap_iter(g, n=None, svdcut=None)
+.. autofunction:: gvar.sample(g, svdcut=1e-12)
+
+.. autofunction:: gvar.bootstrap_iter(g, n=None, svdcut=1e-12)
+
+This function is used to seed the random number generator used by :mod:`gvar`:
 
 .. autofunction:: gvar.ranseed(a)
 

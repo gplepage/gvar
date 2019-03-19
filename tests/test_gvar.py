@@ -955,6 +955,20 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_arraysequal(c['x','y'], [[x.var, evalcov([x,y])[0,1]]])
         self.assert_arraysequal(c['y','x'], c['x','y'].T)
 
+    def test_sample(self):
+        " sample(g) "
+        glist = [
+            gvar('1(2)'), gv.gvar(['10(2)', '20(2)']) * gv.gvar('1(1)'),
+            gv.gvar(dict(a='100(2)', b=['200(2)', '300(2)'])),
+            ]
+        for g in glist:
+            ranseed(12)
+            svdcut = 0.9
+            s1 = sample(g, svdcut=svdcut)
+            ranseed(12)
+            s2 = next(raniter(g, svdcut=svdcut))
+            self.assertEqual(str(s1), str(s2))
+
     @unittest.skipIf(FAST,"skipping test_raniter for speed")
     def test_raniter(self):
         """ raniter """

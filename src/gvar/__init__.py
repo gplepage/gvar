@@ -69,6 +69,8 @@ variables including:
 
     - ``raniter(g,N)`` --- iterator for random numbers.
 
+    - ``sample(g)`` --- random sample from |GVar|\s.
+
     - ``bootstrap_iter(g,N)`` --- bootstrap iterator.
 
     - ``svd(g)`` --- SVD modification of correlation matrix.
@@ -466,7 +468,7 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
     parameter ``add_svdnoise=True``, noise is included in ``gmod.svdcorrection``,
     ::
 
-        gmod.svdcorrection += next(gv.raniter(gmod.svdcorrection)),
+        gmod.svdcorrection += gv.sample(gmod.svdcorrection),
 
     before it is added to ``g.flat``. The noise can be useful for testing fits
     and other applications.

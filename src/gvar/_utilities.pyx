@@ -1135,6 +1135,26 @@ def bootstrap_iter(g, n=None, svdcut=1e-12):
             yield buf.reshape(g.shape)
     raise StopIteration
 
+def sample(g, svdcut=1e-12):
+    """ Generate random sample from distribution ``g``.
+
+    Equivalent to ``next(gvar.raniter(g, svdcut=svdcut))``.
+
+    Args:
+        g: An array or dictionary of objects of type |GVar|; or a |GVar|.
+        svdcut (float or ``None``): If positive, replace eigenvalues
+            ``eig`` of ``g``'s correlation matrix with
+            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the
+            largest eigenvalue; if negative, discard eigenmodes with
+            eigenvalues smaller than ``|svdcut| * max_eig``.
+            Default is ``1e-12``.
+
+    Returns:
+        A random array or dictionary, with the same shape as ``g``,
+        drawn from the Gaussian distribution defined by ``g``.
+    """
+    return next(raniter(g, svdcut=svdcut))
+
 def raniter(g, n=None, svdcut=1e-12):
     """ Return iterator for random samples from distribution ``g``
 
@@ -1153,18 +1173,21 @@ def raniter(g, n=None, svdcut=1e-12):
     the resulting iterator returns random numbers drawn from the
     distribution specified by ``g``.
 
-    :param g: An array (or dictionary) of objects of type |GVar|; or a |GVar|.
-    :type g: array or dictionary or BufferDict or GVar
-    :param n: Maximum number of random iterations. Setting ``n=None``
-        (the default) implies there is no maximum number.
-    :param svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s
-        correlation matrix with ``max(eig, svdcut * max_eig)`` where
-        ``max_eig`` is the largest eigenvalue; if negative,
-        discard eigenmodes with eigenvalues smaller
-        than ``|svdcut| * max_eig``. Default is ``1e-15``.
-    :type svdcut: ``None`` or number
-    :returns: An iterator that returns random arrays or dictionaries
-        with the same shape as ``g`` drawn from the gaussian distribution
+    Args:
+        g: An array (or dictionary) of objects of type |GVar|; or a |GVar|.
+        n (int or ``None``): Maximum number of random iterations.
+            Setting ``n=None`` (the default) implies there is
+            no maximum number.
+        svdcut (float or ``None``): If positive, replace eigenvalues
+            ``eig`` of ``g``'s correlation matrix with
+            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the
+            largest eigenvalue; if negative, discard eigenmodes with
+            eigenvalues smaller than ``|svdcut| * max_eig``.
+            Default is ``1e-12``.
+
+    Returns:
+        An iterator that returns random arrays or dictionaries
+        with the same shape as ``g`` drawn from the Gaussian distribution
         defined by ``g``.
     """
     g, i_wgts = _gvar.svd(g, svdcut=svdcut, wgts=1.)

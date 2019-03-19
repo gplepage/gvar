@@ -921,7 +921,7 @@ class svd_diagnosis(object):
             for use with a multi-fitter using keyword ``pdata`` rather than
             ``data``.
 
-        mincut: Minimum SVD cut (default 1e-14).
+        mincut: Minimum SVD cut (default 1e-12).
 
     The main attributes are:
 
@@ -932,7 +932,7 @@ class svd_diagnosis(object):
         bsval: Bootstrap average of correlation matrix eigenvalues.
         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
     """
-    def __init__(self, dataset, nbstrap=50, mincut=1e-14, models=None):
+    def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None):
         if isinstance(dataset, tuple):
             data, ns = dataset
             tset = _gvar.dataset.Dataset()
@@ -975,6 +975,13 @@ class svd_diagnosis(object):
         ratio = _gvar.mean(self.bsval) / self.val
         cuts = self.val / self.val[-1]
         chi_sig = (2. / self.avgdata.size) ** 0.5
+        # 0) impose mincut
+        idx = numpy.where(
+            cuts > self.mincut
+            )[0]
+        if len(idx) > 0:
+            cuts = cuts[idx[0]:]
+            ratio = ratio[idx[0]:]
         # 1) find last place that is 2 sig down
         idx = numpy.where(
             ratio < 1. - 2 * chi_sig
@@ -1004,9 +1011,13 @@ class svd_diagnosis(object):
     def plot_ratio(self, plot=None, show=False):
         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
 
-        Ratios are plotted versus the value of the actual eigenvalues
-        divided by the maximum eigenvalue. A dashed line shows the
-        position of the proposed SVD cut. The plot object is returned.
+        Ratios (blue points) are plotted versus the value of the actual
+        eigenvalues divided by the maximum eigenvalue. Error bars on
+        the ratios show the range of variation across bootstrapped copies.
+        A dotted line is drawn at ``1 - sqrt(2/N)``, where ``N`` is the
+        number of data points. The proposed SVD cut is where the
+        ratio curve intersects this line; that point is indicated
+        by a vertical dashed red line. The plot object is returned.
 
         Args:
             plot: :class:`matplotlib` plotter used to make plot.
@@ -1030,7 +1041,7 @@ class svd_diagnosis(object):
         sig = (2. / len(self.val)) ** 0.5
         plot.plot([x[0], x[-1]], [1., 1.], 'k--')
         plot.plot([x[0], x[-1]], [1. - sig, 1. - sig], 'k:')
-        plot.ylabel('(bootstrap / exact) for eigenvalues')
+        plot.ylabel('bootstrap eigenvalue / exact eigenvalue')
         plot.xlabel('eigenvalue / largest eigenvalue')
         plot.xscale('log')
         plot.plot([self.svdcut, self.svdcut], [0.8, 1.2], 'r:')

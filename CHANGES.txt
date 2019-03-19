@@ -2,14 +2,17 @@ Version 9.1 2019-03-18
 =========================
 Minor update.
 
-- Improved the heuristic used in gvar.dataset.svd_diagnosis to suggest an
-  svdcut. The new heuristic gives lower estimates usually. Also has a new
+- Much improved the heuristic used in gvar.dataset.svd_diagnosis to suggest
+  an svdcut. The new heuristic gives lower estimates usually. Also has a new
   option for the input data. And fixed bug that occasionally caused crashes.
 
 - Adds new option (add_svdnoise) to gvar.svd. This is primarily for use
   by lsqfit. Also modifies the return value to contain information related
   to the SVD cut (dof, nblocks, ...) (instead of storing that information in
   gvar.svd itself, which is a bad idea).
+
+- New convenience function gvar.sample(g), which is the same as
+  next(gvar.raniter(g)).
 
 
 Version 9.0.3 2018-10-03
