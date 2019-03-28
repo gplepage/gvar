@@ -39,7 +39,7 @@ manipulating gaussian random variables, including:
 
     - :any:`sdev`\ ``(g)`` --- extract standard deviations.
 
-    - :any:`var`\ ``(g)`` --- extract variances.
+    - :any:`var`\ ``(g)`` --- extract  variances.
 
     - :any:`fmt`\ ``(g)`` --- replace all |GVar|\s in array/dictionary by string representations.
 

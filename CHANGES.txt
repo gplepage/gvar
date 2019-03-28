@@ -2,6 +2,8 @@ Version 9.1 2019-03-19
 =========================
 Minor update.
 
+- Simple arithmetic is now supported for BufferDicts having the same layout.
+
 - Much improved the heuristic used in gvar.dataset.svd_diagnosis to suggest
   an svdcut. The new heuristic gives lower estimates usually. Also has a new
   option for the input data. And fixed bug that occasionally caused crashes.

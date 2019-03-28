@@ -272,7 +272,12 @@ class BufferDict(collections_MMapping):
         """ Multiply ``self`` by scalar ``x``. """
         return BufferDict(self, buf=self.flat[:] * x)
 
+    # truediv and div are the same --- 1st is for python3, 2nd for python2
     def __truediv__(self, x):
+        """ Divide ``self`` by scalar ``x``. """
+        return BufferDict(self, buf=self.flat[:] / x)
+
+    def __div__(self, x):
         """ Divide ``self`` by scalar ``x``. """
         return BufferDict(self, buf=self.flat[:] / x)
 
