@@ -508,7 +508,7 @@ attribute <code class="docutils literal notranslate"><span class="pre">logGBF</s
 <code class="descclassname">gvar.</code><code class="descname">equivalent</code><span class="sig-paren">(</span><em>g1</em>, <em>g2</em>, <em>rtol=1e-10</em>, <em>atol=1e-10</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.equivalent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine whether <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> contain equivalent <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 <p>Compares sums and differences of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s stored in <code class="docutils literal notranslate"><span class="pre">g1</span></code>
-and <code class="docutils literal notranslate"><span class="pre">g2</span></code> to see if they agree with tolerances. Operationally,
+and <code class="docutils literal notranslate"><span class="pre">g2</span></code> to see if they agree within tolerances. Operationally,
 agreement means that:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">summ</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rtol</span> <span class="o">+</span> <span class="n">atol</span>
 </pre></div>
@@ -939,15 +939,17 @@ increases the variance of the eigenmodes with eigenvalues smaller
 than <code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.</p>
 <p>The modification of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s covariance matrix is implemented by adding
 (to <code class="docutils literal notranslate"><span class="pre">g</span></code>) a set of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s with zero means:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmod</span><span class="o">.</span><span class="n">flat</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">flat</span> <span class="o">+</span> <span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmod</span> <span class="o">=</span> <span class="n">g</span> <span class="o">+</span> <span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span>
 </pre></div>
 </div>
-<p>where <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code> is an array containing the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. If
-parameter <code class="docutils literal notranslate"><span class="pre">add_svdnoise=True</span></code>, noise is included in <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code>,</p>
+<p>where <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code> is an array/dictionary
+containing the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. If
+parameter <code class="docutils literal notranslate"><span class="pre">add_svdnoise=True</span></code>,
+noise is included in <code class="docutils literal notranslate"><span class="pre">gmod.svdcorrection</span></code>,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span> <span class="o">+=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">gmod</span><span class="o">.</span><span class="n">svdcorrection</span><span class="p">),</span>
 </pre></div>
 </div>
-<p>before it is added to <code class="docutils literal notranslate"><span class="pre">g.flat</span></code>. The noise can be useful for testing fits
+<p>before it is added to <code class="docutils literal notranslate"><span class="pre">g</span></code>. The noise can be useful for testing fits
 and other applications.</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> is negative, eigenmodes of the correlation matrix
 whose eigenvalues are smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code> are dropped
@@ -1076,8 +1078,8 @@ cuts are applied (excluding any omitted modes when
 <dl class="attribute">
 <dt id="gvar.gmod.svdcorrection">
 <code class="descclassname">gmod.</code><code class="descname">svdcorrection</code><a class="headerlink" href="#gvar.gmod.svdcorrection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Array containing the SVD corrections added to <code class="docutils literal notranslate"><span class="pre">g.flat</span></code>
-to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code>: <code class="docutils literal notranslate"><span class="pre">gmod.flat</span> <span class="pre">=</span> <span class="pre">g.flat</span> <span class="pre">+</span> <span class="pre">gmod.svdcorrection</span></code>.</p>
+<dd><p>Array or dictionary containing the SVD corrections added to <code class="docutils literal notranslate"><span class="pre">g</span></code>
+to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code>: <code class="docutils literal notranslate"><span class="pre">gmod</span> <span class="pre">=</span> <span class="pre">g</span> <span class="pre">+</span> <span class="pre">gmod.svdcorrection</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1423,6 +1425,18 @@ using keyword <code class="docutils literal notranslate"><span class="pre">dtype
 <span class="go">{&#39;a&#39;: 1} int64</span>
 </pre></div>
 </div>
+<p>Some simple arithemetic is allowed between two <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s, say,
+<code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> provided they have the same keys and array shapes.
+So, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mf">20.</span><span class="p">,</span> <span class="mf">30.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="go">    {&#39;a&#39;: 11.0,&#39;b&#39;: array([22., 33.])}</span>
+</pre></div>
+</div>
+<p>Subtraction is also defined, as are multiplication and division
+by scalars. The corresponding <code class="docutils literal notranslate"><span class="pre">+=</span></code>, <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">*=</span></code>, <code class="docutils literal notranslate"><span class="pre">/=</span></code> operators
+are supported, as are unary <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code>.</p>
 <p>Finally a <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> can be cloned from another one but with
 a different buffer (containing different values):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>

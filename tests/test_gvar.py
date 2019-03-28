@@ -1289,7 +1289,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(svd.nblocks[2], 1)
 
         # remove svd correction
-        g.flat -= g.svdcorrection
+        g -= g.svdcorrection
         y = g[1] + g[3] * 10.
         dy = g[1] - g[3] * 10.
         test_gvar(y, x)
@@ -1298,18 +1298,25 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         test_gvar(g[2], g4)
         np.testing.assert_allclose(evalcov(g.flat), evalcov(orig_g), atol=1e-7)
 
-        # compute_svdnoise=True
+        # add_svdnoise=True
         x, dx = gvar(['1(1)', '0.01(1)'])
         g, wgts = svd([(x+dx)/2, (x-dx)/2.], svdcut=0.2 ** 2, wgts=-1, add_svdnoise=True)
         y = g[0] + g[1]
         dy = g[0] - g[1]
+        offsets = mean(g.svdcorrection)
         self.assertEqual(g.nmod, 1)
-        self.assertAlmostEqual(g.svdoffsets[0], -g.svdoffsets[1])
+        self.assertAlmostEqual(offsets[0], -offsets[1])
         self.assertGreater(chi2(g.svdcorrection[0]).Q, 0.01)
         self.assertLess(chi2(g.svdcorrection[0]).Q, 0.99)
         with self.assertRaises(AssertionError):
             test_gvar(y, x)
             test_gvar(dy, gvar('0.01(20)'))
+        self.assertTrue(equivalent(
+            g - g.svdcorrection, [(x+dx)/2, (x-dx)/2.]
+            ))
+        self.assertTrue(not equivalent(
+            g, [(x+dx)/2, (x-dx)/2.]
+            ))
 
         # bufferdict
         g = {}
@@ -1324,6 +1331,12 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         test_cov(wgts, evalcov(g.flat))
         self.assertEqual(svd.nmod, 1)
         self.assertAlmostEqual(svd.eigen_range, 0.01**2)
+        self.assertTrue(equivalent(
+            g - g.svdcorrection, {0:(x+dx)/2, 1:(x-dx)/20.}
+            ))
+        self.assertTrue(not equivalent(
+            g, {0:(x+dx)/2, 1:(x-dx)/20.}
+            ))
 
     def test_valder(self):
         """ valder_var """

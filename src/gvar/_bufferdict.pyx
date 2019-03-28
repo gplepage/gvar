@@ -67,6 +67,19 @@ class BufferDict(collections_MMapping):
         >>> print(b, b.dtype)
         {'a': 1} int64
 
+    Some simple arithemetic is allowed between two |BufferDict|\s, say,
+    ``g1`` and ``g2`` provided they have the same keys and array shapes.
+    So, for example::
+
+        >>> a = BufferDict(a=1., b=[2., 3.])
+        >>> b = BufferDict(a=10., b=[20., 30.])
+        >>> print(a + b)
+            {'a': 11.0,'b': array([22., 33.])}
+
+    Subtraction is also defined, as are multiplication and division
+    by scalars. The corresponding ``+=``, ``-=``, ``*=``, ``/=`` operators
+    are supported, as are unary ``+`` and ``-``.
+
     Finally a |BufferDict| can be cloned from another one but with
     a different buffer (containing different values)::
 
@@ -184,6 +197,84 @@ class BufferDict(collections_MMapping):
 
     def __reduce_ex__(self, dummy):
         return (BufferDict, (), self.__getstate__())
+
+    def __iadd__(self, g):
+        """ self += |BufferDict| (or dictionary) """
+        g = BufferDict(g, keys=self.keys())
+        self.flat[:] += g.flat
+        return self
+
+    def __isub__(self, g):
+        """ self += |BufferDict| (or dictionary) """
+        g = BufferDict(g, keys=self.keys())
+        self.flat[:] -= g.flat
+        return self
+
+    def __imul__(self, x):
+        """ ``self *= x`` for scalar ``x`` """
+        self.flat[:] *= x
+        return self
+
+    def __itruediv__(self, x):
+        """ ``self /= x`` for scalar ``x`` """
+        self.flat[:] /= x
+        return self
+
+    def __pos__(self):
+        """ ``-self`` """
+        return BufferDict(self, buf=+self.flat[:])
+
+    def __neg__(self):
+        """ ``-self`` """
+        return BufferDict(self, buf=-self.flat[:])
+
+    def __add__(self, g):
+        """ :class:`BufferDict` (or a dictionary).
+
+        The two dictionaries need to have compatible layouts: i.e., the
+        same keys and array shapes.
+        """
+        g = BufferDict(g, keys=self.keys())
+        return BufferDict(self, buf=self.flat[:] + g.flat)
+
+    def __radd__(self, g):
+        """ Add ``self`` to another :class:`BufferDict` (or a dictionary).
+
+        The two dictionaries need to have compatible layouts: i.e., the
+        same keys and array shapes.
+        """
+        g = BufferDict(g, keys=self.keys())
+        return BufferDict(self, buf=self.flat[:] + g.flat)
+
+    def __sub__(self, g):
+        """ Subtract a :class:`BufferDict` (or a dictionary) from ``self``.
+
+        The two dictionaries need to have compatible layouts: i.e., the
+        same keys and array shapes.
+        """
+        g = BufferDict(g, keys=self.keys())
+        return BufferDict(self, buf=self.flat[:] - g.flat)
+
+    def __rsub__(self, g):
+        """ Subtract ``self`` from a :class:`BufferDict` (or a dictionary).
+
+        The two dictionaries need to have compatible layouts: i.e., the
+        same keys and array shapes.
+        """
+        g = BufferDict(g, keys=self.keys())
+        return BufferDict(self, buf=g.flat[:] - self.flat)
+
+    def __mul__(self, x):
+        """ Multiply ``self``` by scalar ``x``. """
+        return BufferDict(self, buf=self.flat[:] * x)
+
+    def __rmul__(self, x):
+        """ Multiply ``self`` by scalar ``x``. """
+        return BufferDict(self, buf=self.flat[:] * x)
+
+    def __truediv__(self, x):
+        """ Divide ``self`` by scalar ``x``. """
+        return BufferDict(self, buf=self.flat[:] / x)
 
     def add(self,k,v):
         """ Augment buffer with data ``v``, indexed by key ``k``.

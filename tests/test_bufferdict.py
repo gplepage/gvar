@@ -161,7 +161,38 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         outstr += "('tensor',array([[3.,4.],[5.,6.]]))])"
         self.assertEqual(''.join(repr(b).split()),outstr)
 
-    def testufferdict_b(self):
+    def test_arithmetic(self):
+        a = BufferDict(a=1., b=[2., 3.])
+        b = dict(b=[20., 30.], a=10.)
+        self.assertEqual(str(a + b), str(BufferDict(a=11., b=[22., 33.])))
+        self.assertEqual(str(b + a), str(BufferDict(a=11., b=[22., 33.])))
+        self.assertEqual(str(a - b), str(BufferDict(a=-9., b=[-18., -27.])))
+        self.assertEqual(str(b - a), str(BufferDict(a=9., b=[18., 27.])))
+        self.assertEqual(str(a * 2), str(BufferDict(a=2., b=[4., 6.])))
+        self.assertEqual(str(2 * a), str(BufferDict(a=2., b=[4., 6.])))
+        self.assertEqual(str(a / 0.5), str(BufferDict(a=2., b=[4., 6.])))
+        a = BufferDict(a=1., b=[2., 3.])
+        a += b
+        self.assertEqual(str(a), str(BufferDict(a=11., b=[22., 33.])))
+        a = BufferDict(a=1., b=[2., 3.])
+        a -= b
+        self.assertEqual(str(a), str(BufferDict(a=-9., b=[-18., -27.])))
+        a = BufferDict(a=1., b=[2., 3.])
+        a *= 2
+        self.assertEqual(str(a), str(BufferDict(a=2., b=[4., 6.])))
+        a = BufferDict(a=1., b=[2., 3.])
+        a /= 0.5
+        self.assertEqual(str(a), str(BufferDict(a=2., b=[4., 6.])))
+        a = BufferDict(a=1., b=[2., 3.])
+        self.assertEqual(str(+a), str(BufferDict(a=1., b=[2., 3.])))
+        self.assertEqual(str(-a), str(BufferDict(a=-1., b=[-2., -3.])))
+        b = gv.gvar(dict(b=['20(1)', '30(1)'], a='10(1)'))
+        self.assertEqual(
+            str(a + b),
+            str(gv.gvar(BufferDict(a='11(1)', b=['22(1)', '33(1)'])))
+            )
+
+    def test_bufferdict(self):
         """ BufferDict(b) """
         global b,bkeys,bvalues,bslices,bbuf
         nb = BufferDict(b)

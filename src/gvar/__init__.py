@@ -323,7 +323,7 @@ def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
     """ Determine whether ``g1`` and ``g2`` contain equivalent |GVar|\s.
 
     Compares sums and differences of |GVar|\s stored in ``g1``
-    and ``g2`` to see if they agree with tolerances. Operationally,
+    and ``g2`` to see if they agree within tolerances. Operationally,
     agreement means that::
 
         abs(diff) < abs(summ) / 2 * rtol + atol
@@ -462,15 +462,17 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
     The modification of ``g``'s covariance matrix is implemented by adding
     (to ``g``) a set of |GVar|\s with zero means::
 
-        gmod.flat = g.flat + gmod.svdcorrection
+        gmod = g + gmod.svdcorrection
 
-    where ``gmod.svdcorrection`` is an array containing the |GVar|\s. If
-    parameter ``add_svdnoise=True``, noise is included in ``gmod.svdcorrection``,
+    where ``gmod.svdcorrection`` is an array/dictionary
+    containing the |GVar|\s. If
+    parameter ``add_svdnoise=True``,
+    noise is included in ``gmod.svdcorrection``,
     ::
 
         gmod.svdcorrection += gv.sample(gmod.svdcorrection),
 
-    before it is added to ``g.flat``. The noise can be useful for testing fits
+    before it is added to ``g``. The noise can be useful for testing fits
     and other applications.
 
     When ``svdcut`` is negative, eigenmodes of the correlation matrix
@@ -584,13 +586,15 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
 
     .. attribute:: gmod.svdcorrection
 
-        Array containing the SVD corrections added to ``g.flat``
-        to create ``gmod``: ``gmod.flat = g.flat + gmod.svdcorrection``.
+        Array or dictionary containing the SVD corrections added to ``g``
+        to create ``gmod``: ``gmod = g + gmod.svdcorrection``.
     """
     # replace g by a copy of g
     if hasattr(g,'keys'):
+        is_dict = True
         g = BufferDict(g)
     else:
+        is_dict = False
         class svdarray(numpy.ndarray):
             def __new__(cls, inputarray):
                 obj = numpy.array(g).view(cls)
@@ -598,14 +602,10 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
         g = svdarray(g)
     idx_bcov = evalcov_blocks(g.flat)
     g.logdet = 0.0
-    g.svdcorrection = numpy.zeros(len(g.flat), object)
-    g.svdcorrection[:] = gvar(0, 0)
+    svdcorrection = numpy.zeros(len(g.flat), object)
+    svdcorrection[:] = gvar(0, 0)
     g.eigen_range = 1.
     g.nmod = 0
-    if add_svdnoise and svdcut is not None and svdcut > 0:
-        g.svdoffsets = numpy.zeros(len(g.flat), float)
-    else:
-        g.svdoffsets = 0.0
     if wgts is not False:
         i_wgts = [([], [])] # 1st entry for all 1x1 blocks
     lost_modes = 0
@@ -631,11 +631,11 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
                 if add_svdnoise:
                     for vali, valorigi, veci in zip(s.val, s.valorig, s.vec):
                         if vali > valorigi:
-                            # add next(raniter(s.delta)) to s.delta in g.svdcorrection
+                            # add next(raniter(s.delta)) to s.delta in svdcorrection
                             s.delta += (veci / s.D) * (
                                 numpy.random.normal(0.0, (vali - valorigi) ** 0.5)
                                 )
-                g.svdcorrection[idx] = s.delta
+                svdcorrection[idx] = s.delta
                 g.flat[idx] += s.delta
             elif svdcut is not None and svdcut < 0:
                 newg = numpy.zeros(len(idx), object)
@@ -654,12 +654,18 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
     g.dof = len(g.flat) - lost_modes
     g.svdcut = svdcut
 
+    # repackage svdcorrection
+    if is_dict:
+        g.svdcorrection = BufferDict(g, buf=svdcorrection)
+    else:
+        g.svdcorrection = svdcorrection.reshape(g.shape)
+
     ##### for legacy code (don't use)
     svd.dof = g.dof
     svd.nmod = g.nmod
     svd.eigen_range = g.eigen_range
     svd.logdet = g.logdet
-    svd.correction = g.svdcorrection
+    svd.correction = g.svdcorrection.flat[:]
     svd.nblocks = g.nblocks
     ##### end of legacy code
 
