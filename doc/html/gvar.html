@@ -1,18 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 9.1 documentation</title>
+    <meta charset="utf-8" />
+    <title>gvar - Gaussian Random Variables &#8212; gvar 9.2 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -71,39 +70,39 @@ using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code cl
 manipulating gaussian random variables, including:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="#gvar.mean" title="gvar.mean"><code class="xref any py py-func docutils literal notranslate"><span class="pre">mean</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract means.</li>
-<li><a class="reference internal" href="#gvar.sdev" title="gvar.sdev"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sdev</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract standard deviations.</li>
-<li><a class="reference internal" href="#gvar.var" title="gvar.var"><code class="xref any py py-func docutils literal notranslate"><span class="pre">var</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract variances.</li>
-<li><a class="reference internal" href="#gvar.fmt" title="gvar.fmt"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — replace all <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary by string representations.</li>
-<li><a class="reference internal" href="#gvar.tabulate" title="gvar.tabulate"><code class="xref any py py-func docutils literal notranslate"><span class="pre">tabulate</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — tabulate entries in array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><a class="reference internal" href="#gvar.correlate" title="gvar.correlate"><code class="xref any py py-func docutils literal notranslate"><span class="pre">correlate</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">corr)</span></code> — add correlations to <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary <code class="docutils literal notranslate"><span class="pre">g</span></code>.</li>
-<li><a class="reference internal" href="#gvar.chi2" title="gvar.chi2"><code class="xref any py py-func docutils literal notranslate"><span class="pre">chi2</span></code></a><code class="docutils literal notranslate"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> — <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>.</li>
-<li><a class="reference internal" href="#gvar.equivalent" title="gvar.equivalent"><code class="xref any py py-func docutils literal notranslate"><span class="pre">equivalent</span></code></a><code class="docutils literal notranslate"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> — <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s the same in <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code>?</li>
-<li><a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcov</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute covariance matrix.</li>
-<li><a class="reference internal" href="#gvar.evalcov_blocks" title="gvar.evalcov_blocks"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcov_blocks</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute diagonal blocks of covariance matrix.</li>
-<li><a class="reference internal" href="#gvar.evalcorr" title="gvar.evalcorr"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcorr</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute correlation matrix.</li>
-<li><a class="reference internal" href="#gvar.fmt_values" title="gvar.fmt_values"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt_values</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — list values for printing.</li>
-<li><a class="reference internal" href="#gvar.fmt_errorbudget" title="gvar.fmt_errorbudget"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt_errorbudget</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — create error-budget table for printing.</li>
-<li><a class="reference internal" href="#gvar.fmt_chi2" title="gvar.fmt_chi2"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt_chi2</span></code></a><code class="docutils literal notranslate"><span class="pre">(f)</span></code> — format chi**2 information in f as string for printing.</li>
-<li>class <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">BufferDict</span></code></a> — ordered dictionary with data buffer.</li>
-<li>class <a class="reference internal" href="#gvar.PDF" title="gvar.PDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDF</span></code></a> — probability density function.</li>
-<li>class <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFStatistics</span></code></a> — statistical analysis of moments of a random variable.</li>
-<li>class <a class="reference internal" href="#gvar.PDFHistogram" title="gvar.PDFHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFHistogram</span></code></a> — tool for building PDF histograms.</li>
-<li><a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dump</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">outputfile)</span></code> — serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in file.</li>
-<li><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dumps</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in a string.</li>
-<li><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal notranslate"><span class="pre">load</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputfile)</span></code> — reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from a file.</li>
-<li><a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref any py py-func docutils literal notranslate"><span class="pre">loads</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputstr)</span></code> — reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from a string.</li>
-<li><a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">disassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">reassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(data,cov)</span></code> — low-level routine to reassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">raniter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,N)</span></code> — iterator for random numbers.</li>
-<li><a class="reference internal" href="#gvar.ranseed" title="gvar.ranseed"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ranseed</span></code></a><code class="docutils literal notranslate"><span class="pre">(seed)</span></code> — seed random number generator.</li>
-<li><a class="reference internal" href="#gvar.sample" title="gvar.sample"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sample</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — random sample from collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><a class="reference internal" href="#gvar.bootstrap_iter" title="gvar.bootstrap_iter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">bootstrap_iter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,N)</span></code> — bootstrap iterator.</li>
-<li><a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref any py py-func docutils literal notranslate"><span class="pre">svd</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">svdcut)</span></code> — SVD modification of correlation matrix.</li>
-<li><a class="reference internal" href="gvar_dataset.html#gvar.dataset.bin_data" title="gvar.dataset.bin_data"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.bin_data</span></code></a><code class="docutils literal notranslate"><span class="pre">(data)</span></code> — bin random sample data.</li>
-<li><a class="reference internal" href="gvar_dataset.html#gvar.dataset.avg_data" title="gvar.dataset.avg_data"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.avg_data</span></code></a><code class="docutils literal notranslate"><span class="pre">(data)</span></code> — estimate means of random sample data.</li>
-<li><a class="reference internal" href="gvar_dataset.html#gvar.dataset.bootstrap_iter" title="gvar.dataset.bootstrap_iter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.bootstrap_iter</span></code></a><code class="docutils literal notranslate"><span class="pre">(data,N)</span></code> — bootstrap random sample data.</li>
-<li>class <a class="reference internal" href="gvar_dataset.html#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">dataset.Dataset</span></code></a> — class for collecting random sample data.</li>
+<li><p><a class="reference internal" href="#gvar.mean" title="gvar.mean"><code class="xref any py py-func docutils literal notranslate"><span class="pre">mean</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract means.</p></li>
+<li><p><a class="reference internal" href="#gvar.sdev" title="gvar.sdev"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sdev</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract standard deviations.</p></li>
+<li><p><a class="reference internal" href="#gvar.var" title="gvar.var"><code class="xref any py py-func docutils literal notranslate"><span class="pre">var</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract variances.</p></li>
+<li><p><a class="reference internal" href="#gvar.fmt" title="gvar.fmt"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — replace all <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary by string representations.</p></li>
+<li><p><a class="reference internal" href="#gvar.tabulate" title="gvar.tabulate"><code class="xref any py py-func docutils literal notranslate"><span class="pre">tabulate</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — tabulate entries in array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><a class="reference internal" href="#gvar.correlate" title="gvar.correlate"><code class="xref any py py-func docutils literal notranslate"><span class="pre">correlate</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">corr)</span></code> — add correlations to <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p></li>
+<li><p><a class="reference internal" href="#gvar.chi2" title="gvar.chi2"><code class="xref any py py-func docutils literal notranslate"><span class="pre">chi2</span></code></a><code class="docutils literal notranslate"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> — <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>.</p></li>
+<li><p><a class="reference internal" href="#gvar.equivalent" title="gvar.equivalent"><code class="xref any py py-func docutils literal notranslate"><span class="pre">equivalent</span></code></a><code class="docutils literal notranslate"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> — <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s the same in <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code>?</p></li>
+<li><p><a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcov</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute covariance matrix.</p></li>
+<li><p><a class="reference internal" href="#gvar.evalcov_blocks" title="gvar.evalcov_blocks"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcov_blocks</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute diagonal blocks of covariance matrix.</p></li>
+<li><p><a class="reference internal" href="#gvar.evalcorr" title="gvar.evalcorr"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcorr</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute correlation matrix.</p></li>
+<li><p><a class="reference internal" href="#gvar.fmt_values" title="gvar.fmt_values"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt_values</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — list values for printing.</p></li>
+<li><p><a class="reference internal" href="#gvar.fmt_errorbudget" title="gvar.fmt_errorbudget"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt_errorbudget</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — create error-budget table for printing.</p></li>
+<li><p><a class="reference internal" href="#gvar.fmt_chi2" title="gvar.fmt_chi2"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt_chi2</span></code></a><code class="docutils literal notranslate"><span class="pre">(f)</span></code> — format chi**2 information in f as string for printing.</p></li>
+<li><p>class <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">BufferDict</span></code></a> — ordered dictionary with data buffer.</p></li>
+<li><p>class <a class="reference internal" href="#gvar.PDF" title="gvar.PDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDF</span></code></a> — probability density function.</p></li>
+<li><p>class <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFStatistics</span></code></a> — statistical analysis of moments of a random variable.</p></li>
+<li><p>class <a class="reference internal" href="#gvar.PDFHistogram" title="gvar.PDFHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFHistogram</span></code></a> — tool for building PDF histograms.</p></li>
+<li><p><a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dump</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">outputfile)</span></code> — serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in file.</p></li>
+<li><p><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dumps</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in a string.</p></li>
+<li><p><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal notranslate"><span class="pre">load</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputfile)</span></code> — reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from a file.</p></li>
+<li><p><a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref any py py-func docutils literal notranslate"><span class="pre">loads</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputstr)</span></code> — reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from a string.</p></li>
+<li><p><a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">disassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">reassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(data,cov)</span></code> — low-level routine to reassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">raniter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,N)</span></code> — iterator for random numbers.</p></li>
+<li><p><a class="reference internal" href="#gvar.ranseed" title="gvar.ranseed"><code class="xref any py py-func docutils literal notranslate"><span class="pre">ranseed</span></code></a><code class="docutils literal notranslate"><span class="pre">(seed)</span></code> — seed random number generator.</p></li>
+<li><p><a class="reference internal" href="#gvar.sample" title="gvar.sample"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sample</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — random sample from collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><a class="reference internal" href="#gvar.bootstrap_iter" title="gvar.bootstrap_iter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">bootstrap_iter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,N)</span></code> — bootstrap iterator.</p></li>
+<li><p><a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref any py py-func docutils literal notranslate"><span class="pre">svd</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">svdcut)</span></code> — SVD modification of correlation matrix.</p></li>
+<li><p><a class="reference internal" href="gvar_dataset.html#gvar.dataset.bin_data" title="gvar.dataset.bin_data"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.bin_data</span></code></a><code class="docutils literal notranslate"><span class="pre">(data)</span></code> — bin random sample data.</p></li>
+<li><p><a class="reference internal" href="gvar_dataset.html#gvar.dataset.avg_data" title="gvar.dataset.avg_data"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.avg_data</span></code></a><code class="docutils literal notranslate"><span class="pre">(data)</span></code> — estimate means of random sample data.</p></li>
+<li><p><a class="reference internal" href="gvar_dataset.html#gvar.dataset.bootstrap_iter" title="gvar.dataset.bootstrap_iter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dataset.bootstrap_iter</span></code></a><code class="docutils literal notranslate"><span class="pre">(data,N)</span></code> — bootstrap random sample data.</p></li>
+<li><p>class <a class="reference internal" href="gvar_dataset.html#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">dataset.Dataset</span></code></a> — class for collecting random sample data.</p></li>
 </ul>
 </div></blockquote>
 </div>
@@ -216,23 +215,19 @@ whose values are floats or arrays of floats, respectively.</p>
 <p>creates a version of <code class="docutils literal notranslate"><span class="pre">sin(x)</span></code> that works with either floats or
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as its argument. This particular function is unnecessary since
 it is already provided by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s) – Point at which the function is evaluated.</li>
-<li><strong>f</strong> (<em>float</em>) – Value of function at point <code class="docutils literal notranslate"><span class="pre">gvar.mean(x)</span></code>.</li>
-<li><strong>dfdx</strong> (<em>float</em><em>, </em><em>array of floats</em><em>, or </em><em>a dictionary of floats</em>) – Derivatives of function with respect to x at
-point <code class="docutils literal notranslate"><span class="pre">gvar.mean(x)</span></code>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s) – Point at which the function is evaluated.</p></li>
+<li><p><strong>f</strong> (<em>float</em>) – Value of function at point <code class="docutils literal notranslate"><span class="pre">gvar.mean(x)</span></code>.</p></li>
+<li><p><strong>dfdx</strong> (<em>float</em><em>, </em><em>array of floats</em><em>, or </em><em>a dictionary of floats</em>) – Derivatives of function with respect to x at
+point <code class="docutils literal notranslate"><span class="pre">gvar.mean(x)</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> representing the function’s value at <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> representing the function’s value at <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>Means, standard deviations, variances, formatted strings, covariance
@@ -309,29 +304,25 @@ For example, the code</p>
          <span class="mi">0</span><span class="p">,</span><span class="mi">2</span>     <span class="mf">0.033</span> <span class="p">(</span><span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> – Array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (any shape) or dictionary whose values are
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (any shape).</li>
-<li><strong>ncol</strong> – The table is split over <code class="docutils literal notranslate"><span class="pre">ncol</span></code> columns of key/index values
-plus <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> values. Default value is 1.</li>
-<li><strong>headers</strong> – Prints standard header on table if <code class="docutils literal notranslate"><span class="pre">True</span></code>; omits the
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – Array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (any shape) or dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (any shape).</p></li>
+<li><p><strong>ncol</strong> – The table is split over <code class="docutils literal notranslate"><span class="pre">ncol</span></code> columns of key/index values
+plus <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> values. Default value is 1.</p></li>
+<li><p><strong>headers</strong> – Prints standard header on table if <code class="docutils literal notranslate"><span class="pre">True</span></code>; omits the
 header if <code class="docutils literal notranslate"><span class="pre">False</span></code>. If <code class="docutils literal notranslate"><span class="pre">headers</span></code> is a 2-tuple, then
 <code class="docutils literal notranslate"><span class="pre">headers[0]</span></code> is used in the header over the indices/keys
-and <code class="docutils literal notranslate"><span class="pre">headers[1]</span></code> over the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> values. (Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.)</li>
-<li><strong>offset</strong> (<em>str</em>) – String inserted at the beginning of each line in
-the table. Default is <code class="docutils literal notranslate"><span class="pre">''</span></code>.</li>
-<li><strong>ndecimal</strong> – Number of digits displayed after the decimal point.
+and <code class="docutils literal notranslate"><span class="pre">headers[1]</span></code> over the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> values. (Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.)</p></li>
+<li><p><strong>offset</strong> (<em>str</em>) – String inserted at the beginning of each line in
+the table. Default is <code class="docutils literal notranslate"><span class="pre">''</span></code>.</p></li>
+<li><p><strong>ndecimal</strong> – Number of digits displayed after the decimal point.
 Default is <code class="docutils literal notranslate"><span class="pre">ndecimal=None</span></code> which adjusts table entries to
-show 2 digits of error.</li>
+show 2 digits of error.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -370,20 +361,16 @@ a correlation matrix:</p>
 <span class="go">{(&#39;a&#39;, &#39;a&#39;): array([[ 1.]]),(&#39;a&#39;, &#39;b&#39;): array([[ 0.1]]),(&#39;b&#39;, &#39;a&#39;): array([[ 0.1]]),(&#39;b&#39;, &#39;b&#39;): array([[ 1.]])}</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> – An array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary whose values are
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>corr</strong> – Correlations between <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s: <code class="docutils literal notranslate"><span class="pre">corr[i,</span> <span class="pre">j]</span></code> is the
-correlation between <code class="docutils literal notranslate"><span class="pre">g[i]</span></code> and <code class="docutils literal notranslate"><span class="pre">g[j]</span></code>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – An array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>corr</strong> – Correlations between <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s: <code class="docutils literal notranslate"><span class="pre">corr[i,</span> <span class="pre">j]</span></code> is the
+correlation between <code class="docutils literal notranslate"><span class="pre">g[i]</span></code> and <code class="docutils literal notranslate"><span class="pre">g[j]</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -485,11 +472,11 @@ for <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class=
 <p>The return value is the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code>. Extra attributes attached to this
 value give additional information:</p>
 <ul class="simple">
-<li><strong>dof</strong> — Number of degrees of freedom (that is, the number of variables
-compared).</li>
-<li><strong>Q</strong> — The probability that the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> could have been larger,
+<li><p><strong>dof</strong> — Number of degrees of freedom (that is, the number of variables
+compared).</p></li>
+<li><p><strong>Q</strong> — The probability that the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> could have been larger,
 by chance, even if <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> agree. Values smaller than 0.1
-or so suggest that they do not agree. Also called the <em>p-value</em>.</li>
+or so suggest that they do not agree. Also called the <em>p-value</em>.</p></li>
 </ul>
 </dd></dl>
 
@@ -525,24 +512,20 @@ Comparisons are made only for shared keys when they are dictionaries.
 Array dimensions must match between <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code>, but the shapes
 can be different; comparisons are made for the parts of the arrays that
 overlap in shape.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g1</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary of
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>g2</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary of
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>rtol</strong> – Relative tolerance with which mean values and derivatives
-must agree with each other. Default is <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>.</li>
-<li><strong>atol</strong> – Absolute tolerance within which mean values and derivatives
-must agree with each other. Default is <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary of
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>g2</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary of
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>rtol</strong> – Relative tolerance with which mean values and derivatives
+must agree with each other. Default is <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>.</p></li>
+<li><p><strong>atol</strong> – Absolute tolerance within which mean values and derivatives
+must agree with each other. Default is <code class="docutils literal notranslate"><span class="pre">1e-10</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s can be stored (serialized) and retrieved from files (or strings) using:</p>
@@ -557,22 +540,18 @@ and <code class="xref py py-mod docutils literal notranslate"><span class="pre">
 strings. A workaround is used here that succeeds provided
 <code class="docutils literal notranslate"><span class="pre">eval(repr(k))</span> <span class="pre">==</span> <span class="pre">k</span></code> for every key <code class="docutils literal notranslate"><span class="pre">k</span></code>, which is true for strings and
 lots of other types of key. Use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> where the workaround fails.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
-are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>outputfile</strong> – The name of a file or a file object in which the
-serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are stored.</li>
-<li><strong>method</strong> (<em>str</em>) – Serialization method, which should be one of
-<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
+are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>outputfile</strong> – The name of a file or a file object in which the
+serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are stored.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Serialization method, which should be one of
+<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -586,20 +565,16 @@ and <code class="xref py py-mod docutils literal notranslate"><span class="pre">
 strings. A workaround is used here that succeeds provided
 <code class="docutils literal notranslate"><span class="pre">eval(repr(k))</span> <span class="pre">==</span> <span class="pre">k</span></code> for every key <code class="docutils literal notranslate"><span class="pre">k</span></code>, which is true for strings and
 lots of other types of key. Use <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> where the workaround fails.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
-are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>method</strong> (<em>str</em>) – Serialization method, which should be one of
-<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
+are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Serialization method, which should be one of
+<code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -607,24 +582,20 @@ are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code clas
 <code class="descclassname">gvar.</code><code class="descname">load</code><span class="sig-paren">(</span><em>inputfile</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load and return serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from file <code class="docutils literal notranslate"><span class="pre">inputfile</span></code>.</p>
 <p>This function recovers <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s pickled with <a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>inputfile</strong> – The name of the file or a file object in which the
-serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are stored.</li>
-<li><strong>method</strong> (<em>str</em><em> or </em><em>None</em>) – Serialization method, which should be one of
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputfile</strong> – The name of the file or a file object in which the
+serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are stored.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em> or </em><em>None</em>) – Serialization method, which should be one of
 <code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. If <code class="docutils literal notranslate"><span class="pre">method=None</span></code>, then each
-method is tried in turn.</li>
+method is tried in turn.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -632,24 +603,20 @@ method is tried in turn.</li>
 <code class="descclassname">gvar.</code><code class="descname">loads</code><span class="sig-paren">(</span><em>inputstring</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.loads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load and return serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from string <code class="docutils literal notranslate"><span class="pre">inputstring</span></code>.</p>
 <p>This function recovers <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s pickled with <a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dumps()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>inputstring</strong> – A string containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s serialized using
-<a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dumps()</span></code></a>.</li>
-<li><strong>method</strong> (<em>str</em><em> or </em><em>None</em>) – Serialization method, which should be one of
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputstring</strong> – A string containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s serialized using
+<a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dumps()</span></code></a>.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em> or </em><em>None</em>) – Serialization method, which should be one of
 <code class="docutils literal notranslate"><span class="pre">['pickle',</span> <span class="pre">'json',</span> <span class="pre">'yaml']</span></code>. If <code class="docutils literal notranslate"><span class="pre">method=None</span></code>, then each
-method is tried in turn.</li>
+method is tried in turn.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, or array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -659,35 +626,28 @@ method is tried in turn.</li>
 <p>Disassembles collection <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s into components
 that can be pickled or otherwise stored. The output
 is reassembled by <a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.reassemble()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>g</strong> (<em>dict</em><em>, </em><em>array</em><em>, or </em><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><em>gvar.GVar</em></a>) – Collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s to be
-disassembled.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>g</strong> (<em>dict</em><em>, </em><em>array</em><em>, or </em><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><em>gvar.GVar</em></a>) – Collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s to be
+disassembled.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gvar.reassemble">
 <code class="descclassname">gvar.</code><code class="descname">reassemble</code><span class="sig-paren">(</span><em>data</em>, <em>cov=gvar.gvar.cov</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.reassemble" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data (from disassemble) back into <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>data</strong> (<a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><em>BufferDict</em></a><em>, </em><em>array</em>) – Disassembled collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
-from <a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.disassemble()</span></code></a> that are to be reassembled.</li>
-<li><strong>cov</strong> (<em>gvar.smat</em>) – Covariance matrix corresponding to the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
-in <code class="docutils literal notranslate"><span class="pre">data</span></code>. (Default is <code class="docutils literal notranslate"><span class="pre">gvar.gvar.cov</span></code>.)</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><em>BufferDict</em></a><em>, </em><em>array</em>) – Disassembled collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+from <a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.disassemble()</span></code></a> that are to be reassembled.</p></li>
+<li><p><strong>cov</strong> (<em>gvar.smat</em>) – Covariance matrix corresponding to the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+in <code class="docutils literal notranslate"><span class="pre">data</span></code>. (Default is <code class="docutils literal notranslate"><span class="pre">gvar.gvar.cov</span></code>.)</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s contain information about derivatives with respect to the <em>independent</em>
@@ -723,31 +683,27 @@ with arbitrary shapes.</p>
 <p><a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref py py-func docutils literal notranslate"><span class="pre">raniter()</span></code></a> also works when <code class="docutils literal notranslate"><span class="pre">g</span></code> is a single <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, in which case
 the resulting iterator returns random numbers drawn from the
 distribution specified by <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>g</strong> – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>; or a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</li>
-<li><strong>n</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Maximum number of random iterations.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>; or a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p></li>
+<li><p><strong>n</strong> (int or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Maximum number of random iterations.
 Setting <code class="docutils literal notranslate"><span class="pre">n=None</span></code> (the default) implies there is
-no maximum number.</li>
-<li><strong>svdcut</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – If positive, replace eigenvalues
+no maximum number.</p></li>
+<li><p><strong>svdcut</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – If positive, replace eigenvalues
 <code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s correlation matrix with
 <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the
 largest eigenvalue; if negative, discard eigenmodes with
 eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.
-Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</li>
+Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An iterator that returns random arrays or dictionaries
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterator that returns random arrays or dictionaries
 with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code> drawn from the Gaussian distribution
 defined by <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -755,27 +711,23 @@ defined by <code class="docutils literal notranslate"><span class="pre">g</span>
 <code class="descclassname">gvar.</code><code class="descname">sample</code><span class="sig-paren">(</span><em>g</em>, <em>svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate random sample from distribution <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>Equivalent to <code class="docutils literal notranslate"><span class="pre">next(gvar.raniter(g,</span> <span class="pre">svdcut=svdcut))</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>g</strong> – An array or dictionary of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>; or a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</li>
-<li><strong>svdcut</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – If positive, replace eigenvalues
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – An array or dictionary of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>; or a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p></li>
+<li><p><strong>svdcut</strong> (float or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – If positive, replace eigenvalues
 <code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s correlation matrix with
 <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the
 largest eigenvalue; if negative, discard eigenmodes with
 eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.
-Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</li>
+Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A random array or dictionary, with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code>,
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A random array or dictionary, with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code>,
 drawn from the Gaussian distribution defined by <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -793,27 +745,23 @@ covariance matrix).</p>
 <p><a class="reference internal" href="#gvar.bootstrap_iter" title="gvar.bootstrap_iter"><code class="xref py py-func docutils literal notranslate"><span class="pre">bootstrap_iter()</span></code></a> also works when <code class="docutils literal notranslate"><span class="pre">g</span></code> is a single <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, in
 which case the resulting iterator returns bootstrap copies of the
 <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>g</strong> (<em>array</em><em> or </em><em>dictionary</em><em> or </em><a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><em>BufferDict</em></a>) – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</li>
-<li><strong>n</strong> – Maximum number of random iterations. Setting <code class="docutils literal notranslate"><span class="pre">n=None</span></code>
-(the default) implies there is no maximum number.</li>
-<li><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>array</em><em> or </em><em>dictionary</em><em> or </em><a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><em>BufferDict</em></a>) – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p></li>
+<li><p><strong>n</strong> – Maximum number of random iterations. Setting <code class="docutils literal notranslate"><span class="pre">n=None</span></code>
+(the default) implies there is no maximum number.</p></li>
+<li><p><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s
 correlation matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where
 <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the largest eigenvalue; if negative,
 discard eigenmodes with eigenvalues smaller
-than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</li>
+than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An iterator that returns bootstrap copies of <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An iterator that returns bootstrap copies of <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>This function is used to seed the random number generator used by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>:</p>
@@ -830,17 +778,15 @@ the same <code class="docutils literal notranslate"><span class="pre">seed</span
 or with <code class="docutils literal notranslate"><span class="pre">seed=None</span></code>. This seed is stored in <code class="docutils literal notranslate"><span class="pre">ranseed.seed</span></code> and
 also returned by the function. The seed can be used to regenerate
 the same set of random numbers at a later time.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> (<em>int</em><em>, </em><em>tuple</em><em>, or </em><em>None</em>) – Seed for generator. Generates a
-random tuple if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The seed used to reseed the generator.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> (<em>int</em><em>, </em><em>tuple</em><em>, or </em><em>None</em>) – Seed for generator. Generates a
+random tuple if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The seed used to reseed the generator.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>The following two functions that are useful for tabulating results
@@ -859,61 +805,53 @@ rows labeled by <code class="docutils literal notranslate"><span class="pre">ko<
 the others is included in the <code class="docutils literal notranslate"><span class="pre">ki</span></code> contribution as well (since
 contributions from correlated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s cannot be distinguished). The table
 is returned as a string.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outputs</strong> – Dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s for which an error budget
-is computed.</li>
-<li><strong>inputs</strong> – Dictionary of: <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, arrays/dictionaries of
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outputs</strong> – Dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s for which an error budget
+is computed.</p></li>
+<li><p><strong>inputs</strong> – Dictionary of: <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, arrays/dictionaries of
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or lists of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays/dictionaries of
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. <code class="docutils literal notranslate"><span class="pre">fmt_errorbudget</span></code> tabulates the parts of the standard
-deviations of each <code class="docutils literal notranslate"><span class="pre">outputs[ko]</span></code> due to each <code class="docutils literal notranslate"><span class="pre">inputs[ki]</span></code>.</li>
-<li><strong>ndecimal</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of decimal places displayed in table.</li>
-<li><strong>percent</strong> (<em>boolean</em>) – Tabulate % errors if <code class="docutils literal notranslate"><span class="pre">percent</span> <span class="pre">is</span> <span class="pre">True</span></code>; otherwise
-tabulate the errors themselves.</li>
-<li><strong>colwidth</strong> (<em>positive integer</em><em> or </em><em>None</em>) – Width of each column. This is set automatically, to
-accommodate label widths, if <code class="docutils literal notranslate"><span class="pre">colwidth=None</span></code> (default).</li>
-<li><strong>verify</strong> (<em>boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, a warning is issued if: 1) different inputs are
+deviations of each <code class="docutils literal notranslate"><span class="pre">outputs[ko]</span></code> due to each <code class="docutils literal notranslate"><span class="pre">inputs[ki]</span></code>.</p></li>
+<li><p><strong>ndecimal</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of decimal places displayed in table.</p></li>
+<li><p><strong>percent</strong> (<em>boolean</em>) – Tabulate % errors if <code class="docutils literal notranslate"><span class="pre">percent</span> <span class="pre">is</span> <span class="pre">True</span></code>; otherwise
+tabulate the errors themselves.</p></li>
+<li><p><strong>colwidth</strong> (<em>positive integer</em><em> or </em><em>None</em>) – Width of each column. This is set automatically, to
+accommodate label widths, if <code class="docutils literal notranslate"><span class="pre">colwidth=None</span></code> (default).</p></li>
+<li><p><strong>verify</strong> (<em>boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, a warning is issued if: 1) different inputs are
 correlated (and therefore double count errors); or
 2) the sum (in quadrature) of partial errors is not equal to the
 total error to within 0.1% of the error (and the error budget is incomplete or
-overcomplete). No checking is done if <code class="docutils literal notranslate"><span class="pre">verify==False</span></code> (default).</li>
+overcomplete). No checking is done if <code class="docutils literal notranslate"><span class="pre">verify==False</span></code> (default).</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A table (<code class="docutils literal notranslate"><span class="pre">str</span></code>) containing the error budget.
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A table (<code class="docutils literal notranslate"><span class="pre">str</span></code>) containing the error budget.
 Output variables are labeled by the keys in <code class="docutils literal notranslate"><span class="pre">outputs</span></code>
 (columns); sources of uncertainty are labeled by the keys in
 <code class="docutils literal notranslate"><span class="pre">inputs</span></code> (rows).</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gvar.fmt_values">
 <code class="descclassname">gvar.</code><code class="descname">fmt_values</code><span class="sig-paren">(</span><em>outputs</em>, <em>ndecimal=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.fmt_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tabulate <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">outputs</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>outputs</strong> – A dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects.</li>
-<li><strong>ndecimal</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Format values <code class="docutils literal notranslate"><span class="pre">v</span></code> using <code class="docutils literal notranslate"><span class="pre">v.fmt(ndecimal)</span></code>.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outputs</strong> – A dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects.</p></li>
+<li><p><strong>ndecimal</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Format values <code class="docutils literal notranslate"><span class="pre">v</span></code> using <code class="docutils literal notranslate"><span class="pre">v.fmt(ndecimal)</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A table (<code class="docutils literal notranslate"><span class="pre">str</span></code>) containing values and standard
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A table (<code class="docutils literal notranslate"><span class="pre">str</span></code>) containing values and standard
 deviations for variables in <code class="docutils literal notranslate"><span class="pre">outputs</span></code>, labeled by the keys
 in <code class="docutils literal notranslate"><span class="pre">outputs</span></code>.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <p>The following function applies an SVD cut to the correlation matrix
@@ -999,37 +937,33 @@ using:</p>
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">result</span></code> is the desired expectation value.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>g</strong> – An array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dicitionary whose values are
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>svdcut</strong> (<em>None</em><em> or </em><em>float</em>) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – An array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dicitionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>svdcut</strong> (<em>None</em><em> or </em><em>float</em>) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code>
 of the correlation matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code>
 where <code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the largest eigenvalue; if negative, discard
 eigenmodes with eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>.
-Note <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>. Default is 1e-12.</li>
-<li><strong>wgts</strong> – Setting <code class="docutils literal notranslate"><span class="pre">wgts=1</span></code> causes <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a> to compute
+Note <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>. Default is 1e-12.</p></li>
+<li><p><strong>wgts</strong> – Setting <code class="docutils literal notranslate"><span class="pre">wgts=1</span></code> causes <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a> to compute
 and return a spectral decomposition of the covariance matrix of
 the modified <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal notranslate"><span class="pre">gmod</span></code>. Setting <code class="docutils literal notranslate"><span class="pre">wgts=-1</span></code> results in
 a decomposition of the inverse of the covariance matrix. The
-default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>, in which case only <code class="docutils literal notranslate"><span class="pre">gmod</span></code> is returned.</li>
-<li><strong>add_svdnoise</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, noise is added to the SVD correction (see
-above).</li>
+default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>, in which case only <code class="docutils literal notranslate"><span class="pre">gmod</span></code> is returned.</p></li>
+<li><p><strong>add_svdnoise</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, noise is added to the SVD correction (see
+above).</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A copy <code class="docutils literal notranslate"><span class="pre">gmod</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code> whose correlation matrix is modified by
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A copy <code class="docutils literal notranslate"><span class="pre">gmod</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code> whose correlation matrix is modified by
 SVD cuts. If <code class="docutils literal notranslate"><span class="pre">wgts</span></code> is not <code class="docutils literal notranslate"><span class="pre">False</span></code>,
 a tuple <code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">i_wgts)</span></code> is returned where <code class="docutils literal notranslate"><span class="pre">i_wgts</span></code>
 contains a spectral decomposition of <code class="docutils literal notranslate"><span class="pre">gmod</span></code>’s
 covariance matrix or its inverse.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Data from the SVD analysis is stored in <code class="docutils literal notranslate"><span class="pre">gmod</span></code>:</p>
 <dl class="attribute">
 <dt id="gvar.gmod.svdcut">
@@ -1107,26 +1041,22 @@ wherever there aren’t any using</p>
 introduce positive correlations, negative values anti-correlations.</p>
 <p>Parameter <code class="docutils literal notranslate"><span class="pre">gvar</span></code> specifies a function for creating new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that
 replaces <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> (the default).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>g</strong> (<em>array</em><em> or </em><em>dictionary</em>) – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s to be rebuilt.</li>
-<li><strong>gvar</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarFactory</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Replacement for <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> to use in rebuilding.
-Default is <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</li>
-<li><strong>corr</strong> (<em>number</em>) – Size of correlations to introduce where none exist
-initially.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>array</em><em> or </em><em>dictionary</em>) – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s to be rebuilt.</p></li>
+<li><p><strong>gvar</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarFactory</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Replacement for <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> to use in rebuilding.
+Default is <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p></li>
+<li><p><strong>corr</strong> (<em>number</em>) – Size of correlations to introduce where none exist
+initially.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Array or dictionary (gvar.BufferDict) of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s  (same
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array or dictionary (gvar.BufferDict) of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s  (same
 layout as <code class="docutils literal notranslate"><span class="pre">g</span></code>) where all correlations with variables other than
 those in <code class="docutils literal notranslate"><span class="pre">g</span></code> are erased.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <p>The following functions creates new functions that generate <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (to
@@ -1135,28 +1065,22 @@ replace <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code 
 <dt id="gvar.switch_gvar">
 <code class="descclassname">gvar.</code><code class="descname">switch_gvar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.switch_gvar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switch <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> to new <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarFactory</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">New <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>New <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gvar.restore_gvar">
 <code class="descclassname">gvar.</code><code class="descname">restore_gvar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.restore_gvar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore previous <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Previous <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Previous <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -1210,17 +1134,15 @@ variance coming from these is included in the result as well. (This
 last convention is necessary because variances associated with
 correlated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s cannot be disentangled into contributions
 corresponding to each variable separately.)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong><strong>[</strong><strong>i</strong><strong>]</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
-contributing to the partial variance.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Partial variance due to all of <code class="docutils literal notranslate"><span class="pre">args</span></code>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong><strong>[</strong><strong>i</strong><strong>]</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+contributing to the partial variance.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Partial variance due to all of <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -1233,17 +1155,15 @@ standard deviation coming from these is included in the result as
 well. (This last convention is necessary because variances
 associated with correlated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s cannot be disentangled into
 contributions corresponding to each variable separately.)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>args</strong><strong>[</strong><strong>i</strong><strong>]</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s) – Variables contributing to the partial standard
-deviation.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Partial standard deviation due to <code class="docutils literal notranslate"><span class="pre">args</span></code>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong><strong>[</strong><strong>i</strong><strong>]</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s) – Variables contributing to the partial standard
+deviation.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Partial standard deviation due to <code class="docutils literal notranslate"><span class="pre">args</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>Partial derivatives of the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> with respect to the independent
@@ -1256,17 +1176,15 @@ deviation.</td>
 <code class="docutils literal notranslate"><span class="pre">self.deriv(x)</span></code> returns the partial derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with
 respect to primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">x</span></code>, holding all of the other
 primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s constant.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – A primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> (or a function of a single
-primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>).</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> – A primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> (or a function of a single
+primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>There are two methods for converting <code class="docutils literal notranslate"><span class="pre">self</span></code> into a string, for
@@ -1540,18 +1458,14 @@ even though <code class="docutils literal notranslate"><span class="pre">'a'</sp
 </pre></div>
 </div>
 <p>Additional distributions can be added by specifying:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<em>str</em>) – Distributions’ function name.</li>
-<li><strong>invfcn</strong> (<em>callable</em>) – Inverse of the transformation function.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Distributions’ function name.</p></li>
+<li><p><strong>invfcn</strong> (<em>callable</em>) – Inverse of the transformation function.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -1598,26 +1512,22 @@ modified using <em>svd</em> cuts. Typical usage is:</p>
 </pre></div>
 </div>
 <p>Input parameters are:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mat</strong> (2-d sequence (<code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> or <code class="docutils literal notranslate"><span class="pre">list</span></code> or …)) – Positive, symmetric matrix.</li>
-<li><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number <code class="docutils literal notranslate"><span class="pre">(|svdcut|&lt;=1)</span></code>.) – If positive, replace eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat</span></code> with
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mat</strong> (2-d sequence (<code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> or <code class="docutils literal notranslate"><span class="pre">list</span></code> or …)) – Positive, symmetric matrix.</p></li>
+<li><p><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number <code class="docutils literal notranslate"><span class="pre">(|svdcut|&lt;=1)</span></code>.) – If positive, replace eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat</span></code> with
 <code class="docutils literal notranslate"><span class="pre">svdcut*(max</span> <span class="pre">eigenvalue)</span></code>; if negative, discard eigenmodes with
-eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> times the maximum eigenvalue.</li>
-<li><strong>svdnum</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or int) – If positive, keep only the modes with the largest
-<code class="docutils literal notranslate"><span class="pre">svdnum</span></code> eigenvalues; ignore if set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
-<li><strong>compute_delta</strong> (<em>boolean</em>) – Compute <code class="docutils literal notranslate"><span class="pre">delta</span></code> (see below) if <code class="docutils literal notranslate"><span class="pre">True</span></code>; set
-<code class="docutils literal notranslate"><span class="pre">delta=None</span></code> otherwise.</li>
-<li><strong>rescale</strong> – Rescale the input matrix to make its diagonal elements
-equal to +-1.0 before diagonalizing.</li>
+eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> times the maximum eigenvalue.</p></li>
+<li><p><strong>svdnum</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or int) – If positive, keep only the modes with the largest
+<code class="docutils literal notranslate"><span class="pre">svdnum</span></code> eigenvalues; ignore if set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>compute_delta</strong> (<em>boolean</em>) – Compute <code class="docutils literal notranslate"><span class="pre">delta</span></code> (see below) if <code class="docutils literal notranslate"><span class="pre">True</span></code>; set
+<code class="docutils literal notranslate"><span class="pre">delta=None</span></code> otherwise.</p></li>
+<li><p><strong>rescale</strong> – Rescale the input matrix to make its diagonal elements
+equal to +-1.0 before diagonalizing.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>The results are accessed using:</p>
 <dl class="attribute">
 <dt id="gvar.SVD.val">
@@ -1683,20 +1593,19 @@ its eigenvalues. Is <code class="docutils literal notranslate"><span class="pre"
 <dd><p>Vector decomposition of input matrix raised to power <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
 <p>Computes vectors <code class="docutils literal notranslate"><span class="pre">w[i]</span></code> such that</p>
 <blockquote>
-<div>mat**n = sum_i numpy.outer(w[i],w[i])</div></blockquote>
+<div><p>mat**n = sum_i numpy.outer(w[i],w[i])</p>
+</div></blockquote>
 <p>where <code class="docutils literal notranslate"><span class="pre">mat</span></code> is the original input matrix to <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-class docutils literal notranslate"><span class="pre">svd</span></code></a>. This
 decomposition cannot be computed if the input matrix was rescaled
 (<code class="docutils literal notranslate"><span class="pre">rescale=True</span></code>) except for <code class="docutils literal notranslate"><span class="pre">n=1</span></code> and <code class="docutils literal notranslate"><span class="pre">n=-1</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<em>number</em>) – Power of input matrix.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array <code class="docutils literal notranslate"><span class="pre">w</span></code> of vectors.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>number</em>) – Power of input matrix.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array <code class="docutils literal notranslate"><span class="pre">w</span></code> of vectors.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1718,14 +1627,12 @@ multi-dimensional Gaussian distribution defined by <code class="docutils literal
 <code class="docutils literal notranslate"><span class="pre">pdf(p)</span></code> is the probability density for random sample <code class="docutils literal notranslate"><span class="pre">p</span></code>
 drawn from <code class="docutils literal notranslate"><span class="pre">g</span></code>. The logarithm of the PDF is obtained using
 <code class="docutils literal notranslate"><span class="pre">pdf.logpdf(p)</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
-or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>svdcut</strong> (<em>non-negative float</em><em> or </em><em>None</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, replace
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>svdcut</strong> (<em>non-negative float</em><em> or </em><em>None</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, replace
 covariance matrix of <code class="docutils literal notranslate"><span class="pre">g</span></code> with a new matrix whose
 small eigenvalues are modified: eigenvalues smaller than
 <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> times the maximum eigenvalue <code class="docutils literal notranslate"><span class="pre">eig_max</span></code> are
@@ -1734,12 +1641,10 @@ problems caused by roundoff errors when inverting the
 covariance matrix. It increases the uncertainty associated
 with the modified eigenvalues and so is conservative.
 Setting <code class="docutils literal notranslate"><span class="pre">svdcut=None</span></code> or <code class="docutils literal notranslate"><span class="pre">svdcut=0</span></code> leaves the
-covariance matrix unchanged. Default is <code class="docutils literal notranslate"><span class="pre">1e-15</span></code>.</li>
+covariance matrix unchanged. Default is <code class="docutils literal notranslate"><span class="pre">1e-15</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
@@ -1748,25 +1653,21 @@ covariance matrix unchanged. Default is <code class="docutils literal notranslat
 <dd><p>Compute statistical information about a distribution.</p>
 <p>Given moments <code class="docutils literal notranslate"><span class="pre">m[i]</span></code> of a random variable, computes
 mean, standard deviation, skewness, and excess kurtosis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>moments</strong> (<em>array of floats</em>) – <code class="docutils literal notranslate"><span class="pre">moments[i]</span></code> is the (i+1)-th moment.
-Optional argument unless <code class="docutils literal notranslate"><span class="pre">histgram=None</span></code>.</li>
-<li><strong>histogram</strong> (<em>tuple</em>) – Tuple <code class="docutils literal notranslate"><span class="pre">(bins,prob)</span></code> where <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> is
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moments</strong> (<em>array of floats</em>) – <code class="docutils literal notranslate"><span class="pre">moments[i]</span></code> is the (i+1)-th moment.
+Optional argument unless <code class="docutils literal notranslate"><span class="pre">histgram=None</span></code>.</p></li>
+<li><p><strong>histogram</strong> (<em>tuple</em>) – Tuple <code class="docutils literal notranslate"><span class="pre">(bins,prob)</span></code> where <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> is
 the probability in the bin between <code class="docutils literal notranslate"><span class="pre">bins[i-1]</span></code> and <code class="docutils literal notranslate"><span class="pre">bins[i]</span></code>.
 <code class="docutils literal notranslate"><span class="pre">prob[0]</span></code> is the probability below <code class="docutils literal notranslate"><span class="pre">bins[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">prob[-1]</span></code>
 is the probability above <code class="docutils literal notranslate"><span class="pre">bins[-1]</span></code>. Array <code class="docutils literal notranslate"><span class="pre">bins</span></code> is ordered.
 The format for <code class="docutils literal notranslate"><span class="pre">prob</span></code> is what is returned by accumulating calls
 to <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.PDFHistogram.count()</span></code></a>. Optional argument unless
-<code class="docutils literal notranslate"><span class="pre">moments=None</span></code>.</li>
+<code class="docutils literal notranslate"><span class="pre">moments=None</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>The attributes are as follows:</p>
 <dl class="attribute">
 <dt id="gvar.PDFStatistics.mean">
@@ -1862,30 +1763,26 @@ for example:</p>
 complicated, multi-dimensional distributions: the expectation value of
 <code class="docutils literal notranslate"><span class="pre">hist.count(f(p))</span></code> over values of <code class="docutils literal notranslate"><span class="pre">p</span></code> drawn from a multi-dimensional
 distribution gives the the probability distribution for function <code class="docutils literal notranslate"><span class="pre">f(p)</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>g</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – The mean and standard deviation of <code class="docutils literal notranslate"><span class="pre">g</span></code> are
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – The mean and standard deviation of <code class="docutils literal notranslate"><span class="pre">g</span></code> are
 used to design the histogram bins, which are centered
 on <code class="docutils literal notranslate"><span class="pre">g.mean</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (in which case <code class="docutils literal notranslate"><span class="pre">bins</span></code> must
-be specified).</li>
-<li><strong>nbin</strong> (<em>int</em>) – The number of histogram bins. Set equal to
-<code class="docutils literal notranslate"><span class="pre">PDFHistogram.default_nbin</span></code> (=8 initially) if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
-<li><strong>binwidth</strong> (<em>float</em>) – The width of each bin is <code class="docutils literal notranslate"><span class="pre">binwidth</span> <span class="pre">*</span> <span class="pre">g.sdev</span></code>.
+be specified).</p></li>
+<li><p><strong>nbin</strong> (<em>int</em>) – The number of histogram bins. Set equal to
+<code class="docutils literal notranslate"><span class="pre">PDFHistogram.default_nbin</span></code> (=8 initially) if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>binwidth</strong> (<em>float</em>) – The width of each bin is <code class="docutils literal notranslate"><span class="pre">binwidth</span> <span class="pre">*</span> <span class="pre">g.sdev</span></code>.
 Set equal to <code class="docutils literal notranslate"><span class="pre">PDFHistogram.default_binwidth</span></code> (=1. initially)
-if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
-<li><strong>bins</strong> (array or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default). Otherwise specifies the
+if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>bins</strong> (array or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default). Otherwise specifies the
 histogram’s bin edges, overriding the default bin design specified
 by <code class="docutils literal notranslate"><span class="pre">g</span></code>. <code class="docutils literal notranslate"><span class="pre">len(bins)</span></code> is one larger than the number of bins. If
 specified it overrides the default bin design indicated by <code class="docutils literal notranslate"><span class="pre">g</span></code>.
-One of <code class="docutils literal notranslate"><span class="pre">g</span></code> or <code class="docutils literal notranslate"><span class="pre">bins</span></code> must be specified.</li>
+One of <code class="docutils literal notranslate"><span class="pre">g</span></code> or <code class="docutils literal notranslate"><span class="pre">bins</span></code> must be specified.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>The main attributes are:</p>
 <dl class="attribute">
 <dt id="gvar.PDFHistogram.g">
@@ -1940,18 +1837,15 @@ except for the last interval which is closed on both ends.</p>
 histogram of probabilities, and  estimates the mean, standard
 deviation, and other statistical characteristics of the corresponding
 probability distribution.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>count</strong> (<em>array</em>) – Array of length <code class="docutils literal notranslate"><span class="pre">nbin+2</span></code> containing histogram
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>count</strong> (<em>array</em>) – Array of length <code class="docutils literal notranslate"><span class="pre">nbin+2</span></code> containing histogram
 data where <code class="docutils literal notranslate"><span class="pre">count[0]</span></code> is the count for values that are
 below the range of the histogram, <code class="docutils literal notranslate"><span class="pre">count[-1]</span></code> is the count
 for values above the range, and <code class="docutils literal notranslate"><span class="pre">count[i]</span></code> is the count
-for the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th bin where <code class="docutils literal notranslate"><span class="pre">i=1...nbin</span></code>.</td>
-</tr>
-</tbody>
-</table>
+for the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th bin where <code class="docutils literal notranslate"><span class="pre">i=1...nbin</span></code>.</p>
+</dd>
+</dl>
 <p>Returns a named tuple containing the following information (in order):</p>
 <blockquote>
 <div><p><em>bins</em>: Array of bin edges for histogram (length <code class="docutils literal notranslate"><span class="pre">nbin+1</span></code>)</p>
@@ -1965,37 +1859,33 @@ for the <code class="docutils literal notranslate"><span class="pre">i</span></c
 <dt id="gvar.PDFHistogram.make_plot">
 <code class="descname">make_plot</code><span class="sig-paren">(</span><em>count</em>, <em>plot=None</em>, <em>show=False</em>, <em>plottype='probability'</em>, <em>bar=dict(alpha=0.15</em>, <em>color='b')</em>, <em>errorbar=dict(fmt='b.')</em>, <em>gaussian=dict(ls='--'</em>, <em>c='r')</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.make_plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert histogram counts in array <code class="docutils literal notranslate"><span class="pre">count</span></code> into a plot.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>count</strong> (<em>array</em>) – Array of histogram counts (see
-<a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDFHistogram.count()</span></code></a>).</li>
-<li><strong>plot</strong> (<em>plotter</em>) – <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib</span></code> plotting window. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
-uses the default window. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
-<li><strong>show</strong> (<em>boolean</em>) – Displayes plot if <code class="docutils literal notranslate"><span class="pre">True</span></code>; otherwise returns
-the plot. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
-<li><strong>plottype</strong> (<em>str</em>) – The probabilities in each bin are plotted if
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>count</strong> (<em>array</em>) – Array of histogram counts (see
+<a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDFHistogram.count()</span></code></a>).</p></li>
+<li><p><strong>plot</strong> (<em>plotter</em>) – <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib</span></code> plotting window. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
+uses the default window. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>boolean</em>) – Displayes plot if <code class="docutils literal notranslate"><span class="pre">True</span></code>; otherwise returns
+the plot. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>plottype</strong> (<em>str</em>) – The probabilities in each bin are plotted if
 <code class="docutils literal notranslate"><span class="pre">plottype='probability'</span></code> (default). The average probability
 density is plot if <code class="docutils literal notranslate"><span class="pre">plottype='density'</span></code>. The
-cumulative probability is plotted if <code class="docutils literal notranslate"><span class="pre">plottype=cumulative</span></code>.</li>
-<li><strong>bar</strong> (<em>dictionary</em>) – Additional plotting arguments for the bar graph
+cumulative probability is plotted if <code class="docutils literal notranslate"><span class="pre">plottype=cumulative</span></code>.</p></li>
+<li><p><strong>bar</strong> (<em>dictionary</em>) – Additional plotting arguments for the bar graph
 showing the histogram. This part of the plot is omitted
-if <code class="docutils literal notranslate"><span class="pre">bar=None</span></code>.</li>
-<li><strong>errorbar</strong> (<em>dictionary</em>) – Additional plotting arguments for the
+if <code class="docutils literal notranslate"><span class="pre">bar=None</span></code>.</p></li>
+<li><p><strong>errorbar</strong> (<em>dictionary</em>) – Additional plotting arguments for the
 errorbar graph, showing error bars on the histogram. This
-part of the plot is omitted if <code class="docutils literal notranslate"><span class="pre">errorbar=None</span></code>.</li>
-<li><strong>gaussian</strong> (<em>dictionary</em>) – Additional plotting arguments for the
+part of the plot is omitted if <code class="docutils literal notranslate"><span class="pre">errorbar=None</span></code>.</p></li>
+<li><p><strong>gaussian</strong> (<em>dictionary</em>) – Additional plotting arguments for the
 plot of the Gaussian probability for the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> (<code class="docutils literal notranslate"><span class="pre">g</span></code>)
 specified in the initialization. This part of the plot
 is omitted if <code class="docutils literal notranslate"><span class="pre">gaussian=None</span></code> or if no <code class="docutils literal notranslate"><span class="pre">g</span></code> was
-specified.</li>
+specified.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -2015,15 +1905,15 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>
-<li><a class="reference internal" href="#gvar-gvar-objects"><code class="docutils literal notranslate"><span class="pre">gvar.GVar</span></code> Objects</a></li>
-<li><a class="reference internal" href="#gvar-bufferdict-objects"><code class="docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code> Objects</a></li>
-<li><a class="reference internal" href="#gvar-svd-objects"><code class="docutils literal notranslate"><span class="pre">gvar.SVD</span></code> Objects</a></li>
-<li><a class="reference internal" href="#vegas-pdfintegrator-and-other-pdf-related-objects"><code class="docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code> and other PDF-related Objects</a></li>
+<li><a class="reference internal" href="#gvar-gvar-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code> Objects</a></li>
+<li><a class="reference internal" href="#gvar-bufferdict-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code> Objects</a></li>
+<li><a class="reference internal" href="#gvar-svd-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.SVD</span></code> Objects</a></li>
+<li><a class="reference internal" href="#vegas-pdfintegrator-and-other-pdf-related-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code> and other PDF-related Objects</a></li>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 </ul>
 </li>
@@ -2034,7 +1924,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
                         title="previous chapter">Overview and Tutorial</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="gvar_dataset.html"
-                        title="next chapter"><code class="docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></p>
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -2048,8 +1938,6 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -2073,12 +1961,12 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+        &#169; Copyright 2009-2019, G. P. Lepage.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

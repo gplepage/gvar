@@ -29,7 +29,7 @@ import gvar
 extensions = ['sphinx.ext.autodoc','sphinx.ext.napoleon', 'sphinx.ext.imgmath'] # ,'rst2pdf.pdfbuilder']
 imgmath_image_format = "png"
 imgmath_use_preview = True
-imgmath_latex_preamble = "\usepackage{arev}"
+imgmath_latex_preamble = "\\usepackage{arev}"
 imgmath_dvipng_args = ['-gamma', '0.35', '-D', '110', '-bg', 'Transparent']
 
 # Add any paths that contain templates here, relative to this directory.

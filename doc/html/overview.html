@@ -1,18 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Overview and Tutorial &#8212; gvar 9.1 documentation</title>
+    <meta charset="utf-8" />
+    <title>Overview and Tutorial &#8212; gvar 9.2 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="gvar - Gaussian Random Variables" href="gvar.html" />
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -61,10 +60,10 @@ propagating uncertainties and correlations through the functions.</p>
 <p>A Gaussian variable <code class="docutils literal notranslate"><span class="pre">x</span></code> represents a Gaussian probability distribution, and
 is therefore completely characterized by its mean <code class="docutils literal notranslate"><span class="pre">x.mean</span></code> and standard
 deviation <code class="docutils literal notranslate"><span class="pre">x.sdev</span></code>. They are used to represent quantities whose values are
-uncertain: for example, the mass,&nbsp;125.7±0.4&nbsp;GeV, of the recently
+uncertain: for example, the mass, 125.7±0.4 GeV, of the recently
 discovered Higgs boson from particle physics. The following code illustrates a
 (very) simple application of <a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>;  it calculates the Higgs boson’s
-energy when it carries momentum&nbsp;50±0.15&nbsp;GeV.</p>
+energy when it carries momentum 50±0.15 GeV.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">125.7</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>             <span class="c1"># Higgs boson mass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>               <span class="c1"># Higgs boson momentum</span>
@@ -94,7 +93,7 @@ in the mass, and largely cancel, for example, in the ratio:</p>
 <span class="go">1.07621(64)</span>
 </pre></div>
 </div>
-<p>The ratio is 4–5&nbsp;times more accurate than the either
+<p>The ratio is 4–5 times more accurate than the either
 the mass or energy separately.</p>
 <p>The correlation between <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">E</span></code> is obvious from their covariance and
 correlation matrices, both of which have large
@@ -118,7 +117,7 @@ Higgs boson’s mass from its energy and momentum:</p>
 <p>The numerator and denominator are completely correlated, indeed identical to
 machine precision, as they should be. This works only because <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> object
 <code class="docutils literal notranslate"><span class="pre">E</span></code> knows that its uncertainty comes from the uncertainties associated
-with variables <code class="docutils literal notranslate"><span class="pre">m</span></code> and&nbsp;<code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+with variables <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
 <p>We can verify that the uncertainty in the Higgs boson’s energy comes mostly
 from its mass by creating an <em>error budget</em> for the Higgs energy (and for its
 energy to mass ratio):</p>
@@ -136,10 +135,10 @@ energy to mass ratio):</p>
 </div>
 <p>For each output (<code class="docutils literal notranslate"><span class="pre">E</span></code> and <code class="docutils literal notranslate"><span class="pre">E/m</span></code>), the error budget lists the contribution
 to the total uncertainty coming from  each of the inputs (<code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">p</span></code>).
-The total uncertainty in the  energy is&nbsp;±0.28%, and almost all of that
-comes from the mass — only&nbsp;±0.04%  comes from the uncertainty in the
+The total uncertainty in the  energy is ±0.28%, and almost all of that
+comes from the mass — only ±0.04%  comes from the uncertainty in the
 momentum. The two sources of uncertainty contribute equally, however, to the
-ratio <code class="docutils literal notranslate"><span class="pre">E/m</span></code>, which has a total uncertainty of only&nbsp;0.06%.</p>
+ratio <code class="docutils literal notranslate"><span class="pre">E/m</span></code>, which has a total uncertainty of only 0.06%.</p>
 <p>This example is relatively simple. Module <a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>, however, can easily
 handle thousands of Gaussian random variables and all of their correlations.
 These can be combined in arbitrary arithmetic expressions and/or fed through
@@ -169,7 +168,7 @@ statement if using Python 2; or add</p>
 </div>
 <div class="section" id="gaussian-random-variables">
 <h2>Gaussian Random Variables<a class="headerlink" href="#gaussian-random-variables" title="Permalink to this headline">¶</a></h2>
-<p>The Higgs boson mass (125.7±0.4&nbsp;GeV) from the previous section is
+<p>The Higgs boson mass (125.7±0.4 GeV) from the previous section is
 an example of a Gaussian random variable. As discussed above, such variables
 <code class="docutils literal notranslate"><span class="pre">x</span></code> represent Gaussian probability distributions, and therefore are
 completely characterized by their mean <code class="docutils literal notranslate"><span class="pre">x.mean</span></code>
@@ -645,7 +644,7 @@ and standard deviation (0.019(207)) of the distribution (black dotted line).</p>
 <p>Neither Gaussian in this plot is quite right: the first is more accurate close
 to the maximimum, while the second does better further out. From the histogram
 we can estimate that 68% of the probability lies within ±0.14 of 0.03,
-which is probably the best succinct characterization of the uncertainty&nbsp;(<code class="docutils literal notranslate"><span class="pre">0.03(14)</span></code>).</p>
+which is probably the best succinct characterization of the uncertainty (<code class="docutils literal notranslate"><span class="pre">0.03(14)</span></code>).</p>
 <p>This example is relatively simple since the underlying Gaussian
 distribution is only two dimensional. The <code class="xref py py-mod docutils literal notranslate"><span class="pre">vegas</span></code> integrator used
 here is adaptive and so can function effectively even for high
@@ -839,15 +838,15 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Overview and Tutorial</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#gaussian-random-variables">Gaussian Random Variables</a></li>
 <li><a class="reference internal" href="#creating-gaussian-variables">Creating Gaussian Variables</a></li>
-<li><a class="reference internal" href="#gvar-arithmetic-and-functions"><code class="docutils literal notranslate"><span class="pre">gvar.GVar</span></code> Arithmetic and Functions</a></li>
-<li><a class="reference internal" href="#error-budgets-from-gvars">Error Budgets from <code class="docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s</a></li>
-<li><a class="reference internal" href="#storing-gvars-for-later-use-bufferdicts">Storing <code class="docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s for Later Use; <code class="docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code>s</a></li>
+<li><a class="reference internal" href="#gvar-arithmetic-and-functions"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code> Arithmetic and Functions</a></li>
+<li><a class="reference internal" href="#error-budgets-from-gvars">Error Budgets from <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s</a></li>
+<li><a class="reference internal" href="#storing-gvars-for-later-use-bufferdicts">Storing <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s for Later Use; <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code>s</a></li>
 <li><a class="reference internal" href="#non-gaussian-expectation-values">Non-Gaussian Expectation Values</a></li>
 <li><a class="reference internal" href="#random-number-generators-and-simulations">Random Number Generators and Simulations</a></li>
 <li><a class="reference internal" href="#limitations">Limitations</a></li>
@@ -861,7 +860,7 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
                         title="previous chapter">gvar Documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="gvar.html"
-                        title="next chapter"><code class="docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></p>
+                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -875,8 +874,6 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -900,12 +897,12 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+        &#169; Copyright 2009-2019, G. P. Lepage.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

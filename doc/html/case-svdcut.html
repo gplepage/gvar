@@ -1,18 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 9.1 documentation</title>
+    <meta charset="utf-8" />
+    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 9.2 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Case Study: Numerical Analysis — Pendulum Clock" href="case-pendulum.html" />
@@ -36,7 +35,7 @@
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Numerical Analysis — Pendulum Clock"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -49,7 +48,7 @@
 <h1>Case Study: Correlations and SVD Cuts<a class="headerlink" href="#case-study-correlations-and-svd-cuts" title="Permalink to this headline">¶</a></h1>
 <p>This case study illustrates a problem that arises when constructing
 correlation matrices from a small number random samples. It shows how
-to fix the problem using an SVD&nbsp;cut.</p>
+to fix the problem using an SVD cut.</p>
 <div class="section" id="the-problem">
 <h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
 <p>We want to determine the slope indicated by measurements of a
@@ -108,7 +107,7 @@ of independent measurements:</p>
 </pre></div>
 </div>
 <p>The fit, however, is very poor, with a <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> per degree of freedom
-of&nbsp;8.3:</p>
+of 8.3:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Least</span> <span class="n">Square</span> <span class="n">Fit</span><span class="p">:</span>
   <span class="n">chi2</span><span class="o">/</span><span class="n">dof</span> <span class="p">[</span><span class="n">dof</span><span class="p">]</span> <span class="o">=</span> <span class="mf">8.3</span> <span class="p">[</span><span class="mi">10</span><span class="p">]</span>    <span class="n">Q</span> <span class="o">=</span> <span class="mf">1.1e-13</span>    <span class="n">logGBF</span> <span class="o">=</span> <span class="mf">11.816</span>
 
@@ -124,7 +123,7 @@ of&nbsp;8.3:</p>
 the correlation matrix sufficiently accurately. The smallest
 eigenvalues of the correlation matrix tend to be underestimated with small
 samples. Indeed the smallest eigenvalues go to zero when the sample size is
-smaller than the dimension of <code class="docutils literal notranslate"><span class="pre">y</span></code> (i.e., 10&nbsp;here). The underestimated
+smaller than the dimension of <code class="docutils literal notranslate"><span class="pre">y</span></code> (i.e., 10 here). The underestimated
 eigenvalues result in contributions to the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code>
 function in the fit that are both spurious and large.</p>
 </div>
@@ -181,7 +180,7 @@ The bootstrap errors
 give a sense for how accurately the underlying eigenvalues are
 determined given the sample size.</p>
 <p>The plot shows that the fitting problem lies with
-the eigenvalues that are smaller than roughly 10<sup>-5</sup>&nbsp;times
+the eigenvalues that are smaller than roughly 10<sup>-5</sup> times
 the largest
 eigenvalue. To address this problem we introduce an SVD cut
 using <a class="reference internal" href="gvar.html#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a> with a value for <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> suggested
@@ -216,7 +215,7 @@ is more than an order-of-magnitude smaller than what we obtained from
 the uncorrelated fit.</p>
 <p>This simple problem can be approached in different ways. For example,
 we could estimate the slope from <code class="docutils literal notranslate"><span class="pre">y[i+1]</span> <span class="pre">-</span> <span class="pre">y[i]</span></code>, doing a weighted
-average over all values of&nbsp;<code class="docutils literal notranslate"><span class="pre">i</span></code>:</p>
+average over all values of <code class="docutils literal notranslate"><span class="pre">i</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">slope</span> <span class="o">=</span> <span class="n">lsqfit</span><span class="o">.</span><span class="n">wavg</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span>
 </pre></div>
@@ -226,7 +225,7 @@ first been applied to <code class="docutils literal notranslate"><span class="pr
 <p>SVD cuts are often necessary when using correlation matrices constructed
 from random samples. Typically large numbers of samples are needed to
 calculate all of a correlation matrix’s eigenvalues accurately —
-10–100&nbsp;times as many samples as there are variables, or more. Such large
+10–100 times as many samples as there are variables, or more. Such large
 numbers of samples are often not feasible, in which case an SVD cut might
 be essential for a usable correlation matrix.</p>
 </div>
@@ -238,7 +237,7 @@ be essential for a usable correlation matrix.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Case Study: Correlations and SVD Cuts</a><ul>
 <li><a class="reference internal" href="#the-problem">The Problem</a></li>
@@ -264,8 +263,6 @@ be essential for a usable correlation matrix.</p>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -286,12 +283,12 @@ be essential for a usable correlation matrix.</p>
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Numerical Analysis — Pendulum Clock"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+        &#169; Copyright 2009-2019, G. P. Lepage.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

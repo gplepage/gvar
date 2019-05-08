@@ -1,18 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Numerical Analysis Modules in gvar &#8212; gvar 9.1 documentation</title>
+    <meta charset="utf-8" />
+    <title>Numerical Analysis Modules in gvar &#8212; gvar 9.2 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Case Study: Numerical Analysis — Pendulum Clock" href="case-pendulum.html" />
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -61,15 +60,15 @@ More examples will follow with time.</p>
 <p>The sub-modules included here are:</p>
 <blockquote>
 <div><ul class="simple">
-<li><a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.cspline</span></code></a> — cubic splines for 1-d data.</li>
-<li><a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.linalg</span></code></a> — basic linear algebra.</li>
-<li><dl class="first docutils">
-<dt><a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.ode</span></code></a> — integration of systems of ordinary differential equations;</dt>
-<dd><a class="reference internal" href="#integral"><span class="std std-ref">one-dimensional integrals</span></a>.</dd>
+<li><p><a class="reference internal" href="#module-gvar.cspline" title="gvar.cspline: Cubic splines."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.cspline</span></code></a> — cubic splines for 1-d data.</p></li>
+<li><p><a class="reference internal" href="#module-gvar.linalg" title="gvar.linalg: Basic linear algebra."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.linalg</span></code></a> — basic linear algebra.</p></li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.ode</span></code></a> — integration of systems of ordinary differential equations;</dt><dd><p><a class="reference internal" href="#integral"><span class="std std-ref">one-dimensional integrals</span></a>.</p>
+</dd>
 </dl>
 </li>
-<li><a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.powerseries</span></code></a> — power series representation of functions.</li>
-<li><a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.root</span></code></a> — root-finding for one-dimensional functions.</li>
+<li><p><a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.powerseries</span></code></a> — power series representation of functions.</p></li>
+<li><p><a class="reference internal" href="#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.root</span></code></a> — root-finding for one-dimensional functions.</p></li>
 </ul>
 </div></blockquote>
 <span class="target" id="module-gvar.cspline"></span><div class="section" id="cubic-splines">
@@ -168,35 +167,31 @@ are known. Continuing from above, for example, one would take</p>
 </div>
 <p>since the derivatives of <code class="docutils literal notranslate"><span class="pre">sin(x)</span></code> at <code class="docutils literal notranslate"><span class="pre">x=0</span></code> and <code class="docutils literal notranslate"><span class="pre">x=3.14159265</span></code>
 are 1 and -1, respectively.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>xknot</strong> (<em>1-d sequence of number</em>) – The knots of the spline, where the
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xknot</strong> (<em>1-d sequence of number</em>) – The knots of the spline, where the
 function values are specified. The knots are sorted (from small
-to large) if necessary.</li>
-<li><strong>yknot</strong> (<em>1-d sequence of number</em>) – Function values at the locations
-specified by <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>.</li>
-<li><strong>deriv</strong> (<em>2-component sequence</em>) – Derivatives at initial and final
+to large) if necessary.</p></li>
+<li><p><strong>yknot</strong> (<em>1-d sequence of number</em>) – Function values at the locations
+specified by <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>.</p></li>
+<li><p><strong>deriv</strong> (<em>2-component sequence</em>) – Derivatives at initial and final
 boundaries of the  region specified by <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>.
-Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> for each boundary.</li>
-<li><strong>extrap_order</strong> (<em>int</em>) – Order of polynomial used for extrapolations
+Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> for each boundary.</p></li>
+<li><p><strong>extrap_order</strong> (<em>int</em>) – Order of polynomial used for extrapolations
 outside of the spline range. The polynomial is constructed from
 the spline’s value and derivatives at the (nearest) knot of the
 spline. The allowed range is <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">extrap_order</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>. The
 default value is 3 although it is common practice to use
-smaller values.</li>
-<li><strong>warn</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, warnings are generated
+smaller values.</p></li>
+<li><p><strong>warn</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, warnings are generated
 when the spline function is called for <code class="docutils literal notranslate"><span class="pre">x</span></code> values that
 fall outside of the original range of <code class="docutils literal notranslate"><span class="pre">xknot</span></code>s used to
 define the spline. Default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>;
-out-of-range warnings are suppressed if set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</li>
+out-of-range warnings are suppressed if set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <span class="target" id="module-gvar.linalg"></span></div>
@@ -209,93 +204,86 @@ linear algebra with matrices whose elements can be either numbers or
 <dt id="gvar.linalg.det">
 <code class="descclassname">linalg.</code><code class="descname">det</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.det" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determinant of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> – Two-dimensional, square matrix/array of numbers
-and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Deterimant of the matrix.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> – Two-dimensional, square matrix/array of numbers
+and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Deterimant of the matrix.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If matrix is not square and two-dimensional.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="gvar.linalg.slogdet">
 <code class="descclassname">linalg.</code><code class="descname">slogdet</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.slogdet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sign and logarithm of determinant of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> – Two-dimensional, square matrix/array of numbers
-and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
-<dt>Tuple <code class="docutils literal notranslate"><span class="pre">(s,</span> <span class="pre">logdet)</span></code> where the determinant of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code> is</dt>
-<dd><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">*</span> <span class="pre">exp(logdet)</span></code>.</dd>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> – Two-dimensional, square matrix/array of numbers
+and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Tuple <code class="docutils literal notranslate"><span class="pre">(s,</span> <span class="pre">logdet)</span></code> where the determinant of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code> is</dt><dd><p><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">*</span> <span class="pre">exp(logdet)</span></code>.</p>
+</dd>
 </dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</td>
-</tr>
-</tbody>
-</table>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If matrix is not square and two-dimensional.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="gvar.linalg.inv">
 <code class="descclassname">linalg.</code><code class="descname">inv</code><span class="sig-paren">(</span><em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.inv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inverse of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a</strong> – Two-dimensional, square matrix/array of numbers
-and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The inverse of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>a</strong> – Two-dimensional, square matrix/array of numbers
+and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The inverse of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If matrix is not square and two-dimensional.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="gvar.linalg.solve">
 <code class="descclassname">linalg.</code><code class="descname">solve</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.solve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find <code class="docutils literal notranslate"><span class="pre">x</span></code> such that <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">b</span></code> for matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> – Two-dimensional, square matrix/array of numbers
-and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>b</strong> – One-dimensional vector/array of numbers and/or
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – Two-dimensional, square matrix/array of numbers
+and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>b</strong> – One-dimensional vector/array of numbers and/or
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or an array of such vectors.
-Requires <code class="docutils literal notranslate"><span class="pre">b.shape[0]</span> <span class="pre">==</span> <span class="pre">a.shape[1]</span></code>.</li>
+Requires <code class="docutils literal notranslate"><span class="pre">b.shape[0]</span> <span class="pre">==</span> <span class="pre">a.shape[1]</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The solution <code class="docutils literal notranslate"><span class="pre">x</span></code> of <code class="docutils literal notranslate"><span class="pre">a.dot(x)</span> <span class="pre">=</span> <span class="pre">b</span></code>, which is equivalent
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The solution <code class="docutils literal notranslate"><span class="pre">x</span></code> of <code class="docutils literal notranslate"><span class="pre">a.dot(x)</span> <span class="pre">=</span> <span class="pre">b</span></code>, which is equivalent
 to <code class="docutils literal notranslate"><span class="pre">inv(a).dot(b)</span></code>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If <code class="docutils literal notranslate"><span class="pre">a</span></code> is not square and two-dimensional.</li>
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If shape of <code class="docutils literal notranslate"><span class="pre">b</span></code> does not match that of <code class="docutils literal notranslate"><span class="pre">a</span></code>
-(that is <code class="docutils literal notranslate"><span class="pre">b.shape[0]</span> <span class="pre">!=</span> <span class="pre">a.shape[1]</span></code>).</li>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">a</span></code> is not square and two-dimensional.</p></li>
+<li><p><strong>ValueError</strong> – If shape of <code class="docutils literal notranslate"><span class="pre">b</span></code> does not match that of <code class="docutils literal notranslate"><span class="pre">a</span></code>
+    (that is <code class="docutils literal notranslate"><span class="pre">b.shape[0]</span> <span class="pre">!=</span> <span class="pre">a.shape[1]</span></code>).</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -308,145 +296,130 @@ norm with the inverse covariance matrix: i.e., minimize
 <code class="docutils literal notranslate"><span class="pre">||</span> <span class="pre">isig</span> <span class="pre">&#64;</span> <span class="pre">b</span> <span class="pre">-</span> <span class="pre">isig</span> <span class="pre">&#64;</span> <span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x||</span></code> where <code class="docutils literal notranslate"><span class="pre">isig</span></code> is the square root of the
 inverse of <code class="docutils literal notranslate"><span class="pre">b</span></code>’s covariance matrix. Set parameter <code class="docutils literal notranslate"><span class="pre">weighted=True</span></code> to
 obtain the weighted-least-squares solution.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> – Matrix/array of shape <code class="docutils literal notranslate"><span class="pre">(M,N)</span></code> containing numbers and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>b</strong> – Vector/array of shape <code class="docutils literal notranslate"><span class="pre">(M,)</span></code> containing numbers and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>rcond</strong> (<em>float</em>) – Cutoff for singular values of <code class="docutils literal notranslate"><span class="pre">a</span></code>. Singular values
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – Matrix/array of shape <code class="docutils literal notranslate"><span class="pre">(M,N)</span></code> containing numbers and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>b</strong> – Vector/array of shape <code class="docutils literal notranslate"><span class="pre">(M,)</span></code> containing numbers and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>rcond</strong> (<em>float</em>) – Cutoff for singular values of <code class="docutils literal notranslate"><span class="pre">a</span></code>. Singular values
 smaller than <code class="docutils literal notranslate"><span class="pre">rcond</span></code> times the maximum eigenvalue are ignored.
-Default (<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code>) is <code class="docutils literal notranslate"><span class="pre">max(M,N)</span></code> times machine precision.</li>
-<li><strong>weighted</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use weighted least squares; otherwise
-use unweighted least squares.</li>
-<li><strong>extrainfo</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default) only <code class="docutils literal notranslate"><span class="pre">x</span></code> is returned;
-otherwise <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">residual,</span> <span class="pre">rank,</span> <span class="pre">s)</span></code> is returned.</li>
+Default (<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code>) is <code class="docutils literal notranslate"><span class="pre">max(M,N)</span></code> times machine precision.</p></li>
+<li><p><strong>weighted</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use weighted least squares; otherwise
+use unweighted least squares.</p></li>
+<li><p><strong>extrainfo</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default) only <code class="docutils literal notranslate"><span class="pre">x</span></code> is returned;
+otherwise <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">residual,</span> <span class="pre">rank,</span> <span class="pre">s)</span></code> is returned.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Array <code class="docutils literal notranslate"><span class="pre">x</span></code> of shape <code class="docutils literal notranslate"><span class="pre">(N,)</span></code> that minimizes <code class="docutils literal notranslate"><span class="pre">||</span> <span class="pre">b</span> <span class="pre">-</span> <span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x||</span></code>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array <code class="docutils literal notranslate"><span class="pre">x</span></code> of shape <code class="docutils literal notranslate"><span class="pre">(N,)</span></code> that minimizes <code class="docutils literal notranslate"><span class="pre">||</span> <span class="pre">b</span> <span class="pre">-</span> <span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x||</span></code>
 if <code class="docutils literal notranslate"><span class="pre">extrainfo==False</span></code> (default); otherwise returns a tuple
 <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">residual,</span> <span class="pre">rank,</span> <span class="pre">s)</span></code> where <code class="docutils literal notranslate"><span class="pre">residual</span></code> is the sum
 of the squares of <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">-</span> <span class="pre">a</span> <span class="pre">&#64;</span> <span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">rank</span></code> is the rank of matrix
 <code class="docutils literal notranslate"><span class="pre">a</span></code>, and <code class="docutils literal notranslate"><span class="pre">s</span></code> is an array containing the singular values.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="gvar.linalg.eigvalsh">
 <code class="descclassname">linalg.</code><code class="descname">eigvalsh</code><span class="sig-paren">(</span><em>a</em>, <em>eigvec=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.eigvalsh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Eigenvalues of Hermitian matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> – Two-dimensional, square Hermitian matrix/array of numbers
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – Two-dimensional, square Hermitian matrix/array of numbers
 and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Array elements must be
 real-valued if <cite>gvar.GVar</cite>s are involved (i.e., symmetric
-matrix).</li>
-<li><strong>eigvec</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, method returns a tuple of arrays
+matrix).</p></li>
+<li><p><strong>eigvec</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, method returns a tuple of arrays
 <code class="docutils literal notranslate"><span class="pre">(val,</span> <span class="pre">vec)</span></code> where <code class="docutils literal notranslate"><span class="pre">val[i]</span></code> are the
 eigenvalues of <code class="docutils literal notranslate"><span class="pre">a</span></code>, and <code class="docutils literal notranslate"><span class="pre">vec[:,</span> <span class="pre">i]</span></code> are the mean
 values of the corresponding eigenvectors. Only <code class="docutils literal notranslate"><span class="pre">val</span></code> is
-returned if <code class="docutils literal notranslate"><span class="pre">eigvec=False</span></code> (default).</li>
+returned if <code class="docutils literal notranslate"><span class="pre">eigvec=False</span></code> (default).</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Array <code class="docutils literal notranslate"><span class="pre">val</span></code> of eigenvalues of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code> if parameter
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array <code class="docutils literal notranslate"><span class="pre">val</span></code> of eigenvalues of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code> if parameter
 <code class="docutils literal notranslate"><span class="pre">eigvec==False</span></code> (default); otherwise a tuple of
 arrays <code class="docutils literal notranslate"><span class="pre">(val,</span> <span class="pre">vec)</span></code> where <code class="docutils literal notranslate"><span class="pre">val[i]</span></code> are the eigenvalues
 (in ascending order) and <code class="docutils literal notranslate"><span class="pre">vec[:,</span> <span class="pre">i]</span></code> are the mean values
 of the corresponding eigenvectors.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If matrix is not square and two-dimensional.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="gvar.linalg.eigh">
 <code class="descclassname">linalg.</code><code class="descname">eigh</code><span class="sig-paren">(</span><em>a</em>, <em>eigvec=True</em>, <em>rcond=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.eigh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Eigenvalues and eigenvectors of symmetric matrix <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> – Two-dimensional, square Hermitian matrix/array of numbers
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – Two-dimensional, square Hermitian matrix/array of numbers
 and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Array elements must be
 real-valued if <cite>gvar.GVar</cite>s are involved (i.e., symmetric
-matrix).</li>
-<li><strong>eigvec</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>  (default), method returns a tuple
+matrix).</p></li>
+<li><p><strong>eigvec</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>  (default), method returns a tuple
 of arrays <code class="docutils literal notranslate"><span class="pre">(val,</span> <span class="pre">vec)</span></code> where <code class="docutils literal notranslate"><span class="pre">val[i]</span></code> are the
 eigenvalues of <code class="docutils literal notranslate"><span class="pre">a</span></code> (in ascending order), and <code class="docutils literal notranslate"><span class="pre">vec[:,</span> <span class="pre">i]</span></code>
 are the corresponding eigenvectors of <code class="docutils literal notranslate"><span class="pre">a</span></code>. Only <code class="docutils literal notranslate"><span class="pre">val</span></code> is
-returned if <code class="docutils literal notranslate"><span class="pre">eigvec=False</span></code>.</li>
-<li><strong>rcond</strong> (<em>float</em>) – Eigenvalues whose difference is smaller than
+returned if <code class="docutils literal notranslate"><span class="pre">eigvec=False</span></code>.</p></li>
+<li><p><strong>rcond</strong> (<em>float</em>) – Eigenvalues whose difference is smaller than
 <code class="docutils literal notranslate"><span class="pre">rcond</span></code> times their sum are assumed to be degenerate
 (and ignored) when computing variances for the eigvectors.
-Default (<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code>) is <code class="docutils literal notranslate"><span class="pre">max(M,N)</span></code> times machine precision.</li>
+Default (<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code>) is <code class="docutils literal notranslate"><span class="pre">N</span></code> times machine precision,
+where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the dimension of the array.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Tuple <code class="docutils literal notranslate"><span class="pre">(val,vec)</span></code> of eigenvalues and eigenvectors of
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple <code class="docutils literal notranslate"><span class="pre">(val,vec)</span></code> of eigenvalues and eigenvectors of
 matrix <code class="docutils literal notranslate"><span class="pre">a</span></code> if parameter <code class="docutils literal notranslate"><span class="pre">eigvec==True</span></code> (default).
 The eigenvalues <code class="docutils literal notranslate"><span class="pre">val[i]</span></code> are in ascending order and
 <code class="docutils literal notranslate"><span class="pre">vec[:,</span> <span class="pre">i]</span></code> are the corresponding eigenvalues. Only
 the eigenvalues <code class="docutils literal notranslate"><span class="pre">val</span></code> are returned if <code class="docutils literal notranslate"><span class="pre">eigvec=False</span></code>.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If matrix is not square and two-dimensional.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If matrix is not square and two-dimensional.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="gvar.linalg.svd">
 <code class="descclassname">linalg.</code><code class="descname">svd</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>compute_uv=True</em>, <em>rcond=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.linalg.svd" title="Permalink to this definition">¶</a></dt>
 <dd><p>svd decomposition of matrix <code class="docutils literal notranslate"><span class="pre">a</span></code> containing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>a</strong> – Two-dimensional matrix/array of numbers
-and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</li>
-<li><strong>compute_uv</strong> (<em>bool</em>) – It <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), returns
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – Two-dimensional matrix/array of numbers
+and/or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>compute_uv</strong> (<em>bool</em>) – It <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), returns
 tuple <code class="docutils literal notranslate"><span class="pre">(u,s,vT)</span></code> where matrix <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">u</span> <span class="pre">&#64;</span> <span class="pre">np.diag(s)</span> <span class="pre">&#64;</span> <span class="pre">vT</span></code>
 where matrices <code class="docutils literal notranslate"><span class="pre">u</span></code> and <code class="docutils literal notranslate"><span class="pre">vT</span></code> satisfy <code class="docutils literal notranslate"><span class="pre">u.T</span> <span class="pre">&#64;</span> <span class="pre">u</span> <span class="pre">=</span> <span class="pre">1</span></code>
 and <code class="docutils literal notranslate"><span class="pre">vT</span> <span class="pre">&#64;</span> <span class="pre">vT.T</span> <span class="pre">=</span> <span class="pre">1</span></code>, and <code class="docutils literal notranslate"><span class="pre">s</span></code> is the list of singular
-values. Only <code class="docutils literal notranslate"><span class="pre">s</span></code> is returned if <code class="docutils literal notranslate"><span class="pre">compute_uv=False</span></code>.</li>
-<li><strong>rcond</strong> (<em>float</em>) – Singular values whose difference is smaller than
+values. Only <code class="docutils literal notranslate"><span class="pre">s</span></code> is returned if <code class="docutils literal notranslate"><span class="pre">compute_uv=False</span></code>.</p></li>
+<li><p><strong>rcond</strong> (<em>float</em>) – Singular values whose difference is smaller than
 <code class="docutils literal notranslate"><span class="pre">rcond</span></code> times their sum are assumed to be degenerate for
 calculating variances for <code class="docutils literal notranslate"><span class="pre">u</span></code> and <code class="docutils literal notranslate"><span class="pre">vT</span></code>.
-Default (<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code>) is <code class="docutils literal notranslate"><span class="pre">max(M,N)</span></code> times machine precision.</li>
+Default (<code class="docutils literal notranslate"><span class="pre">rcond=None</span></code>) is <code class="docutils literal notranslate"><span class="pre">max(M,N)</span></code> times machine precision.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Tuple <code class="docutils literal notranslate"><span class="pre">(u,s,vT)</span></code> where matrix <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">u</span> <span class="pre">&#64;</span> <span class="pre">np.diag(s)</span> <span class="pre">&#64;</span> <span class="pre">vT</span></code>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple <code class="docutils literal notranslate"><span class="pre">(u,s,vT)</span></code> where matrix <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">u</span> <span class="pre">&#64;</span> <span class="pre">np.diag(s)</span> <span class="pre">&#64;</span> <span class="pre">vT</span></code>
 where matrices <code class="docutils literal notranslate"><span class="pre">u</span></code> and <code class="docutils literal notranslate"><span class="pre">vT</span></code> satisfy <code class="docutils literal notranslate"><span class="pre">u.T</span> <span class="pre">&#64;</span> <span class="pre">u</span> <span class="pre">=</span> <span class="pre">1</span></code>
 and <code class="docutils literal notranslate"><span class="pre">vT</span> <span class="pre">&#64;</span> <span class="pre">vT.T</span> <span class="pre">=</span> <span class="pre">1</span></code>, and <code class="docutils literal notranslate"><span class="pre">s</span></code> is the list of singular
 values. If <code class="docutils literal notranslate"><span class="pre">a.shape=(N,M)</span></code>, then <code class="docutils literal notranslate"><span class="pre">u.shape=(N,K)</span></code>
 and <code class="docutils literal notranslate"><span class="pre">vT.shape=(K,M)</span></code> where <code class="docutils literal notranslate"><span class="pre">K</span></code> is the number of
 nonzero singular values (<code class="docutils literal notranslate"><span class="pre">len(s)==K</span></code>).
 If <code class="docutils literal notranslate"><span class="pre">compute_uv==False</span></code> only <code class="docutils literal notranslate"><span class="pre">s</span></code> is returned.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If matrix is not two-dimensional.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If matrix is not two-dimensional.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <span class="target" id="module-gvar.ode"></span></div>
@@ -548,41 +521,37 @@ allows this as well.)</p>
 the integration, with the current values of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>.
 Objects of type <a class="reference internal" href="#gvar.ode.Solution" title="gvar.ode.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.ode.Solution</span></code></a> are examples of
 (simple) analyzers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deriv</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that returns <code class="docutils literal notranslate"><span class="pre">dy/dx</span></code>.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deriv</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that returns <code class="docutils literal notranslate"><span class="pre">dy/dx</span></code>.
 The return value should have the same shape as <code class="docutils literal notranslate"><span class="pre">y</span></code> if arrays
-are used.</li>
-<li><strong>tol</strong> (<em>float</em>) – Relative accuracy in <code class="docutils literal notranslate"><span class="pre">y</span></code> relative to <code class="docutils literal notranslate"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
+are used.</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – Relative accuracy in <code class="docutils literal notranslate"><span class="pre">y</span></code> relative to <code class="docutils literal notranslate"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
 for each step in the integration. Any integration step that achieves
 less precision is repeated with a smaller step size. The step size
-is increased if precision is higher than needed. Default is 1e-5.</li>
-<li><strong>h</strong> (<em>float</em><em> or </em><em>None</em>) – Absolute value of initial step size. The default value equals the
-entire width of the integration interval.</li>
-<li><strong>hmin</strong> (<em>float</em><em> or </em><em>None</em>) – Smallest step size allowed. A warning is raised
+is increased if precision is higher than needed. Default is 1e-5.</p></li>
+<li><p><strong>h</strong> (<em>float</em><em> or </em><em>None</em>) – Absolute value of initial step size. The default value equals the
+entire width of the integration interval.</p></li>
+<li><p><strong>hmin</strong> (<em>float</em><em> or </em><em>None</em>) – Smallest step size allowed. A warning is raised
 if a smaller step size is requested, and the step size is not
 decreased. This prevents infinite loops at singular points, but
 the solution may not be reliable when a warning has been issued. The
-default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
-<li><strong>delta</strong> – Function <code class="docutils literal notranslate"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> that returns
+default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</p></li>
+<li><p><strong>delta</strong> – Function <code class="docutils literal notranslate"><span class="pre">delta(yerr,</span> <span class="pre">y,</span> <span class="pre">delta_y)</span></code> that returns
 a number to be compared  with <code class="docutils literal notranslate"><span class="pre">tol</span></code> at each integration step:
 if it is larger than <code class="docutils literal notranslate"><span class="pre">tol</span></code>, the step is repeated with a smaller
 step size; if it is smaller the step is accepted and a larger
 step size used for the subsequent step. Here <code class="docutils literal notranslate"><span class="pre">yerr</span></code> is an
 estimate of the error in <code class="docutils literal notranslate"><span class="pre">y</span></code> on the last step; <code class="docutils literal notranslate"><span class="pre">y</span></code> is the
 proposed value; and <code class="docutils literal notranslate"><span class="pre">delta_y</span></code> is the change in <code class="docutils literal notranslate"><span class="pre">y</span></code> over
-the last step.</li>
-<li><strong>analyzer</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that is called after each
+the last step.</p></li>
+<li><p><strong>analyzer</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that is called after each
 step of the integration. This can be used to analyze intermediate
-results.</li>
+results.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
@@ -627,34 +596,30 @@ bad steps, where <code class="docutils literal notranslate"><span class="pre">h<
 the integration with the current values of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>.
 Objects of type <a class="reference internal" href="#gvar.ode.Solution" title="gvar.ode.Solution"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.ode.Solution</span></code></a> are examples of
 (simple) analyzers.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>deriv</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that returns <code class="docutils literal notranslate"><span class="pre">dy/dx</span></code>.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deriv</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that returns <code class="docutils literal notranslate"><span class="pre">dy/dx</span></code>.
 The return value should be a dictionary with the same
 keys as <code class="docutils literal notranslate"><span class="pre">y</span></code>, and values that have the same
-shape as the corresponding values in <code class="docutils literal notranslate"><span class="pre">y</span></code>.</li>
-<li><strong>tol</strong> (<em>float</em>) – Relative accuracy in <code class="docutils literal notranslate"><span class="pre">y</span></code> relative to <code class="docutils literal notranslate"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
+shape as the corresponding values in <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p></li>
+<li><p><strong>tol</strong> (<em>float</em>) – Relative accuracy in <code class="docutils literal notranslate"><span class="pre">y</span></code> relative to <code class="docutils literal notranslate"><span class="pre">|y|</span> <span class="pre">+</span> <span class="pre">h|dy/dx|</span></code>
 for each step in the integration. Any integration step that achieves
 less precision is repeated with a smaller step size. The step size
-is increased if precision is higher than needed.</li>
-<li><strong>h</strong> (<em>float</em>) – Absolute value of initial step size. The default value equals the
-entire width of the integration interval.</li>
-<li><strong>hmin</strong> (<em>float</em>) – Smallest step size allowed. A warning is raised
+is increased if precision is higher than needed.</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Absolute value of initial step size. The default value equals the
+entire width of the integration interval.</p></li>
+<li><p><strong>hmin</strong> (<em>float</em>) – Smallest step size allowed. A warning is raised
 if a smaller step size is requested, and the step size is not
 decreased. This prevents infinite loops at singular points, but
 the solution may not be reliable when a warning has been issued. The
-default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
-<li><strong>analyzer</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that is called after each
+default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</p></li>
+<li><p><strong>analyzer</strong> – Function of <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> that is called after each
 step of the integration. This can be used to analyze intermediate
-results.</li>
+results.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <p>A simple analyzer class is:</p>
@@ -715,31 +680,27 @@ scalars or arrays: for example,</p>
 <span class="go">{&#39;x&#39;: 0.5,&#39;x3&#39;: 0.25}</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fcn</strong> – Function of scalar variable <code class="docutils literal notranslate"><span class="pre">x</span></code> that returns the integrand.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fcn</strong> – Function of scalar variable <code class="docutils literal notranslate"><span class="pre">x</span></code> that returns the integrand.
 The return value should be either a scalar or an array, or a
-dictionary whose values are scalars and/or arrays.</li>
-<li><strong>interval</strong> – Contains the interval <code class="docutils literal notranslate"><span class="pre">(x0,x1)</span></code> over which the integral
-is computed.</li>
-<li><strong>fcnshape</strong> – Contains the shape of the array returned by <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> or
+dictionary whose values are scalars and/or arrays.</p></li>
+<li><p><strong>interval</strong> – Contains the interval <code class="docutils literal notranslate"><span class="pre">(x0,x1)</span></code> over which the integral
+is computed.</p></li>
+<li><p><strong>fcnshape</strong> – Contains the shape of the array returned by <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> or
 <code class="docutils literal notranslate"><span class="pre">()</span></code> if the function returns a scalar. Setting <code class="docutils literal notranslate"><span class="pre">fshape=None</span></code>
 (the default) results in an extra function evaluation to determine
-the shape.</li>
-<li><strong>tol</strong> – Relative accuracy of result.</li>
-<li><strong>hmin</strong> – Smallest step size allowed in adaptive integral. A warning is
+the shape.</p></li>
+<li><p><strong>tol</strong> – Relative accuracy of result.</p></li>
+<li><p><strong>hmin</strong> – Smallest step size allowed in adaptive integral. A warning is
 raised if a smaller step size is requested, and the step size is not
 decreased. This prevents infinite loops at singular points, but
 the integral may not be accurate when a warning has been issued. The
-default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</li>
+default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> (which does <em>not</em> prevent infinite loops).</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -890,20 +851,16 @@ expansion of the expression. Expressions can include the standard
 mathematical functions (<code class="docutils literal notranslate"><span class="pre">log,</span> <span class="pre">exp,</span> <span class="pre">sqrt,</span> <span class="pre">sin,</span> <span class="pre">cos,</span> <span class="pre">tan...</span></code>).
 <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> can also be differentiated (<code class="docutils literal notranslate"><span class="pre">p.deriv()</span></code>)
 and integrated (<code class="docutils literal notranslate"><span class="pre">p.integ()</span></code>).</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>c</strong> (<em>list</em><em> or </em><em>array</em>) – Power series coefficients (optional if parameter
-<em>order</em> specified).</li>
-<li><strong>order</strong> (<em>integer</em>) – Highest power in power series (optional if parameter
-<em>c</em> specified).</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c</strong> (<em>list</em><em> or </em><em>array</em>) – Power series coefficients (optional if parameter
+<em>order</em> specified).</p></li>
+<li><p><strong>order</strong> (<em>integer</em>) – Highest power in power series (optional if parameter
+<em>c</em> specified).</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="attribute">
 <dt id="gvar.powerseries.PowerSeries.coeff">
 <code class="descname">coeff</code><a class="headerlink" href="#gvar.powerseries.PowerSeries.coeff" title="Permalink to this definition">¶</a></dt>
@@ -914,16 +871,14 @@ and integrated (<code class="docutils literal notranslate"><span class="pre">p.i
 <dt id="gvar.powerseries.PowerSeries.deriv">
 <code class="descname">deriv</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.deriv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute <em>n</em>-th derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> (<em>positive integer</em>) – Number of derivatives.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><em>n</em>-th derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>positive integer</em>) – Number of derivatives.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>n</em>-th derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -932,21 +887,17 @@ and integrated (<code class="docutils literal notranslate"><span class="pre">p.i
 <dd><p>Compute <em>n</em>-th indefinite integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 <p>If <em>x0</em> is specified, then the definite integral,
 integrating from point <em>x0</em>, is returned.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n</strong> (<em>integer</em>) – Number of integrations.</li>
-<li><strong>x0</strong> – Starting point for definite integral (optional).</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>integer</em>) – Number of integrations.</p></li>
+<li><p><strong>x0</strong> – Starting point for definite integral (optional).</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><em>n</em>-th integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>n</em>-th integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -1039,43 +990,39 @@ be refined using <a class="reference internal" href="#gvar.root.refine" title="g
 </div>
 <p>The resulting interval correctly brackets the root
 at <code class="docutils literal notranslate"><span class="pre">pi</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fcn</strong> – One dimenionsal function whose root is sought.</li>
-<li><strong>x0</strong> (<em>float</em>) – Starting point for search.</li>
-<li><strong>incr</strong> (<em>float</em><em>, </em><em>optional</em>) – Increment used for linear searches. Default
-value is 0.</li>
-<li><strong>fac</strong> (<em>float</em><em>, </em><em>optional</em>) – Rescaling factor for exponential searches.
-Default value is 1.1.</li>
-<li><strong>maxit</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of steps allowed for search. An
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fcn</strong> – One dimenionsal function whose root is sought.</p></li>
+<li><p><strong>x0</strong> (<em>float</em>) – Starting point for search.</p></li>
+<li><p><strong>incr</strong> (<em>float</em><em>, </em><em>optional</em>) – Increment used for linear searches. Default
+value is 0.</p></li>
+<li><p><strong>fac</strong> (<em>float</em><em>, </em><em>optional</em>) – Rescaling factor for exponential searches.
+Default value is 1.1.</p></li>
+<li><p><strong>maxit</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of steps allowed for search. An
 exception is raised if a root is not found in time. Default
-value is 100.</li>
-<li><strong>analyzer</strong> – Optional function <code class="docutils literal notranslate"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
+value is 100.</p></li>
+<li><p><strong>analyzer</strong> – Optional function <code class="docutils literal notranslate"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
 for each point <code class="docutils literal notranslate"><span class="pre">x</span></code> that is examined. This can be used,
 for example, to monitor the search while debugging.
-Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
+Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>Tuple <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span></code> where <code class="docutils literal notranslate"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>, which implies
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Tuple <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span></code> where <code class="docutils literal notranslate"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>, which implies
 that a root occurs between <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> (provided the
 function is continuous). The tuple has extra attributes
 that provide additional information about the search:</p>
 <ul class="simple">
-<li><strong>nit</strong> — Number of iterations used to find interval <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>.</li>
-<li><strong>fcnval</strong> — Tuple containing the function values at <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>.</li>
+<li><p><strong>nit</strong> — Number of iterations used to find interval <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>.</p></li>
+<li><p><strong>fcnval</strong> — Tuple containing the function values at <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>.</p></li>
 </ul>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code> – If unable to find a root in <code class="docutils literal notranslate"><span class="pre">maxit</span></code> steps.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If unable to find a root in <code class="docutils literal notranslate"><span class="pre">maxit</span></code> steps.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -1101,52 +1048,48 @@ interval:</p>
 <span class="go">7</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fcn</strong> – One-dimensional function whose zero/root is sought.</li>
-<li><strong>interval</strong> – Tuple <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code> specifying an interval containing
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fcn</strong> – One-dimensional function whose zero/root is sought.</p></li>
+<li><p><strong>interval</strong> – Tuple <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code> specifying an interval containing
 the root, with <code class="docutils literal notranslate"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code>. The search
-for a root is confined to this interval.</li>
-<li><strong>rtol</strong> (<em>float</em><em>, </em><em>optional</em>) – Relative tolerance for the root. The default
+for a root is confined to this interval.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em><em>, </em><em>optional</em>) – Relative tolerance for the root. The default
 value is <code class="docutils literal notranslate"><span class="pre">None</span></code>, which sets <code class="docutils literal notranslate"><span class="pre">rtol</span></code> equal to machine
 precision (<code class="docutils literal notranslate"><span class="pre">sys.float_info.epsilon</span></code>). A larger value
-usually leads to less precision but is faster.</li>
-<li><strong>maxit</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of iterations used to find
+usually leads to less precision but is faster.</p></li>
+<li><p><strong>maxit</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum number of iterations used to find
 a root with the given tolerance. A warning is
 issued if the algorithm does not converge in time.
-(Default value is 1000.)</li>
-<li><strong>analyzer</strong> – Optional function <code class="docutils literal notranslate"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
+(Default value is 1000.)</p></li>
+<li><p><strong>analyzer</strong> – Optional function <code class="docutils literal notranslate"><span class="pre">f(x,</span> <span class="pre">fcn(x))</span></code> that is called
 for each point <code class="docutils literal notranslate"><span class="pre">x</span></code> examined by the algorithm. This can
 be used, for example, to monitor convergence while
-debugging. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
+debugging. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>The root, which is either a <code class="docutils literal notranslate"><span class="pre">float</span></code> or
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>The root, which is either a <code class="docutils literal notranslate"><span class="pre">float</span></code> or
 a <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> but with extra attributes that
 provide additional information about the root:</p>
 <ul class="simple">
-<li><strong>nit</strong> — Number of iterations used to find the root.</li>
-<li><strong>interval</strong> — Smallest interval <code class="docutils literal notranslate"><span class="pre">(b,c)</span></code> found containing
-the root, where <code class="docutils literal notranslate"><span class="pre">b</span></code> is the root returned by the method.</li>
-<li><strong>fcnval</strong> — Value of <code class="docutils literal notranslate"><span class="pre">fcn(x)</span></code> at the root.</li>
+<li><p><strong>nit</strong> — Number of iterations used to find the root.</p></li>
+<li><p><strong>interval</strong> — Smallest interval <code class="docutils literal notranslate"><span class="pre">(b,c)</span></code> found containing
+the root, where <code class="docutils literal notranslate"><span class="pre">b</span></code> is the root returned by the method.</p></li>
+<li><p><strong>fcnval</strong> — Value of <code class="docutils literal notranslate"><span class="pre">fcn(x)</span></code> at the root.</p></li>
 </ul>
 </p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If <code class="docutils literal notranslate"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> for initial
-interval <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>.</li>
-<li><code class="xref py py-exc docutils literal notranslate"><span class="pre">UserWarning</span></code> – If the algorithm fails to converge
-after <code class="docutils literal notranslate"><span class="pre">maxit</span></code> iterations.</li>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">fcn(a)</span> <span class="pre">*</span> <span class="pre">fcn(b)</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> for initial
+    interval <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>.</p></li>
+<li><p><strong>UserWarning</strong> – If the algorithm fails to converge
+    after <code class="docutils literal notranslate"><span class="pre">maxit</span></code> iterations.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1158,9 +1101,9 @@ after <code class="docutils literal notranslate"><span class="pre">maxit</span><
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Numerical Analysis Modules in <code class="docutils literal notranslate"><span class="pre">gvar</span></code></a><ul>
+<li><a class="reference internal" href="#">Numerical Analysis Modules in <code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a><ul>
 <li><a class="reference internal" href="#cubic-splines">Cubic Splines</a></li>
 <li><a class="reference internal" href="#linear-algebra">Linear Algebra</a></li>
 <li><a class="reference internal" href="#ordinary-differential-equations">Ordinary Differential Equations</a></li>
@@ -1178,7 +1121,7 @@ after <code class="docutils literal notranslate"><span class="pre">maxit</span><
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="gvar_dataset.html"
-                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></p>
+                        title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="case-pendulum.html"
                         title="next chapter">Case Study:  Numerical Analysis — Pendulum Clock</a></p>
@@ -1195,8 +1138,6 @@ after <code class="docutils literal notranslate"><span class="pre">maxit</span><
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -1220,12 +1161,12 @@ after <code class="docutils literal notranslate"><span class="pre">maxit</span><
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2009-2015, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+        &#169; Copyright 2009-2019, G. P. Lepage.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>
