@@ -16,8 +16,11 @@ test-dataset.py
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+import gzip
 import pickle
 import os
+import subprocess
+import sys
 import unittest
 import warnings
 import numpy as np
@@ -33,6 +36,11 @@ try:
     NO_H5PY = False
 except:
     NO_H5PY = True
+
+try:
+    import lsqfit
+except:
+    lsqfit = None
 
 class ArrayTests(object):
     def __init__(self):
@@ -77,7 +85,7 @@ class ArrayTests(object):
 
 
 
-class test_dataset(unittest.TestCase,ArrayTests):
+class txest_dataset(unittest.TestCase,ArrayTests):
     def setUp(self): pass
 
     def tearDown(self): pass
@@ -333,12 +341,20 @@ class test_dataset(unittest.TestCase,ArrayTests):
                 s 3
                 v 30 300
                 """)  # """
-        with open(fin[1],"w") as f:
-            f.write("""
-                a [[1,10]]
-                a [[2,20]]
-                a [[3,30]]
-                """)  # """
+        with gzip.open(fin[1] + '.gz', 'wb') as f:
+            if sys.version_info >= (3,):
+                f.write(b"""
+                    a [[1,10]]
+                    a [[2,20]]
+                    a [[3,30]]
+                    """)
+            else:
+                f.write("""
+                    a [[1,10]]
+                    a [[2,20]]
+                    a [[3,30]]
+                    """)
+        fin[1] += '.gz'
         data = Dataset(fin[0])
         self.assertEqual(data['s'],[1,2,3])
         self.assert_arraysequal(data['v'],[[10,100],[20,200],[30,300]])
@@ -562,9 +578,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
         # s.plot_ratio(show=True)
 
         # with models (only if lsqfit installed)
-        try:
-            import lsqfit
-        except:
+        if lsqfit is None:
             return
         class Linear(lsqfit.MultiFitterModel):
             def __init__(self, datatag, x, intercept, slope):

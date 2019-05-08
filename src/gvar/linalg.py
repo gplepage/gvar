@@ -106,7 +106,8 @@ def eigh(a, eigvec=True, rcond=None):
         rcond (float): Eigenvalues whose difference is smaller than
             ``rcond`` times their sum are assumed to be degenerate
             (and ignored) when computing variances for the eigvectors.
-            Default (``rcond=None``) is ``max(M,N)`` times machine precision.
+            Default (``rcond=None``) is ``N`` times machine precision,
+            where ``N`` is the dimension of the array.
 
     Returns:
         Tuple ``(val,vec)`` of eigenvalues and eigenvectors of

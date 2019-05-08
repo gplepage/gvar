@@ -13,7 +13,9 @@
 
 import collections
 import fileinput
+import os
 import re
+import sys
 import warnings
 
 import numpy
@@ -24,6 +26,28 @@ except ImportError:
     _PLOT = None
 
 import gvar as _gvar
+
+if sys.version_info > (3,):
+    import gzip
+    import bz2
+    import io
+    # Python 3 needs to decode the compressed output
+    # modified (fixed) from stackoverflow suggestion
+    def hook_compressed_alt(encoding):
+        def hook_compressed(filename, mode):
+            ext = os.path.splitext(filename)[1]
+            if ext == '.gz':
+                return io.TextIOWrapper(gzip.open(filename, mode=mode), encoding=encoding)
+            elif ext == '.bz2':
+                return io.TextIOWrapper(bz2.open(filename, mode=mode), encoding=encoding)
+            else:
+                return open(filename, mode, encoding=encoding)
+        return hook_compressed
+else:
+    # Python 2 can use normal routine
+    def hook_compressed_alt(encoding):
+        return fileinput.hook_compressed
+
 
 cimport numpy, cython
 
@@ -597,7 +621,9 @@ class Dataset(collections.OrderedDict):
         if isinstance(inputdata, fileinput.FileInput):
             finput = inputdata
         else:
-            finput = fileinput.input(inputdata, openhook=fileinput.hook_compressed)
+            finput = fileinput.input(
+                inputdata, openhook=hook_compressed_alt('utf-8')
+                )
         for line in finput:
             f = line.split()
             if len(f)<2 or f[0][0]=='#':
@@ -919,7 +945,11 @@ class svd_diagnosis(object):
             analyzed. The correlation matrix is restricted to the data
             specified by the models and the data returned are "processed data"
             for use with a multi-fitter using keyword ``pdata`` rather than
-            ``data``.
+            ``data``. Ignored if keyword ``process_datasets`` is specified.
+
+        process_datasets: Function that converts datasets into averaged
+            data. Function :func:`gvar.dataset.avg_data` is used if
+            set equal to ``None`` (default).
 
         mincut: Minimum SVD cut (default 1e-12).
 
@@ -932,14 +962,16 @@ class svd_diagnosis(object):
         bsval: Bootstrap average of correlation matrix eigenvalues.
         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
     """
-    def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None):
+    def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):
         if isinstance(dataset, tuple):
             data, ns = dataset
             tset = _gvar.dataset.Dataset()
             for d in _gvar.raniter(data, n=ns):
                 tset.append(d)
             dataset = tset
-        if models is None or models == []:
+        if process_dataset is not None:
+            avg_data = process_dataset
+        elif models is None or models == []:
             avg_data = _gvar.dataset.avg_data
         else:
             try:

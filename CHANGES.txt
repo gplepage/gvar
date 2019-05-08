@@ -1,3 +1,13 @@
+Version 9.2 2019-05-08
+========================
+
+- gvar.dataset.svd_diagnosis has new keyword process_dataset that
+  allows it to be used in more general contexts.
+
+- Fixes bug that prevented Dataset from reading compressed files
+  in Python 3.
+
+
 Version 9.1 2019-03-19
 =========================
 Minor update.
