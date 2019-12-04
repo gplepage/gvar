@@ -1,3 +1,9 @@
+Version 9.2.1 2019-12-04
+========================
+
+- Fixes bugs in gvar.load and gvar.dump caused by recent security upgrades
+  to pyYAML.
+
 Version 9.2 2019-05-08
 ========================
 

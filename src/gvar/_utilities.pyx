@@ -25,6 +25,7 @@ from math import lgamma
 
 try:
     import yaml
+    from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
 except ImportError:
     yaml = None
 
@@ -639,7 +640,7 @@ def dump(g, outputfile, method='pickle', use_json=False):
         data = dict(tag=tag, gmean=gmean, gcov=gcov)
         return (
             json.dump(data, ofile) if method == 'json' else
-            yaml.dump(data, ofile)
+            yaml.dump(data, ofile, Dumper=yaml_Dumper)
             )
     elif method == 'pickle':
         pickle.dump(
@@ -720,7 +721,7 @@ def load(inputfile, method=None, use_json=None):
     else:
         ifile = inputfile
     if method in ['json', 'yaml']:
-        data = json.load(ifile) if method == 'json' else yaml.load(ifile)
+        data = json.load(ifile) if method == 'json' else yaml.load(ifile, Loader=yaml_Loader)
         assert data['tag'][0] == method
         if data['tag'][1] == 'dict':
             if method == 'json':
