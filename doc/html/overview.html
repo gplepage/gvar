@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Overview and Tutorial &#8212; gvar 9.2 documentation</title>
+    <title>Overview and Tutorial &#8212; gvar 9.2.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -161,7 +161,7 @@ Monte Carlo integration).</p>
 <p><em>About Printing:</em> The examples in this tutorial use the <code class="docutils literal notranslate"><span class="pre">print</span></code> function
 as it is used in Python 3. Drop the outermost parenthesis in each <code class="docutils literal notranslate"><span class="pre">print</span></code>
 statement if using Python 2; or add</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 </pre></div>
 </div>
 <p>at the start of your file.</p>
@@ -181,7 +181,7 @@ standard deviation <code class="docutils literal notranslate"><span class="pre">
 Thus we can define a function <code class="docutils literal notranslate"><span class="pre">f</span></code> of a Gaussian  variable <code class="docutils literal notranslate"><span class="pre">x</span></code> to be a
 Gaussian variable itself, with</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
-<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">sdev</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">sdev</span> <span class="o">|</span><span class="n">f</span><span class="s1">&#39;(x.mean)|,</span>
+<span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">sdev</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">sdev</span> <span class="o">|</span><span class="sa">f</span><span class="s1">&#39;(x.mean)|,</span>
 </pre></div>
 </div>
 <p>which follows from linearizing the <code class="docutils literal notranslate"><span class="pre">x</span></code> dependence of <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> about point
@@ -767,7 +767,7 @@ simulations, as discussed in <a class="reference internal" href="#gvar-random-nu
 <p>Another potential issue is roundoff error, which can become problematic if
 there is a wide range of standard deviations among correlated modes. For
 example, the following code works as expected:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar</span> <span class="k">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar</span> <span class="kn">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tiny</span> <span class="o">=</span> <span class="mf">1e-4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">da</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="n">tiny</span><span class="p">,</span> <span class="n">tiny</span><span class="p">)</span>
@@ -777,7 +777,7 @@ example, the following code works as expected:</p>
 </pre></div>
 </div>
 <p>Reducing <code class="docutils literal notranslate"><span class="pre">tiny</span></code>, however, leads to problems:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar</span> <span class="k">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar</span> <span class="kn">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tiny</span> <span class="o">=</span> <span class="mf">1e-8</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">da</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="n">tiny</span><span class="p">,</span> <span class="n">tiny</span><span class="p">)</span>
@@ -869,10 +869,10 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -897,12 +897,12 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2019, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
     </div>
   </body>
 </html>
