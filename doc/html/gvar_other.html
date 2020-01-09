@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Numerical Analysis Modules in gvar &#8212; gvar 9.2.1 documentation</title>
+    <title>Numerical Analysis Modules in gvar &#8212; gvar 10.0 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -735,7 +735,7 @@ calculus. <code class="docutils literal notranslate"><span class="pre">PowerSeri
 a power series with coefficients <code class="docutils literal notranslate"><span class="pre">f0,</span> <span class="pre">f1,</span> <span class="pre">f2,</span> <span class="pre">f3...</span></code> (as in <code class="docutils literal notranslate"><span class="pre">f(x)</span></code>
 above). Thus, for example, we can define a 4th-order power series
 approximation <code class="docutils literal notranslate"><span class="pre">f</span></code> to <code class="docutils literal notranslate"><span class="pre">exp(x)=1+x+x**2/2+...</span></code> using</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">24.</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># print the coefficients</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667]</span>
@@ -743,7 +743,7 @@ approximation <code class="docutils literal notranslate"><span class="pre">f</sp
 </div>
 <p>Arithmetic expressions involving instances of class <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> are
 themselves <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> as in, for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for exp(-x)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for exp(-x)</span>
 <span class="go">[ 1.         -1.          0.5        -0.16666667  0.04166667]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>        <span class="c1"># power series for x</span>
 <span class="go">[ 0.  1.  0. -0.  0.]</span>
@@ -777,7 +777,7 @@ represents <code class="docutils literal notranslate"><span class="pre">g(x)=log
 </div>
 <p>Individual coefficients from the powerseries can be accessed using
 array-element notation: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 <span class="go">1.0 1.0 0.5 0.166666666667</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># f is now the power series for exp(x)-1</span>
@@ -789,12 +789,12 @@ array-element notation: for example,</p>
 <h3>Numerical evaluation of power series<a class="headerlink" href="#numerical-evaluation-of-power-series" title="Permalink to this headline">¶</a></h3>
 <p>The power series can also be evaluated for a particular
 numerical value of x: continuing the example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># should be exp(0.01)-1 approximately</span>
 <span class="go">0.0100501670833</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c1"># verify that it is</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c1"># verify that it is</span>
 <span class="go">0.0100501670842</span>
 </pre></div>
 </div>
@@ -811,7 +811,7 @@ expansion of a Python function <code class="docutils literal notranslate"><span 
 <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">PowerSeries([0.,1.],order=N)</span></code>. The Taylor series for function <code class="docutils literal notranslate"><span class="pre">g</span></code>
 is then given by <code class="docutils literal notranslate"><span class="pre">g_taylor</span> <span class="pre">=</span> <span class="pre">g(x)</span></code> which is a <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> instance.
 For example, consider:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>           <span class="c1"># an example of a Python function</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -1161,12 +1161,12 @@ the root, where <code class="docutils literal notranslate"><span class="pre">b</
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 9.2.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2019, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

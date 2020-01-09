@@ -132,7 +132,7 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.cov(g1, g2)
 
-.. autofunction:: gvar.evalcov_blocks(g)
+.. autofunction:: gvar.evalcov_blocks(g, compress=False)
 
 .. autofunction:: gvar.evalcorr(g)
 
@@ -150,13 +150,13 @@ matrices and correlation/comparison information can be extracted from arrays
 
 |GVar|\s can be stored (serialized) and retrieved from files (or strings) using:
 
-.. autofunction:: gvar.dump(g, outputfile, method='pickle')
+.. autofunction:: gvar.dump(g, outputfile=None, method=None)
 
-.. autofunction:: gvar.dumps(g, method='pickle')
+.. autofunction:: gvar.dumps(g)
 
 .. autofunction:: gvar.load(inputfile, method=None)
 
-.. autofunction:: gvar.loads(inputstring, method=None)
+.. autofunction:: gvar.loads(inputstring)
 
 .. autofunction:: gvar.disassemble(g)
 

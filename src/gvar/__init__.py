@@ -59,9 +59,9 @@ variables including:
 
     - ``reassemble(data, cov)`` --- reassemble into |GVar|\s.
 
-    - ``dump(g, outputfile)`` --- pickle |GVar|\s in file.
+    - ``dump(g, outputfile)`` --- store |GVar|\s in file.
 
-    - ``dumps(g)`` --- pickle |GVar|s in a string.
+    - ``dumps(g)`` --- store |GVar|s in a string.
 
     - ``load(inputfile)`` --- read |GVar|\s from a file.
 
@@ -100,7 +100,7 @@ tools for use with |GVar|\s (or ``float``\s):
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-18 G. Peter Lepage.
+# Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -600,7 +600,7 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
                 obj = numpy.array(g).view(cls)
                 return obj
         g = svdarray(g)
-    idx_bcov = evalcov_blocks(g.flat)
+    idx_bcov = evalcov_blocks(g.flat, compress=True)
     g.logdet = 0.0
     svdcorrection = numpy.zeros(len(g.flat), object)
     svdcorrection[:] = gvar(0, 0)
@@ -610,46 +610,48 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
         i_wgts = [([], [])] # 1st entry for all 1x1 blocks
     lost_modes = 0
     g.nblocks = {}
-    for idx, block_cov in idx_bcov:
-        g.nblocks[len(idx)] = g.nblocks.get(len(idx), 0) + 1
-        if len(idx) == 1:
-            i = idx[0]
-            if block_cov[0, 0] == 0:
-                g.logdet = numpy.inf
-            else:
-                g.logdet += numpy.log(block_cov[0, 0])
-            if wgts is not False:
-                i_wgts[0][0].append(i)
-                i_wgts[0][1].append(block_cov[0, 0] ** (wgts * 0.5))
+    # uncorrelated parts
+    idx, block_sdev = idx_bcov[0]
+    if len(idx) > 0:
+        g.nblocks[1] = len(idx)
+        if numpy.any(block_sdev == 0):
+            g.logdet = -numpy.inf 
         else:
-            s = SVD(block_cov, svdcut=svdcut, rescale=True, compute_delta=True)
-            if s.D is not None:
-                g.logdet -= 2 * sum(numpy.log(di) for di in s.D)
-            g.logdet += sum(numpy.log(vali) for vali in s.val)
-            g.nmod += s.nmod
-            if s.delta is not None:
-                if add_svdnoise:
-                    for vali, valorigi, veci in zip(s.val, s.valorig, s.vec):
-                        if vali > valorigi:
-                            # add next(raniter(s.delta)) to s.delta in svdcorrection
-                            s.delta += (veci / s.D) * (
-                                numpy.random.normal(0.0, (vali - valorigi) ** 0.5)
-                                )
-                svdcorrection[idx] = s.delta
-                g.flat[idx] += s.delta
-            elif svdcut is not None and svdcut < 0:
-                newg = numpy.zeros(len(idx), object)
-                for veci in s.vec:
-                    veci_D = veci / s.D
-                    newg += veci_D * (veci.dot(s.D * g.flat[idx]))
-                lost_modes += len(idx) - len(s.vec)
-                g.flat[idx] = newg
-            if wgts is not False:
-                i_wgts.append(
-                    (idx, [w for w in s.decomp(wgts)[::-1]])
-                    )
-            if s.eigen_range < g.eigen_range:
-                g.eigen_range = s.eigen_range
+            g.logdet += 2 * numpy.sum(numpy.log(block_sdev))
+        if wgts is not False:
+            i_wgts[0][0].extend(idx)
+            i_wgts[0][1].extend(block_sdev ** wgts)
+    # correlated parts
+    for idx, block_cov in idx_bcov[1:]:
+        g.nblocks[len(idx)] = g.nblocks.get(len(idx), 0) + 1
+        s = SVD(block_cov, svdcut=svdcut, rescale=True, compute_delta=True)
+        if s.D is not None:
+            g.logdet -= 2 * sum(numpy.log(di) for di in s.D)
+        g.logdet += sum(numpy.log(vali) for vali in s.val)
+        g.nmod += s.nmod
+        if s.delta is not None:
+            if add_svdnoise:
+                for vali, valorigi, veci in zip(s.val, s.valorig, s.vec):
+                    if vali > valorigi:
+                        # add next(raniter(s.delta)) to s.delta in svdcorrection
+                        s.delta += (veci / s.D) * (
+                            numpy.random.normal(0.0, (vali - valorigi) ** 0.5)
+                            )
+            svdcorrection[idx] = s.delta
+            g.flat[idx] += s.delta
+        elif svdcut is not None and svdcut < 0:
+            newg = numpy.zeros(len(idx), object)
+            for veci in s.vec:
+                veci_D = veci / s.D
+                newg += veci_D * (veci.dot(s.D * g.flat[idx]))
+            lost_modes += len(idx) - len(s.vec)
+            g.flat[idx] = newg
+        if wgts is not False:
+            i_wgts.append(
+                (idx, [w for w in s.decomp(wgts)[::-1]])
+                )
+        if s.eigen_range < g.eigen_range:
+            g.eigen_range = s.eigen_range
     g.nmod += lost_modes
     g.dof = len(g.flat) - lost_modes
     g.svdcut = svdcut

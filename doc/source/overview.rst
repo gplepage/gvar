@@ -470,13 +470,15 @@ file named ``'gfile.p'``. To reassemble the |GVar|\s we use::
 
 This recipe works for ``g``\s that are: single |GVar|\s, arrays of |GVar|\s
 (any shape), or dictionaries whose values are |GVar|\s and/or arrays  of
-|GVar|\s.
+|GVar|\s. (The ``'.p'`` filename extension indicates that the :mod:`pickle` 
+module
+should be used to serialize the data; using ``'gfile.json'`` would 
+cause :func:`gvar.dump` to use the :mod:`json` module instead.)
 
 The correlations between different |GVar|\s  in the original array/dictionary
 ``g`` are preserved here, but their correlations with other |GVar|\s are lost.
 So it is important to include all |GVar|\s of  interest in a single array or
-dictionary before saving them. These functions can also serialize |GVar|\s
-using :mod:`json` rather than :mod:`pickle`.
+dictionary before saving them. 
 
 Function :func:`gvar.dump` is functionally equivalent to ::
 
@@ -488,10 +490,12 @@ where  the means and covariance matrix are extracted into a tuple and then
 saved (pickled) in file ``'gfile.p'``. Function :func:`gvar.load` is
 equivalent to ::
 
-    >>> g = gvar.gvar(pickle.load('gfile.p', 'rb'))
+    >>> g = gvar.gvar(*pickle.load('gfile.p', 'rb'))
 
 where :func:`pickle.load` reads ``gtuple`` back in, and :func:`gvar.gvar`
-converts it back into a collection of |GVar|\s.
+converts it back into a collection of |GVar|\s. Functions :func:`gvar.dump` 
+and :func:`gvar.load` are simpler, and more efficient, however, 
+at least for large problems.
 
 |GVar|\s can also be pickled easily if they are stored in a
 |BufferDict| since this data type has explicit support for pickling.

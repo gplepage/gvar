@@ -1,8 +1,26 @@
+Version 10.0 ???
+==================
+Backwards incompatible changes in gvar.load and gvar.dump, but 
+otherwise compatible.
+
+- gvar.load() and gvar.dump() use a new protocol (for serializing
+  GVars) that make them substantially more efficient for large
+  problems. The change is not backwards compatible; 
+  use gvar.oldload to read files created by the older 
+  version (this function will disappear in later releases).
+
+- Pickle format used for BufferDicts is changed but the new code
+  can handle data from pervious versions.
+
+- New option (compress) for gvar.evalcov_blocks().
+
+
 Version 9.2.1 2019-12-04
 ========================
 
 - Fixes bugs in gvar.load and gvar.dump caused by recent security upgrades
   to pyYAML.
+
 
 Version 9.2 2019-05-08
 ========================

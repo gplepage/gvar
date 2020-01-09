@@ -25,3 +25,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. image:: https://zenodo.org/badge/37556070.svg
+   :target: https://zenodo.org/badge/latestdoi/37556070
+

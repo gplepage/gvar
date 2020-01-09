@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-# encoding: utf-8
 """
 test-bufferdict.py
 
 """
-# Copyright (c) 2012-2018 G. Peter Lepage.
+# Copyright (c) 2012-2020 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -281,32 +279,23 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         for k in b:
             self.assert_arraysequal(b[k],c[k])
 
-    # def test_dump(self):
-    #     global b
-    #     b[0,1] = 2.
-    #     for use_json in [True,False]:
-    #         sb = b.dumps(use_json=use_json)
-    #         c = BufferDict.loads(sb, use_json=use_json)
-    #         for k in b:
-    #             self.assert_arraysequal(b[k],c[k])
-
     def test_pickle_gvar(self):
-        b = BufferDict(dict(a=gv.gvar(1,2),b=[gv.gvar(3,4),gv.gvar(5,6)]))
+        b = BufferDict()
+        b['a'] = gv.gvar(1,2)
+        b['b'] = [gv.gvar(3,4), gv.gvar(5,6)] 
+        b['b'] += gv.gvar(1, 1)
+        b['c'] = gv.gvar(10,1)
         sb = pckl.dumps(b)
         c = pckl.loads(sb)
-        for k in b:
-            self.assert_gvclose(b[k],c[k],rtol=1e-6)
+        self.assertEqual(str(b), str(c))
+        self.assertEqual(str(gv.evalcov(b)), str(gv.evalcov(c)))
+        # no uncorrelated bits
+        b['a'] += b['c']
+        sb = pckl.dumps(b)
+        c = pckl.loads(sb)
+        self.assertEqual(str(b), str(c))
+        self.assertEqual(str(gv.evalcov(b)), str(gv.evalcov(c)))
 
-    # def test_dump_gvar(self):
-    #     b = BufferDict(dict(a=gv.gvar(1,2),b=[gv.gvar(3,4),gv.gvar(5,6)]))
-    #     b[0,1] = b['a']+10*b['b'][0]
-    #     for use_json in [True,False]:
-    #         sb = b.dumps(use_json=use_json)
-    #         c = BufferDict.loads(sb, use_json=use_json)
-    #         for k in b:
-    #             self.assert_gvclose(b[k],c[k],rtol=1e-6)
-    #         self.assert_gvclose((c[0,1]-10*c['b'][0])/c['a'],
-    #                             gv.gvar(1.0,0.0), rtol=1e-6)
 
     def test_extension_mapping(self):
         " BufferDict extension and mapping properties  "
@@ -375,14 +364,14 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         assert np.all(oldp.buf == newp.buf)
 
         # nonredundant keys
-        assert set(nonredundant_keys(newp.keys())) == set(p.keys())
-
+        # assert set(nonredundant_keys(newp.keys())) == set(p.keys())
+        self.assertEqual(set(nonredundant_keys(newp.keys())), set(p.keys()))
         # stripkey
         for ks, f, k in [
             ('aa', np.exp, 'log(aa)'),
             ('aa', np.square, 'sqrt(aa)'),
             ]:
-            assert (ks, f) == gv._bufferdict._stripkey(k)
+            self.assertEqual((ks,f), gv._bufferdict._stripkey(k))
 
         # addparentheses
         pvar = BufferDict()

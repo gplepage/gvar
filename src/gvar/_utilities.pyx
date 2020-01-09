@@ -22,21 +22,24 @@ import pickle
 import json
 import collections
 from math import lgamma
+import sys
 
 try:
+    # needed for oldload (optionally)
     import yaml
     from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
 except ImportError:
     yaml = None
 
-try:
-    # python 2
-    from StringIO import StringIO as _StringIO
-    _BytesIO = _StringIO
-except ImportError:
+if sys.version_info > (3, 0):
     # python 3
-    from io import BytesIO as _BytesIO
-    from io import StringIO as _StringIO
+    from io import BytesIO 
+    from io import StringIO
+else:
+    # python 2
+    from StringIO import StringIO 
+    class BytesIO(StringIO):
+        pass
 
 from libc.math cimport  log, exp  # don't put lgamma here -- old C compilers don't have it
 
@@ -46,21 +49,6 @@ from ._svec_smat cimport svec, smat
 from ._bufferdict import BufferDict
 
 from numpy cimport npy_intp as INTP_TYPE
-# index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
-
-# cdef extern from "gsl/gsl_errno.h":
-#     void* gsl_set_error_handler_off()
-#     char* gsl_strerror(int errno)
-#     int GSL_SUCCESS
-#     int GSL_CONTINUE
-#     int GSL_EFAILED
-#     int GSL_EBADFUNC
-
-# cdef extern from "gsl/gsl_sf.h":
-#     struct gsl_sf_result_struct:
-#         double val
-#         double err
-#     int gsl_sf_gamma_inc_Q_e (double a, double x, gsl_sf_result_struct* res)
 
 cdef extern from "math.h":
     double c_pow "pow" (double x,double y)
@@ -449,7 +437,7 @@ def correlate(g, corr):
         corr = numpy.asarray(corr).reshape(mean.shape[0], -1)
         return _gvar.gvar(mean, corr * numpy.outer(sdev, sdev)).reshape(g.shape)
 
-def evalcov_blocks(g):
+def evalcov_blocks(g, compress=False):
     """ Evaluate covariance matrix for elements of ``g``.
 
     Evaluates the covariance matrices for |GVar|\s stored in
@@ -461,12 +449,52 @@ def evalcov_blocks(g):
     the blocks into a single matrix ``cov``, for example, one would use::
 
         import numpy as np
-        cov = np.empty((len(g), len(g)), float)
-        for idx, bcov in evalcov_block(g):
+        import gvar as gv
+        cov = np.empty((len(g.flat), len(g.flat)), float)
+        for idx, bcov in gv.evalcov_blocks(g):
             cov[idx[:, None], idx] = bcov
 
     :func:`gvar.evalcov_blocks` is particularly useful when the covariance
     matrix is sparse; only nonzero elements are retained.
+
+    Setting argument ``compress=True`` (default is ``False``) changes 
+    the meaning of the first element in the list: ``idx`` for the first 
+    element contains the indices of all |GVar|\s in ``g.flat`` that 
+    are uncorrelated from other |GVar|\s in ``g.flat``, and ``bcov`` 
+    contains the standard deviations for those |GVar|\s. Thus the full
+    covariance matrix is reconstructed using the following code::
+
+        import numpy as np
+        import gvar as gv
+        cov = np.empty((len(g.flat), len(g.flat)), float)
+        blocks = gv.evalcov_blocks(g)
+        # uncorrelated pieces are diagonal
+        cov[blocks[0][0]] = blocks[0][1] ** 2
+        # correlated pieces
+        for idx, bcov in blocks[1:]:
+            cov[idx[:, None], idx] = bcov
+    
+    The code with ``compress=True`` should be faster if there are many 
+    uncorrelated |GVar|\s.
+
+    It is easy to create an array of |GVar|\s having the covariance
+    matrix from ``g.flat``: for example, ::
+
+        import numpy as np 
+        import gvar as gv
+        new_g = np.zeros(len(g.flat), dtype=object)
+        for idx, bcov in evalcov_blocks(g):
+            new_g[idx] = gv.gvar(new_g[idx], bcov)
+
+    creates an array of |GVar|\s with zero mean and the same covariance
+    matrix as ``g.flat``. This works with either value for argument ``compress``.
+
+    Args:
+        g: A |GVar|, an array of |GVar|\s, or a dictionary whose values 
+            are |GVar|\s and/or arrays of |GVar|\s.
+        compress (bool): Setting ``compress=True`` collects all of the 
+            uncorrelated |GVar|\s in ``g.flat`` into the first element of 
+            the returned list (see above). Default is ``False``.
     """
     cdef INTP_TYPE a, b
     cdef GVar ga, gb
@@ -530,7 +558,18 @@ def evalcov_blocks(g):
         else:
             idx = numpy.array([b for b in bl], dtype=numpy.intp)
             ans.append((idx, evalcov(gf[idx])))
-    return ans
+    if compress:
+        c_ans = [([], [])]
+        for idx, bcov in ans:
+            if len(idx) == 1:
+                c_ans[0][0].append(idx[0])
+                c_ans[0][1].append(bcov[0, 0] ** 0.5)
+            else:
+                c_ans.append((idx, bcov))
+        c_ans[0] = (numpy.array(c_ans[0][0], dtype=int), numpy.array(c_ans[0][1], dtype=float))            
+        return c_ans
+    else:
+        return ans
 
 def evalcov(g):
     """ Compute covariance matrix for elements of
@@ -593,8 +632,268 @@ def evalcov(g):
             ans[b,a] = ans[a,b]
     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
-def dump(g, outputfile, method='pickle', use_json=False):
+def dumps(g):
+    """ Return a serialized representation of ``g``.
+
+    This function is shorthand for::
+    
+        gvar.dump(g, method='json').getvalue()
+    
+    Typical usage is::
+
+        # create string containing GVars in g
+        import gvar as gv 
+        gstr = gv.dumps(g)
+
+        # convert string back into GVars
+        new_g = gv.loads(gstr)
+
+    Args:
+        g: A |GVar|, array of |GVar|\s, or dictionary whose values
+            are |GVar|\s and/or arrays of |GVar|\s.
+    
+    Returns:
+        A string containing a serialized representation of object ``g``.
+    """
+    return dump(g, method='json').getvalue()
+
+def dump(g, outputfile=None, method=None, **kargs):
+    """ Write a representation of ``g``  to file ``outputfile``.
+
+    Object ``g`` is a |GVar|, an array of |GVar|\s (any shape), or 
+    a dictionary whose values are |GVar|\s and/or arrays of |GVar|\s;
+    it describes a general (multi-dimensional) Gaussian distribution.
+    Calling ``gvar.dump(g, 'filename')`` writes a serialized representation
+    of ``g`` into the file named ``filename``. The Gaussian distribution
+    described by ``g`` can be recovered later using ``gvar.load('filename')``.
+    Correlations between different |GVar|\s in ``g`` are preserved.
+
+    Typical usage is::
+
+        # create file xxx.pickle containing GVars in g
+        import gvar as gv 
+        gv.dump(g, 'xxx.pickle')
+
+        # read file xxx.pickle to recreate g
+        new_g = gv.load('xxx.pickle')
+
+    Object ``g`` is serialized using one of the :mod:`json` (text
+    file) or :mod:`pickle` (binary file) Python modules. 
+    Method ``'json'`` can produce smaller files, but
+    method ``'pickle'`` can be significantly faster. ``'json'`` 
+    is more secure than ``'pickle'``, if that is an issue.
+    
+    :mod:`json` can have trouble with dictionaries whose keys are
+    not strings. A workaround is used here that succeeds provided
+    ``eval(repr(k)) == k`` for every key ``k``. This works for 
+    a wide variety of standard key types including strings, integers, 
+    and tuples of strings and/or integers. Try :mod:`pickle` if the 
+    workaround fails.
+
+    Args:
+        g: A |GVar|, array of |GVar|\s, or dictionary whose values
+            are |GVar|\s and/or arrays of |GVar|\s.
+        outputfile: The name of a file or a file object in which the
+            serialized |GVar|\s are stored. If ``outputfile=None`` (default),
+            the results are written to a :class:`StringIO` (for 
+            ``method='json'``) or :class:`BytesIO` (for
+            ``method='pickle'``) object. 
+        method (str): Serialization method, which should be either
+            ``'json'`` or ``'pickle'``. If ``method=None`` (default),
+            the method is inferred from the filename's extension:
+            ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` 
+            or ``.p`` for ``'pickle'``. If that fails the method 
+            defaults to ``'json'``.
+        kargs (dict): Additional arguments, if any, that are passed to 
+            the underlying serializer (:mod:`pickle` or :mod:`json`).
+
+    Returns:
+        if ``outputfile=None``, the :class:`StringIO` or :class:`BytesIO` 
+        object containing the serialized data is returned. Otherwise
+        ``outputfile`` is returned.
+    """
+    sg = _dump(g)
+    if outputfile is None:
+        if method is None:
+            method = 'json' 
+        elif method == 'dict':
+            return sg
+        ofile = StringIO() if method == 'json' else BytesIO()
+    elif isinstance(outputfile, str):
+        if method is None:
+            method = (
+                'json' if '.' not in outputfile else
+                _DUMPMETHODS.get(outputfile.split('.')[-1], 'json')
+                )
+        ofile = open(outputfile, 'w' if method == 'json' else 'wb')
+    else:
+        ofile = outputfile 
+        if method is None:
+            method = 'json'
+    if method == 'json':
+        if 'keys' in sg:
+            sg['keys'] = repr(sg['keys'])
+        json.dump(sg, ofile, **kargs)
+    elif method == 'pickle':
+        pickle.dump(sg, ofile, **kargs)
+    else:
+        if isinstance(outputfile, str):
+            ofile.close()
+        raise ValueError('unknown method: ' + str(method))
+    if outputfile is None:
+        ofile.seek(0)
+        return ofile
+    elif isinstance(outputfile, str):
+        ofile.close()
+    return outputfile
+    
+_DUMPMETHODS = dict(json='json', p='pickle', pkl='pickle', pickle='pickle')
+
+def loads(inputstr):
+    """ Return |GVar|\s that are serialized in ``inputstr``.
+
+    This function recovers the |GVar|\s serialized with :func:`gvar.dumps(g)`.
+    It is shorthand for::
+
+        gvar.load(StringIO(inputstr), method='json')
+    
+    Typical usage is::
+
+        # create string containing GVars in g
+        import gvar as gv 
+        gstr = gv.dumps(g)
+
+        # convert string back into GVars
+        new_g = gv.loads(gstr)
+
+    Args:
+        inputstr (str): String created by :func:`gvar.dumps`. 
+
+    Returns:
+        The reconstructed |GVar|, array of |GVar|\s, or dictionary 
+        whose values are |GVar|\s and/or arrays of |GVar|\s.
+    """
+    return load(StringIO(inputstr), method='json')
+
+def load(inputfile, method=None, **kargs):
+    """ Read and return |GVar|\s that are serialized in ``inputfile``.
+
+    This function recovers |GVar|\s serialized with :func:`gvar.dump`.
+    Typical usage is::
+
+        # create file xxx.pickle containing GVars in g
+        import gvar as gv 
+        gv.dump(g, 'xxx.pickle')
+
+        # read file xxx.pickle to recreate g
+        new_g = gv.load('xxx.pickle')
+
+    Note that this function cannot read files created using versions
+    of :mod:`gvar` earlier than |~| 10.0. Try :func:`gvar.oldload` for
+    such files (:func:`oldload` will disappear eventually).
+
+    Args:
+        inputfile: The name of the file or a file object in which the
+            serialized |GVar|\s are stored (created by :func:`gvar.dump`).
+        method (str or None): Serialization method, which should be either
+            ``'pickle'`` or ``'json'``. If ``method=None`` (default),
+            the method is inferred from the filename's extension:
+            ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` 
+            or ``.p`` for ``'pickle'``. If that fails the method 
+            defaults to ``'json'``.
+        kargs (dict): Additional arguments, if any, that are passed to 
+            the underlying de-serializer (:mod:`pickle` or :mod:`json`).
+
+    Returns:
+        The reconstructed |GVar|, array of |GVar|\s, or dictionary 
+        whose values are |GVar|\s and/or arrays of |GVar|\s.
+    """
+    if isinstance(inputfile, dict):
+        return _load(inputfile)
+    elif isinstance(inputfile, BytesIO): # check for this before StringIO
+        ifile = inputfile
+        method = 'pickle'
+    elif isinstance(inputfile, StringIO):
+        ifile = inputfile 
+        method = 'json'
+    elif isinstance(inputfile, str):
+        if method is None:
+            method = (
+                'json' if '.' not in inputfile else
+                _DUMPMETHODS.get(inputfile.split('.')[-1], 'json')
+                )
+        ifile = open(inputfile, 'r' if method == 'json' else 'rb')
+    else:
+        ifile = inputfile 
+        if method is None:
+            method = 'json'  
+    if method == 'json':
+        sg = json.load(ifile, **kargs) 
+    elif method == 'pickle':
+        sg = pickle.load(ifile, **kargs)
+    else:
+        if isinstance(inputfile, str):
+            ifile.close()
+        raise ValueError('invalid method: ' + str(method))
+    if isinstance(inputfile, str):
+        ifile.close()
+    return _load(sg)
+
+def _dump(g):
+    """ Repack ``g`` in dictionary that can be serialized. Used by :func:`dump`.
+    """
+    data = {}
+    if hasattr(g, 'keys'):
+        if not isinstance(g, _gvar.BufferDict):
+            g = _gvar.BufferDict(g)
+        data['keys'] = list(g.keys())
+        data['layouts'] = []
+        for k in data['keys']:
+            slice, shape = g.slice_shape(k)
+            if shape == ():
+                data['layouts'].append([slice, []])
+            else:
+                data['layouts'].append([[slice.start, slice.stop, slice.step], list(shape)])
+        data['means'] = _gvar.mean(g.buf).tolist()
+    else:
+        g = numpy.asarray(g)
+        data['shape'] = list(numpy.shape(g))
+        data['means'] = list(_gvar.mean(g.flat))
+    data['bcovs'] = [
+        [idx.tolist(), bcov.tolist()] for idx, bcov in _gvar.evalcov_blocks(g.flat, compress=True)
+        ]
+    return data 
+
+def _load(data):
+    """ Inverse of :func:`_dump`.
+    """
+    # reconstitute the GVars
+    buf = numpy.array(data['means'], dtype=object)
+    for idx, bcov in data['bcovs']:
+        buf[idx] = _gvar.gvar(buf[idx], bcov)
+    # rebuild the data structures
+    if 'keys' in data:
+        keys = data['keys']
+        if not isinstance(keys, list):
+            keys = eval(keys, {}, {})
+        g = collections.OrderedDict()
+        for k, (sl, sh) in zip(keys, data['layouts']):
+            sh = tuple(sh)
+            if sh == ():
+                g[k] = buf[sl]
+            else:
+                sl = slice(*sl)
+                g[k] = numpy.reshape(buf[sl], sh)
+        return _gvar.BufferDict(g)
+    else:
+        buf.shape = tuple(data['shape'])
+        return buf
+
+# old versions kept for legacy purposes (for now)
+def olddump(g, outputfile, method='pickle', use_json=False):
     """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
+
+    Old verion, here for testing purposes only.
 
     The |GVar|\s are recovered using :func:`gvar.load`.
 
@@ -620,7 +919,7 @@ def dump(g, outputfile, method='pickle', use_json=False):
         raise RuntimeError('yaml module not installed')
     if isinstance(outputfile, str):
         with open(outputfile, 'w' if method in ['json', 'yaml'] else 'wb') as ofile:
-            return dump(g, ofile, method=method)
+            return olddump(g, ofile, method=method)
     else:
         ofile = outputfile
     if method in ['json', 'yaml']:
@@ -644,42 +943,16 @@ def dump(g, outputfile, method='pickle', use_json=False):
             )
     elif method == 'pickle':
         pickle.dump(
-            dict(tag=('pickle', None), gmean=mean(g), gcov=evalcov(g)), ofile
+            dict(tag=('pickle', None), gmean=_gvar.mean(g), gcov=_gvar.evalcov(g)), ofile
             )
     else:
         raise ValueError('unknown method: ' + str(method))
 
-def dumps(g, method='pickle', use_json=False):
-    """ Serialize a collection ``g`` of |GVar|\s into a string.
-
-    The |GVar|\s are recovered using :func:`gvar.loads`.
-
-    Three serialization methods are available: :mod:`pickle`, :mod:`json`,
-    and :mod:`yaml` (provided the :mod:`yaml` module is installed).
-
-    :mod:`json` can have trouble with dictionaries whose keys are not
-    strings. A workaround is used here that succeeds provided
-    ``eval(repr(k)) == k`` for every key ``k``, which is true for strings and
-    lots of other types of key. Use :mod:`pickle` where the workaround fails.
-
-    Args:
-        g: A |GVar|, array of |GVar|\s, or dictionary whose values
-            are |GVar|\s and/or arrays of |GVar|\s.
-        method (str): Serialization method, which should be one of
-            ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.
-    """
-    if use_json is True:  # for legacy code
-        method = 'json'
-    if yaml is None and method == 'yaml':
-        raise RuntimeError('yaml module not installed')
-    f = _StringIO() if method in ['json', 'yaml'] else _BytesIO()
-    dump(g, f, method=method)
-    return f.getvalue()
-
-def load(inputfile, method=None, use_json=None):
+def oldload(inputfile, method=None, use_json=None):
     """ Load and return serialized |GVar|\s from file ``inputfile``.
 
     This function recovers |GVar|\s pickled with :func:`gvar.dump`.
+    It will disappear eventually.
 
     Args:
         inputfile: The name of the file or a file object in which the
@@ -691,22 +964,23 @@ def load(inputfile, method=None, use_json=None):
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
+    warnings.warn("deprecated", DeprecationWarning)
     if use_json is True: # for legacy code
         method = 'json'
     elif use_json is False:
         method = 'pickle'
     if method is None:
         try:
-            return load(inputfile, method='pickle')
+            return oldload(inputfile, method='pickle')
         except:
             pass
         try:
-            return load(inputfile, method='json')
+            return oldload(inputfile, method='json')
         except:
             pass
         if yaml is not None:
             try:
-                return load(inputfile, method='yaml')
+                return oldload(inputfile, method='yaml')
             except:
                 pass
         try:
@@ -717,7 +991,7 @@ def load(inputfile, method=None, use_json=None):
         raise RuntimeError('yaml module not installed')
     if isinstance(inputfile, str):
         with open(inputfile, 'rb' if method == 'pickle' else 'r') as ifile:
-            return load(ifile, method=method)
+            return oldload(ifile, method=method)
     else:
         ifile = inputfile
     if method in ['json', 'yaml']:
@@ -738,52 +1012,9 @@ def load(inputfile, method=None, use_json=None):
         raise ValueError('unknown method: ' + str(method))
     return ans
 
-def loads(inputstring, method=None, use_json=None):
-    """ Load and return serialized |GVar|\s from string ``inputstring``.
-
-    This function recovers |GVar|\s pickled with :func:`gvar.dumps`.
-
-    Args:
-        inputstring: A string containing |GVar|\s serialized using
-            :func:`gvar.dumps`.
-        method (str or None): Serialization method, which should be one of
-            ``['pickle', 'json', 'yaml']``. If ``method=None``, then each
-            method is tried in turn.
-    Returns:
-        The reconstructed |GVar|, or array or dictionary of |GVar|\s.
-    """
-    if use_json is True: # for legacy code
-        method = 'json'
-    elif use_json is False:
-        method = 'pickle'
-    if method is None:
-        try:
-            return loads(inputstring, method='pickle')
-        except:
-            pass
-        try:
-            return loads(inputstring, method='json')
-        except:
-            pass
-        if yaml is not None:
-            try:
-                return loads(inputstring, method='yaml')
-            except:
-                pass
-        try:
-            return _oldloads(inputstring)
-        except:
-            raise RuntimeError('cannot read string')
-    f = (
-        _StringIO(inputstring) if method in ['json', 'yaml'] else
-        _BytesIO(inputstring)
-        )
-    return load(f, method=method)
-
-
 def _oldload(inputfile, use_json=None):
     """
-    Previous version of :func:`load`, included to allow loading
+    Older version of :func:`load`, included to allow loading
     of previously dumped data.
     """
     if use_json is None:
@@ -807,25 +1038,8 @@ def _oldload(inputfile, use_json=None):
         ans = _gvar.gvar(pickle.load(ifile))
     return ans
 
-def _oldloads(inputstring, use_json=None):
-    """
-    Previous version of :func:`loads`, included to allow loading
-    of previously dumped data.
-    """
-    if use_json is None:
-        try:
-            return _oldloads(inputstring, use_json=False)
-        except:
-            return _oldloads(inputstring, use_json=True)
-    f = _StringIO(inputstring) if use_json else _BytesIO(inputstring)
-    return _oldload(f, use_json=use_json)
-
 def disassemble(g):
     """ Disassemble collection ``g`` of |GVar|\s.
-
-    Disassembles collection ``g`` of |GVar|\s into components
-    that can be pickled or otherwise stored. The output
-    is reassembled by :func:`gvar.reassemble`.
 
     Args:
         g (dict, array, or gvar.GVar): Collection of |GVar|\s to be
@@ -846,7 +1060,7 @@ def disassemble(g):
     return BufferDict(g, buf=newbuf) if g.shape is None else newbuf.reshape(g.shape)
 
 def reassemble(data, smat cov=_gvar.gvar.cov):
-    """ Convert data (from disassemble) back into |GVar|\s.
+    """ Convert data from :func:`gvar.disassemble` back into |GVar|\s.
 
     Args:
         data (BufferDict, array): Disassembled collection of |GVar|\s
@@ -872,34 +1086,6 @@ def reassemble(data, smat cov=_gvar.gvar.cov):
         BufferDict(data, buf=newbuf) if data.shape is None else
         newbuf.reshape(data.shape)
         )
-
-# def disassemble(numpy.ndarray garray):
-#     """ Replace ``garray[i]`` by ``(garray[i].v, garray[i].d)``. """
-#     cdef GVar g
-#     cdef INTP_TYPE i
-#     cdef numpy.ndarray[object, ndim=1] ans
-#     if not isinstance(garray[0], GVar):
-#         return garray
-#     ans = numpy.empty(garray.size, object)
-#     for i in range(garray.size):
-#         g = garray[i]
-#         ans[i] = (g.v, g.d)
-#     return ans
-
-# def reassemble(numpy.ndarray data, smat cov):
-#     """ Replace ``data[i]`` by ``gvar.GVar(data[i][0], data[i][1], cov)``. """
-#     cdef GVar g
-#     cdef INTP_TYPE i
-#     cdef numpy.ndarray[object, ndim=1] ans
-#     cdef svec der
-#     cdef double val
-#     if not isinstance(data[0], tuple):
-#         return data
-#     ans = numpy.empty(data.size, object)
-#     for i in range(ans.size):
-#         val, der = data[i]
-#         ans[i] = GVar(val, der, cov)
-#     return ans
 
 
 def wsum_der(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):

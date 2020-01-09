@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-# encoding: utf-8
 """
 test-gvar.py
 
 """
-# Copyright (c) 2012-18 G. Peter Lepage.
+# Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1166,11 +1164,13 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
     def test_evalcov_blocks(self):
         def test_cov(g):
+            if hasattr(g, 'keys'):
+                g = BufferDict(g)
             g = g.flat[:]
             cov = np.zeros((len(g), len(g)), dtype=float)
             for idx, bcov in evalcov_blocks(g):
                 cov[idx[:,None], idx] = bcov
-            np.testing.assert_allclose(evalcov(g), cov)
+            self.assertEqual(str(evalcov(g)), str(cov))
         g = gv.gvar(5 * ['1(1)'])
         test_cov(g)
         g[-1] = g[0] + g[1]
@@ -1179,6 +1179,34 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g = gv.gvar(5 * ['1(1)'])
         g[0] = g[-1] + g[-2]
         test_cov(g)
+
+    def test_evalcov_blocks_compress(self):
+        def test_cov(g):
+            if hasattr(g, 'keys'):
+                g = BufferDict(g)
+            blocks = evalcov_blocks(g, compress=True)
+            g = g.flat[:]
+            cov = np.zeros((len(g), len(g)), dtype=float)
+            idx, bsdev = blocks[0]
+            if len(idx) > 0:
+                cov[idx, idx] = bsdev ** 2
+            for idx, bcov in blocks[1:]:
+                cov[idx[:,None], idx] = bcov
+            self.assertEqual(str(evalcov(g)), str(cov))
+        g = gv.gvar(5 * ['1(1)'])
+        test_cov(g)
+        test_cov(dict(g=g))
+        g[-1] = g[0] + g[1]
+        test_cov(g)
+        test_cov(dict(g=g))
+        test_cov(g * gv.gvar('2(1)'))
+        g = gv.gvar(5 * ['1(1)'])
+        g[0] = g[-1] + g[-2]
+        test_cov(g)
+        test_cov(dict(g=g))
+        g[1:] += g[:-1]
+        test_cov(g)
+        test_cov(dict(g=g))
 
     def test_svd(self):
         """ svd """
@@ -1457,87 +1485,60 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             g2 = gvar(pickle.loads(gpickle))
             self.assertEqual(str(g1), str(g2))
             self.assertEqual(str(evalcov(g1)), str(evalcov(g2)))
-            dump(g1, 'outputfile.p')
-            g3 = load('outputfile.p')
-            self.assertEqual(str(g1), str(g3))
-            self.assertEqual(str(evalcov(g1)), str(evalcov(g3)))
-            gstr = dumps(g1)
-            g4 = loads(gstr)
-            self.assertEqual(str(g1), str(g4))
-            self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
-        os.remove('outputfile.p')
 
-    def test_json(self):
-        """ pickle strategies """
-        for g in [
-            '1(5)',
-            [['2(1)'], ['3(2)']],
-            {'a':'4(2)', 'b':[['5(5)', '6(9)']], (1,'2'):'7(8)'},
-            ]:
-            g1 = gvar(g)
-            dump(g1, 'outputfile.json', method='json')
-            g3 = load('outputfile.json')
-            if hasattr(g1, 'keys'):
-                for k in g1:
-                    self.assertTrue(k in g3)
-                    self.assertEqual(str(g1[k]), str(g3[k]))
-                for k in g3:
-                    self.assertTrue(k in g1)
-                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g3.buf)))
-            else:
-                self.assertEqual(str(g1), str(g3))
-                self.assertEqual(str(evalcov(g1)), str(evalcov(g3)))
-            gstr = dumps(g1, method='json')
-            g4 = loads(gstr)
-            if hasattr(g1, 'keys'):
-                for k in g1:
-                    self.assertTrue(k in g4)
-                    self.assertEqual(str(g1[k]), str(g4[k]))
-                for k in g4:
-                    self.assertTrue(k in g1)
-                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g4.buf)))
-            else:
-                self.assertEqual(str(g1), str(g4))
-                self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
-        os.remove('outputfile.json')
+    def test_dump_load(self):
+        gs = gv.gvar('1(2)')
+        ga = gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)')
+        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+        gd['v'] += gv.gvar('0(1)')
+        gd[(1,3)] = gv.gvar('13(13)')
+        gd['v'] = 1 / gd['v']
+        def _test(g, outputfile=None, method=None):
+            s = dump(g, outputfile=outputfile, method=method)
+            d = load(s if outputfile is None else outputfile, method=method)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+            # cleanup
+            if isinstance(outputfile, str):
+                os.remove(outputfile) 
+        for g in [gs, ga, gd]:
+            _test(g)
+            _test(g, outputfile='xxx.json')
+            _test(g, outputfile='xxx.pickle')
+            _test(g, outputfile='xxx')
+            _test(g, outputfile='xxx', method='pickle')
+            _test(g, method='json')
+            _test(g, method='pickle')    
+            _test(g, method='dict')
 
-    def test_yaml(self):
-        """ pickle strategies """
-        try:
-            import yaml
-        except ImportError:
-            return
-        for g in [
-            '1(5)',
-            [['2(1)'], ['3(2)']],
-            {'a':'4(2)', 'b':[['5(5)', '6(9)']], (1,'2'):'7(8)'},
-            ]:
-            g1 = gvar(g)
-            dump(g1, 'outputfile.yaml', method='yaml')
-            g3 = load('outputfile.yaml')
-            if hasattr(g1, 'keys'):
-                for k in g1:
-                    self.assertTrue(k in g3)
-                    self.assertEqual(str(g1[k]), str(g3[k]))
-                for k in g3:
-                    self.assertTrue(k in g1)
-                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g3.buf)))
-            else:
-                self.assertEqual(str(g1), str(g3))
-                self.assertEqual(str(evalcov(g1)), str(evalcov(g3)))
-            gstr = dumps(g1, method='yaml')
-            g4 = loads(gstr)
-            if hasattr(g1, 'keys'):
-                for k in g1:
-                    self.assertTrue(k in g4)
-                    self.assertEqual(str(g1[k]), str(g4[k]))
-                for k in g4:
-                    self.assertTrue(k in g1)
-                self.assertEqual(str(evalcov(g1.buf)), str(evalcov(g4.buf)))
-            else:
-                self.assertEqual(str(g1), str(g4))
-                self.assertEqual(str(evalcov(g1)), str(evalcov(g4)))
-        os.remove('outputfile.yaml')
+    def test_dumps_loads(self):
+        gs = gv.gvar('1(2)')
+        ga = (gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)') )
+        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+        gd['v'] += gv.gvar('0(1)')
+        gd[(1,3)] = gv.gvar('13(13)')
+        gd['v'] = 1 / gd['v']
+        def _test(g):
+            s = dumps(g)
+            d = loads(s)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+        for g in [gs, ga, gd]:
+            _test(g)
+
+    def test_oldload(self):
+        # suppress the deprecation warning
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            g = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+            olddump(g, 'xxx.p')
+            d = oldload('xxx.p')
+            assert str(g) == str(d)
+            assert str(gv.evalcov(g)) == str(gv.evalcov(d))
+            olddump(g, 'xxx.json', method='json')
+            d = oldload('xxx.json', method='json')
+            assert str(g) == str(d)
+            assert str(gv.evalcov(g)) == str(gv.evalcov(d))
 
     def test_gammaQ(self):
         " gammaQ(a, x) "

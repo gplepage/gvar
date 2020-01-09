@@ -1,5 +1,5 @@
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-16 G. Peter Lepage.
+# Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,6 @@ import numpy
 import copy
 import pickle
 import json
-try:
-    # python 2
-    from StringIO import StringIO as _StringIO
-    _BytesIO = _StringIO
-except ImportError:
-    # python 3
-    from io import BytesIO as _BytesIO
-    from io import StringIO as _StringIO
 import gvar as _gvar
 
 try:
@@ -167,7 +159,10 @@ class BufferDict(collections_MMapping):
         state = {}
         buf = self._buf
         if len(self._buf) > 0 and isinstance(self._buf[0], _gvar.GVar):
-            state['buf'] = ( _gvar.mean(buf),  _gvar.evalcov(buf))
+            # state['buf'] = ( _gvar.mean(buf),  _gvar.evalcov(buf))  # old
+            means = _gvar.mean(buf)
+            bcovs = _gvar.evalcov_blocks(buf, compress=True)
+            state['buf'] = (means, bcovs, None)
         else:
             state['buf'] = numpy.asarray(buf)
         layout = collections.OrderedDict()
@@ -182,7 +177,14 @@ class BufferDict(collections_MMapping):
         layout = state['layout']
         buf = state['buf']
         if isinstance(buf, tuple):
-            buf = _gvar.gvar(*buf)
+            if len(buf) == 2:
+                # old format (for legacy)
+                buf = _gvar.gvar(*buf)  
+            else:
+                means, bcovs = buf[:2]
+                buf = numpy.array(means, dtype=object)
+                for idx, bcov in bcovs:
+                    buf[idx] = _gvar.gvar(buf[idx], bcov)
         for k in layout:
             self._odict.__setitem__(
                 k,
@@ -205,7 +207,7 @@ class BufferDict(collections_MMapping):
         return self
 
     def __isub__(self, g):
-        """ self += |BufferDict| (or dictionary) """
+        """ self -= |BufferDict| (or dictionary) """
         g = BufferDict(g, keys=self.keys())
         self.flat[:] -= g.flat
         return self
@@ -221,7 +223,7 @@ class BufferDict(collections_MMapping):
         return self
 
     def __pos__(self):
-        """ ``-self`` """
+        """ ``+self`` """
         return BufferDict(self, buf=+self.flat[:])
 
     def __neg__(self):

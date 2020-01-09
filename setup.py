@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-GVAR_VERSION = '9.2.1'
+GVAR_VERSION = '10.0'
 
 from distutils.core import setup
 from distutils.extension import Extension
