@@ -160,11 +160,13 @@ class BufferDict(collections_MMapping):
         buf = self._buf
         if len(self._buf) > 0 and isinstance(self._buf[0], _gvar.GVar):
             # state['buf'] = ( _gvar.mean(buf),  _gvar.evalcov(buf))  # old
-            means = _gvar.mean(buf)
-            bcovs = _gvar.evalcov_blocks(buf, compress=True)
+            means = _gvar.mean(buf).tolist()
+            bcovs = [
+                [idx.tolist(), bcov.tolist()] for idx, bcov in _gvar.evalcov_blocks(buf, compress=True)
+                ]
             state['buf'] = (means, bcovs, None)
         else:
-            state['buf'] = numpy.asarray(buf)
+            state['buf'] = numpy.asarray(buf).tolist()
         layout = collections.OrderedDict()
         od = self._odict
         for k in self:
@@ -185,6 +187,8 @@ class BufferDict(collections_MMapping):
                 buf = numpy.array(means, dtype=object)
                 for idx, bcov in bcovs:
                     buf[idx] = _gvar.gvar(buf[idx], bcov)
+        else:
+            buf = numpy.array(buf)
         for k in layout:
             self._odict.__setitem__(
                 k,
@@ -524,8 +528,6 @@ class BufferDict(collections_MMapping):
             gv.BufferDict.add_distribution('sqrt', gv.square)
             gv.BufferDict.add_distribution('erfinv', gv.erf)
 
-        Additional distributions can be added by specifying:
-
         Args:
             name (str): Distributions' function name.
             invfcn (callable): Inverse of the transformation function.
@@ -536,7 +538,51 @@ class BufferDict(collections_MMapping):
     def del_distribution(name):
         """ Delete |BufferDict| distribution ``name``. """
         del BufferDict.extension_fcn[name]
+        if name in BufferDict.uniform.extension_fcn:
+            del BufferDict.uniform.extension_fcn[name]
 
+    @staticmethod
+    def uniform(fname, umin, umax, shape=()):
+        """ Create uniform distribution on interval ``[umin, umax]``.
+
+        The code ::
+
+            import gvar as gv
+            b = gv.BufferDict()
+            b['f(w)'] = gv.BufferDict.uniform('f', 2., 3.)
+        
+        adds a distribution function ``f(w)`` designed so that ``b['w']``
+        corresponds to a uniform distribution on the interval ``[2., 3.]``
+        (see :meth:`gvar.BufferDict.add_distribution` for more about 
+        distributions).
+
+        Args:
+            fname (str): Name of function used in the :class:`BufferDict` key. 
+                Note that names can reused provided they correspond to the 
+                same interval as in previous calls.
+            umin (float): Minimum value of the uniform distribution.
+            umax (float): Maximum value of the uniform distribution.
+            shape (tuple): Shape of array of uniform variables. Default is ``()``.
+        
+        Returns:
+            :class:`gvar.GVar` object corresponding to a uniform distribution.
+        """
+        if not hasattr(BufferDict.uniform, 'extension_fcn'):
+            BufferDict.uniform.extension_fcn = {}
+        if fname in BufferDict.uniform.extension_fcn:
+            if sorted(BufferDict.uniform.extension_fcn[fname]) != sorted((umin, umax)):
+                raise ValueError("can't reuse function name -- " + str(fname))
+        else:
+            BufferDict.uniform.extension_fcn[fname] = (umin, umax)
+            root2 = numpy.sqrt(2)
+            BufferDict.add_distribution(fname, lambda x : umin + (_gvar.erf(x / root2) + 1) * (umax - umin) / 2.)
+        if shape == ():
+            return _gvar.gvar(0, 1)
+        else:
+            ans = _gvar.gvar(int(numpy.prod(shape)) * [(0, 1.)]) 
+            ans.shape = shape 
+            return ans
+    
 def asbufferdict(g, dtype=None):
     """ Convert ``g`` to a BufferDict, keeping only ``g[k]`` for ``k in keylist``.
 

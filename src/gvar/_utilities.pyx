@@ -4,7 +4,7 @@
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
-# any later version (see <http://www.gnu.org/licenses/>).
+# any later version  (see <http://www.gnu.org/licenses/>).
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -632,7 +632,7 @@ def evalcov(g):
             ans[b,a] = ans[a,b]
     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
-def dumps(g):
+def dumps(g, method='json'):
     """ Return a serialized representation of ``g``.
 
     This function is shorthand for::
@@ -651,11 +651,19 @@ def dumps(g):
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
             are |GVar|\s and/or arrays of |GVar|\s.
+        method: Serialization method, which should be either
+            ``'json'`` or ``'pickle'``. Default is ``'json'``.
     
     Returns:
-        A string containing a serialized representation of object ``g``.
+        A string or bytes object containing a serialized 
+        representation of object ``g``.
     """
-    return dump(g, method='json').getvalue()
+    if method is None or method == 'json':
+        return dump(g, method='json').getvalue()
+    elif method == 'pickle':
+        return dump(g, method='pickle').getvalue()
+    else:
+        raise ValueError('unknown method: ' + str(method))
 
 def dump(g, outputfile=None, method=None, **kargs):
     """ Write a representation of ``g``  to file ``outputfile``.
@@ -767,13 +775,17 @@ def loads(inputstr):
         new_g = gv.loads(gstr)
 
     Args:
-        inputstr (str): String created by :func:`gvar.dumps`. 
+        inputstr (str or bytes): String or bytes object 
+            created by :func:`gvar.dumps`. 
 
     Returns:
         The reconstructed |GVar|, array of |GVar|\s, or dictionary 
         whose values are |GVar|\s and/or arrays of |GVar|\s.
     """
-    return load(StringIO(inputstr), method='json')
+    try:
+        return load(StringIO(inputstr), method='json')
+    except (TypeError, ValueError):
+        return load(BytesIO(inputstr), method='pickle')
 
 def load(inputfile, method=None, **kargs):
     """ Read and return |GVar|\s that are serialized in ``inputfile``.
@@ -788,9 +800,12 @@ def load(inputfile, method=None, **kargs):
         # read file xxx.pickle to recreate g
         new_g = gv.load('xxx.pickle')
 
-    Note that this function cannot read files created using versions
-    of :mod:`gvar` earlier than |~| 10.0. Try :func:`gvar.oldload` for
-    such files (:func:`oldload` will disappear eventually).
+    Note that the format used by :func:`gvar.dump` changed with 
+    version |~| 10.0 of :mod:`gvar`. :func:`gvar.load` will 
+    attempt to read the old format if it is encountered, but 
+    old data should be converted to the new format (by reading 
+    it in with :func:`load` and them writing it out again 
+    with :func:`dump`).
 
     Args:
         inputfile: The name of the file or a file object in which the
@@ -800,7 +815,10 @@ def load(inputfile, method=None, **kargs):
             the method is inferred from the filename's extension:
             ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` 
             or ``.p`` for ``'pickle'``. If that fails the method 
-            defaults to ``'json'``.
+            defaults to ``'json'``. Argument ``method`` is ignored 
+            if ``inputfile`` is either a :class:`StringIO` or 
+            :class:`BytesIO` object, with the method being set 
+            to ``'json'`` or ``'pickle'``, respectively.
         kargs (dict): Additional arguments, if any, that are passed to 
             the underlying de-serializer (:mod:`pickle` or :mod:`json`).
 
@@ -837,7 +855,10 @@ def load(inputfile, method=None, **kargs):
         raise ValueError('invalid method: ' + str(method))
     if isinstance(inputfile, str):
         ifile.close()
-    return _load(sg)
+    try:
+        return _load(sg)
+    except KeyError, TypeError:
+        return _oldload1(inputfile, method)
 
 def _dump(g):
     """ Repack ``g`` in dictionary that can be serialized. Used by :func:`dump`.
@@ -948,8 +969,11 @@ def olddump(g, outputfile, method='pickle', use_json=False):
     else:
         raise ValueError('unknown method: ' + str(method))
 
-def oldload(inputfile, method=None, use_json=None):
+def _oldload1(inputfile, method=None, use_json=None):
     """ Load and return serialized |GVar|\s from file ``inputfile``.
+
+    This is the version of :func:`gvar.load` used before  
+    version |~| 10.0 of :mod:`gvar`.
 
     This function recovers |GVar|\s pickled with :func:`gvar.dump`.
     It will disappear eventually.
@@ -964,34 +988,34 @@ def oldload(inputfile, method=None, use_json=None):
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
-    warnings.warn("deprecated", DeprecationWarning)
+    warnings.warn("using old dump format", DeprecationWarning)
     if use_json is True: # for legacy code
         method = 'json'
     elif use_json is False:
         method = 'pickle'
     if method is None:
         try:
-            return oldload(inputfile, method='pickle')
+            return _oldload1(inputfile, method='pickle')
         except:
             pass
         try:
-            return oldload(inputfile, method='json')
+            return _oldload1(inputfile, method='json')
         except:
             pass
         if yaml is not None:
             try:
-                return oldload(inputfile, method='yaml')
+                return _oldload1(inputfile, method='yaml')
             except:
                 pass
         try:
-            return _oldload(inputfile)
+            return _oldload0(inputfile)
         except:
             raise RuntimeError('cannot read file')
     if yaml is None and method == 'yaml':
         raise RuntimeError('yaml module not installed')
     if isinstance(inputfile, str):
         with open(inputfile, 'rb' if method == 'pickle' else 'r') as ifile:
-            return oldload(ifile, method=method)
+            return _oldload1(ifile, method=method)
     else:
         ifile = inputfile
     if method in ['json', 'yaml']:
@@ -1012,19 +1036,19 @@ def oldload(inputfile, method=None, use_json=None):
         raise ValueError('unknown method: ' + str(method))
     return ans
 
-def _oldload(inputfile, use_json=None):
+def _oldload0(inputfile, use_json=None):
     """
     Older version of :func:`load`, included to allow loading
     of previously dumped data.
     """
     if use_json is None:
         try:
-            return _oldload(inputfile, use_json=False)
+            return _oldload0(inputfile, use_json=False)
         except:
-            return _oldload(inputfile, use_json=True)
+            return _oldload0(inputfile, use_json=True)
     if isinstance(inputfile, str):
         with open(inputfile, 'r' if use_json else 'rb') as ifile:
-            return _oldload(ifile, use_json=use_json)
+            return _oldload0(ifile, use_json=use_json)
     else:
         ifile = inputfile
     if use_json:
@@ -1389,7 +1413,7 @@ def raniter(g, n=None, svdcut=1e-12):
         if len(i) > 0:
             buf[i] += z[i] * wgts
         for i, wgts in i_wgts[1:]:
-            buf[i] += sum(zi * wi for zi, wi in zip(z[i], wgts))
+            buf[i] += z[i].dot(wgts) 
         if g.shape is None:
             yield BufferDict(g, buf=buf)
         elif g.shape == ():

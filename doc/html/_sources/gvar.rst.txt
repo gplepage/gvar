@@ -150,11 +150,11 @@ matrices and correlation/comparison information can be extracted from arrays
 
 |GVar|\s can be stored (serialized) and retrieved from files (or strings) using:
 
-.. autofunction:: gvar.dump(g, outputfile=None, method=None)
+.. autofunction:: gvar.dump(g, outputfile=None, method=None, **kargs)
 
-.. autofunction:: gvar.dumps(g)
+.. autofunction:: gvar.dumps(g, method='json')
 
-.. autofunction:: gvar.load(inputfile, method=None)
+.. autofunction:: gvar.load(inputfile, method=None, **kargs)
 
 .. autofunction:: gvar.loads(inputstring)
 
@@ -374,6 +374,8 @@ below.
    .. automethod:: add_distribution(name, invfcn)
 
    .. automethod:: del_distribution(invfcn)
+
+   .. automethod:: uniform(fname, umin, umax, shape=())
 
 :class:`gvar.SVD` Objects
 ---------------------------

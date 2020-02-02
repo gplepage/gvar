@@ -77,56 +77,95 @@ More examples will follow with time.</p>
 interpolating one-dimensional data using cubic splines:</p>
 <dl class="class">
 <dt id="gvar.cspline.CSpline">
-<em class="property">class </em><code class="sig-prename descclassname">gvar.cspline.</code><code class="sig-name descname">CSpline</code><span class="sig-paren">(</span><em class="sig-param">xknots</em>, <em class="sig-param">yknots</em>, <em class="sig-param">deriv=(None</em>, <em class="sig-param">None)</em>, <em class="sig-param">extrap_order=3</em>, <em class="sig-param">warn=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.cspline.CSpline" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gvar.cspline.</code><code class="sig-name descname">CSpline</code><span class="sig-paren">(</span><em class="sig-param">xknots</em>, <em class="sig-param">yknots</em>, <em class="sig-param">deriv=(None</em>, <em class="sig-param">None)</em>, <em class="sig-param">extrap_order=3</em>, <em class="sig-param">alg='steffen'</em>, <em class="sig-param">warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.cspline.CSpline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cubic spline approximation to a function.</p>
 <p>Given <code class="docutils literal notranslate"><span class="pre">N</span></code> values of a function <code class="docutils literal notranslate"><span class="pre">yknot[i]</span></code> at <code class="docutils literal notranslate"><span class="pre">N</span></code> points
-<code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code> for <code class="docutils literal notranslate"><span class="pre">i=0..N-1</span></code> (the ‘knots’ of the spline),
+<code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code> for <code class="docutils literal notranslate"><span class="pre">i=0..N-1</span></code> (the <em>knots</em> of the spline),
 the code</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.cspline</span> <span class="kn">import</span> <span class="n">CSpline</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.cspline</span> <span class="k">import</span> <span class="n">CSpline</span>
 
 <span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>defines a function <code class="docutils literal notranslate"><span class="pre">f</span></code> such that: a) <code class="docutils literal notranslate"><span class="pre">f(xknot[i])</span> <span class="pre">=</span> <span class="pre">yknot[i]</span></code> for
-all <code class="docutils literal notranslate"><span class="pre">i</span></code>; and b) <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> is
-continuous, as are its first and second derivatives.
-Function <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> is a cubic polynomial between the knots <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">CSpline(xknot,</span> <span class="pre">yknot)</span></code> creates a <em>natural spline</em>, which has zero second
-derivative at the end points, <code class="docutils literal notranslate"><span class="pre">xknot[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">xknot[-1]</span></code> (assuming
-the knots are sorted). More generally one can specify the derivatives
-of <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> at one or both of the endpoints:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="n">dydx_i</span><span class="p">,</span> <span class="n">dydx_f</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>where <code class="docutils literal notranslate"><span class="pre">dydx_i</span></code> is the derivative at <code class="docutils literal notranslate"><span class="pre">xknot[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">dydx_f</span></code> is the
-derivative at <code class="docutils literal notranslate"><span class="pre">xknot[-1]</span></code>. Replacing either (or both) of these with
-<code class="docutils literal notranslate"><span class="pre">None</span></code> results in a derivative corresponding to zero second
-derivative at that boundary (i.e., a <em>natural</em> boundary).</p>
-<p>Derivatives and integrals of the spline function can also be evaluated:</p>
+<p>defines a function <code class="docutils literal notranslate"><span class="pre">f</span></code> such that: a) <code class="docutils literal notranslate"><span class="pre">f(xknot[i])</span> <span class="pre">=</span> <span class="pre">yknot[i]</span></code>
+for all <code class="docutils literal notranslate"><span class="pre">i</span></code>; and b) <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> and its first derivative are
+continuous. Function <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> is a cubic polynomial
+between the knots <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code> (determined from the values
+and first derivatives at the adjacent knots).
+Argument <code class="docutils literal notranslate"><span class="pre">x</span></code> in <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> is a number or an array
+of numbers (any shape). Numbers can be replaced
+by <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects in <code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">xknot</span></code>
+and/or <code class="docutils literal notranslate"><span class="pre">yknot</span></code>.</p>
+<p>Derivatives and integrals of the spline function are also
+available:</p>
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">f.D(x)</span></code> — first derivative at <code class="docutils literal notranslate"><span class="pre">x</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">f.D2(x)</span></code> — second derivative at <code class="docutils literal notranslate"><span class="pre">x</span></code>;</p>
+<p><code class="docutils literal notranslate"><span class="pre">f.D3(x)</span></code> — third derivative at <code class="docutils literal notranslate"><span class="pre">x</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">f.integ(x)</span></code> — integral from <code class="docutils literal notranslate"><span class="pre">xknot[0]</span></code> to <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 </div></blockquote>
+<p>The derivatives are increasingly unreliable with increasing order.</p>
 <p>Splines can be used outside the range covered by the defining
-<code class="docutils literal notranslate"><span class="pre">xknot</span></code> values. As this is often a bad idea, the <code class="xref py py-mod docutils literal notranslate"><span class="pre">CSpline</span></code>
-methods issue a warning when called with out-of-range points.
-The warning can be suppressed by setting parameter <code class="docutils literal notranslate"><span class="pre">warn=False</span></code>.
+<code class="docutils literal notranslate"><span class="pre">xknot</span></code> values. As this is often a bad idea, keyword parameter
+<code class="docutils literal notranslate"><span class="pre">warn</span></code> can be set to <code class="docutils literal notranslate"><span class="pre">True</span></code> so that warnings are generated
+if the spline is used out of range. This keyword is set
+in the original constructor (<code class="docutils literal notranslate"><span class="pre">CSpline(x,</span> <span class="pre">y,</span> <span class="pre">warn=True)</span></code>) or in
+calls to a <code class="xref py py-mod docutils literal notranslate"><span class="pre">CSpline</span></code> object (eg, <code class="docutils literal notranslate"><span class="pre">f.D(x,</span> <span class="pre">warn=True)</span></code>).
 The spline value for an out-of-range point is calculated
 using a polynomial whose value and derivatives match those of the spline
 at the knot closest to the out-of-range point. The extrapolation
-polynomial is cubic by default, but lower orders can be specified by
+polynomial is cubic by default, but lower orders are specified by
 setting parameter <code class="docutils literal notranslate"><span class="pre">extrap_order</span></code> to a (non-negative) integer
-less than 3; this is often a good idea.</p>
+less than 3.</p>
+<p>The first derivatives of <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> at the knots are determined
+from the function values in the vicinity of the knot. The derivatives
+at the endpoints (<code class="docutils literal notranslate"><span class="pre">xknot[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">xknot[-1]</span></code> if the knots are
+ordered) can be specified explicitly, if they are known:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="n">dydx_i</span><span class="p">,</span> <span class="n">dydx_f</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">dydx_i</span></code> is the derivative at <code class="docutils literal notranslate"><span class="pre">xknot[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">dydx_f</span></code>
+is the derivative at <code class="docutils literal notranslate"><span class="pre">xknot[-1]</span></code>.</p>
+<p>There are different types of spline available, selected with
+keyword <code class="docutils literal notranslate"><span class="pre">alg</span></code>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">alg='steffen'</span></code></dt><dd><p>Monotonic cubic spline that has quadratic precision
+where the function is monotonic between knots. This is
+the default algorithm.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">alg='cspline'</span></code></dt><dd><p>Cubic spline with continuous second derivatives <code class="docutils literal notranslate"><span class="pre">f''(x)</span></code>
+(in addition to <code class="docutils literal notranslate"><span class="pre">f'(x)</span></code> and <code class="docutils literal notranslate"><span class="pre">f(x)</span></code>). Sets
+<code class="docutils literal notranslate"><span class="pre">f''(x)</span></code> to zero at the endpoints (<em>natural</em> boundary
+conditions) if the first derivatives have not been
+specified there (using keyword <code class="docutils literal notranslate"><span class="pre">deriv</span></code>).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">alg='pchip'</span></code></dt><dd><p>Monotonic cubic spline used in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy</span></code>
+function <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.interpolate.PchipInterpolator</span></code>.
+This algorithm is usually less accurate than <code class="docutils literal notranslate"><span class="pre">'steffen'</span></code>
+where the function is smooth (and monotonic).</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">'cspline'</span></code> algorithm gives the smoothest interpolations
+and the most accuracy for very smooth functions, but it tends
+to overreact to abrupt jumps in the function, leading
+to unrealistic oscillations around the jump. Monotonic
+splines are guaranteed to be monotonic between knots and so
+are unable to overshoot the input data in this way. (The
+monotonic splines may not be monotonic in the first or last
+intervals if derivatives are supplied for the endpoints,
+using the <code class="docutils literal notranslate"><span class="pre">deriv</span></code> keyword.)</p>
+<p>Third derivatives (<code class="docutils literal notranslate"><span class="pre">f.D3(x)</span></code>) are unreliable for
+monotonic splines.</p>
 <p class="rubric">Examples</p>
 <p>Typical usage is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.78539816</span><span class="p">,</span> <span class="mf">1.57079633</span><span class="p">,</span> <span class="mf">2.35619449</span><span class="p">,</span> <span class="mf">3.14159265</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">yknot</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.70710678</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="mf">0.7</span><span class="p">))</span>
-<span class="go">0.644243383101 0.765592448296 -0.663236750777 0.234963942648</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="mf">0.7</span><span class="p">))</span>
+<span class="go">0.644243383100598 0.7655924482958195 0.23496394264839268</span>
 </pre></div>
 </div>
 <p>Here the <code class="docutils literal notranslate"><span class="pre">yknot</span></code> values were obtained by taking <code class="docutils literal notranslate"><span class="pre">sin(xknot)</span></code>.
@@ -135,60 +174,62 @@ shows that this 5-knot spline gives a pretty good approximation
 of the function <code class="docutils literal notranslate"><span class="pre">sin(x)</span></code>, as well as its derivatives and integral:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span>    <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>    <span class="n">f</span><span class="o">.</span><span class="n">D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">f</span><span class="o">.</span><span class="n">D2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">|</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="mi">1</span><span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="o">------------------------------------------------------------------</span>
-<span class="mf">0.3</span>  <span class="mf">0.2951</span>  <span class="mf">0.9551</span>  <span class="o">-</span><span class="mf">0.2842</span> <span class="mf">0.04458</span>    <span class="o">|</span> <span class="mf">0.2955</span>  <span class="mf">0.9553</span>  <span class="mf">0.04466</span>
+<span class="mf">0.3</span>  <span class="mf">0.2951</span>  <span class="mf">0.9551</span>  <span class="o">-</span><span class="mf">0.2842</span> <span class="mf">0.0446</span>     <span class="o">|</span> <span class="mf">0.2955</span>  <span class="mf">0.9553</span>  <span class="mf">0.0447</span>
 <span class="mf">0.5</span>  <span class="mf">0.4791</span>  <span class="mf">0.8793</span>  <span class="o">-</span><span class="mf">0.4737</span> <span class="mf">0.1222</span>     <span class="o">|</span> <span class="mf">0.4794</span>  <span class="mf">0.8776</span>  <span class="mf">0.1224</span>
-<span class="mf">0.7</span>  <span class="mf">0.6442</span>  <span class="mf">0.7656</span>  <span class="o">-</span><span class="mf">0.6632</span> <span class="mf">0.235</span>      <span class="o">|</span> <span class="mf">0.6442</span>  <span class="mf">0.7648</span>  <span class="mf">0.2352</span>
-<span class="mf">0.9</span>  <span class="mf">0.783</span>   <span class="mf">0.6176</span>  <span class="o">-</span><span class="mf">0.7891</span> <span class="mf">0.3782</span>     <span class="o">|</span> <span class="mf">0.7833</span>  <span class="mf">0.6216</span>  <span class="mf">0.3784</span>
-<span class="mf">1.1</span>  <span class="mf">0.8902</span>  <span class="mf">0.452</span>   <span class="o">-</span><span class="mf">0.8676</span> <span class="mf">0.5461</span>     <span class="o">|</span> <span class="mf">0.8912</span>  <span class="mf">0.4536</span>  <span class="mf">0.5464</span>
+<span class="mf">0.7</span>  <span class="mf">0.6442</span>  <span class="mf">0.7656</span>  <span class="o">-</span><span class="mf">0.6632</span> <span class="mf">0.2350</span>     <span class="o">|</span> <span class="mf">0.6442</span>  <span class="mf">0.7648</span>  <span class="mf">0.2352</span>
+<span class="mf">0.9</span>  <span class="mf">0.7830</span>  <span class="mf">0.6176</span>  <span class="o">-</span><span class="mf">0.7891</span> <span class="mf">0.3782</span>     <span class="o">|</span> <span class="mf">0.7833</span>  <span class="mf">0.6216</span>  <span class="mf">0.3784</span>
+<span class="mf">1.1</span>  <span class="mf">0.8902</span>  <span class="mf">0.4520</span>  <span class="o">-</span><span class="mf">0.8676</span> <span class="mf">0.5461</span>     <span class="o">|</span> <span class="mf">0.8912</span>  <span class="mf">0.4536</span>  <span class="mf">0.5464</span>
 <span class="mf">1.3</span>  <span class="mf">0.9627</span>  <span class="mf">0.2706</span>  <span class="o">-</span><span class="mf">0.9461</span> <span class="mf">0.7319</span>     <span class="o">|</span> <span class="mf">0.9636</span>  <span class="mf">0.2675</span>  <span class="mf">0.7325</span>
-<span class="mf">1.5</span>  <span class="mf">0.9974</span>  <span class="mf">0.07352</span> <span class="o">-</span><span class="mf">1.025</span>  <span class="mf">0.9286</span>     <span class="o">|</span> <span class="mf">0.9975</span>  <span class="mf">0.07074</span> <span class="mf">0.9293</span>
+<span class="mf">1.5</span>  <span class="mf">0.9974</span>  <span class="mf">0.0735</span>  <span class="o">-</span><span class="mf">1.0246</span> <span class="mf">0.9286</span>     <span class="o">|</span> <span class="mf">0.9975</span>  <span class="mf">0.07074</span> <span class="mf">0.9293</span>
 </pre></div>
 </div>
 <p>Using the spline outside
 the range covered by the knots is less good:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
-<span class="go">gvar/cspline.py:164: UserWarning: x outside of spline range: [ 6.28318531]</span>
-<span class="go">1.7618635470106501</span>
+<span class="go">1.7618635470106572</span>
 </pre></div>
 </div>
-<p>The correct answer is 0.0, of course. This is why the spline function
-issues a warning. Working just outside the knot region is often fine,
-although it is usually a good idea to limit the order of the
-polynomial used in such regions: for example, setting</p>
+<p>The correct answer is 0.0, of course. Working just outside
+the knot region is often fine, although it might be
+a good idea to limit the order of the polynomial
+used in such regions: for example, setting</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">extrap_order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>implies that quadratic polynomials are used outside the spline range.
-Finally one can specify the values of the first derivatives of the
-function at one or the other endpoints of the spline region, if they
-are known. Continuing from above, for example, one would take</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">cspline</span><span class="o">.</span><span class="n">CSpline</span><span class="p">(</span><span class="n">xknot</span><span class="p">,</span> <span class="n">yknot</span><span class="p">,</span> <span class="n">deriv</span><span class="o">=</span><span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>since the derivatives of <code class="docutils literal notranslate"><span class="pre">sin(x)</span></code> at <code class="docutils literal notranslate"><span class="pre">x=0</span></code> and <code class="docutils literal notranslate"><span class="pre">x=3.14159265</span></code>
-are 1 and -1, respectively.</p>
+<p>implies that quadratic polynomials are used outside the spline range.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>xknot</strong> (<em>1-d sequence of number</em>) – The knots of the spline, where the
-function values are specified. The knots are sorted (from small
-to large) if necessary.</p></li>
-<li><p><strong>yknot</strong> (<em>1-d sequence of number</em>) – Function values at the locations
-specified by <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>.</p></li>
-<li><p><strong>deriv</strong> (<em>2-component sequence</em>) – Derivatives at initial and final
-boundaries of the  region specified by <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>.
-Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code> for each boundary.</p></li>
-<li><p><strong>extrap_order</strong> (<em>int</em>) – Order of polynomial used for extrapolations
-outside of the spline range. The polynomial is constructed from
-the spline’s value and derivatives at the (nearest) knot of the
-spline. The allowed range is <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">extrap_order</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>. The
-default value is 3 although it is common practice to use
-smaller values.</p></li>
+<li><p><strong>xknot</strong> (<em>1-d sequence</em>) – Location of the
+spline’s knots, where the function values are
+specified. The locations can be numbers of
+<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects.</p></li>
+<li><p><strong>yknot</strong> (<em>1-d sequence</em>) – Function values at
+the locations specified by <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>. The
+values can be numbers or
+<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects.</p></li>
+<li><p><strong>deriv</strong> (<em>2-component sequence</em>) – Derivatives at initial
+and final boundaries of the  region specified
+by <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code>. The derivatives can be numbers or
+<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects. Default value is <code class="docutils literal notranslate"><span class="pre">None</span></code>
+for each boundary, which implies <em>natural</em> boundary
+conditions (vanishing second derivative).</p></li>
+<li><p><strong>extrap_order</strong> (<em>int</em>) – Order of polynomial used for
+extrapolations outside of the spline range.
+The polynomial is constructed from the spline’s
+value and derivatives at the (nearest) knot of the
+spline. The allowed range is <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">extrap_order</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>.
+The default value is 3 although it is common practice
+to use smaller values.</p></li>
 <li><p><strong>warn</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, warnings are generated
 when the spline function is called for <code class="docutils literal notranslate"><span class="pre">x</span></code> values that
 fall outside of the original range of <code class="docutils literal notranslate"><span class="pre">xknot</span></code>s used to
-define the spline. Default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>;
-out-of-range warnings are suppressed if set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+define the spline. Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>,
+which means out-of-range warnings are suppressed.</p></li>
+<li><p><strong>alg</strong> (<em>str</em>) – Spline algorithm used, which is one of:
+<code class="docutils literal notranslate"><span class="pre">'steffen'</span></code> (default), <code class="docutils literal notranslate"><span class="pre">'cspline'</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">'pchip'</span></code>. The first and last of these give
+monotonic splines.</p></li>
 </ul>
 </dd>
 </dl>
@@ -437,7 +478,7 @@ other integrates dictionary-valued equations:</p>
 to obtain <code class="docutils literal notranslate"><span class="pre">y(x1)</span></code> from <code class="docutils literal notranslate"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">f(x,y)</span></code> can
 be scalars or <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> arrays. Typical usage is illustrated
 by the following code for integrating <code class="docutils literal notranslate"><span class="pre">dy/dx</span> <span class="pre">=</span> <span class="pre">y</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="kn">import</span> <span class="n">Integrator</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">Integrator</span>
 
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">y</span>
@@ -562,7 +603,7 @@ results.</p></li>
 to obtain <code class="docutils literal notranslate"><span class="pre">y(x1)</span></code> from <code class="docutils literal notranslate"><span class="pre">y0</span> <span class="pre">=</span> <span class="pre">y(x0)</span></code>. <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">f(x,y)</span></code> are
 dictionary types having the same keys, and containing scalars
 and/or <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> arrays as values. Typical usage is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="kn">import</span> <span class="n">DictIntegrator</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gvar.ode</span> <span class="k">import</span> <span class="n">DictIntegrator</span>
 
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="o">...</span>
@@ -644,9 +685,9 @@ of the differential equation at that point.</p>
 <span id="integral"></span><h2>One-Dimensional Integration<a class="headerlink" href="#one-dimensional-integration" title="Permalink to this headline">¶</a></h2>
 <p>Module <a class="reference internal" href="#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.ode</span></code></a> also provides a method for evaluating
 one-dimensional integrals (using its adaptive Runge-Kutta algorithm):</p>
-<dl class="method">
+<dl class="function">
 <dt id="gvar.ode.integral">
-<code class="sig-prename descclassname">ode.</code><code class="sig-name descname">integral</code><span class="sig-paren">(</span><em class="sig-param">interval</em>, <em class="sig-param">fcnshape=None</em>, <em class="sig-param">tol=1e-08</em>, <em class="sig-param">hmin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.integral" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.ode.</code><code class="sig-name descname">integral</code><span class="sig-paren">(</span><em class="sig-param">fcn</em>, <em class="sig-param">interval</em>, <em class="sig-param">fcnshape=None</em>, <em class="sig-param">tol=1e-08</em>, <em class="sig-param">hmin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ode.integral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute integral of <code class="docutils literal notranslate"><span class="pre">fcn(x)</span></code> on interval.</p>
 <p>Given a function <code class="docutils literal notranslate"><span class="pre">fcn(x)</span></code> the call</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">))</span>
@@ -710,7 +751,7 @@ default value is <code class="docutils literal notranslate"><span class="pre">No
 approximations of functions. A function’s power series is specified by the
 coefficients in its Taylor expansion with respect to an independent variable,
 say <code class="docutils literal notranslate"><span class="pre">x</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="s1">&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
      <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">f1</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">f2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">f3</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
@@ -735,7 +776,7 @@ calculus. <code class="docutils literal notranslate"><span class="pre">PowerSeri
 a power series with coefficients <code class="docutils literal notranslate"><span class="pre">f0,</span> <span class="pre">f1,</span> <span class="pre">f2,</span> <span class="pre">f3...</span></code> (as in <code class="docutils literal notranslate"><span class="pre">f(x)</span></code>
 above). Thus, for example, we can define a 4th-order power series
 approximation <code class="docutils literal notranslate"><span class="pre">f</span></code> to <code class="docutils literal notranslate"><span class="pre">exp(x)=1+x+x**2/2+...</span></code> using</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">24.</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># print the coefficients</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667]</span>
@@ -743,7 +784,7 @@ approximation <code class="docutils literal notranslate"><span class="pre">f</sp
 </div>
 <p>Arithmetic expressions involving instances of class <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> are
 themselves <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> as in, for example,</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for exp(-x)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for exp(-x)</span>
 <span class="go">[ 1.         -1.          0.5        -0.16666667  0.04166667]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>        <span class="c1"># power series for x</span>
 <span class="go">[ 0.  1.  0. -0.  0.]</span>
@@ -777,7 +818,7 @@ represents <code class="docutils literal notranslate"><span class="pre">g(x)=log
 </div>
 <p>Individual coefficients from the powerseries can be accessed using
 array-element notation: for example,</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 <span class="go">1.0 1.0 0.5 0.166666666667</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># f is now the power series for exp(x)-1</span>
@@ -789,12 +830,12 @@ array-element notation: for example,</p>
 <h3>Numerical evaluation of power series<a class="headerlink" href="#numerical-evaluation-of-power-series" title="Permalink to this headline">¶</a></h3>
 <p>The power series can also be evaluated for a particular
 numerical value of x: continuing the example,</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># should be exp(0.01)-1 approximately</span>
 <span class="go">0.0100501670833</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c1"># verify that it is</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c1"># verify that it is</span>
 <span class="go">0.0100501670842</span>
 </pre></div>
 </div>
@@ -811,7 +852,7 @@ expansion of a Python function <code class="docutils literal notranslate"><span 
 <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">PowerSeries([0.,1.],order=N)</span></code>. The Taylor series for function <code class="docutils literal notranslate"><span class="pre">g</span></code>
 is then given by <code class="docutils literal notranslate"><span class="pre">g_taylor</span> <span class="pre">=</span> <span class="pre">g(x)</span></code> which is a <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> instance.
 For example, consider:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>           <span class="c1"># an example of a Python function</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">...</span>
@@ -1166,7 +1207,7 @@ the root, where <code class="docutils literal notranslate"><span class="pre">b</
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2019, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

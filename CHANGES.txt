@@ -1,13 +1,26 @@
-Version 10.0 ???
-==================
-Backwards incompatible changes in gvar.load and gvar.dump, but 
-otherwise compatible.
+Version 10.0 2020-02-02
+=======================
+New features and improvements to existing features. 
+There are incompatible changes in gvar.loads and 
+gvar.cspline.CSpline, though most old code should
+still run.
+
+- gvar.cspline.CSpline has been reimplemented. It now supports 
+  different algorithms (select using keyword alg) and the 
+  default algorithm is a monotonic spline rather than a 
+  classical cubic spline.
+
+- Adds support in gvar.BufferDict for uniform distributions: see 
+  gvar.BufferDict.uniform. This is for use by lsqfit.
 
 - gvar.load() and gvar.dump() use a new protocol (for serializing
   GVars) that make them substantially more efficient for large
-  problems. The change is not backwards compatible; 
-  use gvar.oldload to read files created by the older 
-  version (this function will disappear in later releases).
+  problems. gvar.load() can read files created with the 
+  old protocol, but if you want to update the format used 
+  in an old file, load it and dump it again:
+  dump(load('filename'), 'filename'). gv.loads() no longer
+  has a method keyword since the method is inferred from 
+  the data.
 
 - Pickle format used for BufferDicts is changed but the new code
   can handle data from pervious versions.

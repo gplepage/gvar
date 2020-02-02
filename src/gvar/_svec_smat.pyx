@@ -273,7 +273,7 @@ cdef class smat:
     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self,
                                     numpy.ndarray[numpy.float_t,ndim=1] d):
         """ Add d[i] along diagonal. """
-        cdef INTP_TYPE i,nr
+        cdef INTP_TYPE i, nr
         cdef numpy.ndarray[numpy.float_t, ndim=1] v
         cdef numpy.ndarray[INTP_TYPE, ndim=1] idx, vrange
         cdef svec new_svec
@@ -293,7 +293,7 @@ cdef class smat:
             self.row[self.nrow] = new_svec
             self.nrow += 1
         return vrange
-    ##
+        
     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self,
                                     numpy.ndarray[numpy.float_t,ndim=2] m):
         """ Add matrix m on diagonal. """

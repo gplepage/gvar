@@ -31,7 +31,7 @@ class build_ext(_build_ext):
         import numpy
         if USE_CYTHON:
             from Cython.Build import cythonize
-            self.extensions = cythonize(self.extensions)
+            self.extensions = cythonize(self.extensions, force=True)
         numpy_include = numpy.get_include()
         for ext in self.extensions:
             ext.include_dirs.append(numpy_include)

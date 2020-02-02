@@ -336,7 +336,7 @@ using the correlations specified in <code class="docutils literal notranslate"><
 <p>A typical application involves the construction of correlated
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s give the means and standard deviations, together with
 a correlation matrix:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;1(1)&#39;</span><span class="p">,</span> <span class="s1">&#39;2(10)&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">evalcorr</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>           <span class="c1"># uncorrelated</span>
 <span class="go">[[ 1.  0.]</span>
@@ -573,7 +573,7 @@ must agree with each other. Default is <code class="docutils literal notranslate
 <p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s can be stored (serialized) and retrieved from files (or strings) using:</p>
 <dl class="function">
 <dt id="gvar.dump">
-<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">outputfile=None</em>, <em class="sig-param">method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dump" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">outputfile=None</em>, <em class="sig-param">method=None</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a representation of <code class="docutils literal notranslate"><span class="pre">g</span></code>  to file <code class="docutils literal notranslate"><span class="pre">outputfile</span></code>.</p>
 <p>Object <code class="docutils literal notranslate"><span class="pre">g</span></code> is a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (any shape), or
 a dictionary whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s;
@@ -632,7 +632,7 @@ object containing the serialized data is returned. Otherwise
 
 <dl class="function">
 <dt id="gvar.dumps">
-<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">dumps</code><span class="sig-paren">(</span><em class="sig-param">g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dumps" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">dumps</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">method='json'</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dumps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a serialized representation of <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>This function is shorthand for:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gvar</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
@@ -649,18 +649,23 @@ object containing the serialized data is returned. Otherwise
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
-are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary whose values
+are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>method</strong> – Serialization method, which should be either
+<code class="docutils literal notranslate"><span class="pre">'json'</span></code> or <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'json'</span></code>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A string containing a serialized representation of object <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<dd class="field-even"><p>A string or bytes object containing a serialized
+representation of object <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="gvar.load">
-<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">inputfile</em>, <em class="sig-param">method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">inputfile</em>, <em class="sig-param">method=None</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read and return <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that are serialized in <code class="docutils literal notranslate"><span class="pre">inputfile</span></code>.</p>
 <p>This function recovers <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s serialized with <a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a>.
 Typical usage is:</p>
@@ -672,9 +677,12 @@ Typical usage is:</p>
 <span class="n">new_g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;xxx.pickle&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Note that this function cannot read files created using versions
-of <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> earlier than 10.0. Try <code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.oldload()</span></code> for
-such files (<code class="xref py py-func docutils literal notranslate"><span class="pre">oldload()</span></code> will disappear eventually).</p>
+<p>Note that the format used by <a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a> changed with
+version 10.0 of <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>. <a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.load()</span></code></a> will
+attempt to read the old format if it is encountered, but
+old data should be converted to the new format (by reading
+it in with <a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a> and them writing it out again
+with <a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">dump()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -685,7 +693,10 @@ serialized <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><co
 the method is inferred from the filename’s extension:
 <code class="docutils literal notranslate"><span class="pre">.json</span></code> for <code class="docutils literal notranslate"><span class="pre">'json'</span></code>; and <code class="docutils literal notranslate"><span class="pre">.pickle</span></code> or <code class="docutils literal notranslate"><span class="pre">.pkl</span></code>
 or <code class="docutils literal notranslate"><span class="pre">.p</span></code> for <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>. If that fails the method
-defaults to <code class="docutils literal notranslate"><span class="pre">'json'</span></code>.</p></li>
+defaults to <code class="docutils literal notranslate"><span class="pre">'json'</span></code>. Argument <code class="docutils literal notranslate"><span class="pre">method</span></code> is ignored
+if <code class="docutils literal notranslate"><span class="pre">inputfile</span></code> is either a <code class="xref py py-class docutils literal notranslate"><span class="pre">StringIO</span></code> or
+<code class="xref py py-class docutils literal notranslate"><span class="pre">BytesIO</span></code> object, with the method being set
+to <code class="docutils literal notranslate"><span class="pre">'json'</span></code> or <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>, respectively.</p></li>
 <li><p><strong>kargs</strong> (<em>dict</em>) – Additional arguments, if any, that are passed to
 the underlying de-serializer (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code>).</p></li>
 </ul>
@@ -717,7 +728,8 @@ It is shorthand for:</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inputstr</strong> (<em>str</em>) – String created by <a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dumps()</span></code></a>.</p>
+<dd class="field-odd"><p><strong>inputstr</strong> (<em>str</em><em> or </em><em>bytes</em>) – String or bytes object
+created by <a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dumps()</span></code></a>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The reconstructed <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary
@@ -1561,7 +1573,6 @@ even though <code class="docutils literal notranslate"><span class="pre">'a'</sp
 <span class="n">gv</span><span class="o">.</span><span class="n">BufferDict</span><span class="o">.</span><span class="n">add_distribution</span><span class="p">(</span><span class="s1">&#39;erfinv&#39;</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">erf</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Additional distributions can be added by specifying:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1576,6 +1587,37 @@ even though <code class="docutils literal notranslate"><span class="pre">'a'</sp
 <dt id="gvar.BufferDict.del_distribution">
 <em class="property">static </em><code class="sig-name descname">del_distribution</code><span class="sig-paren">(</span><em class="sig-param">invfcn</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.del_distribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> distribution <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gvar.BufferDict.uniform">
+<em class="property">static </em><code class="sig-name descname">uniform</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">umin</em>, <em class="sig-param">umax</em>, <em class="sig-param">shape=()</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create uniform distribution on interval <code class="docutils literal notranslate"><span class="pre">[umin,</span> <span class="pre">umax]</span></code>.</p>
+<p>The code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">BufferDict</span><span class="p">()</span>
+<span class="n">b</span><span class="p">[</span><span class="s1">&#39;f(w)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">BufferDict</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>adds a distribution function <code class="docutils literal notranslate"><span class="pre">f(w)</span></code> designed so that <code class="docutils literal notranslate"><span class="pre">b['w']</span></code>
+corresponds to a uniform distribution on the interval <code class="docutils literal notranslate"><span class="pre">[2.,</span> <span class="pre">3.]</span></code>
+(see <a class="reference internal" href="#gvar.BufferDict.add_distribution" title="gvar.BufferDict.add_distribution"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.BufferDict.add_distribution()</span></code></a> for more about
+distributions).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<em>str</em>) – Name of function used in the <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">BufferDict</span></code></a> key.
+Note that names can reused provided they correspond to the
+same interval as in previous calls.</p></li>
+<li><p><strong>umin</strong> (<em>float</em>) – Minimum value of the uniform distribution.</p></li>
+<li><p><strong>umax</strong> (<em>float</em>) – Maximum value of the uniform distribution.</p></li>
+<li><p><strong>shape</strong> (<em>tuple</em>) – Shape of array of uniform variables. Default is <code class="docutils literal notranslate"><span class="pre">()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> object corresponding to a uniform distribution.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -2070,7 +2112,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2019, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

@@ -446,7 +446,7 @@ equivalent to the text file above would contain two groups,
 one with key <code class="docutils literal notranslate"><span class="pre">'s'</span></code> that is a one-dimensional array with shape (4,),
 and another with key <code class="docutils literal notranslate"><span class="pre">'v'</span></code> that is a two-dimensional array
 with shape (4, 2):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">h5py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">h5py</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;datafile.h5&#39;</span><span class="p">)[</span><span class="s1">&#39;/mcdata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 <span class="go">&lt;HDF5 dataset &quot;s&quot;: shape (4,), type &quot;&lt;f8&quot;&gt;</span>
@@ -829,7 +829,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2019, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

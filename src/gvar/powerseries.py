@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# encoding: utf-8
 """
 Module :mod:`gvar.powerseries` provides tools for manipulating power series
 approximations of functions. A function's power series is specified by the
@@ -124,7 +122,7 @@ For example, consider:
 
 """
 # Created by G. Peter Lepage on 2009-12-14.
-# Copyright (c) 2009-2013 G. Peter Lepage.
+# Copyright (c) 2009-2020 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

@@ -93,7 +93,7 @@ One-Dimensional Integration
 Module :mod:`gvar.ode` also provides a method for evaluating
 one-dimensional integrals (using its adaptive Runge-Kutta algorithm):
 
-.. automethod:: gvar.ode.integral
+.. autofunction:: gvar.ode.integral
 
 
 

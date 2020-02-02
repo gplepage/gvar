@@ -1518,6 +1518,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         gd['v'] += gv.gvar('0(1)')
         gd[(1,3)] = gv.gvar('13(13)')
         gd['v'] = 1 / gd['v']
+        # json (implicit)
         def _test(g):
             s = dumps(g)
             d = loads(s)
@@ -1525,20 +1526,37 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
         for g in [gs, ga, gd]:
             _test(g)
+        # json
+        def _test(g):
+            s = dumps(g, method='json')
+            d = loads(s)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+        for g in [gs, ga, gd]:
+            _test(g)
+        # pickle
+        def _test(g):
+            s = dumps(g, method='pickle')
+            d = loads(s)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+        for g in [gs, ga, gd]:
+            _test(g)
 
     def test_oldload(self):
-        # suppress the deprecation warning
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            g = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
-            olddump(g, 'xxx.p')
-            d = oldload('xxx.p')
-            assert str(g) == str(d)
-            assert str(gv.evalcov(g)) == str(gv.evalcov(d))
-            olddump(g, 'xxx.json', method='json')
-            d = oldload('xxx.json', method='json')
-            assert str(g) == str(d)
-            assert str(gv.evalcov(g)) == str(gv.evalcov(d))
+        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+        for g in [gd, gd['s'], gd['v']]:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                g = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+                olddump(g, 'xxx.p')
+                d = load('xxx.p')
+                assert str(g) == str(d)
+                assert str(gv.evalcov(g)) == str(gv.evalcov(d))
+                olddump(g, 'xxx.json', method='json')
+                d = load('xxx.json', method='json')
+                assert str(g) == str(d)
+                assert str(gv.evalcov(g)) == str(gv.evalcov(d))
 
     def test_gammaQ(self):
         " gammaQ(a, x) "

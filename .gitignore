@@ -1,6 +1,7 @@
 *.pyc
 .vscode
 build/
+ideas/
 __pycache__/
 src/gdev.c
 *.p
@@ -26,6 +27,8 @@ tmp/
 misc/
 ideas/
 todo/
+papers/
+old/
 gvar-distribution/
 doc/html/_static/dialog-todo.png
 doc/latex/
@@ -35,3 +38,6 @@ outputfile.p
 gvar.egg-info/
 doc/source/pendulum-paper.pdf
 README.html
+z*.py
+y*.py
+x*.py

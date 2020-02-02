@@ -6,6 +6,9 @@
 gvar Documentation
 ========================================
 
+.. image:: https://zenodo.org/badge/37556070.svg
+   :target: https://zenodo.org/badge/latestdoi/37556070
+
 Contents:
 
 .. toctree::
@@ -26,6 +29,4 @@ Indices and tables
 * :ref:`search`
 
 
-.. image:: https://zenodo.org/badge/37556070.svg
-   :target: https://zenodo.org/badge/latestdoi/37556070
 

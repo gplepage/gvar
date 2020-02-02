@@ -1,4 +1,4 @@
-# Copyright (c) 2012-18 G. Peter Lepage.
+# Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,10 @@ import random
 import gvar as gv
 from gvar import *
 from gvar.powerseries import PowerSeries
+try:
+    import scipy.interpolate as scipy_interpolate
+except:
+    scipy_interpolate = None
 
 class ArrayTests(object):
     def __init__(self):
@@ -228,17 +232,23 @@ class test_cspline(unittest.TestCase,ArrayTests):
 
     def tearDown(self): pass
 
-    def f(self, x):
-        return 1 + 2. * x + 3 * x ** 2 + 4 * x ** 3
+    def f(self, x, c=[1, 2., 3., 0.]):
+        return c[0] + c[1] * x + c[2] * x ** 2 + c[3] * x ** 3
 
-    def Df(self, x):
-        return 2. + 6. * x + 12. * x ** 2
+    def Df(self, x, c=[1, 2., 3., 0.]):
+        return c[1] + 2 * c[2] * x + 3 * c[3] * x ** 2
 
-    def D2f(self, x):
-        return 6. + 24. * x
+    def D2f(self, x, c=[1, 2., 3., 0.]):
+        return 2 * c[2] + 6 *  c[3] * x
 
-    def integf(self, x, x0=0):
-        return x + x**2 + x**3 + x**4 - (x0 + x0**2 + x0**3 + x0**4)
+    def D3f(self, x, c=[1, 2., 3., 0.]):
+        return 6 * c[3] + 0 * x 
+
+    def integf(self, x, x0=0, c=[1, 2., 3., 0.]):
+        return (
+            c[0] * x + c[1] * x**2 / 2 + c[2] * x**3 / 3 + c[3] * x**4 / 4
+            - (c[0] * x0 + c[1] * x0**2 / 2 + c[2] * x0**3 / 3 + c[3] * x0**4 / 4)
+            )
 
     def test_shape(self):
         " shape of spline == shape of argument "
@@ -248,7 +258,7 @@ class test_cspline(unittest.TestCase,ArrayTests):
         for extrap_order in [1,3]:
             s = cspline.CSpline(
                 xx, yy,
-                deriv=[yp[0], yp[-1]], warn=False,
+                deriv=[yp[0], yp[-1]],
                 extrap_order=extrap_order
                 )
             for x in [-1, 0.5, 4.]:
@@ -267,12 +277,13 @@ class test_cspline(unittest.TestCase,ArrayTests):
         x0 = x[0]
         y = self.f(x)
         yp= self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], warn=False)
+        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]])
         x = np.arange(0.4, 3., 0.4)
         for xi in x:
             self.assertAlmostEqual(self.f(xi), s(xi))
             self.assertAlmostEqual(self.Df(xi), s.D(xi))
             self.assertAlmostEqual(self.D2f(xi), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi), s.D3(xi))
             self.assertAlmostEqual(self.integf(xi, x0), s.integ(xi))
 
     def test_out_of_range(self):
@@ -281,11 +292,12 @@ class test_cspline(unittest.TestCase,ArrayTests):
         x0 = x[0]
         y = self.f(x)
         yp= self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], warn=False)
+        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]])
         for xi in [ -1.55, -1., 0., 2., 3., 4., 6.2]:
             self.assertAlmostEqual(self.f(xi), s(xi))
             self.assertAlmostEqual(self.Df(xi), s.D(xi))
             self.assertAlmostEqual(self.D2f(xi), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi), s.D3(xi))
             self.assertAlmostEqual(self.integf(xi, x0), s.integ(xi))
         for xx in [s([]), s.D([]), s.D2([]), s.integ([])]:
             self.assertEqual(list(xx), [])
@@ -325,7 +337,7 @@ class test_cspline(unittest.TestCase,ArrayTests):
             return ans
         y = self.f(x)
         yp = self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=0, warn=False)
+        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=0)
         for xi in [ -1.55, -1., 0., 2., 3., 4., 6.2]:
             self.assertAlmostEqual(f0(xi), s(xi))
             self.assertAlmostEqual(Df0(xi), s.D(xi))
@@ -369,7 +381,7 @@ class test_cspline(unittest.TestCase,ArrayTests):
             return ans
         y = self.f(x)
         yp = self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=1, warn=False)
+        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=1)
         for xi in [-1.55, -1., 0., 2., 3., 4., 6.2]:
             self.assertAlmostEqual(f1(xi), s(xi))
             self.assertAlmostEqual(Df1(xi), s.D(xi))
@@ -425,7 +437,7 @@ class test_cspline(unittest.TestCase,ArrayTests):
             return ans
         y = self.f(x)
         yp = self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=2, warn=False)
+        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], extrap_order=2)
         for xi in [-1.55, -1., 0., 2., 3., 4., 6.2]:
             self.assertAlmostEqual(f2(xi), s(xi))
             self.assertAlmostEqual(Df2(xi), s.D(xi))
@@ -435,37 +447,41 @@ class test_cspline(unittest.TestCase,ArrayTests):
     def test_left_natural_bc(self):
         # choose left bdy so that self.D2f(xl) = 0 ==> get exact fcn
         x = np.array([-0.25, 1., 3.])
+        c = [1, 2, 3, 4]
         x0 = x[0]
-        y = self.f(x)
-        yp= self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[None, yp[-1]], warn=False)
-        x = [-1., 0., 0.5, 2., 3., 4.]
+        y = self.f(x, c=c)
+        yp= self.Df(x, c=c)
+        s = cspline.CSpline(x, y, deriv=[None, yp[-1]], alg='cspline')
+        x = [-1., 0., 0.5, 2., 3., 4.][1:-1]
         for xi in x:
-            self.assertAlmostEqual(self.f(xi), s(xi))
-            self.assertAlmostEqual(self.Df(xi), s.D(xi))
-            self.assertAlmostEqual(self.D2f(xi), s.D2(xi))
-            self.assertAlmostEqual(self.integf(xi, x0), s.integ(xi))
+            self.assertAlmostEqual(self.f(xi, c=c), s(xi))
+            self.assertAlmostEqual(self.Df(xi, c=c), s.D(xi))
+            self.assertAlmostEqual(self.D2f(xi, c=c), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi, c=c), s.D3(xi))
+            self.assertAlmostEqual(self.integf(xi, x0, c=c), s.integ(xi))
 
     def test_right_natural_bc(self):
         # choose right bdy so that self.D2f(xr) = 0 ==> get exact fcn
         x = np.array([-3., -1. , -0.25])
+        c = [1, 2, 3, 4]
         x0 = x[0]
-        y = self.f(x)
-        yp= self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[yp[0], None], warn=False)
+        y = self.f(x, c=c)
+        yp= self.Df(x, c=c)
+        s = cspline.CSpline(x, y, deriv=[yp[0], None], alg='cspline')
         x = [-5., -2., -1., 0., 0.5, 2.]
         for xi in x:
-            self.assertAlmostEqual(self.f(xi), s(xi))
-            self.assertAlmostEqual(self.Df(xi), s.D(xi))
-            self.assertAlmostEqual(self.D2f(xi), s.D2(xi))
-            self.assertAlmostEqual(self.integf(xi, x0), s.integ(xi))
+            self.assertAlmostEqual(self.f(xi, c=c), s(xi))
+            self.assertAlmostEqual(self.Df(xi, c=c), s.D(xi))
+            self.assertAlmostEqual(self.D2f(xi, c=c), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi, c=c), s.D3(xi))
+            self.assertAlmostEqual(self.integf(xi, x0, c=c), s.integ(xi))
 
     def test_gvar(self):
         x = gvar(['0(1)', '1(1)', '3(1)'])
         x0 = x[0]
         y = self.f(x)
         yp= self.Df(x)
-        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]], warn=False)
+        s = cspline.CSpline(x, y, deriv=[yp[0], yp[-1]])
         for xi in x:
             self.assert_gvclose(self.f(xi), s(xi))
             self.assert_gvclose(self.Df(xi), s.D(xi))
@@ -483,13 +499,50 @@ class test_cspline(unittest.TestCase,ArrayTests):
 
     def test_sin(self):
         " test CSpline with real function "
-        x = np.arange(-1.,1.,0.0005)
-        fs = cspline.CSpline(x, np.sin(x), [np.cos(x[0]), np.cos(x[-1])])
+        xx = np.linspace(-1.,1.,500)
+        fs = cspline.CSpline(xx, np.sin(xx), deriv=[np.cos(xx[0]), np.cos(xx[-1])], alg='cspline')
         for x in [-0.666, -0.333, -0.123, 0.123, 0.333, 0.666]:
-            self.assertAlmostEqual(fs(x), np.sin(x))
-            self.assertAlmostEqual(fs.D(x), np.cos(x))
-            self.assertAlmostEqual(fs.D2(x), -np.sin(x))
-            self.assertAlmostEqual(fs.integ(x), -np.cos(x) + np.cos(-1.))
+            self.assertAlmostEqual(fs(x), np.sin(x), places=9)
+            self.assertAlmostEqual(fs.D(x), np.cos(x), places=7)
+            self.assertAlmostEqual(fs.D2(x), -np.sin(x), places=4)
+            self.assertAlmostEqual(fs.D3(x), -np.cos(x), places=2)
+            self.assertAlmostEqual(fs.integ(x), -np.cos(x) + np.cos(-1.), places=9)
+
+        fs = cspline.CSpline(xx, np.sin(xx)) 
+        for x in [-0.666, -0.333, -0.123, 0.123, 0.333, 0.666]:
+            self.assertAlmostEqual(fs(x), np.sin(x), places=7)
+            self.assertAlmostEqual(fs.D(x), np.cos(x), places=4)
+            self.assertAlmostEqual(fs.D2(x), -np.sin(x), places=2)
+            self.assertAlmostEqual(fs.integ(x), -np.cos(x) + np.cos(-1.), places=8)
+
+        fs = cspline.CSpline(xx, np.sin(xx), alg='pchip') 
+        for x in [-0.666, -0.333, -0.123, 0.123, 0.333, 0.666]:
+            self.assertAlmostEqual(fs(x), np.sin(x), places=7)
+            self.assertAlmostEqual(fs.D(x), np.cos(x), places=4)
+            self.assertAlmostEqual(fs.D2(x), -np.sin(x), places=2)
+            self.assertAlmostEqual(fs.integ(x), -np.cos(x) + np.cos(-1.), places=8)
+
+
+    @unittest.skipIf(scipy_interpolate is None,"need scipy for test; not installed")
+    def test_against_scipy(self):
+        " test CSpline against scipy equivalents "
+        x = np.array([0, np.pi/4, np.pi/2, 3*np.pi/4, np.pi])
+        def f(x):
+            return np.cos(x) 
+        y = f(x)
+        yg = cspline.CSpline(x, y, alg='pchip')
+        ys = scipy_interpolate.PchipInterpolator(x, y)
+        xx = [-0.4, 0.0, 0.4, np.pi/4, 1.0, 1.9, 3.0, 4.0]
+        for xi in xx:
+            self.assertAlmostEqual(yg(xi), ys(xi))
+        yg = cspline.CSpline(x, y, alg='cspline')
+        ys = scipy_interpolate.CubicSpline(x, y, bc_type='natural')
+        for xi in xx:
+            self.assertAlmostEqual(yg(xi), ys(xi))
+        yg = cspline.CSpline(x, y, alg='cspline', deriv=[0,0])
+        ys = scipy_interpolate.CubicSpline(x, y, bc_type='clamped')
+        for xi in xx:
+            self.assertAlmostEqual(yg(xi), ys(xi))
 
 class PowerSeriesTests(object):
     def __init__(self):

@@ -305,6 +305,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         p['log(c)'] = 0.
         p['sqrt(d)'] = [5., 6.]
         p['erfinv(e)'] = [[33.]]
+        p['f(w)'] = BufferDict.uniform('f', 2., 3.).mean
         newp = BufferDict(p)
         for i in range(2):
             for k in p:
@@ -313,11 +314,11 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             assert np.all(newp['d'] == np.square(newp['sqrt(d)']))
             assert np.all(newp['e'] == gv.erf(newp['erfinv(e)']))
             assert np.all(p.buf == newp.buf)
-            p.buf[:] = [10., 20., 30., 1., 2., 3., 4.]
+            p.buf[:-1] = [10., 20., 30., 1., 2., 3., 4.]
             newp.buf = np.array(p.buf.tolist())
         self.assertEqual(
-            gv.get_dictkeys(p, ['c', 'a', 'log(c)', 'e', 'd']),
-            ['log(c)', 'a', 'log(c)', 'erfinv(e)', 'sqrt(d)']
+            gv.get_dictkeys(p, ['c', 'a', 'log(c)', 'e', 'd', 'w', 'f(w)']),
+            ['log(c)', 'a', 'log(c)', 'erfinv(e)', 'sqrt(d)', 'f(w)', 'f(w)']
             )
         self.assertEqual(
             [gv.dictkey(p, k)  for k in [
@@ -335,10 +336,10 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         self.assertTrue(gv.BufferDict.has_dictkey(p, 'erfinv(e)'))
         self.assertTrue(not gv.BufferDict.has_dictkey(p, 'log(a)'))
         self.assertTrue(not gv.BufferDict.has_dictkey(p, 'sqrt(b)'))
-        self.assertEqual(list(p), ['a', 'b', 'log(c)', 'sqrt(d)', 'erfinv(e)'])
+        self.assertEqual(list(p), ['a', 'b', 'log(c)', 'sqrt(d)', 'erfinv(e)', 'f(w)'])
         np.testing.assert_equal(
-            list(p.values()),
-            [10.0, [20., 30.], 1.0, [2., 3.], [[4.]]]
+            (list(p.values())),
+            ([10.0, [20., 30.], 1.0, [2., 3.], [[4.]], 0.])
             )
         self.assertEqual(p.get('c'), p['c'])
 
@@ -353,7 +354,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(p['log(c)'], 2.)
         self.assertEqual(
             list(p),
-            ['a', 'b', 'log(c)', 'sqrt(d)', 'erfinv(e)'],
+            ['a', 'b', 'log(c)', 'sqrt(d)', 'erfinv(e)', 'f(w)'],
             )
 
         # the rest is not so important
@@ -380,6 +381,7 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         pvar['logc'] = p['log(c)']
         pvar['sqrtd'] = p['sqrt(d)']
         pvar['erfinv(e)'] = p['erfinv(e)']
+        pvar['f(w)'] = p['f(w)']
         pvar = add_parameter_parentheses(pvar)
         for k in p:
             assert k in pvar
@@ -397,10 +399,19 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         assert 'c(23)' not in pvar
         assert 'log(c(23))' in pvar
         self.assertAlmostEqual(gv.exp(pvar['log(c(23))']), pvar['c(23)'])
+        BufferDict.del_distribution('f')
 
-
-
-
+    def test_uniform(self):
+        " BufferDict.uniform "
+        b = BufferDict()
+        BufferDict.uniform('f', 0., 1.)
+        for fw, w in [(0, 0.5), (-1., 0.15865525393145707), (1, 1 - 0.15865525393145707)]:
+            b['f(s)'] = fw 
+            fmt = '{:.6f}'
+            self.assertEqual(fmt.format(b['s']), fmt.format(w))
+            b['f(a)'] = 4 * [fw]
+            self.assertEqual(str(b['a']), str(np.array(4 * [w])))
+        BufferDict.del_distribution('f')
 
 if __name__ == '__main__':
     unittest.main()
