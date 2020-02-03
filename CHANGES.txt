@@ -1,3 +1,7 @@
+Version 10.0.1 2020-02-03
+=========================
+Bug fix for Windows users (thanks to Christoph Gohlke).
+
 Version 10.0 2020-02-02
 =======================
 New features and improvements to existing features. 
