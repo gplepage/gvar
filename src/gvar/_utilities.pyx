@@ -566,7 +566,7 @@ def evalcov_blocks(g, compress=False):
                 c_ans[0][1].append(bcov[0, 0] ** 0.5)
             else:
                 c_ans.append((idx, bcov))
-        c_ans[0] = (numpy.array(c_ans[0][0], dtype=int), numpy.array(c_ans[0][1], dtype=float))            
+        c_ans[0] = (numpy.array(c_ans[0][0], dtype=numpy.intp), numpy.array(c_ans[0][1], dtype=float))            
         return c_ans
     else:
         return ans
