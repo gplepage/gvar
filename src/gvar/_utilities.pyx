@@ -554,7 +554,7 @@ def evalcov_blocks(g, compress=False):
         if len(bl) == 1:
             b = bl.pop()
             gb = gf[b]
-            ans.append((numpy.array([b]), numpy.array([[gb.var]])))
+            ans.append((numpy.array([b], dtype=numpy.intp), numpy.array([[gb.var]])))
         else:
             idx = numpy.array([b for b in bl], dtype=numpy.intp)
             ans.append((idx, evalcov(gf[idx])))
