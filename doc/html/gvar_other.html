@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Numerical Analysis Modules in gvar &#8212; gvar 10.0.1 documentation</title>
+    <title>Numerical Analysis Modules in gvar &#8212; gvar 10.0.2 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -77,7 +77,7 @@ More examples will follow with time.</p>
 interpolating one-dimensional data using cubic splines:</p>
 <dl class="class">
 <dt id="gvar.cspline.CSpline">
-<em class="property">class </em><code class="sig-prename descclassname">gvar.cspline.</code><code class="sig-name descname">CSpline</code><span class="sig-paren">(</span><em class="sig-param">xknots</em>, <em class="sig-param">yknots</em>, <em class="sig-param">deriv=(None</em>, <em class="sig-param">None)</em>, <em class="sig-param">extrap_order=3</em>, <em class="sig-param">alg='steffen'</em>, <em class="sig-param">warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.cspline.CSpline" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">gvar.cspline.</code><code class="sig-name descname">CSpline</code><span class="sig-paren">(</span><em class="sig-param">xknot</em>, <em class="sig-param">yknot</em>, <em class="sig-param">deriv=(None</em>, <em class="sig-param">None)</em>, <em class="sig-param">extrap_order=3</em>, <em class="sig-param">alg='steffen'</em>, <em class="sig-param">warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.cspline.CSpline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cubic spline approximation to a function.</p>
 <p>Given <code class="docutils literal notranslate"><span class="pre">N</span></code> values of a function <code class="docutils literal notranslate"><span class="pre">yknot[i]</span></code> at <code class="docutils literal notranslate"><span class="pre">N</span></code> points
 <code class="docutils literal notranslate"><span class="pre">xknot[i]</span></code> for <code class="docutils literal notranslate"><span class="pre">i=0..N-1</span></code> (the <em>knots</em> of the spline),
@@ -155,9 +155,12 @@ splines are guaranteed to be monotonic between knots and so
 are unable to overshoot the input data in this way. (The
 monotonic splines may not be monotonic in the first or last
 intervals if derivatives are supplied for the endpoints,
-using the <code class="docutils literal notranslate"><span class="pre">deriv</span></code> keyword.)</p>
-<p>Third derivatives (<code class="docutils literal notranslate"><span class="pre">f.D3(x)</span></code>) are unreliable for
-monotonic splines.</p>
+using the <code class="docutils literal notranslate"><span class="pre">deriv</span></code> keyword. Also third derivatives (<code class="docutils literal notranslate"><span class="pre">f.D3(x)</span></code>)
+are unreliable for monotonic splines.)</p>
+<p>The algorithm is irrelevant when there are only two knots. In that case
+the spline is linear if no derivatives are specified (using <code class="docutils literal notranslate"><span class="pre">deriv</span></code>),
+quadratic if one or the other derivative is specified, or cubic
+if both derivatives are specified.</p>
 <p class="rubric">Examples</p>
 <p>Typical usage is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
@@ -1202,7 +1205,7 @@ the root, where <code class="docutils literal notranslate"><span class="pre">b</
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

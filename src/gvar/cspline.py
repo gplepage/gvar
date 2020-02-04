@@ -106,11 +106,11 @@ class CSpline:
     using the ``deriv`` keyword. Also third derivatives (``f.D3(x)``) 
     are unreliable for monotonic splines.)
 
-    The algorithm is ignored if there are only two knots. In that case
+    The algorithm is irrelevant when there are only two knots. In that case
     the spline is linear if no derivatives are specified (using ``deriv``), 
-    quadratic if one or the other derivatives is specified, or cubic
+    quadratic if one or the other derivative is specified, or cubic
     if both derivatives are specified. 
-    
+
     Examples:
         Typical usage is::
 
