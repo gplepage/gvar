@@ -103,11 +103,14 @@ class CSpline:
     are unable to overshoot the input data in this way. (The 
     monotonic splines may not be monotonic in the first or last
     intervals if derivatives are supplied for the endpoints,
-    using the ``deriv`` keyword.)
+    using the ``deriv`` keyword. Also third derivatives (``f.D3(x)``) 
+    are unreliable for monotonic splines.)
 
-    Third derivatives (``f.D3(x)``) are unreliable for 
-    monotonic splines.
-
+    The algorithm is ignored if there are only two knots. In that case
+    the spline is linear if no derivatives are specified (using ``deriv``), 
+    quadratic if one or the other derivatives is specified, or cubic
+    if both derivatives are specified. 
+    
     Examples:
         Typical usage is::
 
@@ -181,9 +184,9 @@ class CSpline:
             monotonic splines.
 
     """
-    def __init__(self, xknots, yknots, deriv=(None, None), extrap_order=3, alg='steffen', warn=False):
+    def __init__(self, xknot, yknot, deriv=(None, None), extrap_order=3, alg='steffen', warn=False):
         # sort and store arguments
-        x, y = zip(*sorted(zip(xknots, yknots)))
+        x, y = zip(*sorted(zip(xknot, yknot)))
         self.x = numpy.array(x)
         self.y = numpy.array(y)
         self.deriv = deriv 
@@ -191,21 +194,25 @@ class CSpline:
         self.warn = warn 
         self.extrap_order = extrap_order
         self.n = len(self.y)
-        self.warn = warn 
-        self.extrap_order = extrap_order
-        self.n = len(self.y)
         # initial estimates for derivatives
         h = self.x[1:] - self.x[:-1]
+        if numpy.any(h == 0):
+            raise ValueError('knots must be a different locations: x = ' + str(self.x))
         delta = (self.y[1:] - self.y[:-1]) / h
         # slopes at knots
-        if alg == 'pchip':
-            self.dy = CSpline._monotonic_slopes(delta, h, self.deriv)
-        elif alg == 'cspline':
-            self.dy = CSpline._cspline_slopes(delta, h, self.deriv)
-        elif alg == 'steffen':
-            self.dy = CSpline._steffen_slopes(delta, h, self.deriv)
+        if self.n < 2:
+            raise ValueError('spline needs more knots than ' + str(self.n))
+        elif self.n == 2:
+            self.dy = CSpline._2pt_slopes(delta, h, self.deriv)
         else:
-            raise ValueError('undefined algorithm = ' + str(alg))
+            if alg == 'pchip':
+                self.dy = CSpline._monotonic_slopes(delta, h, self.deriv)
+            elif alg == 'cspline':
+                self.dy = CSpline._cspline_slopes(delta, h, self.deriv)
+            elif alg == 'steffen':
+                self.dy = CSpline._steffen_slopes(delta, h, self.deriv)
+            else:
+                raise ValueError('undefined algorithm = ' + str(alg))
         # higher derivatives (times 1/n!) for start of each interval
         self.d2y =(3 * delta - 2 * self.dy[:-1] - self.dy[1:]) / h 
         self.d3y = (self.dy[:-1] - 2 * delta + self.dy[1:]) / h**2
@@ -222,6 +229,17 @@ class CSpline:
         self.cright=numpy.array(
                 [self.y[-1], self.D(self.x[-1]), 0.5 * self.D2(self.x[-1], warn=False)]
                 )
+
+    @staticmethod 
+    def _2pt_slopes(delta, h, deriv):
+        if deriv[0] == None and deriv[1] == None:
+            return numpy.array([delta[0], delta[0]])
+        elif deriv[0] != None and deriv[1] == None:
+            return numpy.array([deriv[0], 2 * delta[0] - deriv[0]])
+        elif deriv[1] != None and deriv[0] == None:
+            return numpy.array([2 * delta[0] - deriv[1], deriv[1]])
+        else:
+            return numpy.array(deriv)
 
     @staticmethod
     def _cspline_slopes(delta, h, deriv):
@@ -445,8 +463,6 @@ class CSpline:
         out_of_range = numpy.any(left) or numpy.any(right)
         if warn and out_of_range:
             warnings.warn('x outside of spline range: ' + str(x[left]) + ' and ' + str(x[right]))
-        if warn and self.alg == 'monotonic':
-            warnings.warn('2nd derivatives are undefined at knots for monotonic splines')
         if out_of_range and self.extrap_order < 3:
             ans = numpy.empty(len(x), object)
             middle = numpy.logical_not(numpy.logical_or(left, right))

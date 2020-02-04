@@ -286,6 +286,52 @@ class test_cspline(unittest.TestCase,ArrayTests):
             self.assertAlmostEqual(self.D3f(xi), s.D3(xi))
             self.assertAlmostEqual(self.integf(xi, x0), s.integ(xi))
 
+    def test_2knot(self):
+        " 2 knot spline "
+        x = np.array([1., 3.])
+        x0 = x[0]
+        xtest = np.array([-1.5, 1., 2.2, 3., 3.5])
+        # linear 
+        c = [2., 2.7, 0., 0.]
+        y = self.f(x, c=c)
+        s = cspline.CSpline(x, y)
+        for xi in xtest:
+            self.assertAlmostEqual(self.f(xi, c=c), s(xi))
+            self.assertAlmostEqual(self.Df(xi, c=c), s.D(xi))
+            self.assertAlmostEqual(self.D2f(xi, c=c), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi, c=c), s.D3(xi))
+            self.assertAlmostEqual(self.integf(xi, x0, c=c), s.integ(xi))
+        # quadratic, left
+        c = [2., 2.7, -1.1, 0.]
+        y = self.f(x, c=c)
+        s = cspline.CSpline(x, y, deriv=[self.Df(x[0], c=c), None])
+        for xi in xtest:
+            self.assertAlmostEqual(self.f(xi, c=c), s(xi))
+            self.assertAlmostEqual(self.Df(xi, c=c), s.D(xi))
+            self.assertAlmostEqual(self.D2f(xi, c=c), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi, c=c), s.D3(xi))
+            self.assertAlmostEqual(self.integf(xi, x0, c=c), s.integ(xi))      
+        # quadratic, right
+        c = [2., -2.7, -0.7, 0.]
+        y = self.f(x, c=c)
+        s = cspline.CSpline(x, y, deriv=[None, self.Df(x[-1], c=c)])
+        for xi in xtest:
+            self.assertAlmostEqual(self.f(xi, c=c), s(xi))
+            self.assertAlmostEqual(self.Df(xi, c=c), s.D(xi))
+            self.assertAlmostEqual(self.D2f(xi, c=c), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi, c=c), s.D3(xi))
+            self.assertAlmostEqual(self.integf(xi, x0, c=c), s.integ(xi))      
+        # cubic
+        c = [-2., -1.1, 0.5, 0.25]
+        y = self.f(x, c=c)
+        s = cspline.CSpline(x, y, deriv=[self.Df(x[0], c=c), self.Df(x[-1], c=c)])
+        for xi in xtest:
+            self.assertAlmostEqual(self.f(xi, c=c), s(xi))
+            self.assertAlmostEqual(self.Df(xi, c=c), s.D(xi))
+            self.assertAlmostEqual(self.D2f(xi, c=c), s.D2(xi))
+            self.assertAlmostEqual(self.D3f(xi, c=c), s.D3(xi))
+            self.assertAlmostEqual(self.integf(xi, x0, c=c), s.integ(xi))      
+  
     def test_out_of_range(self):
         " out of range, extrap_order=3 "
         x = np.array([0, 1., 3.])
