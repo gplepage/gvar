@@ -496,7 +496,7 @@ def evalcov_blocks(g, compress=False):
             uncorrelated |GVar|\s in ``g.flat`` into the first element of 
             the returned list (see above). Default is ``False``.
     """
-    cdef INTP_TYPE a, b
+    cdef INTP_TYPE a, b, i
     cdef GVar ga, gb
     cdef smat master_cov
     # cdef numpy.ndarray[numpy.npy_intp, ndim=1] idx, ga_d_indices
