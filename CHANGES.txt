@@ -1,3 +1,11 @@
+Version 10.0.3 2020-02-07
+=========================
+Changed default string representation used when 
+printing GVars so that it always shows all 
+significant digits in the mean. This was 
+not the case before when answers were 
+very accurate. 
+
 Version 10.0.2 2020-02-03
 =========================
 Bug fix so that gvar.cspline.CSpline works with only 2 knots. 

@@ -11469,6 +11469,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_23evalcov_blocks(PyObject *__pyx_se
 static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_compress) {
   npy_intp __pyx_v_a;
   npy_intp __pyx_v_b;
+  npy_intp __pyx_v_i;
   struct __pyx_obj_4gvar_9_gvarcore_GVar *__pyx_v_ga = 0;
   struct __pyx_obj_4gvar_9_gvarcore_GVar *__pyx_v_gb = 0;
   struct __pyx_obj_4gvar_10_svec_smat_smat *__pyx_v_master_cov = 0;
@@ -11481,7 +11482,6 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyOb
   PyObject *__pyx_v_gcov_indices = NULL;
   PyObject *__pyx_v_unprocessed_indices = NULL;
   PyObject *__pyx_v_xcov_indices = NULL;
-  PyObject *__pyx_v_i = NULL;
   PyObject *__pyx_v_new_indices = NULL;
   PyObject *__pyx_v_ans = NULL;
   PyObject *__pyx_v_bl = NULL;
@@ -12213,8 +12213,9 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyOb
           }
           __Pyx_GOTREF(__pyx_t_4);
         }
-        __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_4);
-        __pyx_t_4 = 0;
+        __pyx_t_15 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_4); if (unlikely((__pyx_t_15 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(0, 535, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __pyx_v_i = __pyx_t_15;
 
         /* "gvar/_utilities.pyx":536
  *             # find all indices connected to xcov_indices by the master cov
@@ -12224,18 +12225,17 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyOb
  *             new_indices = set()
  */
         if (unlikely(!__pyx_v_master_cov->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 536, __pyx_L1_error)}
-        __pyx_t_18 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_18 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 536, __pyx_L1_error)
-        __pyx_t_19 = __pyx_t_18;
+        __pyx_t_18 = __pyx_v_i;
         __pyx_t_6 = -1;
-        if (__pyx_t_19 < 0) {
-          __pyx_t_19 += __pyx_v_master_cov->row.shape[0];
-          if (unlikely(__pyx_t_19 < 0)) __pyx_t_6 = 0;
-        } else if (unlikely(__pyx_t_19 >= __pyx_v_master_cov->row.shape[0])) __pyx_t_6 = 0;
+        if (__pyx_t_18 < 0) {
+          __pyx_t_18 += __pyx_v_master_cov->row.shape[0];
+          if (unlikely(__pyx_t_18 < 0)) __pyx_t_6 = 0;
+        } else if (unlikely(__pyx_t_18 >= __pyx_v_master_cov->row.shape[0])) __pyx_t_6 = 0;
         if (unlikely(__pyx_t_6 != -1)) {
           __Pyx_RaiseBufferIndexError(__pyx_t_6);
           __PYX_ERR(0, 536, __pyx_L1_error)
         }
-        __pyx_t_12 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_master_cov->row.data + __pyx_t_19 * __pyx_v_master_cov->row.strides[0]) ));
+        __pyx_t_12 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_master_cov->row.data + __pyx_t_18 * __pyx_v_master_cov->row.strides[0]) ));
         __Pyx_INCREF((PyObject*)__pyx_t_12);
         __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_indices); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 536, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
@@ -12290,13 +12290,13 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyOb
  *                     gb = gf[b]
  */
       __pyx_t_11 = 0;
-      __pyx_t_3 = __Pyx_set_iterator(__pyx_v_unassigned_indices, 1, (&__pyx_t_18), (&__pyx_t_6)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 539, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_set_iterator(__pyx_v_unassigned_indices, 1, (&__pyx_t_19), (&__pyx_t_6)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 539, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_XDECREF(__pyx_t_13);
       __pyx_t_13 = __pyx_t_3;
       __pyx_t_3 = 0;
       while (1) {
-        __pyx_t_20 = __Pyx_set_iter_next(__pyx_t_13, __pyx_t_18, &__pyx_t_11, &__pyx_t_3, __pyx_t_6);
+        __pyx_t_20 = __Pyx_set_iter_next(__pyx_t_13, __pyx_t_19, &__pyx_t_11, &__pyx_t_3, __pyx_t_6);
         if (unlikely(__pyx_t_20 == 0)) break;
         if (unlikely(__pyx_t_20 == -1)) __PYX_ERR(0, 539, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
@@ -12554,13 +12554,13 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyOb
  *         if len(bl) == 1:
  *             b = bl.pop()
  */
-  __pyx_t_13 = __pyx_v_blocks; __Pyx_INCREF(__pyx_t_13); __pyx_t_18 = 0;
+  __pyx_t_13 = __pyx_v_blocks; __Pyx_INCREF(__pyx_t_13); __pyx_t_19 = 0;
   for (;;) {
-    if (__pyx_t_18 >= PyList_GET_SIZE(__pyx_t_13)) break;
+    if (__pyx_t_19 >= PyList_GET_SIZE(__pyx_t_13)) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_12 = PyList_GET_ITEM(__pyx_t_13, __pyx_t_18); __Pyx_INCREF(__pyx_t_12); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 553, __pyx_L1_error)
+    __pyx_t_12 = PyList_GET_ITEM(__pyx_t_13, __pyx_t_19); __Pyx_INCREF(__pyx_t_12); __pyx_t_19++; if (unlikely(0 < 0)) __PYX_ERR(0, 553, __pyx_L1_error)
     #else
-    __pyx_t_12 = PySequence_ITEM(__pyx_t_13, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 553, __pyx_L1_error)
+    __pyx_t_12 = PySequence_ITEM(__pyx_t_13, __pyx_t_19); __pyx_t_19++; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 553, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_bl, __pyx_t_12);
@@ -12904,13 +12904,13 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyOb
  *             if len(idx) == 1:
  *                 c_ans[0][0].append(idx[0])
  */
-    __pyx_t_3 = __pyx_v_ans; __Pyx_INCREF(__pyx_t_3); __pyx_t_18 = 0;
+    __pyx_t_3 = __pyx_v_ans; __Pyx_INCREF(__pyx_t_3); __pyx_t_19 = 0;
     for (;;) {
-      if (__pyx_t_18 >= PyList_GET_SIZE(__pyx_t_3)) break;
+      if (__pyx_t_19 >= PyList_GET_SIZE(__pyx_t_3)) break;
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-      __pyx_t_10 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_18); __Pyx_INCREF(__pyx_t_10); __pyx_t_18++; if (unlikely(0 < 0)) __PYX_ERR(0, 563, __pyx_L1_error)
+      __pyx_t_10 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_19); __Pyx_INCREF(__pyx_t_10); __pyx_t_19++; if (unlikely(0 < 0)) __PYX_ERR(0, 563, __pyx_L1_error)
       #else
-      __pyx_t_10 = PySequence_ITEM(__pyx_t_3, __pyx_t_18); __pyx_t_18++; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 563, __pyx_L1_error)
+      __pyx_t_10 = PySequence_ITEM(__pyx_t_3, __pyx_t_19); __pyx_t_19++; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 563, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       #endif
       if ((likely(PyTuple_CheckExact(__pyx_t_10))) || (PyList_CheckExact(__pyx_t_10))) {
@@ -13236,7 +13236,6 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcov_blocks(CYTHON_UNUSED PyOb
   __Pyx_XDECREF(__pyx_v_gcov_indices);
   __Pyx_XDECREF(__pyx_v_unprocessed_indices);
   __Pyx_XDECREF(__pyx_v_xcov_indices);
-  __Pyx_XDECREF(__pyx_v_i);
   __Pyx_XDECREF(__pyx_v_new_indices);
   __Pyx_XDECREF(__pyx_v_ans);
   __Pyx_XDECREF(__pyx_v_bl);
@@ -50761,7 +50760,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Evaluate covariance matrix for elements of ``g``.
  * 
  */
-  __pyx_tuple__76 = PyTuple_Pack(22, __pyx_n_s_g, __pyx_n_s_compress, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_ga, __pyx_n_s_gb, __pyx_n_s_master_cov, __pyx_n_s_idx, __pyx_n_s_ga_d_indices, __pyx_n_s_gf, __pyx_n_s_g_indices, __pyx_n_s_unassigned_indices, __pyx_n_s_blocks, __pyx_n_s_gcov_indices, __pyx_n_s_unprocessed_indices, __pyx_n_s_xcov_indices, __pyx_n_s_i, __pyx_n_s_new_indices, __pyx_n_s_ans, __pyx_n_s_bl, __pyx_n_s_c_ans, __pyx_n_s_bcov); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(0, 440, __pyx_L1_error)
+  __pyx_tuple__76 = PyTuple_Pack(22, __pyx_n_s_g, __pyx_n_s_compress, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_i, __pyx_n_s_ga, __pyx_n_s_gb, __pyx_n_s_master_cov, __pyx_n_s_idx, __pyx_n_s_ga_d_indices, __pyx_n_s_gf, __pyx_n_s_g_indices, __pyx_n_s_unassigned_indices, __pyx_n_s_blocks, __pyx_n_s_gcov_indices, __pyx_n_s_unprocessed_indices, __pyx_n_s_xcov_indices, __pyx_n_s_new_indices, __pyx_n_s_ans, __pyx_n_s_bl, __pyx_n_s_c_ans, __pyx_n_s_bcov); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__76);
   __Pyx_GIVEREF(__pyx_tuple__76);
   __pyx_codeobj__77 = (PyObject*)__Pyx_PyCode_New(2, 0, 22, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__76, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov_blocks, 440, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__77)) __PYX_ERR(0, 440, __pyx_L1_error)
