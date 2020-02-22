@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 10.0.3 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 10.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -73,10 +73,13 @@ manipulating gaussian random variables, including:</p>
 <li><p><a class="reference internal" href="#gvar.mean" title="gvar.mean"><code class="xref any py py-func docutils literal notranslate"><span class="pre">mean</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract means.</p></li>
 <li><p><a class="reference internal" href="#gvar.sdev" title="gvar.sdev"><code class="xref any py py-func docutils literal notranslate"><span class="pre">sdev</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract standard deviations.</p></li>
 <li><p><a class="reference internal" href="#gvar.var" title="gvar.var"><code class="xref any py py-func docutils literal notranslate"><span class="pre">var</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract variances.</p></li>
+<li><p><a class="reference internal" href="#gvar.is_primary" title="gvar.is_primary"><code class="xref any py py-func docutils literal notranslate"><span class="pre">is_primary</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — test whether primary (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or derived (<code class="docutils literal notranslate"><span class="pre">False</span></code>) <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><a class="reference internal" href="#gvar.deriv" title="gvar.deriv"><code class="xref any py py-func docutils literal notranslate"><span class="pre">deriv</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">x)</span></code> — derivatives of <code class="docutils literal notranslate"><span class="pre">g</span></code> with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code>,</p></li>
 <li><p><a class="reference internal" href="#gvar.fmt" title="gvar.fmt"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — replace all <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary by string representations.</p></li>
 <li><p><a class="reference internal" href="#gvar.tabulate" title="gvar.tabulate"><code class="xref any py py-func docutils literal notranslate"><span class="pre">tabulate</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — tabulate entries in array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
 <li><p><a class="reference internal" href="#gvar.correlate" title="gvar.correlate"><code class="xref any py py-func docutils literal notranslate"><span class="pre">correlate</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">corr)</span></code> — add correlations to <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p></li>
 <li><p><a class="reference internal" href="#gvar.chi2" title="gvar.chi2"><code class="xref any py py-func docutils literal notranslate"><span class="pre">chi2</span></code></a><code class="docutils literal notranslate"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> — <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>.</p></li>
+<li><p><a class="reference internal" href="#gvar.qqplot" title="gvar.qqplot"><code class="xref any py py-func docutils literal notranslate"><span class="pre">qqplot</span></code></a><code class="docutils literal notranslate"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> — QQ plot of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>,</p></li>
 <li><p><a class="reference internal" href="#gvar.equivalent" title="gvar.equivalent"><code class="xref any py py-func docutils literal notranslate"><span class="pre">equivalent</span></code></a><code class="docutils literal notranslate"><span class="pre">(g1,</span> <span class="pre">g2)</span></code> — <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s the same in <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code>?</p></li>
 <li><p><a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcov</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute covariance matrix.</p></li>
 <li><p><a class="reference internal" href="#gvar.evalcov_blocks" title="gvar.evalcov_blocks"><code class="xref any py py-func docutils literal notranslate"><span class="pre">evalcov_blocks</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — compute diagonal blocks of covariance matrix.</p></li>
@@ -258,6 +261,30 @@ matrices and correlation/comparison information can be extracted from arrays
 <p><code class="docutils literal notranslate"><span class="pre">g</span></code> can be a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary containing
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Result has the same layout as <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>The variance is set to 0.0 for elements of <code class="docutils literal notranslate"><span class="pre">g</span></code> that are not <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.is_primary">
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">is_primary</code><span class="sig-paren">(</span><em class="sig-param">g</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.is_primary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether or not the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> are primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>A <em>primary</em> <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> is one created using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> (or a
+function of such a variable). A <em>derived</em> <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> is one that
+is constructed from arithmetic expressions and functions that
+combine multiple primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. The standard deviations for
+all <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s originate with the primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.
+In particular,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">mean</span> <span class="o">+</span> <span class="n">sum_p</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">p</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="o">*</span> <span class="n">dz</span><span class="o">/</span><span class="n">dp</span>
+</pre></div>
+</div>
+<p>is true for any <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">z</span></code>, where the sum is over all primary
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">g</span></code> can be a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary containing
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. The result has the same layout as <code class="docutils literal notranslate"><span class="pre">g</span></code>.
+Each <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> is replaced by <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code> depending upon whether
+it is primary or not.</p>
+<p>When the same <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> appears in <code class="docutils literal notranslate"><span class="pre">g</span></code>, only the first appearance
+is marked as a primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>. This avoids double counting
+the same primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> — the list of primaries is a minimal list.</p>
 </dd></dl>
 
 <dl class="function">
@@ -487,13 +514,17 @@ of <code class="docutils literal notranslate"><span class="pre">g1</span></code>
 
 <dl class="function">
 <dt id="gvar.chi2">
-<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">chi2</code><span class="sig-paren">(</span><em class="sig-param">g1</em>, <em class="sig-param">g2</em>, <em class="sig-param">svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.chi2" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">chi2</code><span class="sig-paren">(</span><em class="sig-param">g1</em>, <em class="sig-param">g2</em>, <em class="sig-param">svdcut=1e-12</em>, <em class="sig-param">dof=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.chi2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute chi**2 of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">chi**2</span></code> is a measure of whether the multi-dimensional
-Gaussian distributions <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> (dictionaries or arrays)
-agree with each other — that is, do their means agree
-within errors for corresponding elements. The probability is high
-if <code class="docutils literal notranslate"><span class="pre">chi2(g1,g2)/chi2.dof</span></code> is of order 1 or smaller.</p>
+<p>chi**2 equals <code class="docutils literal notranslate"><span class="pre">dg.invcov.dg,</span> <span class="pre">where</span> <span class="pre">``dg</span> <span class="pre">=</span> <span class="pre">g1</span> <span class="pre">-</span> <span class="pre">g2</span></code> and
+<code class="docutils literal notranslate"><span class="pre">invcov</span></code> is the inverse of <code class="docutils literal notranslate"><span class="pre">dg</span></code>’s covariance matrix.
+It is a measure  of how well multi-dimensional Gaussian
+distributions <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> (dictionaries or arrays)
+agree with each other —  that is, do their means agree
+within errors for corresponding elements. The probability
+is high if <code class="docutils literal notranslate"><span class="pre">chi2(g1,g2)/dof</span></code> is of order 1 or smaller,
+where <code class="docutils literal notranslate"><span class="pre">dof</span></code> is the number  of degrees of freedom
+being compared.</p>
 <p>Usually <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> are dictionaries with the same keys,
 where <code class="docutils literal notranslate"><span class="pre">g1[k]</span></code> and <code class="docutils literal notranslate"><span class="pre">g2[k]</span></code> are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s having the same shape. Alternatively <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code>
@@ -504,22 +535,128 @@ the numbers came from the distribution specified by the other
 argument.</p>
 <p>One or the other of <code class="docutils literal notranslate"><span class="pre">g1</span></code> or <code class="docutils literal notranslate"><span class="pre">g2</span></code> can be missing keys, or missing
 elements from arrays. Only the parts of <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> that
-overlap are used. Also setting <code class="docutils literal notranslate"><span class="pre">g2=None</span></code> is equivalent to replacing its
-elements by zeros.</p>
-<p><code class="docutils literal notranslate"><span class="pre">chi**2</span></code> is computed from the inverse of the covariance matrix
-of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>. The matrix inversion can be sensitive to roundoff
-errors. In such cases, SVD cuts can be applied by setting
-parameters <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>; see the documentation
-for <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a>, which is used to apply the cut.</p>
-<p>The return value is the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code>. Extra attributes attached to this
-value give additional information:</p>
-<ul class="simple">
-<li><p><strong>dof</strong> — Number of degrees of freedom (that is, the number of variables
-compared).</p></li>
-<li><p><strong>Q</strong> — The probability that the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> could have been larger,
-by chance, even if <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> agree. Values smaller than 0.1
-or so suggest that they do not agree. Also called the <em>p-value</em>.</p></li>
+overlap are used. Also setting <code class="docutils literal notranslate"><span class="pre">g2=None</span></code> is equivalent
+to replacing its elements by zeros.</p>
+<p>A typical application tests whether distribution <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code>
+are consistent with each other (within errors): the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">chi2</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">chi2</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gvar</span><span class="o">.</span><span class="n">fmt_chi2</span><span class="p">(</span><span class="n">chi2</span><span class="p">))</span>
+<span class="go">chi2/dof = 1.1 [100]    Q = 0.26</span>
+</pre></div>
+</div>
+<p>shows that the distributions are reasonably consistent. The
+number of degrees of freedom (here 100) in this example equals the
+number of variables from <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> that are compared;
+this can be changed using the <code class="docutils literal notranslate"><span class="pre">dof</span></code> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Specifies a multi-dimensional
+Gaussian distribution. Alternatively the elements can be
+numbers instead of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, in which case <code class="docutils literal notranslate"><span class="pre">g1</span></code> specifies
+a sample from a distribution.</p></li>
+<li><p><strong>g2</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Specifies a multi-dimensional
+Gaussian distribution. Alternatively the elements can be
+numbers instead of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, in which case <code class="docutils literal notranslate"><span class="pre">g2</span></code> specifies
+a sample from a distribution. Setting <code class="docutils literal notranslate"><span class="pre">g2=None</span></code>
+(default) is equivalent to setting its elements all to zero.</p></li>
+<li><p><strong>svdcut</strong> (<em>float</em><em> or </em><em>None</em>) – SVD cut used when inverting the covariance
+matrix of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>. See documentation for <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a>
+for more information.</p></li>
+<li><p><strong>dof</strong> (<em>int</em><em> or </em><em>None</em>) – Number of independent degrees of freedom in
+<code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>. This is set equal to the number of elements in
+<code class="docutils literal notranslate"><span class="pre">g1-g2</span></code> if <code class="docutils literal notranslate"><span class="pre">dof=None</span></code> is set. This parameter affects
+the <code class="docutils literal notranslate"><span class="pre">Q</span></code> value assigned to the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code>.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>The return value is the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code>. Extra attributes attached
+to this number give additional information:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>dof</strong> — Number of degrees of freedom (that is, the number</dt><dd><p>of variables compared if not specified).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Q</strong> — The probability that the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> could have</dt><dd><p>been larger, by chance, even if <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> agree. Values
+smaller than 0.1 or so suggest that they do not agree.
+Also called the <em>p-value</em>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>residuals</strong> — Decomposition of the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code> in terms of the</dt><dd><p>eigenmodes of the correlation matrix: <code class="docutils literal notranslate"><span class="pre">chi**2</span> <span class="pre">=</span> <span class="pre">sum(residuals**2)</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.qqplot">
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">qqplot</code><span class="sig-paren">(</span><em class="sig-param">g1</em>, <em class="sig-param">g2</em>, <em class="sig-param">plot=None</em>, <em class="sig-param">svdcut=1e-12</em>, <em class="sig-param">dof=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.qqplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>QQ plot <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>.</p>
+<p>The QQ plot compares the distribution of the means of Gaussian
+distribution <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code> to that of random samples from the
+distribution. The resulting plot will approximate a straight
+line along the diagonal of the plot (dashed black line) if
+the means have a Gaussian distribution about zero with
+the correct standard deviations.</p>
+<p>Usually <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> are dictionaries with the same keys,
+where <code class="docutils literal notranslate"><span class="pre">g1[k]</span></code> and <code class="docutils literal notranslate"><span class="pre">g2[k]</span></code> are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s having the same shape. Alternatively <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code>
+can be <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s having the same shape.</p>
+<p>One of <code class="docutils literal notranslate"><span class="pre">g1</span></code> or <code class="docutils literal notranslate"><span class="pre">g2</span></code> can contain numbers instead of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>One or the other of <code class="docutils literal notranslate"><span class="pre">g1</span></code> or <code class="docutils literal notranslate"><span class="pre">g2</span></code> can be missing keys, or missing
+elements from arrays. Only the parts of <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> that
+overlap are used. Also setting <code class="docutils literal notranslate"><span class="pre">g2=None</span></code> is equivalent
+to replacing its elements by zeros.</p>
+<p>In a typical application, the plot displayed by</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gvar</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">gsample</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>tests whether <code class="docutils literal notranslate"><span class="pre">gsample</span></code> is likely a random sample
+from a multi-dimensional Gaussian distribtuion <code class="docutils literal notranslate"><span class="pre">g</span></code>.
+It is consistent with being a random sample if the
+QQ plot is a straight line through the origin
+with unit slope. The is most useful when there are
+many variables (<code class="docutils literal notranslate"><span class="pre">g.size</span> <span class="pre">&gt;&gt;</span> <span class="pre">1</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g1</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Specifies a multi-dimensional
+Gaussian distribution. Alternatively the elements can be
+numbers instead of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, in which case <code class="docutils literal notranslate"><span class="pre">g1</span></code> specifies
+a sample from a distribution.</p></li>
+<li><p><strong>g2</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Specifies a multi-dimensional
+Gaussian distribution. Alternatively the elements can be
+numbers instead of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, in which case <code class="docutils literal notranslate"><span class="pre">g2</span></code> specifies
+a sample from a distribution. Setting <code class="docutils literal notranslate"><span class="pre">g2=None</span></code>
+(default) is equivalent to setting its elements all to zero.</p></li>
+<li><p><strong>plot</strong> – a <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib</span></code> plotter. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default),
+uses <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code>.</p></li>
+<li><p><strong>svdcut</strong> (<em>float</em><em> or </em><em>None</em>) – SVD cut used when inverting the covariance
+matrix of <code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>. See documentation for <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a>
+for more information.</p></li>
+<li><p><strong>dof</strong> (<em>int</em><em> or </em><em>None</em>) – Number of independent degrees of freedom in
+<code class="docutils literal notranslate"><span class="pre">g1-g2</span></code>. This is set equal to the number of elements in
+<code class="docutils literal notranslate"><span class="pre">g1-g2</span></code> if <code class="docutils literal notranslate"><span class="pre">dof=None</span></code> is set. This parameter affects
+the <code class="docutils literal notranslate"><span class="pre">Q</span></code> value assigned to the <code class="docutils literal notranslate"><span class="pre">chi**2</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Plotter <code class="docutils literal notranslate"><span class="pre">plot</span></code>.</p>
+</dd>
+</dl>
+<p>This method requires the <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy</span></code> and <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib</span></code> modules.</p>
 </dd></dl>
 
 <dl class="function">
@@ -581,7 +718,9 @@ it describes a general (multi-dimensional) Gaussian distribution.
 Calling <code class="docutils literal notranslate"><span class="pre">gvar.dump(g,</span> <span class="pre">'filename')</span></code> writes a serialized representation
 of <code class="docutils literal notranslate"><span class="pre">g</span></code> into the file named <code class="docutils literal notranslate"><span class="pre">filename</span></code>. The Gaussian distribution
 described by <code class="docutils literal notranslate"><span class="pre">g</span></code> can be recovered later using <code class="docutils literal notranslate"><span class="pre">gvar.load('filename')</span></code>.
-Correlations between different <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> are preserved.</p>
+Correlations between different <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> are preserved, as
+are relationships (i.e., derivatives) between derived <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and
+any primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>Typical usage is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create file xxx.pickle containing GVars in g</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
@@ -602,6 +741,19 @@ not strings. A workaround is used here that succeeds provided
 a wide variety of standard key types including strings, integers,
 and tuples of strings and/or integers. Try <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> if the
 workaround fails.</p>
+<p>The partial variances for derived <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> from
+primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> are preserved by <a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a>.
+(These are used, for example, to calculate error budgets.)
+Partial variances from derived (rather than primary) <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+are unreliable unless every primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> that contributes
+to the covariances in <code class="docutils literal notranslate"><span class="pre">g</span></code> is included in <code class="docutils literal notranslate"><span class="pre">g</span></code>. To guarantee
+that this is the case set keyword <code class="docutils literal notranslate"><span class="pre">add_dependencies=True</span></code>.
+This can greatly increase the size of the output file, however,
+and so should only be done if error budgets, etc. are needed.
+(The cost of evaluating covariance matrices (<a class="reference internal" href="#gvar.evalcov" title="gvar.evalcov"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.evalcov()</span></code></a>)
+for the reconstituted <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s is also increased if there
+are large numbers of primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.) The default is
+<code class="docutils literal notranslate"><span class="pre">add_dependencies=False</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -618,6 +770,10 @@ the method is inferred from the filename’s extension:
 <code class="docutils literal notranslate"><span class="pre">.json</span></code> for <code class="docutils literal notranslate"><span class="pre">'json'</span></code>; and <code class="docutils literal notranslate"><span class="pre">.pickle</span></code> or <code class="docutils literal notranslate"><span class="pre">.pkl</span></code>
 or <code class="docutils literal notranslate"><span class="pre">.p</span></code> for <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>. If that fails the method
 defaults to <code class="docutils literal notranslate"><span class="pre">'json'</span></code>.</p></li>
+<li><p><strong>add_dependencies</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, automatically includes
+all primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that contribute to the covariances
+of the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> but are not already in <code class="docutils literal notranslate"><span class="pre">g</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>kargs</strong> (<em>dict</em>) – Additional arguments, if any, that are passed to
 the underlying serializer (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> or <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code>).</p></li>
 </ul>
@@ -654,6 +810,10 @@ object containing the serialized data is returned. Otherwise
 are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
 <li><p><strong>method</strong> – Serialization method, which should be either
 <code class="docutils literal notranslate"><span class="pre">'json'</span></code> or <code class="docutils literal notranslate"><span class="pre">'pickle'</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'json'</span></code>.</p></li>
+<li><p><strong>add_dependencies</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, automatically includes
+all primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that contribute to the covariances
+of the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> but are not already in <code class="docutils literal notranslate"><span class="pre">g</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -766,18 +926,29 @@ in <code class="docutils literal notranslate"><span class="pre">data</span></cod
 </dl>
 </dd></dl>
 
-<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s contain information about derivatives with respect to the <em>independent</em>
+<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s contain information about derivatives with respect to the <em>primary</em>
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from which they were constructed. This information can be extracted using:</p>
 <dl class="function">
 <dt id="gvar.deriv">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.deriv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute first derivatives wrt <code class="docutils literal notranslate"><span class="pre">x</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">g</span></code> can be a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary containing
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Result has the same layout as <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">x</span></code> must be an <em>primary</em> <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, which is a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> created by a
-call to <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> (<em>e.g.</em>, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">gvar.gvar(xmean,</span> <span class="pre">xsdev)</span></code>) or a
-function <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> of such a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>. (More precisely, <code class="docutils literal notranslate"><span class="pre">x.der</span></code> must have
-only one nonzero entry.)</p>
+<dd><p>Compute partial derivatives of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> w.r.t. primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<p>Primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are those created using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> (or any function of
+such a variable); see <a class="reference internal" href="#gvar.is_primary" title="gvar.is_primary"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.is_primary()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary whose values are
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>x</strong> – A <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Arrays are typically one
+dimensional but can have any shape.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">g</span></code> but with each <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> in it replaced by an array of
+derivatives with respect to the primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">x</span></code>.
+The derivatives have the same shape as <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <p>The following functions are used to generate random arrays or dictionaries
@@ -1287,18 +1458,20 @@ deviation.</p>
 <dl class="method">
 <dt id="gvar.GVar.deriv">
 <code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.deriv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with respest to <em>primary</em> <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
-<p>All <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are constructed from primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.
-<code class="docutils literal notranslate"><span class="pre">self.deriv(x)</span></code> returns the partial derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with
-respect to primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">x</span></code>, holding all of the other
+<dd><p>Derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with respest to primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<p>All <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are constructed from primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (see
+<a class="reference internal" href="#gvar.is_primary" title="gvar.is_primary"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.is_primary()</span></code></a>).  <code class="docutils literal notranslate"><span class="pre">self.deriv(x)</span></code> returns the
+partial derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with respect to
+primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">x</span></code>, holding all of the other
 primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s constant.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – A primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> (or a function of a single
-primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>).</p>
+<dd class="field-odd"><p><strong>x</strong> – A primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or an array of primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code> with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<dd class="field-even"><p>Derivatives of <code class="docutils literal notranslate"><span class="pre">self</span></code> with respect to the
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">x</span></code>.  The result has the same
+shape as <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2107,7 +2280,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.0.3 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

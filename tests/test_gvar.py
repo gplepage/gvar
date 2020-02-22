@@ -867,14 +867,22 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(f.deriv(y), 3.)
         with self.assertRaises(ValueError):
             f.deriv(x+y)
+        self.assertEqual(deriv(f, [x, y]).tolist(), [4. * x.mean, 3.])
+        self.assertEqual(deriv(f, [[x], [y]]).tolist(), [[4. * x.mean], [3.]])
+        self.assertEqual(deriv([f], [x, y]).tolist(), [[4. * x.mean, 3.]])
         f = [2 * x + 3 * y, 4 * x]
         self.assertEqual(deriv(f, x).tolist(), [2., 4.])
         self.assertEqual(deriv(f, y).tolist(), [3., 0.])
         with self.assertRaises(ValueError):
             deriv(f, x+y)
+        df = deriv(f, [[x, y]])
+        self.assertEqual(df.tolist(), [[[2., 3.]], [[4., 0.]]])
         f = BufferDict([('a', 2 * x + 3 * y), ('b', 4 * x)])
         self.assertEqual(deriv(f, x), BufferDict([('a',2.), ('b',4.)]))
         self.assertEqual(deriv(f, y), BufferDict([('a',3.), ('b',0.)]))
+        df = deriv(f, [x, y])
+        self.assertEqual(df['a'].tolist(), [2., 3.])
+        self.assertEqual(df['b'].tolist(), [4., 0.])        
         with self.assertRaises(ValueError):
             deriv(f, x+y)
 
@@ -1511,6 +1519,54 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             _test(g, method='pickle')    
             _test(g, method='dict')
 
+    def test_dump_load_errbudget(self):
+        def _test(d, add_dependencies=False):
+            newd = loads(dumps(d, add_dependencies=add_dependencies))
+            str1 = fmt_values(d) + fmt_errorbudget(
+                outputs=dict(a=d['a'], b=d['b']), 
+                inputs=dict(x=d['x'], y=d['y'], z=d['z']),
+                )
+            d = newd
+            str2 = fmt_values(d) + fmt_errorbudget(
+                outputs=dict(a=d['a'], b=d['b']), 
+                inputs=dict(x=d['x'], y=d['y'], z=d['z']),
+                )
+            self.assertEqual(str1, str2)    
+        # all primaries included
+        x = gv.gvar('1(2)')
+        y = gv.gvar('2(3)') ** 2
+        z = gv.gvar('3(4)') ** 0.5 
+        a  = x*y
+        b = x*y - z
+        d = dict(a=a, b=b, x=x, y=y, z=z)
+        _test(d)
+        # a,b are primaries
+        a, b = gvar(mean([d['a'], d['b']]), evalcov([d['a'], d['b']]))
+        d['a'] = a
+        d['b'] = b 
+        _test(d)
+        # no primaries included explicitly
+        x = gv.gvar('1(2)') + gv.gvar('1(2)')
+        y = gv.gvar('2(3)') ** 2 + gv.gvar('3(1)')
+        z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
+        a  = x*y
+        b = x*y - z + gv.gvar('10(1)')
+        d = dict(a=a, b=b, x=x, y=y, z=z)
+        _test(d, add_dependencies=True)
+
+    def test_dependencies(self):
+        def _test(g):
+            dep = dependencies(g)
+            new_g = g.mean + sum(dep * g.deriv(dep))
+            self.assertEqual(str(new_g - g), str(gvar('0(0)')))
+            self.assertTrue(equivalent(g, new_g))
+        x = gv.gvar('1(2)')
+        y = gv.gvar('2(3)') ** 2
+        z = gv.gvar('3(4)') ** 0.5 * y
+        _test(x * y)
+        _test(x * y - z)
+
+
     def test_dumps_loads(self):
         gs = gv.gvar('1(2)')
         ga = (gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)') )
@@ -1606,6 +1662,28 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         dnew = dict(x=xnew, y0=x[0])
         self.assertTrue(not equivalent(d, dnew))
 
+    def test_is_primary(self):
+        " is_primary(g) "
+        self.assertTrue(gvar('1(1)').is_primary())
+        self.assertTrue((2 * gvar('1(1)')).is_primary())
+        self.assertFalse((gvar('2(1)') * gvar('1(1)')).is_primary())
+        gs = gvar('1(1)')
+        ga = gvar(2 * [3 * ['1(1)']])
+        gd = dict(s=gs, a=ga)
+        self.assertEqual(is_primary(gs), True)
+        self.assertEqual(is_primary(ga).tolist(), 2 * [3 * [True]])
+        self.assertEqual(is_primary(gd).buf.tolist(), 7 * [True])
+        self.assertEqual(is_primary([gs, gs]).tolist(), [True, False])
+        gs = gs + gvar('1(1)')
+        ga[0, 0] += gvar('2(1)')
+        ga[1, 0] *= 5.
+        gd = BufferDict()
+        gd['s'] = gs 
+        gd['a'] = ga
+        self.assertEqual(is_primary(gs), False)
+        self.assertEqual(is_primary(ga).tolist(), [[False, True, True], [True, True, True]])
+        self.assertEqual(is_primary(gd).buf.tolist(), [False, False] + 5 * [True])
+
     def test_disassemble(self):
         " d = disassemble(g); reassemble(d) "
         # gvar
@@ -1674,6 +1752,155 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertTrue(
                 abs(stats.minus.mean - g.sdev) < 5 * stats.minus.sdev
                 )
+
+# def chi2(g1, g2=None, svdcut=1e-12, nocorr=False, dof=None):
+#     """ Compute chi**2 of ``dg = g1-g2``.
+
+#     ``chi**2 = dg.invcov.dg``, where ``dg = g1 - g2`` and 
+#     ``invcov`` is the inverse of ``dg``'s covariance matrix, 
+#     provides a measure  of how well multi-dimensional Gaussian 
+#     distributions ``g1`` and ``g2`` (dictionaries or arrays)  
+#     agree with each other ---  that is, do their means agree 
+#     within errors for corresponding elements. The probability 
+#     is high if ``chi2(g1,g2)/dof`` is of order 1 or smaller,
+#     where ``dof`` is the number  of degrees of freedom
+#     being compared.
+
+#     Usually ``g1`` and ``g2`` are dictionaries with the same keys,
+#     where ``g1[k]`` and ``g2[k]`` are |GVar|\s or arrays of
+#     |GVar|\s having the same shape. Alternatively ``g1`` and ``g2``
+#     can be |GVar|\s, or arrays of |GVar|\s having the same shape.
+
+#     One of ``g1`` or ``g2`` can contain numbers instead of |GVar|\s,
+#     in which case ``chi**2`` is a measure of the likelihood that
+#     the numbers came from the distribution specified by the other
+#     argument.
+
+#     One or the other of ``g1`` or ``g2`` can be missing keys, or missing
+#     elements from arrays. Only the parts of ``g1`` and ``g2`` that
+#     overlap are used. Also setting ``g2=None`` is equivalent 
+#     to replacing its elements by zeros.
+
+#     Args:
+#         g1: |GVar| or array of |GVar|\s, or a dictionary whose values are
+#             |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
+#             Gaussian distribution. 
+#         g2: |GVar| or array of |GVar|\s, or a dictionary whose values are
+#             |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
+#             Gaussian distribution. Alternatively the elements can be 
+#             numbers instead of |GVar|\s, in which case ``g2`` can specify 
+#             a random sample from a distribution. Setting ``g2=None`` 
+#             (default) is equivalent to setting its elements all to zero.
+#         svdcut (float or None): SVD cut used when inverting the covariance
+#             matrix of ``g1-g2``. See documentation for :func:`gvar.svd` 
+#             for more information.
+#         nocorr (bool): Correlations between different |GVar|\s are ignored
+#             if ``nocorr=True``; otherwise they are included (default).
+#         dof (int or None): Number of independent degrees of freedom in
+#             ``g1-g2``. This is set equal to the number of elements in
+#             ``g1-g2`` if ``dof=None`` is set. This parameter affects
+#             the ``Q`` value assigned to the ``chi**2``.
+    
+#     Returns:
+#         The return value is the ``chi**2``. Extra attributes attached 
+#         to this number give additional information:
+
+#         - **dof** --- Number of degrees of freedom (that is, the number 
+#         of variables compared if not specified).
+
+#         - **Q** --- The probability that the ``chi**2`` could have 
+#         been larger, by chance, even if ``g1`` and ``g2`` agree. Values 
+#         smaller than 0.1 or so suggest that they do not agree. 
+#         Also called the *p-value*.
+
+#         - **residuals** --- Decomposition of the ``chi**2`` in terms of the 
+#         eigenmodes of the correlation matrix: ``chi**2 = sum(residuals**2)``.
+
+#     """
+#     # customized class for answer
+#     class ans(float):
+#         def __new__(cls, chi2, dof, res):
+#             return float.__new__(cls, chi2)
+#         def __init__(self, chi2, dof, res):
+#             self.dof = dof
+#             self.chi2 = chi2
+#             self.residuals = res
+#         def _get_Q(self):
+#             return gammaQ(self.dof / 2., self.chi2 / 2.)  
+#         Q = property(_get_Q)
+
+#     # leaving nocorr (turn off correlations) undocumented because I
+#     #   suspect I will remove it
+#     if g2 is None:
+#         diff = (
+#             BufferDict(g1).buf if hasattr(g1, 'keys') else 
+#             numpy.asarray(g1).flatten()
+#             )
+#     elif hasattr(g1, 'keys') and hasattr(g2, 'keys'):
+#         # g1 and g2 are dictionaries
+#         g1 = BufferDict(g1)
+#         g2 = BufferDict(g2)
+#         diff = BufferDict()
+#         keys = set(g1.keys())
+#         keys = keys.intersection(g2.keys())
+#         for k in keys:
+#             g1k = g1[k]
+#             g2k = g2[k]
+#             shape = tuple(
+#                 [min(s1,s2) for s1, s2 in zip(numpy.shape(g1k), numpy.shape(g2k))]
+#                 )
+#             diff[k] = numpy.zeros(shape, object)
+#             if len(shape) == 0:
+#                 diff[k] = g1k - g2k
+#             else:
+#                 for i in numpy.ndindex(shape):
+#                     diff[k][i] = g1k[i] - g2k[i]
+#         diff = diff.buf
+#     elif not hasattr(g1, 'keys') and not hasattr(g2, 'keys'):
+#         # g1 and g2 are arrays or scalars
+#         g1 = numpy.asarray(g1)
+#         g2 = numpy.asarray(g2)
+#         shape = tuple(
+#             [min(s1,s2) for s1, s2 in zip(numpy.shape(g1), numpy.shape(g2))]
+#             )
+#         diff = numpy.zeros(shape, object)
+#         if len(shape) == 0:
+#             diff = numpy.array(g1 - g2)
+#         else:
+#             for i in numpy.ndindex(shape):
+#                 diff[i] = g1[i] - g2[i]
+#         diff = diff.flatten()
+#     else:
+#         # g1 and g2 are something else
+#         raise ValueError(
+#             'cannot compute chi**2 for types ' + str(type(g1)) + ' ' +
+#             str(type(g2))
+#             )
+#     if diff.size == 0:
+#         return ans(0.0, 0)
+#     if nocorr:
+#         # ignore correlations
+#         res = mean(diff) / sdev(diff)
+#         chi2 = numpy.sum(res ** 2)
+#         if dof is None:
+#             dof = len(diff)
+#     else:
+#         diffmod, i_wgts = svd(diff, svdcut=svdcut, wgts=-1)
+#         diffmean = mean(diffmod)
+#         res = numpy.zeros(diffmod.shape, float)
+#         i, wgts = i_wgts[0]
+#         res[i] = diffmean[i] * wgts
+#         for i, wgts in i_wgts[1:]:
+#             res[i[:wgts.shape[0]]] = wgts.dot(diffmean[i])
+#         chi2 = numpy.sum(res ** 2)
+#         # chi2 = 0.0
+#         # if len(i) > 0:
+#         #     chi2 += numpy.sum((diffmean[i] * wgts) ** 2)
+#         # for i, wgts in i_wgts[1:]:
+#         #     chi2 += numpy.sum(wgts.dot(diffmean[i]) ** 2)
+#         if dof is None:
+#             dof = sum(len(wgts) for i, wgts in i_wgts)
+#     return ans(chi2, dof, res)
 
 
 if __name__ == '__main__':

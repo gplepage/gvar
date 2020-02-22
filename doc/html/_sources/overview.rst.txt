@@ -380,9 +380,15 @@ as arguments.
 pieces of information: 1) its mean value; 2) its derivatives with respect to
 the primary |GVar|\s (created by :func:`gvar.gvar`);
 and 3) the location of the covariance matrix for the primary |GVar|\s.
-The derivatives and covariance matrix allow one to compute the
-standard deviation of the |GVar|, as well as correlations between it and any
-other function of the primary |GVar|\s. The derivatives for
+The standard deviations and covariances for all |GVar|\s originate with 
+the primary |GVar|\s: any |GVar| |~| ``z`` satisfies :: 
+
+    z = z.mean + sum_p (p - p.mean) * dz/dp
+
+where the sum is over all primary |GVar|\s |~| ``p``. 
+:mod:`gvar` uses this expression 
+to calculate covariances from the derivatives, 
+and the covariance matrix of the primary |GVar|\s. The derivatives for
 derived |GVar|\s are computed automatically, using *automatic
 differentiation*.
 
@@ -390,8 +396,7 @@ The derivative of a |GVar| ``f`` with
 respect to a primary |GVar| ``x`` is obtained from ``f.deriv(x)``. A list
 of derivatives with respect to all primary |GVar|\s is given by ``f.der``,
 where the order of derivatives is the same as the order in which the primary
-|GVar|\s were created.
-
+|GVar|\s were created. 
 
 A |GVar| can be constructed at a
 very low level by supplying all the three
@@ -403,7 +408,7 @@ where ``fmean`` is the mean, ``fder`` is an array where ``fder[i]`` is the
 derivative of ``f`` with respect to the ``i``-th primary |GVar|
 (numbered in the order in which they were created using :func:`gvar.gvar`),
 and ``cov`` is the covariance matrix for the primary |GVar|\s (easily
-obtained from an existing |GVar| ``x`` using ``x.cov``).
+obtained from ``gvar.gvar.cov``).
 
 Error Budgets from |GVar|\s
 ------------------------------------

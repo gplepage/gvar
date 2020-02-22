@@ -41,6 +41,10 @@ manipulating gaussian random variables, including:
 
     - :any:`var`\ ``(g)`` --- extract variances.
 
+    - :any:`is_primary`\ ``(g)`` --- test whether primary (``True``) or derived (``False``) |GVar|\s.
+
+    - :any:`deriv`\ ``(g, x)`` --- derivatives of ``g`` with respect to ``x``,
+    
     - :any:`fmt`\ ``(g)`` --- replace all |GVar|\s in array/dictionary by string representations.
 
     - :any:`tabulate`\ ``(g)`` --- tabulate entries in array/dictionary of |GVar|\s.
@@ -48,6 +52,8 @@ manipulating gaussian random variables, including:
     - :any:`correlate`\ ``(g, corr)`` --- add correlations to |GVar|\s in array/dictionary ``g``.
 
     - :any:`chi2`\ ``(g1, g2)`` --- ``chi**2`` of ``g1-g2``.
+
+    - :any:`qqplot`\ ``(g1, g2)`` --- QQ plot of ``g1-g2``,
 
     - :any:`equivalent`\ ``(g1, g2)`` --- |GVar|\s the same in ``g1`` and ``g2``?
 
@@ -122,6 +128,8 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.var(g)
 
+.. autofunction:: gvar.is_primary(g)
+
 .. autofunction:: gvar.fmt(g, ndecimal=None, sep='')
 
 .. autofunction:: gvar.tabulate(g, ncol=1, headers=True, offset='', ndecimal=None)
@@ -140,7 +148,9 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.uncorrelated(g1, g2)
 
-.. autofunction:: gvar.chi2(g1, g2, svdcut=1e-12)
+.. autofunction:: gvar.chi2(g1, g2, svdcut=1e-12, dof=None)
+
+.. autofunction:: gvar.qqplot(g1, g2, plot=None, svdcut=1e-12, dof=None)
 
 .. autofunction:: gvar.fmt_chi2(f)
 
@@ -162,7 +172,7 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.reassemble(data, cov=gvar.gvar.cov)
 
-|GVar|\s contain information about derivatives with respect to the *independent*
+|GVar|\s contain information about derivatives with respect to the *primary*
 |GVar|\s from which they were constructed. This information can be extracted using:
 
 .. autofunction:: gvar.deriv(g, x)

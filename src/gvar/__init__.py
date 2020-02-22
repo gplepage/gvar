@@ -206,14 +206,101 @@ def gvar_factory(cov=None):
     """
     return GVarFactory(cov)
 
-def chi2(g1, g2=None, svdcut=1e-12, nocorr=False):
+def qqplot(g1, g2=None, plot=None, svdcut=1e-12, dof=None, nocorr=False):
+    """ QQ plot ``g1-g2``.
+
+    The QQ plot compares the distribution of the means of Gaussian 
+    distribution ``g1-g2`` to that of random samples from the 
+    distribution. The resulting plot will approximate a straight 
+    line along the diagonal of the plot (dashed black line) if 
+    the means have a Gaussian distribution about zero with
+    the correct standard deviations.
+
+    Usually ``g1`` and ``g2`` are dictionaries with the same keys,
+    where ``g1[k]`` and ``g2[k]`` are |GVar|\s or arrays of
+    |GVar|\s having the same shape. Alternatively ``g1`` and ``g2``
+    can be |GVar|\s, or arrays of |GVar|\s having the same shape.
+
+    One of ``g1`` or ``g2`` can contain numbers instead of |GVar|\s.
+
+    One or the other of ``g1`` or ``g2`` can be missing keys, or missing
+    elements from arrays. Only the parts of ``g1`` and ``g2`` that
+    overlap are used. Also setting ``g2=None`` is equivalent 
+    to replacing its elements by zeros.
+
+    In a typical application, the plot displayed by ::
+
+        gvar.qqplot(gsample, g).show()
+
+    tests whether ``gsample`` is likely a random sample  
+    from a multi-dimensional Gaussian distribtuion ``g``. 
+    It is consistent with being a random sample if the 
+    QQ plot is a straight line through the origin
+    with unit slope. The is most useful when there are 
+    many variables (``g.size >> 1``).
+
+    Args:
+        g1: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
+            Gaussian distribution. Alternatively the elements can be 
+            numbers instead of |GVar|\s, in which case ``g1`` specifies 
+            a sample from a distribution.
+        g2: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
+            Gaussian distribution. Alternatively the elements can be 
+            numbers instead of |GVar|\s, in which case ``g2`` specifies 
+            a sample from a distribution. Setting ``g2=None`` 
+            (default) is equivalent to setting its elements all to zero.
+        plot: a :mod:`matplotlib` plotter. If ``None`` (default), 
+            uses ``matplotlib.pyplot``.
+        svdcut (float or None): SVD cut used when inverting the covariance
+            matrix of ``g1-g2``. See documentation for :func:`gvar.svd` 
+            for more information.
+        dof (int or None): Number of independent degrees of freedom in
+            ``g1-g2``. This is set equal to the number of elements in
+            ``g1-g2`` if ``dof=None`` is set. This parameter affects
+            the ``Q`` value assigned to the ``chi**2``.
+
+    Returns:
+        Plotter ``plot``.
+
+    This method requires the :mod:`scipy` and :mod:`matplotlib` modules.
+    """
+    try:
+        import scipy 
+        from scipy import stats 
+    except ImportError:
+        warnings.warn('scipy module not installed; needed for qqplot_residuals()')
+        return
+    if plot is None:
+        import matplotlib.pyplot as plot
+    chi2g1g2 = chi2(g1, g2, svdcut=svdcut, nocorr=nocorr, dof=dof)
+    (x, y), (s,y0,r) = stats.probplot(chi2g1g2.residuals, plot=plot, fit=True)
+    minx = min(x)
+    maxx = max(x)
+    plot.plot([minx, maxx], [minx, maxx], 'k:')
+    text = (
+        '{}\n' r'residual = {:.2f} + {:.2f} $\times$ theory' '\nr = {:.2f}').format(
+        fmt_chi2(chi2g1g2), y0, s, r
+        )
+    plot.title('Q-Q Plot')
+    plot.ylabel('Ordered residuals')
+    ylim = plot.ylim()
+    plot.text(minx, ylim[0] + (ylim[1] - ylim[0]) * 0.84,text, color='r')
+    return plot 
+
+def chi2(g1, g2=None, svdcut=1e-12, dof=None, nocorr=False):
     """ Compute chi**2 of ``g1-g2``.
 
-    ``chi**2`` is a measure of whether the multi-dimensional
-    Gaussian distributions ``g1`` and ``g2`` (dictionaries or arrays)
-    agree with each other --- that is, do their means agree
-    within errors for corresponding elements. The probability is high
-    if ``chi2(g1,g2)/chi2.dof`` is of order 1 or smaller.
+    chi**2 equals ``dg.invcov.dg, where ``dg = g1 - g2`` and 
+    ``invcov`` is the inverse of ``dg``'s covariance matrix. 
+    It is a measure  of how well multi-dimensional Gaussian 
+    distributions ``g1`` and ``g2`` (dictionaries or arrays)  
+    agree with each other ---  that is, do their means agree 
+    within errors for corresponding elements. The probability 
+    is high if ``chi2(g1,g2)/dof`` is of order 1 or smaller,
+    where ``dof`` is the number  of degrees of freedom
+    being compared.
 
     Usually ``g1`` and ``g2`` are dictionaries with the same keys,
     where ``g1[k]`` and ``g2[k]`` are |GVar|\s or arrays of
@@ -227,38 +314,75 @@ def chi2(g1, g2=None, svdcut=1e-12, nocorr=False):
 
     One or the other of ``g1`` or ``g2`` can be missing keys, or missing
     elements from arrays. Only the parts of ``g1`` and ``g2`` that
-    overlap are used. Also setting ``g2=None`` is equivalent to replacing its
-    elements by zeros.
+    overlap are used. Also setting ``g2=None`` is equivalent 
+    to replacing its elements by zeros.
 
-    ``chi**2`` is computed from the inverse of the covariance matrix
-    of ``g1-g2``. The matrix inversion can be sensitive to roundoff
-    errors. In such cases, SVD cuts can be applied by setting
-    parameters ``svdcut``; see the documentation
-    for :func:`gvar.svd`, which is used to apply the cut.
+    A typical application tests whether distribution ``g1`` and ``g2`` 
+    are consistent with each other (within errors): the code ::
 
-    The return value is the ``chi**2``. Extra attributes attached to this
-    value give additional information:
+        >>> chi2 = gvar.chi2(g1, g2)
+        >>> print(gvar.fmt_chi2(chi2))
+        chi2/dof = 1.1 [100]    Q = 0.26
 
-    - **dof** --- Number of degrees of freedom (that is, the number of variables
-      compared).
+    shows that the distributions are reasonably consistent. The 
+    number of degrees of freedom (here 100) in this example equals the 
+    number of variables from ``g1`` and ``g2`` that are compared;
+    this can be changed using the ``dof`` argument.
 
-    - **Q** --- The probability that the ``chi**2`` could have been larger,
-      by chance, even if ``g1`` and ``g2`` agree. Values smaller than 0.1
-      or so suggest that they do not agree. Also called the *p-value*.
+    Args:
+        g1: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
+            Gaussian distribution. Alternatively the elements can be 
+            numbers instead of |GVar|\s, in which case ``g1`` specifies 
+            a sample from a distribution.
+        g2: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
+            Gaussian distribution. Alternatively the elements can be 
+            numbers instead of |GVar|\s, in which case ``g2`` specifies 
+            a sample from a distribution. Setting ``g2=None`` 
+            (default) is equivalent to setting its elements all to zero.
+        svdcut (float or None): SVD cut used when inverting the covariance
+            matrix of ``g1-g2``. See documentation for :func:`gvar.svd` 
+            for more information.
+        dof (int or None): Number of independent degrees of freedom in
+            ``g1-g2``. This is set equal to the number of elements in
+            ``g1-g2`` if ``dof=None`` is set. This parameter affects
+            the ``Q`` value assigned to the ``chi**2``.
+    
+    Returns:
+        The return value is the ``chi**2``. Extra attributes attached 
+        to this number give additional information:
+
+        - **dof** --- Number of degrees of freedom (that is, the number 
+            of variables compared if not specified).
+
+        - **Q** --- The probability that the ``chi**2`` could have 
+            been larger, by chance, even if ``g1`` and ``g2`` agree. Values 
+            smaller than 0.1 or so suggest that they do not agree. 
+            Also called the *p-value*.
+
+        - **residuals** --- Decomposition of the ``chi**2`` in terms of the 
+            eigenmodes of the correlation matrix: ``chi**2 = sum(residuals**2)``.
     """
     # customized class for answer
     class ans(float):
-        def __new__(cls, chi2, dof, Q):
+        def __new__(cls, chi2, dof, res):
             return float.__new__(cls, chi2)
-        def __init__(self, chi2, dof, Q):
+        def __init__(self, chi2, dof, res):
             self.dof = dof
-            self.Q = Q
             self.chi2 = chi2
+            self.residuals = res
+        def _get_Q(self):
+            return gammaQ(self.dof / 2., self.chi2 / 2.)  
+        Q = property(_get_Q)
 
     # leaving nocorr (turn off correlations) undocumented because I
     #   suspect I will remove it
     if g2 is None:
-        diff = BufferDict(g1).buf if hasattr(g1, 'keys') else numpy.asarray(g1).flatten()
+        diff = (
+            BufferDict(g1).buf if hasattr(g1, 'keys') else 
+            numpy.asarray(g1).flatten()
+            )
     elif hasattr(g1, 'keys') and hasattr(g2, 'keys'):
         # g1 and g2 are dictionaries
         g1 = BufferDict(g1)
@@ -299,25 +423,29 @@ def chi2(g1, g2=None, svdcut=1e-12, nocorr=False):
             'cannot compute chi**2 for types ' + str(type(g1)) + ' ' +
             str(type(g2))
             )
-    dof = diff.size
-    if dof == 0:
-        return ans(0.0, 0, 0)
+    if diff.size == 0:
+        return ans(0.0, 0)
     if nocorr:
         # ignore correlations
-        chi2 = numpy.sum(mean(diff) ** 2 / var(diff))
-        dof = len(diff)
+        res = mean(diff) / sdev(diff)
+        chi2 = numpy.sum(res ** 2)
+        if dof is None:
+            dof = len(diff)
     else:
         diffmod, i_wgts = svd(diff, svdcut=svdcut, wgts=-1)
         diffmean = mean(diffmod)
+        res = numpy.zeros(diffmod.shape, float)
         i, wgts = i_wgts[0]
-        chi2 = 0.0
-        if len(i) > 0:
-            chi2 += numpy.sum((diffmean[i] * wgts) ** 2)
+        res[i] = diffmean[i] * wgts
+        ilist = i.tolist()
         for i, wgts in i_wgts[1:]:
-            chi2 += numpy.sum(wgts.dot(diffmean[i]) ** 2)
-        dof = sum(len(wgts) for i, wgts in i_wgts)
-    Q = gammaQ(dof/2., chi2/2.)
-    return ans(chi2, dof=dof, Q=Q)
+            res[i[:wgts.shape[0]]] = wgts.dot(diffmean[i])
+            ilist.extend(i[:wgts.shape[0]])
+        res = res[ilist]
+        chi2 = numpy.sum(res ** 2)
+        if dof is None:
+            dof = len(res)
+    return ans(chi2, dof, res)
 
 def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
     """ Determine whether ``g1`` and ``g2`` contain equivalent |GVar|\s.

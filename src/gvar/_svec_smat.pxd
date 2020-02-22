@@ -22,9 +22,10 @@ cdef packed struct svec_element:
 cdef class svec:
     cdef svec_element * v
     cdef readonly int size
-    cpdef numpy.ndarray[numpy.double_t, ndim=1] toarray(svec,INTP_TYPE msize=?)
+    cpdef numpy.ndarray[numpy.float_t, ndim=1] toarray(svec,INTP_TYPE msize=?)
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] indices(svec)
-    cpdef _assign(self,numpy.ndarray[numpy.double_t, ndim=1],
+    cpdef numpy.ndarray[numpy.float_t, ndim=1] values(svec)
+    cpdef _assign(self,numpy.ndarray[numpy.float_t, ndim=1],
                      numpy.ndarray[INTP_TYPE, ndim=1])
     cpdef double dot(svec,svec)
     cpdef svec clone(svec)
@@ -38,10 +39,10 @@ cdef class smat:
     cdef INTP_TYPE nrow, nrow_max
     cpdef _add_memory(smat self)
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag(self,
-                                        numpy.ndarray[numpy.double_t,ndim=1])
+                                        numpy.ndarray[numpy.float_t,ndim=1])
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag_m(self,
-                                        numpy.ndarray[numpy.double_t,ndim=2])
+                                        numpy.ndarray[numpy.float_t,ndim=2])
     cpdef svec dot(self,svec)
     cpdef svec masked_dot(self, svec vv, numpy.ndarray[numpy.int8_t, ndim=1] imask)
     cpdef double expval(self,svec)
-    cpdef numpy.ndarray[numpy.double_t, ndim=2] toarray(self)
+    cpdef numpy.ndarray[numpy.float_t, ndim=2] toarray(self)

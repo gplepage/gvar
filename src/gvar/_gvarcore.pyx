@@ -449,33 +449,40 @@ cdef class GVar:
         else:
             return -self
 
-    def deriv(GVar self, GVar x):
-        """ Derivative of ``self`` with respest to *primary* |GVar| ``x``.
+    def deriv(GVar self, x):
+        """ Derivative of ``self`` with respest to primary |GVar|\s in ``x``.
 
-        All |GVar|\s are constructed from primary |GVar|\s.
-        ``self.deriv(x)`` returns the partial derivative of ``self`` with
-        respect to primary |GVar| ``x``, holding all of the other
+        All |GVar|\s are constructed from primary |GVar|\s (see 
+        :func:`gvar.is_primary`).  ``self.deriv(x)`` returns the 
+        partial derivative of ``self`` with respect to 
+        primary |GVar| ``x``, holding all of the other
         primary |GVar|\s constant.
 
-        :param x: A primary |GVar| (or a function of a single
-            primary |GVar|).
-        :returns: The derivative of ``self`` with respect to ``x``.
+        Args:
+            x: A primary |GVar| or an array of primary |GVar|\s.
+
+        Returns:
+            Derivatives of ``self`` with respect to the 
+            |GVar|\s in ``x``.  The result has the same 
+            shape as ``x``.
         """
         cdef INTP_TYPE i, ider
         cdef double xder
-        xder = 0.0
-        for i in range(x.d.size):
-            if x.d.v[i].v != 0:
-                if xder != 0:
-                    raise ValueError("derivative ambiguous -- x is not primary")
-                else:
-                    xder = x.d.v[i].v
-                    ider = x.d.v[i].i
-        for i in range(self.d.size):
-            if self.d.v[i].i == ider:
-                return self.d.v[i].v / xder
-        else:
-            return 0.0
+        cdef numpy.ndarray[numpy.float_t, ndim=1] ans
+        cdef GVar xi
+        x = numpy.asarray(x)
+        ans = numpy.zeros(x.size, dtype=float)
+        self_deriv = dict([(self.d.v[i].i, self.d.v[i].v) for i in range(self.d.size)])
+        for i in range(x.size):
+            xi = x.flat[i]
+            if xi.d.size != 1:
+                raise ValueError("derivative ambiguous -- x is not primary")
+            xder = xi.d.v[0].v 
+            ider = xi.d.v[0].i 
+            if xder == 0:
+                continue
+            ans[i] = self_deriv.get(ider, 0.0) / xder
+        return ans.flat[0] if x.shape == () else ans.reshape(x.shape)
 
     def fmt(self, ndecimal=None, sep='', d=None):
         """ Convert to string with format: ``mean(sdev)``.
@@ -627,6 +634,23 @@ cdef class GVar:
         ans = self.partialvar(*args)
         return ans**0.5 if ans>0 else -(-ans)**0.5
 
+    cpdef bint is_primary(self):
+        """ ``True`` if a primary |GVar| ; ``False`` otherwise. 
+        
+        A *primary* |GVar| is one created using :func:`gvar.gvar` (or a 
+        function of such a variable). A *derived* |GVar| is one that 
+        is constructed from arithmetic expressions and functions that 
+        combine multiple primary |GVar|\s. The standard deviations for 
+        all |GVar|\s originate with the primary |GVar|\s. 
+        In particular, :: 
+
+            z = z.mean + sum_p (p - p.mean) * dz/dp
+
+        is true for any |GVar| ``z``, where the sum is over all primary 
+        |GVar|\s ``p``.
+        """
+        return self.d.size == 1
+    
     property shape:
         """ Shape = () """
         def __get__(self):
@@ -956,8 +980,8 @@ class GVarFactory:
                 return GVar(x, args[1], cov)
             elif isinstance(args[1], tuple):
                 try:
-                    d_idx = numpy.asarray(args[0], numpy.intp)
-                    d_v = numpy.asarray(args[0], numpy.float_)
+                    d_idx = numpy.asarray(args[1][1], numpy.intp)
+                    d_v = numpy.asarray(args[1][0], numpy.float_)
                     assert d_idx.ndim == 1 and d_idx.shape == d_v.shape
                 except (ValueError, TypeError, AssertionError):
                     raise TypeError('Badly formed derivative.')

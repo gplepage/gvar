@@ -1,3 +1,22 @@
+Version 10.1 ????
+=========================
+Significant improvement to gvar.dump/load. All changes are 
+backwards compatible.
+
+- New versions of gvar.dump and gvar.dumps that can preserve 
+  dependencies between derived and primary GVars (to allow, for 
+  example, the construction of error budgets).
+
+- Slight modification of gvar.chi2() to support 
+  implementation of new function gvar.qqplot().
+
+- New function gvar.is_primary(g) to determine whether GVars
+  are primary or derived. Also gvar.GVar.is_primary().
+
+- Function gvar.deriv(g, x) now works for an array x of GVars 
+  (not just a single GVar). Also gvar.GVar.deriv(x).
+
+
 Version 10.0.3 2020-02-07
 =========================
 Changed default string representation used when 

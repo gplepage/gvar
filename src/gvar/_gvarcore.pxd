@@ -17,3 +17,4 @@ cdef class GVar:
     cdef svec d
     cdef readonly smat cov
     cpdef GVar clone(self)
+    cpdef bint is_primary(self)

@@ -84,6 +84,14 @@ cdef class svec:
             ans[i] = self.v[i].i
         return ans
 
+    cpdef numpy.ndarray[numpy.float_t, ndim=1] values(self):
+        cdef INTP_TYPE i
+        cdef numpy.ndarray [numpy.float_t, ndim=1] ans
+        ans = numpy.zeros(self.size, float)
+        for i in range(self.size):
+            ans[i] = self.v[i].v
+        return ans    
+
     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self,INTP_TYPE msize=0):
         """ Create numpy.array version of self, padded with zeros to length
         msize if msize is not None and larger than the actual size.

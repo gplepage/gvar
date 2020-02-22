@@ -41,6 +41,8 @@ else:
     class BytesIO(StringIO):
         pass
 
+cdef double EPSILON = sys.float_info.epsilon * 10.         # roundoff error threshold
+
 from libc.math cimport  log, exp  # don't put lgamma here -- old C compilers don't have it
 
 from ._svec_smat import svec, smat
@@ -203,45 +205,41 @@ def sdev(g):
             buf[i] = ogi.sdev if isinstance(ogi, GVar) else 0.0
     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
 
-def deriv(g, GVar x):
-    """ Compute first derivatives wrt ``x`` of |GVar|\s in ``g``.
+def deriv(g, x):
+    """ Compute partial derivatives of |GVar|\s in ``g`` w.r.t. primary |GVar|\s in ``x``.
 
-    ``g`` can be a |GVar|, an array of |GVar|\s, or a dictionary containing
-    |GVar|\s or arrays of |GVar|\s. Result has the same layout as ``g``.
+    Primary |GVar|\s are those created using :func:`gvar.gvar` (or any function of 
+    such a variable); see :func:`gvar.is_primary`.
 
-    ``x`` must be an *primary* |GVar|, which is a |GVar| created by a
-    call to :func:`gvar.gvar` (*e.g.*, ``x = gvar.gvar(xmean, xsdev)``) or a
-    function ``f(x)`` of such a |GVar|. (More precisely, ``x.der`` must have
-    only one nonzero entry.)
+    Args:
+        g: A |GVar| or array of |GVar|\s, or a dictionary whose values are 
+            |GVar|\s or arrays of |GVar|\s.
+        x: A |GVar| or array of primary |GVar|\s. Arrays are typically one 
+            dimensional but can have any shape.
+    
+    Returns:
+        ``g`` but with each |GVar| in it replaced by an array of
+        derivatives with respect to the primary |GVar|\s in ``x``.
+        The derivatives have the same shape as ``x``.
     """
-    cdef INTP_TYPE i, j, ider
-    cdef double xder
+    cdef INTP_TYPE i    
     cdef GVar gi
-    cdef numpy.ndarray[numpy.float_t,ndim=1] buf
-    if isinstance(g, GVar):
-        return g.deriv(x)
-    xder = 0.0
-    for i in range(x.d.size):
-        if x.d.v[i].v != 0:
-            if xder != 0:
-                raise ValueError("derivative ambiguous -- x is not primary")
-            else:
-                xder = x.d.v[i].v
-                ider = x.d.v[i].i
+    cdef numpy.ndarray ans
+    x = numpy.asarray(x)
     if hasattr(g, 'keys'):
-        if not isinstance(g, BufferDict):
-            g = BufferDict(g)
+        ansdict = BufferDict()
+        for k in g:
+            ansdict[k] = deriv(g[k], x)
+        return ansdict
     else:
         g = numpy.asarray(g)
-    buf = numpy.zeros(g.size, numpy.float_)
-    for i, gi in enumerate(g.flat):
-        for j in range(gi.d.size):
-            if gi.d.v[j].i == ider:
-                buf[i] = gi.d.v[j].v / xder
-                break
-        else:
-            buf[i] = 0.0
-    return BufferDict(g, buf=buf) if g.shape is None else buf.reshape(g.shape)
+        if g.shape == ():
+            return g.flat[0].deriv(x)
+        ans = numpy.zeros((g.size,  ) + x.shape, dtype=float)
+        for i in range(g.size):
+            gi = g.flat[i]
+            ans[i] = gi.deriv(x)
+        return ans.reshape(g.shape + x.shape)
 
 def var(g):
     """ Extract variances from :class:`gvar.GVar`\s in ``g``.
@@ -269,6 +267,100 @@ def var(g):
         for i, ogi in enumerate(g.flat):
             buf[i] = ogi.var if isinstance(ogi, GVar) else 0.0
     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
+
+def is_primary(g):
+    """ Determine whether or not the |GVar|\s in ``g`` are primary |GVar|\s.
+    
+    A *primary* |GVar| is one created using :func:`gvar.gvar` (or a 
+    function of such a variable). A *derived* |GVar| is one that 
+    is constructed from arithmetic expressions and functions that 
+    combine multiple primary |GVar|\s. The standard deviations for 
+    all |GVar|\s originate with the primary |GVar|\s. 
+    In particular, :: 
+
+        z = z.mean + sum_p (p - p.mean) * dz/dp
+
+    is true for any |GVar| ``z``, where the sum is over all primary 
+    |GVar|\s ``p``.
+
+    ``g`` can be a |GVar|, an array of |GVar|\s, or a dictionary containing
+    |GVar|\s or arrays of |GVar|\s. The result has the same layout as ``g``. 
+    Each |GVar| is replaced by ``True`` or ``False`` depending upon whether
+    it is primary or not.
+    
+    When the same |GVar| appears in ``g``, only the first appearance
+    is marked as a primary |GVar|. This avoids double counting 
+    the same primary |GVar| --- the list of primaries is a minimal list. 
+    """
+    cdef INTP_TYPE i, j
+    cdef GVar gi
+    cdef numpy.ndarray buf
+    if isinstance(g, GVar):
+        return g.is_primary()
+    if hasattr(g,'keys'):
+        if not isinstance(g,BufferDict):
+            g = BufferDict(g)
+    else:
+        g = numpy.asarray(g)
+    buf = numpy.zeros(g.size, dtype=bool)
+    done = set()
+    try:
+        for i, gi in enumerate(g.flat):
+            if gi.d.size == 1 and gi.d.v[0].i not in done:
+                buf[i] = True 
+                done.add(gi.d.v[0].i)
+    except TypeError:
+        for i, ogi in enumerate(g.flat):
+            if isinstance(ogi, GVar) and ogi.d.size == 1 and gi.d.v[0].i not in done:
+                buf[i] = True 
+                done.add(ogi.d.v[0].i)
+    return BufferDict(g, buf=buf) if g.shape is None else buf.reshape(g.shape)
+
+def dependencies(g, all=False):
+    """ Collect primary |GVar|\s contributing to the covariances of |GVar|\s in ``g``.
+
+
+    Args:
+        g: |GVar| or array of |GVar|\s, or a dictionary whose values are |GVar|\s or 
+            arrays of |GVar|\s.
+        all (bool): If ``True`` the result includes all primary |GVar|\s including 
+            those that are in ``g``; otherwise only includes those not in ``g``.
+            Default is ``False``.
+
+    Returns:
+        An array containing the primary |GVar|\s contributing to covariances of 
+        |GVar|\s in ``g``. Each of the primary |GVar|\s has zero mean, so that,
+        for example, the code ::
+
+            dep = dependencies(z)
+            new_z = z.mean + sum(dep * z.deriv(dep))
+
+        creates a new new |GVar| ``new_z`` that is identical to ``z``.
+    """
+    cdef INTP_TYPE i
+    cdef GVar gi
+    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
+    cdef numpy.ndarray[numpy.float_t, ndim=1] val
+    if hasattr(g,'keys'):
+        if not isinstance(g,BufferDict):
+            g = BufferDict(g)
+    else:
+        g = numpy.asarray(g)
+    dep = set()
+    for gi in g.flat:
+        if not all and gi.d.size == 1:
+            continue
+        dep.update(gi.d.indices())
+    ans = []
+    idx = numpy.zeros(1, numpy.intp)
+    val = numpy.ones(1, numpy.float_)
+    sv = _gvar.svec(1)
+    for i in dep:
+        idx[0] = i
+        sv = _gvar.svec(1)
+        sv._assign(val, idx)
+        ans.append(_gvar.gvar(0.0, sv, _gvar.gvar.cov))
+    return numpy.array(ans)
 
 def uncorrelated(g1,g2):
     """ Return ``True`` if |GVar|\s in ``g1`` uncorrelated with those in ``g2``.
@@ -632,7 +724,7 @@ def evalcov(g):
             ans[b,a] = ans[a,b]
     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
-def dumps(g, method='json'):
+def dumps(g, method='json', add_dependencies=False):
     """ Return a serialized representation of ``g``.
 
     This function is shorthand for::
@@ -647,25 +739,29 @@ def dumps(g, method='json'):
 
         # convert string back into GVars
         new_g = gv.loads(gstr)
-
+    
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
             are |GVar|\s and/or arrays of |GVar|\s.
         method: Serialization method, which should be either
             ``'json'`` or ``'pickle'``. Default is ``'json'``.
+        add_dependencies (bool): If ``True``, automatically includes 
+            all primary |GVar|\s that contribute to the covariances 
+            of the |GVar|\s in ``g`` but are not already in ``g``.
+            Default is ``False``.
     
     Returns:
         A string or bytes object containing a serialized 
         representation of object ``g``.
     """
     if method is None or method == 'json':
-        return dump(g, method='json').getvalue()
+        return dump(g, method='json', add_dependencies=add_dependencies).getvalue()
     elif method == 'pickle':
-        return dump(g, method='pickle').getvalue()
+        return dump(g, method='pickle', add_dependencies=add_dependencies).getvalue()
     else:
         raise ValueError('unknown method: ' + str(method))
 
-def dump(g, outputfile=None, method=None, **kargs):
+def dump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
     """ Write a representation of ``g``  to file ``outputfile``.
 
     Object ``g`` is a |GVar|, an array of |GVar|\s (any shape), or 
@@ -674,7 +770,9 @@ def dump(g, outputfile=None, method=None, **kargs):
     Calling ``gvar.dump(g, 'filename')`` writes a serialized representation
     of ``g`` into the file named ``filename``. The Gaussian distribution
     described by ``g`` can be recovered later using ``gvar.load('filename')``.
-    Correlations between different |GVar|\s in ``g`` are preserved.
+    Correlations between different |GVar|\s in ``g`` are preserved, as
+    are relationships (i.e., derivatives) between derived |GVar|\s and 
+    any primary |GVar|\s in ``g``.
 
     Typical usage is::
 
@@ -698,6 +796,20 @@ def dump(g, outputfile=None, method=None, **kargs):
     and tuples of strings and/or integers. Try :mod:`pickle` if the 
     workaround fails.
 
+    The partial variances for derived |GVar|\s in ``g`` from 
+    primary |GVar|\s in ``g`` are preserved by :func:`gvar.dump`.
+    (These are used, for example, to calculate error budgets.)
+    Partial variances from derived (rather than primary) |GVar|\s
+    are unreliable unless every primary |GVar| that contributes 
+    to the covariances in ``g`` is included in ``g``. To guarantee
+    that this is the case set keyword ``add_dependencies=True``.
+    This can greatly increase the size of the output file, however,
+    and so should only be done if error budgets, etc. are needed. 
+    (The cost of evaluating covariance matrices (:func:`gvar.evalcov`)
+    for the reconstituted |GVar|\s is also increased if there 
+    are large numbers of primary |GVar|\s.) The default is 
+    ``add_dependencies=False``.
+
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
             are |GVar|\s and/or arrays of |GVar|\s.
@@ -712,6 +824,10 @@ def dump(g, outputfile=None, method=None, **kargs):
             ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` 
             or ``.p`` for ``'pickle'``. If that fails the method 
             defaults to ``'json'``.
+        add_dependencies (bool): If ``True``, automatically includes 
+            all primary |GVar|\s that contribute to the covariances 
+            of the |GVar|\s in ``g`` but are not already in ``g``.
+            Default is ``False``.
         kargs (dict): Additional arguments, if any, that are passed to 
             the underlying serializer (:mod:`pickle` or :mod:`json`).
 
@@ -720,7 +836,7 @@ def dump(g, outputfile=None, method=None, **kargs):
         object containing the serialized data is returned. Otherwise
         ``outputfile`` is returned.
     """
-    sg = _dump(g)
+    sg = _dump(g, add_dependencies=add_dependencies)
     if outputfile is None:
         if method is None:
             method = 'json' 
@@ -860,9 +976,12 @@ def load(inputfile, method=None, **kargs):
     except KeyError, TypeError:
         return _oldload1(inputfile, method)
 
-def _dump(g):
+def _dump(g, add_dependencies=False):
     """ Repack ``g`` in dictionary that can be serialized. Used by :func:`dump`.
     """
+    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
+    cdef numpy.ndarray bcov
+    cdef numpy.ndarray primary, derived
     data = {}
     if hasattr(g, 'keys'):
         if not isinstance(g, _gvar.BufferDict):
@@ -875,14 +994,29 @@ def _dump(g):
                 data['layouts'].append([slice, []])
             else:
                 data['layouts'].append([[slice.start, slice.stop, slice.step], list(shape)])
-        data['means'] = _gvar.mean(g.buf).tolist()
     else:
         g = numpy.asarray(g)
         data['shape'] = list(numpy.shape(g))
-        data['means'] = list(_gvar.mean(g.flat))
-    data['bcovs'] = [
-        [idx.tolist(), bcov.tolist()] for idx, bcov in _gvar.evalcov_blocks(g.flat, compress=True)
-        ]
+    buf = g.flat[:]
+    data['bufsize'] = len(buf)
+    if add_dependencies:
+        buf = numpy.concatenate([buf, _gvar.dependencies(buf)])
+    data['means'] = _gvar.mean(buf).tolist()
+    data['bcovs'] = []
+    first_pass = True
+    for idx, bcov in _gvar.evalcov_blocks(buf, compress=True):
+        data['bcovs'] += [[idx.tolist(), bcov.tolist()]]
+        if first_pass:
+            data['bcovs'][0] += [[], []]
+            first_pass = False
+        else:
+            primary = _gvar.is_primary(buf[idx])
+            derived = numpy.logical_not(primary)
+            if numpy.all(primary) or numpy.all(derived):
+                data['bcovs'][-1] += [[], []]
+            else:
+                derivs = _gvar.deriv(buf[idx][derived], buf[idx][primary])
+                data['bcovs'][-1] += [primary.tolist(), derivs.tolist()]
     return data 
 
 def _load(data):
@@ -890,8 +1024,18 @@ def _load(data):
     """
     # reconstitute the GVars
     buf = numpy.array(data['means'], dtype=object)
-    for idx, bcov in data['bcovs']:
-        buf[idx] = _gvar.gvar(buf[idx], bcov)
+    try:
+        for idx, bcov, primary, derivs in data['bcovs']:
+            buf[idx] = _rebuild_gvars(
+                _gvar.gvar(buf[idx], bcov), numpy.array(bcov), 
+                primary, numpy.array(derivs)
+                )
+        buf = numpy.array(buf[:data['bufsize']])
+    except ValueError:
+        # old format for legacy code
+        for idx, bcov in data['bcovs']:
+            buf[idx] = _gvar.gvar(buf[idx], bcov)
+
     # rebuild the data structures
     if 'keys' in data:
         keys = data['keys']
@@ -909,6 +1053,24 @@ def _load(data):
     else:
         buf.shape = tuple(data['shape'])
         return buf
+
+def _rebuild_gvars(buf, cov, primary, derivs):
+    " reconnect derived GVars to primary GVars "
+    if primary == [] or derivs.size == 0:
+        return buf
+    idx_primary = numpy.arange(buf.size)[primary]
+    idx_derived = numpy.arange(buf.size)[numpy.logical_not(primary)]
+    # contributions from primaries
+    tmp = _gvar.mean(buf[idx_derived]) + numpy.sum(
+        (buf[idx_primary] - _gvar.mean(buf[idx_primary]))[None, :] * derivs,
+        axis=1
+        )
+    # contributions from missing primaries
+    buf[idx_derived] = tmp + _gvar.gvar(
+        numpy.zeros(len(idx_derived), dtype=float),
+        cov[idx_derived[None, :], idx_derived] * (1 + EPSILON) - _gvar.evalcov(tmp)
+        )
+    return buf
 
 # old versions kept for legacy purposes (for now)
 def olddump(g, outputfile, method='pickle', use_json=False):
