@@ -1,4 +1,4 @@
-#cython: boundscheck=False, intializedcheck=False, wraparound=False
+# cython: boundscheck=False, intializedcheck=False, wraparound=False
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-17 G. Peter Lepage.
 #

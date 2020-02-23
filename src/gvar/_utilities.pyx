@@ -335,7 +335,8 @@ def dependencies(g, all=False):
             dep = dependencies(z)
             new_z = z.mean + sum(dep * z.deriv(dep))
 
-        creates a new new |GVar| ``new_z`` that is identical to ``z``.
+        creates a new |GVar| ``new_z`` that is identical to derived 
+        |GVar| |~| ``z``.
     """
     cdef INTP_TYPE i
     cdef GVar gi
@@ -796,17 +797,18 @@ def dump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
     and tuples of strings and/or integers. Try :mod:`pickle` if the 
     workaround fails.
 
-    The partial variances for derived |GVar|\s in ``g`` from 
+    The partial variances for derived |GVar|\s in ``g`` coming from 
     primary |GVar|\s in ``g`` are preserved by :func:`gvar.dump`.
     (These are used, for example, to calculate error budgets.)
-    Partial variances from derived (rather than primary) |GVar|\s
-    are unreliable unless every primary |GVar| that contributes 
-    to the covariances in ``g`` is included in ``g``. To guarantee
-    that this is the case set keyword ``add_dependencies=True``.
-    This can greatly increase the size of the output file, however,
+    Partial variances coming from derived (rather than 
+    primary) |GVar|\s, however, are unreliable unless 
+    every primary |GVar| that contributes to the covariances
+    in ``g`` is included in ``g``. To guarantee that
+    this is the case set keyword ``add_dependencies=True``.
+    This can greatly increase the size of the output file,
     and so should only be done if error budgets, etc. are needed. 
-    (The cost of evaluating covariance matrices (:func:`gvar.evalcov`)
-    for the reconstituted |GVar|\s is also increased if there 
+    (Also the cost of evaluating covariance matrices 
+    for the reconstituted |GVar|\s is increased if there 
     are large numbers of primary |GVar|\s.) The default is 
     ``add_dependencies=False``.
 

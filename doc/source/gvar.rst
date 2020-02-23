@@ -43,6 +43,8 @@ manipulating gaussian random variables, including:
 
     - :any:`is_primary`\ ``(g)`` --- test whether primary (``True``) or derived (``False``) |GVar|\s.
 
+    - :any:`dependencies`\ ``(g)`` --- collect primary |GVar|\s contributing to ``g``.
+
     - :any:`deriv`\ ``(g, x)`` --- derivatives of ``g`` with respect to ``x``,
     
     - :any:`fmt`\ ``(g)`` --- replace all |GVar|\s in array/dictionary by string representations.
@@ -93,7 +95,7 @@ manipulating gaussian random variables, including:
 
     - :any:`ranseed`\ ``(seed)`` --- seed random number generator.
 
-    - :any:`sample`\ ``(g)`` --- random sample from collection of |GVar|\s.
+    - :any:`sample`\ ``(g)``  --- random sample from collection of |GVar|\s.
 
     - :any:`bootstrap_iter`\ ``(g,N)`` --- bootstrap iterator.
 
@@ -130,6 +132,8 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.is_primary(g)
 
+.. autofunction:: gvar.dependencies(g, all=False)
+
 .. autofunction:: gvar.fmt(g, ndecimal=None, sep='')
 
 .. autofunction:: gvar.tabulate(g, ncol=1, headers=True, offset='', ndecimal=None)
@@ -160,9 +164,9 @@ matrices and correlation/comparison information can be extracted from arrays
 
 |GVar|\s can be stored (serialized) and retrieved from files (or strings) using:
 
-.. autofunction:: gvar.dump(g, outputfile=None, method=None, **kargs)
+.. autofunction:: gvar.dump(g, outputfile=None, method=None, add_dependencies=False, **kargs)
 
-.. autofunction:: gvar.dumps(g, method='json')
+.. autofunction:: gvar.dumps(g, method='json', add_dependencies=False)
 
 .. autofunction:: gvar.load(inputfile, method=None, **kargs)
 

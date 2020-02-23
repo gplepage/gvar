@@ -485,23 +485,6 @@ The correlations between different |GVar|\s  in the original array/dictionary
 So it is important to include all |GVar|\s of  interest in a single array or
 dictionary before saving them. 
 
-Function :func:`gvar.dump` is functionally equivalent to ::
-
-    >>> gtuple = (gvar.mean(g), gvar.evalcov(g))
-    >>> import pickle
-    >>> pickle.dump(gtuple, open('gfile.p', 'wb'))
-
-where  the means and covariance matrix are extracted into a tuple and then
-saved (pickled) in file ``'gfile.p'``. Function :func:`gvar.load` is
-equivalent to ::
-
-    >>> g = gvar.gvar(*pickle.load('gfile.p', 'rb'))
-
-where :func:`pickle.load` reads ``gtuple`` back in, and :func:`gvar.gvar`
-converts it back into a collection of |GVar|\s. Functions :func:`gvar.dump` 
-and :func:`gvar.load` are simpler, and more efficient, however, 
-at least for large problems.
-
 |GVar|\s can also be pickled easily if they are stored in a
 |BufferDict| since this data type has explicit support for pickling.
 So if ``g`` is a
@@ -515,6 +498,8 @@ the |GVar|\s are retrieved using ::
 
     >>> g = pickle.load(open('gfile.p', 'rb'))
 
+Of course, ``gvar.dump(g, 'gfile.p')`` and ``g = gvar.load('gfile.p')`` 
+are simpler and achieve the same goal.
 
 Non-Gaussian Expectation Values
 --------------------------------------------------------

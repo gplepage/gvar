@@ -1,21 +1,31 @@
-Version 10.1 ????
+Version 10.1 2020-02-22
 =========================
-Significant improvement to gvar.dump/load. All changes are 
-backwards compatible.
+Significant improvement to gvar.dump/load and some new functions. 
+All changes are backwards compatible. Note that this code 
+still works with Python 2.7 (as well as Python3) but I can 
+see a point in the not too distant future where that will 
+no longer be the case (as developers of standard packages 
+abandon Python2, now that it is formally discontinued).
 
 - New versions of gvar.dump and gvar.dumps that can preserve 
   dependencies between derived and primary GVars (to allow, for 
-  example, the construction of error budgets).
+  example, the construction of error budgets). 
+
+- New function gvar.qqplot() for making QQ-plots.
 
 - Slight modification of gvar.chi2() to support 
-  implementation of new function gvar.qqplot().
+  implementation of gvar.qqplot().
 
 - New function gvar.is_primary(g) to determine whether GVars
-  are primary or derived. Also gvar.GVar.is_primary().
+  are primary or derived. Also gvar.GVar.is_primary(). Also
+  new function gvar.dependencies for collecting relevant 
+  primary GVars.
 
 - Function gvar.deriv(g, x) now works for an array x of GVars 
   (not just a single GVar). Also gvar.GVar.deriv(x).
 
+- Fixed bug (that caused crashes) in (undocumented) low-level 
+  gvar.gvar() usage. 
 
 Version 10.0.3 2020-02-07
 =========================

@@ -693,7 +693,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_arraysequal(z.der,dv)
         self.assertEqual(z.var,np.dot(dv,np.dot(cov,dv)))
         self.assertEqual(z.sdev,sqrt(z.var))
-        # self.assertTrue(z.cov is cov)
+
+        cov = smat()
+        cov.append_diag_m(np.array([[2.,4.],[4.,16.]]))
+        y = gvar(v,([1.], [0]), cov)
+        z = gvar(v, ([1.], [1]), cov)
+        cov = evalcov([y,z])
+        self.assertEqual(z.mean,v)
+        self.assert_arraysequal(z.der,dv)
+        self.assertEqual(z.var,np.dot(dv,np.dot(cov,dv)))
+        self.assertEqual(z.sdev,sqrt(z.var))
 
         # zero covariance
         x = gvar([1.], [[0.]])

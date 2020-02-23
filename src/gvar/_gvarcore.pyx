@@ -1,4 +1,4 @@
-#cython: boundscheck=False
+# cython: boundscheck=False
 # c#ython: profile=True
 # remove extra # above for profiling
 
@@ -982,7 +982,7 @@ class GVarFactory:
                 try:
                     d_idx = numpy.asarray(args[1][1], numpy.intp)
                     d_v = numpy.asarray(args[1][0], numpy.float_)
-                    assert d_idx.ndim == 1 and d_idx.shape == d_v.shape
+                    assert d_idx.ndim == 1 and d_v.ndim == 1 and d_idx.shape[0] == d_v.shape[0]
                 except (ValueError, TypeError, AssertionError):
                     raise TypeError('Badly formed derivative.')
             else:
@@ -994,11 +994,8 @@ class GVarFactory:
                 d_idx = d.nonzero()[0]
                 d_v = d[d_idx]
             assert len(cov) > d_idx[-1], "length mismatch between der and cov"
-            nd = len(d_idx)
-            der = svec(nd)
-            for i in range(nd):
-                der.v[i].i = d_idx[i]
-                der.v[i].v = d_v[i]
+            der = svec(len(d_idx))
+            der.assign(d_v, d_idx)
             return GVar(x, der, cov)
         else:
             raise ValueError("Wrong number of arguments: "+str(len(args)))
