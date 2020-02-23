@@ -283,14 +283,14 @@ def is_primary(g):
     is true for any |GVar| ``z``, where the sum is over all primary 
     |GVar|\s ``p``.
 
-    ``g`` can be a |GVar|, an array of |GVar|\s, or a dictionary containing
+    Here ``g`` can be a |GVar|, an array of |GVar|\s, or a dictionary containing
     |GVar|\s or arrays of |GVar|\s. The result has the same layout as ``g``. 
     Each |GVar| is replaced by ``True`` or ``False`` depending upon whether
     it is primary or not.
     
-    When the same |GVar| appears in ``g``, only the first appearance
-    is marked as a primary |GVar|. This avoids double counting 
-    the same primary |GVar| --- the list of primaries is a minimal list. 
+    When the same |GVar| appears more than once in ``g``, only the first 
+    appearance is marked as a primary |GVar|. This avoids double counting 
+    the same primary |GVar| --- each primary |GVar| in the list is unique. 
     """
     cdef INTP_TYPE i, j
     cdef GVar gi
@@ -318,7 +318,6 @@ def is_primary(g):
 
 def dependencies(g, all=False):
     """ Collect primary |GVar|\s contributing to the covariances of |GVar|\s in ``g``.
-
 
     Args:
         g: |GVar| or array of |GVar|\s, or a dictionary whose values are |GVar|\s or 
@@ -348,10 +347,15 @@ def dependencies(g, all=False):
     else:
         g = numpy.asarray(g)
     dep = set()
+    pri = set()
     for gi in g.flat:
-        if not all and gi.d.size == 1:
-            continue
+        if gi.d.size == 1:
+            pri.add(gi.d.v[0].i)
+            if not all:
+                continue
         dep.update(gi.d.indices())
+    if not all:
+        dep = dep - pri
     ans = []
     idx = numpy.zeros(1, numpy.intp)
     val = numpy.ones(1, numpy.float_)
@@ -362,6 +366,42 @@ def dependencies(g, all=False):
         sv._assign(val, idx)
         ans.append(_gvar.gvar(0.0, sv, _gvar.gvar.cov))
     return numpy.array(ans)
+
+def missing_dependencies(g):
+    """ Collect primary |GVar|\s contributing to the covariances of |GVar|\s in ``g``.
+
+    Args:
+        g: |GVar| or array of |GVar|\s, or a dictionary whose values are |GVar|\s or 
+            arrays of |GVar|\s.
+        all (bool): If ``True`` the result includes all primary |GVar|\s including 
+            those that are in ``g``; otherwise only includes those not in ``g``.
+            Default is ``False``.
+
+    Returns:
+        An array containing the primary |GVar|\s contributing to covariances of 
+        |GVar|\s in ``g``. Each of the primary |GVar|\s has zero mean, so that,
+        for example, the code ::
+
+            dep = dependencies(z)
+            new_z = z.mean + sum(dep * z.deriv(dep))
+
+        creates a new |GVar| ``new_z`` that is identical to derived 
+        |GVar| |~| ``z``.
+    """
+    cdef GVar gi
+    if hasattr(g,'keys'):
+        if not isinstance(g,BufferDict):
+            g = BufferDict(g)
+    else:
+        g = numpy.asarray(g)
+    dep = set()
+    pri = set()
+    for gi in g.flat:
+        if gi.d.size == 1:
+            pri.add(gi.d.v[0].i)
+            continue
+        dep.update(gi.d.indices())
+    return len(dep - pri) > 0
 
 def uncorrelated(g1,g2):
     """ Return ``True`` if |GVar|\s in ``g1`` uncorrelated with those in ``g2``.
@@ -1003,6 +1043,11 @@ def _dump(g, add_dependencies=False):
     data['bufsize'] = len(buf)
     if add_dependencies:
         buf = numpy.concatenate([buf, _gvar.dependencies(buf)])
+        data['fix_cov'] = False
+    elif len(_gvar.dependencies(buf)) == 0:
+        data['fix_cov'] = False 
+    else:
+        data['fix_cov'] = True
     data['means'] = _gvar.mean(buf).tolist()
     data['bcovs'] = []
     first_pass = True
@@ -1030,7 +1075,8 @@ def _load(data):
         for idx, bcov, primary, derivs in data['bcovs']:
             buf[idx] = _rebuild_gvars(
                 _gvar.gvar(buf[idx], bcov), numpy.array(bcov), 
-                primary, numpy.array(derivs)
+                primary, numpy.array(derivs), 
+                fix_cov = data['fix_cov'],
                 )
         buf = numpy.array(buf[:data['bufsize']])
     except ValueError:
@@ -1056,7 +1102,7 @@ def _load(data):
         buf.shape = tuple(data['shape'])
         return buf
 
-def _rebuild_gvars(buf, cov, primary, derivs):
+def _rebuild_gvars(buf, cov, primary, derivs, fix_cov):
     " reconnect derived GVars to primary GVars "
     if primary == [] or derivs.size == 0:
         return buf
@@ -1068,10 +1114,13 @@ def _rebuild_gvars(buf, cov, primary, derivs):
         axis=1
         )
     # contributions from missing primaries
-    buf[idx_derived] = tmp + _gvar.gvar(
-        numpy.zeros(len(idx_derived), dtype=float),
-        cov[idx_derived[None, :], idx_derived] * (1 + EPSILON) - _gvar.evalcov(tmp)
-        )
+    if fix_cov:
+        buf[idx_derived] = tmp + _gvar.gvar(
+            numpy.zeros(len(idx_derived), dtype=float),
+            cov[idx_derived[None, :], idx_derived] * (1 + EPSILON) - _gvar.evalcov(tmp)
+            )
+    else:
+        buf[idx_derived] = tmp
     return buf
 
 # old versions kept for legacy purposes (for now)

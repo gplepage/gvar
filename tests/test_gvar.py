@@ -1574,7 +1574,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gv.gvar('3(4)') ** 0.5 * y
         _test(x * y)
         _test(x * y - z)
-
+        self.assertEqual(len(dependencies([x*y, x])), 1)
+        self.assertEqual(len(dependencies([x*y, x], all=True)), 2)
+        self.assertTrue(missing_dependencies([x*y, x]))
+        self.assertTrue(not missing_dependencies([x*y, x, y]))            
 
     def test_dumps_loads(self):
         gs = gv.gvar('1(2)')
