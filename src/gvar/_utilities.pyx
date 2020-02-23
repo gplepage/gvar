@@ -1030,7 +1030,7 @@ def _dump(g, add_dependencies=False):
     if add_dependencies:
         buf = numpy.concatenate([buf, _gvar.dependencies(buf)])
         data['fix_cov'] = False
-    elif len(_gvar.dependencies(buf)) == 0:
+    elif not _gvar.missing_dependencies(buf):
         data['fix_cov'] = False 
     else:
         data['fix_cov'] = True
