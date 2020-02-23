@@ -2,14 +2,16 @@ Version 10.1 2020-02-22
 =========================
 Significant improvement to gvar.dump/load and some new functions. 
 All changes are backwards compatible. Note that this code 
-still works with Python 2.7 (as well as Python3) but I can 
-see a point in the not too distant future where that will 
-no longer be the case (as developers of standard packages 
-abandon Python2, now that it is formally discontinued).
+still works with Python 2.7 (as well as Python 3.X, of course)
+but it seems likely this will not continue far into 
+the future, as developers for the several packages
+used by gvar abandon Python2, now that it is formally
+discontinued.
 
 - New versions of gvar.dump and gvar.dumps that can preserve 
   dependencies between derived and primary GVars (to allow, for 
-  example, the construction of error budgets). 
+  example, the construction of error budgets). Update for 
+  pickling of gvar.BufferDicts.
 
 - New function gvar.qqplot() for making QQ-plots.
 
