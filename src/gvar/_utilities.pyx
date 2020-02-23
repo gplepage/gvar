@@ -368,25 +368,11 @@ def dependencies(g, all=False):
     return numpy.array(ans)
 
 def missing_dependencies(g):
-    """ Collect primary |GVar|\s contributing to the covariances of |GVar|\s in ``g``.
+    """ ``True`` if ``len(gvar.dependencies(g))!=0``; ``False`` otherwise.
 
     Args:
         g: |GVar| or array of |GVar|\s, or a dictionary whose values are |GVar|\s or 
             arrays of |GVar|\s.
-        all (bool): If ``True`` the result includes all primary |GVar|\s including 
-            those that are in ``g``; otherwise only includes those not in ``g``.
-            Default is ``False``.
-
-    Returns:
-        An array containing the primary |GVar|\s contributing to covariances of 
-        |GVar|\s in ``g``. Each of the primary |GVar|\s has zero mean, so that,
-        for example, the code ::
-
-            dep = dependencies(z)
-            new_z = z.mean + sum(dep * z.deriv(dep))
-
-        creates a new |GVar| ``new_z`` that is identical to derived 
-        |GVar| |~| ``z``.
     """
     cdef GVar gi
     if hasattr(g,'keys'):
