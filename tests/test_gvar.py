@@ -1547,7 +1547,9 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gv.gvar('3(4)') ** 0.5 
         a  = x*y
         b = x*y - z
-        d = dict(a=a, b=b, x=x, y=y, z=z)
+        d = dict(a=a, b=b, x=x, y=y, z=z, xx=x)
+        _test(d)
+        del d['xx']
         _test(d)
         # a,b are primaries
         a, b = gvar(mean([d['a'], d['b']]), evalcov([d['a'], d['b']]))
@@ -1560,7 +1562,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
         a  = x*y
         b = x*y - z + gv.gvar('10(1)')
-        d = dict(a=a, b=b, x=x, y=y, z=z)
+        d = dict(a=a, b=b, x=x, y=y, z=z, xx=x)
         _test(d, add_dependencies=True)
 
     def test_dependencies(self):
@@ -1575,7 +1577,9 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         _test(x * y)
         _test(x * y - z)
         self.assertEqual(len(dependencies([x*y, x])), 1)
+        self.assertEqual(len(dependencies([x*y, x, x, x])), 1)
         self.assertEqual(len(dependencies([x*y, x], all=True)), 2)
+        self.assertEqual(len(dependencies([x*y, x, x, x], all=True)), 2)
         self.assertTrue(missing_dependencies([x*y, x]))
         self.assertTrue(not missing_dependencies([x*y, x, y]))            
 
