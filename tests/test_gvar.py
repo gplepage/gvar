@@ -1549,7 +1549,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         u = gv.gvar([2, 3], [[5., 1.], [1., 10.]]) 
         a  = x*y
         b = x*y - z
-        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, xx=x)
+        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, uu=u*gv.gvar('1(1)'), xx=x)
         _test(d)
         del d['xx']
         _test(d)
@@ -1564,7 +1564,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
         a  = x*y
         b = x*y - z + gv.gvar('10(1)')
-        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, xx=x)
+        d = dict(a=a, b=b, x=x, y=y, z=z, uu=u*gv.gvar('1(1)'), xx=x)
         _test(d, add_dependencies=True)
         # mixture
         x = gv.gvar('1(2)') 
@@ -1572,7 +1572,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
         a  = x*y
         b = x*y - z + gv.gvar('10(1)')
-        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, xx=x)
+        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, uu=u*gv.gvar('1(1)'), xx=x)
         _test(d, add_dependencies=True)
 
     def test_dependencies(self):
