@@ -1,3 +1,8 @@
+Version 10.1.2 2020-02-24
+==========================
+Fixes bug introduced into dump in version 10.1 (with thanks to 
+Andre Walker-Loud for pointing it out).
+
 Version 10.1.1 2020-02-23
 =========================
 Fixes minor bug/inefficiency in gvar.dependencies and gvar.dump.

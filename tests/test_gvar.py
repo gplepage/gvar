@@ -1504,8 +1504,8 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertEqual(str(evalcov(g1)), str(evalcov(g2)))
 
     def test_dump_load(self):
-        gs = gv.gvar('1(2)')
-        ga = gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)')
+        gs = gv.gvar('1(2)') * gv.gvar('3(2)')
+        ga = gv.gvar([2, 3], [[5., 1.], [1., 10.]]) 
         gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
         gd['v'] += gv.gvar('0(1)')
         gd[(1,3)] = gv.gvar('13(13)')
@@ -1528,15 +1528,19 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             _test(g, method='pickle')    
             _test(g, method='dict')
 
+# {'a': 4(14), 'b': 2(14), 'x': 1.0(2.0), 'y': 4(12), 'z': 1.7(1.2), 'u': array([2.0(2.2), 3.0(3.2)], dtype=object), 'xx': 1.0(2.0)}Partial % Errors:
+# {'a': 4(14),'b': 2(14),'x': 1.0(2.0),'y': 4(12),'z': 1.7(1.2),'u': array([2.0(2.2), 3.0(3.2)], dtype=object),'xx': 1.0(2.0)}Partial % Errors:
+
     def test_dump_load_errbudget(self):
         def _test(d, add_dependencies=False):
+            d = gv.BufferDict(d)
             newd = loads(dumps(d, add_dependencies=add_dependencies))
-            str1 = fmt_values(d) + fmt_errorbudget(
+            str1 = str(d) + fmt_errorbudget(
                 outputs=dict(a=d['a'], b=d['b']), 
                 inputs=dict(x=d['x'], y=d['y'], z=d['z']),
                 )
             d = newd
-            str2 = fmt_values(d) + fmt_errorbudget(
+            str2 = str(d) + fmt_errorbudget(
                 outputs=dict(a=d['a'], b=d['b']), 
                 inputs=dict(x=d['x'], y=d['y'], z=d['z']),
                 )
@@ -1545,9 +1549,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         x = gv.gvar('1(2)')
         y = gv.gvar('2(3)') ** 2
         z = gv.gvar('3(4)') ** 0.5 
+        u = gv.gvar([2, 3], [[5., 1.], [1., 10.]]) 
         a  = x*y
         b = x*y - z
-        d = dict(a=a, b=b, x=x, y=y, z=z, xx=x)
+        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, xx=x)
         _test(d)
         del d['xx']
         _test(d)
@@ -1562,7 +1567,15 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
         a  = x*y
         b = x*y - z + gv.gvar('10(1)')
-        d = dict(a=a, b=b, x=x, y=y, z=z, xx=x)
+        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, xx=x)
+        _test(d, add_dependencies=True)
+        # mixture
+        x = gv.gvar('1(2)') 
+        y = gv.gvar('2(3)') ** 2  + gv.gvar('3(1)')
+        z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
+        a  = x*y
+        b = x*y - z + gv.gvar('10(1)')
+        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, xx=x)
         _test(d, add_dependencies=True)
 
     def test_dependencies(self):
@@ -1576,11 +1589,15 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gv.gvar('3(4)') ** 0.5 * y
         _test(x * y)
         _test(x * y - z)
+        self.assertEqual(len(dependencies([y, x])), 0)
+        self.assertEqual(len(dependencies([y, x, x**2, 2*y])), 0)
         self.assertEqual(len(dependencies([x*y, x])), 1)
         self.assertEqual(len(dependencies([x*y, x, x, x])), 1)
         self.assertEqual(len(dependencies([x*y, x], all=True)), 2)
         self.assertEqual(len(dependencies([x*y, x, x, x], all=True)), 2)
         self.assertTrue(missing_dependencies([x*y, x]))
+        self.assertTrue(missing_dependencies([x*y, x+y, x, x]))
+        self.assertTrue(not missing_dependencies([y, x]))
         self.assertTrue(not missing_dependencies([x*y, x, y]))            
 
     def test_dumps_loads(self):

@@ -1103,7 +1103,7 @@ def _rebuild_gvars(buf, cov, primary, derivs, fix_cov):
     if fix_cov:
         buf[idx_derived] = tmp + _gvar.gvar(
             numpy.zeros(len(idx_derived), dtype=float),
-            cov[idx_derived[None, :], idx_derived] * (1 + EPSILON) - _gvar.evalcov(tmp)
+            cov[idx_derived[:, None], idx_derived] * (1 + EPSILON) - _gvar.evalcov(tmp)
             )
     else:
         buf[idx_derived] = tmp
