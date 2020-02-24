@@ -1575,6 +1575,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         d = dict(a=a, b=b, x=x, y=y, z=z, u=u, uu=u*gv.gvar('1(1)'), xx=x)
         _test(d, add_dependencies=True)
 
+    def test_more_dump(self):
+        " check on particular issue "
+        x = gv.gvar(4 * ['1(2)']) 
+        x[0] -= x[1] * gv.gvar('1(10)')
+        x[2] += x[1]
+        str1 = str(x) +  str(evalcov(x))
+        x = loads(dumps(x))
+        str2 = str(x) +  str(evalcov(x))
+        self.assertEqual(str1, str2)
+
     def test_dependencies(self):
         def _test(g):
             dep = dependencies(g)
