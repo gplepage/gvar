@@ -1528,9 +1528,6 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             _test(g, method='pickle')    
             _test(g, method='dict')
 
-# {'a': 4(14), 'b': 2(14), 'x': 1.0(2.0), 'y': 4(12), 'z': 1.7(1.2), 'u': array([2.0(2.2), 3.0(3.2)], dtype=object), 'xx': 1.0(2.0)}Partial % Errors:
-# {'a': 4(14),'b': 2(14),'x': 1.0(2.0),'y': 4(12),'z': 1.7(1.2),'u': array([2.0(2.2), 3.0(3.2)], dtype=object),'xx': 1.0(2.0)}Partial % Errors:
-
     def test_dump_load_errbudget(self):
         def _test(d, add_dependencies=False):
             d = gv.BufferDict(d)
