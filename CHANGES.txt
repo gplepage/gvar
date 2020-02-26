@@ -1,3 +1,16 @@
+Version 11.0 2020-02-25
+========================
+Significant upgrade to gvar.dump and gvar.load, which now can 
+handle data structures that contain mixtures of GVars with 
+other data types, and that can include nested dictionaries, lists,
+tuples, etc. The old versions (v10.1.2) of these 
+are still available as gvar.gdump and gvar.gload. 
+
+The new versions of dump/load are much more flexible, but 
+unlike the old versions only work with pickle (not json) 
+as the serializer; there is no longer a "method" keyword.
+gdump/gload still offer a choice between pickle and json.
+
 Version 10.1.2 2020-02-24
 ==========================
 Fixes bug introduced into dump in version 10.1 (with thanks to 

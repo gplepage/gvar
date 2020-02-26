@@ -79,13 +79,22 @@ manipulating gaussian random variables, including:
 
     - class :class:`PDFHistogram` --- tool for building PDF histograms.
 
-    - :any:`dump`\ ``(g, outputfile)`` --- serialize a collection of |GVar|\s in file.
+    - :any:`dump`\ ``(g, outputfile)`` --- serialize data from ``g`` in file.
 
-    - :any:`dumps`\ ``(g)`` --- serialize a collection of |GVar|\s in a string.
+    - :any:`dumps`\ ``(g)`` --- serialize data from ``g`` in a bytes object.
 
-    - :any:`load`\ ``(inputfile)`` --- reconstitute a collection of |GVar|\s from a file.
+    - :any:`load`\ ``(inputfile)`` --- reconstitute data serialized in a file.
 
-    - :any:`loads`\ ``(inputstr)`` --- reconstitute a collection of |GVar|\s from a string.
+    - :any:`loads`\ ``(inputbytes)`` --- reconstitute data serialized in a bytes object.
+
+    - :any:`gdump`\ ``(g, outputfile)`` --- serialize a collection of |GVar|\s in file.
+
+    - :any:`gdumps`\ ``(g)`` --- serialize a collection of |GVar|\s in a string.
+
+    - :any:`gload`\ ``(inputfile)`` --- reconstitute a collection of |GVar|\s from a file.
+
+    - :any:`gloads`\ ``(inputstr)`` --- reconstitute a collection of |GVar|\s from a string.
+
 
     - :any:`disassemble`\ ``(g)`` --- low-level routine to disassemble a collection of |GVar|\s.
 
@@ -164,13 +173,21 @@ matrices and correlation/comparison information can be extracted from arrays
 
 |GVar|\s can be stored (serialized) and retrieved from files (or strings) using:
 
-.. autofunction:: gvar.dump(g, outputfile=None, method=None, add_dependencies=False, **kargs)
+.. autofunction:: gvar.dump(g, outputfile=None, add_dependencies=False, **kargs)
 
-.. autofunction:: gvar.dumps(g, method='json', add_dependencies=False)
+.. autofunction:: gvar.dumps(g, add_dependencies=False)
 
-.. autofunction:: gvar.load(inputfile, method=None, **kargs)
+.. autofunction:: gvar.load(inputfile, **kargs)
 
 .. autofunction:: gvar.loads(inputstring)
+
+.. autofunction:: gvar.gdump(g, outputfile=None, method=None, add_dependencies=False, **kargs)
+
+.. autofunction:: gvar.gdumps(g, method='json', add_dependencies=False)
+
+.. autofunction:: gvar.gload(inputfile, method=None, **kargs)
+
+.. autofunction:: gvar.gloads(inputstring)
 
 .. autofunction:: gvar.disassemble(g)
 

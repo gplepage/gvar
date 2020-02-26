@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Overview and Tutorial &#8212; gvar 10.1.2 documentation</title>
+    <title>Overview and Tutorial &#8212; gvar 11.0 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.1.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -480,16 +480,11 @@ means. The easiest way to save an array or dictionary <code class="docutils lite
 </pre></div>
 </div>
 <p>saves the means and covariances from <code class="docutils literal notranslate"><span class="pre">g</span></code> in a Python <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code>
-file named <code class="docutils literal notranslate"><span class="pre">'gfile.p'</span></code>. To reassemble the <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s we use:</p>
+file named <code class="docutils literal notranslate"><span class="pre">'gfile.p'</span></code>. To reassemble the <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (and any other
+data from <code class="docutils literal notranslate"><span class="pre">g</span></code>) we use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;gfile.p&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This recipe works for <code class="docutils literal notranslate"><span class="pre">g</span></code>s that are: single <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, arrays of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
-(any shape), or dictionaries whose values are <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays  of
-<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. (The <code class="docutils literal notranslate"><span class="pre">'.p'</span></code> filename extension indicates that the <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code>
-module
-should be used to serialize the data; using <code class="docutils literal notranslate"><span class="pre">'gfile.json'</span></code> would
-cause <a class="reference internal" href="gvar.html#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a> to use the <code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> module instead.)</p>
 <p>The correlations between different <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s  in the original array/dictionary
 <code class="docutils literal notranslate"><span class="pre">g</span></code> are preserved here, but their correlations with other <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are lost.
 So it is important to include all <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s of  interest in a single array or
@@ -893,7 +888,7 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 10.1.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

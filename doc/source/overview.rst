@@ -469,16 +469,10 @@ means. The easiest way to save an array or dictionary ``g``  of
     >>> gvar.dump(g, 'gfile.p')
 
 saves the means and covariances from ``g`` in a Python :mod:`pickle`
-file named ``'gfile.p'``. To reassemble the |GVar|\s we use::
+file named ``'gfile.p'``. To reassemble the |GVar|\s (and any other 
+data from ``g``) we use::
 
     >>> g = gvar.load('gfile.p')
-
-This recipe works for ``g``\s that are: single |GVar|\s, arrays of |GVar|\s
-(any shape), or dictionaries whose values are |GVar|\s and/or arrays  of
-|GVar|\s. (The ``'.p'`` filename extension indicates that the :mod:`pickle` 
-module
-should be used to serialize the data; using ``'gfile.json'`` would 
-cause :func:`gvar.dump` to use the :mod:`json` module instead.)
 
 The correlations between different |GVar|\s  in the original array/dictionary
 ``g`` are preserved here, but their correlations with other |GVar|\s are lost.

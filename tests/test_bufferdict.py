@@ -15,11 +15,13 @@ test-bufferdict.py
 # GNU General Public License for more details.
 
 import unittest
+import copy
 import pickle as pckl
 import numpy as np
 import gvar as gv
 from gvar import BufferDict, add_parameter_parentheses, trim_redundant_keys
 from gvar import nonredundant_keys
+
 
 class ArrayTests(object):
     def __init__(self):
@@ -79,6 +81,18 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
     def tearDown(self):
         global b,bkeys,bvalues,bslices,bbuf
         b = None
+
+    def test_copy(self):
+        global b,bkeys,bvalues,bslices,bbuf
+        b = gv.BufferDict(b, buf=b.buf * gv.gvar('2(1)'))
+        c = copy.copy(b)
+        self.assertTrue(gv.equivalent(b, c))
+        c['vector'] *= -1 
+        self.assertEqual(c['vector'].tolist(), (-b['vector']).tolist())
+        c = copy.deepcopy(b)
+        self.assertTrue(gv.equivalent(b, c))
+        c['vector'] *= -1 
+        self.assertEqual(c['vector'].tolist(), (-b['vector']).tolist())
 
     def test_flat(self):
         """ b.flat """

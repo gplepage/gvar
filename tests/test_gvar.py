@@ -1504,31 +1504,49 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertEqual(str(evalcov(g1)), str(evalcov(g2)))
 
     def test_dump_load(self):
+        dict = collections.OrderedDict
         gs = gv.gvar('1(2)') * gv.gvar('3(2)')
         ga = gv.gvar([2, 3], [[5., 1.], [1., 10.]]) 
         gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
         gd['v'] += gv.gvar('0(1)')
         gd[(1,3)] = gv.gvar('13(13)')
         gd['v'] = 1 / gd['v']
-        def _test(g, outputfile=None, method=None):
-            s = dump(g, outputfile=outputfile, method=method)
-            d = load(s if outputfile is None else outputfile, method=method)
+        def _test(g, outputfile=None, test_cov=True):
+            s = dump(g, outputfile=outputfile)
+            d = load(s if outputfile is None else outputfile)
             self.assertEqual( str(g), str(d))
-            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+            if test_cov:
+                self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
             # cleanup
             if isinstance(outputfile, str):
                 os.remove(outputfile) 
+            return d
         for g in [gs, ga, gd]:
             _test(g)
-            _test(g, outputfile='xxx.json')
             _test(g, outputfile='xxx.pickle')
             _test(g, outputfile='xxx')
-            _test(g, outputfile='xxx', method='pickle')
-            _test(g, method='json')
-            _test(g, method='pickle')    
-            _test(g, method='dict')
+        gd['x'] = 5.0
+        _test(gd, test_cov=False)
+        _test(gd, outputfile='xxx', test_cov=False)
+        for g in [gs, ga, gd]:
+            g = gv.mean(g)
+            _test(g, test_cov=False)
+        # misc types
+        g = dict(
+            s=set([1,2,gv.gvar('12(20)')]),
+            a=1, 
+            b=[1,[gv.gvar('3(1)') * gv.gvar('2(1)'), 4]], 
+            c=dict(a=gv.gvar(5 * ['1(2)']), b=np.array([[4]])),
+            d=collections.deque([1., 2, gv.gvar('4(1)')]),
+            e='a string',
+            g=(3, 'hi', gv.gvar('-1(2)')),
+            )
+        g['f'] = ['str', g['b'][1][0] * gv.gvar('5(2)')]
+        d = _test(g, outputfile='xxx', test_cov=False)
+        # print(d)
 
     def test_dump_load_errbudget(self):
+        dict = collections.OrderedDict
         def _test(d, add_dependencies=False):
             d = gv.BufferDict(d)
             newd = loads(dumps(d, add_dependencies=add_dependencies))
@@ -1585,6 +1603,153 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         str2 = str(x) +  str(evalcov(x))
         self.assertEqual(str1, str2)
 
+    def test_dumps_loads(self):
+        dict = collections.OrderedDict
+        gs = gv.gvar('1(2)')
+        ga = (gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)') )
+        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+        gd['v'] += gv.gvar('0(1)')
+        gd[(1,3)] = gv.gvar('13(13)')
+        gd['v'] = 1 / gd['v']
+        def _test(g):
+            s = dumps(g)
+            d = loads(s)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+        for g in [gs, ga, gd]:
+            _test(g)
+
+###############
+    def test_gdump_gload(self):
+        gs = gv.gvar('1(2)') * gv.gvar('3(2)')
+        ga = gv.gvar([2, 3], [[5., 1.], [1., 10.]]) 
+        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+        gd['v'] += gv.gvar('0(1)')
+        gd[(1,3)] = gv.gvar('13(13)')
+        gd['v'] = 1 / gd['v']
+        def _test(g, outputfile=None, method=None):
+            s = gdump(g, outputfile=outputfile, method=method)
+            d = gload(s if outputfile is None else outputfile, method=method)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+            # cleanup
+            if isinstance(outputfile, str):
+                os.remove(outputfile) 
+        for g in [gs, ga, gd]:
+            _test(g)
+            _test(g, outputfile='xxx.json')
+            _test(g, outputfile='xxx.pickle')
+            _test(g, outputfile='xxx')
+            _test(g, outputfile='xxx', method='pickle')
+            _test(g, method='json')
+            _test(g, method='pickle')    
+            _test(g, method='dict')
+
+    def test_gdump_gload_errbudget(self):
+        def _test(d, add_dependencies=False):
+            d = gv.BufferDict(d)
+            newd = gloads(gdumps(d, add_dependencies=add_dependencies))
+            str1 = str(d) + fmt_errorbudget(
+                outputs=dict(a=d['a'], b=d['b']), 
+                inputs=dict(x=d['x'], y=d['y'], z=d['z']),
+                )
+            d = newd
+            str2 = str(d) + fmt_errorbudget(
+                outputs=dict(a=d['a'], b=d['b']), 
+                inputs=dict(x=d['x'], y=d['y'], z=d['z']),
+                )
+            self.assertEqual(str1, str2)    
+        # all primaries included
+        x = gv.gvar('1(2)')
+        y = gv.gvar('2(3)') ** 2
+        z = gv.gvar('3(4)') ** 0.5 
+        u = gv.gvar([2, 3], [[5., 1.], [1., 10.]]) 
+        a  = x*y
+        b = x*y - z
+        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, uu=u*gv.gvar('1(1)'), xx=x)
+        _test(d)
+        del d['xx']
+        _test(d)
+        # a,b are primaries
+        a, b = gvar(mean([d['a'], d['b']]), evalcov([d['a'], d['b']]))
+        d['a'] = a
+        d['b'] = b 
+        _test(d)
+        # no primaries included explicitly
+        x = gv.gvar('1(2)') + gv.gvar('1(2)')
+        y = gv.gvar('2(3)') ** 2 + gv.gvar('3(1)')
+        z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
+        a  = x*y
+        b = x*y - z + gv.gvar('10(1)')
+        d = dict(a=a, b=b, x=x, y=y, z=z, uu=u*gv.gvar('1(1)'), xx=x)
+        _test(d, add_dependencies=True)
+        # mixture
+        x = gv.gvar('1(2)') 
+        y = gv.gvar('2(3)') ** 2  + gv.gvar('3(1)')
+        z = gv.gvar('3(4)') ** 0.5 + gv.gvar('4(1)')
+        a  = x*y
+        b = x*y - z + gv.gvar('10(1)')
+        d = dict(a=a, b=b, x=x, y=y, z=z, u=u, uu=u*gv.gvar('1(1)'), xx=x)
+        _test(d, add_dependencies=True)
+
+    def test_more_gdump(self):
+        " check on particular issue "
+        x = gv.gvar(4 * ['1(2)']) 
+        x[0] -= x[1] * gv.gvar('1(10)')
+        x[2] += x[1]
+        str1 = str(x) +  str(evalcov(x))
+        x = gloads(gdumps(x))
+        str2 = str(x) +  str(evalcov(x))
+        self.assertEqual(str1, str2)
+
+    def test_gdumps_gloads(self):
+        gs = gv.gvar('1(2)')
+        ga = (gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)') )
+        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+        gd['v'] += gv.gvar('0(1)')
+        gd[(1,3)] = gv.gvar('13(13)')
+        gd['v'] = 1 / gd['v']
+        # json (implicit)
+        def _test(g):
+            s = gdumps(g)
+            d = gloads(s)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+        for g in [gs, ga, gd]:
+            _test(g)
+        # json
+        def _test(g):
+            s = gdumps(g, method='json')
+            d = gloads(s)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+        for g in [gs, ga, gd]:
+            _test(g)
+        # pickle
+        def _test(g):
+            s = gdumps(g, method='pickle')
+            d = gloads(s)
+            self.assertEqual( str(g), str(d))
+            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+        for g in [gs, ga, gd]:
+            _test(g)
+
+################
+    def test_oldload(self):
+        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+        for g in [gd, gd['s'], gd['v']]:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                g = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
+                olddump(g, 'xxx.p')
+                d = load('xxx.p')
+                assert str(g) == str(d)
+                assert str(gv.evalcov(g)) == str(gv.evalcov(d))
+                olddump(g, 'xxx.json', method='json')
+                d = load('xxx.json', method='json')
+                assert str(g) == str(d)
+                assert str(gv.evalcov(g)) == str(gv.evalcov(d))
+
     def test_dependencies(self):
         def _test(g):
             dep = dependencies(g)
@@ -1606,53 +1771,6 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertTrue(missing_dependencies([x*y, x+y, x, x]))
         self.assertTrue(not missing_dependencies([y, x]))
         self.assertTrue(not missing_dependencies([x*y, x, y]))            
-
-    def test_dumps_loads(self):
-        gs = gv.gvar('1(2)')
-        ga = (gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)') )
-        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
-        gd['v'] += gv.gvar('0(1)')
-        gd[(1,3)] = gv.gvar('13(13)')
-        gd['v'] = 1 / gd['v']
-        # json (implicit)
-        def _test(g):
-            s = dumps(g)
-            d = loads(s)
-            self.assertEqual( str(g), str(d))
-            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
-        for g in [gs, ga, gd]:
-            _test(g)
-        # json
-        def _test(g):
-            s = dumps(g, method='json')
-            d = loads(s)
-            self.assertEqual( str(g), str(d))
-            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
-        for g in [gs, ga, gd]:
-            _test(g)
-        # pickle
-        def _test(g):
-            s = dumps(g, method='pickle')
-            d = loads(s)
-            self.assertEqual( str(g), str(d))
-            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
-        for g in [gs, ga, gd]:
-            _test(g)
-
-    def test_oldload(self):
-        gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
-        for g in [gd, gd['s'], gd['v']]:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                g = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
-                olddump(g, 'xxx.p')
-                d = load('xxx.p')
-                assert str(g) == str(d)
-                assert str(gv.evalcov(g)) == str(gv.evalcov(d))
-                olddump(g, 'xxx.json', method='json')
-                d = load('xxx.json', method='json')
-                assert str(g) == str(d)
-                assert str(gv.evalcov(g)) == str(gv.evalcov(d))
 
     def test_gammaQ(self):
         " gammaQ(a, x) "

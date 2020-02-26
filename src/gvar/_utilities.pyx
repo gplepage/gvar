@@ -751,21 +751,228 @@ def evalcov(g):
             ans[b,a] = ans[a,b]
     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
-def dumps(g, method='json', add_dependencies=False):
+###### dump/load
+######
+class _GVarRef:
+    def __init__(self, loc):
+        self.loc = loc
+
+def _distribute_gvars(g, gvlist):
+    " distribute |GVar|\s from ``gvlist`` in structure g, replacing ``_GVarRef``\s. "
+    if hasattr(g, 'keys'):
+        return type(g)([(k, _distribute_gvars(g[k], gvlist)) for k in g])
+    elif type(g) in [collections.deque, list, tuple, set]:
+        return type(g)([_distribute_gvars(x, gvlist) for x in g])
+    elif type(g) == numpy.ndarray:
+        return numpy.array([_distribute_gvars(x, gvlist) for x in g])
+    elif isinstance(g, _GVarRef):
+        return gvlist[g.loc]
+    else:
+        return g
+
+def _collect_gvars(g, gvlist):
+    " collect |GVar|\s in ``gvlist`` from structure g; replace with ``_GVarRef``\s. "
+    if hasattr(g, 'keys'):
+        return type(g)([(k, _collect_gvars(g[k], gvlist)) for k in g])
+    elif type(g) in [collections.deque, list, tuple, set]:
+        return type(g)([_collect_gvars(x, gvlist) for x in g])
+    elif type(g) == numpy.ndarray:
+        return numpy.array([_collect_gvars(x, gvlist) for x in g])
+    elif isinstance(g, _gvar.GVar):
+        gvlist.append(g)
+        return _GVarRef(len(gvlist) - 1)
+    else:
+        return g
+
+def dumps(g, add_dependencies=False, **kargs):
     """ Return a serialized representation of ``g``.
 
     This function is shorthand for::
     
-        gvar.dump(g, method='json').getvalue()
+        gvar.dump(g).getvalue()
+    
+    Typical usage is::
+
+        # create bytes object containing GVars in g
+        import gvar as gv 
+        gbytes = gv.dumps(g)
+
+        # convert string back into GVars
+        new_g = gv.loads(gbytes)
+    
+    Args:
+        g: Object to be serialized. Consists of (possibly nested) 
+            dictionaries, sets, deques, lists, ``numpy.array``\s, 
+            and/or tuples that contain |GVar|\s and other types of data.
+        add_dependencies (bool): If ``True``, automatically includes 
+            all primary |GVar|\s that contribute to the covariances 
+            of the |GVar|\s in ``g`` but are not already in ``g``.
+            Default is ``False``.
+    
+    Returns:
+        A bytes object containing a serialized representation 
+        of object ``g``.
+    """
+    return dump(g, add_dependencies=add_dependencies).getvalue()
+
+def loads(inputbytes, **kargs):
+    return load(BytesIO(inputbytes), **kargs)
+
+def dump(g, outputfile=None, add_dependencies=False, **kargs):
+    """ Write a representation of ``g``  to file ``outputfile``.
+
+    Object ``g`` consists of (possibly nested) dictionaries, sets, deques,
+    lists, ``numpy.array``\s, and/or tuples that contain |GVar|\s and 
+    other types of data. Calling ``gvar.dump(g, 'filename')`` writes a 
+    serialized representation of ``g`` into the file named ``filename``. 
+    Object ``g`` can be recovered later using ``gvar.load('filename')``.
+
+    Typical usage is::
+
+        # create file xxx.pickle containing GVars in g
+        import gvar as gv 
+        gv.dump(g, 'xxx.pickle')
+
+        # read file xxx.pickle to recreate g
+        new_g = gv.load('xxx.pickle')
+
+    :func:`gvar.dump` is an alternative to ``pickle.dump()`` which,
+    unlike the latter, works when there are |GVar|\s in ``g``.
+    In particular it preserves correlations between different
+    |GVar|\s, as well as relationships (i.e., derivatives) between
+    derived |GVar|\s and primary |GVar|\s in ``g``.
+
+    The partial variances for derived |GVar|\s in ``g`` coming from 
+    primary |GVar|\s in ``g`` are preserved by :func:`gvar.dump`.
+    (These are used, for example, to calculate error budgets.)
+    Partial variances coming from derived (rather than 
+    primary) |GVar|\s, however, are unreliable unless 
+    every primary |GVar| that contributes to the covariances
+    in ``g`` is included in ``g``. To guarantee that
+    this is the case, set keyword ``add_dependencies=True``.
+    This can greatly increase the size of the output file,
+    and so should only be done if error budgets, etc. are needed. 
+    (Also the cost of evaluating covariance matrices 
+    for the reconstituted |GVar|\s is increased if there 
+    are large numbers of primary |GVar|\s.) The default is 
+    ``add_dependencies=False``.
+
+    Args:
+        g: Object to be serialized. Consists of (possibly nested) 
+            dictionaries, sets, deques, lists, ``numpy.array``\s, 
+            and/or tuples that contain |GVar|\s and other types of data.
+        outputfile: The name of a file or a file object in which the
+            serialized ``g`` is stored. If ``outputfile=None`` (default),
+            the results are written to a :class:`BytesIO`. 
+        add_dependencies (bool): If ``True``, automatically includes 
+            all primary |GVar|\s that contribute to the covariances 
+            of the |GVar|\s in ``g`` but are not already in ``g``.
+            Default is ``False``.
+        kargs (dict): Additional arguments, if any, that are passed to 
+            the underlying serializer (:mod:`pickle`).
+
+    Returns:
+        The :class:`BytesIO` object containing the serialized data, 
+        if ``outputfile=None``; otherwise ``outputfile``.
+    """    
+    if outputfile is None:
+        ofile = BytesIO()
+    elif isinstance(outputfile, str):
+        ofile = open(outputfile, 'wb')
+    else:
+        ofile = outputfile 
+    datadict = {}
+    gvlist = []
+    datadict['data'] = _collect_gvars(g, gvlist)
+    if gvlist:
+        datadict['gvlist'] = _gvar.gdumps(
+            gvlist, method='pickle', 
+            add_dependencies=add_dependencies
+            )
+    else:
+        datadict['data'] = g
+    # dump the datadict
+    pickle.dump(datadict, ofile, **kargs)
+    # cleanup and return
+    if outputfile is None:
+        ofile.seek(0)
+        return ofile
+    elif isinstance(outputfile, str):
+        ofile.close()
+    return outputfile
+
+def load(inputfile, method=None, **kargs):
+    """ Read and return object serialized in ``inputfile`` by :func:`gvar.dump`.
+
+    This function recovers data serialized with :func:`gvar.dump`.
+    Typical usage is::
+
+        # create file xxx.pickle containing data in g
+        import gvar as gv 
+        gv.dump(g, 'xxx.pickle')
+
+        # read file xxx.pickle to recreate g
+        new_g = gv.gload('xxx.pickle')
+
+    Note that the format used by :func:`gvar.dump` changed with 
+    version |~| 11.0 of :mod:`gvar`. :func:`gvar.load` will 
+    attempt to read the old formats if they are encountered, but 
+    old data should be converted to the new format (by reading 
+    it in with :func:`load` and them writing it out again 
+    with :func:`dump`).
+
+    Args:
+        inputfile: The name of the file or a file object in which the
+            serialized |GVar|\s are stored (created by :func:`gvar.dump`).
+        kargs (dict): Additional arguments, if any, that are passed to 
+            the underlying de-serializer (:mod:`pickle`).
+
+    Returns:
+        The reconstructed data object.
+    """
+    # N.B. method included for legacy code only
+    if isinstance(inputfile, BytesIO): 
+        ifile = inputfile
+        iloc = inputfile.tell()
+    elif isinstance(inputfile, StringIO):
+        return _gvar.gload(inputfile, method)
+    elif isinstance(inputfile, str):
+        ifile = open(inputfile, 'rb')
+    else:
+        ifile = inputfile 
+    try:
+        datadict = pickle.load(ifile, **kargs)
+        if isinstance(inputfile, str):
+            ifile.close()
+        if 'gvlist' in datadict:
+            return _distribute_gvars(
+                datadict['data'], 
+                _gvar.gloads(datadict['gvlist'])
+                )   
+        else:
+            return datadict['data']
+    except (KeyError, TypeError, pickle.PickleError):
+        if isinstance(inputfile, BytesIO):
+            inputfile.seek(iloc)
+        return gload(inputfile, method)
+
+##### gdump/gload
+#####
+def gdumps(g, method='json', add_dependencies=False):
+    """ Return a serialized representation of ``g``.
+
+    This function is shorthand for::
+    
+        gvar.gdump(g, method='json').getvalue()
     
     Typical usage is::
 
         # create string containing GVars in g
         import gvar as gv 
-        gstr = gv.dumps(g)
+        gstr = gv.gdumps(g)
 
         # convert string back into GVars
-        new_g = gv.loads(gstr)
+        new_g = gv.gloads(gstr)
     
     Args:
         g: A |GVar|, array of |GVar|\s, or dictionary whose values
@@ -782,19 +989,19 @@ def dumps(g, method='json', add_dependencies=False):
         representation of object ``g``.
     """
     if method is None or method == 'json':
-        return dump(g, method='json', add_dependencies=add_dependencies).getvalue()
+        return gdump(g, method='json', add_dependencies=add_dependencies).getvalue()
     elif method == 'pickle':
-        return dump(g, method='pickle', add_dependencies=add_dependencies).getvalue()
+        return gdump(g, method='pickle', add_dependencies=add_dependencies).getvalue()
     else:
         raise ValueError('unknown method: ' + str(method))
 
-def dump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
+def gdump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
     """ Write a representation of ``g``  to file ``outputfile``.
 
     Object ``g`` is a |GVar|, an array of |GVar|\s (any shape), or 
     a dictionary whose values are |GVar|\s and/or arrays of |GVar|\s;
     it describes a general (multi-dimensional) Gaussian distribution.
-    Calling ``gvar.dump(g, 'filename')`` writes a serialized representation
+    Calling ``gvar.gdump(g, 'filename')`` writes a serialized representation
     of ``g`` into the file named ``filename``. The Gaussian distribution
     described by ``g`` can be recovered later using ``gvar.load('filename')``.
     Correlations between different |GVar|\s in ``g`` are preserved, as
@@ -805,10 +1012,10 @@ def dump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
 
         # create file xxx.pickle containing GVars in g
         import gvar as gv 
-        gv.dump(g, 'xxx.pickle')
+        gv.gdump(g, 'xxx.pickle')
 
         # read file xxx.pickle to recreate g
-        new_g = gv.load('xxx.pickle')
+        new_g = gv.gload('xxx.pickle')
 
     Object ``g`` is serialized using one of the :mod:`json` (text
     file) or :mod:`pickle` (binary file) Python modules. 
@@ -824,7 +1031,7 @@ def dump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
     workaround fails.
 
     The partial variances for derived |GVar|\s in ``g`` coming from 
-    primary |GVar|\s in ``g`` are preserved by :func:`gvar.dump`.
+    primary |GVar|\s in ``g`` are preserved by :func:`gvar.gdump`.
     (These are used, for example, to calculate error budgets.)
     Partial variances coming from derived (rather than 
     primary) |GVar|\s, however, are unreliable unless 
@@ -864,7 +1071,7 @@ def dump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
         object containing the serialized data is returned. Otherwise
         ``outputfile`` is returned.
     """
-    sg = _dump(g, add_dependencies=add_dependencies)
+    sg = _gdump(g, add_dependencies=add_dependencies)
     if outputfile is None:
         if method is None:
             method = 'json' 
@@ -901,22 +1108,22 @@ def dump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
     
 _DUMPMETHODS = dict(json='json', p='pickle', pkl='pickle', pickle='pickle')
 
-def loads(inputstr):
+def gloads(inputstr):
     """ Return |GVar|\s that are serialized in ``inputstr``.
 
-    This function recovers the |GVar|\s serialized with :func:`gvar.dumps(g)`.
+    This function recovers the |GVar|\s serialized with :func:`gvar.gdumps(g)`.
     It is shorthand for::
 
-        gvar.load(StringIO(inputstr), method='json')
+        gvar.gload(StringIO(inputstr), method='json')
     
     Typical usage is::
 
         # create string containing GVars in g
         import gvar as gv 
-        gstr = gv.dumps(g)
+        gstr = gv.gdumps(g)
 
         # convert string back into GVars
-        new_g = gv.loads(gstr)
+        new_g = gv.gloads(gstr)
 
     Args:
         inputstr (str or bytes): String or bytes object 
@@ -927,33 +1134,26 @@ def loads(inputstr):
         whose values are |GVar|\s and/or arrays of |GVar|\s.
     """
     try:
-        return load(StringIO(inputstr), method='json')
+        return gload(StringIO(inputstr), method='json')
     except (TypeError, ValueError):
-        return load(BytesIO(inputstr), method='pickle')
+        return gload(BytesIO(inputstr), method='pickle')
 
-def load(inputfile, method=None, **kargs):
+def gload(inputfile, method=None, **kargs):
     """ Read and return |GVar|\s that are serialized in ``inputfile``.
 
-    This function recovers |GVar|\s serialized with :func:`gvar.dump`.
+    This function recovers |GVar|\s serialized with :func:`gvar.gdump`.
     Typical usage is::
 
         # create file xxx.pickle containing GVars in g
         import gvar as gv 
-        gv.dump(g, 'xxx.pickle')
+        gv.gdump(g, 'xxx.pickle')
 
         # read file xxx.pickle to recreate g
-        new_g = gv.load('xxx.pickle')
-
-    Note that the format used by :func:`gvar.dump` changed with 
-    version |~| 10.0 of :mod:`gvar`. :func:`gvar.load` will 
-    attempt to read the old format if it is encountered, but 
-    old data should be converted to the new format (by reading 
-    it in with :func:`load` and them writing it out again 
-    with :func:`dump`).
+        new_g = gv.gload('xxx.pickle')
 
     Args:
         inputfile: The name of the file or a file object in which the
-            serialized |GVar|\s are stored (created by :func:`gvar.dump`).
+            serialized |GVar|\s are stored (created by :func:`gvar.gdump`).
         method (str or None): Serialization method, which should be either
             ``'pickle'`` or ``'json'``. If ``method=None`` (default),
             the method is inferred from the filename's extension:
@@ -971,12 +1171,14 @@ def load(inputfile, method=None, **kargs):
         whose values are |GVar|\s and/or arrays of |GVar|\s.
     """
     if isinstance(inputfile, dict):
-        return _load(inputfile)
+        return _gload(inputfile)
     elif isinstance(inputfile, BytesIO): # check for this before StringIO
         ifile = inputfile
+        iloc = inputfile.tell()
         method = 'pickle'
     elif isinstance(inputfile, StringIO):
         ifile = inputfile 
+        iloc = inputfile.tell()
         method = 'json'
     elif isinstance(inputfile, str):
         if method is None:
@@ -1000,12 +1202,14 @@ def load(inputfile, method=None, **kargs):
     if isinstance(inputfile, str):
         ifile.close()
     try:
-        return _load(sg)
+        return _gload(sg)
     except KeyError, TypeError:
+        if isinstance(inputfile, BytesIO) or isinstance(inputfile, StringIO):
+            inputfile.seek(iloc)
         return _oldload1(inputfile, method)
 
-def _dump(g, add_dependencies=False):
-    """ Repack ``g`` in dictionary that can be serialized. Used by :func:`dump`.
+def _gdump(g, add_dependencies=False):
+    """ Repack ``g`` in dictionary that can be serialized. Used by :func:`gdump`.
     """
     cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
     cdef numpy.ndarray bcov
@@ -1052,8 +1256,8 @@ def _dump(g, add_dependencies=False):
                 data['bcovs'][-1] += [primary.tolist(), derivs.tolist()]
     return data 
 
-def _load(data):
-    """ Inverse of :func:`_dump`.
+def _gload(data):
+    """ Inverse of :func:`_gdump`.
     """
     # reconstitute the GVars
     buf = numpy.array(data['means'], dtype=object)
@@ -1089,7 +1293,7 @@ def _load(data):
         return buf
 
 def _rebuild_gvars(buf, cov, primary, derivs, fix_cov):
-    " reconnect derived GVars to primary GVars "
+    " reconnect derived GVars to primary GVars; used by :func:`_gload` "
     if primary == [] or derivs.size == 0:
         return buf
     idx_primary = numpy.arange(buf.size)[primary]
@@ -1109,7 +1313,8 @@ def _rebuild_gvars(buf, cov, primary, derivs, fix_cov):
         buf[idx_derived] = tmp
     return buf
 
-# old versions kept for legacy purposes (for now)
+####### old versions kept for legacy purposes (for now)
+#######
 def olddump(g, outputfile, method='pickle', use_json=False):
     """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
 

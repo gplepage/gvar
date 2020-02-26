@@ -154,42 +154,20 @@ class BufferDict(collections_MMapping):
                     "bd must be a BufferDict in BufferDict(bd,buf), not %s"
                                     % str(type(bd)))
 
+    def __copy__(self):
+        return BufferDict(self)
+    
+    def __deepcopy__(self, memo):
+        return BufferDict(self, buf=copy.deepcopy(self.buf, memo))
+
     def __getstate__(self):
         """ Capture state for pickling when elements are GVars. """
-        if len(self._buf) > 0 and isinstance(self._buf[0], _gvar.GVar):
-            return _gvar.dumps(self, method='pickle')
-        else:
-            state = {}
-            buf = self._buf
-            state['buf'] = numpy.asarray(buf).tolist()        
-            layout = collections.OrderedDict()
-            od = self._odict
-            for k in self:
-                layout[k] = (od.__getitem__(k).slice, od.__getitem__(k).shape)
-            state['layout'] = layout
-            return state
-        # state = {}
-        # buf = self._buf
-        # if len(self._buf) > 0 and isinstance(self._buf[0], _gvar.GVar):
-        #     # state['buf'] = ( _gvar.mean(buf),  _gvar.evalcov(buf))  # old
-        #     means = _gvar.mean(buf).tolist()
-        #     bcovs = [
-        #         [idx.tolist(), bcov.tolist()] for idx, bcov in _gvar.evalcov_blocks(buf, compress=True)
-        #         ]
-        #     state['buf'] = (means, bcovs, None)
-        # else:
-        #     state['buf'] = numpy.asarray(buf).tolist()
-        # layout = collections.OrderedDict()
-        # od = self._odict
-        # for k in self:
-        #     layout[k] = (od.__getitem__(k).slice, od.__getitem__(k).shape)
-        # state['layout'] = layout
-        # return state
+        return _gvar.dumps(collections.OrderedDict(self))
 
     def __setstate__(self, state):
         """ Restore state when unpickling when elements are GVars. """
         if not hasattr(state, 'keys'):
-            tmp = _gvar.loads(state)
+            tmp = _gvar.BufferDict(_gvar.loads(state))
             self._odict = tmp._odict 
             self._buf = tmp._buf 
             self._extension = {}
