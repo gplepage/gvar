@@ -1,5 +1,5 @@
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-18 G. Peter Lepage.
+# Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -770,19 +770,56 @@ def _distribute_gvars(g, gvlist):
     else:
         return g
 
-def _collect_gvars(g, gvlist):
-    " collect |GVar|\s in ``gvlist`` from structure g; replace with ``_GVarRef``\s. "
+def _remove_gvars(g, gvlist):
+    " remove |GVar|\s from structure g, collecting them in ``gvlist``; replace with ``_GVarRef``\s. "
     if hasattr(g, 'keys'):
-        return type(g)([(k, _collect_gvars(g[k], gvlist)) for k in g])
+        return type(g)([(k, _remove_gvars(g[k], gvlist)) for k in g])
     elif type(g) in [collections.deque, list, tuple, set]:
-        return type(g)([_collect_gvars(x, gvlist) for x in g])
+        return type(g)([_remove_gvars(x, gvlist) for x in g])
     elif type(g) == numpy.ndarray:
-        return numpy.array([_collect_gvars(x, gvlist) for x in g])
+        return numpy.array([_remove_gvars(x, gvlist) for x in g])
     elif isinstance(g, _gvar.GVar):
         gvlist.append(g)
         return _GVarRef(len(gvlist) - 1)
     else:
         return g
+
+def _collect_gvars(g, gvlist):
+    " collect |GVar|\s in ``gvlist`` from structure g; replace with ``_GVarRef``\s. "
+    if isinstance(g, _gvar.GVar):
+        gvlist.append(g)
+    elif hasattr(g, 'keys'):
+        for k in g:
+            _collect_gvars(g[k], gvlist)
+    elif type(g) in [collections.deque, list, tuple, set, numpy.ndarray]:
+        for x in g:
+            _collect_gvars(x, gvlist)
+
+def filter(g, f, *args, **kargs):
+    """ Filter |GVar|\s in ``g`` through function ``f``. 
+    
+    Sample usuage::
+
+        import gvar as gv
+        g_mod = gv.filter(g, gv.mean)
+
+    replaces every |GVar| in ``g`` by its mean.
+
+    Args:
+        g: Object consisting of (possibly nested) dictionaries,
+            sets, deques, lists, ``numpy.array``\s, and/or tuples 
+            that contain |GVar|\s and other types of data.
+        f: Function that takes an array of |GVar|\s as an argument
+            and returns an array of results having the same shape.
+            The function call is ``f(gvar_array, *args, **kargs)``
+        args: Additional arguments for ``f``.
+        kargs: Additional keyword arguments for ``f``.
+
+    """
+    gvlist = []
+    new_g = _remove_gvars(g, gvlist)
+    gvlist = f(gvlist, *args, **kargs)
+    return _distribute_gvars(new_g, gvlist)
 
 def dumps(g, add_dependencies=False, **kargs):
     """ Return a serialized representation of ``g``.
@@ -883,7 +920,7 @@ def dump(g, outputfile=None, add_dependencies=False, **kargs):
         ofile = outputfile 
     datadict = {}
     gvlist = []
-    datadict['data'] = _collect_gvars(g, gvlist)
+    datadict['data'] = _remove_gvars(g, gvlist)
     if gvlist:
         datadict['gvlist'] = _gvar.gdumps(
             gvlist, method='pickle', 

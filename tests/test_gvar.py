@@ -1489,6 +1489,11 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_arraysclose((b[1]-b[0]).sdev,1.0)
         self.assert_arraysclose((a[1]-a[0]).sdev,5.0)
 
+    def test_filter(self):
+        g = collections.OrderedDict(a=2.3, b=[gv.gvar('12(2)'), 3.], c='string')
+        gm = collections.OrderedDict([('a', 2.3), ('b', [2., 3.])], c='string')
+        self.assertEqual(str(gv.filter(g, gv.sdev)), str(gm))
+
     def test_pickle(self):
         """ pickle strategies """
         for g in [

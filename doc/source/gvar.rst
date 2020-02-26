@@ -45,6 +45,8 @@ manipulating gaussian random variables, including:
 
     - :any:`dependencies`\ ``(g)`` --- collect primary |GVar|\s contributing to ``g``.
 
+    - :any:`filter`\ ``(g, f, *args, **kargs)`` --- filter |GVar|\s in ``g`` through function ``f``.
+
     - :any:`deriv`\ ``(g, x)`` --- derivatives of ``g`` with respect to ``x``,
     
     - :any:`fmt`\ ``(g)`` --- replace all |GVar|\s in array/dictionary by string representations.
@@ -95,7 +97,6 @@ manipulating gaussian random variables, including:
 
     - :any:`gloads`\ ``(inputstr)`` --- reconstitute a collection of |GVar|\s from a string.
 
-
     - :any:`disassemble`\ ``(g)`` --- low-level routine to disassemble a collection of |GVar|\s.
 
     - :any:`reassemble`\ ``(data,cov)`` --- low-level routine to reassemble a collection of |GVar|\s.
@@ -142,6 +143,8 @@ matrices and correlation/comparison information can be extracted from arrays
 .. autofunction:: gvar.is_primary(g)
 
 .. autofunction:: gvar.dependencies(g, all=False)
+
+.. autofunction:: gvar.filter(g, f, *args, **kargs)
 
 .. autofunction:: gvar.fmt(g, ndecimal=None, sep='')
 
