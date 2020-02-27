@@ -75,6 +75,7 @@ manipulating gaussian random variables, including:</p>
 <li><p><a class="reference internal" href="#gvar.var" title="gvar.var"><code class="xref any py py-func docutils literal notranslate"><span class="pre">var</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — extract variances.</p></li>
 <li><p><a class="reference internal" href="#gvar.is_primary" title="gvar.is_primary"><code class="xref any py py-func docutils literal notranslate"><span class="pre">is_primary</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — test whether primary (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or derived (<code class="docutils literal notranslate"><span class="pre">False</span></code>) <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
 <li><p><a class="reference internal" href="#gvar.dependencies" title="gvar.dependencies"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dependencies</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — collect primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s contributing to <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p></li>
+<li><p><a class="reference internal" href="#gvar.filter" title="gvar.filter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">filter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">f,</span> <span class="pre">*args,</span> <span class="pre">**kargs)</span></code> — filter <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> through function <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p></li>
 <li><p><a class="reference internal" href="#gvar.deriv" title="gvar.deriv"><code class="xref any py py-func docutils literal notranslate"><span class="pre">deriv</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">x)</span></code> — derivatives of <code class="docutils literal notranslate"><span class="pre">g</span></code> with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code>,</p></li>
 <li><p><a class="reference internal" href="#gvar.fmt" title="gvar.fmt"><code class="xref any py py-func docutils literal notranslate"><span class="pre">fmt</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — replace all <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in array/dictionary by string representations.</p></li>
 <li><p><a class="reference internal" href="#gvar.tabulate" title="gvar.tabulate"><code class="xref any py py-func docutils literal notranslate"><span class="pre">tabulate</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — tabulate entries in array/dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
@@ -299,24 +300,52 @@ the same primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVa
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>g</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or
-arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>g</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or a dictionary, array, etc. containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
 <li><p><strong>all</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the result includes all primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s including
-those that are in <code class="docutils literal notranslate"><span class="pre">g</span></code>; otherwise only includes those not in <code class="docutils literal notranslate"><span class="pre">g</span></code>.
+those that are in <code class="docutils literal notranslate"><span class="pre">g</span></code>; otherwise it only includes those not in <code class="docutils literal notranslate"><span class="pre">g</span></code>.
 Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>An array containing the primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s contributing to covariances of
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>. Each of the primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s has zero mean, so that,
-for example, the code</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dep</span> <span class="o">=</span> <span class="n">dependencies</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-<span class="n">new_z</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">mean</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dep</span> <span class="o">*</span> <span class="n">z</span><span class="o">.</span><span class="n">deriv</span><span class="p">(</span><span class="n">dep</span><span class="p">))</span>
+<dd class="field-even"><p>An array containing the primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s contributing to covariances of
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.filter">
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">f</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> through function <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
+<p>Sample usuage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="n">g_mod</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>creates a new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">new_z</span></code> that is identical to derived
-<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">z</span></code>.</p>
-</p>
+<p>replaces every <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> in <code class="docutils literal notranslate"><span class="pre">g</span></code> by its mean. This is useful
+when <code class="docutils literal notranslate"><span class="pre">gv.mean(g)</span></code> doesn’t work — for example, because
+<code class="docutils literal notranslate"><span class="pre">g</span></code> contains data types other than <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s,
+or consists of nested dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – Object consisting of (possibly nested) dictionaries,
+deques, lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s, and/or tuples
+that contain <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and other types of data.</p></li>
+<li><p><strong>f</strong> – Function that takes an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as an argument
+and returns an array of results having the same shape.
+Given an array <code class="docutils literal notranslate"><span class="pre">gvar_array</span></code> containing all
+the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from <code class="docutils literal notranslate"><span class="pre">g</span></code>, the function call is
+<code class="docutils literal notranslate"><span class="pre">f(gvar_array,</span> <span class="pre">*args,</span> <span class="pre">**kargs)</span></code>. Results
+from the returned array replace the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+in the original object.</p></li>
+<li><p><strong>args</strong> – Additional arguments for <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p></li>
+<li><p><strong>kargs</strong> – Additional keyword arguments for <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object like <code class="docutils literal notranslate"><span class="pre">g</span></code>  but with all the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+replaced by objects generated by function <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -746,7 +775,7 @@ must agree with each other. Default is <code class="docutils literal notranslate
 <dt id="gvar.dump">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">outputfile=None</em>, <em class="sig-param">add_dependencies=False</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a representation of <code class="docutils literal notranslate"><span class="pre">g</span></code>  to file <code class="docutils literal notranslate"><span class="pre">outputfile</span></code>.</p>
-<p>Object <code class="docutils literal notranslate"><span class="pre">g</span></code> consists of (possibly nested) dictionaries, sets, deques,
+<p>Object <code class="docutils literal notranslate"><span class="pre">g</span></code> consists of (possibly nested) dictionaries, deques,
 lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s, and/or tuples that contain <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and
 other types of data. Calling <code class="docutils literal notranslate"><span class="pre">gvar.dump(g,</span> <span class="pre">'filename')</span></code> writes a
 serialized representation of <code class="docutils literal notranslate"><span class="pre">g</span></code> into the file named <code class="docutils literal notranslate"><span class="pre">filename</span></code>.
@@ -783,7 +812,7 @@ are large numbers of primary <a class="reference internal" href="#gvar.GVar" tit
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> – Object to be serialized. Consists of (possibly nested)
-dictionaries, sets, deques, lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s,
+dictionaries, deques, lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s,
 and/or tuples that contain <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and other types of data.</p></li>
 <li><p><strong>outputfile</strong> – The name of a file or a file object in which the
 serialized <code class="docutils literal notranslate"><span class="pre">g</span></code> is stored. If <code class="docutils literal notranslate"><span class="pre">outputfile=None</span></code> (default),
@@ -824,7 +853,7 @@ if <code class="docutils literal notranslate"><span class="pre">outputfile=None<
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> – Object to be serialized. Consists of (possibly nested)
-dictionaries, sets, deques, lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s,
+dictionaries, deques, lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s,
 and/or tuples that contain <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and other types of data.</p></li>
 <li><p><strong>add_dependencies</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, automatically includes
 all primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that contribute to the covariances

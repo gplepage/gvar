@@ -1490,8 +1490,8 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_arraysclose((a[1]-a[0]).sdev,5.0)
 
     def test_filter(self):
-        g = collections.OrderedDict(a=2.3, b=[gv.gvar('12(2)'), 3.], c='string')
-        gm = collections.OrderedDict([('a', 2.3), ('b', [2., 3.])], c='string')
+        g = collections.OrderedDict([('a', 2.3), ('b', [gv.gvar('12(2)'), 3.]), ('c', 'string')])
+        gm = collections.OrderedDict([('a', 2.3), ('b', [2., 3.]), ('c', 'string')])
         self.assertEqual(str(gv.filter(g, gv.sdev)), str(gm))
 
     def test_pickle(self):
@@ -1538,7 +1538,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             _test(g, test_cov=False)
         # misc types
         g = dict(
-            s=set([1,2,gv.gvar('12(20)')]),
+            s=set([1,2,12.2]),
             a=1, 
             b=[1,[gv.gvar('3(1)') * gv.gvar('2(1)'), 4]], 
             c=dict(a=gv.gvar(5 * ['1(2)']), b=np.array([[4]])),
@@ -1767,10 +1767,12 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         _test(x * y)
         _test(x * y - z)
         self.assertEqual(len(dependencies([y, x])), 0)
+        self.assertEqual(len(dependencies([y, 'string', x])), 0)
         self.assertEqual(len(dependencies([y, x, x**2, 2*y])), 0)
         self.assertEqual(len(dependencies([x*y, x])), 1)
         self.assertEqual(len(dependencies([x*y, x, x, x])), 1)
         self.assertEqual(len(dependencies([x*y, x], all=True)), 2)
+        self.assertEqual(len(dependencies([x*y, x, 'string'], all=True)), 2)
         self.assertEqual(len(dependencies([x*y, x, x, x], all=True)), 2)
         self.assertTrue(missing_dependencies([x*y, x]))
         self.assertTrue(missing_dependencies([x*y, x+y, x, x]))

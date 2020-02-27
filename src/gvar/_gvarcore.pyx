@@ -154,8 +154,8 @@ cdef class GVar:
         """ Same as ``str(self)``. """
         return self.__str__()
 
-    def __hash__(self):
-        return id(self)
+    # def __hash__(self):  # conflicts with equality (unless make it hash(self.mean) -- dumb)
+    #     return id(self)
 
     def __richcmp__(x, y, op):
         """ Compare mean values. """
@@ -586,10 +586,10 @@ cdef class GVar:
         cov = self.cov
         jset = set()
         for i in iset:
-            # jset.update(cov.rowlist[i].indices())
+            # NB: iset is contained in jset since cov always has diagonal elements
             jset.update(cov.row[i].indices())
 
-        # c) build the mask
+        # c) build the mask to restrict to indices in or connected to args
         dmask = numpy.zeros(dstop-dstart, numpy.intp)
         for j in sorted(jset):
             if j<dstart:
@@ -598,7 +598,6 @@ cdef class GVar:
                 break
             else:
                 dmask[j-dstart] |= 1
-
 
         # create masked derivative vector for self
         md_size = 0

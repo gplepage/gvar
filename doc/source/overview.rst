@@ -463,20 +463,20 @@ Storing |GVar|\s for Later Use; |BufferDict|\s
 --------------------------------------------------
 Storing |GVar|\s in a file for later use is complicated by the need to
 capture the covariances between different |GVar|\s as well as their
-means. The easiest way to save an array or dictionary ``g``  of
+means. The easiest way to save an array or dictionary ``g``  that contains
 |GVar|\s is to use :func:`gvar.dump`: for example, ::
 
     >>> gvar.dump(g, 'gfile.p')
 
 saves the data from ``g`` in a Python :mod:`pickle`
 file named ``'gfile.p'``. To reassemble the the data 
-from ``g``) we use::
+from ``g`` we use::
 
     >>> g = gvar.load('gfile.p')
 
 Functions :func:`gvar.dump` and :func:`gvar.load` are similar to the 
 corresponding functions in Python's :mod:`pickle` module. Unlike
-the :mod:`pickle` functions, these can deal with |GVar|\s in ``g``.
+the :mod:`pickle` functions, however, these can deal with |GVar|\s in ``g``.
 In particular they preserve information about the correlations between
 different |GVar|\s in ``g``. Correlations with |GVar|\s that are not 
 in ``g`` are lost, so it is important to include all |GVar|\s of  
@@ -793,7 +793,7 @@ Here the call to :func:`gvar.evalcov` creates a new covariance matrix for
 ``a`` and ``ada = a+da``, but the matrix does not have enough numerical
 precision to encode the size of ``da``'s variance, which gets set, in
 effect, to zero. The problem arises here for values of ``tiny`` less than
-about 2e-8 (with 64-bit floating point numbers --- ``tiny**2`` is what
+about 2e-8 (with 64-bit floating point numbers; ``tiny**2`` is what
 appears in the covariance matrix).
 
 
