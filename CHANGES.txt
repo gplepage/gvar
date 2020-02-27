@@ -11,6 +11,9 @@ unlike the old versions only work with pickle (not json)
 as the serializer; there is no longer a "method" keyword.
 gdump/gload still offer a choice between pickle and json.
 
+Other additions: gvar.dependencies, gvar.missing_dependencies,
+and gvar.filter.
+
 Version 10.1.2 2020-02-24
 ==========================
 Fixes bug introduced into dump in version 10.1 (with thanks to 
