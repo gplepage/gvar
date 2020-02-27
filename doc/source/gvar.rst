@@ -178,11 +178,11 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.dump(g, outputfile=None, add_dependencies=False, **kargs)
 
-.. autofunction:: gvar.dumps(g, add_dependencies=False)
+.. autofunction:: gvar.dumps(g, add_dependencies=False, **kargs)
 
 .. autofunction:: gvar.load(inputfile, **kargs)
 
-.. autofunction:: gvar.loads(inputstring)
+.. autofunction:: gvar.loads(inputbytes, **kargs)
 
 .. autofunction:: gvar.gdump(g, outputfile=None, method=None, add_dependencies=False, **kargs)
 

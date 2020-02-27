@@ -845,7 +845,7 @@ def dumps(g, add_dependencies=False, **kargs):
         import gvar as gv 
         gbytes = gv.dumps(g)
 
-        # convert string back into GVars
+        # convert bytes object back into g
         new_g = gv.loads(gbytes)
     
     Args:
@@ -856,6 +856,8 @@ def dumps(g, add_dependencies=False, **kargs):
             all primary |GVar|\s that contribute to the covariances 
             of the |GVar|\s in ``g`` but are not already in ``g``.
             Default is ``False``.
+        kargs (dict): Additional arguments, if any, that are passed to 
+            the underlying serializer (:mod:`pickle`).
     
     Returns:
         A bytes object containing a serialized representation 
@@ -864,6 +866,30 @@ def dumps(g, add_dependencies=False, **kargs):
     return dump(g, add_dependencies=add_dependencies).getvalue()
 
 def loads(inputbytes, **kargs):
+    """ Read and return object serialized in ``inputbytes`` by :func:`gvar.dumps`.
+
+    This function recovers data serialized with :func:`gvar.dumps`. It is 
+    shorthand for::
+
+        gvar.load(BytesIO(inputbytes))
+
+    Typical usage is::
+
+        # create bytes object containing data in g
+        import gvar as gv 
+        gbytes = gv.dumps(g)
+
+        # recreate g from bytes object gbytes
+        new_g = gv.gloads(gbytes)
+
+    Args:
+        inputbytes (bytes): Bytes object created by :func:`gvar.dumps`.
+        kargs (dict): Additional arguments, if any, that are passed to 
+            the underlying serializer (:mod:`pickle`).
+
+    Returns:
+        The reconstructed data.
+    """
     return load(BytesIO(inputbytes), **kargs)
 
 def dump(g, outputfile=None, add_dependencies=False, **kargs):
@@ -1055,6 +1081,12 @@ def gdump(g, outputfile=None, method=None, add_dependencies=False, **kargs):
     Correlations between different |GVar|\s in ``g`` are preserved, as
     are relationships (i.e., derivatives) between derived |GVar|\s and 
     any primary |GVar|\s in ``g``.
+
+    :func:`gvar.gdump` differs from :func:`gvar.dump` in that the elements 
+    in ``g`` must all be |GVar|\s for the former, whereas |GVar|\s may be
+    mixed in with other data types for the latter. The structure of ``g``
+    is also more restricted for :func:`gvar.gdump`, but it is 
+    typically faster than :func:`gvar.dump`.
 
     Typical usage is::
 
