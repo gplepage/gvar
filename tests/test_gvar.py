@@ -1548,7 +1548,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             )
         g['f'] = ['str', g['b'][1][0] * gv.gvar('5(2)')]
         d = _test(g, outputfile='xxx', test_cov=False)
-        # print(d)
+
+        # dumping classes, without and with special methods
+        g['C'] = C(gv.gvar(2 * ['3(4)']) * gv.gvar('10(1)'), 'str', (1,2,gv.gvar('2(1)')))
+        d = _test(g, test_cov=False)
+        self.assertEqual(str(gv.evalcov(d['C'].x)), str(gv.evalcov(g['C'].x)))
+        g['C'] = CC(gv.gvar(2 * ['3(4)']) * gv.gvar('10(1)'), 'str', 12.)
+        d = gv.loads(gv.dumps(g))
+        self.assertEqual(d['C'].z, None)
+        self.assertEqual(g['C'].z, 12.)
+        self.assertEqual(str(gv.evalcov(d['C'].x)), str(gv.evalcov(g['C'].x)))
 
     def test_dump_load_errbudget(self):
         dict = collections.OrderedDict
@@ -1917,6 +1926,35 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertTrue(
                 abs(stats.minus.mean - g.sdev) < 5 * stats.minus.sdev
                 )
+
+class C:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+    def __str__(self):
+        return str(self.__dict__)
+    def __repr__(self):
+        return str(self.__dict__)
+
+class CC:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+    def __str__(self):
+        return str(self.__dict__)
+    def __repr__(self):
+        return str(self.__dict__)
+    def _remove_gvars(self, gvlist):
+        c = copy.copy(self)
+        c.z = None
+        c._dict__ = gv.remove_gvars(c.__dict__, gvlist)
+        return c
+    def _distribute_gvars(self, gvlist):
+        self.__dict__ = gv.distribute_gvars(self.__dict__, gvlist)
+        return self 
+
 
 # def chi2(g1, g2=None, svdcut=1e-12, nocorr=False, dof=None):
 #     """ Compute chi**2 of ``dg = g1-g2``.

@@ -46,6 +46,9 @@ src/gvar/dataset.c : src/gvar/dataset.pyx
 uninstall :			# mostly works (may leave some empty directories)
 	$(PIP) uninstall gvar
 
+update :
+	make uninstall install 
+
 try:
 	$(PYTHON) setup.py install --user --record files-gvar.$(PYTHONVERSION)
 

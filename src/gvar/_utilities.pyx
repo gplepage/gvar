@@ -21,6 +21,7 @@ import warnings
 import pickle
 import json
 import collections
+import copy
 from math import lgamma
 import sys
 
@@ -333,7 +334,7 @@ def dependencies(g, all=False):
         return _dependencies(g, all=all)
     except:
         gvlist = []
-        _collect_gvars(g, gvlist)
+        collect_gvars(g, gvlist)
         return _dependencies(gvlist, all=all) if gvlist else []
 
 def _dependencies(g, all=False):
@@ -754,47 +755,140 @@ def evalcov(g):
 
 ###### dump/load
 ######
-class _GVarRef:
-    def __init__(self, loc):
-        self.loc = loc
+class GVarRef:
+    """ Placeholder for a |GVar|, used by :func:`gvar.remove_gvars`. 
+    
+    Typical usage, when ``g`` is a dictionary containing |GVar|\s::
 
-def _distribute_gvars(g, gvlist):
-    " distribute |GVar|\s from ``gvlist`` in structure g, replacing ``_GVarRef``\s. "
-    if hasattr(g, 'keys'):
-        return type(g)([(k, _distribute_gvars(g[k], gvlist)) for k in g])
-    elif type(g) in [collections.deque, list, tuple]:
-        return type(g)([_distribute_gvars(x, gvlist) for x in g])
-    elif type(g) == numpy.ndarray:
-        return numpy.array([_distribute_gvars(x, gvlist) for x in g])
-    elif isinstance(g, _GVarRef):
-        return gvlist[g.loc]
-    else:
-        return g
+        import gvar as gv 
 
-def _remove_gvars(g, gvlist):
-    " remove |GVar|\s from structure g, collecting them in ``gvlist``; replace with ``_GVarRef``\s. "
-    if hasattr(g, 'keys'):
-        return type(g)([(k, _remove_gvars(g[k], gvlist)) for k in g])
-    elif type(g) in [collections.deque, list, tuple]:
-        return type(g)([_remove_gvars(x, gvlist) for x in g])
-    elif type(g) == numpy.ndarray:
-        return numpy.array([_remove_gvars(x, gvlist) for x in g])
-    elif isinstance(g, _gvar.GVar):
+        gvlist = []
+        for k in g:
+            if isinstance(g[k], gv.GVar):
+                g[k] = gv.GVarRef(g[k], gvlist)
+
+    where at the end ``gvlist`` contains the |GVar|\s removed 
+    from ``g``.
+    
+    The |GVar|\s are restored using::
+
+        for k in g:
+            if isinstance(g[k], gv.GVarRef):
+                g[k] = g[k](gvlist)
+
+    where the |GVar|\s are drawn from list ``gvlist``.
+    """
+    def __init__(self, g, gvlist):
+        self.loc = len(gvlist)
         gvlist.append(g)
-        return _GVarRef(len(gvlist) - 1)
+    
+    def __call__(self, gvlist):
+        return gvlist[self.loc]
+
+def distribute_gvars(g, gvlist):
+    """ Distribute |GVar|\s from ``gvlist`` in structure g, replacing :class:`gvar.GVarRef`\s. 
+    
+    :func:`distribute_gvars` undoes what :func:`remove_gvars` does to ``g``.
+
+    Args:
+        g: Object containing :class:`GVarRef`\s created by :func:`remove_gvars`.
+        gvlist: List of |GVar|\s created by :func:`remove_gvars`.
+
+    Returns:
+        Object ``g`` with :class:`GVarRef`\s replaced by corresponding |GVar|\s
+        from list ``gvlist``.
+    """
+    if isinstance(g, GVarRef):
+        return g(gvlist)
+    elif hasattr(g, 'keys'):
+        return type(g)([(k, distribute_gvars(g[k], gvlist)) for k in g])
+    elif hasattr(g, '_distribute_gvars'):
+        return g._distribute_gvars(gvlist)
+    elif type(g) in [collections.deque, list, tuple]:
+        return type(g)([distribute_gvars(x, gvlist) for x in g])
+    elif type(g) == numpy.ndarray:
+        return numpy.array([distribute_gvars(x, gvlist) for x in g])
+    elif hasattr(g, '__dict__'):
+        try:
+            g.__dict__ = _gvar.distribute_gvars(g.__dict__, gvlist)
+            return g
+        except:
+            return g
     else:
         return g
 
-def _collect_gvars(g, gvlist):
-    " collect |GVar|\s in ``gvlist`` from structure g; replace with ``_GVarRef``\s. "
+def remove_gvars(g, gvlist):
+    """ Remove |GVar|\s from structure g, collecting them in ``gvlist``; replace with :class:`gvar.GVarRef`\s. 
+    
+    :func:`remove_gvars` searches container object ``g`` for |GVar|\s and replaces 
+    them with :class:`GVarRef` objects. The |GVar|\s are collected in list ``gvlist``.
+    Object ``g`` can be a dictionary, list, etc., or nested instances of these.
+    
+    If ``g`` contains an object ``obj`` that is a not standard container, 
+    :func:`gvar.remove_gvars` will replace the object by 
+    ``obj._remove_gvars(gvlist)`` if that method exists; otherwise 
+    it will attempt to look inside the object via ``obj.__dict__``.
+    The default treatment, when ``obj._remove_gvars`` is not defined, is 
+    equivalent to adding the following method to the object's class::
+
+        def _remove_gvars(self, gvlist):
+            tmp = copy.copy(g)
+            tmp.__dict__ = gvar.remove_gvars(tmp.__dict__, gvlist)
+            return tmp 
+
+    A class that has method ``obj._remove_gvars(gvlist)`` should have  
+    a corresponding method ``obj._distribute_gvars(gvlist)``, for 
+    use by :func:`gvar.distribute_gvars`. The default behavior is 
+    equivalent to method::
+
+        def _distribute_gvars(self, gvlist):
+            self.__dict__ = gvar.distribute_gvars(self.__dict__, gvlist)
+
+    Args:
+        g: Object containing |GVar|\s.
+        gvlist: |GVar|\s removed from ``g`` are appended to list ``gvlist``.
+
+    Returns:
+        Copy of object ``g`` with |GVar|\s replaced by :class:`GVarRef`\s. 
+        The |GVar|\s are appended to ``gvlist``.
+    """
+    if isinstance(g, _gvar.GVar):
+        return GVarRef(g, gvlist)
+    elif hasattr(g, 'keys'):
+        return type(g)([(k, remove_gvars(g[k], gvlist)) for k in g])
+    elif hasattr(g, '_remove_gvars'):
+        return g._remove_gvars(gvlist)
+    elif type(g) in [collections.deque, list, tuple]:
+        return type(g)([remove_gvars(x, gvlist) for x in g])
+    elif type(g) == numpy.ndarray:
+        return numpy.array([remove_gvars(x, gvlist) for x in g])
+    elif hasattr(g, '__dict__'):
+        try:
+            tmp = copy.copy(g)
+            tmp.__dict__ = _gvar.remove_gvars(tmp.__dict__, gvlist)
+            return tmp 
+        except:
+            return g
+    else:
+        return g
+
+def collect_gvars(g, gvlist):
+    " Collect |GVar|\s in ``gvlist`` from container object g. "
     if isinstance(g, _gvar.GVar):
         gvlist.append(g)
     elif hasattr(g, 'keys'):
         for k in g:
-            _collect_gvars(g[k], gvlist)
+            collect_gvars(g[k], gvlist)
     elif type(g) in [collections.deque, list, tuple, numpy.ndarray]:
         for x in g:
-            _collect_gvars(x, gvlist)
+            collect_gvars(x, gvlist)
+    elif hasattr(g, '_remove_gvars'):
+        g._remove_gvars(gvlist)
+    elif hasattr(g, '__dict__'):
+        try:
+            collect_gvars(g.__dict__, gvlist)
+        except:
+            pass
 
 def filter(g, f, *args, **kargs):
     """ Filter |GVar|\s in ``g`` through function ``f``. 
@@ -811,8 +905,9 @@ def filter(g, f, *args, **kargs):
 
     Args:
         g: Object consisting of (possibly nested) dictionaries,
-            deques, lists, ``numpy.array``\s, and/or tuples 
-            that contain |GVar|\s and other types of data.
+            deques, lists, ``numpy.array``\s, tuples, and/or 
+            other data types that contain |GVar|\s and other 
+            types of data.
         f: Function that takes an array of |GVar|\s as an argument
             and returns an array of results having the same shape.
             Given an array ``gvar_array`` containing all 
@@ -828,9 +923,9 @@ def filter(g, f, *args, **kargs):
         replaced by objects generated by function ``f``.
     """
     gvlist = []
-    new_g = _remove_gvars(g, gvlist)
+    new_g = remove_gvars(g, gvlist)
     gvlist = f(gvlist, *args, **kargs)
-    return _distribute_gvars(new_g, gvlist)
+    return distribute_gvars(new_g, gvlist)
 
 def dumps(g, add_dependencies=False, **kargs):
     """ Return a serialized representation of ``g``.
@@ -915,6 +1010,8 @@ def dump(g, outputfile=None, add_dependencies=False, **kargs):
     In particular it preserves correlations between different
     |GVar|\s, as well as relationships (i.e., derivatives) between
     derived |GVar|\s and primary |GVar|\s in ``g``.
+    :func:`gvar.dump` uses :func:`gvar.remove_gvars` to search
+    (recursively) for the |GVar|\s in ``g``.
 
     The partial variances for derived |GVar|\s in ``g`` coming from 
     primary |GVar|\s in ``g`` are preserved by :func:`gvar.dump`.
@@ -957,15 +1054,12 @@ def dump(g, outputfile=None, add_dependencies=False, **kargs):
         ofile = outputfile 
     datadict = {}
     gvlist = []
-    datadict['data'] = _remove_gvars(g, gvlist)
+    datadict['data'] = remove_gvars(g, gvlist)
     if gvlist:
         datadict['gvlist'] = _gvar.gdumps(
             gvlist, method='pickle', 
             add_dependencies=add_dependencies
             )
-    else:
-        datadict['data'] = g
-    # dump the datadict
     pickle.dump(datadict, ofile, **kargs)
     # cleanup and return
     if outputfile is None:
@@ -1019,7 +1113,7 @@ def load(inputfile, method=None, **kargs):
         if isinstance(inputfile, str):
             ifile.close()
         if 'gvlist' in datadict:
-            return _distribute_gvars(
+            return distribute_gvars(
                 datadict['data'], 
                 _gvar.gloads(datadict['gvlist'])
                 )   

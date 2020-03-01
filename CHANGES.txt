@@ -1,3 +1,12 @@
+Versions 11.1 2020-03-01
+==========================
+Further upgrade to gvar.dump and gvar.load to allow 
+user-defined classes some control over how GVars 
+are removed and distributed. New functions are 
+available to help: gvar.remove_gvars and 
+gvar.distribute_gvars. These changes respond
+to a feature request for the lsqfit module.
+
 Version 11.0 2020-02-25
 ========================
 Significant upgrade to gvar.dump and gvar.load, which now can 

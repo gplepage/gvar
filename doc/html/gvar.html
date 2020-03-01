@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.0 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -95,12 +95,15 @@ manipulating gaussian random variables, including:</p>
 <li><p>class <a class="reference internal" href="#gvar.PDFHistogram" title="gvar.PDFHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFHistogram</span></code></a> — tool for building PDF histograms.</p></li>
 <li><p><a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dump</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">outputfile)</span></code> — serialize data from <code class="docutils literal notranslate"><span class="pre">g</span></code> in file.</p></li>
 <li><p><a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><code class="xref any py py-func docutils literal notranslate"><span class="pre">dumps</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — serialize data from <code class="docutils literal notranslate"><span class="pre">g</span></code> in a bytes object.</p></li>
-<li><p><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal notranslate"><span class="pre">load</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputfile)</span></code> — reconstitute data serialized in a file.</p></li>
+<li><p><a class="reference internal" href="#gvar.load" title="gvar.load"><code class="xref any py py-func docutils literal notranslate"><span class="pre">load</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputfile)</span></code> —  reconstitute data serialized in a file.</p></li>
 <li><p><a class="reference internal" href="#gvar.loads" title="gvar.loads"><code class="xref any py py-func docutils literal notranslate"><span class="pre">loads</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputbytes)</span></code> — reconstitute data serialized in a bytes object.</p></li>
 <li><p><a class="reference internal" href="#gvar.gdump" title="gvar.gdump"><code class="xref any py py-func docutils literal notranslate"><span class="pre">gdump</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">outputfile)</span></code> — serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in file.</p></li>
 <li><p><a class="reference internal" href="#gvar.gdumps" title="gvar.gdumps"><code class="xref any py py-func docutils literal notranslate"><span class="pre">gdumps</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — serialize a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in a string.</p></li>
 <li><p><a class="reference internal" href="#gvar.gload" title="gvar.gload"><code class="xref any py py-func docutils literal notranslate"><span class="pre">gload</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputfile)</span></code> — reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from a file.</p></li>
 <li><p><a class="reference internal" href="#gvar.gloads" title="gvar.gloads"><code class="xref any py py-func docutils literal notranslate"><span class="pre">gloads</span></code></a><code class="docutils literal notranslate"><span class="pre">(inputstr)</span></code> — reconstitute a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from a string.</p></li>
+<li><p><a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref any py py-func docutils literal notranslate"><span class="pre">remove_gvars</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">gvlist)</span></code> — remove <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from <code class="docutils literal notranslate"><span class="pre">g</span></code>, appending them to <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.</p></li>
+<li><p><a class="reference internal" href="#gvar.distribute_gvars" title="gvar.distribute_gvars"><code class="xref any py py-func docutils literal notranslate"><span class="pre">distribute_gvars</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">gvlist)</span></code> — restore <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s to <code class="docutils literal notranslate"><span class="pre">g</span></code> from <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.</p></li>
+<li><p>class <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">GVarRef</span></code></a> — placeholder for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> removed by <a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.remove_gvars()</span></code></a>.</p></li>
 <li><p><a class="reference internal" href="#gvar.disassemble" title="gvar.disassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">disassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(g)</span></code> — low-level routine to disassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
 <li><p><a class="reference internal" href="#gvar.reassemble" title="gvar.reassemble"><code class="xref any py py-func docutils literal notranslate"><span class="pre">reassemble</span></code></a><code class="docutils literal notranslate"><span class="pre">(data,cov)</span></code> — low-level routine to reassemble a collection of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
 <li><p><a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref any py py-func docutils literal notranslate"><span class="pre">raniter</span></code></a><code class="docutils literal notranslate"><span class="pre">(g,N)</span></code> — iterator for random numbers.</p></li>
@@ -330,8 +333,9 @@ or consists of nested dictionaries.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> – Object consisting of (possibly nested) dictionaries,
-deques, lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s, and/or tuples
-that contain <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and other types of data.</p></li>
+deques, lists, <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>s, tuples, and/or
+other data types that contain <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and other
+types of data.</p></li>
 <li><p><strong>f</strong> – Function that takes an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as an argument
 and returns an array of results having the same shape.
 Given an array <code class="docutils literal notranslate"><span class="pre">gvar_array</span></code> containing all
@@ -793,7 +797,9 @@ Object <code class="docutils literal notranslate"><span class="pre">g</span></co
 unlike the latter, works when there are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.
 In particular it preserves correlations between different
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, as well as relationships (i.e., derivatives) between
-derived <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+derived <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.
+<a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a> uses <a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.remove_gvars()</span></code></a> to search
+(recursively) for the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>The partial variances for derived <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> coming from
 primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> are preserved by <a class="reference internal" href="#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a>.
 (These are used, for example, to calculate error budgets.)
@@ -1125,6 +1131,90 @@ created by <a class="reference internal" href="#gvar.dumps" title="gvar.dumps"><
 whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.remove_gvars">
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">remove_gvars</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">gvlist</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.remove_gvars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from structure g, collecting them in <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>; replace with <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarRef</span></code></a>s.</p>
+<p><a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_gvars()</span></code></a> searches container object <code class="docutils literal notranslate"><span class="pre">g</span></code> for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and replaces
+them with <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">GVarRef</span></code></a> objects. The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are collected in list <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.
+Object <code class="docutils literal notranslate"><span class="pre">g</span></code> can be a dictionary, list, etc., or nested instances of these.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">g</span></code> contains an object <code class="docutils literal notranslate"><span class="pre">obj</span></code> that is a not standard container,
+<a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.remove_gvars()</span></code></a> will replace the object by
+<code class="docutils literal notranslate"><span class="pre">obj._remove_gvars(gvlist)</span></code> if that method exists; otherwise
+it will attempt to look inside the object via <code class="docutils literal notranslate"><span class="pre">obj.__dict__</span></code>.
+The default treatment, when <code class="docutils literal notranslate"><span class="pre">obj._remove_gvars</span></code> is not defined, is
+equivalent to adding the following method to the object’s class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_remove_gvars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gvlist</span><span class="p">):</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="n">tmp</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">remove_gvars</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">gvlist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tmp</span>
+</pre></div>
+</div>
+<p>A class that has method <code class="docutils literal notranslate"><span class="pre">obj._remove_gvars(gvlist)</span></code> should have
+a corresponding method <code class="docutils literal notranslate"><span class="pre">obj._distribute_gvars(gvlist)</span></code>, for
+use by <a class="reference internal" href="#gvar.distribute_gvars" title="gvar.distribute_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.distribute_gvars()</span></code></a>. The default behavior is
+equivalent to method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_distribute_gvars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gvlist</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">distribute_gvars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">gvlist</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – Object containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
+<li><p><strong>gvlist</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s removed from <code class="docutils literal notranslate"><span class="pre">g</span></code> are appended to list <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Copy of object <code class="docutils literal notranslate"><span class="pre">g</span></code> with <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s replaced by <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">GVarRef</span></code></a>s.
+The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are appended to <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.distribute_gvars">
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">distribute_gvars</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">gvlist</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.distribute_gvars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from <code class="docutils literal notranslate"><span class="pre">gvlist</span></code> in structure g, replacing <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarRef</span></code></a>s.</p>
+<p><a class="reference internal" href="#gvar.distribute_gvars" title="gvar.distribute_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">distribute_gvars()</span></code></a> undoes what <a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_gvars()</span></code></a> does to <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – Object containing <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">GVarRef</span></code></a>s created by <a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_gvars()</span></code></a>.</p></li>
+<li><p><strong>gvlist</strong> – List of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s created by <a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_gvars()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Object <code class="docutils literal notranslate"><span class="pre">g</span></code> with <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">GVarRef</span></code></a>s replaced by corresponding <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+from list <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="gvar.GVarRef">
+<em class="property">class </em><code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">GVarRef</code><a class="headerlink" href="#gvar.GVarRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Placeholder for a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, used by <a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.remove_gvars()</span></code></a>.</p>
+<p>Typical usage, when <code class="docutils literal notranslate"><span class="pre">g</span></code> is a dictionary containing <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+
+<span class="n">gvlist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
+        <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVarRef</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">gvlist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where at the end <code class="docutils literal notranslate"><span class="pre">gvlist</span></code> contains the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s removed
+from <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<p>The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are restored using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVarRef</span><span class="p">):</span>
+        <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">k</span><span class="p">](</span><span class="n">gvlist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are drawn from list <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -2509,7 +2599,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

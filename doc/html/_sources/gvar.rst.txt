@@ -85,7 +85,7 @@ manipulating gaussian random variables, including:
 
     - :any:`dumps`\ ``(g)`` --- serialize data from ``g`` in a bytes object.
 
-    - :any:`load`\ ``(inputfile)`` --- reconstitute data serialized in a file.
+    - :any:`load`\ ``(inputfile)`` ---  reconstitute data serialized in a file.
 
     - :any:`loads`\ ``(inputbytes)`` --- reconstitute data serialized in a bytes object.
 
@@ -96,6 +96,12 @@ manipulating gaussian random variables, including:
     - :any:`gload`\ ``(inputfile)`` --- reconstitute a collection of |GVar|\s from a file.
 
     - :any:`gloads`\ ``(inputstr)`` --- reconstitute a collection of |GVar|\s from a string.
+
+    - :any:`remove_gvars`\ ``(g, gvlist)`` --- remove |GVar|\s from ``g``, appending them to ``gvlist``.
+
+    - :any:`distribute_gvars`\ ``(g, gvlist)`` --- restore |GVar|\s to ``g`` from ``gvlist``.
+
+    - class :class:`GVarRef` --- placeholder for |GVar| removed by :func:`gvar.remove_gvars`.
 
     - :any:`disassemble`\ ``(g)`` --- low-level routine to disassemble a collection of |GVar|\s.
 
@@ -191,6 +197,12 @@ matrices and correlation/comparison information can be extracted from arrays
 .. autofunction:: gvar.gload(inputfile, method=None, **kargs)
 
 .. autofunction:: gvar.gloads(inputstring)
+
+.. autofunction:: gvar.remove_gvars(g, gvlist)
+
+.. autofunction:: gvar.distribute_gvars(g, gvlist)
+
+.. autoclass:: gvar.GVarRef
 
 .. autofunction:: gvar.disassemble(g)
 
