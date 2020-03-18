@@ -103,8 +103,9 @@ class test_ode(unittest.TestCase,ArrayTests):
             y1 = odeint(y0, (0, 1))
         sol = ode.Solution()
         odeint = ode.Integrator(deriv=f, h=1, hmin=0.1, tol=1e-13)
-        with self.assertWarns(UserWarning):
-            y1 = odeint(y0, (0, 1))
+        if hasattr(self, 'assertWarns'): # for Python2.7
+            with self.assertWarns(UserWarning):
+                y1 = odeint(y0, (0, 1))
 
     def test_gvar_scalar(self):
         # exponential with errors
