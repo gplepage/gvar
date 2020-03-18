@@ -73,7 +73,6 @@ class test_ode(unittest.TestCase,ArrayTests):
         # exponential (scalar)
         def f(x, y):
             return y
-
         odeint = ode.Integrator(deriv=f, h=1, tol=1e-13)
         y0 = 1
         y1 = odeint(y0, (0, 1))
@@ -81,6 +80,31 @@ class test_ode(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(y1, exact)
         yN = odeint(y0, [0.0, 0.5, 1.0])
         self.assert_arraysclose(yN, numpy.exp([0.5, 1.0]))
+
+    def test_hmax_maxstep_hmin(self):
+        " ode with hmax, hmin, maxstep "
+        # exponential (scalar)
+        def f(x, y):
+            return y
+        sol = ode.Solution()
+        odeint = ode.Integrator(
+            deriv=f, h=1, hmax=0.005, maxstep = 1000, 
+            analyzer=sol, tol=1e-13
+            )
+        y0 = 1
+        y1 = odeint(y0, (0, 1))
+        x = numpy.array(sol.x)
+        self.assertAlmostEqual(max(x[1:] - x[:-1]), 0.005)
+        exact = numpy.exp(1)
+        self.assertAlmostEqual(y1, exact)
+        odeint = ode.Integrator(deriv=f, h=1, maxstep=10, tol=1e-13)
+        y0 = 1
+        with self.assertRaises(RuntimeError):
+            y1 = odeint(y0, (0, 1))
+        sol = ode.Solution()
+        odeint = ode.Integrator(deriv=f, h=1, hmin=0.1, tol=1e-13)
+        with self.assertWarns(UserWarning):
+            y1 = odeint(y0, (0, 1))
 
     def test_gvar_scalar(self):
         # exponential with errors
@@ -157,6 +181,13 @@ class test_ode(unittest.TestCase,ArrayTests):
                 )
         def f(x, y):
             return y * (1 + 0.1j)
+        # without delta
+        odeint = ode.Integrator(deriv=f, h=1, tol=1e-13, delta=None) 
+        y0 = 1
+        y1 = odeint(y0, (0, 1))
+        exact = numpy.exp(1 + 0.1j)
+        self.assertAlmostEqual(y1, exact)
+        # now with delta
         odeint = ode.Integrator(deriv=f, h=1, tol=1e-13, delta=delta)
         y0 = 1
         y1 = odeint(y0, (0, 1))

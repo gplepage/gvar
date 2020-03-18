@@ -76,9 +76,9 @@ of first-order differential equations using an adaptive Runge-Kutta
 algorithm. One integrates scalar- or array-valued equations, while the
 other integrates dictionary-valued equations:
 
-.. autoclass:: gvar.ode.Integrator(deriv, tol=1e-05, h=None, hmin=None, analyzer=None)
+.. autoclass:: gvar.ode.Integrator(deriv, tol=1e-05, h=None, hmin=None, hmax=None, maxstep=None, delta=None, analyzer=None)
 
-.. autoclass:: gvar.ode.DictIntegrator(deriv, tol=1e-05, h=None, hmin=None, analyzer=None)
+.. autoclass:: gvar.ode.DictIntegrator(deriv, tol=1e-05, h=None, hmin=None, hmax=None, maxstep=None, delta=None, analyzer=None)
 
 A simple analyzer class is:
 

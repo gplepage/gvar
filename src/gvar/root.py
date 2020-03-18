@@ -1,7 +1,7 @@
 """ Function root-finding for GVars. """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-04-27.
-# Copyright (c) 2015 G. Peter Lepage. 
+# Copyright (c) 2015-20 G. Peter Lepage. 
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

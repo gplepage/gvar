@@ -1,3 +1,15 @@
+Version 11.2 2020-03-18
+========================
+Minor fixes and updates.
+
+- Fixes (substantial) inefficiency in gvar.ode.Integrator. This was a coding 
+  error that gave correct results but sometimes at a cost much larger than 
+  necessary. Adds options hmax, maxstep to ode.Integrator.
+
+- Adds gvar.abs. This is more less same as gvar.fabs, but unlike fabs works 
+  for something like np.array([1., -2.], dtype=object). Treatment of GVars is
+  the same. 
+
 Versions 11.1 2020-03-01
 ==========================
 Further upgrade to gvar.dump and gvar.load to allow 

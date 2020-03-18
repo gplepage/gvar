@@ -804,8 +804,16 @@ def distribute_gvars(g, gvlist):
         return type(g)([(k, distribute_gvars(g[k], gvlist)) for k in g])
     elif hasattr(g, '_distribute_gvars'):
         return g._distribute_gvars(gvlist)
-    elif type(g) in [collections.deque, list, tuple]:
+    elif type(g) in [collections.deque, list]:
         return type(g)([distribute_gvars(x, gvlist) for x in g])
+    elif isinstance(g, tuple):
+        if type(g) != tuple and hasattr(g, '_fields'):
+            # named tuple 
+            return type(g)(**dict(zip(g._fields, [distribute_gvars(x, gvlist) for x in g])))
+        elif type(g) == tuple:
+            return type(g)([distribute_gvars(x, gvlist) for x in g])
+        else:
+            return g
     elif type(g) == numpy.ndarray:
         return numpy.array([distribute_gvars(x, gvlist) for x in g])
     elif hasattr(g, '__dict__'):
@@ -820,9 +828,10 @@ def distribute_gvars(g, gvlist):
 def remove_gvars(g, gvlist):
     """ Remove |GVar|\s from structure g, collecting them in ``gvlist``; replace with :class:`gvar.GVarRef`\s. 
     
-    :func:`remove_gvars` searches container object ``g`` for |GVar|\s and replaces 
-    them with :class:`GVarRef` objects. The |GVar|\s are collected in list ``gvlist``.
-    Object ``g`` can be a dictionary, list, etc., or nested instances of these.
+    :func:`remove_gvars` searches container object ``g`` (recursively) 
+    for |GVar|\s and replaces them with :class:`GVarRef` objects. The 
+    |GVar|\s are collected in list ``gvlist``. Object ``g`` can be a 
+    dictionary, list, etc., or nested instances of these.
     
     If ``g`` contains an object ``obj`` that is a not standard container, 
     :func:`gvar.remove_gvars` will replace the object by 
@@ -858,8 +867,16 @@ def remove_gvars(g, gvlist):
         return type(g)([(k, remove_gvars(g[k], gvlist)) for k in g])
     elif hasattr(g, '_remove_gvars'):
         return g._remove_gvars(gvlist)
-    elif type(g) in [collections.deque, list, tuple]:
+    elif type(g) in [collections.deque, list]:
         return type(g)([remove_gvars(x, gvlist) for x in g])
+    elif isinstance(g, tuple):
+        if type(g) != tuple and hasattr(g,'_fields'):
+            # named tuple 
+            return type(g)(**dict(zip(g._fields, [remove_gvars(x, gvlist) for x in g])))
+        elif type(g) == tuple:
+            return type(g)([remove_gvars(x, gvlist) for x in g])
+        else:
+            return g
     elif type(g) == numpy.ndarray:
         return numpy.array([remove_gvars(x, gvlist) for x in g])
     elif hasattr(g, '__dict__'):

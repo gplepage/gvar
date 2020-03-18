@@ -1,7 +1,7 @@
 """ Differential equation integrator for GVars. """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-04-27.
-# Copyright (c) 2014-2015 G. Peter Lepage.
+# Copyright (c) 2014-2020 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,10 +25,11 @@ TINY = sys.float_info.min ** 0.5
 class Integrator(object):
     """ Integrate ``dy/dx = deriv(x,y)``.
 
-    An :class:`Integrator` object ``odeint`` integrates ``dy/dx = f(x,y)``
-    to obtain ``y(x1)`` from ``y0 = y(x0)``. ``y`` and ``f(x,y)`` can
-    be scalars or :mod:`numpy` arrays. Typical usage is illustrated
-    by the following code for integrating ``dy/dx = y``::
+    An :class:`Integrator` object ``odeint`` integrates 
+    ``dy/dx = f(x,y)`` to obtain ``y(x1)`` from ``y0 = y(x0)``. 
+    ``y`` and ``f(x,y)`` can be scalars or :mod:`numpy` arrays. 
+    Typical usage is illustrated by the following code 
+    for integrating ``dy/dx = y``::
 
         from gvar.ode import Integrator
 
@@ -78,13 +79,14 @@ class Integrator(object):
     array containing the corresponding ``y`` values is returned.
 
     The integrator uses an adaptive Runge-Kutta algorithm that adjusts
-    the integrator's step size to obtain relative accuracy ``tol`` in the solution.
-    An initial step size can be set in the :class:`Integrator` by specifying
-    parameter ``h``. A minimum step size ``hmin`` can also be specified;
-    the :class:`Integrator` raises an exception if the step size becomes
-    smaller than ``hmin``. The :class:`Integrator` keeps track of the
-    number of good steps, where ``h`` is increased, and the number of
-    bad steps, where ``h`` is decreased and the step is repeated:
+    the integrator's step size to obtain relative accuracy ``tol`` 
+    in the solution. An initial step size can be set in the 
+    :class:`Integrator` by specifying parameter ``h``. A minimum 
+    step size ``hmin`` can also be specified; the :class:`Integrator` 
+    raises an exception if the step size becomes smaller than ``hmin``. 
+    The :class:`Integrator` keeps track of the number of good steps, 
+    where ``h`` is increased, and the number of bad steps, where ``h`` 
+    is decreased and the step is repeated:
     ``odeint.ngood`` and ``odeint.nbad``, respectively.
 
     A custom criterion for step-size changes can be implemented by
@@ -95,23 +97,16 @@ class Integrator(object):
     to compare with tolerance ``tol``. The step size is
     decreased and the step repeated if ``delta(yerr, y, delta_y) > tol``;
     otherwise the step is accepted and the step size increased.
-    The default definition of ``delta`` is roughly equivalent to::
+    The default definition of ``delta`` is equivalent to::
 
         import numpy as np
         import gvar as gv
 
         def delta(yerr, y, delta_y):
             return np.max(
-                np.fabs(yerr) / (np.fabs(y) + np.fabs(delta_y) + gv.ode.TINY)
+                np.fabs(yerr) / 
+                (np.fabs(y) + np.fabs(delta_y) + gv.ode.TINY)
                 )
-
-    A custom definition can be used to allow an ``Integrator`` to
-    work with data types other than floats or :mod:`numpy` arrays of floats.
-    All that is required of the data type is that it support
-    ordinary arithmetic. Therefore, for example, defining
-    ``delta(yerr, y, delta_y)`` with ``np.abs()`` instead of ``np.fabs()``
-    allows ``y`` to be complex valued. (Actually the default ``delta``
-    allows this as well.)
 
     An analyzer ``analyzer(x,y)`` can be specified using parameter
     ``analyzer``. This function is called after every full step of
@@ -119,40 +114,49 @@ class Integrator(object):
     Objects of type :class:`gvar.ode.Solution` are examples of
     (simple) analyzers.
 
-    :param deriv: Function of ``x`` and ``y`` that returns ``dy/dx``.
-        The return value should have the same shape as ``y`` if arrays
-        are used.
-    :param tol: Relative accuracy in ``y`` relative to ``|y| + h|dy/dx|``
-        for each step in the integration. Any integration step that achieves
-        less precision is repeated with a smaller step size. The step size
-        is increased if precision is higher than needed. Default is 1e-5.
-    :type tol: float
-    :param h: Absolute value of initial step size. The default value equals the
-        entire width of the integration interval.
-    :type h: float or None
-    :param hmin: Smallest step size allowed. A warning is raised
-        if a smaller step size is requested, and the step size is not
-        decreased. This prevents infinite loops at singular points, but
-        the solution may not be reliable when a warning has been issued. The
-        default value is ``None`` (which does *not* prevent infinite loops).
-    :type hmin: float or None
-    :param delta: Function ``delta(yerr, y, delta_y)`` that returns
-        a number to be compared  with ``tol`` at each integration step:
-        if it is larger than ``tol``, the step is repeated with a smaller
-        step size; if it is smaller the step is accepted and a larger
-        step size used for the subsequent step. Here ``yerr`` is an
-        estimate of the error in ``y`` on the last step; ``y`` is the
-        proposed value; and ``delta_y`` is the change in ``y`` over
-        the last step.
-    :param analyzer: Function of ``x`` and ``y`` that is called after each
-        step of the integration. This can be used to analyze intermediate
-        results.
+    Args:
+        deriv: Function of ``x`` and ``y`` that returns ``dy/dx``.
+            The return value should have the same shape as ``y`` if arrays
+            are used.
+        tol (float): Relative accuracy in ``y`` relative to 
+            ``|y| + h|dy/dx|`` for each step in the integration. 
+            Any integration step that achieves less precision is 
+            repeated with a smaller step size. The step size
+            is increased if precision is higher than needed. 
+            Default is 1e-5.
+        h (float or None): Absolute value of initial step size. 
+            The default value equals the entire width of the 
+            integration interval.
+        hmin (float or None): Smallest step size allowed. A warning 
+            is raised if a smaller step size is requested, and 
+            the step size is not decreased. This prevents infinite loops 
+            at singular points, but the solution may not be reliable when 
+            a warning has been issued. The default value is ``None`` 
+            (which does *not* prevent infinite loops).
+        hmax (float or None): Largest step allowed. Ignored if 
+            set to ``None``.
+        maxstep (int or None): Maximum number of integration steps 
+            allowed, after which a ``RuntimeError`` exception is raised. 
+            Ignored if set to ``None``.
+        delta: Function ``delta(yerr, y, delta_y)`` that returns
+            a number to be compared  with ``tol`` at each integration step:
+            if it is larger than ``tol``, the step is repeated with a smaller
+            step size; if it is smaller the step is accepted and a larger
+            step size used for the subsequent step. Here ``yerr`` is an
+            estimate of the error in ``y`` on the last step; ``y`` is the
+            proposed value; and ``delta_y`` is the change in ``y`` over
+            the last step.
+        analyzer: Function of ``x`` and ``y`` that is called after each
+            step of the integration. This can be used to analyze intermediate
+            results.
     """
-    def __init__(self, deriv=None, tol=1e-5, h=None, hmin=None, delta=None, analyzer=None):
+    def __init__(self, deriv=None, tol=1e-5, h=None, hmin=None, hmax=None, maxstep=None, delta=None, analyzer=None):
         self.deriv = deriv
         self.tol = tol
         self.h = h
         self.hmin = hmin
+        self.hmax = hmax
+        self.maxstep = maxstep
         self.delta = delta
         self.analyzer = analyzer
         self.ngood = 0
@@ -161,12 +165,21 @@ class Integrator(object):
     def __call__(self, y0, interval):
         """ Integrate from ``x0`` to ``x1`` where ``interval=(x0,x1)`` and ``y0=y(x0)``. """
         if len(interval) > 2:
+            # evaluate for sequence of intervals, one at a time
             ans = []
             xlast = interval[0]
             ylast = y0
+            nbad = 0
+            ngood = 0
             for x in interval[1:]:
                 y = self(ylast, interval=(xlast,x))
+                ylast = y 
+                xlast = x
+                nbad += self.nbad 
+                ngood += self.ngood
                 ans.append(y)
+            self.nbad = nbad 
+            self.ngood = ngood
             return numpy.array(ans)
         if self.deriv is None or interval[1] == interval[0]:
             return y0
@@ -174,15 +187,19 @@ class Integrator(object):
         self.nbad = 0
         self.ngood = 0
         x0, x1 = interval
-
+        hmax = numpy.fabs((x1 - x0) if self.hmax is None else self.hmax)
         h = self.h if (self.h is not None and self.h != 0) else (x1 - x0)
         h = numpy.fabs(h)
+        if h > hmax:
+            h = hmax
         xdir = 1 if x1 > x0 else -1
         hmin = 0.0 if self.hmin is None else numpy.fabs(self.hmin)
         x = x0
         y = numpy.asarray(y0)
         y_shape = y.shape
         while (xdir>0 and x<x1) or (xdir<0 and x>x1):
+            if self.maxstep is not None and (self.ngood + self.nbad) >= self.maxstep:
+                raise RuntimeError('maximum number of steps exceeded: ' + str(self.maxstep))
             hold = h
             xold = x
             yold = y
@@ -190,36 +207,35 @@ class Integrator(object):
                 h = numpy.fabs(x - x1)
             x, y, yerr = rk5_stepper(xold, h*xdir, yold, self.deriv, errors=True)
             if self.delta is not None:
-                delta = self.delta(yerr, y, y-yold)
+                delta = self.delta(yerr, y, y - yold)
             else:
-                try:
-                    delta = numpy.fabs(yerr) / (numpy.fabs(y) + numpy.fabs(y-yold) + TINY)
-                except (AttributeError, TypeError):
-                    # kludge having to do with idiocyncracy in numpy:
-                    #     fabs doesn't work on, eg, array([1.,-2.], object);
-                    #     the 'object' messes it up -- get AttributeError.
-                    #     Unfortunately abs can't be made to work for GVars.
-                    delta = numpy.abs(yerr) / (numpy.abs(y) + numpy.abs(y-yold) + TINY)
-                delta = numpy.max(delta)
+                delta = numpy.max(gvar.abs(yerr) / (gvar.abs(y) + gvar.abs(y - yold) + TINY))
                 if isinstance(delta, gvar.GVar):
                     delta = delta.mean
             if delta >= tol:
-                # smaller step size -- adjust and redo step
-                if h < hmin:
+                # need smaller step size -- adjust and redo step
+                if h <= hmin:
                     warnings.warn(
-                        'step size not reduced (< hmin) --- errors may not be reliable'
+                        'step size not reduced (<= hmin) --- errors may not be reliable'
                         )
                     continue
-                h *= 0.97 * (tol / delta) ** 0.25
+                hfac = 0.9 * (tol / delta) ** 0.25
+                # limit step change
+                h *= hfac if hfac > 0.1 else 0.1
                 x = xold
                 y = yold
                 self.nbad += 1
+                continue
             else:
-                # larger step size -- adjust and continue
+                # want larger step size -- adjust and continue
                 if delta > 0:
-                    h *= 0.97 * (tol / delta) ** 0.20
+                    hfac = 0.9 * (tol / delta) ** 0.20
+                    # limit step change
+                    h *= hfac if hfac < 5. else 5.
                 else:
-                    h *= 2.
+                    h *= 5.
+                if h > hmax:
+                    h = hmax
                 self.ngood += 1
             if self.analyzer is not None:
                 self.analyzer(x, y)
@@ -258,26 +274,36 @@ def rk5_stepper(x, h, y , deriv, errors=False):
     Adapted from Numerical Recipes.
     """
     k1 = h * deriv(x,y)
-    k2 = h * deriv(x+0.2*h, y+0.2*k1)
-    k3 = h * deriv(x+0.3*h, y+0.075*k1+0.225*k2)
-    k4 = h * deriv(x+0.6*h, y+0.3*k1-0.9*k2+1.2*k3)
-    k5 = h * deriv(x+h, y-.2037037037037037037037037*k1
-             +2.5*k2-2.592592592592592592592593*k3
-             +1.296296296296296296296296*k4)
-    k6 = h * deriv(x+0.875*h, y+.2949580439814814814814815e-1*k1
-             +.341796875*k2+.4159432870370370370370370e-1*k3
-             +.4003454137731481481481481*k4+.61767578125e-1*k5)
-    yn = y + (.9788359788359788359788361e-1*k1
-             +.4025764895330112721417070*k3
-             +.2104377104377104377104378*k4
-             +.2891022021456804065499718*k6)
-    xn = x+h
+    k2 = h * deriv(x + 0.2 * h, y + 0.2 * k1)
+    k3 = h * deriv(x + 0.3 * h, y + 0.075 * k1 + 0.225 * k2)
+    k4 = h * deriv(x + 0.6 * h, y + 0.3 * k1 - 0.9 * k2 + 1.2 * k3)
+    k5 = h * deriv(
+        x + h, 
+        y - .2037037037037037037037037 * k1
+        + 2.5 * k2 - 2.592592592592592592592593 * k3
+        + 1.296296296296296296296296 * k4
+        )
+    k6 = h * deriv(
+        x + 0.875 * h, 
+        y + .2949580439814814814814815e-1 * k1
+        + .341796875 * k2 + .4159432870370370370370370e-1 * k3
+        + .4003454137731481481481481 * k4 + .61767578125e-1 * k5
+        )
+    yn = y  +  (
+        .9788359788359788359788361e-1 * k1
+        + .4025764895330112721417070 * k3
+        + .2104377104377104377104378 * k4
+        + .2891022021456804065499718 * k6
+        )
+    xn = x + h
     if errors:
-        yerr = (-.429377480158730158730159e-2*k1
-                +.186685860938578329882678e-1*k3
-                -.341550268308080808080807e-1*k4
-                -.1932198660714285714285714e-1*k5
-                +.391022021456804065499718e-1*k6)
+        yerr = (
+            - .429377480158730158730159e-2 * k1
+            + .186685860938578329882678e-1 * k3
+            - .341550268308080808080807e-1 * k4
+            - .1932198660714285714285714e-1 * k5
+            + .391022021456804065499718e-1 * k6
+            )
         return xn,yn,yerr
     else:
         return xn,yn
@@ -285,8 +311,9 @@ def rk5_stepper(x, h, y , deriv, errors=False):
 class DictIntegrator(Integrator):
     """ Integrate ``dy/dx = deriv(x,y)`` where ``y`` is a dictionary.
 
-    An :class:`DictIntegrator` object ``odeint`` integrates ``dy/dx = f(x,y)``
-    to obtain ``y(x1)`` from ``y0 = y(x0)``. ``y`` and ``f(x,y)`` are
+    An :class:`DictIntegrator` object ``odeint`` 
+    integrates ``dy/dx = f(x,y)`` to obtain ``y(x1)`` from 
+    ``y0 = y(x0)``. ``y`` and ``f(x,y)`` are
     dictionary types having the same keys, and containing scalars
     and/or :mod:`numpy` arrays as values. Typical usage is::
 
@@ -310,10 +337,11 @@ class DictIntegrator(Integrator):
         y1, y2 ... = odeint(y0, interval=[x0, x1, x2 ...])
 
     The integrator uses an adaptive Runge-Kutta algorithm that adjusts
-    the integrator's step size to obtain relative accuracy ``tol`` in the solution.
-    An initial step size can be set in the :class:`DictIntegrator` by specifying
-    parameter ``h``. A minimum ste psize ``hmin`` can also be specified;
-    the :class:`Integrator` raises an exception if the step size becomes
+    the integrator's step size to obtain relative accuracy ``tol`` 
+    in the solution. An initial step size can be set in the 
+    :class:`DictIntegrator` by specifying parameter ``h``. 
+    A minimum ste psize ``hmin`` can also be specified; the 
+    :class:`Integrator` raises an exception if the step size becomes
     smaller than ``hmin``. The :class:`DictIntegrator` keeps track of the
     number of good steps, where ``h`` is increased, and the number of
     bad steps, where ``h`` is decreases and the step is repeated:
@@ -325,28 +353,42 @@ class DictIntegrator(Integrator):
     Objects of type :class:`gvar.ode.Solution` are examples of
     (simple) analyzers.
 
-
-    :param deriv: Function of ``x`` and ``y`` that returns ``dy/dx``.
-        The return value should be a dictionary with the same
-        keys as ``y``, and values that have the same
-        shape as the corresponding values in ``y``.
-    :param tol: Relative accuracy in ``y`` relative to ``|y| + h|dy/dx|``
-        for each step in the integration. Any integration step that achieves
-        less precision is repeated with a smaller step size. The step size
-        is increased if precision is higher than needed.
-    :type tol: float
-    :param h: Absolute value of initial step size. The default value equals the
-        entire width of the integration interval.
-    :type h: float
-    :param hmin: Smallest step size allowed. A warning is raised
-        if a smaller step size is requested, and the step size is not
-        decreased. This prevents infinite loops at singular points, but
-        the solution may not be reliable when a warning has been issued. The
-        default value is ``None`` (which does *not* prevent infinite loops).
-    :type hmin: float
-    :param analyzer: Function of ``x`` and ``y`` that is called after each
-        step of the integration. This can be used to analyze intermediate
-        results.
+    Args:
+        deriv: Function of ``x`` and ``y`` that returns ``dy/dx``.
+            The return value should be a dictionary with the same
+            keys as ``y``, and values that have the same
+            shape as the corresponding values in ``y``.
+        tol (float): Relative accuracy in ``y`` relative to 
+            ``|y| + h|dy/dx|`` for each step in the integration. 
+            Any integration step that achieves less precision is 
+            repeated with a smaller step size. The step size
+            is increased if precision is higher than needed. 
+            Default is 1e-5.
+        h (float or None): Absolute value of initial step size. 
+            The default value equals the entire width of the 
+            integration interval.
+        hmin (float or None): Smallest step size allowed. A warning 
+            is raised if a smaller step size is requested, and 
+            the step size is not decreased. This prevents infinite loops 
+            at singular points, but the solution may not be reliable when 
+            a warning has been issued. The default value is ``None`` 
+            (which does *not* prevent infinite loops).
+        hmax (float or None): Largest step allowed. Ignored if 
+            set to ``None``.
+        maxstep (int or None): Maximum number of integration steps 
+            allowed, after which a ``RuntimeError`` exception is raised. 
+            Ignored if set to ``None``.
+        delta: Function ``delta(yerr, y, delta_y)`` that returns
+            a number to be compared  with ``tol`` at each integration step:
+            if it is larger than ``tol``, the step is repeated with a smaller
+            step size; if it is smaller the step is accepted and a larger
+            step size used for the subsequent step. Here ``yerr`` is an
+            estimate of the error in ``y`` on the last step; ``y`` is the
+            proposed value; and ``delta_y`` is the change in ``y`` over
+            the last step.
+        analyzer: Function of ``x`` and ``y`` that is called after each
+            step of the integration. This can be used to analyze intermediate
+            results.
     """
     def __init__(self, **args):
         super(DictIntegrator, self).__init__(**args)
@@ -355,9 +397,17 @@ class DictIntegrator(Integrator):
             ans = []
             xlast = interval[0]
             ylast = y0
+            nbad = 0
+            ngood = 0
             for x in interval[1:]:
                 y = self(ylast, interval=(xlast,x))
+                xlast = x
+                ylast = y 
+                nbad += self.nbad 
+                ngood += self.ngood
                 ans.append(y)
+            self.nbad = nbad 
+            self.ngood = ngood 
             return ans
         if not isinstance(y0, gvar.BufferDict):
             y0 = gvar.BufferDict(y0)

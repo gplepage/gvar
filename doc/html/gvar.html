@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.1 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.2 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -1137,9 +1137,10 @@ whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVa
 <dt id="gvar.remove_gvars">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">remove_gvars</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">gvlist</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.remove_gvars" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from structure g, collecting them in <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>; replace with <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarRef</span></code></a>s.</p>
-<p><a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_gvars()</span></code></a> searches container object <code class="docutils literal notranslate"><span class="pre">g</span></code> for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and replaces
-them with <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">GVarRef</span></code></a> objects. The <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are collected in list <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>.
-Object <code class="docutils literal notranslate"><span class="pre">g</span></code> can be a dictionary, list, etc., or nested instances of these.</p>
+<p><a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">remove_gvars()</span></code></a> searches container object <code class="docutils literal notranslate"><span class="pre">g</span></code> (recursively)
+for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and replaces them with <a class="reference internal" href="#gvar.GVarRef" title="gvar.GVarRef"><code class="xref py py-class docutils literal notranslate"><span class="pre">GVarRef</span></code></a> objects. The
+<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are collected in list <code class="docutils literal notranslate"><span class="pre">gvlist</span></code>. Object <code class="docutils literal notranslate"><span class="pre">g</span></code> can be a
+dictionary, list, etc., or nested instances of these.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">g</span></code> contains an object <code class="docutils literal notranslate"><span class="pre">obj</span></code> that is a not standard container,
 <a class="reference internal" href="#gvar.remove_gvars" title="gvar.remove_gvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.remove_gvars()</span></code></a> will replace the object by
 <code class="docutils literal notranslate"><span class="pre">obj._remove_gvars(gvlist)</span></code> if that method exists; otherwise
@@ -2599,11 +2600,11 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2009-2019, G. P. Lepage.
+        &#169; Copyright 2009-2020, G. P. Lepage.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>

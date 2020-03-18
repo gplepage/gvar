@@ -3,7 +3,7 @@
 # remove extra # above for profiling
 
 # Created by Peter Lepage (Cornell University) on 2011-08-17.
-# Copyright (c) 2011-2018 G. Peter Lepage.
+# Copyright (c) 2011-2020 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1077,6 +1077,11 @@ def gvar_function(x, double f, dfdx):
     return GVar(f, f_d, x_i.cov)
 
 
+def abs(g):
+    try:
+        return fabs(g)
+    except:
+        return numpy.absolute(g)
 
 
 

@@ -335,7 +335,7 @@ denominator::
 The :mod:`gvar` module defines versions of the standard Python mathematical
 functions that work with |GVar| arguments. These include:
 ``exp, log, sqrt, sin, cos, tan, arcsin, arccos, arctan, arctan2, sinh, cosh,
-tanh, arcsinh, arccosh, arctanh, erf``. Numeric functions defined
+tanh, arcsinh, arccosh, arctanh, erf, fabs, abs``. Numeric functions defined
 entirely in Python (*i.e.*, pure-Python functions)
 will likely also work with |GVar|\s.
 
