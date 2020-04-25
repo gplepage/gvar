@@ -367,7 +367,7 @@ cdef class smat:
             ans.v[i].v = v[i]
             ans.v[i].i = idx[i]
         return ans
-
+    
     cpdef svec masked_dot(self, svec vv, numpy.ndarray[numpy.int8_t,ndim=1] imask):
         """ Compute masked dot product self|vv>.
 
