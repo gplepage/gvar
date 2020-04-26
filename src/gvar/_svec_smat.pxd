@@ -35,7 +35,7 @@ cdef class svec:
 
 cdef class smat:
     # cdef object rowlist
-    cdef readonly object[:] row
+    cdef object[:] row
     cdef INTP_TYPE nrow, nrow_max
     cpdef _add_memory(smat self)
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag(self,

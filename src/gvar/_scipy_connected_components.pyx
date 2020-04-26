@@ -1,13 +1,15 @@
+import numpy as np
 cimport numpy as np
 cimport cython
+from numpy cimport npy_intp as ITYPE_t
+ITYPE = np.intp
 
 __doc__ = """
 
 This function is copied from scipy/sparse/csgraph/_traversal.pyx. Use it like
 this:
 
-labels = np.empty(csgraph.shape[0], dtype=ITYPE)
-labels.fill(NULL_IDX)
+labels = np.zeros(csgraph.shape[0], dtype=ITYPE)
 n = _connected_components_directed(csgraph.indices, csgraph.indptr, labels)
 
 """
