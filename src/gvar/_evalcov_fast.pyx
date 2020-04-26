@@ -2,87 +2,96 @@ import numpy as np
 cimport numpy as np
 from numpy cimport npy_intp as INTP_TYPE
 
-from ._svec_smat cimport svec, smat, svec_element
+from ._svec_smat cimport svec, smat
 from ._gvarcore cimport GVar
 
 from ._bufferdict import BufferDict
 
-from ._scipy_connected_components cimport _connected_components_directed
-
-
-cpdef double _cov_raw(smat cov, svec x, svec y):
-    """Covariance between two gvars. x and y are the d members, cov is the
-    global covariance matrix."""
-    
-    cdef INTP_TYPE i = 0
-    cdef INTP_TYPE j = 0
-    cdef INTP_TYPE k = 0
-    cdef double out = 0.0
-    cdef INTP_TYPE xind
-    cdef INTP_TYPE yind
-    cdef svec_element *xv = x._getv()
-    cdef svec_element *yv = y._getv()
-    cdef svec_element *rowv
-    cdef svec row
-    
-    while i < x.size and j < y.size:
-        xind = xv[i].i
-        yind = yv[j].i
-        row = cov.row[xind]
-        
-        if xind == yind:
-            rowv = row._getv()
-            while k < row.size and rowv[k].i < yind:
-                k += 1
-            if k < row.size and rowv[k].i == yind:
-                out += xv[i].v * yv[j].v * rowv[k].v
-        
-        if xind <= yind:
-            i += 1
-            k = 0
-        if yind <= xind:
-            j += 1
-            
-    return out
-
-cpdef double _cov(GVar g1, GVar g2):
-    """Covariance between two gvars."""
-    assert g1.cov is g2.cov
-    return _cov_raw(g1.cov, g1.d, g2.d)
+from ._scipy_connected_components cimport _connected_components_undirected
 
 cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     """
     Return the covariance matrix of g as a sparse CSR matrix.
     Returned values: data, indices, indptr, like scipy.sparse.csr_matrix.
+    Only the upper triangular part is returned.
     """
+    # get the global covariance matrix
+    cdef smat cov
+    if hasattr(g[0], 'cov'):
+        cov = g[0].cov
+    else:
+        raise ValueError("g does not contain GVar's")
     
-    cdef np.ndarray[object, ndim=1] rows_data = np.empty(len(g), object)
-    cdef np.ndarray[object, ndim=1] rows_indices = np.empty(len(g), object)
-    cdef np.ndarray[INTP_TYPE, ndim=1] indptr = np.empty(len(g) + 1, np.intp)
+    # make a mask for the indices we need from cov
+    cdef INTP_TYPE ng = len(g)
+    cdef INTP_TYPE nc = cov.nrow
+    cdef np.ndarray[np.int8_t, ndim=1] imask = np.zeros(nc, np.int8)
+    cdef GVar ga
+    cdef svec da
+    for a in range(ng):
+        ga = g[a]
+        da = ga.d
+        for i in range(da.size):
+            imask[da.v[i].i] = True
     
-    cdef np.ndarray[np.float_t, ndim=1] row_buffer = np.empty(len(g))
-    cdef np.ndarray[INTP_TYPE, ndim=1] indices_buffer = np.empty(len(g), np.intp)
+    # compute the covariance matrix
+    cdef np.ndarray[object, ndim=1] covd = np.zeros(ng, object)
+    cdef INTP_TYPE col, row
+    cdef np.ndarray[object, ndim=1] rows_data = np.empty(ng, object)
+    cdef np.ndarray[object, ndim=1] rows_indices = np.empty(ng, object)
+    cdef np.ndarray[np.float_t, ndim=1] data
+    cdef np.ndarray[INTP_TYPE, ndim=1] indices
+    cdef np.ndarray[INTP_TYPE, ndim=1] buflen = np.zeros(ng, np.intp)
+    cdef np.ndarray[INTP_TYPE, ndim=1] length = np.zeros(ng, np.intp)
+    cdef np.float_t c
+    for col in range(ng):
+        ga = g[col]
+        covd[col] = cov.masked_dot(ga.d, imask)
+        for row in range(col + 1):
+            c = ga.d.dot(covd[row])
+            if c != 0:
+            
+                # create the row buffers if needed
+                if buflen[row] == 0:
+                    rows_data[row] = np.empty(1)
+                    rows_indices[row] = np.empty(1, np.intp)
+                    buflen[row] = 1
+                    
+                # expand the row buffers if needed
+                if buflen[row] <= length[row]:
+                    rows_data[row] = np.append(rows_data[row], np.empty_like(rows_data[row]))
+                    rows_indices[row] = np.append(rows_indices[row], np.empty_like(rows_indices[row]))
+                    buflen[row] *= 2
+                
+                data = rows_data[row]
+                indices = rows_indices[row]
+                data[length[row]] = c
+                indices[length[row]] = col
+                length[row] += 1
     
-    indptr[0] = 0
-    cdef INTP_TYPE buflen
-    for i in range(g.size):
-        buflen = 0
-        for j in range(g.size):
-            cov = _cov(g[i], g[j])
-            if cov > 0.0:
-                row_buffer[buflen] = cov
-                indices_buffer[buflen] = j
-                buflen += 1
-        indptr[i + 1] = indptr[i] + buflen
-        rows_data[i] = np.copy(row_buffer[:buflen])
-        rows_indices[i] = np.copy(indices_buffer[:buflen])
+    # short buffers to their used length and remove empty buffers
+    cdef INTP_TYPE outrow = 0
+    for row in range(ng):
+        if length[row] > 0:
+            rows_data[outrow] = rows_data[row][:length[row]]
+            rows_indices[outrow] = rows_indices[row][:length[row]]
+            outrow += 1
+    rows_data = rows_data[:outrow]
+    rows_indices = rows_indices[:outrow]
     
+    # concatenate buffers
     data = np.concatenate(rows_data)
     indices = np.concatenate(rows_indices)
+    
+    # compute rows span
+    cdef np.ndarray[INTP_TYPE, ndim=1] indptr = np.empty(ng + 1, np.intp)
+    indptr[0] = 0
+    indptr[1:] = np.cumsum(length)
+    
     return data, indices, indptr
 
 cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
-    """Convert the labels output of _connected_components_directed to a list
+    """Convert the labels output of _connected_components_* to a list
     of arrays of indices, where each array contains all the indices for a
     single label. The first array contains indices for all the labels with only
     one index."""
@@ -158,7 +167,8 @@ cpdef np.ndarray[np.float_t, ndim=2] _sub_cov(
 ):
     """Extract the submatrix from a CSR matrix for indices `outindices`."""
 
-    cdef np.ndarray[np.float_t, ndim=2] out = np.empty(2 * (len(outindices),))
+    cdef INTP_TYPE size = len(outindices)
+    cdef np.ndarray[np.float_t, ndim=2] out = np.empty((size, size))
     for iout, i in enumerate(outindices):
         rowslice = slice(indptr[i], indptr[i + 1])
         rowdata = data[rowslice]
@@ -169,6 +179,7 @@ cpdef np.ndarray[np.float_t, ndim=2] _sub_cov(
                 out[iout, jout] = rowdata[j]
             else:
                 out[iout, jout] = 0
+            out[jout, iout] = out[iout, jout]
     return out
 
 def _evalcov_blocks(np.ndarray[object, ndim=1] g):
@@ -177,7 +188,7 @@ def _evalcov_blocks(np.ndarray[object, ndim=1] g):
     """
     data, indices, indptr = _evalcov_sparse(g)
     labels = np.zeros(len(g), np.intp)
-    n = _connected_components_directed(indices, indptr, labels)
+    n = _connected_components_undirected(indices, indptr, indices, indptr, labels)
     indices_list = _compress_labels(labels)
     covs = [_sub_sdev(indices_list[0], data, indices, indptr)]
     for idxs in indices_list[1:]:

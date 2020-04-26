@@ -6,8 +6,8 @@ ITYPE = np.intp
 
 __doc__ = """
 
-This function is copied from scipy/sparse/csgraph/_traversal.pyx. Use it like
-this:
+These functions are copied from scipy/sparse/csgraph/_traversal.pyx. Use them
+like this:
 
 labels = np.zeros(csgraph.shape[0], dtype=ITYPE)
 n = _connected_components_directed(csgraph.indices, csgraph.indptr, labels)
@@ -132,3 +132,50 @@ cdef int _connected_components_directed(
     labels *= -1
     labels += (N - 1)
     return (N - 1) - label
+    
+cdef int _connected_components_undirected(
+                           np.ndarray[ITYPE_t, ndim=1, mode='c'] indices1,
+                           np.ndarray[ITYPE_t, ndim=1, mode='c'] indptr1,
+                           np.ndarray[ITYPE_t, ndim=1, mode='c'] indices2,
+                           np.ndarray[ITYPE_t, ndim=1, mode='c'] indptr2,
+                           np.ndarray[ITYPE_t, ndim=1, mode='c'] labels):
+
+    cdef int v, w, j, label, SS_head
+    cdef int N = labels.shape[0]
+    DEF VOID = -1
+    DEF END = -2
+    labels.fill(VOID)
+    label = 0
+
+    # Share memory for the stack and labels, since labels are only
+    # applied once a node has been popped from the stack.
+    cdef np.ndarray[ITYPE_t, ndim=1, mode="c"] SS = labels
+    SS_head = END
+    for v in range(N):
+        if labels[v] == VOID:
+            # SS.push(v)
+            SS_head = v
+            SS[v] = END
+
+            while SS_head != END:
+                # v = SS.pop()
+                v = SS_head
+                SS_head = SS[v]
+
+                labels[v] = label
+
+                # Push children onto the stack if they haven't been
+                # seen at all yet.
+                for j in range(indptr1[v], indptr1[v+1]):
+                    w = indices1[j]
+                    if SS[w] == VOID:
+                        SS[w] = SS_head
+                        SS_head = w
+                for j in range(indptr2[v], indptr2[v+1]):
+                    w = indices2[j]
+                    if SS[w] == VOID:
+                        SS[w] = SS_head
+                        SS_head = w
+            label += 1
+
+    return label
