@@ -5,11 +5,22 @@ import numpy as np
 
 def evalcov_sparse(g):
     g = np.array(g)
-    data, indices, indptr = ef._evalcov_sparse(g)
-    upper = sparse.csr_matrix((data, indices, indptr), shape=2 * (len(g),))
+    udata, uindices, uindptr, ldata, lindices, lindptr = ef._evalcov_sparse(g)
+
+    upper = sparse.csr_matrix((udata, uindices, uindptr), shape=2 * (len(g),))
     assert upper.has_canonical_format
-    cov = upper.toarray()
-    assert np.all(cov - np.triu(cov) == 0)
+    upper = upper.toarray()
+    assert np.all(upper - np.triu(upper) == 0)
+
+    lower = sparse.csr_matrix((ldata, lindices, lindptr))
+    assert lower.has_canonical_format
+    lower = lower.toarray()
+    assert np.all(lower - np.tril(lower) == 0)
+    
+    assert np.array_equal(np.diag(upper), np.diag(lower))
+    assert np.array_equal(upper, lower.T)
+
+    cov = upper
     indices = np.triu_indices(len(g))
     cov[tuple(reversed(indices))] = cov[indices]
     assert np.all(cov == cov.T)
@@ -67,7 +78,7 @@ def test_compress_labels_single():
 
 def test_compress_labels():
     # labels = np.array([0, 1, 0, 0, 2, 1, 2, 0, 3, 1, 1])
-    length = np.random.randint(10, size=10)
+    length = np.random.randint(1, 10, size=10)
     labels = np.concatenate([l * [i] for i, l in enumerate(length)])
     np.random.shuffle(labels)
     indices = np.arange(len(labels))
@@ -79,3 +90,85 @@ def test_compress_labels():
     for idx in idxs[1:]:
         l = labels[idx[0]]
         assert np.array_equal(idx, indices[labels == l])
+
+def sub_sdev(g, idxs):
+    g = np.array(g)
+    idxs = np.array(idxs)
+    data, indices, indptr, _, _, _ = ef._evalcov_sparse(g)
+    return ef._sub_sdev(idxs, data, indices, indptr)
+
+def test_sub_sdev():
+    a = np.random.randint(4, size=(10, 10))
+    xcov = a.T @ a
+    x = gvar.gvar(np.zeros(10), xcov)
+    transf = np.random.randint(20, size=(5, 10))
+    y = transf @ x
+    indices = np.random.randint(len(y), size=5)
+    sdev1 = gvar.sdev(y[indices])
+    sdev2 = sub_sdev(y, indices)
+    assert np.array_equal(sdev1, sdev2)
+
+def sub_cov(g, idxs):
+    g = np.array(g)
+    idxs = np.array(idxs)
+    data, indices, indptr, _, _, _ = ef._evalcov_sparse(g)
+    cov = ef._sub_cov(idxs, data, indices, indptr)
+    assert cov.shape == (len(idxs), len(idxs))
+    return cov
+
+def test_sub_cov():
+    a = np.random.randint(5, size=(10, 10))
+    xcov = a.T @ a
+    x = gvar.gvar(np.zeros(10), xcov)
+    transf = np.random.randint(20, size=(5, 10))
+    y = transf @ x
+    indices = np.random.randint(len(y), size=5)
+    cov1 = gvar.evalcov(y[indices])
+    cov2 = sub_cov(y, indices)
+    assert np.array_equal(cov1, cov2)
+
+def test_evalcov_blocks():
+    def test_cov(g):
+        if hasattr(g, 'keys'):
+            g = gvar.BufferDict(g)
+        g = g.flat[:]
+        cov = np.zeros((len(g), len(g)), dtype=float)
+        for idx, bcov in ef.evalcov_blocks(g):
+            cov[idx[:,None], idx] = bcov
+        assert str(gvar.evalcov(g)) == str(cov)
+    g = gvar.gvar(5 * ['1(1)'])
+    test_cov(g)
+    g[-1] = g[0] + g[1]
+    test_cov(g)
+    test_cov(g * gvar.gvar('2(1)'))
+    g = gvar.gvar(5 * ['1(1)'])
+    g[0] = g[-1] + g[-2]
+    test_cov(g)
+
+def test_evalcov_blocks_compress():
+    def test_cov(g):
+        if hasattr(g, 'keys'):
+            g = gvar.BufferDict(g)
+        blocks = ef.evalcov_blocks(g, compress=True)
+        g = g.flat[:]
+        cov = np.zeros((len(g), len(g)), dtype=float)
+        idx, bsdev = blocks[0]
+        if len(idx) > 0:
+            cov[idx, idx] = bsdev ** 2
+        for idx, bcov in blocks[1:]:
+            cov[idx[:,None], idx] = bcov
+        assert str(gvar.evalcov(g)) == str(cov)
+    g = gvar.gvar(5 * ['1(1)'])
+    test_cov(g)
+    test_cov(dict(g=g))
+    g[-1] = g[0] + g[1]
+    test_cov(g)
+    test_cov(dict(g=g))
+    test_cov(g * gvar.gvar('2(1)'))
+    g = gvar.gvar(5 * ['1(1)'])
+    g[0] = g[-1] + g[-2]
+    test_cov(g)
+    test_cov(dict(g=g))
+    g[1:] += g[:-1]
+    test_cov(g)
+    test_cov(dict(g=g))
