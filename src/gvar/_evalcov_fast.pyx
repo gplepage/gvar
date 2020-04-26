@@ -9,6 +9,95 @@ from ._bufferdict import BufferDict
 
 from ._scipy_connected_components cimport _connected_components_undirected
 
+cpdef tuple _transpose_CSR(tuple shape,
+                           np.ndarray[np.float_t, ndim=1] data,
+                           np.ndarray[INTP_TYPE, ndim=1] indices,
+                           np.ndarray[INTP_TYPE, ndim=1] indptr):
+    """transpose a CSR/CSC matrix
+    copied and adapted from scipy/sparse/sparsetools/csr.h
+    the original code is in comments
+    returns data, indices, indptr of the transposed matrix"""
+# void csr_tocsc(const I n_row,
+#                const I n_col,
+#                const I Ap[],
+#                const I Aj[],
+#                const T Ax[],
+#                      I Bp[],
+#                      I Bi[],
+#                      T Bx[])
+# {
+    cdef INTP_TYPE n_row = shape[0]
+    cdef INTP_TYPE n_col = shape[1]
+    cdef np.ndarray[INTP_TYPE, ndim=1] Ap = indptr
+    cdef np.ndarray[INTP_TYPE, ndim=1] Aj = indices
+    cdef np.ndarray[np.float_t, ndim=1] Ax = data
+    cdef np.ndarray[INTP_TYPE, ndim=1] Bp = np.zeros(1 + n_col, np.intp)
+    cdef np.ndarray[INTP_TYPE, ndim=1] Bi = np.empty_like(indices)
+    cdef np.ndarray[np.float_t, ndim=1] Bx = np.empty_like(data)
+
+    # const I nnz = Ap[n_row];
+    cdef INTP_TYPE nnz = Ap[n_row]
+
+    # //compute number of non-zero entries per column of A
+    # std::fill(Bp, Bp + n_col, 0);
+
+    # for (I n = 0; n < nnz; n++){
+    #     Bp[Aj[n]]++;
+    # }
+    cdef INTP_TYPE n
+    for n in range(nnz):
+        Bp[Aj[n]] += 1
+
+    # //cumsum the nnz per column to get Bp[]
+    # for(I col = 0, cumsum = 0; col < n_col; col++){
+    #     I temp  = Bp[col];
+    #     Bp[col] = cumsum;
+    #     cumsum += temp;
+    # }
+    # Bp[n_col] = nnz;
+    cdef INTP_TYPE col = 0
+    cdef INTP_TYPE cumsum = 0
+    cdef INTP_TYPE temp
+    for col in range(n_col):
+        temp = Bp[col]
+        Bp[col] = cumsum
+        cumsum += temp
+    Bp[n_col] = nnz
+
+    # for(I row = 0; row < n_row; row++){
+    #     for(I jj = Ap[row]; jj < Ap[row+1]; jj++){
+    #         I col  = Aj[jj];
+    #         I dest = Bp[col];
+    #
+    #         Bi[dest] = row;
+    #         Bx[dest] = Ax[jj];
+    #
+    #         Bp[col]++;
+    #     }
+    # }
+    cdef INTP_TYPE row, jj, dest
+    for row in range(n_row):
+        for jj in range(Ap[row], Ap[row + 1]):
+            col = Aj[jj]
+            dest = Bp[col]
+            Bi[dest] = row
+            Bx[dest] = Ax[jj]
+            Bp[col] += 1
+
+    # for(I col = 0, last = 0; col <= n_col; col++){
+    #     I temp  = Bp[col];
+    #     Bp[col] = last;
+    #     last    = temp;
+    # }
+    cdef INTP_TYPE last = 0
+    for col in range(n_col + 1):
+        temp = Bp[col]
+        Bp[col] = last
+        last = temp
+    
+    return Bx, Bi, Bp
+# }
+
 cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     """
     Return the covariance matrix of g as a sparse CSR matrix.
@@ -38,105 +127,53 @@ cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     
     # variables for computing the covariance matrix
     cdef np.ndarray[object, ndim=1] covd = np.zeros(ng, object)
-    cdef INTP_TYPE col, row
+    cdef INTP_TYPE row, col
     cdef np.float_t c
+    
     cdef np.ndarray[np.float_t, ndim=1] data
     cdef np.ndarray[INTP_TYPE, ndim=1] indices
+    cdef np.ndarray[INTP_TYPE, ndim=1] indptr = np.empty(1 + ng, np.intp)
+    indptr[0] = 0
     
-    # variables only for upper output
-    cdef np.ndarray[object, ndim=1] upper_rows_data = np.empty(ng, object)
-    cdef np.ndarray[object, ndim=1] upper_rows_indices = np.empty(ng, object)
-    cdef np.ndarray[INTP_TYPE, ndim=1] upper_buflen = np.zeros(ng, np.intp)
-    cdef np.ndarray[INTP_TYPE, ndim=1] upper_length = np.zeros(ng, np.intp)
-    
-    # variables only for lower output
-    cdef np.ndarray[object, ndim=1] lower_rows_data = np.empty(ng, object)
-    cdef np.ndarray[object, ndim=1] lower_rows_indices = np.empty(ng, object)
-    cdef np.ndarray[INTP_TYPE, ndim=1] lindptr = np.empty(1 + ng, np.intp)
-    lindptr[0] = 0
-    cdef np.ndarray[np.float_t, ndim=1] lower_row_data_buffer = np.empty(ng)
-    cdef np.ndarray[INTP_TYPE, ndim=1] lower_row_indices_buffer = np.empty(ng, np.intp)
-    cdef INTP_TYPE lower_buflen
-    cdef INTP_TYPE lower_nbuf = 0
+    cdef np.ndarray[object, ndim=1] rows_data = np.empty(ng, object)
+    cdef np.ndarray[object, ndim=1] rows_indices = np.empty(ng, object)
+
+    cdef np.ndarray[np.float_t, ndim=1] row_data_buffer = np.empty(ng)
+    cdef np.ndarray[INTP_TYPE, ndim=1] row_indices_buffer = np.empty(ng, np.intp)
+    cdef INTP_TYPE buflen
+    cdef INTP_TYPE nbuf = 0
     
     # compute the covariance matrix
-    for col in range(ng):
+    for row in range(ng):
         
-        # compute (global covariance) @ transform[:,col]
-        ga = g[col]
-        covd[col] = cov.masked_dot(ga.d, imask)
+        # compute (global covariance) @ transform[row, :].T
+        ga = g[row]
+        covd[row] = cov.masked_dot(ga.d, imask)
         
-        lower_buflen = 0
-        for row in range(col + 1):
+        buflen = 0
+        for col in range(row + 1):
         
             # compute transform[row,:] @ (global covariance) @ transform[:,col]
-            c = ga.d.dot(covd[row])
+            c = ga.d.dot(covd[col])
             if c != 0:
+                row_data_buffer[buflen] = c
+                row_indices_buffer[buflen] = col
+                buflen += 1
             
-                ### UPPER OUTPUT ###
-                
-                # create the row buffers if needed
-                if upper_buflen[row] == 0:
-                    upper_rows_data[row] = np.empty(1)
-                    upper_rows_indices[row] = np.empty(1, np.intp)
-                    upper_buflen[row] = 1
-                    
-                # expand the row buffers if needed
-                if upper_buflen[row] <= upper_length[row]:
-                    data = upper_rows_data[row]
-                    indices = upper_rows_indices[row]
-                    upper_rows_data[row] = np.append(data, np.empty_like(data))
-                    upper_rows_indices[row] = np.append(indices, np.empty_like(indices))
-                    upper_buflen[row] *= 2
-                
-                # append the value to the row buffers
-                data = upper_rows_data[row]
-                indices = upper_rows_indices[row]
-                data[upper_length[row]] = c
-                indices[upper_length[row]] = col
-                upper_length[row] += 1
-                
-                ### LOWER OUTPUT ###
-                # here row, col is transposed
-                
-                lower_row_data_buffer[lower_buflen] = c
-                lower_row_indices_buffer[lower_buflen] = row
-                lower_buflen += 1
-            
-        if lower_buflen > 0:
-            lower_rows_data[lower_nbuf] = np.copy(lower_row_data_buffer[:lower_buflen])
-            lower_rows_indices[lower_nbuf] = np.copy(lower_row_indices_buffer[:lower_buflen])
-            lower_nbuf += 1
-        lindptr[col + 1] = lindptr[col] + lower_buflen
-    
-    ### UPPER OUTPUT ###
-    
-    # short buffers to their used length and remove empty buffers
-    cdef INTP_TYPE outrow = 0
-    for row in range(ng):
-        if upper_length[row] > 0:
-            upper_rows_data[outrow] = upper_rows_data[row][:upper_length[row]]
-            upper_rows_indices[outrow] = upper_rows_indices[row][:upper_length[row]]
-            outrow += 1
-    upper_rows_data = upper_rows_data[:outrow]
-    upper_rows_indices = upper_rows_indices[:outrow]
-    
-    # concatenate buffers
-    udata = np.concatenate(upper_rows_data)
-    uindices = np.concatenate(upper_rows_indices)
-    
-    # compute rows span
-    cdef np.ndarray[INTP_TYPE, ndim=1] uindptr = np.empty(ng + 1, np.intp)
-    uindptr[0] = 0
-    uindptr[1:] = np.cumsum(upper_length)
-    
-    ### LOWER OUTPUT ###
+        if buflen > 0:
+            rows_data[nbuf] = np.copy(row_data_buffer[:buflen])
+            rows_indices[nbuf] = np.copy(row_indices_buffer[:buflen])
+            nbuf += 1
+        indptr[col + 1] = indptr[col] + buflen
     
     # concatenate buffers truncating to used buffers
-    ldata = np.concatenate(lower_rows_data[:lower_nbuf])
-    lindices = np.concatenate(lower_rows_indices[:lower_nbuf])
+    data = np.concatenate(rows_data[:nbuf])
+    indices = np.concatenate(rows_indices[:nbuf])
     
-    return udata, uindices, uindptr, ldata, lindices, lindptr
+    # transpose
+    udata, uindices, uindptr = _transpose_CSR((ng, ng), data, indices, indptr)
+    
+    return udata, uindices, uindptr, data, indices, indptr
 
 cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
     """Convert the labels output of _connected_components_* to a list
