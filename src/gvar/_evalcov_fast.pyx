@@ -2,14 +2,15 @@ import numpy as np
 cimport numpy as np
 from numpy cimport npy_intp as INTP_TYPE
 
-from ._svec_smat import svec, smat
-from ._svec_smat cimport svec, smat
+from ._svec_smat cimport svec, smat, svec_element
+from ._gvarcore cimport GVar
 
 from ._bufferdict import BufferDict
 
 from ._scipy_connected_components cimport _connected_components_directed
 
-cdef double _cov_raw(smat cov, svec x, svec y):
+
+cpdef double _cov_raw(smat cov, svec x, svec y):
     """Covariance between two gvars. x and y are the d members, cov is the
     global covariance matrix."""
     
@@ -19,17 +20,22 @@ cdef double _cov_raw(smat cov, svec x, svec y):
     cdef double out = 0.0
     cdef INTP_TYPE xind
     cdef INTP_TYPE yind
+    cdef svec_element *xv = x._getv()
+    cdef svec_element *yv = y._getv()
+    cdef svec_element *rowv
+    cdef svec row
     
     while i < x.size and j < y.size:
-        xind = x[i].i
-        yind = y[j].i
+        xind = xv[i].i
+        yind = yv[j].i
         row = cov.row[xind]
         
         if xind == yind:
-            while k < row.size and row[k].i < yind:
+            rowv = row._getv()
+            while k < row.size and rowv[k].i < yind:
                 k += 1
-            if k < row.size and row[k].i == yind:
-                out += x[i].v * y[j].v * row[k].v
+            if k < row.size and rowv[k].i == yind:
+                out += xv[i].v * yv[j].v * rowv[k].v
         
         if xind <= yind:
             i += 1
@@ -39,12 +45,12 @@ cdef double _cov_raw(smat cov, svec x, svec y):
             
     return out
 
-cdef double _cov(g1, g2):
+cpdef double _cov(GVar g1, GVar g2):
     """Covariance between two gvars."""
     assert g1.cov is g2.cov
     return _cov_raw(g1.cov, g1.d, g2.d)
 
-cdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
+cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     """
     Return the covariance matrix of g as a sparse CSR matrix.
     Returned values: data, indices, indptr, like scipy.sparse.csr_matrix.
@@ -75,7 +81,7 @@ cdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     indices = np.concatenate(rows_indices)
     return data, indices, indptr
 
-cdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
+cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
     """Convert the labels output of _connected_components_directed to a list
     of arrays of indices, where each array contains all the indices for a
     single label. The first array contains indices for all the labels with only
@@ -114,16 +120,16 @@ cdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
     # remove empty arrays
     cdef np.ndarray[object, ndim=1] output = np.empty(nlabels + 1 - nones, object)
     output[0] = indices[0]
-    end = 1
+    cdef INTP_TYPE outlen = 1
     for idxs in indices[1:]:
         if idxs:
-            output[end] = idxs
-            end += 1
-    assert end == len(output)
+            output[outlen] = idxs
+            outlen += 1
+    assert outlen == len(output)
     
     return output
 
-cdef np.ndarray[np.float_t, ndim=1] _sub_sdev(
+cpdef np.ndarray[np.float_t, ndim=1] _sub_sdev(
     np.ndarray[INTP_TYPE, ndim=1] outindices,
     np.ndarray[np.float_t, ndim=1] data,
     np.ndarray[INTP_TYPE, ndim=1] indices,
@@ -144,7 +150,7 @@ cdef np.ndarray[np.float_t, ndim=1] _sub_sdev(
             out[iout] = 0
     return out
 
-cdef np.ndarray[np.float_t, ndim=2] _sub_cov(
+cpdef np.ndarray[np.float_t, ndim=2] _sub_cov(
     np.ndarray[INTP_TYPE, ndim=1] outindices,
     np.ndarray[np.float_t, ndim=1] data,
     np.ndarray[INTP_TYPE, ndim=1] indices,

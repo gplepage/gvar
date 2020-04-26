@@ -31,6 +31,7 @@ cdef class svec:
     cpdef svec clone(svec)
     cpdef svec add(svec,svec,double a=*,double b=*)
     cpdef svec mul(svec self,double a)
+    cdef svec_element *_getv(svec)
 
 
 cdef class smat:

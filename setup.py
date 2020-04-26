@@ -65,6 +65,8 @@ ext_modules = [
     Extension("gvar._utilities", ["src/gvar/_utilities" + ext], **ext_args),
     Extension("gvar.dataset", ["src/gvar/dataset" + ext], **ext_args),
     Extension("gvar._bufferdict", ["src/gvar/_bufferdict" + ext], **ext_args),
+    Extension("gvar._scipy_connected_components", ["src/gvar/_scipy_connected_components" + ext], **ext_args),
+    Extension("gvar._evalcov_fast", ["src/gvar/_evalcov_fast" + ext], **ext_args),
     ]
 
 # packages

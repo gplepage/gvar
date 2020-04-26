@@ -29,6 +29,9 @@ cdef class svec:
     """ sparse vector --- for GVar derivatives (only)"""
     # cdef svec_element * v
     # cdef readonly usigned int size ## number of elements in v
+    
+    cdef svec_element *_getv(svec self):
+        return self.v
 
     def __cinit__(svec self, INTP_TYPE size, *arg, **karg):
         self.v = <svec_element *> PyMem_Malloc(size * sizeof(self.v[0]))
