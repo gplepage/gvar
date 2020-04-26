@@ -9,14 +9,14 @@ from ._bufferdict import BufferDict
 
 from ._scipy_connected_components cimport _connected_components_undirected
 
-cpdef tuple _transpose_CSR(tuple shape,
-                           np.ndarray[np.float_t, ndim=1] data,
+cpdef tuple _transpose_csmatrix_indices(tuple shape,
+                           # np.ndarray[np.float_t, ndim=1] data,
                            np.ndarray[INTP_TYPE, ndim=1] indices,
                            np.ndarray[INTP_TYPE, ndim=1] indptr):
     """transpose a CSR/CSC matrix
     copied and adapted from scipy/sparse/sparsetools/csr.h
     the original code is in comments
-    returns data, indices, indptr of the transposed matrix"""
+    returns indices, indptr of the transposed matrix"""
 # void csr_tocsc(const I n_row,
 #                const I n_col,
 #                const I Ap[],
@@ -30,10 +30,10 @@ cpdef tuple _transpose_CSR(tuple shape,
     cdef INTP_TYPE n_col = shape[1]
     cdef np.ndarray[INTP_TYPE, ndim=1] Ap = indptr
     cdef np.ndarray[INTP_TYPE, ndim=1] Aj = indices
-    cdef np.ndarray[np.float_t, ndim=1] Ax = data
+    # cdef np.ndarray[np.float_t, ndim=1] Ax = data
     cdef np.ndarray[INTP_TYPE, ndim=1] Bp = np.zeros(1 + n_col, np.intp)
     cdef np.ndarray[INTP_TYPE, ndim=1] Bi = np.empty_like(indices)
-    cdef np.ndarray[np.float_t, ndim=1] Bx = np.empty_like(data)
+    # cdef np.ndarray[np.float_t, ndim=1] Bx = np.empty_like(data)
 
     # const I nnz = Ap[n_row];
     cdef INTP_TYPE nnz = Ap[n_row]
@@ -81,7 +81,7 @@ cpdef tuple _transpose_CSR(tuple shape,
             col = Aj[jj]
             dest = Bp[col]
             Bi[dest] = row
-            Bx[dest] = Ax[jj]
+            # Bx[dest] = Ax[jj]
             Bp[col] += 1
 
     # for(I col = 0, last = 0; col <= n_col; col++){
@@ -95,16 +95,14 @@ cpdef tuple _transpose_CSR(tuple shape,
         Bp[col] = last
         last = temp
     
-    return Bx, Bi, Bp
+    return Bi, Bp
 # }
 
 cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     """
-    Return the covariance matrix of g as a sparse CSR matrix.
-    Matrix format: data, indices, indptr, like scipy.sparse.csr_matrix.
-    Two matrices are returned: the upper triangular part and the lower
-    triangular part. Thus the function output is:
-        (udata, uindices, uindptr, ldata, lindices, lindptr)
+    Compute the covariance matrix of g as a sparse CSR matrix.
+    Returns data, indices, indptr, like scipy.sparse.csr_matrix.
+    Only the lower triangular part is computed.
     """
     # get the global covariance matrix
     cdef smat cov
@@ -170,10 +168,7 @@ cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     data = np.concatenate(rows_data[:nbuf])
     indices = np.concatenate(rows_indices[:nbuf])
     
-    # transpose
-    udata, uindices, uindptr = _transpose_CSR((ng, ng), data, indices, indptr)
-    
-    return udata, uindices, uindptr, data, indices, indptr
+    return data, indices, indptr
 
 cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
     """Convert the labels output of _connected_components_* to a list
@@ -255,7 +250,7 @@ cpdef np.ndarray[np.float_t, ndim=2] _sub_cov(
     np.ndarray[INTP_TYPE, ndim=1] indptr,
 ):
     """Extract the submatrix from a CSR matrix for indices `outindices`. The
-    matrix must be the upper triangular part of a symmetric matrix."""
+    matrix must be the triangular part of a symmetric matrix."""
 
     cdef INTP_TYPE size = len(outindices)
     cdef np.ndarray[np.float_t, ndim=2] out = np.zeros((size, size))
@@ -277,13 +272,14 @@ def _evalcov_blocks(np.ndarray[object, ndim=1] g):
     """
     Like evalcov_blocks with compress=True for 1D array input.
     """
-    udata, uindices, uindptr, ldata, lindices, lindptr = _evalcov_sparse(g)
+    ldata, lindices, lindptr = _evalcov_sparse(g)
+    uindices, uindptr = _transpose_csmatrix_indices((len(g), len(g)), lindices, lindptr)
     labels = np.zeros(len(g), np.intp)
     n = _connected_components_undirected(uindices, uindptr, lindices, lindptr, labels)
     indices_list = _compress_labels(labels)
-    covs = [_sub_sdev(indices_list[0], udata, uindices, uindptr)]
+    covs = [_sub_sdev(indices_list[0], ldata, lindices, lindptr)]
     for idxs in indices_list[1:]:
-        covs.append(_sub_cov(idxs, udata, uindices, uindptr))
+        covs.append(_sub_cov(idxs, ldata, lindices, lindptr))
     return list(zip(indices_list, covs))
 
 def _sanitize(g):

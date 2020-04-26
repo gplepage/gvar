@@ -5,23 +5,15 @@ import numpy as np
 
 def evalcov_sparse(g):
     g = np.array(g)
-    udata, uindices, uindptr, ldata, lindices, lindptr = ef._evalcov_sparse(g)
-
-    upper = sparse.csr_matrix((udata, uindices, uindptr), shape=2 * (len(g),))
-    assert upper.has_canonical_format
-    upper = upper.toarray()
-    assert np.all(upper - np.triu(upper) == 0)
+    ldata, lindices, lindptr = ef._evalcov_sparse(g)
 
     lower = sparse.csr_matrix((ldata, lindices, lindptr))
     assert lower.has_canonical_format
     lower = lower.toarray()
     assert np.all(lower - np.tril(lower) == 0)
     
-    assert np.array_equal(np.diag(upper), np.diag(lower))
-    assert np.array_equal(upper, lower.T)
-
-    cov = upper
-    indices = np.triu_indices(len(g))
+    cov = lower
+    indices = np.tril_indices(len(g))
     cov[tuple(reversed(indices))] = cov[indices]
     assert np.all(cov == cov.T)
     return cov
@@ -94,7 +86,7 @@ def test_compress_labels():
 def sub_sdev(g, idxs):
     g = np.array(g)
     idxs = np.array(idxs)
-    data, indices, indptr, _, _, _ = ef._evalcov_sparse(g)
+    data, indices, indptr = ef._evalcov_sparse(g)
     return ef._sub_sdev(idxs, data, indices, indptr)
 
 def test_sub_sdev():
@@ -111,7 +103,7 @@ def test_sub_sdev():
 def sub_cov(g, idxs):
     g = np.array(g)
     idxs = np.array(idxs)
-    data, indices, indptr, _, _, _ = ef._evalcov_sparse(g)
+    data, indices, indptr = ef._evalcov_sparse(g)
     cov = ef._sub_cov(idxs, data, indices, indptr)
     assert cov.shape == (len(idxs), len(idxs))
     return cov
