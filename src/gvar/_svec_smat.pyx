@@ -29,7 +29,7 @@ cdef class svec:
     """ sparse vector --- for GVar derivatives (only)"""
     # cdef svec_element * v
     # cdef readonly usigned int size ## number of elements in v
-    
+
     def __cinit__(svec self, INTP_TYPE size, *arg, **karg):
         self.v = <svec_element *> PyMem_Malloc(size * sizeof(self.v[0]))
         memset(self.v, 0, size * sizeof(self.v[0]))
@@ -367,7 +367,7 @@ cdef class smat:
             ans.v[i].v = v[i]
             ans.v[i].i = idx[i]
         return ans
-    
+
     cpdef svec masked_dot(self, svec vv, numpy.ndarray[numpy.int8_t,ndim=1] imask):
         """ Compute masked dot product self|vv>.
 
