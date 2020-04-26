@@ -101,8 +101,10 @@ cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
     cdef np.ndarray[INTP_TYPE, ndim=1] length = np.zeros(nlabels, np.intp)
     cdef np.ndarray[INTP_TYPE, ndim=1] end = np.zeros(1 + nlabels, np.intp)
     cdef np.ndarray[object, ndim=1] indices = np.empty(1 + nlabels, object)
+    cdef np.ndarray[INTP_TYPE, ndim=1] idxs
     
     # count number of indices for each label
+    cdef INTP_TYPE l
     for l in labels:
         length[l] += 1
     assert np.all(length)
@@ -115,15 +117,17 @@ cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
     indices[0] = np.empty(nones, np.intp)
 
     # fill arrays of indices
+    cdef INTP_TYPE i
     for i, l in enumerate(labels):
         if length[l] == 1:
-            indices[0][end[0]] = l
+            indices[0][end[0]] = i
             end[0] += 1
         else:
             idx = 1 + l
             if end[idx] == 0:
                 indices[idx] = np.empty(length[l], np.intp)
-            indices[idx][end[idx]] = i
+            idxs = indices[idx]
+            idxs[end[idx]] = i
             end[idx] += 1
     
     # remove empty arrays
@@ -131,7 +135,7 @@ cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
     output[0] = indices[0]
     cdef INTP_TYPE outlen = 1
     for idxs in indices[1:]:
-        if idxs:
+        if idxs is not None:
             output[outlen] = idxs
             outlen += 1
     assert outlen == len(output)

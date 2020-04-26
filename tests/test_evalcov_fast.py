@@ -7,6 +7,7 @@ def evalcov_sparse(g):
     g = np.array(g)
     data, indices, indptr = ef._evalcov_sparse(g)
     upper = sparse.csr_matrix((data, indices, indptr), shape=2 * (len(g),))
+    assert upper.has_canonical_format
     cov = upper.toarray()
     assert np.all(cov - np.triu(cov) == 0)
     indices = np.triu_indices(len(g))
@@ -46,4 +47,35 @@ def test_cov():
     cov1 = evalcov_sparse(y)
     cov2 = gvar.evalcov(y)
     assert np.all(cov1 == cov2)
+
+def compress_labels(l):
+    l = np.array(l)
+    return list(ef._compress_labels(l))
+
+def test_compress_labels_single_sorted():
+    l = np.arange(100)
+    idxs = compress_labels(l)
+    assert len(idxs) == 1
+    assert np.all(idxs[0] == np.arange(len(l)))
     
+def test_compress_labels_single():
+    l = np.arange(100)
+    np.random.shuffle(l)
+    idxs = compress_labels(l)
+    assert len(idxs) == 1
+    assert np.all(idxs[0] == np.arange(len(l)))
+
+def test_compress_labels():
+    # labels = np.array([0, 1, 0, 0, 2, 1, 2, 0, 3, 1, 1])
+    length = np.random.randint(10, size=10)
+    labels = np.concatenate([l * [i] for i, l in enumerate(length)])
+    np.random.shuffle(labels)
+    indices = np.arange(len(labels))
+    idxs = compress_labels(labels)
+    assert np.array_equal(np.sort(np.concatenate(idxs)), indices)
+    for i in idxs[0]:
+        l = labels[i]
+        assert np.sum(labels == l) == 1
+    for idx in idxs[1:]:
+        l = labels[idx[0]]
+        assert np.array_equal(idx, indices[labels == l])
