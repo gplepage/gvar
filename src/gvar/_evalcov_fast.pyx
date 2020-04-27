@@ -133,6 +133,7 @@ cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
     cdef np.ndarray[INTP_TYPE, ndim=1] indptr = np.empty(1 + ng, np.intp)
     indptr[0] = 0
     
+    # Should I use lists? Can I type a list like list[np.ndarray[etc]]?
     cdef np.ndarray[object, ndim=1] rows_data = np.empty(ng, object)
     cdef np.ndarray[object, ndim=1] rows_indices = np.empty(ng, object)
 
@@ -159,114 +160,119 @@ cpdef tuple _evalcov_sparse(np.ndarray[object, ndim=1] g):
                 buflen += 1
             
         if buflen > 0:
+            # TODO should I avoid using np.copy? Will it call python code?
             rows_data[nbuf] = np.copy(row_data_buffer[:buflen])
             rows_indices[nbuf] = np.copy(row_indices_buffer[:buflen])
             nbuf += 1
         indptr[col + 1] = indptr[col] + buflen
     
     # concatenate buffers truncating to used buffers
-    data = np.concatenate(rows_data[:nbuf])
-    indices = np.concatenate(rows_indices[:nbuf])
+    data = np.concatenate(rows_data[:nbuf]) if nbuf else np.empty(0)
+    indices = np.concatenate(rows_indices[:nbuf]) if nbuf else np.empty(0, np.intp)
     
     return data, indices, indptr
 
-cpdef _compress_labels(np.ndarray[INTP_TYPE, ndim=1] labels):
-    """Convert the labels output of _connected_components_* to a list
-    of arrays of indices, where each array contains all the indices for a
-    single label. The first array contains indices for all the labels with only
-    one index."""
+cpdef list _extract_blocks(
+    np.ndarray[INTP_TYPE, ndim=1] labels,
+    np.ndarray[np.float_t, ndim=1] data,
+    np.ndarray[INTP_TYPE, ndim=1] indices,
+    np.ndarray[INTP_TYPE, ndim=1] indptr
+):
+    """Extract the connected blocks from the lower part of the covariance
+    matrix, output format is like evalcov_blocks(*, compress=True)"""
 
-    nlabels = 1 + np.max(labels)
-
-    cdef np.ndarray[INTP_TYPE, ndim=1] length = np.zeros(nlabels, np.intp)
-    cdef np.ndarray[INTP_TYPE, ndim=1] end = np.zeros(1 + nlabels, np.intp)
-    cdef np.ndarray[object, ndim=1] indices = np.empty(1 + nlabels, object)
-    cdef np.ndarray[INTP_TYPE, ndim=1] idxs
-    
     # count number of indices for each label
-    cdef INTP_TYPE l
-    for l in labels:
-        length[l] += 1
-    assert np.all(length)
+    cdef INTP_TYPE nlabels = 1 + np.max(labels)
+    cdef np.ndarray[INTP_TYPE, ndim=1] length = np.zeros(nlabels, np.intp)
+    cdef INTP_TYPE label
+    for label in labels:
+        length[label] += 1
+    # assert np.all(length), 'np.all(length)'
     
-    # array for indices of single-index labels
-    nones = 0
+    # count single-appearance labels
+    cdef INTP_TYPE nones = 0
+    cdef INTP_TYPE l
     for l in length:
         if l == 1:
             nones += 1
-    indices[0] = np.empty(nones, np.intp)
-
-    # fill arrays of indices
-    cdef INTP_TYPE i
-    for i, l in enumerate(labels):
-        if length[l] == 1:
-            indices[0][end[0]] = i
-            end[0] += 1
-        else:
-            idx = 1 + l
-            if end[idx] == 0:
-                indices[idx] = np.empty(length[l], np.intp)
-            idxs = indices[idx]
-            idxs[end[idx]] = i
-            end[idx] += 1
     
-    # remove empty arrays
-    cdef np.ndarray[object, ndim=1] output = np.empty(nlabels + 1 - nones, object)
-    output[0] = indices[0]
-    cdef INTP_TYPE outlen = 1
-    for idxs in indices[1:]:
-        if idxs is not None:
-            output[outlen] = idxs
-            outlen += 1
-    assert outlen == len(output)
+    # arrays for saving indices and sdev of solitary labels
+    cdef np.ndarray[INTP_TYPE, ndim=1] ones_indices = np.empty(nones, np.intp)
+    cdef np.ndarray[np.float_t, ndim=1] ones_sdev = np.empty(nones)
+    cdef INTP_TYPE ones_end = 0
+    
+    # arrays of arrays for saving indices and covariance blocks
+    # TODO use a single buffer with indptrs for covs and covs_indices
+    cdef np.ndarray[object, ndim=1] covs
+    cdef np.ndarray[object, ndim=1] covs_indices
+    cdef np.ndarray[INTP_TYPE, ndim=1] covs_end, subindices
+    if nlabels - nones:
+        covs = np.empty(nlabels, object)
+        covs_indices = np.empty(nlabels, object)
+        covs_end = np.zeros(nlabels, np.intp)
+        subindices = np.empty(len(labels), np.intp)
+
+    # variables for cycle
+    cdef INTP_TYPE row, start, end, cov_end, col, i, j
+    cdef np.ndarray[np.float_t, ndim=2] cov
+    cdef np.ndarray[np.float_t, ndim=1] rowdata
+    cdef np.ndarray[INTP_TYPE, ndim=1] rowindices, cov_indices
+    
+    # fill arrays
+    for row, label in enumerate(labels):
+        
+        # extract row from sparse matrix
+        start = indptr[row]
+        end = indptr[row + 1]
+        rowdata = data[start:end]
+        rowindices = indices[start:end]
+
+        # extract sdev if label is solitary
+        l = length[label]
+        if l == 1:
+            # assert end - start <= 1, 'end - start <= 1'
+            # assert end - start == 0 or rowindices[0] == row, 'rowindices[0] == row'
+            ones_indices[ones_end] = row
+            ones_sdev[ones_end] = np.sqrt(rowdata[0]) if end - start else 0
+            ones_end += 1
+            
+        # extract square block
+        else:
+            
+            # get arrays for the label
+            cov_end = covs_end[label]
+            if cov_end == 0:
+                covs[label] = np.zeros((l, l))
+                covs_indices[label] = np.empty(l, np.intp)
+            cov = covs[label]
+            cov_indices = covs_indices[label]
+            
+            # save indices
+            subindices[row] = cov_end
+            cov_indices[cov_end] = row
+            
+            # # some checks
+            # assert end - start <= cov_end + 1, 'end - start <= cov_end + 1'
+            # for i in rowindices:
+            #     assert i in cov_indices, 'i in cov_indices'
+
+            # fill cov
+            for i, col in enumerate(rowindices):
+                # assert col <= row, 'col <= row'
+                j = subindices[col]
+                # assert j <= cov_end, 'j <= cov_end'
+                cov[cov_end, j] = rowdata[i]
+                cov[j, cov_end] = rowdata[i]
+            covs_end[label] += 1
+    
+    # put everything in a list, removing empty arrays
+    output = [(ones_indices, ones_sdev)]
+    for label in range(nlabels):
+        if length[label] > 1:
+            # assert covs_end[label] == length[label], 'covs_end[label] == length[label]'
+            output.append((covs_indices[label], covs[label]))
     
     return output
-
-cpdef np.ndarray[np.float_t, ndim=1] _sub_sdev(
-    np.ndarray[INTP_TYPE, ndim=1] outindices,
-    np.ndarray[np.float_t, ndim=1] data,
-    np.ndarray[INTP_TYPE, ndim=1] indices,
-    np.ndarray[INTP_TYPE, ndim=1] indptr,
-):
-    """Extract the square root of the diagonal from a CSR matrix at indices
-    `outindices`."""
-    
-    cdef np.ndarray[np.float_t, ndim=1] out = np.empty(len(outindices))
-    for iout, i in enumerate(outindices):
-        rowslice = slice(indptr[i], indptr[i + 1])
-        rowdata = data[rowslice]
-        rowindices = indices[rowslice]
-        j = np.searchsorted(rowindices, i)
-        if j < len(rowindices) and rowindices[j] == i:
-            out[iout] = np.sqrt(rowdata[j])
-        else:
-            out[iout] = 0
-    return out
-
-cpdef np.ndarray[np.float_t, ndim=2] _sub_cov(
-    np.ndarray[INTP_TYPE, ndim=1] outindices,
-    np.ndarray[np.float_t, ndim=1] data,
-    np.ndarray[INTP_TYPE, ndim=1] indices,
-    np.ndarray[INTP_TYPE, ndim=1] indptr,
-):
-    """Extract the submatrix from a CSR matrix for indices `outindices`. The
-    matrix must be the triangular part of a symmetric matrix."""
-
-    cdef INTP_TYPE size = len(outindices)
-    cdef np.ndarray[np.float_t, ndim=2] out = np.zeros((size, size))
-    cdef INTP_TYPE iout, i, jout, j
-    cdef np.ndarray[INTP_TYPE, ndim=1] rowindices, rowj
-    cdef np.ndarray[np.float_t, ndim=1] rowdata
-    for iout, i in enumerate(outindices):
-        rowslice = slice(indptr[i], indptr[i + 1])
-        rowdata = data[rowslice]
-        rowindices = indices[rowslice]
-        rowj = np.searchsorted(rowindices, outindices)
-        for jout, j in enumerate(rowj):
-            if j < len(rowindices) and rowindices[j] == outindices[jout]:
-                out[iout, jout] = rowdata[j]
-                out[jout, iout] = out[iout, jout]
-    return out
 
 def _evalcov_blocks(np.ndarray[object, ndim=1] g):
     """
@@ -275,37 +281,26 @@ def _evalcov_blocks(np.ndarray[object, ndim=1] g):
     ldata, lindices, lindptr = _evalcov_sparse(g)
     uindices, uindptr = _transpose_csmatrix_indices((len(g), len(g)), lindices, lindptr)
     labels = np.zeros(len(g), np.intp)
-    n = _connected_components_undirected(uindices, uindptr, lindices, lindptr, labels)
-    indices_list = _compress_labels(labels)
-    covs = [_sub_sdev(indices_list[0], ldata, lindices, lindptr)]
-    for idxs in indices_list[1:]:
-        covs.append(_sub_cov(idxs, ldata, lindices, lindptr))
-    return list(zip(indices_list, covs))
-
-def _sanitize(g):
-    """convert g to ndarray or BufferDict"""
-    if hasattr(g, 'keys'): # a dictionary
-        return BufferDict(g)
-    else: # array or scalar
-        return np.array(g)
+    _connected_components_undirected(uindices, uindptr, lindices, lindptr, labels)
+    return _extract_blocks(labels, ldata, lindices, lindptr)
 
 def _flat(g):
     """convert g to a flat array"""
-    if hasattr(g, 'keys'): # a bufferdict
+    if hasattr(g, 'keys'):
+        # a dictionary
+        if not isinstance(g, BufferDict):
+            g = BufferDict(g)
         return g.buf
-    else: # an array
-        return g.reshape(-1)
+    else:
+        # array or scalar
+        return np.array(g, copy=False).reshape(-1)
 
 def _decompress(index, sdev):
     """Expand index, sdev into a list of pairs ([idx], [[sdev ** 2]])"""
-    return [
-        (np.array([idx]), np.array([[s ** 2]]))
-        for idx, s in zip(index, sdev)
-    ]
+    return list(zip(index.reshape(-1, 1), sdev.reshape(-1, 1, 1)))
 
 def evalcov_blocks(g, compress=False):
     """Faster version of gvar.evalcov_blocks"""
-    g = _sanitize(g)
     g = _flat(g)
     idxs_covs = _evalcov_blocks(g)
     if not compress:

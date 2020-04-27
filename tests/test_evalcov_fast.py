@@ -51,73 +51,11 @@ def test_cov():
     cov2 = gvar.evalcov(y)
     assert np.all(cov1 == cov2)
 
-def compress_labels(l):
-    l = np.array(l)
-    return list(ef._compress_labels(l))
-
-def test_compress_labels_single_sorted():
-    l = np.arange(100)
-    idxs = compress_labels(l)
-    assert len(idxs) == 1
-    assert np.all(idxs[0] == np.arange(len(l)))
-    
-def test_compress_labels_single():
-    l = np.arange(100)
-    np.random.shuffle(l)
-    idxs = compress_labels(l)
-    assert len(idxs) == 1
-    assert np.all(idxs[0] == np.arange(len(l)))
-
-def test_compress_labels():
-    # labels = np.array([0, 1, 0, 0, 2, 1, 2, 0, 3, 1, 1])
-    length = np.random.randint(1, 10, size=10)
-    labels = np.concatenate([l * [i] for i, l in enumerate(length)])
-    np.random.shuffle(labels)
-    indices = np.arange(len(labels))
-    idxs = compress_labels(labels)
-    assert np.array_equal(np.sort(np.concatenate(idxs)), indices)
-    for i in idxs[0]:
-        l = labels[i]
-        assert np.sum(labels == l) == 1
-    for idx in idxs[1:]:
-        l = labels[idx[0]]
-        assert np.array_equal(idx, indices[labels == l])
-
-def sub_sdev(g, idxs):
-    g = np.array(g)
-    idxs = np.array(idxs)
-    data, indices, indptr = ef._evalcov_sparse(g)
-    return ef._sub_sdev(idxs, data, indices, indptr)
-
-def test_sub_sdev():
-    a = np.random.randint(4, size=(10, 10))
-    xcov = a.T @ a
-    x = gvar.gvar(np.zeros(10), xcov)
-    transf = np.random.randint(20, size=(5, 10))
-    y = transf @ x
-    indices = np.random.randint(len(y), size=5)
-    sdev1 = gvar.sdev(y[indices])
-    sdev2 = sub_sdev(y, indices)
-    assert np.array_equal(sdev1, sdev2)
-
-def sub_cov(g, idxs):
-    g = np.array(g)
-    idxs = np.array(idxs)
-    data, indices, indptr = ef._evalcov_sparse(g)
-    cov = ef._sub_cov(idxs, data, indices, indptr)
-    assert cov.shape == (len(idxs), len(idxs))
-    return cov
-
-def test_sub_cov():
-    a = np.random.randint(5, size=(10, 10))
-    xcov = a.T @ a
-    x = gvar.gvar(np.zeros(10), xcov)
-    transf = np.random.randint(20, size=(5, 10))
-    y = transf @ x
-    indices = np.random.randint(len(y), size=5)
-    cov1 = gvar.evalcov(y[indices])
-    cov2 = sub_cov(y, indices)
-    assert np.array_equal(cov1, cov2)
+def test_empty_cov():
+    x = gvar.gvar(0, 0)
+    out = ef.evalcov_blocks(x)
+    assert np.array_equal(out[0][0], [0])
+    assert np.array_equal(out[0][1], [[0.]])
 
 def test_evalcov_blocks():
     def test_cov(g):
