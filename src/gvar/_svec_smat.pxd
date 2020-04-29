@@ -1,3 +1,4 @@
+# cython: language_level=3str
 # Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -36,8 +37,10 @@ cdef class svec:
 cdef class smat:
     # cdef object rowlist
     cdef object[:] row
-    cdef INTP_TYPE nrow, nrow_max
+    cdef INTP_TYPE[:] block
+    cdef INTP_TYPE nrow, nrow_max, next_block
     cpdef _add_memory(smat self)
+    cpdef INTP_TYPE blockid(smat self, INTP_TYPE i)
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag(self,
                                         numpy.ndarray[numpy.float_t,ndim=1])
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag_m(self,

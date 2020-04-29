@@ -176,6 +176,13 @@ def ranseed(seed=None):
 def switch_gvar(cov=None):
     """ Switch :func:`gvar.gvar` to new :class:`gvar.GVarFactory`.
 
+    |GVar|\s created from different factory functions (see 
+    :func:`gvar.gvar_factory`), with different 
+    covariance matrices, should never be mixed in arithmetic or other 
+    expressions. Such mixing is unsupported and will result in 
+    unpredictable behavior. Arithmetic that mixes |GVar|\s in 
+    this way will generate an error message: "incompatible GVars".
+
     :returns: New :func:`gvar.gvar`.
     """
     global gvar
@@ -185,6 +192,13 @@ def switch_gvar(cov=None):
 
 def restore_gvar():
     """ Restore previous :func:`gvar.gvar`.
+
+    |GVar|\s created from different factory functions (see 
+    :func:`gvar.gvar_factory`), with different 
+    covariance matrices, should never be mixed in arithmetic or other 
+    expressions. Such mixing is unsupported and will result in 
+    unpredictable behavior. Arithmetic that mixes |GVar|\s in 
+    this way will generate an error message: "incompatible GVars".
 
     :returns: Previous :func:`gvar.gvar`.
     """
@@ -203,6 +217,12 @@ def gvar_factory(cov=None):
     for new |GVar|\s created by the function returned by
     ``gvar_factory(cov)``. Otherwise a new covariance matrix is created
     internally.
+
+    |GVar|\s created from different factory functions, with different 
+    covariance matrices, should never be mixed in arithmetic or other 
+    expressions. Such mixing is unsupported and will result in 
+    unpredictable behavior. Arithmetic that mixes |GVar|\s in 
+    this way will generate an error message: "incompatible GVars".
     """
     return GVarFactory(cov)
 

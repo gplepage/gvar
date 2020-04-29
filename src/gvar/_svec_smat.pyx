@@ -1,4 +1,4 @@
-# cython: boundscheck=False, intializedcheck=False, wraparound=False
+# cython: boundscheck=False, intializedcheck=False, wraparound=False, language_level=3str
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-20 G. Peter Lepage.
 #
@@ -253,7 +253,9 @@ cdef class smat:
 
     def __cinit__(smat self):
         self.row = numpy.empty(2000, object)
+        self.block = numpy.empty(2000, numpy.intp)
         self.nrow = 0
+        self.next_block = 0
         self.nrow_max = 2000
 
     def __reduce_ex__(self, dummy):
@@ -269,12 +271,18 @@ cdef class smat:
         """ Dimension of matrix. """
         return self.nrow # len(self.rowlist)
 
+    cpdef INTP_TYPE blockid(smat self, INTP_TYPE i):
+        return self.block[i]
+    
     cpdef _add_memory(smat self):
         cdef object[:] oldrow = self.row
+        cdef INTP_TYPE[:] oldblock = self.block 
         cdef INTP_TYPE i
         self.row = numpy.empty(2 * self.nrow_max, object)
+        self.block = numpy.empty(2 * self.nrow_max, numpy.intp)
         for i in range(self.nrow_max):
             self.row[i] = oldrow[i]
+            self.block[i] = oldblock[i]
         self.nrow_max = 2 * self.nrow_max
         # print('added memory')
 
@@ -299,12 +307,13 @@ cdef class smat:
             new_svec = svec(1)
             new_svec._assign(v, idx)
             self.row[self.nrow] = new_svec
+            self.block[self.nrow] = self.next_block
+            self.next_block += 1
             self.nrow += 1
         return vrange
         
     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self,
                                     numpy.ndarray[numpy.float_t,ndim=2] m):
-        """ Add matrix m on diagonal. """
         cdef INTP_TYPE i, j, nr, nm, n_nonzero
         cdef numpy.ndarray[numpy.float_t, ndim=1] v
         cdef numpy.ndarray[INTP_TYPE, ndim=1] idx,vrange
@@ -330,7 +339,9 @@ cdef class smat:
             new_svec = svec(n_nonzero) # nm)
             new_svec._assign(v[:n_nonzero], idx[:n_nonzero])
             self.row[self.nrow] = new_svec
+            self.block[self.nrow] = self.next_block
             self.nrow += 1
+        self.next_block += 1
         return vrange
 
     cpdef double expval(self, svec vv):

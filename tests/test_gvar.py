@@ -451,6 +451,15 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         diff = gvar_function(x, f, dfdx) - fcn(x)
         self.assertAlmostEqual(diff.mean, 0.0)
         self.assertAlmostEqual(diff.sdev, 0.0)
+        x = gvar(['1(1)', '2(2)', '3(3)'])
+        def fcn(x):
+            return sin(x[0] + x[1]) * x[2]
+        f = fcn(x)
+        dfdx = np.array([f.deriv(x[0]), f.deriv(x[1]), f.deriv(x[2])])
+        f = f.mean
+        diff = gvar_function(x, f, dfdx) - fcn(x)
+        self.assertAlmostEqual(diff.mean, 0.0)
+        self.assertAlmostEqual(diff.sdev, 0.0)
 
     def test_wsum_der(self):
         """ wsum_der """
@@ -767,6 +776,68 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         z = gvar(mean(y), evalcov(y))
         self.assert_gvclose(z.flat, y.flat)
         self.assert_arraysclose(evalcov(z.flat), evalcov(x))
+
+    def test_gvar_blocks(self):
+        " block structure created by gvar.gvar "
+        def blockid(g):
+            return g.cov.blockid(g.internaldata[1].indices()[0])
+        x = gvar([1., 2., 3.], [1., 1., 1.])
+        id = [blockid(xi) for xi in x]
+        self.assertNotEqual(id[0], id[1])
+        self.assertNotEqual(id[0], id[2])
+        self.assertNotEqual(id[1], id[2])
+        idlast = max(id)
+        x = gvar([1., 2., 3.], [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]])
+        id = [blockid(xi) for xi in x]
+        self.assertEqual(min(id), idlast + 1)
+        self.assertNotEqual(id[0], id[1])
+        self.assertNotEqual(id[0], id[2])
+        self.assertNotEqual(id[1], id[2])
+        idlast = max(id)
+        x = gvar([1., 2., 3.], [[1., 0.1, 0.], [0.1, 1., 0.], [0., 0., 1.]])
+        id = [blockid(xi) for xi in x]
+        self.assertEqual(min(id), idlast + 1)
+        self.assertEqual(id[0], id[1])
+        self.assertNotEqual(id[0], id[2])
+        idlast = max(id)
+        x = gvar([1., 2., 3.], [[1., 0., 0.1], [0.0, 1., 0.0], [0.1, 0., 1.]])
+        id = [blockid(xi) for xi in x]
+        self.assertEqual(min(id), idlast + 1)
+        self.assertEqual(id[0], id[2])
+        self.assertNotEqual(id[0], id[1])
+        idlast = max(id)
+        x = gvar([1., 2., 3.], [[1., 0., 0.0], [0.0, 1., 0.1], [0.0, 0.1, 1.]])
+        id = [blockid(xi) for xi in x]
+        self.assertEqual(min(id), idlast + 1)
+        self.assertEqual(id[1], id[2])
+        self.assertNotEqual(id[0], id[1])
+        idlast = max(id)
+        x = gvar([1., 2., 3.], [[1., 0.1, 0.0], [0.1, 1., 0.1], [0.0, 0.1, 1.]])
+        id = [blockid(xi) for xi in x]
+        self.assertEqual(min(id), idlast + 1)
+        self.assertEqual(id[1], id[2])
+        self.assertEqual(id[0], id[1])
+        idlast = max(id)
+        x = gvar([1., 2., 3.], [[1., 0.1, 0.1], [0.1, 1., 0.1], [0.1, 0.1, 1.]])
+        id = [blockid(xi) for xi in x]
+        self.assertEqual(min(id), idlast + 1)
+        self.assertEqual(id[1], id[2])
+        self.assertEqual(id[0], id[1])
+        
+
+    def test_gvar_verify(self):
+        " gvar(x, xx, verify=True) "
+        # case that does not generate an error
+        gvar([1., 2.], [[1., 2./10], [2./10., 1.]])
+        with self.assertRaises(ValueError):
+            gvar([1., 2.], [[1., .5], [.6, 1.]])
+        # cases that do generate errors
+        for a,b in [
+            (1., -1.), ([1., 2.], [2., -2.]), 
+            ([1., 2.], [[1., 2.], [2., 1.]]),
+            ]:
+            with self.assertRaises(ValueError):
+                gvar(a, b, verify=True)
 
     def test_asgvar(self):
         """ gvar functions as asgvar """

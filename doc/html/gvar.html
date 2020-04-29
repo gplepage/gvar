@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.2 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.4 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.4 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -124,11 +124,12 @@ manipulating gaussian random variables, including:</p>
 <dl class="function">
 <dt id="gvar.gvar">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">...</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.gvar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create one or more new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
-<p>Each of the following creates new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s:</p>
+<dd><p>Creates one or more new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gvar.gvar</span></code> is an object of type <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarFactory</span></code>.
+Each of the following creates new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s:</p>
 <dl class="function">
-<dt>
-<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">xsdev</em><span class="sig-paren">)</span></dt>
+<dt id="gvar.gvar.gvar">
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">xsdev</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.gvar.gvar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> with mean <code class="docutils literal notranslate"><span class="pre">x</span></code> and standard deviation <code class="docutils literal notranslate"><span class="pre">xsdev</span></code>.
 Returns an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s if <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">xsdev</span></code> are arrays
 with the same shape; the shape of the result is the same as the
@@ -158,6 +159,34 @@ dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar">
 
 <dl class="function">
 <dt>
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">xcov</em>, <em class="sig-param">verify=True</em><span class="sig-paren">)</span></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">gvar.gvar(x,</span> <span class="pre">xcov)</span></code> above but checks that the covariance
+matrix is symmetric and positive definite (which covariance matrices
+should be). This check is expensive for large matrices and so is
+<em>not</em> done by default. Note, however, that unpredictable outcomes
+will result from specifying an improper covariance matrix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">xcov</em>, <em class="sig-param">fast=True</em><span class="sig-paren">)</span></dt>
+<dd><p>Normally <code class="docutils literal notranslate"><span class="pre">gvar.gvar(x,</span> <span class="pre">xcov)</span></code> tries to break the covariance matrix
+into disjoint diagonal blocks, if there are any. For example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xcov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>can be decomposed into two blocks. This decomposition saves memory,
+and can make later manipulations of the resulting <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
+significantly faster. This is at the expense of extra processing to
+create the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Setting keyword <code class="docutils literal notranslate"><span class="pre">fast=True</span></code> prevents
+<code class="docutils literal notranslate"><span class="pre">gvar.gvar</span></code> from doing this, which would make sense, for example,
+if it is known ahead of time that <code class="docutils literal notranslate"><span class="pre">xcov</span></code> has no sub-blocks. The
+default is <code class="docutils literal notranslate"><span class="pre">fast=False</span></code>. Either choice gives correct answers;
+the difference is about efficiency.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">(x</em>, <em class="sig-param">xsdev)</em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> with mean <code class="docutils literal notranslate"><span class="pre">x</span></code> and standard deviation <code class="docutils literal notranslate"><span class="pre">xsdev</span></code>.</p>
 </dd></dl>
@@ -180,7 +209,7 @@ either of the form <code class="docutils literal notranslate"><span class="pre">
 <dt>
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">xdict</em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a dictionary (<a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">BufferDict</span></code></a>) <code class="docutils literal notranslate"><span class="pre">b</span></code> where
-<code class="docutils literal notranslate"><span class="pre">b[k]</span> <span class="pre">=</span> <span class="pre">gvar(xdict[k])</span></code> for every key in dictionary <code class="docutils literal notranslate"><span class="pre">xdict</span></code>.
+<code class="docutils literal notranslate"><span class="pre">b[k]</span> <span class="pre">=</span> <span class="pre">gvar.gvar(xdict[k])</span></code> for every key in dictionary <code class="docutils literal notranslate"><span class="pre">xdict</span></code>.
 The values in <code class="docutils literal notranslate"><span class="pre">xdict</span></code>, therefore, can be strings, tuples or
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (see above), or arrays of these.</p>
 </dd></dl>
@@ -189,12 +218,11 @@ The values in <code class="docutils literal notranslate"><span class="pre">xdict
 <dt>
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">gvar</code><span class="sig-paren">(</span><em class="sig-param">xarray</em><span class="sig-paren">)</span></dt>
 <dd><p>Returns an array <code class="docutils literal notranslate"><span class="pre">a</span></code> having the same shape as <code class="docutils literal notranslate"><span class="pre">xarray</span></code> where
-every element <code class="docutils literal notranslate"><span class="pre">a[i...]</span> <span class="pre">=</span> <span class="pre">gvar(xarray[i...])</span></code>. The values in
+every element <code class="docutils literal notranslate"><span class="pre">a[i...]</span> <span class="pre">=</span> <span class="pre">gvar.gvar(xarray[i...])</span></code>. The values in
 <code class="docutils literal notranslate"><span class="pre">xarray</span></code>, therefore, can be strings, tuples or <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (see
 above).</p>
 </dd></dl>
 
-<p><code class="docutils literal notranslate"><span class="pre">gvar.gvar</span></code> is actually an object of type <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarFactory</span></code>.</p>
 </dd></dl>
 
 <p>The following function is useful for constructing new functions that
@@ -498,7 +526,7 @@ corresponding indices in <code class="docutils literal notranslate"><span class=
 the blocks into a single matrix <code class="docutils literal notranslate"><span class="pre">cov</span></code>, for example, one would use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bcov</span> <span class="ow">in</span> <span class="n">gv</span><span class="o">.</span><span class="n">evalcov_blocks</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
     <span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcov</span>
 </pre></div>
@@ -513,22 +541,23 @@ contains the standard deviations for those <a class="reference internal" href="#
 covariance matrix is reconstructed using the following code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
-<span class="n">blocks</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">evalcov_blocks</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">)),</span> <span class="nb">float</span><span class="p">)</span>
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">evalcov_blocks</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># uncorrelated pieces are diagonal</span>
-<span class="n">cov</span><span class="p">[</span><span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">idx</span><span class="p">,</span> <span class="n">sdev</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">sdev</span> <span class="o">**</span> <span class="mi">2</span>
 <span class="c1"># correlated pieces</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bcov</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
     <span class="n">cov</span><span class="p">[</span><span class="n">idx</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">bcov</span>
 </pre></div>
 </div>
-<p>The code with <code class="docutils literal notranslate"><span class="pre">compress=True</span></code> should be faster if there are many
-uncorrelated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>The code with <code class="docutils literal notranslate"><span class="pre">compress=True</span></code> should be slightly faster if
+there are many uncorrelated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 <p>It is easy to create an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s having the covariance
 matrix from <code class="docutils literal notranslate"><span class="pre">g.flat</span></code>: for example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="n">new_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+<span class="n">new_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">flat</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">bcov</span> <span class="ow">in</span> <span class="n">evalcov_blocks</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
     <span class="n">new_g</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">new_g</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">bcov</span><span class="p">)</span>
 </pre></div>
@@ -1672,6 +1701,12 @@ replace <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code 
 <dt id="gvar.switch_gvar">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">switch_gvar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.switch_gvar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Switch <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> to new <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarFactory</span></code>.</p>
+<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s created from different factory functions (see
+<a class="reference internal" href="#gvar.gvar_factory" title="gvar.gvar_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar_factory()</span></code></a>), with different
+covariance matrices, should never be mixed in arithmetic or other
+expressions. Such mixing is unsupported and will result in
+unpredictable behavior. Arithmetic that mixes <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in
+this way will generate an error message: “incompatible GVars”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>New <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p>
@@ -1683,6 +1718,12 @@ replace <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code 
 <dt id="gvar.restore_gvar">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">restore_gvar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.restore_gvar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore previous <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p>
+<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s created from different factory functions (see
+<a class="reference internal" href="#gvar.gvar_factory" title="gvar.gvar_factory"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar_factory()</span></code></a>), with different
+covariance matrices, should never be mixed in arithmetic or other
+expressions. Such mixing is unsupported and will result in
+unpredictable behavior. Arithmetic that mixes <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in
+this way will generate an error message: “incompatible GVars”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Previous <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p>
@@ -1699,10 +1740,13 @@ replace <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code 
 for new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s created by the function returned by
 <code class="docutils literal notranslate"><span class="pre">gvar_factory(cov)</span></code>. Otherwise a new covariance matrix is created
 internally.</p>
+<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s created from different factory functions, with different
+covariance matrices, should never be mixed in arithmetic or other
+expressions. Such mixing is unsupported and will result in
+unpredictable behavior. Arithmetic that mixes <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in
+this way will generate an error message: “incompatible GVars”.</p>
 </dd></dl>
 
-<p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s created by different functions cannot be combined in arithmetic
-expressions (the error message “Incompatible GVars.” results).</p>
 </div>
 <div class="section" id="gvar-gvar-objects">
 <h2><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> Objects<a class="headerlink" href="#gvar-gvar-objects" title="Permalink to this headline">¶</a></h2>
@@ -2600,7 +2644,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.4 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

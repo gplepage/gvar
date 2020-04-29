@@ -1,3 +1,19 @@
+Version 11.4 2020-04-29
+=======================
+Significant rewrite of gvar.evalcov_blocks(g), making it much 
+faster (thanks to Giacomo Petrillo for the suggestion). Also 
+gvar.gvar(x,cov) has new keywords: verify and fast. See 
+documentation. 
+
+Version 11.3 2020-04-24
+========================
+Minor update to add a feature in response to a request: using 
+gvar.gvar(x, xcov, verify=True) instead of gvar.gvar(x, xcov) checks 
+to make sure covariance matrix xcov is symmetric and positive-definite. 
+This check is expensive for large covariance matrices (N**3) and so 
+is *not* done by default; bad things can happen, however, if the 
+covariance matrix is improper.
+
 Version 11.2 2020-03-18
 ========================
 Minor fixes and updates.

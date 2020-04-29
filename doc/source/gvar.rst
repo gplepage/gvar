@@ -259,9 +259,6 @@ replace :func:`gvar.gvar`):
 
 .. autofunction:: gvar.gvar_factory(cov=None)
 
-|GVar|\s created by different functions cannot be combined in arithmetic
-expressions (the error message "Incompatible GVars." results).
-
 
 :class:`gvar.GVar` Objects
 ---------------------------

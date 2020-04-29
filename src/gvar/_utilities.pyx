@@ -1,3 +1,4 @@
+# cython: language_level=3str
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-20 G. Peter Lepage.
 #
@@ -14,6 +15,9 @@
 import gvar as _gvar
 from gvar._gvarcore import GVar
 from gvar._gvarcore cimport GVar
+
+from scipy.sparse.csgraph import connected_components as _connected_components
+from scipy.sparse import csr_matrix as _csr_matrix
 
 import numpy
 cimport numpy
@@ -558,6 +562,40 @@ def correlate(g, corr):
         corr = numpy.asarray(corr).reshape(mean.shape[0], -1)
         return _gvar.gvar(mean, corr * numpy.outer(sdev, sdev)).reshape(g.shape)
 
+# def evalcov_blocks_fast(g, compress=False):
+#     # can be terrible for very sparse covariance matrices
+#     # don't use
+#     cdef INTP_TYPE nvar, i, j, nb, ib
+#     cdef double sdev
+#     cdef smat cov 
+#     if hasattr(g, 'flat'):
+#         varlist = g.flat[:]
+#     elif hasattr(g, 'keys'):
+#         varlist = BufferDict(g).flat[:]
+#     else:
+#         varlist = numpy.array(g).flat[:]
+#     nvar = len(varlist)
+#     allcov = evalcov(varlist)
+#     nb, key = _connected_components(allcov != 0, directed=False, connection='weak')
+#     allvar = numpy.arange(nvar)
+#     blocks = [([], [])]
+#     for ib in range(nb):
+#         idx = allvar[key == ib]
+#         if len(idx) == 1:
+#             i = idx[0]
+#             blocks[0][0].append(i)
+#             blocks[0][1].append(varlist[i].sdev)
+#         else:
+#             bcov = allcov[idx, idx]
+#             blocks.append((idx, allcov[idx[:, None], idx]))
+#     blocks[0] = (numpy.array(blocks[0][0], dtype=numpy.intp), numpy.array(blocks[0][1], dtype=float))
+#     if len(blocks[0][0]) > 0:
+#         if not compress:
+#             for i, sdev in zip(*blocks[0]):
+#                 blocks.append((numpy.array([i]), numpy.array([[sdev**2]])))
+#             blocks = blocks[1:]
+#     return blocks
+
 def evalcov_blocks(g, compress=False):
     """ Evaluate covariance matrix for elements of ``g``.
 
@@ -571,7 +609,7 @@ def evalcov_blocks(g, compress=False):
 
         import numpy as np
         import gvar as gv
-        cov = np.empty((len(g.flat), len(g.flat)), float)
+        cov = np.zeros((len(g.flat), len(g.flat)), float)
         for idx, bcov in gv.evalcov_blocks(g):
             cov[idx[:, None], idx] = bcov
 
@@ -587,23 +625,24 @@ def evalcov_blocks(g, compress=False):
 
         import numpy as np
         import gvar as gv
-        cov = np.empty((len(g.flat), len(g.flat)), float)
-        blocks = gv.evalcov_blocks(g)
+        cov = np.zeros((len(g.flat), len(g.flat)), float)
+        blocks = gv.evalcov_blocks(g, compress=True)
         # uncorrelated pieces are diagonal
-        cov[blocks[0][0]] = blocks[0][1] ** 2
+        idx, sdev = blocks[0]
+        cov[idx, idx] = sdev ** 2
         # correlated pieces
         for idx, bcov in blocks[1:]:
             cov[idx[:, None], idx] = bcov
     
-    The code with ``compress=True`` should be faster if there are many 
-    uncorrelated |GVar|\s.
+    The code with ``compress=True`` should be slightly faster if 
+    there are many uncorrelated |GVar|\s.
 
     It is easy to create an array of |GVar|\s having the covariance
     matrix from ``g.flat``: for example, ::
 
         import numpy as np 
         import gvar as gv
-        new_g = np.zeros(len(g.flat), dtype=object)
+        new_g = np.empty(len(g.flat), dtype=object)
         for idx, bcov in evalcov_blocks(g):
             new_g[idx] = gv.gvar(new_g[idx], bcov)
 
@@ -617,80 +656,80 @@ def evalcov_blocks(g, compress=False):
             uncorrelated |GVar|\s in ``g.flat`` into the first element of 
             the returned list (see above). Default is ``False``.
     """
-    cdef INTP_TYPE a, b, i
-    cdef GVar ga, gb
-    cdef smat master_cov
-    # cdef numpy.ndarray[numpy.npy_intp, ndim=1] idx, ga_d_indices
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx, ga_d_indices
-    cdef numpy.ndarray[object, ndim=1] gf, g_indices
-    # find blocks
-    if hasattr(g, 'keys'):
-        if isinstance(g, BufferDict):
-            gf = g.flat[:]
-        else:
-            gf = BufferDict(g).buf[:]
-    elif hasattr(g, 'flat'):
-        gf = g.flat[:]
+    cdef INTP_TYPE nvar, iv, i, j, id, nb, ib, sib, snb, nval
+    cdef double sdev
+    cdef smat cov 
+    cdef GVar gi
+    cdef INTP_TYPE[::1] rows, cols
+    cdef numpy.int8_t[::1] vals
+    if hasattr(g, 'flat'):
+        varlist = g.flat[:]
+    elif hasattr(g, 'keys'):
+        varlist = BufferDict(g).flat[:]
     else:
-        gf = numpy.asarray(g).flat[:]
-    # gcov indices not in block yet = unassigned_indices
-    if len(gf) <= 0:
-        return []
-    unassigned_indices = set(numpy.arange(0, len(gf)))
-    # set containing xcov indices for each g[a] is g_indices[a]
-    g_indices = numpy.zeros(len(gf), object)
-    blocks = []
-    master_cov = gf[0].cov
-    while unassigned_indices:
-        a = unassigned_indices.pop()
-        # gcov indices in current block = gcov_indices
-        gcov_indices = set([a])
-        unprocessed_indices = set([a])
-        while unprocessed_indices:
-            a = unprocessed_indices.pop()
-            ga = gf[a]
-            # xcov indices in the current gcov block = xcov_indices
-            ga_d_indices = ga.d.indices()
-            xcov_indices = set(ga_d_indices)
-            # find all indices connected to xcov_indices by the master cov
-            for i in ga_d_indices:
-                xcov_indices.update(master_cov.row[i].indices())
-            # new_indices = indices added to gcov_indices in the for-b loop
-            new_indices = set()
-            for b in unassigned_indices:
-                if g_indices[b] == 0:
-                    gb = gf[b]
-                    g_indices[b] = set(gb.d.indices())
-                if g_indices[b].isdisjoint(xcov_indices):
+        varlist = numpy.array(g).flat[:]
+    nvar = len(varlist)
+    cov = varlist[0].cov
+    # assemble iv's into sets associated with each cov.blockid
+    # N.B. same iv could be in sets for multiple blockids
+    ivdict = {} 
+    for iv, gi in enumerate(varlist):
+        for i in range(gi.d.size):
+            id = cov.block[gi.d.v[i].i]
+            if id not in ivdict:
+                ivdict[id] = set()
+            ivdict[id].add(iv)
+    # Build graph showing which two variables are in the same block set.
+    # The block sets provide the links between the different variables.
+    # You can't be correlated if you don't share membership in a block set.
+    nval = sum(len(ivset) * (len(ivset) + 1) // 2 for ivset in ivdict.values())
+    rows = numpy.empty(nval, dtype=numpy.intp)
+    cols = numpy.empty(nval, dtype=numpy.intp)
+    vals = numpy.empty(nval, dtype=numpy.int8)
+    nval = 0
+    for ivset in ivdict.values():
+        for i in ivset:
+            for j in ivset:
+                if j > i: 
                     continue
-                else:
-                    new_indices.add(b)
-                    xcov_indices.update(g_indices[b])
-            gcov_indices.update(new_indices)
-            unprocessed_indices.update(new_indices)
-            unassigned_indices.difference_update(new_indices)
-        blocks.append(gcov_indices)
-    ans = []
-    for bl in blocks:
-        if len(bl) == 1:
-            b = bl.pop()
-            gb = gf[b]
-            ans.append((numpy.array([b], dtype=numpy.intp), numpy.array([[gb.var]])))
+                rows[nval] = i 
+                cols[nval] = j 
+                vals[nval] = True
+                nval += 1
+    graph = _csr_matrix((vals, (rows, cols)))
+    # find and collect the sub-blocks
+    nb, key = _connected_components(graph, directed=False)
+    allvar = numpy.arange(nvar)
+    blocks = [([], [])]
+    for ib in range(nb):
+        idx = allvar[key == ib]
+        if len(idx) == 1:
+            i = idx[0]
+            blocks[0][0].append(i)
+            blocks[0][1].append(varlist[i].sdev)
         else:
-            idx = numpy.array([b for b in bl], dtype=numpy.intp)
-            ans.append((idx, evalcov(gf[idx])))
-    if compress:
-        c_ans = [([], [])]
-        for idx, bcov in ans:
-            if len(idx) == 1:
-                c_ans[0][0].append(idx[0])
-                c_ans[0][1].append(bcov[0, 0] ** 0.5)
-            else:
-                c_ans.append((idx, bcov))
-        c_ans[0] = (numpy.array(c_ans[0][0], dtype=numpy.intp), numpy.array(c_ans[0][1], dtype=float))            
-        return c_ans
-    else:
-        return ans
+            # evaluate cov for sub-block
+            bcov = evalcov(varlist[idx])
+            # check for sub-blocks within the sub-blocks
+            allbcov =  numpy.arange(bcov.shape[0])
+            snb, skey = _connected_components(bcov != 0, directed=False, connection='strong')
+            for sib in range(snb):
+                sidx = idx[skey == sib]
+                if len(sidx) == 1:
+                    i = sidx[0]
+                    blocks[0][0].append(i)
+                    blocks[0][1].append(varlist[i].sdev)
+                else:
+                    bidx = allbcov[skey == sib]
+                    sbcov = numpy.array(bcov[bidx[:, None], bidx])
+                    blocks.append((sidx, sbcov))
+    blocks[0] = (numpy.array(blocks[0][0], dtype=numpy.intp), numpy.array(blocks[0][1], dtype=float))
+    if not compress: 
+        if len(blocks[0][0]) > 0:
+            for i,sdev in zip(*blocks[0]):
+               blocks.append((numpy.array([i]), numpy.array([[sdev**2]])))
+        blocks = blocks[1:]
+    return blocks
 
 def evalcov(g):
     """ Compute covariance matrix for elements of

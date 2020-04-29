@@ -1,4 +1,4 @@
-# cython: boundscheck=False
+# cython: boundscheck=False, language_level=3str
 # c#ython: profile=True
 # remove extra # above for profiling
 
@@ -16,6 +16,7 @@
 # GNU General Public License for more details.
 
 import re
+from scipy.sparse.csgraph import connected_components as _connected_components
 from gvar._svec_smat import svec, smat
 from gvar._bufferdict import BufferDict
 
@@ -196,7 +197,7 @@ cdef class GVar:
             if isinstance(yy,GVar):
                 x = xx
                 y = yy
-                assert x.cov is y.cov,"Incompatible GVars."
+                assert x.cov is y.cov,"incompatible GVars"
                 ans.v = x.v + y.v
                 ans.d = x.d.add(y.d)
                 ans.cov = x.cov
@@ -225,7 +226,7 @@ cdef class GVar:
             if isinstance(yy,GVar):
                 x = xx
                 y = yy
-                assert x.cov is y.cov,"Incompatible GVars."
+                assert x.cov is y.cov,"incompatible GVars"
                 return GVar(x.v-y.v,x.d.add(y.d,1.,-1.),x.cov)
             else:
                 x = xx
@@ -245,7 +246,7 @@ cdef class GVar:
             if isinstance(yy,GVar):
                 x = xx
                 y = yy
-                assert x.cov is y.cov,"Incompatible GVars."
+                assert x.cov is y.cov,"incompatible GVars"
                 return GVar(x.v * y.v, x.d.add(y.d, y.v, x.v), x.cov)
             else:
                 x = xx
@@ -266,7 +267,7 @@ cdef class GVar:
             if isinstance(yy,GVar):
                 x = xx
                 y = yy
-                assert x.cov is y.cov,"Incompatible GVars."
+                assert x.cov is y.cov,"incompatible GVars"
                 return GVar(x.v/y.v,x.d.add(y.d,1./y.v,-x.v/y.v**2),x.cov)
             else:
                 x = xx
@@ -288,7 +289,7 @@ cdef class GVar:
             if isinstance(yy, GVar):
                 x = xx
                 y = yy
-                assert x.cov is y.cov,"Incompatible GVars."
+                assert x.cov is y.cov,"incompatible GVars"
                 return GVar(
                     x.v / y.v,
                     x.d.add(y.d, 1. / y.v, -x.v / y.v**2),
@@ -314,7 +315,7 @@ cdef class GVar:
             if isinstance(yy, GVar):
                 x = xx
                 y = yy
-                assert x.cov is y.cov,"Incompatible GVars."
+                assert x.cov is y.cov,"incompatible GVars"
                 ans = c_pow(x.v, y.v)
                 f1 = c_pow(x.v,y.v-1)*y.v
                 f2 = ans*c_log(x.v)
@@ -725,11 +726,12 @@ _RE3 = re.compile(r"([-+]?)([0-9]*)[.]?([0-9]*)\s*\(([0-9]+)\)")
 _RE3a = re.compile(r"([-+]?[0-9]*[.]?[0-9]*)\s*\(([.0-9]+)\)")
 
 class GVarFactory:
-    """ Create one or more new |GVar|\s.
+    """ Creates one or more new |GVar|\s.
 
+    ``gvar.gvar`` is an object of type :class:`gvar.GVarFactory`.
     Each of the following creates new |GVar|\s:
 
-    .. function:: gvar(x,xsdev)
+    .. function:: gvar.gvar(x, xsdev)
 
         Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.
         Returns an array of |GVar|\s if ``x`` and ``xsdev`` are arrays
@@ -738,7 +740,7 @@ class GVarFactory:
         are dictionaries with the same keys and layout; the result has
         the same keys and layout as ``x``.
 
-    .. function:: gvar(x,xcov)
+    .. function:: gvar.gvar(x, xcov)
 
         Returns an array of |GVar|\s with means given by array ``x`` and a
         covariance matrix given by array ``xcov``, where ``xcov.shape =
@@ -755,35 +757,57 @@ class GVarFactory:
         in ``g`` provided ``g`` is a single |GVar|, or an array or
         dictionary of |GVar|\s.
 
-    .. function:: gvar((x,xsdev))
+    .. function:: gvar.gvar(x, xcov, verify=True)
+
+        Same as ``gvar.gvar(x, xcov)`` above but checks that the covariance 
+        matrix is symmetric and positive definite (which covariance matrices 
+        should be). This check is expensive for large matrices and so is 
+        *not* done by default. Note, however, that unpredictable outcomes 
+        will result from specifying an improper covariance matrix.
+        
+    .. function:: gvar.gvar(x, xcov, fast=True)
+
+        Normally ``gvar.gvar(x, xcov)`` tries to break the covariance matrix
+        into disjoint diagonal blocks, if there are any. For example, ::
+        
+            xcov = [[1,1,0], [1,2,0], [0,0,3]]
+        
+        can be decomposed into two blocks. This decomposition saves memory, 
+        and can make later manipulations of the resulting |GVar|\s 
+        significantly faster. This is at the expense of extra processing to 
+        create the |GVar|\s. Setting keyword ``fast=True`` prevents 
+        ``gvar.gvar`` from doing this, which would make sense, for example, 
+        if it is known ahead of time that ``xcov`` has no sub-blocks. The 
+        default is ``fast=False``. Either choice gives correct answers; 
+        the difference is about efficiency.
+        
+    .. function:: gvar.gvar((x, xsdev))
 
         Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.
 
-    .. function:: gvar(xstr)
+    .. function:: gvar.gvar(xstr)
 
         Returns a |GVar| corresponding to string ``xstr`` which is
         either of the form ``"xmean +- xsdev"`` or ``"x(xerr)"`` (see
         :meth:`GVar.fmt`).
 
-    .. function:: gvar(xgvar)
+    .. function:: gvar.gvar(xgvar)
 
         Returns |GVar| ``xgvar`` unchanged.
 
-    .. function:: gvar(xdict)
+    .. function:: gvar.gvar(xdict)
 
         Returns a dictionary (:class:`BufferDict`) ``b`` where
-        ``b[k] = gvar(xdict[k])`` for every key in dictionary ``xdict``.
+        ``b[k] = gvar.gvar(xdict[k])`` for every key in dictionary ``xdict``.
         The values in ``xdict``, therefore, can be strings, tuples or
         |GVar|\s (see above), or arrays of these.
 
-    .. function:: gvar(xarray)
+    .. function:: gvar.gvar(xarray)
 
         Returns an array ``a`` having the same shape as ``xarray`` where
-        every element ``a[i...] = gvar(xarray[i...])``. The values in
+        every element ``a[i...] = gvar.gvar(xarray[i...])``. The values in
         ``xarray``, therefore, can be strings, tuples or |GVar|\s (see
         above).
-
-    ``gvar.gvar`` is actually an object of type :class:`gvar.GVarFactory`.
     """
     def __init__(self,cov=None):
         if cov is None:
@@ -792,8 +816,8 @@ class GVarFactory:
             assert isinstance(cov,smat),"cov not type gvar.smat"
             self.cov = cov
 
-    def __call__(self, *args):
-        cdef INTP_TYPE nx, i, nd
+    def __call__(self, *args, verify=False, fast=False):
+        cdef INTP_TYPE nx, i, nd, ib, nb
         cdef svec der
         cdef smat cov
         cdef GVar gv
@@ -840,7 +864,7 @@ class GVarFactory:
                             xcov[k1_sl, k2_sl] = (
                                 numpy.asarray(args[1][k1, k2]).reshape(n1, n2)
                                 )
-                    xflat = self(x.flat, xcov)
+                    xflat = self(x.flat, xcov, verify=verify, fast=fast)
                     return BufferDict(x, buf=xflat)
             else:
                 # (x,xsdev) or (xarray,sdev-array) or (xarray,cov)
@@ -860,6 +884,8 @@ class GVarFactory:
                         xsdev = c_sqrt(abs(xsdev[0, 0]))
                     elif len(xsdev.shape) != 0:
                         raise ValueError("x and xsdev different shapes.")
+                    if verify and xsdev < 0:
+                        raise ValueError('negative standard deviation: ' + str(xsdev))
                     idx = self.cov.append_diag(numpy.array([xsdev**2]))
                     der = svec(1)
                     der.v[0].i = idx[0]
@@ -874,23 +900,37 @@ class GVarFactory:
                     # array of gvars from x and sdev/cov arrays
                     nx = len(x.flat)
                     if x.shape==xsdev.shape:  # x,sdev
+                        if verify and numpy.any(xsdev < 0):
+                            raise ValueError('negative standard deviation: ' + str(xsdev))
                         idx = self.cov.append_diag(xsdev.reshape(nx) ** 2)
                     elif xsdev.shape==2 * x.shape: # x,cov
-                        idx = self.cov.append_diag_m(xsdev.reshape(nx, nx))
+                        xcov = xsdev.reshape(nx, nx)
+                        if not numpy.allclose(xcov, xcov.T):
+                            raise ValueError('non-symmetric covariance matrix:\n' + str(xcov))
+                        if verify:
+                            try:
+                                numpy.linalg.cholesky(xcov)
+                            except numpy.linalg.LinAlgError:
+                                raise ValueError('covariance matrix not positive definite')
+                        if fast:
+                            idx = self.cov.append_diag_m(xcov)
+                        else:
+                            allxcov = numpy.arange(nx)
+                            ans = numpy.empty(nx, dtype=object)
+                            nb, key = _connected_components(xcov != 0, directed=False)
+                            for ib in range(nb):
+                                bidx = allxcov[key == ib]
+                                ans[bidx] = self(x.flat[bidx], xcov[bidx[:, None], bidx], fast=True)
+                            return ans.reshape(x.shape)
                     else:
                         raise ValueError("Argument shapes mismatched: " +
                             str(x.shape) + ' ' + str(xsdev.shape))
-                    d = numpy.ones(nx, numpy.float_)
-                    ans = numpy.empty(nx, object)
+                    d = numpy.ones(nx, dtype=numpy.float_)
+                    ans = numpy.empty(nx, dtype=object)
                     for i in range(nx):
                         der = svec(1)
                         der.v[0].i = idx[i]
                         der.v[0].v = 1.0
-                        # gv = GVar.__new__(GVar)
-                        # gv.v = x.flat[i]
-                        # gv.d = der
-                        # gv.cov = self.cov
-                        # ans[i] = gv
                         ans[i] = GVar(x.flat[i], der, self.cov)
                     return ans.reshape(x.shape)
         elif len(args)==1:

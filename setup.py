@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-GVAR_VERSION = '11.2'
+GVAR_VERSION = '11.4'
 
 from distutils.core import setup
 from distutils.extension import Extension
@@ -87,9 +87,9 @@ setup(name='gvar',
     package_data=package_data,
     ext_modules= ext_modules,
     # for pip (distutils ignores):
-    install_requires=['cython>=0.17', 'numpy>=1.7'] if USE_CYTHON else ['numpy>=1.7'],
+    install_requires=['cython>=0.17', 'numpy>=1.7', 'scipy'] if USE_CYTHON else ['numpy>=1.7', 'scipy'],
     # for distutils (pip ignores):
-    requires=['cython (>=0.17)', 'numpy (>=1.7)'] if USE_CYTHON else ['numpy (>=1.7)'],
+    requires=['cython (>=0.17)', 'numpy (>=1.7)', 'scipy'] if USE_CYTHON else ['numpy (>=1.7)', 'scipy'],
     url="https://github.com/gplepage/gvar.git",
     license='GPLv3+',
     platforms='Any',
