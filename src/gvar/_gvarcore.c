@@ -1168,6 +1168,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 
 /*--- Type declarations ---*/
 struct __pyx_obj_4gvar_10_svec_smat_svec;
+struct __pyx_obj_4gvar_10_svec_smat_smask;
 struct __pyx_obj_4gvar_10_svec_smat_smat;
 struct __pyx_obj_4gvar_9_gvarcore_GVar;
 struct __pyx_obj_4gvar_9_gvarcore___pyx_scope_struct____call__;
@@ -1215,6 +1216,8 @@ typedef npy_cdouble __pyx_t_5numpy_complex_t;
 struct __pyx_t_4gvar_10_svec_smat_svec_element;
 struct __pyx_opt_args_4gvar_10_svec_smat_4svec_toarray;
 struct __pyx_opt_args_4gvar_10_svec_smat_4svec_add;
+struct __pyx_opt_args_4gvar_10_svec_smat_4svec_masked_vec;
+struct __pyx_opt_args_4gvar_10_svec_smat_4smat_masked_mat;
 
 /* "_svec_smat.pxd":19
  * # index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
@@ -1255,12 +1258,34 @@ struct __pyx_opt_args_4gvar_10_svec_smat_4svec_toarray {
  *     cpdef svec clone(svec)
  *     cpdef svec add(svec,svec,double a=*,double b=*)             # <<<<<<<<<<<<<<
  *     cpdef svec mul(svec self,double a)
- * 
+ *     cpdef numpy.ndarray[numpy.float_t, ndim=1] masked_vec(svec, smask, out=*)
  */
 struct __pyx_opt_args_4gvar_10_svec_smat_4svec_add {
   int __pyx_n;
   double a;
   double b;
+};
+
+/* "_svec_smat.pxd":35
+ *     cpdef svec add(svec,svec,double a=*,double b=*)
+ *     cpdef svec mul(svec self,double a)
+ *     cpdef numpy.ndarray[numpy.float_t, ndim=1] masked_vec(svec, smask, out=*)             # <<<<<<<<<<<<<<
+ * 
+ * cdef class smask:
+ */
+struct __pyx_opt_args_4gvar_10_svec_smat_4svec_masked_vec {
+  int __pyx_n;
+  PyObject *out;
+};
+
+/* "_svec_smat.pxd":57
+ *     cpdef double expval(self,svec)
+ *     cpdef numpy.ndarray[numpy.float_t, ndim=2] toarray(self)
+ *     cpdef numpy.ndarray[numpy.float_t, ndim=2] masked_mat(smat self, smask mask, out=*)             # <<<<<<<<<<<<<<
+ */
+struct __pyx_opt_args_4gvar_10_svec_smat_4smat_masked_mat {
+  int __pyx_n;
+  PyObject *out;
 };
 
 /* "_svec_smat.pxd":23
@@ -1279,7 +1304,24 @@ struct __pyx_obj_4gvar_10_svec_smat_svec {
 
 
 /* "_svec_smat.pxd":37
+ *     cpdef numpy.ndarray[numpy.float_t, ndim=1] masked_vec(svec, smask, out=*)
  * 
+ * cdef class smask:             # <<<<<<<<<<<<<<
+ *     cdef readonly numpy.int8_t[::1] mask
+ *     cdef readonly INTP_TYPE[::1] map
+ */
+struct __pyx_obj_4gvar_10_svec_smat_smask {
+  PyObject_HEAD
+  __Pyx_memviewslice mask;
+  __Pyx_memviewslice map;
+  npy_intp starti;
+  npy_intp stopi;
+  npy_intp len;
+};
+
+
+/* "_svec_smat.pxd":42
+ *     cdef readonly INTP_TYPE starti, stopi, len
  * 
  * cdef class smat:             # <<<<<<<<<<<<<<
  *     # cdef object rowlist
@@ -1434,12 +1476,13 @@ struct __pyx_vtabstruct_4gvar_10_svec_smat_svec {
   struct __pyx_obj_4gvar_10_svec_smat_svec *(*clone)(struct __pyx_obj_4gvar_10_svec_smat_svec *, int __pyx_skip_dispatch);
   struct __pyx_obj_4gvar_10_svec_smat_svec *(*add)(struct __pyx_obj_4gvar_10_svec_smat_svec *, struct __pyx_obj_4gvar_10_svec_smat_svec *, int __pyx_skip_dispatch, struct __pyx_opt_args_4gvar_10_svec_smat_4svec_add *__pyx_optional_args);
   struct __pyx_obj_4gvar_10_svec_smat_svec *(*mul)(struct __pyx_obj_4gvar_10_svec_smat_svec *, double, int __pyx_skip_dispatch);
+  PyArrayObject *(*masked_vec)(struct __pyx_obj_4gvar_10_svec_smat_svec *, struct __pyx_obj_4gvar_10_svec_smat_smask *, int __pyx_skip_dispatch, struct __pyx_opt_args_4gvar_10_svec_smat_4svec_masked_vec *__pyx_optional_args);
 };
 static struct __pyx_vtabstruct_4gvar_10_svec_smat_svec *__pyx_vtabptr_4gvar_10_svec_smat_svec;
 
 
-/* "_svec_smat.pxd":37
- * 
+/* "_svec_smat.pxd":42
+ *     cdef readonly INTP_TYPE starti, stopi, len
  * 
  * cdef class smat:             # <<<<<<<<<<<<<<
  *     # cdef object rowlist
@@ -1455,6 +1498,7 @@ struct __pyx_vtabstruct_4gvar_10_svec_smat_smat {
   struct __pyx_obj_4gvar_10_svec_smat_svec *(*masked_dot)(struct __pyx_obj_4gvar_10_svec_smat_smat *, struct __pyx_obj_4gvar_10_svec_smat_svec *, PyArrayObject *, int __pyx_skip_dispatch);
   double (*expval)(struct __pyx_obj_4gvar_10_svec_smat_smat *, struct __pyx_obj_4gvar_10_svec_smat_svec *, int __pyx_skip_dispatch);
   PyArrayObject *(*toarray)(struct __pyx_obj_4gvar_10_svec_smat_smat *, int __pyx_skip_dispatch);
+  PyArrayObject *(*masked_mat)(struct __pyx_obj_4gvar_10_svec_smat_smat *, struct __pyx_obj_4gvar_10_svec_smat_smask *, int __pyx_skip_dispatch, struct __pyx_opt_args_4gvar_10_svec_smat_4smat_masked_mat *__pyx_optional_args);
 };
 static struct __pyx_vtabstruct_4gvar_10_svec_smat_smat *__pyx_vtabptr_4gvar_10_svec_smat_smat;
 
@@ -2598,6 +2642,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, cha
 
 /* Module declarations from 'gvar._svec_smat' */
 static PyTypeObject *__pyx_ptype_4gvar_10_svec_smat_svec = 0;
+static PyTypeObject *__pyx_ptype_4gvar_10_svec_smat_smask = 0;
 static PyTypeObject *__pyx_ptype_4gvar_10_svec_smat_smat = 0;
 
 /* Module declarations from 'cython.view' */
@@ -2970,7 +3015,7 @@ static const char __pyx_k_shape_dfdx_k_shape_x_k_for_k[] = "shape(dfdx[k]) != sh
 static const char __pyx_k_x_and_xsdev_different_shapes[] = "x and xsdev different shapes.";
 static const char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static const char __pyx_k_x_is_a_dictionary_dfdx_is_not[] = "x is a dictionary, dfdx is not";
-static const char __pyx_k_Creates_one_or_more_new_GVar_s[] = " Creates one or more new |GVar|\\s.\n\n    ``gvar.gvar`` is an object of type :class:`gvar.GVarFactory`.\n    Each of the following creates new |GVar|\\s:\n\n    .. function:: gvar.gvar(x, xsdev)\n\n        Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.\n        Returns an array of |GVar|\\s if ``x`` and ``xsdev`` are arrays\n        with the same shape; the shape of the result is the same as the\n        shape of ``x``. Returns a |BufferDict| if ``x`` and ``xsdev``\n        are dictionaries with the same keys and layout; the result has\n        the same keys and layout as ``x``.\n\n    .. function:: gvar.gvar(x, xcov)\n\n        Returns an array of |GVar|\\s with means given by array ``x`` and a\n        covariance matrix given by array ``xcov``, where ``xcov.shape =\n        2*x.shape``; the result has the same shape as ``x``. Returns a\n        |BufferDict| if ``x`` and ``xcov`` are dictionaries, where the\n        keys in ``xcov`` are ``(k1,k2)`` for any keys ``k1`` and ``k2``\n        in ``x``. Returns a single |GVar| if ``x`` is a number and\n        ``xcov`` is a one-by-one matrix. The layout for ``xcov`` is\n        compatible with that produced by :func:`gvar.evalcov` for\n        a single |GVar|, an array of |GVar|\\s, or a dictionary whose\n        values are |GVar|\\s and/or arrays of |GVar|\\s. Therefore\n        ``gvar.gvar(gvar.mean(g), gvar.evalcov(g))`` creates |GVar|\\s\n        with the same means and covariance matrix as the |GVar|\\s\n        in ``g`` provided ``g`` is a single |GVar|, or an array or\n        dictionary of |GVar|\\s.\n\n    .. function:: gvar.gvar(x, xcov, verify=True)\n\n        Same as ``gvar.gvar(x, xcov)`` above but checks that the covariance \n        matrix is symmetric and positive definite (which covariance matrices \n        should be). This check is expensive for large matrices and so is \n        *not* done by default. Note, however, that unpredictable outcomes \n        will result from specifying"" an improper covariance matrix.\n        \n    .. function:: gvar.gvar(x, xcov, fast=True)\n\n        Normally ``gvar.gvar(x, xcov)`` tries to break the covariance matrix\n        into disjoint diagonal blocks, if there are any. For example, ::\n        \n            xcov = [[1,1,0], [1,2,0], [0,0,3]]\n        \n        can be decomposed into two blocks. This decomposition saves memory, \n        and can make later manipulations of the resulting |GVar|\\s \n        significantly faster. This is at the expense of extra processing to \n        create the |GVar|\\s. Setting keyword ``fast=True`` prevents \n        ``gvar.gvar`` from doing this, which would make sense, for example, \n        if it is known ahead of time that ``xcov`` has no sub-blocks. The \n        default is ``fast=False``. Either choice gives correct answers; \n        the difference is about efficiency.\n        \n    .. function:: gvar.gvar((x, xsdev))\n\n        Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.\n\n    .. function:: gvar.gvar(xstr)\n\n        Returns a |GVar| corresponding to string ``xstr`` which is\n        either of the form ``\"xmean +- xsdev\"`` or ``\"x(xerr)\"`` (see\n        :meth:`GVar.fmt`).\n\n    .. function:: gvar.gvar(xgvar)\n\n        Returns |GVar| ``xgvar`` unchanged.\n\n    .. function:: gvar.gvar(xdict)\n\n        Returns a dictionary (:class:`BufferDict`) ``b`` where\n        ``b[k] = gvar.gvar(xdict[k])`` for every key in dictionary ``xdict``.\n        The values in ``xdict``, therefore, can be strings, tuples or\n        |GVar|\\s (see above), or arrays of these.\n\n    .. function:: gvar.gvar(xarray)\n\n        Returns an array ``a`` having the same shape as ``xarray`` where\n        every element ``a[i...] = gvar.gvar(xarray[i...])``. The values in\n        ``xarray``, therefore, can be strings, tuples or |GVar|\\s (see\n        above).\n    ";
+static const char __pyx_k_Creates_one_or_more_new_GVar_s[] = " Creates one or more new |GVar|\\s.\n\n    ``gvar.gvar`` is an object of type :class:`gvar.GVarFactory`.\n    Each of the following creates new |GVar|\\s:\n\n    .. function:: gvar.gvar(x, xsdev)\n\n        Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.\n        Returns an array of |GVar|\\s if ``x`` and ``xsdev`` are arrays\n        with the same shape; the shape of the result is the same as the\n        shape of ``x``. Returns a |BufferDict| if ``x`` and ``xsdev``\n        are dictionaries with the same keys and layout; the result has\n        the same keys and layout as ``x``.\n\n    .. function:: gvar.gvar(x, xcov)\n\n        Returns an array of |GVar|\\s with means given by array ``x`` and a\n        covariance matrix given by array ``xcov``, where ``xcov.shape =\n        2*x.shape``; the result has the same shape as ``x``. Returns a\n        |BufferDict| if ``x`` and ``xcov`` are dictionaries, where the\n        keys in ``xcov`` are ``(k1,k2)`` for any keys ``k1`` and ``k2``\n        in ``x``. Returns a single |GVar| if ``x`` is a number and\n        ``xcov`` is a one-by-one matrix. The layout for ``xcov`` is\n        compatible with that produced by :func:`gvar.evalcov` for\n        a single |GVar|, an array of |GVar|\\s, or a dictionary whose\n        values are |GVar|\\s and/or arrays of |GVar|\\s. Therefore\n        ``gvar.gvar(gvar.mean(g), gvar.evalcov(g))`` creates |GVar|\\s\n        with the same means and covariance matrix as the |GVar|\\s\n        in ``g`` provided ``g`` is a single |GVar|, or an array or\n        dictionary of |GVar|\\s.\n\n    .. function:: gvar.gvar(x, xcov, verify=True)\n\n        Same as ``gvar.gvar(x, xcov)`` above but checks that the covariance \n        matrix is symmetric and positive definite (which covariance matrices \n        should be). This check is expensive for large matrices and so is \n        *not* done by default. Note, however, that unpredictable outcomes \n        will result from specifying"" an improper covariance matrix.\n        \n    .. function:: gvar.gvar(x, xcov, fast=True)\n\n        Normally ``gvar.gvar(x, xcov)`` tries to break the covariance matrix\n        into disjoint diagonal blocks, if there are any. For example, ::\n        \n            xcov = [[1,1,0], [1,2,0], [0,0,3]]\n        \n        can be decomposed into two blocks. This decomposition saves memory, \n        and can make later manipulations of the resulting |GVar|\\s \n        faster. This is at the expense of extra processing to \n        create the |GVar|\\s. Setting keyword ``fast=True`` prevents \n        ``gvar.gvar`` from doing this, which would make sense, for example, \n        if it was known ahead of time that ``xcov`` has no sub-blocks. The \n        default is ``fast=False``. Either choice gives correct answers; \n        the difference is about efficiency.\n        \n    .. function:: gvar.gvar((x, xsdev))\n\n        Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.\n\n    .. function:: gvar.gvar(xstr)\n\n        Returns a |GVar| corresponding to string ``xstr`` which is\n        either of the form ``\"xmean +- xsdev\"`` or ``\"x(xerr)\"`` (see\n        :meth:`GVar.fmt`).\n\n    .. function:: gvar.gvar(xgvar)\n\n        Returns |GVar| ``xgvar`` unchanged.\n\n    .. function:: gvar.gvar(xdict)\n\n        Returns a dictionary (:class:`BufferDict`) ``b`` where\n        ``b[k] = gvar.gvar(xdict[k])`` for every key in dictionary ``xdict``.\n        The values in ``xdict``, therefore, can be strings, tuples or\n        |GVar|\\s (see above), or arrays of these.\n\n    .. function:: gvar.gvar(xarray)\n\n        Returns an array ``a`` having the same shape as ``xarray`` where\n        every element ``a[i...] = gvar.gvar(xarray[i...])``. The values in\n        ``xarray``, therefore, can be strings, tuples or |GVar|\\s (see\n        above).\n    ";
 static const char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
 static const char __pyx_k_undefined_comparison_for_GVars[] = "undefined comparison for GVars";
 static const char __pyx_k_length_mismatch_between_der_and[] = "length mismatch between der and cov";
@@ -3795,6 +3840,7 @@ static struct __pyx_obj_4gvar_9_gvarcore_GVar *__pyx_f_4gvar_9_gvarcore_4GVar_cl
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_3clone(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_2clone[] = "GVar.clone(self) -> GVar";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_3clone(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -3839,6 +3885,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_2clone(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_5__deepcopy__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_4__deepcopy__[] = "GVar.__deepcopy__(self, *args)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_5__deepcopy__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED PyObject *__pyx_v_args = 0;
   PyObject *__pyx_r = 0;
@@ -3897,6 +3944,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_4__deepcopy__(struct __pyx_obj_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_7__copy__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_6__copy__[] = "GVar.__copy__(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_7__copy__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -3950,7 +3998,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_6__copy__(struct __pyx_obj_4gva
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_9__format__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_4GVar_8__format__[] = " Convert to string and format the string ";
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_8__format__[] = "GVar.__format__(self, fmt=None)\n Convert to string and format the string ";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_9__format__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_fmt = 0;
   PyObject *__pyx_r = 0;
@@ -8630,6 +8678,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_32__pow__(PyObject *__pyx_v_xx,
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_35sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_34sin[] = "GVar.sin(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_35sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -8710,6 +8759,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_34sin(struct __pyx_obj_4gvar_9_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_37cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_36cos[] = "GVar.cos(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_37cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -8790,6 +8840,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_36cos(struct __pyx_obj_4gvar_9_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_39tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_38tan[] = "GVar.tan(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_39tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -8880,6 +8931,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_38tan(struct __pyx_obj_4gvar_9_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_41arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_40arcsin[] = "GVar.arcsin(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_41arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -8990,6 +9042,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_40arcsin(struct __pyx_obj_4gvar
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_43asin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_42asin[] = "GVar.asin(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_43asin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9069,6 +9122,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_42asin(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_45arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_44arccos[] = "GVar.arccos(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_45arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9179,6 +9233,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_44arccos(struct __pyx_obj_4gvar
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_47acos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_46acos[] = "GVar.acos(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_47acos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9258,6 +9313,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_46acos(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_49arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_48arctan[] = "GVar.arctan(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_49arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9344,6 +9400,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_48arctan(struct __pyx_obj_4gvar
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_51atan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_50atan[] = "GVar.atan(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_51atan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9423,6 +9480,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_50atan(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_53arctan2(PyObject *__pyx_v_yy, PyObject *__pyx_v_xx); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_52arctan2[] = "GVar.arctan2(yy, xx)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_53arctan2(PyObject *__pyx_v_yy, PyObject *__pyx_v_xx) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9824,6 +9882,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_52arctan2(struct __pyx_obj_4gva
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_55atan2(PyObject *__pyx_v_yy, PyObject *__pyx_v_xx); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_54atan2[] = "GVar.atan2(yy, xx)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_55atan2(PyObject *__pyx_v_yy, PyObject *__pyx_v_xx) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9903,6 +9962,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_54atan2(struct __pyx_obj_4gvar_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_57sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_56sinh[] = "GVar.sinh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_57sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -9983,6 +10043,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_56sinh(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_59cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_58cosh[] = "GVar.cosh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_59cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10063,6 +10124,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_58cosh(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_61tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_60tanh[] = "GVar.tanh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_61tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10173,6 +10235,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_60tanh(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_63arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_62arcsinh[] = "GVar.arcsinh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_63arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10285,6 +10348,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_62arcsinh(struct __pyx_obj_4gva
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_65asinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_64asinh[] = "GVar.asinh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_65asinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10364,6 +10428,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_64asinh(struct __pyx_obj_4gvar_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_67arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_66arccosh[] = "GVar.arccosh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_67arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10476,6 +10541,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_66arccosh(struct __pyx_obj_4gva
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_69acosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_68acosh[] = "GVar.acosh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_69acosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10555,6 +10621,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_68acosh(struct __pyx_obj_4gvar_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_71arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_70arctanh[] = "GVar.arctanh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_71arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10650,6 +10717,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_70arctanh(struct __pyx_obj_4gva
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_73atanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_72atanh[] = "GVar.atanh(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_73atanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10729,6 +10797,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_72atanh(struct __pyx_obj_4gvar_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_75exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_74exp[] = "GVar.exp(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_75exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10819,6 +10888,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_74exp(struct __pyx_obj_4gvar_9_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_77log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_76log[] = "GVar.log(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_77log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10903,6 +10973,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_76log(struct __pyx_obj_4gvar_9_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_79sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_78sqrt[] = "GVar.sqrt(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_79sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10997,6 +11068,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_78sqrt(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_81fabs(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_80fabs[] = "GVar.fabs(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_81fabs(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -11091,7 +11163,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_80fabs(struct __pyx_obj_4gvar_9
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_83deriv(PyObject *__pyx_v_self, PyObject *__pyx_v_x); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_4GVar_82deriv[] = " Derivative of ``self`` with respest to primary |GVar|\\s in ``x``.\n\n        All |GVar|\\s are constructed from primary |GVar|\\s (see \n        :func:`gvar.is_primary`).  ``self.deriv(x)`` returns the \n        partial derivative of ``self`` with respect to \n        primary |GVar| ``x``, holding all of the other\n        primary |GVar|\\s constant.\n\n        Args:\n            x: A primary |GVar| or an array of primary |GVar|\\s.\n\n        Returns:\n            Derivatives of ``self`` with respect to the \n            |GVar|\\s in ``x``.  The result has the same \n            shape as ``x``.\n        ";
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_82deriv[] = "GVar.deriv(self, x)\n Derivative of ``self`` with respest to primary |GVar|\\s in ``x``.\n\n        All |GVar|\\s are constructed from primary |GVar|\\s (see \n        :func:`gvar.is_primary`).  ``self.deriv(x)`` returns the \n        partial derivative of ``self`` with respect to \n        primary |GVar| ``x``, holding all of the other\n        primary |GVar|\\s constant.\n\n        Args:\n            x: A primary |GVar| or an array of primary |GVar|\\s.\n\n        Returns:\n            Derivatives of ``self`` with respect to the \n            |GVar|\\s in ``x``.  The result has the same \n            shape as ``x``.\n        ";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_83deriv(PyObject *__pyx_v_self, PyObject *__pyx_v_x) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -11490,7 +11562,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_82deriv(struct __pyx_obj_4gvar_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_85fmt(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_4GVar_84fmt[] = " Convert to string with format: ``mean(sdev)``.\n\n        Leading zeros in the standard deviation are omitted: for example,\n        ``25.67 +- 0.02`` becomes ``25.67(2)``. Parameter ``ndecimal``\n        specifies how many digits follow the decimal point in the mean.\n        Parameter ``sep`` is a string that is inserted between the ``mean``\n        and the ``(sdev)``. If ``ndecimal`` is ``None`` (default), it is set\n        automatically to the larger of ``int(2-log10(self.sdev))`` or\n        ``0``; this will display at least two digits of error. Very large\n        or very small numbers are written with exponential notation when\n        ``ndecimal`` is ``None``.\n\n        Setting ``ndecimal < 0`` returns ``mean +- sdev``.\n        ";
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_84fmt[] = "GVar.fmt(self, ndecimal=None, sep='', d=None)\n Convert to string with format: ``mean(sdev)``.\n\n        Leading zeros in the standard deviation are omitted: for example,\n        ``25.67 +- 0.02`` becomes ``25.67(2)``. Parameter ``ndecimal``\n        specifies how many digits follow the decimal point in the mean.\n        Parameter ``sep`` is a string that is inserted between the ``mean``\n        and the ``(sdev)``. If ``ndecimal`` is ``None`` (default), it is set\n        automatically to the larger of ``int(2-log10(self.sdev))`` or\n        ``0``; this will display at least two digits of error. Very large\n        or very small numbers are written with exponential notation when\n        ``ndecimal`` is ``None``.\n\n        Setting ``ndecimal < 0`` returns ``mean +- sdev``.\n        ";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_85fmt(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_ndecimal = 0;
   PyObject *__pyx_v_sep = 0;
@@ -12166,7 +12238,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_84fmt(struct __pyx_obj_4gvar_9_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_87partialvar(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_4GVar_86partialvar[] = " Compute partial variance due to |GVar|\\s in ``args``.\n\n        This method computes the part of ``self.var`` due to the |GVar|\\s\n        in ``args``. If ``args[i]`` is correlated with other |GVar|\\s, the\n        variance coming from these is included in the result as well. (This\n        last convention is necessary because variances associated with\n        correlated |GVar|\\s cannot be disentangled into contributions\n        corresponding to each variable separately.)\n\n        Args:\n            args[i]: A |GVar| or array/dictionary of |GVar|\\s\n                 contributing to the partial variance.\n\n        Returns:\n            Partial variance due to all of ``args``.\n        ";
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_86partialvar[] = "GVar.partialvar(self, *args)\n Compute partial variance due to |GVar|\\s in ``args``.\n\n        This method computes the part of ``self.var`` due to the |GVar|\\s\n        in ``args``. If ``args[i]`` is correlated with other |GVar|\\s, the\n        variance coming from these is included in the result as well. (This\n        last convention is necessary because variances associated with\n        correlated |GVar|\\s cannot be disentangled into contributions\n        corresponding to each variable separately.)\n\n        Args:\n            args[i]: A |GVar| or array/dictionary of |GVar|\\s\n                 contributing to the partial variance.\n\n        Returns:\n            Partial variance due to all of ``args``.\n        ";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_87partialvar(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_args = 0;
   PyObject *__pyx_r = 0;
@@ -13270,7 +13342,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_86partialvar(struct __pyx_obj_4
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_89partialsdev(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_4GVar_88partialsdev[] = " Compute partial standard deviation due to |GVar|\\s in ``args``.\n\n        This method computes the part of ``self.sdev`` due to the |GVar|\\s\n        in ``args``. If ``args[i]`` is correlated with other |GVar|\\s, the\n        standard deviation coming from these is included in the result as\n        well. (This last convention is necessary because variances\n        associated with correlated |GVar|\\s cannot be disentangled into\n        contributions corresponding to each variable separately.)\n\n        :param args[i]: Variables contributing to the partial standard\n            deviation.\n        :type args[i]: |GVar| or array/dictionary of |GVar|\\s\n        :returns: Partial standard deviation due to ``args``.\n        ";
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_88partialsdev[] = "GVar.partialsdev(self, *args)\n Compute partial standard deviation due to |GVar|\\s in ``args``.\n\n        This method computes the part of ``self.sdev`` due to the |GVar|\\s\n        in ``args``. If ``args[i]`` is correlated with other |GVar|\\s, the\n        standard deviation coming from these is included in the result as\n        well. (This last convention is necessary because variances\n        associated with correlated |GVar|\\s cannot be disentangled into\n        contributions corresponding to each variable separately.)\n\n        :param args[i]: Variables contributing to the partial standard\n            deviation.\n        :type args[i]: |GVar| or array/dictionary of |GVar|\\s\n        :returns: Partial standard deviation due to ``args``.\n        ";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_89partialsdev(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_args = 0;
   PyObject *__pyx_r = 0;
@@ -13464,7 +13536,7 @@ static int __pyx_f_4gvar_9_gvarcore_4GVar_is_primary(struct __pyx_obj_4gvar_9_gv
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_91is_primary(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_4GVar_90is_primary[] = " ``True`` if a primary |GVar| ; ``False`` otherwise. \n        \n        A *primary* |GVar| is one created using :func:`gvar.gvar` (or a \n        function of such a variable). A *derived* |GVar| is one that \n        is constructed from arithmetic expressions and functions that \n        combine multiple primary |GVar|\\s. The standard deviations for \n        all |GVar|\\s originate with the primary |GVar|\\s. \n        In particular, :: \n\n            z = z.mean + sum_p (p - p.mean) * dz/dp\n\n        is true for any |GVar| ``z``, where the sum is over all primary \n        |GVar|\\s ``p``.\n        ";
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_90is_primary[] = "GVar.is_primary(self) -> bool\n ``True`` if a primary |GVar| ; ``False`` otherwise. \n        \n        A *primary* |GVar| is one created using :func:`gvar.gvar` (or a \n        function of such a variable). A *derived* |GVar| is one that \n        is constructed from arithmetic expressions and functions that \n        combine multiple primary |GVar|\\s. The standard deviations for \n        all |GVar|\\s originate with the primary |GVar|\\s. \n        In particular, :: \n\n            z = z.mean + sum_p (p - p.mean) * dz/dp\n\n        is true for any |GVar| ``z``, where the sum is over all primary \n        |GVar|\\s ``p``.\n        ";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_91is_primary(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -13997,7 +14069,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_12internaldata___get__(struct _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_93dotder(PyObject *__pyx_v_self, PyObject *__pyx_v_v); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_4GVar_92dotder[] = " Return the dot product of ``self.der`` and ``v``. ";
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_92dotder[] = "GVar.dotder(self, ndarray v)\n Return the dot product of ``self.der`` and ``v``. ";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_93dotder(PyObject *__pyx_v_self, PyObject *__pyx_v_v) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -14157,6 +14229,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_3cov___get__(struct __pyx_obj_4
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_95__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_94__reduce_cython__[] = "GVar.__reduce_cython__(self)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_95__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -14408,6 +14481,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_94__reduce_cython__(struct __py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_97__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static char __pyx_doc_4gvar_9_gvarcore_4GVar_96__setstate_cython__[] = "GVar.__setstate_cython__(self, __pyx_state)";
 static PyObject *__pyx_pw_4gvar_9_gvarcore_4GVar_97__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -14465,7 +14539,8 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_96__setstate_cython__(struct __
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_11GVarFactory_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_11GVarFactory_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_11GVarFactory_1__init__, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_9_gvarcore_11GVarFactory___init__[] = "GVarFactory.__init__(self, cov=None)";
+static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_11GVarFactory_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_11GVarFactory_1__init__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_11GVarFactory___init__};
 static PyObject *__pyx_pw_4gvar_9_gvarcore_11GVarFactory_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_cov = 0;
@@ -14630,7 +14705,8 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_11GVarFactory___init__(CYTHON_UNUSED 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_11GVarFactory_3__call__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_11GVarFactory_3__call__ = {"__call__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_11GVarFactory_3__call__, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_9_gvarcore_11GVarFactory_2__call__[] = "GVarFactory.__call__(self, *args, verify=False, fast=False)";
+static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_11GVarFactory_3__call__ = {"__call__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_11GVarFactory_3__call__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_11GVarFactory_2__call__};
 static PyObject *__pyx_pw_4gvar_9_gvarcore_11GVarFactory_3__call__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_verify = 0;
@@ -21094,7 +21170,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_11GVarFactory_2__call__(CYTHON_UNUSED
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_1gvar_function(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_9_gvarcore_gvar_function[] = " Create a |GVar| for function f(x) given f and df/dx at x.\n\n    This function creates a |GVar| corresponding to a function of |GVar|\\s ``x``\n    whose value is ``f`` and whose derivatives with respect to each\n    ``x`` are given by ``dfdx``. Here ``x`` can be a single |GVar|,\n    an array of |GVar|\\s (for a multidimensional function), or\n    a dictionary whose values are |GVar|\\s or arrays of |GVar|\\s, while\n    ``dfdx`` must be a float, an array of floats, or a dictionary\n    whose values are floats or arrays of floats, respectively.\n\n    This function is useful for creating functions that can accept\n    |GVar|\\s as arguments. For example, ::\n\n        import math\n        import gvar as gv\n\n        def sin(x):\n            if isinstance(x, gv.GVar):\n                f = math.sin(x.mean)\n                dfdx = math.cos(x.mean)\n                return gv.gvar_function(x, f, dfdx)\n            else:\n                return math.sin(x)\n\n    creates a version of ``sin(x)`` that works with either floats or\n    |GVar|\\s as its argument. This particular function is unnecessary since\n    it is already provided by :mod:`gvar`.\n\n    :param x: Point at which the function is evaluated.\n    :type x: |GVar|, array of |GVar|\\s, or a dictionary of |GVar|\\s\n\n    :param f: Value of function at point ``gvar.mean(x)``.\n    :type f: float\n\n    :param dfdx: Derivatives of function with respect to x at\n        point ``gvar.mean(x)``.\n    :type dfdx: float, array of floats, or a dictionary of floats\n\n    :returns: A |GVar| representing the function's value at ``x``.\n    ";
+static char __pyx_doc_4gvar_9_gvarcore_gvar_function[] = "gvar_function(x, double f, dfdx)\n Create a |GVar| for function f(x) given f and df/dx at x.\n\n    This function creates a |GVar| corresponding to a function of |GVar|\\s ``x``\n    whose value is ``f`` and whose derivatives with respect to each\n    ``x`` are given by ``dfdx``. Here ``x`` can be a single |GVar|,\n    an array of |GVar|\\s (for a multidimensional function), or\n    a dictionary whose values are |GVar|\\s or arrays of |GVar|\\s, while\n    ``dfdx`` must be a float, an array of floats, or a dictionary\n    whose values are floats or arrays of floats, respectively.\n\n    This function is useful for creating functions that can accept\n    |GVar|\\s as arguments. For example, ::\n\n        import math\n        import gvar as gv\n\n        def sin(x):\n            if isinstance(x, gv.GVar):\n                f = math.sin(x.mean)\n                dfdx = math.cos(x.mean)\n                return gv.gvar_function(x, f, dfdx)\n            else:\n                return math.sin(x)\n\n    creates a version of ``sin(x)`` that works with either floats or\n    |GVar|\\s as its argument. This particular function is unnecessary since\n    it is already provided by :mod:`gvar`.\n\n    :param x: Point at which the function is evaluated.\n    :type x: |GVar|, array of |GVar|\\s, or a dictionary of |GVar|\\s\n\n    :param f: Value of function at point ``gvar.mean(x)``.\n    :type f: float\n\n    :param dfdx: Derivatives of function with respect to x at\n        point ``gvar.mean(x)``.\n    :type dfdx: float, array of floats, or a dictionary of floats\n\n    :returns: A |GVar| representing the function's value at ``x``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_1gvar_function = {"gvar_function", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_1gvar_function, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_gvar_function};
 static PyObject *__pyx_pw_4gvar_9_gvarcore_1gvar_function(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_x = 0;
@@ -22067,7 +22143,8 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_gvar_function(CYTHON_UNUSED PyObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_3abs(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_3abs = {"abs", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_3abs, METH_O, 0};
+static char __pyx_doc_4gvar_9_gvarcore_2abs[] = "abs(g)";
+static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_3abs = {"abs", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_3abs, METH_O, __pyx_doc_4gvar_9_gvarcore_2abs};
 static PyObject *__pyx_pw_4gvar_9_gvarcore_3abs(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -22260,7 +22337,8 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_2abs(CYTHON_UNUSED PyObject *__pyx_se
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_9_gvarcore_5__pyx_unpickle_GVar(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_5__pyx_unpickle_GVar = {"__pyx_unpickle_GVar", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_5__pyx_unpickle_GVar, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_9_gvarcore_4__pyx_unpickle_GVar[] = "__pyx_unpickle_GVar(__pyx_type, long __pyx_checksum, __pyx_state)";
+static PyMethodDef __pyx_mdef_4gvar_9_gvarcore_5__pyx_unpickle_GVar = {"__pyx_unpickle_GVar", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_5__pyx_unpickle_GVar, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_4__pyx_unpickle_GVar};
 static PyObject *__pyx_pw_4gvar_9_gvarcore_5__pyx_unpickle_GVar(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v___pyx_type = 0;
   long __pyx_v___pyx_checksum;
@@ -37973,42 +38051,42 @@ static PyObject *__pyx_getprop_4gvar_9_gvarcore_4GVar_cov(PyObject *o, CYTHON_UN
 }
 
 static PyMethodDef __pyx_methods_4gvar_9_gvarcore_GVar[] = {
-  {"clone", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_3clone, METH_NOARGS, 0},
-  {"__deepcopy__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_4GVar_5__deepcopy__, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__copy__", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_7__copy__, METH_NOARGS, 0},
+  {"clone", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_3clone, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_2clone},
+  {"__deepcopy__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_4GVar_5__deepcopy__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_4GVar_4__deepcopy__},
+  {"__copy__", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_7__copy__, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_6__copy__},
   {"__format__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_4GVar_9__format__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_4GVar_8__format__},
-  {"sin", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_35sin, METH_NOARGS, 0},
-  {"cos", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_37cos, METH_NOARGS, 0},
-  {"tan", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_39tan, METH_NOARGS, 0},
-  {"arcsin", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_41arcsin, METH_NOARGS, 0},
-  {"asin", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_43asin, METH_NOARGS, 0},
-  {"arccos", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_45arccos, METH_NOARGS, 0},
-  {"acos", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_47acos, METH_NOARGS, 0},
-  {"arctan", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_49arctan, METH_NOARGS, 0},
-  {"atan", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_51atan, METH_NOARGS, 0},
-  {"arctan2", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_53arctan2, METH_O, 0},
-  {"atan2", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_55atan2, METH_O, 0},
-  {"sinh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_57sinh, METH_NOARGS, 0},
-  {"cosh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_59cosh, METH_NOARGS, 0},
-  {"tanh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_61tanh, METH_NOARGS, 0},
-  {"arcsinh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_63arcsinh, METH_NOARGS, 0},
-  {"asinh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_65asinh, METH_NOARGS, 0},
-  {"arccosh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_67arccosh, METH_NOARGS, 0},
-  {"acosh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_69acosh, METH_NOARGS, 0},
-  {"arctanh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_71arctanh, METH_NOARGS, 0},
-  {"atanh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_73atanh, METH_NOARGS, 0},
-  {"exp", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_75exp, METH_NOARGS, 0},
-  {"log", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_77log, METH_NOARGS, 0},
-  {"sqrt", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_79sqrt, METH_NOARGS, 0},
-  {"fabs", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_81fabs, METH_NOARGS, 0},
+  {"sin", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_35sin, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_34sin},
+  {"cos", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_37cos, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_36cos},
+  {"tan", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_39tan, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_38tan},
+  {"arcsin", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_41arcsin, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_40arcsin},
+  {"asin", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_43asin, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_42asin},
+  {"arccos", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_45arccos, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_44arccos},
+  {"acos", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_47acos, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_46acos},
+  {"arctan", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_49arctan, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_48arctan},
+  {"atan", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_51atan, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_50atan},
+  {"arctan2", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_53arctan2, METH_O, __pyx_doc_4gvar_9_gvarcore_4GVar_52arctan2},
+  {"atan2", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_55atan2, METH_O, __pyx_doc_4gvar_9_gvarcore_4GVar_54atan2},
+  {"sinh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_57sinh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_56sinh},
+  {"cosh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_59cosh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_58cosh},
+  {"tanh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_61tanh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_60tanh},
+  {"arcsinh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_63arcsinh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_62arcsinh},
+  {"asinh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_65asinh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_64asinh},
+  {"arccosh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_67arccosh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_66arccosh},
+  {"acosh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_69acosh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_68acosh},
+  {"arctanh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_71arctanh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_70arctanh},
+  {"atanh", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_73atanh, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_72atanh},
+  {"exp", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_75exp, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_74exp},
+  {"log", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_77log, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_76log},
+  {"sqrt", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_79sqrt, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_78sqrt},
+  {"fabs", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_81fabs, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_80fabs},
   {"deriv", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_83deriv, METH_O, __pyx_doc_4gvar_9_gvarcore_4GVar_82deriv},
   {"fmt", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_4GVar_85fmt, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_4GVar_84fmt},
   {"partialvar", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_4GVar_87partialvar, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_4GVar_86partialvar},
   {"partialsdev", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_9_gvarcore_4GVar_89partialsdev, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_9_gvarcore_4GVar_88partialsdev},
   {"is_primary", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_91is_primary, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_90is_primary},
   {"dotder", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_93dotder, METH_O, __pyx_doc_4gvar_9_gvarcore_4GVar_92dotder},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_95__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_97__setstate_cython__, METH_O, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_95__reduce_cython__, METH_NOARGS, __pyx_doc_4gvar_9_gvarcore_4GVar_94__reduce_cython__},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_4gvar_9_gvarcore_4GVar_97__setstate_cython__, METH_O, __pyx_doc_4gvar_9_gvarcore_4GVar_96__setstate_cython__},
   {0, 0, 0, 0}
 };
 
@@ -38112,7 +38190,7 @@ static PyTypeObject __pyx_type_4gvar_9_gvarcore_GVar = {
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
-  0, /*tp_doc*/
+  "GVar(double v, svec d, smat cov)", /*tp_doc*/
   __pyx_tp_traverse_4gvar_9_gvarcore_GVar, /*tp_traverse*/
   __pyx_tp_clear_4gvar_9_gvarcore_GVar, /*tp_clear*/
   __pyx_pw_4gvar_9_gvarcore_4GVar_15__richcmp__, /*tp_richcompare*/
@@ -40298,9 +40376,11 @@ static int __Pyx_modinit_type_import_code(void) {
   __pyx_ptype_4gvar_10_svec_smat_svec = __Pyx_ImportType(__pyx_t_1, "gvar._svec_smat", "svec", sizeof(struct __pyx_obj_4gvar_10_svec_smat_svec), __Pyx_ImportType_CheckSize_Warn);
    if (!__pyx_ptype_4gvar_10_svec_smat_svec) __PYX_ERR(4, 23, __pyx_L1_error)
   __pyx_vtabptr_4gvar_10_svec_smat_svec = (struct __pyx_vtabstruct_4gvar_10_svec_smat_svec*)__Pyx_GetVtable(__pyx_ptype_4gvar_10_svec_smat_svec->tp_dict); if (unlikely(!__pyx_vtabptr_4gvar_10_svec_smat_svec)) __PYX_ERR(4, 23, __pyx_L1_error)
+  __pyx_ptype_4gvar_10_svec_smat_smask = __Pyx_ImportType(__pyx_t_1, "gvar._svec_smat", "smask", sizeof(struct __pyx_obj_4gvar_10_svec_smat_smask), __Pyx_ImportType_CheckSize_Warn);
+   if (!__pyx_ptype_4gvar_10_svec_smat_smask) __PYX_ERR(4, 37, __pyx_L1_error)
   __pyx_ptype_4gvar_10_svec_smat_smat = __Pyx_ImportType(__pyx_t_1, "gvar._svec_smat", "smat", sizeof(struct __pyx_obj_4gvar_10_svec_smat_smat), __Pyx_ImportType_CheckSize_Warn);
-   if (!__pyx_ptype_4gvar_10_svec_smat_smat) __PYX_ERR(4, 37, __pyx_L1_error)
-  __pyx_vtabptr_4gvar_10_svec_smat_smat = (struct __pyx_vtabstruct_4gvar_10_svec_smat_smat*)__Pyx_GetVtable(__pyx_ptype_4gvar_10_svec_smat_smat->tp_dict); if (unlikely(!__pyx_vtabptr_4gvar_10_svec_smat_smat)) __PYX_ERR(4, 37, __pyx_L1_error)
+   if (!__pyx_ptype_4gvar_10_svec_smat_smat) __PYX_ERR(4, 42, __pyx_L1_error)
+  __pyx_vtabptr_4gvar_10_svec_smat_smat = (struct __pyx_vtabstruct_4gvar_10_svec_smat_smat*)__Pyx_GetVtable(__pyx_ptype_4gvar_10_svec_smat_smat->tp_dict); if (unlikely(!__pyx_vtabptr_4gvar_10_svec_smat_smat)) __PYX_ERR(4, 42, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -40991,7 +41071,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "gvar/_gvarcore.pyx":1
- * # cython: boundscheck=False, language_level=3str             # <<<<<<<<<<<<<<
+ * # cython: boundscheck=False, language_level=3str, embedsignature=True             # <<<<<<<<<<<<<<
  * # c#ython: profile=True
  * # remove extra # above for profiling
  */

@@ -142,6 +142,7 @@ from gvar import root
 #     pass
 
 _GVAR_LIST = []
+_CONFIG = dict(evalcov=200, evalcov_blocks=6000)
 
 def ranseed(seed=None):
     """ Seed random number generators with tuple ``seed``.

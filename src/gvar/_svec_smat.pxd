@@ -32,8 +32,13 @@ cdef class svec:
     cpdef svec clone(svec)
     cpdef svec add(svec,svec,double a=*,double b=*)
     cpdef svec mul(svec self,double a)
+    cpdef numpy.ndarray[numpy.float_t, ndim=1] masked_vec(svec, smask, out=*)
 
-
+cdef class smask:
+    cdef readonly numpy.int8_t[::1] mask
+    cdef readonly INTP_TYPE[::1] map 
+    cdef readonly INTP_TYPE starti, stopi, len
+ 
 cdef class smat:
     # cdef object rowlist
     cdef object[:] row
@@ -49,3 +54,4 @@ cdef class smat:
     cpdef svec masked_dot(self, svec vv, numpy.ndarray[numpy.int8_t, ndim=1] imask)
     cpdef double expval(self,svec)
     cpdef numpy.ndarray[numpy.float_t, ndim=2] toarray(self)
+    cpdef numpy.ndarray[numpy.float_t, ndim=2] masked_mat(smat self, smask mask, out=*)

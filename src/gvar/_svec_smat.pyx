@@ -1,4 +1,4 @@
-# cython: boundscheck=False, intializedcheck=False, wraparound=False, language_level=3str
+# cython: boundscheck=False, intializedcheck=False, wraparound=False, language_level=3str, embedsignature=True
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-20 G. Peter Lepage.
 #
@@ -244,8 +244,47 @@ cdef class svec:
             ans.v[i].i = self.v[i].i
             ans.v[i].v = a * self.v[i].v
         return ans
+    
+    cpdef numpy.ndarray[numpy.float_t, ndim=1] masked_vec(svec self, smask mask, out=None):
+        """ Returns compact vector containing the unmasked components of the svec. 
+        
+        N.B. If use ``out`` make sure it is zeroed first.
+        """
+        cdef INTP_TYPE i
+        cdef numpy.ndarray[numpy.float_t, ndim=1] ans
+        if out is None:
+            ans = numpy.zeros(mask.len, dtype=float)
+        else:
+            ans = out
+        for i in range(self.size):
+            if mask.mask[self.v[i].i]:
+                ans[mask.map[self.v[i].i]] = self.v[i].v
+        return ans
 
+cdef class smask:
+    " mask for smat, svec "
 
+    def __cinit__(smask self, numpy.int8_t[::1] mask):
+        cdef INTP_TYPE i 
+        cdef numpy.int8_t ib 
+        self.mask = mask
+        self.map = numpy.zeros(len(self.mask), dtype=numpy.intp)
+        self.starti = -1
+        self.stopi = -1
+        i = 0
+        self.len = 0
+        for ib in mask:
+            if ib:
+                self.map[i] = self.len
+                self.len += 1
+                if self.starti == -1:
+                    self.starti = i
+                self.stopi = i
+            i += 1
+        self.stopi += 1
+    
+    def __len__(smask self):
+        return self.len
 
 cdef class smat:
     """ sym. sparse matrix --- for GVar covariance matrices (only) """
@@ -421,3 +460,21 @@ cdef class smat:
             ans[i][:len(row)] = row
         return ans
 
+    cpdef numpy.ndarray[numpy.float_t, ndim=2] masked_mat(smat self, smask mask, out=None):
+        """ Returns compact matrix containing the unmasked components of the smat. 
+        
+        N.B. If use ``out`` make sure it is zeroed first.
+        """
+        cdef INTP_TYPE i
+        cdef numpy.ndarray[numpy.float_t, ndim=2] ans 
+        cdef svec rowi
+        if out is None:
+            ans = numpy.zeros((mask.len, mask.len), dtype=float)
+        else:
+            ans = out
+        for i in range(mask.starti, mask.stopi):
+            if mask.mask[i]:
+                rowi = self.row[i]
+                # ans[mask.map[i], :] = rowi.masked_vec(mask)
+                rowi.masked_vec(mask, out=ans[mask.map[i],:])
+        return ans

@@ -1,4 +1,4 @@
-# cython: boundscheck=False, language_level=3str
+# cython: boundscheck=False, language_level=3str, embedsignature=True
 # c#ython: profile=True
 # remove extra # above for profiling
 
@@ -774,10 +774,10 @@ class GVarFactory:
         
         can be decomposed into two blocks. This decomposition saves memory, 
         and can make later manipulations of the resulting |GVar|\s 
-        significantly faster. This is at the expense of extra processing to 
+        faster. This is at the expense of extra processing to 
         create the |GVar|\s. Setting keyword ``fast=True`` prevents 
         ``gvar.gvar`` from doing this, which would make sense, for example, 
-        if it is known ahead of time that ``xcov`` has no sub-blocks. The 
+        if it was known ahead of time that ``xcov`` has no sub-blocks. The 
         default is ``fast=False``. Either choice gives correct answers; 
         the difference is about efficiency.
         

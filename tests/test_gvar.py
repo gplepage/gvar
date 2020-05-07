@@ -224,6 +224,43 @@ class test_smat(unittest.TestCase,ArrayTests):
         self.assertTrue(np.all(smat_m.toarray() == m.toarray()))
         os.remove('outputfile.p')
 
+class test_smask(unittest.TestCase):
+    def test_smask(self):
+        def _test(imask):
+            mask = smask(imask)
+            np.testing.assert_array_equal(sum(imask[mask.starti:mask.stopi]), mask.len)
+            np.testing.assert_array_equal(imask, np.asarray(mask.mask))
+            np.testing.assert_array_equal(np.asarray(mask.map)[imask != 0], np.arange(mask.len))
+            np.testing.assert_array_equal(np.cumsum(imask[imask != 0]) - 1, np.asarray(mask.map)[imask != 0])
+        g = gvar([1, 2, 3], [4, 5, 6])
+        gvar(1,0)
+        imask = np.array(g[0].der + g[2].der, dtype=np.int8)
+        _test(imask)
+    
+    def test_masked_ved(self):
+        def _test(imask, g):
+            mask = smask(imask)
+            vec = g.internaldata[1].masked_vec(mask)
+            np.testing.assert_array_equal(vec, g.der[imask!=0])
+        g = gvar([1, 2, 3], [4, 5, 6])
+        gvar(1,0)
+        imask = np.array(g[0].der + g[1].der, dtype=np.int8)
+        g[1:] += g[:-1]
+        g2 = g**2
+        _test(imask, g2[0])
+        _test(imask, g2[1])
+        _test(imask, g2[2])
+    
+    def test_masked_mat(self):
+        a = np.random.rand(3,3)
+        g = gvar([1, 2, 3], a.dot(a.T))
+        imask = np.array((g[0].der + g[2].der) != 0, dtype=np.int8)
+        cov = evalcov([g[0], g[2]])
+        gvar(1,0)
+        mask = smask(imask)
+        np.testing.assert_allclose(cov, g[1].cov.masked_mat(mask))
+
+
 class test_gvar1(unittest.TestCase,ArrayTests):
     """ gvar1 - part 1 """
     def setUp(self):
@@ -777,6 +814,48 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_gvclose(z.flat, y.flat)
         self.assert_arraysclose(evalcov(z.flat), evalcov(x))
 
+    def _tst_compare_evalcovs(self):
+        " evalcov evalcov_blocks evalcov_blocks_dense agree "
+        def reconstruct(x, blocks, compress):
+            ans = np.zeros((len(x), len(x)), float)
+            if compress:
+                idx, sdev = blocks[0]
+                ans[idx, idx] = sdev ** 2
+                n = (len(idx), len(blocks))
+                blocks = blocks[1:]
+            else:
+                n = len(blocks)
+            for idx, bcov in blocks:
+                ans[idx[:,None], idx[:]] = bcov 
+            return ans, n
+        for setup, compress in [
+            ("N=10; a=np.random.rand(N,N); x=gv.gvar(N*[1.],a.dot(a.T)); x=a.dot(x);", True),
+            ("N=10; a=np.random.rand(N,N); x=gv.gvar(N*[1.],a.dot(a.T)); x=a.dot(x);", False),
+            ("N=10; x=gv.gvar(N*[1.],N*[1.]);", True),
+            ("N=10; x=gv.gvar(N*[1.],N*[1.]);", False),
+            ("N=10;  x=gv.gvar(N*[1.],N*[1.]); x[1:] += x[:-1];", True),
+            ("N=10;  x=gv.gvar(N*[1.],N*[1.]); x[1:] += x[:-1];", False),
+            ("N=10; a=np.random.rand(N,N); x=gv.gvar(N*[1.],a.dot(a.T));", True),
+            ("N=10; a=np.random.rand(N,N); x=gv.gvar(N*[1.],a.dot(a.T));", False),
+            ]:
+            tmp = locals()
+            exec(setup, globals(), tmp)
+            x = tmp['x']
+            ec = gv.evalcov(x)
+            ecb, necb = reconstruct(x, gv.evalcov_blocks(x, compress=compress), compress)
+            ecbd, necbd = reconstruct(x, gv.evalcov_blocks_dense(x, compress=compress), compress)
+            np.testing.assert_allclose(ec, ecbd)
+            np.testing.assert_allclose(ec, ecb)
+            self.assertEqual(necb, necbd)
+            # print(necb)
+
+    def test_compare_evalcovs(self):
+        " evalcov evalcov_blocks evalcov_blocks_dense agree "
+        self._tst_compare_evalcovs()
+        tmp, gv._CONFIG['evalcov_blocks'] = gv._CONFIG['evalcov_blocks'], 1
+        self._tst_compare_evalcovs()
+        gv._CONFIG['evalcov_blocks'] = tmp
+
     def test_gvar_blocks(self):
         " block structure created by gvar.gvar "
         def blockid(g):
@@ -787,38 +866,38 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertNotEqual(id[0], id[2])
         self.assertNotEqual(id[1], id[2])
         idlast = max(id)
-        x = gvar([1., 2., 3.], [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]])
+        x = gvar([1., 2., 3.], [[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]], fast=False)
         id = [blockid(xi) for xi in x]
         self.assertEqual(min(id), idlast + 1)
         self.assertNotEqual(id[0], id[1])
         self.assertNotEqual(id[0], id[2])
         self.assertNotEqual(id[1], id[2])
         idlast = max(id)
-        x = gvar([1., 2., 3.], [[1., 0.1, 0.], [0.1, 1., 0.], [0., 0., 1.]])
+        x = gvar([1., 2., 3.], [[1., 0.1, 0.], [0.1, 1., 0.], [0., 0., 1.]], fast=False)
         id = [blockid(xi) for xi in x]
         self.assertEqual(min(id), idlast + 1)
         self.assertEqual(id[0], id[1])
         self.assertNotEqual(id[0], id[2])
         idlast = max(id)
-        x = gvar([1., 2., 3.], [[1., 0., 0.1], [0.0, 1., 0.0], [0.1, 0., 1.]])
+        x = gvar([1., 2., 3.], [[1., 0., 0.1], [0.0, 1., 0.0], [0.1, 0., 1.]], fast=False)
         id = [blockid(xi) for xi in x]
         self.assertEqual(min(id), idlast + 1)
         self.assertEqual(id[0], id[2])
         self.assertNotEqual(id[0], id[1])
         idlast = max(id)
-        x = gvar([1., 2., 3.], [[1., 0., 0.0], [0.0, 1., 0.1], [0.0, 0.1, 1.]])
+        x = gvar([1., 2., 3.], [[1., 0., 0.0], [0.0, 1., 0.1], [0.0, 0.1, 1.]], fast=False)
         id = [blockid(xi) for xi in x]
         self.assertEqual(min(id), idlast + 1)
         self.assertEqual(id[1], id[2])
         self.assertNotEqual(id[0], id[1])
         idlast = max(id)
-        x = gvar([1., 2., 3.], [[1., 0.1, 0.0], [0.1, 1., 0.1], [0.0, 0.1, 1.]])
+        x = gvar([1., 2., 3.], [[1., 0.1, 0.0], [0.1, 1., 0.1], [0.0, 0.1, 1.]], fast=False)
         id = [blockid(xi) for xi in x]
         self.assertEqual(min(id), idlast + 1)
         self.assertEqual(id[1], id[2])
         self.assertEqual(id[0], id[1])
         idlast = max(id)
-        x = gvar([1., 2., 3.], [[1., 0.1, 0.1], [0.1, 1., 0.1], [0.1, 0.1, 1.]])
+        x = gvar([1., 2., 3.], [[1., 0.1, 0.1], [0.1, 1., 0.1], [0.1, 0.1, 1.]], fast=False)
         id = [blockid(xi) for xi in x]
         self.assertEqual(min(id), idlast + 1)
         self.assertEqual(id[1], id[2])
@@ -1010,7 +1089,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_arraysequal(c['b', 'a'], [[1.], [1./8.]])
         self.assert_arraysequal(c['b', 'b'], [[1., 1/8.], [1/8., 1.]])
 
-    def test_evalcov1(self):
+    def _tst_evalcov1(self):
         """ evalcov(array) """
         a,b = gvar([1.,2.],[[64.,4.],[4.,36.]])
         c = evalcov([a,b/2])
@@ -1028,7 +1107,14 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         rotn = np.array([[1.,1/2.],[2.,-1.]])
         self.assert_arraysequal(rc,np.dot(rotn,np.dot(c[:2,:2],rotn.transpose())))
 
-    def test_evalcov2(self):
+    def test_evalcov1(self):
+        """ evalcov(array) """
+        self._tst_evalcov1()
+        tmp, gv._CONFIG['evalcov'] = gv._CONFIG['evalcov'], 1
+        self._tst_evalcov1()
+        gv._CONFIG['evalcov'] = tmp
+
+    def _tst_evalcov2(self):
         """ evalcov(dict) """
         c = evalcov({0:x + y / 2, 1:2 * x - y})
         rotn = np.array([[1., 1/2.], [2., -1.]])
@@ -1040,6 +1126,13 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(c['x','x'], [[x.var]])
         self.assert_arraysequal(c['x','y'], [[x.var, evalcov([x,y])[0,1]]])
         self.assert_arraysequal(c['y','x'], c['x','y'].T)
+
+    def test_evalcov2(self):
+        """ evalcov(dict) """
+        self._tst_evalcov2()
+        tmp, gv._CONFIG['evalcov'] = gv._CONFIG['evalcov'], 1
+        self._tst_evalcov2()
+        gv._CONFIG['evalcov'] = tmp
 
     def test_sample(self):
         " sample(g) "
@@ -1142,6 +1235,9 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
     def test_SVD(self):
         """ SVD """
+        # error system
+        with self.assertRaises(np.linalg.LinAlgError):
+            SVD([1,2])
         # non-singular
         x,y = gvar([1,1],[1,4])
         cov = evalcov([(x+y)/2**0.5,(x-y)/2**0.5])

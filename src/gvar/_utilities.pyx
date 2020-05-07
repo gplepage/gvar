@@ -1,4 +1,4 @@
-# cython: language_level=3str
+# cython: language_level=3str, embedsignature=True
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-20 G. Peter Lepage.
 #
@@ -28,6 +28,7 @@ import collections
 import copy
 from math import lgamma
 import sys
+cimport cython
 
 try:
     # needed for oldload (optionally)
@@ -50,8 +51,8 @@ cdef double EPSILON = sys.float_info.epsilon * 10.         # roundoff error thre
 
 from libc.math cimport  log, exp  # don't put lgamma here -- old C compilers don't have it
 
-from ._svec_smat import svec, smat
-from ._svec_smat cimport svec, smat
+from ._svec_smat import svec, smat, smask
+from ._svec_smat cimport svec, smat, smask
 
 from ._bufferdict import BufferDict
 
@@ -562,40 +563,49 @@ def correlate(g, corr):
         corr = numpy.asarray(corr).reshape(mean.shape[0], -1)
         return _gvar.gvar(mean, corr * numpy.outer(sdev, sdev)).reshape(g.shape)
 
-# def evalcov_blocks_fast(g, compress=False):
-#     # can be terrible for very sparse covariance matrices
-#     # don't use
-#     cdef INTP_TYPE nvar, i, j, nb, ib
-#     cdef double sdev
-#     cdef smat cov 
-#     if hasattr(g, 'flat'):
-#         varlist = g.flat[:]
-#     elif hasattr(g, 'keys'):
-#         varlist = BufferDict(g).flat[:]
-#     else:
-#         varlist = numpy.array(g).flat[:]
-#     nvar = len(varlist)
-#     allcov = evalcov(varlist)
-#     nb, key = _connected_components(allcov != 0, directed=False, connection='weak')
-#     allvar = numpy.arange(nvar)
-#     blocks = [([], [])]
-#     for ib in range(nb):
-#         idx = allvar[key == ib]
-#         if len(idx) == 1:
-#             i = idx[0]
-#             blocks[0][0].append(i)
-#             blocks[0][1].append(varlist[i].sdev)
-#         else:
-#             bcov = allcov[idx, idx]
-#             blocks.append((idx, allcov[idx[:, None], idx]))
-#     blocks[0] = (numpy.array(blocks[0][0], dtype=numpy.intp), numpy.array(blocks[0][1], dtype=float))
-#     if len(blocks[0][0]) > 0:
-#         if not compress:
-#             for i, sdev in zip(*blocks[0]):
-#                 blocks.append((numpy.array([i]), numpy.array([[sdev**2]])))
-#             blocks = blocks[1:]
-#     return blocks
+@cython.boundscheck(False) # turn off bounds-checking
+@cython.wraparound(False)  # turn off negative index wrapping
+def evalcov_blocks_dense(g, compress=False):
+    """ Evaluate covariance matrix for elements of ``g``.
 
+    Same as :func:`gvar.evalcov_blocks` but optimized for 
+    large, dense covariance matrices.
+    """
+    cdef INTP_TYPE nvar, i, j, nb, ib
+    cdef object[:] varlist
+    cdef double sdev
+    cdef smat cov 
+    if hasattr(g, 'flat'):
+        varlist = g.flat[:]
+    elif hasattr(g, 'keys'):
+        varlist = BufferDict(g).flat[:]
+    else:
+        varlist = numpy.array(g).flat[:]
+    nvar = len(varlist)
+    if nvar <= 0:
+        return [([], [])] if compress else [([], [[]])]
+    allcov = evalcov(varlist)
+    nb, key = _connected_components(allcov != 0, directed=False)
+    allvar = numpy.arange(nvar)
+    blocks = [([], [])]
+    for ib in range(nb):
+        idx = allvar[key == ib]
+        if len(idx) == 1:
+            i = idx[0]
+            blocks[0][0].append(i)
+            blocks[0][1].append(varlist[i].sdev)
+        else:
+            blocks.append((idx, allcov[idx[:, None], idx]))
+    blocks[0] = (numpy.array(blocks[0][0], dtype=numpy.intp), numpy.array(blocks[0][1], dtype=float))
+    if not compress: 
+        if len(blocks[0][0]) > 0:
+            for i,sdev in zip(*blocks[0]):
+               blocks.append((numpy.array([i]), numpy.array([[sdev**2]])))
+        blocks = blocks[1:]
+    return blocks
+
+@cython.boundscheck(False) # turn off bounds-checking 
+@cython.wraparound(False)  # turn off negative index wrapping
 def evalcov_blocks(g, compress=False):
     """ Evaluate covariance matrix for elements of ``g``.
 
@@ -656,12 +666,13 @@ def evalcov_blocks(g, compress=False):
             uncorrelated |GVar|\s in ``g.flat`` into the first element of 
             the returned list (see above). Default is ``False``.
     """
-    cdef INTP_TYPE nvar, iv, i, j, id, nb, ib, sib, snb, nval
+    cdef INTP_TYPE nvar, iv, i, j, id, nb, ib, sib, snb, nval, nvalmax, n, nzeros
     cdef double sdev
     cdef smat cov 
     cdef GVar gi
     cdef INTP_TYPE[::1] rows, cols
     cdef numpy.int8_t[::1] vals
+    cdef object[::1] ivset_iv
     if hasattr(g, 'flat'):
         varlist = g.flat[:]
     elif hasattr(g, 'keys'):
@@ -669,34 +680,63 @@ def evalcov_blocks(g, compress=False):
     else:
         varlist = numpy.array(g).flat[:]
     nvar = len(varlist)
+    if nvar <= 0:
+        return [([], [])] if compress else [([], [[]])]
     cov = varlist[0].cov
-    # assemble iv's into sets associated with each cov.blockid
-    # N.B. same iv could be in sets for multiple blockids
-    ivdict = {} 
+    ivlist_id = {} 
+    ivlist_idset = {}
+    ivset_iv = numpy.array([set() for i in range(nvar)])
+    nzeros = 0
     for iv, gi in enumerate(varlist):
+        idset = set()
         for i in range(gi.d.size):
-            id = cov.block[gi.d.v[i].i]
-            if id not in ivdict:
-                ivdict[id] = set()
-            ivdict[id].add(iv)
-    # Build graph showing which two variables are in the same block set.
-    # The block sets provide the links between the different variables.
-    # You can't be correlated if you don't share membership in a block set.
-    nval = sum(len(ivset) * (len(ivset) + 1) // 2 for ivset in ivdict.values())
-    rows = numpy.empty(nval, dtype=numpy.intp)
-    cols = numpy.empty(nval, dtype=numpy.intp)
-    vals = numpy.empty(nval, dtype=numpy.int8)
+            idset.add(cov.block[gi.d.v[i].i])
+        idset = frozenset(idset)
+        if idset not in ivlist_idset:
+            for id in idset:
+                if id not in ivlist_id:
+                    # new id, not used by smaller ivs
+                    ivlist_id[id] = [iv]
+                else:
+                    ivlist_id[id].append(iv)
+                ivset_iv[iv].update(ivlist_id[id])
+            ivlist_idset[idset] = list(ivset_iv[iv])
+        else:
+            # ivlist_idset[idset] only has ivs smaller than iv
+            ivlist_idset[idset].append(iv)
+            ivset_iv[iv] = set(ivlist_idset[idset])
+        nzeros += iv - len(ivset_iv[iv]) + 1
+    nvalmax = nvar * (nvar + 1) // 2
+    if nzeros <= nvalmax / 2:
+        # probably not sparse
+        # nzeros is the minimum number of zeros; could actually be larger
+        # so not foolproof
+        return evalcov_blocks_dense(varlist, compress=compress)
+    
+    # build graph showing which pairs of variables share a block (or blocks)
+    n = min(_gvar._CONFIG['evalcov_blocks'], nvalmax)
+    rows = numpy.empty(n, dtype=numpy.intp)
+    cols = numpy.empty(n, dtype=numpy.intp)
+    vals = numpy.empty(n, dtype=numpy.int8)
     nval = 0
-    for ivset in ivdict.values():
-        for i in ivset:
-            for j in ivset:
-                if j > i: 
-                    continue
-                rows[nval] = i 
-                cols[nval] = j 
-                vals[nval] = True
-                nval += 1
-    graph = _csr_matrix((vals, (rows, cols)))
+    for i in range(nvar):
+        for j in ivset_iv[i]:
+            if nval == len(rows):
+                # need more space
+                n = min(2 * nval, nvalmax)
+                tmp = numpy.empty(n, dtype=numpy.intp)
+                tmp[:nval], rows = rows, tmp
+                tmp = numpy.empty(n, dtype=numpy.intp)
+                tmp[:nval], cols = cols, tmp
+                tmp = numpy.empty(n, dtype=numpy.int8)
+                tmp[:nval], vals = vals, tmp
+                # print(n, nval, nvalmax, len(rows), i, ivset_iv[i])
+            rows[nval] = i 
+            cols[nval] = j 
+            vals[nval] = True
+            nval += 1
+    assert nval <= nvalmax
+    graph = _csr_matrix((vals[:nval], (rows[:nval], cols[:nval])))
     # find and collect the sub-blocks
     nb, key = _connected_components(graph, directed=False)
     allvar = numpy.arange(nvar)
@@ -731,9 +771,137 @@ def evalcov_blocks(g, compress=False):
         blocks = blocks[1:]
     return blocks
 
+@cython.boundscheck(False) # turn off bounds-checking
+@cython.wraparound(False)  # turn off negative index wrapping
 def evalcov(g):
-    """ Compute covariance matrix for elements of
+    """ Compute covariance matrix for elements of 
     array/dictionary ``g``.
+
+    If ``g`` is an array of |GVar|\s, ``evalcov`` returns the
+    covariance matrix as an array with shape ``g.shape+g.shape``.
+    If ``g`` is a dictionary whose values are |GVar|\s or arrays of
+    |GVar|\s, the result is a doubly-indexed dictionary where
+    ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.
+    """
+    cdef INTP_TYPE a,b,ng,i,j,nc
+    cdef INTP_TYPE cov_zeros, previousid, bsize, ni, id
+    cdef double vec_zeros
+    cdef numpy.ndarray[numpy.float_t, ndim=2] ans
+    cdef numpy.ndarray[object, ndim=1] covd
+    # cdef numpy.ndarray[numpy.float_t, ndim=2] np_covd
+    cdef numpy.int8_t[::1] imask
+    cdef numpy.ndarray[numpy.int8_t, ndim=1] np_imask
+    cdef numpy.ndarray[numpy.float_t, ndim=2] mcov 
+    cdef numpy.ndarray[numpy.float_t, ndim=1] mvec
+    cdef numpy.int8_t is_dense, ib
+    cdef GVar ga,gb
+    cdef svec da,db
+    cdef smat cov
+    cdef smask mask
+    if hasattr(g, "keys"):
+        # convert g to list and call evalcov; repack as double dict
+        if not isinstance(g,BufferDict):
+            g = BufferDict(g)
+        gcov = evalcov(g.flat)
+        ansd = BufferDict()
+        for k1 in g:
+            k1_sl, k1_sh = g.slice_shape(k1)
+            if k1_sh == ():
+                k1_sl = slice(k1_sl, k1_sl+1)
+                k1_sh = (1,)
+            for k2 in g:
+                k2_sl, k2_sh = g.slice_shape(k2)
+                if k2_sh == ():
+                    k2_sl = slice(k2_sl, k2_sl+1)
+                    k2_sh = (1,)
+                ansd[k1, k2] = gcov[k1_sl, k2_sl].reshape(k1_sh + k2_sh)
+        return ansd
+    g = numpy.asarray(g)
+    g_shape = g.shape
+    g = g.flat
+    ng = len(g)
+    if ng <= 0:
+        return numpy.array([[]])
+    ans = numpy.zeros((ng,ng),numpy.float_)
+    if hasattr(g[0], 'cov'):
+        cov = g[0].cov
+    else:
+        raise ValueError("g does not contain GVar's")
+    nc = cov.nrow 
+    ####
+    # create a mask indentifying relevant primary GVars 
+    imask = numpy.zeros(nc, numpy.int8)
+    vec_zeros = 0
+    for a in range(ng):
+        ga = g[a]
+        da = ga.d
+        vec_zeros += da.size
+        for i in range(da.size):
+            imask[da.v[i].i] = True
+    if ng > _gvar._CONFIG['evalcov']:
+        # only efficient for large matrices
+        # estimate how many zeros in the primary GVars' cov
+        # and in the derivative vectors for each g[a]
+        cov_zeros = 0
+        previousid = -1
+        bsize = 0
+        ni = 0
+        i = 0
+        for ib in imask:
+            if ib:
+                ni += 1
+                id = cov.block[i]
+                if id != previousid:
+                    # finish previous block
+                    cov_zeros += bsize * bsize 
+                    bsize = 0
+                    previousid = id 
+                bsize += 1
+            i += 1
+        # finish last block
+        cov_zeros += bsize * bsize
+        # convert to zeros
+        cov_zeros = ni * ni - cov_zeros 
+        vec_zeros = ni - vec_zeros / ng
+        # less than 50% zero is defined as dense (ad hoc)
+        is_dense = cov_zeros / ni / ni < 0.5 and vec_zeros / ni < 0.5    
+        if is_dense:
+            # collect cov matrix for primary GVars and
+            # derivative vectors for g[a]; form dot products
+            mask = smask(imask)
+            # np_covd = numpy.zeros((ng, mask.len), dtype=float)
+            covd = numpy.zeros(ng, dtype=object)
+            mvec = numpy.empty(mask.len, float)
+            mcov = cov.masked_mat(mask)
+            for a in range(ng):
+                ga = g[a]
+                mvec[:] = 0
+                ga.d.masked_vec(mask, out=mvec)
+                # mcov.dot(mvec, out=np_covd[a]) 
+                # ans[a, a] = mvec.dot(np_covd[a])
+                covd[a] = mcov.dot(mvec) 
+                ans[a, a] = mvec.dot(covd[a])
+                for b in range(a):
+                    # ans[a, b] = mvec.dot(np_covd[b]) 
+                    ans[a, b] = mvec.dot(covd[b]) 
+                    ans[b, a] = ans[a,b]
+    else:
+        is_dense = False
+    if not is_dense:
+        covd = numpy.zeros(ng, object)
+        np_imask = numpy.asarray(imask)
+        for a in range(ng):
+            ga = g[a]
+            covd[a] = cov.masked_dot(ga.d, np_imask)
+            ans[a,a] = ga.d.dot(covd[a])
+            for b in range(a):
+                ans[a,b] = ga.d.dot(covd[b])
+                ans[b,a] = ans[a,b]
+    return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
+
+def evalcov_old(g):
+    """ Compute covariance matrix for elements of
+    array/dictionary ``g``. Old version, for testing.
 
     If ``g`` is an array of |GVar|\s, ``evalcov`` returns the
     covariance matrix as an array with shape ``g.shape+g.shape``.
@@ -775,7 +943,8 @@ def evalcov(g):
         cov = g[0].cov
     else:
         raise ValueError("g does not contain GVar's")
-    nc = cov.nrow # len(cov.rowlist)
+    nc = cov.nrow 
+    # mask restricts calculation to relevant primary GVars
     imask = numpy.zeros(nc, numpy.int8)
     for a in range(ng):
         ga = g[a]
@@ -949,7 +1118,7 @@ def collect_gvars(g, gvlist):
 def filter(g, f, *args, **kargs):
     """ Filter |GVar|\s in ``g`` through function ``f``. 
     
-    Sample usuage::
+    Sample usage::
 
         import gvar as gv
         g_mod = gv.filter(g, gv.mean)
@@ -1801,10 +1970,11 @@ def wsum_gvar(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):
 def fmt_values(outputs, ndecimal=None, ndigit=None):
     """ Tabulate :class:`gvar.GVar`\s in ``outputs``.
 
-    :param outputs: A dictionary of :class:`gvar.GVar` objects.
-    :param ndecimal: Format values ``v`` using ``v.fmt(ndecimal)``.
-    :type ndecimal: ``int`` or ``None``
-    :returns: A table (``str``) containing values and standard
+    Args:
+        outputs: A dictionary of :class:`gvar.GVar` objects.
+        ndecimal (int): Format values ``v`` using ``v.fmt(ndecimal)``.
+    Returns:
+        A table (``str``) containing values and standard
         deviations for variables in ``outputs``, labeled by the keys
         in ``outputs``.
     """
@@ -1831,27 +2001,27 @@ def fmt_errorbudget(
     contributions from correlated |GVar|\s cannot be distinguished). The table
     is returned as a string.
 
-    :param outputs: Dictionary of |GVar|\s for which an error budget
-        is computed.
-    :param inputs: Dictionary of: |GVar|\s, arrays/dictionaries of
-        |GVar|\s, or lists of |GVar|\s and/or arrays/dictionaries of
-        |GVar|\s. ``fmt_errorbudget`` tabulates the parts of the standard
-        deviations of each ``outputs[ko]`` due to each ``inputs[ki]``.
-    :param ndecimal: Number of decimal places displayed in table.
-    :type ndecimal: ``int``
-    :param percent: Tabulate % errors if ``percent is True``; otherwise
-        tabulate the errors themselves.
-    :type percent: boolean
-    :param colwidth: Width of each column. This is set automatically, to
-        accommodate label widths, if ``colwidth=None`` (default).
-    :type colwidth: positive integer or None
-    :param verify: If ``True``, a warning is issued if: 1) different inputs are
-        correlated (and therefore double count errors); or
-        2) the sum (in quadrature) of partial errors is not equal to the
-        total error to within 0.1% of the error (and the error budget is incomplete or
-        overcomplete). No checking is done if ``verify==False`` (default).
-    :type verify: boolean
-    :returns: A table (``str``) containing the error budget.
+    Args:
+        outputs: Dictionary of |GVar|\s for which an error budget
+            is computed.
+        inputs: Dictionary of: |GVar|\s, arrays/dictionaries of
+            |GVar|\s, or lists of |GVar|\s and/or arrays/dictionaries of
+            |GVar|\s. ``fmt_errorbudget`` tabulates the parts of the standard
+            deviations of each ``outputs[ko]`` due to each ``inputs[ki]``.
+        ndecimal (int): Number of decimal places displayed in table.
+        percent (bool): Tabulate % errors if ``percent is True``;   
+            otherwise tabulate the errors themselves.
+        colwidth (int): Width of each column. This is set automatically,
+            to accommodate label widths, if ``colwidth=None`` (default).
+        verify (bool): If ``True``, a warning is issued if: 1) different 
+            inputs are correlated (and therefore double count errors); or
+            2) the sum (in quadrature) of partial errors is not equal to 
+            the total error to within 0.1% of the error (and the error 
+            budget is incomplete or overcomplete). No checking is done 
+            if ``verify==False`` (default).
+
+    Returns:
+        A table (``str``) containing the error budget.
         Output variables are labeled by the keys in ``outputs``
         (columns); sources of uncertainty are labeled by the keys in
         ``inputs`` (rows).
@@ -1947,17 +2117,18 @@ def bootstrap_iter(g, n=None, svdcut=1e-12):
     which case the resulting iterator returns bootstrap copies of the
     ``g``.
 
-    :param g: An array (or dictionary) of objects of type |GVar|.
-    :type g: array or dictionary or BufferDict
-    :param n: Maximum number of random iterations. Setting ``n=None``
-        (the default) implies there is no maximum number.
-    :param svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s
-        correlation matrix with ``max(eig, svdcut * max_eig)`` where
-        ``max_eig`` is the largest eigenvalue; if negative,
-        discard eigenmodes with eigenvalues smaller
-        than ``|svdcut| * max_eig``. Default is ``1e-12``.
-    :type svdcut: ``None`` or number
-    :returns: An iterator that returns bootstrap copies of ``g``.
+    Args:
+        g: An array (or dictionary) of objects of type |GVar|.
+        n: Maximum number of random iterations. Setting ``n=None``
+            (the default) implies there is no maximum number.
+        svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s
+            correlation matrix with ``max(eig, svdcut * max_eig)`` 
+            wherec``max_eig`` is the largest eigenvalue; if negative,
+            discard eigenmodes with eigenvalues smaller
+            than ``|svdcut| * max_eig``. Default is ``1e-12``.
+
+    Returns:
+        An iterator that returns bootstrap copies of ``g``.
     """
     g, i_wgts = _gvar.svd(g, svdcut=svdcut, wgts=1)
     g_flat = g.flat
@@ -2086,22 +2257,18 @@ class SVD(object):
         [[  1.00000000e+00   2.77555756e-17]
          [  1.66533454e-16   1.00000000e+00]]
 
-    Input parameters are:
-
-    :param mat: Positive, symmetric matrix.
-    :type mat: 2-d sequence (``numpy.array`` or ``list`` or ...)
-    :param svdcut: If positive, replace eigenvalues of ``mat`` with
-        ``svdcut*(max eigenvalue)``; if negative, discard eigenmodes with
-        eigenvalues smaller than ``svdcut`` times the maximum eigenvalue.
-    :type svdcut: ``None`` or number ``(|svdcut|<=1)``.
-    :param svdnum: If positive, keep only the modes with the largest
-        ``svdnum`` eigenvalues; ignore if set to ``None``.
-    :type svdnum: ``None`` or int
-    :param compute_delta: Compute ``delta`` (see below) if ``True``; set
-        ``delta=None`` otherwise.
-    :type compute_delta: boolean
-    :param rescale: Rescale the input matrix to make its diagonal elements
-        equal to +-1.0 before diagonalizing.
+    Args:
+        mat: Positive, symmetric matrix.
+        svdcut: If positive, replace eigenvalues of ``mat`` with
+            ``svdcut*(max eigenvalue)``; if negative, discard 
+            eigenmodes with eigenvalues smaller than ``svdcut`` 
+            times the maximum eigenvalue.
+        svdnum: If positive, keep only the modes with the largest
+            ``svdnum`` eigenvalues; ignore if set to ``None``.
+        compute_delta (bool): Compute ``delta`` (see below) 
+            if ``True``; set ``delta=None`` otherwise.
+        rescale: Rescale the input matrix to make its diagonal 
+            elements equal to +-1.0 before diagonalizing.
 
     The results are accessed using:
 
@@ -2164,22 +2331,15 @@ class SVD(object):
         else:
             DmatD = numpy.asarray(mat)
             self.D = None
-        try:
-            vec,val,dummy = numpy.linalg.svd(DmatD)
-            vec = numpy.transpose(vec) # now 1st index labels eigenval
-            # guarantee that sorted, with smallest val[i] first
-            vec = numpy.array(vec[-1::-1])
-            val = numpy.array(val[-1::-1])
-        except numpy.linalg.LinAlgError:
-            # warnings.warn('numpy.linalg.svd failed; trying numpy.linalg.eigh')
-            val, vec = numpy.linalg.eigh(DmatD)
-            vec = numpy.transpose(vec) # now 1st index labels eigenval
-            val = numpy.fabs(val)
-            # guarantee that sorted, with smallest val[i] first
-            indices = numpy.arange(val.size) # in case val[i]==val[j]
-            val, indices, vec = zip(*sorted(zip(val, indices, vec)))
-            val = numpy.array(val)
-            vec = numpy.array(vec)
+        val = None
+        for key in SVD._analyzers:
+            try:
+                val, vec = SVD._analyzers[key](DmatD)
+            except numpy.linalg.LinAlgError:
+                continue
+            break
+        if val is None:
+            raise numpy.linalg.LinAlgError('eigen analysis failed')
         self.kappa = val[0]/val[-1] if val[-1]!=0 else None  # min/max eval
         self.eigen_range = self.kappa
         self.delta = None
@@ -2228,6 +2388,27 @@ class SVD(object):
             self.vec = vec[i:]
             return  # val[i:],vec[i:],kappa,None
 
+    @staticmethod 
+    def _numpy_eigh(DmatD):
+        val, vec = numpy.linalg.eigh(DmatD)
+        vec = numpy.transpose(vec) # now 1st index labels eigenval
+        val = numpy.fabs(val)
+        # guarantee that sorted, with smallest val[i] first
+        indices = numpy.arange(val.size) # in case val[i]==val[j]
+        val, indices, vec = zip(*sorted(zip(val, indices, vec)))
+        val = numpy.array(val)
+        vec = numpy.array(vec)
+        return val, vec 
+
+    @staticmethod
+    def _numpy_svd(DmatD):
+        # warnings.warn('numpy.linalg.eigh failed; trying numpy.linalg.svd')
+        vec,val,dummy = numpy.linalg.svd(DmatD)
+        vec = vec.T # numpy.transpose(vec) # now 1st index labels eigenval
+        # guarantee that sorted, with smallest val[i] first
+        vec = numpy.array(vec[-1::-1])
+        val = numpy.array(val[-1::-1])
+        return val, vec 
 
     def decomp(self,n=1):
         """ Vector decomposition of input matrix raised to power ``n``.
@@ -2258,6 +2439,10 @@ class SVD(object):
                 w[j] *= Dfac*valj**(n/2.)
         return w
 
+# use ordered dict for python2
+SVD._analyzers = collections.OrderedDict()
+SVD._analyzers['numpy_svd']  = SVD._numpy_svd
+SVD._analyzers['numpy_eigh']  = SVD._numpy_eigh
 
 def valder(v):
     """ Convert array ``v`` of numbers into an array of |GVar|\s.
@@ -2394,5 +2579,3 @@ def gammaP(double a, double x, double rtol=1e-5, itmax=10000):
         return gammaP_ser(a, x, rtol=rtol, itmax=itmax)
     else:
         return 1. - gammaQ_cf(a, x, rtol=rtol, itmax=itmax)
-
-
