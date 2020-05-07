@@ -1,4 +1,5 @@
-# cython: boundscheck=False, intializedcheck=False, wraparound=False, language_level=3str, embedsignature=True
+# cython: boundscheck=False, intializedcheck=False, wraparound=False, language_level=3str 
+# c#ython: embedsignature=True
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-20 G. Peter Lepage.
 #

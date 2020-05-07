@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.4 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.5 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -177,10 +177,10 @@ into disjoint diagonal blocks, if there are any. For example,</p>
 </div>
 <p>can be decomposed into two blocks. This decomposition saves memory,
 and can make later manipulations of the resulting <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
-significantly faster. This is at the expense of extra processing to
+faster. This is at the expense of extra processing to
 create the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Setting keyword <code class="docutils literal notranslate"><span class="pre">fast=True</span></code> prevents
 <code class="docutils literal notranslate"><span class="pre">gvar.gvar</span></code> from doing this, which would make sense, for example,
-if it is known ahead of time that <code class="docutils literal notranslate"><span class="pre">xcov</span></code> has no sub-blocks. The
+if it was known ahead of time that <code class="docutils literal notranslate"><span class="pre">xcov</span></code> has no sub-blocks. The
 default is <code class="docutils literal notranslate"><span class="pre">fast=False</span></code>. Either choice gives correct answers;
 the difference is about efficiency.</p>
 </dd></dl>
@@ -348,7 +348,7 @@ Default is <code class="docutils literal notranslate"><span class="pre">False</s
 <dt id="gvar.filter">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">f</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code> through function <code class="docutils literal notranslate"><span class="pre">f</span></code>.</p>
-<p>Sample usuage:</p>
+<p>Sample usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 <span class="n">g_mod</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
 </pre></div>
@@ -1384,12 +1384,12 @@ which case the resulting iterator returns bootstrap copies of the
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>g</strong> (<em>array</em><em> or </em><em>dictionary</em><em> or </em><a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><em>BufferDict</em></a>) – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p></li>
+<li><p><strong>g</strong> – An array (or dictionary) of objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p></li>
 <li><p><strong>n</strong> – Maximum number of random iterations. Setting <code class="docutils literal notranslate"><span class="pre">n=None</span></code>
 (the default) implies there is no maximum number.</p></li>
-<li><p><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number) – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s
-correlation matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code> where
-<code class="docutils literal notranslate"><span class="pre">max_eig</span></code> is the largest eigenvalue; if negative,
+<li><p><strong>svdcut</strong> – If positive, replace eigenvalues <code class="docutils literal notranslate"><span class="pre">eig</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code>’s
+correlation matrix with <code class="docutils literal notranslate"><span class="pre">max(eig,</span> <span class="pre">svdcut</span> <span class="pre">*</span> <span class="pre">max_eig)</span></code>
+wherec``max_eig`` is the largest eigenvalue; if negative,
 discard eigenmodes with eigenvalues smaller
 than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span> <span class="pre">*</span> <span class="pre">max_eig</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</p></li>
 </ul>
@@ -1450,16 +1450,17 @@ is computed.</p></li>
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or lists of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and/or arrays/dictionaries of
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. <code class="docutils literal notranslate"><span class="pre">fmt_errorbudget</span></code> tabulates the parts of the standard
 deviations of each <code class="docutils literal notranslate"><span class="pre">outputs[ko]</span></code> due to each <code class="docutils literal notranslate"><span class="pre">inputs[ki]</span></code>.</p></li>
-<li><p><strong>ndecimal</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Number of decimal places displayed in table.</p></li>
-<li><p><strong>percent</strong> (<em>boolean</em>) – Tabulate % errors if <code class="docutils literal notranslate"><span class="pre">percent</span> <span class="pre">is</span> <span class="pre">True</span></code>; otherwise
-tabulate the errors themselves.</p></li>
-<li><p><strong>colwidth</strong> (<em>positive integer</em><em> or </em><em>None</em>) – Width of each column. This is set automatically, to
-accommodate label widths, if <code class="docutils literal notranslate"><span class="pre">colwidth=None</span></code> (default).</p></li>
-<li><p><strong>verify</strong> (<em>boolean</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, a warning is issued if: 1) different inputs are
-correlated (and therefore double count errors); or
-2) the sum (in quadrature) of partial errors is not equal to the
-total error to within 0.1% of the error (and the error budget is incomplete or
-overcomplete). No checking is done if <code class="docutils literal notranslate"><span class="pre">verify==False</span></code> (default).</p></li>
+<li><p><strong>ndecimal</strong> (<em>int</em>) – Number of decimal places displayed in table.</p></li>
+<li><p><strong>percent</strong> (<em>bool</em>) – Tabulate % errors if <code class="docutils literal notranslate"><span class="pre">percent</span> <span class="pre">is</span> <span class="pre">True</span></code>;
+otherwise tabulate the errors themselves.</p></li>
+<li><p><strong>colwidth</strong> (<em>int</em>) – Width of each column. This is set automatically,
+to accommodate label widths, if <code class="docutils literal notranslate"><span class="pre">colwidth=None</span></code> (default).</p></li>
+<li><p><strong>verify</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, a warning is issued if: 1) different
+inputs are correlated (and therefore double count errors); or
+2) the sum (in quadrature) of partial errors is not equal to
+the total error to within 0.1% of the error (and the error
+budget is incomplete or overcomplete). No checking is done
+if <code class="docutils literal notranslate"><span class="pre">verify==False</span></code> (default).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1479,7 +1480,7 @@ Output variables are labeled by the keys in <code class="docutils literal notran
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>outputs</strong> – A dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects.</p></li>
-<li><p><strong>ndecimal</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Format values <code class="docutils literal notranslate"><span class="pre">v</span></code> using <code class="docutils literal notranslate"><span class="pre">v.fmt(ndecimal)</span></code>.</p></li>
+<li><p><strong>ndecimal</strong> (<em>int</em>) – Format values <code class="docutils literal notranslate"><span class="pre">v</span></code> using <code class="docutils literal notranslate"><span class="pre">v.fmt(ndecimal)</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2194,20 +2195,20 @@ modified using <em>svd</em> cuts. Typical usage is:</p>
 <span class="go"> [  1.66533454e-16   1.00000000e+00]]</span>
 </pre></div>
 </div>
-<p>Input parameters are:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mat</strong> (2-d sequence (<code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> or <code class="docutils literal notranslate"><span class="pre">list</span></code> or …)) – Positive, symmetric matrix.</p></li>
-<li><p><strong>svdcut</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or number <code class="docutils literal notranslate"><span class="pre">(|svdcut|&lt;=1)</span></code>.) – If positive, replace eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat</span></code> with
-<code class="docutils literal notranslate"><span class="pre">svdcut*(max</span> <span class="pre">eigenvalue)</span></code>; if negative, discard eigenmodes with
-eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> times the maximum eigenvalue.</p></li>
-<li><p><strong>svdnum</strong> (<code class="docutils literal notranslate"><span class="pre">None</span></code> or int) – If positive, keep only the modes with the largest
+<li><p><strong>mat</strong> – Positive, symmetric matrix.</p></li>
+<li><p><strong>svdcut</strong> – If positive, replace eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat</span></code> with
+<code class="docutils literal notranslate"><span class="pre">svdcut*(max</span> <span class="pre">eigenvalue)</span></code>; if negative, discard
+eigenmodes with eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>
+times the maximum eigenvalue.</p></li>
+<li><p><strong>svdnum</strong> – If positive, keep only the modes with the largest
 <code class="docutils literal notranslate"><span class="pre">svdnum</span></code> eigenvalues; ignore if set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>compute_delta</strong> (<em>boolean</em>) – Compute <code class="docutils literal notranslate"><span class="pre">delta</span></code> (see below) if <code class="docutils literal notranslate"><span class="pre">True</span></code>; set
-<code class="docutils literal notranslate"><span class="pre">delta=None</span></code> otherwise.</p></li>
-<li><p><strong>rescale</strong> – Rescale the input matrix to make its diagonal elements
-equal to +-1.0 before diagonalizing.</p></li>
+<li><p><strong>compute_delta</strong> (<em>bool</em>) – Compute <code class="docutils literal notranslate"><span class="pre">delta</span></code> (see below)
+if <code class="docutils literal notranslate"><span class="pre">True</span></code>; set <code class="docutils literal notranslate"><span class="pre">delta=None</span></code> otherwise.</p></li>
+<li><p><strong>rescale</strong> – Rescale the input matrix to make its diagonal
+elements equal to +-1.0 before diagonalizing.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2644,7 +2645,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
