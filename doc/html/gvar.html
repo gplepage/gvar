@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.5 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.5.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.5.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -1557,8 +1557,7 @@ for example, one could use code like:</p>
 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
     <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wgts</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">wgts</span> <span class="ow">in</span> <span class="n">i_wgts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>                <span class="c1"># nxn sub-matrices (n&gt;1)</span>
-    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wgts</span><span class="p">:</span>
-        <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+    <span class="n">inv_cov</span><span class="p">[</span><span class="n">i</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">wgts</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">wgts</span>
 </pre></div>
 </div>
 <p>This sets <code class="docutils literal notranslate"><span class="pre">inv_cov</span></code> equal to the inverse of the covariance matrix of
@@ -2645,7 +2644,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.5.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -19,6 +19,7 @@ VERSION = `python -c 'import gvar; print (gvar.__version__)'`
 DOCFILES :=  $(shell ls doc/source/conf.py doc/source/*.{rst,png})
 SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})
 CYTHONFILES := src/gvar/_bufferdict.c src/gvar/_gvarcore.c src/gvar/_svec_smat.c src/gvar/_utilities.c src/gvar/dataset.c
+CYTHONOPTS = -X embedsignature=True
 
 install-user : $(CYTHONFILES)
 	$(PIP) install . --user
@@ -27,19 +28,19 @@ install install-sys : $(CYTHONFILES)
 	$(PIP) install .
 
 src/gvar/_gvarcore.c : src/gvar/_gvarcore.pyx src/gvar/_gvarcore.pxd
-	cd src/gvar; cython _gvarcore.pyx
+	cd src/gvar; cython $(CYTHONOPTS) _gvarcore.pyx
 
 src/gvar/_svec_smat.c : src/gvar/_svec_smat.pyx src/gvar/_svec_smat.pxd
-	cd src/gvar; cython _svec_smat.pyx
+	cd src/gvar; cython $(CYTHONOPTS) _svec_smat.pyx
 
 src/gvar/_bufferdict.c : src/gvar/_bufferdict.pyx
-	cd src/gvar; cython _bufferdict.pyx
+	cd src/gvar; cython $(CYTHONOPTS) _bufferdict.pyx
 
 src/gvar/_utilities.c : src/gvar/_utilities.pyx
-	cd src/gvar; cython _utilities.pyx
+	cd src/gvar; cython $(CYTHONOPTS) _utilities.pyx
 
 src/gvar/dataset.c : src/gvar/dataset.pyx
-	cd src/gvar; cython dataset.pyx
+	cd src/gvar; cython $(CYTHONOPTS) dataset.pyx
 
 # $(PYTHON) setup.py install --record files-gvar.$(PYTHONVERSION)
 
@@ -47,6 +48,10 @@ uninstall :			# mostly works (may leave some empty directories)
 	$(PIP) uninstall gvar
 
 update :
+	make uninstall install 
+
+rebuild:
+	rm -rf $(CYTHONFILES)
 	make uninstall install 
 
 try:
@@ -66,8 +71,13 @@ install-gdev-sys :
 doc-html:
 	make doc/html/index.html
 
-doc/html/index.html : $(SRCFILES) $(DOCFILES)
+doc-htmlf:
 	rm -rf doc/html; sphinx-build -b html doc/source doc/html
+
+doc/html/index.html : $(SRCFILES) $(DOCFILES)
+	make CYTHONOPTS='' rebuild
+	rm -rf doc/html; sphinx-build -b html doc/source doc/html
+	make CYTHONOPTS='$(CYTHONOPTS)' rebuild 
 
 # doc-pdf:
 # 	make doc/gvar.pdf
@@ -108,7 +118,7 @@ upload-twine: $(CYTHONFILES)
 
 upload-git: $(CYTHONFILES)
 	echo  "version $(VERSION)"
-	make doc-html # doc-pdf
+	make doc-html
 	git diff --exit-code
 	git diff --cached --exit-code
 	git push origin master

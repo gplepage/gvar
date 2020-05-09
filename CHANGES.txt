@@ -1,3 +1,9 @@
+Version 11.5.1 2020-05-09
+==========================
+More tuning of evalcov, for better performance on dense matrices of 
+size 15x15 or larger. Also improved doc-strings for Cython-generated 
+functions.
+
 Version 11.5 2020-05-06
 ========================
 Significant performance upgrades to evalcov and evalcov_blocks, 
@@ -8,8 +14,6 @@ especially for large systems.
 - New optimization in gvar.evalcov for large, dense covariance matrices. 
   The improvement can be as large as a factor of 3-4 speedup for matrices
   larger than (roughly) 200x200. Suggested by Giacomo Petrillo. 
-
-- Improved document strings for Cython functions.
 
 
 Version 11.4 2020-04-29

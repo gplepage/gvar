@@ -11,7 +11,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more  details.
+# GNU General Public License for more details.
 
 import numpy
 
@@ -246,6 +246,7 @@ cdef class svec:
             ans.v[i].v = a * self.v[i].v
         return ans
     
+    @cython.initializedcheck(False)
     cpdef numpy.ndarray[numpy.float_t, ndim=1] masked_vec(svec self, smask mask, out=None):
         """ Returns compact vector containing the unmasked components of the svec. 
         
@@ -461,6 +462,7 @@ cdef class smat:
             ans[i][:len(row)] = row
         return ans
 
+    @cython.initializedcheck(False)
     cpdef numpy.ndarray[numpy.float_t, ndim=2] masked_mat(smat self, smask mask, out=None):
         """ Returns compact matrix containing the unmasked components of the smat. 
         

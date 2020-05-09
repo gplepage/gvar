@@ -2139,7 +2139,8 @@ static PyObject *__pyx_codeobj__123;
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_1__init__, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict___init__[] = "BufferDict.__init__(self, *args, **kargs)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_1__init__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict___init__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_args = 0;
@@ -3763,7 +3764,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict___init__(CYTHON_UNUSE
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_3__copy__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_3__copy__ = {"__copy__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_3__copy__, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_2__copy__[] = "BufferDict.__copy__(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_3__copy__ = {"__copy__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_3__copy__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_2__copy__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_3__copy__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -3843,7 +3845,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_2__copy__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_5__deepcopy__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_5__deepcopy__ = {"__deepcopy__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_5__deepcopy__, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_4__deepcopy__[] = "BufferDict.__deepcopy__(self, memo)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_5__deepcopy__ = {"__deepcopy__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_5__deepcopy__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_4__deepcopy__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_5__deepcopy__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_memo = 0;
@@ -4035,7 +4038,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_4__deepcopy__(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_7__getstate__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_6__getstate__[] = " Capture state for pickling when elements are GVars. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_6__getstate__[] = "BufferDict.__getstate__(self)\n Capture state for pickling when elements are GVars. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_7__getstate__ = {"__getstate__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_7__getstate__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_6__getstate__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_7__getstate__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
@@ -4144,7 +4147,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_6__getstate__(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_9__setstate__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_8__setstate__[] = " Restore state when unpickling when elements are GVars. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_8__setstate__[] = "BufferDict.__setstate__(self, state)\n Restore state when unpickling when elements are GVars. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_9__setstate__ = {"__setstate__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_9__setstate__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_8__setstate__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_9__setstate__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -5005,7 +5008,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_8__setstate__(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_11__reduce_ex__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_11__reduce_ex__ = {"__reduce_ex__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_11__reduce_ex__, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_10__reduce_ex__[] = "BufferDict.__reduce_ex__(self, dummy)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_11__reduce_ex__ = {"__reduce_ex__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_11__reduce_ex__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_10__reduce_ex__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_11__reduce_ex__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   CYTHON_UNUSED PyObject *__pyx_v_dummy = 0;
@@ -5148,7 +5152,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_10__reduce_ex__(CYTHO
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_13__iadd__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_12__iadd__[] = " self += |BufferDict| (or dictionary) ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_12__iadd__[] = "BufferDict.__iadd__(self, g)\n self += |BufferDict| (or dictionary) ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_13__iadd__ = {"__iadd__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_13__iadd__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_12__iadd__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_13__iadd__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -5337,7 +5341,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_12__iadd__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_15__isub__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_14__isub__[] = " self -= |BufferDict| (or dictionary) ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_14__isub__[] = "BufferDict.__isub__(self, g)\n self -= |BufferDict| (or dictionary) ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_15__isub__ = {"__isub__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_15__isub__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_14__isub__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_15__isub__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -5526,7 +5530,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_14__isub__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_17__imul__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_16__imul__[] = " ``self *= x`` for scalar ``x`` ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_16__imul__[] = "BufferDict.__imul__(self, x)\n ``self *= x`` for scalar ``x`` ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_17__imul__ = {"__imul__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_17__imul__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_16__imul__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_17__imul__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -5661,7 +5665,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_16__imul__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_19__itruediv__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_18__itruediv__[] = " ``self /= x`` for scalar ``x`` ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_18__itruediv__[] = "BufferDict.__itruediv__(self, x)\n ``self /= x`` for scalar ``x`` ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_19__itruediv__ = {"__itruediv__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_19__itruediv__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_18__itruediv__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_19__itruediv__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -5796,7 +5800,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_18__itruediv__(CYTHON
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_21__pos__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_20__pos__[] = " ``+self`` ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_20__pos__[] = "BufferDict.__pos__(self)\n ``+self`` ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_21__pos__ = {"__pos__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_21__pos__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_20__pos__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_21__pos__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
@@ -5888,7 +5892,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_20__pos__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_23__neg__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_22__neg__[] = " ``-self`` ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_22__neg__[] = "BufferDict.__neg__(self)\n ``-self`` ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_23__neg__ = {"__neg__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_23__neg__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_22__neg__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_23__neg__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
@@ -5980,7 +5984,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_22__neg__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_25__add__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_24__add__[] = " :class:`BufferDict` (or a dictionary).\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_24__add__[] = "BufferDict.__add__(self, g)\n :class:`BufferDict` (or a dictionary).\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_25__add__ = {"__add__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_25__add__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_24__add__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_25__add__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -6170,7 +6174,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_24__add__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_27__radd__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_26__radd__[] = " Add ``self`` to another :class:`BufferDict` (or a dictionary).\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_26__radd__[] = "BufferDict.__radd__(self, g)\n Add ``self`` to another :class:`BufferDict` (or a dictionary).\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_27__radd__ = {"__radd__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_27__radd__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_26__radd__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_27__radd__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -6360,7 +6364,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_26__radd__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_29__sub__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_28__sub__[] = " Subtract a :class:`BufferDict` (or a dictionary) from ``self``.\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_28__sub__[] = "BufferDict.__sub__(self, g)\n Subtract a :class:`BufferDict` (or a dictionary) from ``self``.\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_29__sub__ = {"__sub__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_29__sub__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_28__sub__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_29__sub__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -6550,7 +6554,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_28__sub__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_31__rsub__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_30__rsub__[] = " Subtract ``self`` from a :class:`BufferDict` (or a dictionary).\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_30__rsub__[] = "BufferDict.__rsub__(self, g)\n Subtract ``self`` from a :class:`BufferDict` (or a dictionary).\n\n        The two dictionaries need to have compatible layouts: i.e., the\n        same keys and array shapes.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_31__rsub__ = {"__rsub__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_31__rsub__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_30__rsub__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_31__rsub__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -6740,7 +6744,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_30__rsub__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_33__mul__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_32__mul__[] = " Multiply ``self``` by scalar ``x``. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_32__mul__[] = "BufferDict.__mul__(self, x)\n Multiply ``self``` by scalar ``x``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_33__mul__ = {"__mul__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_33__mul__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_32__mul__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_33__mul__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -6880,7 +6884,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_32__mul__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_35__rmul__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_34__rmul__[] = " Multiply ``self`` by scalar ``x``. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_34__rmul__[] = "BufferDict.__rmul__(self, x)\n Multiply ``self`` by scalar ``x``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_35__rmul__ = {"__rmul__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_35__rmul__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_34__rmul__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_35__rmul__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -7020,7 +7024,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_34__rmul__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_37__truediv__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_36__truediv__[] = " Divide ``self`` by scalar ``x``. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_36__truediv__[] = "BufferDict.__truediv__(self, x)\n Divide ``self`` by scalar ``x``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_37__truediv__ = {"__truediv__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_37__truediv__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_36__truediv__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_37__truediv__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -7160,7 +7164,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_36__truediv__(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_39__div__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_38__div__[] = " Divide ``self`` by scalar ``x``. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_38__div__[] = "BufferDict.__div__(self, x)\n Divide ``self`` by scalar ``x``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_39__div__ = {"__div__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_39__div__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_38__div__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_39__div__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -7300,7 +7304,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_38__div__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_41add(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_40add[] = " Augment buffer with data ``v``, indexed by key ``k``.\n\n        ``v`` is either a scalar or a :mod:`numpy` array (or a list or\n        other data type that can be changed into a numpy.array).\n        If ``v`` is a :mod:`numpy` array, it can have any shape.\n\n        Same as ``self[k] = v`` except when ``k`` is already used in\n        ``self``, in which case a ``ValueError`` is raised.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_40add[] = "BufferDict.add(self, k, v)\n Augment buffer with data ``v``, indexed by key ``k``.\n\n        ``v`` is either a scalar or a :mod:`numpy` array (or a list or\n        other data type that can be changed into a numpy.array).\n        If ``v`` is a :mod:`numpy` array, it can have any shape.\n\n        Same as ``self[k] = v`` except when ``k`` is already used in\n        ``self``, in which case a ``ValueError`` is raised.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_41add = {"add", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_41add, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_40add};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_41add(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -7463,7 +7467,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_40add(CYTHON_UNUSED P
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_43__getitem__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_42__getitem__[] = " Return piece of buffer corresponding to key ``k``. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_42__getitem__[] = "BufferDict.__getitem__(self, k)\n Return piece of buffer corresponding to key ``k``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_43__getitem__ = {"__getitem__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_43__getitem__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_42__getitem__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_43__getitem__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -8167,7 +8171,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_42__getitem__(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_45extension_keys(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_45extension_keys = {"extension_keys", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_45extension_keys, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_44extension_keys[] = "BufferDict.extension_keys(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_45extension_keys = {"extension_keys", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_45extension_keys, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_44extension_keys};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_45extension_keys(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -8629,7 +8634,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_44extension_keys(CYTH
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_47values(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_47values = {"values", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_47values, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_46values[] = "BufferDict.values(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_47values = {"values", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_47values, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_46values};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_47values(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -8753,7 +8759,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_46values(CYTHON_UNUSE
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_49items(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_49items = {"items", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_49items, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_48items[] = "BufferDict.items(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_49items = {"items", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_49items, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_48items};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_49items(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -8887,7 +8894,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_48items(CYTHON_UNUSED
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_51__setitem__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_50__setitem__[] = " Set piece of buffer corresponding to ``k`` to value ``v``.\n\n        The shape of ``v`` must equal that of ``self[k]`` if key ``k``\n        is already in ``self``.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_50__setitem__[] = "BufferDict.__setitem__(self, k, v)\n Set piece of buffer corresponding to ``k`` to value ``v``.\n\n        The shape of ``v`` must equal that of ``self[k]`` if key ``k``\n        is already in ``self``.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_51__setitem__ = {"__setitem__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_51__setitem__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_50__setitem__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_51__setitem__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -9991,7 +9998,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_50__setitem__(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_53__delitem__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_53__delitem__ = {"__delitem__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_53__delitem__, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_52__delitem__[] = "BufferDict.__delitem__(self, k)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_53__delitem__ = {"__delitem__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_53__delitem__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_52__delitem__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_53__delitem__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_k = 0;
@@ -10606,7 +10614,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_52__delitem__(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_55__len__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_55__len__ = {"__len__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_55__len__, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_54__len__[] = "BufferDict.__len__(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_55__len__ = {"__len__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_55__len__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_54__len__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_55__len__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10672,7 +10681,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_54__len__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_57__iter__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_57__iter__ = {"__iter__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_57__iter__, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_56__iter__[] = "BufferDict.__iter__(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_57__iter__ = {"__iter__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_57__iter__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_56__iter__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_57__iter__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -10738,7 +10748,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_56__iter__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_59__contains__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_59__contains__ = {"__contains__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_59__contains__, METH_VARARGS|METH_KEYWORDS, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_58__contains__[] = "BufferDict.__contains__(self, k)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_59__contains__ = {"__contains__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_59__contains__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_58__contains__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_59__contains__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_k = 0;
@@ -10852,7 +10863,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_58__contains__(CYTHON
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_61__str__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_61__str__ = {"__str__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_61__str__, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_60__str__[] = "BufferDict.__str__(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_61__str__ = {"__str__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_61__str__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_60__str__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_61__str__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -11070,7 +11082,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_60__str__(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_63__repr__(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_63__repr__ = {"__repr__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_63__repr__, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_62__repr__[] = "BufferDict.__repr__(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_63__repr__ = {"__repr__", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_63__repr__, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_62__repr__};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_63__repr__(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -11200,7 +11213,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_62__repr__(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_65_getflat(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_65_getflat = {"_getflat", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_65_getflat, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_64_getflat[] = "BufferDict._getflat(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_65_getflat = {"_getflat", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_65_getflat, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_64_getflat};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_65_getflat(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -11278,7 +11292,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_64_getflat(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_67_setflat(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_66_setflat[] = " Assigns buffer with buf if same size. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_66_setflat[] = "BufferDict._setflat(self, buf)\n Assigns buffer with buf if same size. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_67_setflat = {"_setflat", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_67_setflat, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_66_setflat};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_67_setflat(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -11400,7 +11414,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_66_setflat(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_69flatten(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_68flatten[] = " Copy of buffer array. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_68flatten[] = "BufferDict.flatten(self)\n Copy of buffer array. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_69flatten = {"flatten", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_69flatten, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_68flatten};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_69flatten(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
@@ -11489,7 +11503,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_68flatten(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_71_getdtype(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_71_getdtype = {"_getdtype", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_71_getdtype, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_70_getdtype[] = "BufferDict._getdtype(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_71_getdtype = {"_getdtype", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_71_getdtype, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_70_getdtype};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_71_getdtype(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -11555,7 +11570,8 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_70_getdtype(CYTHON_UN
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_73_getbuf(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_73_getbuf = {"_getbuf", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_73_getbuf, METH_O, 0};
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_72_getbuf[] = "BufferDict._getbuf(self)";
+static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_73_getbuf = {"_getbuf", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_73_getbuf, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_72_getbuf};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_73_getbuf(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -11628,7 +11644,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_72_getbuf(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_75_setbuf(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_74_setbuf[] = " Replace buffer with ``buf``.\n\n        ``buf`` must be a 1-dimensional :mod:`numpy` array of the same size\n        as ``self._buf``.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_74_setbuf[] = "BufferDict._setbuf(self, buf)\n Replace buffer with ``buf``.\n\n        ``buf`` must be a 1-dimensional :mod:`numpy` array of the same size\n        as ``self._buf``.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_75_setbuf = {"_setbuf", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_75_setbuf, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_74_setbuf};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_75_setbuf(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -11896,7 +11912,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_74_setbuf(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_77_getsize(PyObject *__pyx_self, PyObject *__pyx_v_self); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_76_getsize[] = " Length of buffer. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_76_getsize[] = "BufferDict._getsize(self)\n Length of buffer. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_77_getsize = {"_getsize", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_77_getsize, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_76_getsize};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_77_getsize(PyObject *__pyx_self, PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
@@ -11963,7 +11979,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_76_getsize(CYTHON_UNU
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_79slice(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_78slice[] = " Return slice/index in ``self.flat`` corresponding to key ``k``.";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_78slice[] = "BufferDict.slice(self, k)\n Return slice/index in ``self.flat`` corresponding to key ``k``.";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_79slice = {"slice", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_79slice, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_78slice};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_79slice(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -12110,7 +12126,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_78slice(CYTHON_UNUSED
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_81slice_shape(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_80slice_shape[] = " Return tuple ``(slice/index, shape)`` corresponding to key ``k``.";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_80slice_shape[] = "BufferDict.slice_shape(self, k)\n Return tuple ``(slice/index, shape)`` corresponding to key ``k``.";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_81slice_shape = {"slice_shape", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_81slice_shape, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_80slice_shape};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_81slice_shape(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -12254,7 +12270,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_80slice_shape(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_83has_dictkey(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_82has_dictkey[] = " Returns ``True`` if ``self[k]`` is defined; ``False`` otherwise.\n\n        Note that ``k`` may be a key or it may be related to a\n        related key associated with a non-Gaussian distribution\n        (e.g., ``'log(k)'``; see :func:`gvar.BufferDict.add_distribution`\n        for more information).\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_82has_dictkey[] = "BufferDict.has_dictkey(self, k)\n Returns ``True`` if ``self[k]`` is defined; ``False`` otherwise.\n\n        Note that ``k`` may be a key or it may be related to a\n        related key associated with a non-Gaussian distribution\n        (e.g., ``'log(k)'``; see :func:`gvar.BufferDict.add_distribution`\n        for more information).\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_83has_dictkey = {"has_dictkey", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_83has_dictkey, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_82has_dictkey};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_83has_dictkey(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -12419,7 +12435,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_82has_dictkey(CYTHON_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_85add_distribution(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_84add_distribution[] = " Add new parameter distribution.\n\n        |BufferDict|\\s can be used to represent a  restricted\n        class of  non-Gaussian distributions. For example, the code ::\n\n            import gvar as gv\n            gv.BufferDict.add_distribution('log', gv.exp)\n\n        enables the use of log-normal distributions for parameters. So\n        defining, for example, ::\n\n            b = gv.BufferDict()\n            b['log(a)'] = gv.gvar('1(1)')\n\n        means that ``b['a']`` has a value (equal to ``exp(b['log(a)']``)\n        even though ``'a'`` is not a key in the dictionary.\n\n        The distributions available by default correspond to::\n\n            gv.BufferDict.add_distribution('log', gv.exp)\n            gv.BufferDict.add_distribution('sqrt', gv.square)\n            gv.BufferDict.add_distribution('erfinv', gv.erf)\n\n        Args:\n            name (str): Distributions' function name.\n            invfcn (callable): Inverse of the transformation function.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_84add_distribution[] = "BufferDict.add_distribution(name, invfcn)\n Add new parameter distribution.\n\n        |BufferDict|\\s can be used to represent a  restricted\n        class of  non-Gaussian distributions. For example, the code ::\n\n            import gvar as gv\n            gv.BufferDict.add_distribution('log', gv.exp)\n\n        enables the use of log-normal distributions for parameters. So\n        defining, for example, ::\n\n            b = gv.BufferDict()\n            b['log(a)'] = gv.gvar('1(1)')\n\n        means that ``b['a']`` has a value (equal to ``exp(b['log(a)']``)\n        even though ``'a'`` is not a key in the dictionary.\n\n        The distributions available by default correspond to::\n\n            gv.BufferDict.add_distribution('log', gv.exp)\n            gv.BufferDict.add_distribution('sqrt', gv.square)\n            gv.BufferDict.add_distribution('erfinv', gv.erf)\n\n        Args:\n            name (str): Distributions' function name.\n            invfcn (callable): Inverse of the transformation function.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_85add_distribution = {"add_distribution", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_85add_distribution, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_84add_distribution};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_85add_distribution(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_name = 0;
@@ -12534,7 +12550,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_84add_distribution(CY
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_87del_distribution(PyObject *__pyx_self, PyObject *__pyx_v_name); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_86del_distribution[] = " Delete |BufferDict| distribution ``name``. ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_86del_distribution[] = "BufferDict.del_distribution(name)\n Delete |BufferDict| distribution ``name``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_87del_distribution = {"del_distribution", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_10BufferDict_87del_distribution, METH_O, __pyx_doc_4gvar_11_bufferdict_10BufferDict_86del_distribution};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_87del_distribution(PyObject *__pyx_self, PyObject *__pyx_v_name) {
   PyObject *__pyx_r = 0;
@@ -12650,7 +12666,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_86del_distribution(CY
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_89uniform(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_88uniform[] = " Create uniform distribution on interval ``[umin, umax]``.\n\n        The code ::\n\n            import gvar as gv\n            b = gv.BufferDict()\n            b['f(w)'] = gv.BufferDict.uniform('f', 2., 3.)\n        \n        adds a distribution function ``f(w)`` designed so that ``b['w']``\n        corresponds to a uniform distribution on the interval ``[2., 3.]``\n        (see :meth:`gvar.BufferDict.add_distribution` for more about \n        distributions).\n\n        Args:\n            fname (str): Name of function used in the :class:`BufferDict` key. \n                Note that names can reused provided they correspond to the \n                same interval as in previous calls.\n            umin (float): Minimum value of the uniform distribution.\n            umax (float): Maximum value of the uniform distribution.\n            shape (tuple): Shape of array of uniform variables. Default is ``()``.\n        \n        Returns:\n            :class:`gvar.GVar` object corresponding to a uniform distribution.\n        ";
+static char __pyx_doc_4gvar_11_bufferdict_10BufferDict_88uniform[] = "BufferDict.uniform(fname, umin, umax, shape=())\n Create uniform distribution on interval ``[umin, umax]``.\n\n        The code ::\n\n            import gvar as gv\n            b = gv.BufferDict()\n            b['f(w)'] = gv.BufferDict.uniform('f', 2., 3.)\n        \n        adds a distribution function ``f(w)`` designed so that ``b['w']``\n        corresponds to a uniform distribution on the interval ``[2., 3.]``\n        (see :meth:`gvar.BufferDict.add_distribution` for more about \n        distributions).\n\n        Args:\n            fname (str): Name of function used in the :class:`BufferDict` key. \n                Note that names can reused provided they correspond to the \n                same interval as in previous calls.\n            umin (float): Minimum value of the uniform distribution.\n            umax (float): Maximum value of the uniform distribution.\n            shape (tuple): Shape of array of uniform variables. Default is ``()``.\n        \n        Returns:\n            :class:`gvar.GVar` object corresponding to a uniform distribution.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_10BufferDict_89uniform = {"uniform", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_10BufferDict_89uniform, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_10BufferDict_88uniform};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_10BufferDict_89uniform(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_fname = 0;
@@ -13300,7 +13316,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_88uniform(CYTHON_UNUS
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_1asbufferdict(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_asbufferdict[] = " Convert ``g`` to a BufferDict, keeping only ``g[k]`` for ``k in keylist``.\n\n    ``asbufferdict(g)`` will return ``g`` if it is already a\n    :class:`gvar.BufferDict`; otherwise it will convert the dictionary-like\n    object into a :class:`gvar.BufferDict`. The data can also be\n    specified: e.g., ``asbufferdict(g, dtype=int)``.\n    ";
+static char __pyx_doc_4gvar_11_bufferdict_asbufferdict[] = "asbufferdict(g, dtype=None)\n Convert ``g`` to a BufferDict, keeping only ``g[k]`` for ``k in keylist``.\n\n    ``asbufferdict(g)`` will return ``g`` if it is already a\n    :class:`gvar.BufferDict`; otherwise it will convert the dictionary-like\n    object into a :class:`gvar.BufferDict`. The data can also be\n    specified: e.g., ``asbufferdict(g, dtype=int)``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_1asbufferdict = {"asbufferdict", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_1asbufferdict, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_asbufferdict};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_1asbufferdict(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -13503,7 +13519,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_asbufferdict(CYTHON_UNUSED PyObjec
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_3get_dictkeys(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_2get_dictkeys[] = " Same as ``[dictkey(bdict, k) for k in klist]``. ";
+static char __pyx_doc_4gvar_11_bufferdict_2get_dictkeys[] = "get_dictkeys(bdict, klist)\n Same as ``[dictkey(bdict, k) for k in klist]``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_3get_dictkeys = {"get_dictkeys", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_3get_dictkeys, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_2get_dictkeys};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_3get_dictkeys(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bdict = 0;
@@ -13892,7 +13908,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_2get_dictkeys(CYTHON_UNUSED PyObje
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_5dictkey(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_4dictkey[] = " Find key in ``bdict`` corresponding to ``k``.\n\n    Could be ``k`` itself or one of the standard extensions,\n    such as ``log(k)`` or ``sqrt(k)``.\n    ";
+static char __pyx_doc_4gvar_11_bufferdict_4dictkey[] = "dictkey(bdict, k)\n Find key in ``bdict`` corresponding to ``k``.\n\n    Could be ``k`` itself or one of the standard extensions,\n    such as ``log(k)`` or ``sqrt(k)``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_5dictkey = {"dictkey", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_5dictkey, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_4dictkey};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_5dictkey(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bdict = 0;
@@ -14174,7 +14190,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_4dictkey(CYTHON_UNUSED PyObject *_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_7has_dictkey(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_6has_dictkey[] = " Returns ``True`` if ``b[k]`` is defined; ``False`` otherwise.\n\n    Note that ``k`` may be a key or it may be related to a\n    related key associated with a non-Gaussian distribution\n    (e.g., ``'log(k)'``; see :func:`gvar.MultiFitter.add_distribution`).\n    ";
+static char __pyx_doc_4gvar_11_bufferdict_6has_dictkey[] = "has_dictkey(b, k)\n Returns ``True`` if ``b[k]`` is defined; ``False`` otherwise.\n\n    Note that ``k`` may be a key or it may be related to a\n    related key associated with a non-Gaussian distribution\n    (e.g., ``'log(k)'``; see :func:`gvar.MultiFitter.add_distribution`).\n    ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_7has_dictkey = {"has_dictkey", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_11_bufferdict_7has_dictkey, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_11_bufferdict_6has_dictkey};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_7has_dictkey(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_b = 0;
@@ -14449,7 +14465,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_6has_dictkey(CYTHON_UNUSED PyObjec
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_9_stripkey(PyObject *__pyx_self, PyObject *__pyx_v_k); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_8_stripkey[] = " Return (stripped key, fcn) where fcn is exp or square or ...\n\n    Strip off any ``\"log\"`` or ``\"sqrt\"`` or ... prefix.\n    ";
+static char __pyx_doc_4gvar_11_bufferdict_8_stripkey[] = "_stripkey(k)\n Return (stripped key, fcn) where fcn is exp or square or ...\n\n    Strip off any ``\"log\"`` or ``\"sqrt\"`` or ... prefix.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_9_stripkey = {"_stripkey", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_9_stripkey, METH_O, __pyx_doc_4gvar_11_bufferdict_8_stripkey};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_9_stripkey(PyObject *__pyx_self, PyObject *__pyx_v_k) {
   PyObject *__pyx_r = 0;
@@ -14811,7 +14827,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_8_stripkey(CYTHON_UNUSED PyObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_11nonredundant_keys(PyObject *__pyx_self, PyObject *__pyx_v_keys); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_10nonredundant_keys[] = " Return list containing only nonredundant keys in list ``keys``. ";
+static char __pyx_doc_4gvar_11_bufferdict_10nonredundant_keys[] = "nonredundant_keys(keys)\n Return list containing only nonredundant keys in list ``keys``. ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_11nonredundant_keys = {"nonredundant_keys", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_11nonredundant_keys, METH_O, __pyx_doc_4gvar_11_bufferdict_10nonredundant_keys};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_11nonredundant_keys(PyObject *__pyx_self, PyObject *__pyx_v_keys) {
   PyObject *__pyx_r = 0;
@@ -15213,7 +15229,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10nonredundant_keys(CYTHON_UNUSED 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_13add_parameter_parentheses(PyObject *__pyx_self, PyObject *__pyx_v_p); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_12add_parameter_parentheses[] = " Return dictionary with proper keys for parameter distributions (legacy code).\n\n    This utility function helps fix legacy code that uses\n    parameter keys like ``logp`` or ``sqrtp`` instead of\n    ``log(p)`` or ``sqrt(p)``, as now required. This method creates a\n    copy of  dictionary ``p'' but with keys like ``logp`` or ``sqrtp``\n    replaced by ``log(p)`` or ``sqrt(p)``. So setting ::\n\n        p = add_parameter_parentheses(p)\n\n    fixes the keys in ``p`` for log-normal and sqrt-normal parameters.\n    ";
+static char __pyx_doc_4gvar_11_bufferdict_12add_parameter_parentheses[] = "add_parameter_parentheses(p)\n Return dictionary with proper keys for parameter distributions (legacy code).\n\n    This utility function helps fix legacy code that uses\n    parameter keys like ``logp`` or ``sqrtp`` instead of\n    ``log(p)`` or ``sqrt(p)``, as now required. This method creates a\n    copy of  dictionary ``p'' but with keys like ``logp`` or ``sqrtp``\n    replaced by ``log(p)`` or ``sqrt(p)``. So setting ::\n\n        p = add_parameter_parentheses(p)\n\n    fixes the keys in ``p`` for log-normal and sqrt-normal parameters.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_13add_parameter_parentheses = {"add_parameter_parentheses", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_13add_parameter_parentheses, METH_O, __pyx_doc_4gvar_11_bufferdict_12add_parameter_parentheses};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_13add_parameter_parentheses(PyObject *__pyx_self, PyObject *__pyx_v_p) {
   PyObject *__pyx_r = 0;
@@ -15563,7 +15579,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_12add_parameter_parentheses(CYTHON
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_11_bufferdict_15trim_redundant_keys(PyObject *__pyx_self, PyObject *__pyx_v_p); /*proto*/
-static char __pyx_doc_4gvar_11_bufferdict_14trim_redundant_keys[] = " Remove redundant keys from dictionary ``p``.\n\n    A key ``'c'`` is redundant if either of ``'log(c)'``\n    or ``'sqrt(c)'`` is also a key. (There are additional redundancies\n    if :meth:`gvar.add_parameter_distribution` has been used to add\n    extra distributions.) This function creates a copy of ``p`` but with\n    the redundant keys removed.\n    ";
+static char __pyx_doc_4gvar_11_bufferdict_14trim_redundant_keys[] = "trim_redundant_keys(p)\n Remove redundant keys from dictionary ``p``.\n\n    A key ``'c'`` is redundant if either of ``'log(c)'``\n    or ``'sqrt(c)'`` is also a key. (There are additional redundancies\n    if :meth:`gvar.add_parameter_distribution` has been used to add\n    extra distributions.) This function creates a copy of ``p`` but with\n    the redundant keys removed.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_11_bufferdict_15trim_redundant_keys = {"trim_redundant_keys", (PyCFunction)__pyx_pw_4gvar_11_bufferdict_15trim_redundant_keys, METH_O, __pyx_doc_4gvar_11_bufferdict_14trim_redundant_keys};
 static PyObject *__pyx_pw_4gvar_11_bufferdict_15trim_redundant_keys(PyObject *__pyx_self, PyObject *__pyx_v_p) {
   PyObject *__pyx_r = 0;

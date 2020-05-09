@@ -566,6 +566,7 @@ def correlate(g, corr):
 
 @cython.boundscheck(False) # turn off bounds-checking
 @cython.wraparound(False)  # turn off negative index wrapping
+@cython.initializedcheck(False) # memory views initialized?
 def evalcov_blocks_dense(g, compress=False):
     """ Evaluate covariance matrix for elements of ``g``.
 
@@ -607,6 +608,7 @@ def evalcov_blocks_dense(g, compress=False):
 
 @cython.boundscheck(False) # turn off bounds-checking 
 @cython.wraparound(False)  # turn off negative index wrapping
+@cython.initializedcheck(False) # memory views initialized?
 def evalcov_blocks(g, compress=False):
     """ Evaluate covariance matrix for elements of ``g``.
 
@@ -774,6 +776,24 @@ def evalcov_blocks(g, compress=False):
 
 @cython.boundscheck(False) # turn off bounds-checking
 @cython.wraparound(False)  # turn off negative index wrapping
+@cython.initializedcheck(False) # memory views initialized?
+def mock_evalcov(numpy.ndarray[numpy.float_t, ndim=2] cov, numpy.ndarray[numpy.float_t, ndim=2] d):
+    """ Mock evalcov for testing.
+
+    Assumes maximum density. It also has no overhead for collecting either ``cov`` or 
+    ``d``, unlike the real ``evalcov``. The focus is on the N**3 part of the algorithm.
+
+    Args:
+        cov: Covariance matrix of primary |GVar|\s.
+        d: ``d[a]`` is the derivative vector for |GVar| ``g[a]`` (i.e., 
+            ``dg[a]/dx[i]`` for |GVar| ``ga[a]`` where ``x[i]`` are primary |GVar|\s.)
+    """
+    return d.T @ cov @ d
+
+
+@cython.boundscheck(False) # turn off bounds-checking
+@cython.wraparound(False)  # turn off negative index wrapping
+@cython.initializedcheck(False) # memory views initialized?
 def evalcov(g):
     """ Compute covariance matrix for elements of 
     array/dictionary ``g``.
@@ -788,17 +808,18 @@ def evalcov(g):
     cdef INTP_TYPE cov_zeros, previousid, bsize, ni, id
     cdef double vec_zeros
     cdef numpy.ndarray[numpy.float_t, ndim=2] ans
-    cdef numpy.ndarray[object, ndim=1] covd
-    # cdef numpy.ndarray[numpy.float_t, ndim=2] np_covd
+    cdef numpy.ndarray[numpy.float_t, ndim=2] np_gd
     cdef numpy.int8_t[::1] imask
     cdef numpy.ndarray[numpy.int8_t, ndim=1] np_imask
     cdef numpy.ndarray[numpy.float_t, ndim=2] mcov 
     cdef numpy.ndarray[numpy.float_t, ndim=1] mvec
     cdef numpy.int8_t is_dense, ib
-    cdef GVar ga,gb
-    cdef svec da,db
+    cdef GVar ga
+    cdef svec da
     cdef smat cov
     cdef smask mask
+    cdef svec[::1] gdlist
+    cdef svec[::1] covd
     if hasattr(g, "keys"):
         # convert g to list and call evalcov; repack as double dict
         if not isinstance(g,BufferDict):
@@ -823,33 +844,29 @@ def evalcov(g):
     ng = len(g)
     if ng <= 0:
         return numpy.array([[]])
-    ans = numpy.zeros((ng,ng),numpy.float_)
     if hasattr(g[0], 'cov'):
         cov = g[0].cov
     else:
         raise ValueError("g does not contain GVar's")
-    nc = cov.nrow 
     ####
+    nc = cov.nrow 
+    gdlist = numpy.array([ga.d for ga in g])
     # create a mask indentifying relevant primary GVars 
     imask = numpy.zeros(nc, numpy.int8)
     vec_zeros = 0
-    for a in range(ng):
-        ga = g[a]
-        da = ga.d
-        vec_zeros += da.size
-        for i in range(da.size):
-            imask[da.v[i].i] = True
+    for i in range(ng):
+        da = gdlist[i]
+        for j in range(da.size):
+            imask[da.v[j].i] = True
     if ng > _gvar._CONFIG['evalcov']:
-        # only efficient for large matrices
+        # only efficient for larger matrices
         # estimate how many zeros in the primary GVars' cov
-        # and in the derivative vectors for each g[a]
         cov_zeros = 0
         previousid = -1
         bsize = 0
         ni = 0
-        i = 0
-        for ib in imask:
-            if ib:
+        for i in range(nc):
+            if imask[i]:
                 ni += 1
                 id = cov.block[i]
                 if id != previousid:
@@ -858,46 +875,38 @@ def evalcov(g):
                     bsize = 0
                     previousid = id 
                 bsize += 1
-            i += 1
         # finish last block
         cov_zeros += bsize * bsize
         # convert to zeros
         cov_zeros = ni * ni - cov_zeros 
-        vec_zeros = ni - vec_zeros / ng
+        # vec_zeros = ni - vec_zeros / ng
         # less than 50% zero is defined as dense (ad hoc)
-        is_dense = cov_zeros / ni / ni < 0.5 and vec_zeros / ni < 0.5    
+        is_dense = cov_zeros / ni / ni < 0.5 # and vec_zeros / ni < 0.5  # sparse vecs ok 
         if is_dense:
             # collect cov matrix for primary GVars and
             # derivative vectors for g[a]; form dot products
             mask = smask(imask)
-            # np_covd = numpy.zeros((ng, mask.len), dtype=float)
-            covd = numpy.zeros(ng, dtype=object)
-            mvec = numpy.empty(mask.len, float)
+            np_gd = numpy.zeros((ng, mask.len), dtype=float)
             mcov = cov.masked_mat(mask)
             for a in range(ng):
-                ga = g[a]
-                mvec[:] = 0
-                ga.d.masked_vec(mask, out=mvec)
-                # mcov.dot(mvec, out=np_covd[a]) 
-                # ans[a, a] = mvec.dot(np_covd[a])
-                covd[a] = mcov.dot(mvec) 
-                ans[a, a] = mvec.dot(covd[a])
-                for b in range(a):
-                    # ans[a, b] = mvec.dot(np_covd[b]) 
-                    ans[a, b] = mvec.dot(covd[b]) 
-                    ans[b, a] = ans[a,b]
+                da = gdlist[a]
+                da.masked_vec(mask, out=np_gd[a])
+            ans = np_gd @ mcov @ np_gd.T
     else:
         is_dense = False
     if not is_dense:
+        ans = numpy.empty((ng,ng),numpy.float_)
         covd = numpy.zeros(ng, object)
         np_imask = numpy.asarray(imask)
         for a in range(ng):
             ga = g[a]
-            covd[a] = cov.masked_dot(ga.d, np_imask)
-            ans[a,a] = ga.d.dot(covd[a])
+        for a in range(ng):
+            da = gdlist[a]
+            covd[a] = cov.masked_dot(da, np_imask)
+            ans[a,a] = da.dot(covd[a])
             for b in range(a):
-                ans[a,b] = ga.d.dot(covd[b])
-                ans[b,a] = ans[a,b]
+                ans[a, b] = da.dot(covd[b])
+                ans[b, a] = ans[a, b]
     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
 def evalcov_old(g):

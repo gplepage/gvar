@@ -142,7 +142,7 @@ from gvar import root
 #     pass
 
 _GVAR_LIST = []
-_CONFIG = dict(evalcov=200, evalcov_blocks=6000)
+_CONFIG = dict(evalcov=15, evalcov_blocks=6000)
 
 def ranseed(seed=None):
     """ Seed random number generators with tuple ``seed``.
@@ -658,8 +658,7 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
         if len(i) > 0:
             inv_cov[i, i] = numpy.array(wgts) ** 2
         for i, wgts in i_wgts[1:]:                # nxn sub-matrices (n>1)
-            for w in wgts:
-                inv_cov[i[:, None], i] += numpy.outer(w, w)
+            inv_cov[i[:, None], i] = wgts.T @ wgts
 
     This sets ``inv_cov`` equal to the inverse of the covariance matrix of
     the ``gmod``\s. Similarly, we can  compute the expectation value,
@@ -797,7 +796,8 @@ def svd(g, svdcut=1e-12, wgts=False, add_svdnoise=False):
             g.flat[idx] = newg
         if wgts is not False:
             i_wgts.append(
-                (idx, [w for w in s.decomp(wgts)[::-1]])
+                (idx, numpy.array(s.decomp(wgts)[::-1]))
+                # (idx, numpy.array([w for w in s.decomp(wgts)[::-1]]))
                 )
         if s.eigen_range < g.eigen_range:
             g.eigen_range = s.eigen_range
