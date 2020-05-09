@@ -891,7 +891,7 @@ def evalcov(g):
             for a in range(ng):
                 da = gdlist[a]
                 da.masked_vec(mask, out=np_gd[a])
-            ans = np_gd @ mcov @ np_gd.T
+            ans = numpy.matmul(np_gd, numpy.matmul(mcov,np_gd.T))
     else:
         is_dense = False
     if not is_dense:
