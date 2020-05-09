@@ -1,5 +1,4 @@
-# cython: language_level=3str 
-# c#ython: embedsignature=True
+# cython: language_level=3str, binding=True
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-20 G. Peter Lepage.
 #

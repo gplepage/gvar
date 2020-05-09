@@ -247,7 +247,7 @@ The following function can be used to rebuild collections of |GVar|\s,
 ignoring all correlations with other variables. It can also be used to
 introduce correlations between uncorrelated variables.
 
-.. autofunction:: gvar.rebuild(g, gvar=gvar, corr=0.0)
+.. autofunction:: gvar.rebuild(g, corr=0.0, gvar=gvar.gvar)
 
 
 The following functions creates new functions that generate |GVar|\s (to

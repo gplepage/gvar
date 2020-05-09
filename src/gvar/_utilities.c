@@ -1292,6 +1292,16 @@ struct __pyx_opt_args_4gvar_10_svec_smat_4smat_masked_mat {
   int __pyx_n;
   PyObject *out;
 };
+struct __pyx_defaults;
+typedef struct __pyx_defaults __pyx_defaults;
+struct __pyx_defaults1;
+typedef struct __pyx_defaults1 __pyx_defaults1;
+struct __pyx_defaults {
+  PyObject *__pyx_arg_gvar;
+};
+struct __pyx_defaults1 {
+  struct __pyx_obj_4gvar_10_svec_smat_smat *__pyx_arg_cov;
+};
 
 /* "_svec_smat.pxd":23
  *     INTP_TYPE i
@@ -2556,6 +2566,9 @@ static int __pyx_slices_overlap(__Pyx_memviewslice *slice1,
 static CYTHON_INLINE PyObject *__pyx_capsule_create(void *p, const char *sig);
 
 /* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
+
+/* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_Py_intptr_t(Py_intptr_t value);
 
 /* CIntToPy.proto */
@@ -2564,9 +2577,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 /* MemviewObjectToObject.proto */
 static PyObject *__pyx_memview_get_object(const char *itemp);
 static int __pyx_memview_set_object(const char *itemp, PyObject *obj);
-
-/* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
 /* MemviewDtypeToObject.proto */
 static CYTHON_INLINE PyObject *__pyx_memview_get_nn_npy_intp(const char *itemp);
@@ -2948,6 +2958,7 @@ static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_Ellipsis;
 static PyObject *__pyx_builtin_id;
 static PyObject *__pyx_builtin_IndexError;
+static const char __pyx_k_[] = "";
 static const char __pyx_k_D[] = "D";
 static const char __pyx_k_O[] = "O";
 static const char __pyx_k_T[] = "T";
@@ -2968,7 +2979,7 @@ static const char __pyx_k_v[] = "v";
 static const char __pyx_k_w[] = "w";
 static const char __pyx_k_x[] = "x";
 static const char __pyx_k_z[] = "z";
-static const char __pyx_k__2[] = "";
+static const char __pyx_k__9[] = ".";
 static const char __pyx_k_ck[] = "ck";
 static const char __pyx_k_cr[] = "cr";
 static const char __pyx_k_da[] = "da";
@@ -3004,10 +3015,9 @@ static const char __pyx_k_wb[] = "wb";
 static const char __pyx_k_wd[] = "wd";
 static const char __pyx_k_wv[] = "wv";
 static const char __pyx_k_SVD[] = "SVD";
-static const char __pyx_k__10[] = ".";
-static const char __pyx_k__18[] = "%";
-static const char __pyx_k__19[] = "\n";
-static const char __pyx_k__21[] = "-";
+static const char __pyx_k__16[] = "%";
+static const char __pyx_k__17[] = "\n";
+static const char __pyx_k__19[] = "-";
 static const char __pyx_k_add[] = "add";
 static const char __pyx_k_all[] = "all";
 static const char __pyx_k_ans[] = "ans";
@@ -3462,6 +3472,7 @@ static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath
 static const char __pyx_k_unable_to_allocate_shape_and_str[] = "unable to allocate shape and strides.";
 static const char __pyx_k_wgt_and_glist_have_different_len[] = "wgt and glist have different lengths.";
 static const char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
+static PyObject *__pyx_kp_s_;
 static PyObject *__pyx_kp_s_19s_20s;
 static PyObject *__pyx_n_s_ASCII;
 static PyObject *__pyx_kp_u_Add_correlations_to_uncorrelate;
@@ -3526,11 +3537,10 @@ static PyObject *__pyx_kp_s_Unable_to_convert_item_to_object;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_kp_s_Values;
 static PyObject *__pyx_n_s_View_MemoryView;
-static PyObject *__pyx_kp_s__10;
-static PyObject *__pyx_kp_s__18;
+static PyObject *__pyx_kp_s__16;
+static PyObject *__pyx_kp_s__17;
 static PyObject *__pyx_kp_s__19;
-static PyObject *__pyx_kp_s__2;
-static PyObject *__pyx_kp_s__21;
+static PyObject *__pyx_kp_s__9;
 static PyObject *__pyx_n_s_a;
 static PyObject *__pyx_n_s_add;
 static PyObject *__pyx_n_s_add_dependencies;
@@ -3978,6 +3988,7 @@ static PyObject *__pyx_kp_s_yaml_module_not_installed;
 static PyObject *__pyx_n_s_z;
 static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_n_s_zip;
+static PyObject *__pyx_pf_4gvar_10_utilities_102__defaults__(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_rebuild(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_corr, PyObject *__pyx_v_gvar); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_2mean(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_4fmt(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_ndecimal, PyObject *__pyx_v_sep, PyObject *__pyx_v_d); /* proto */
@@ -4019,6 +4030,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_70olddump(CYTHON_UNUSED PyObject *_
 static PyObject *__pyx_pf_4gvar_10_utilities_72_oldload1(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_inputfile, PyObject *__pyx_v_method, PyObject *__pyx_v_use_json); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_74_oldload0(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_inputfile, PyObject *__pyx_v_use_json); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_76disassemble(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g); /* proto */
+static PyObject *__pyx_pf_4gvar_10_utilities_104__defaults__(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_78reassemble(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_data, struct __pyx_obj_4gvar_10_svec_smat_smat *__pyx_v_cov); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_80wsum_der(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_wgt, PyObject *__pyx_v_glist); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_82wsum_gvar(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_wgt, PyObject *__pyx_v_glist); /* proto */
@@ -4112,25 +4124,25 @@ static PyObject *__pyx_int_20;
 static PyObject *__pyx_int_10000;
 static PyObject *__pyx_int_184977713;
 static PyObject *__pyx_int_neg_1;
-static PyObject *__pyx_k_;
-static struct __pyx_obj_4gvar_10_svec_smat_smat *__pyx_k__17;
-static PyObject *__pyx_slice__6;
+static PyObject *__pyx_slice__5;
+static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_tuple__4;
-static PyObject *__pyx_tuple__5;
+static PyObject *__pyx_tuple__6;
 static PyObject *__pyx_tuple__7;
 static PyObject *__pyx_tuple__8;
-static PyObject *__pyx_tuple__9;
+static PyObject *__pyx_slice__22;
 static PyObject *__pyx_slice__24;
-static PyObject *__pyx_slice__26;
+static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__14;
 static PyObject *__pyx_tuple__15;
-static PyObject *__pyx_tuple__16;
+static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__20;
-static PyObject *__pyx_tuple__22;
+static PyObject *__pyx_tuple__25;
+static PyObject *__pyx_tuple__26;
 static PyObject *__pyx_tuple__27;
 static PyObject *__pyx_tuple__28;
 static PyObject *__pyx_tuple__29;
@@ -4157,142 +4169,199 @@ static PyObject *__pyx_tuple__49;
 static PyObject *__pyx_tuple__50;
 static PyObject *__pyx_tuple__51;
 static PyObject *__pyx_tuple__52;
-static PyObject *__pyx_tuple__53;
 static PyObject *__pyx_tuple__54;
 static PyObject *__pyx_tuple__56;
 static PyObject *__pyx_tuple__58;
-static PyObject *__pyx_tuple__60;
-static PyObject *__pyx_tuple__62;
-static PyObject *__pyx_tuple__64;
-static PyObject *__pyx_tuple__66;
-static PyObject *__pyx_tuple__68;
+static PyObject *__pyx_tuple__59;
+static PyObject *__pyx_tuple__61;
+static PyObject *__pyx_tuple__63;
+static PyObject *__pyx_tuple__65;
+static PyObject *__pyx_tuple__67;
+static PyObject *__pyx_tuple__69;
 static PyObject *__pyx_tuple__70;
 static PyObject *__pyx_tuple__72;
-static PyObject *__pyx_tuple__74;
-static PyObject *__pyx_tuple__76;
-static PyObject *__pyx_tuple__78;
-static PyObject *__pyx_tuple__80;
-static PyObject *__pyx_tuple__82;
-static PyObject *__pyx_tuple__84;
-static PyObject *__pyx_tuple__86;
+static PyObject *__pyx_tuple__73;
+static PyObject *__pyx_tuple__75;
+static PyObject *__pyx_tuple__77;
+static PyObject *__pyx_tuple__79;
+static PyObject *__pyx_tuple__81;
+static PyObject *__pyx_tuple__83;
+static PyObject *__pyx_tuple__85;
+static PyObject *__pyx_tuple__87;
 static PyObject *__pyx_tuple__88;
 static PyObject *__pyx_tuple__90;
-static PyObject *__pyx_tuple__92;
-static PyObject *__pyx_tuple__94;
-static PyObject *__pyx_tuple__96;
-static PyObject *__pyx_tuple__98;
-static PyObject *__pyx_tuple__100;
-static PyObject *__pyx_tuple__102;
-static PyObject *__pyx_tuple__104;
-static PyObject *__pyx_tuple__106;
-static PyObject *__pyx_tuple__108;
-static PyObject *__pyx_tuple__110;
+static PyObject *__pyx_tuple__91;
+static PyObject *__pyx_tuple__93;
+static PyObject *__pyx_tuple__95;
+static PyObject *__pyx_tuple__97;
+static PyObject *__pyx_tuple__99;
+static PyObject *__pyx_tuple__101;
+static PyObject *__pyx_tuple__103;
+static PyObject *__pyx_tuple__105;
+static PyObject *__pyx_tuple__107;
+static PyObject *__pyx_tuple__109;
+static PyObject *__pyx_tuple__111;
 static PyObject *__pyx_tuple__112;
 static PyObject *__pyx_tuple__114;
 static PyObject *__pyx_tuple__116;
-static PyObject *__pyx_tuple__118;
+static PyObject *__pyx_tuple__117;
+static PyObject *__pyx_tuple__119;
 static PyObject *__pyx_tuple__120;
 static PyObject *__pyx_tuple__122;
-static PyObject *__pyx_tuple__124;
+static PyObject *__pyx_tuple__123;
+static PyObject *__pyx_tuple__125;
 static PyObject *__pyx_tuple__126;
 static PyObject *__pyx_tuple__128;
 static PyObject *__pyx_tuple__130;
-static PyObject *__pyx_tuple__132;
+static PyObject *__pyx_tuple__131;
+static PyObject *__pyx_tuple__133;
 static PyObject *__pyx_tuple__134;
 static PyObject *__pyx_tuple__136;
 static PyObject *__pyx_tuple__138;
 static PyObject *__pyx_tuple__140;
-static PyObject *__pyx_tuple__142;
+static PyObject *__pyx_tuple__141;
+static PyObject *__pyx_tuple__143;
 static PyObject *__pyx_tuple__144;
 static PyObject *__pyx_tuple__146;
 static PyObject *__pyx_tuple__147;
 static PyObject *__pyx_tuple__149;
-static PyObject *__pyx_tuple__150;
 static PyObject *__pyx_tuple__151;
 static PyObject *__pyx_tuple__153;
-static PyObject *__pyx_tuple__154;
-static PyObject *__pyx_tuple__156;
+static PyObject *__pyx_tuple__155;
+static PyObject *__pyx_tuple__157;
 static PyObject *__pyx_tuple__158;
 static PyObject *__pyx_tuple__160;
 static PyObject *__pyx_tuple__161;
+static PyObject *__pyx_tuple__162;
 static PyObject *__pyx_tuple__163;
 static PyObject *__pyx_tuple__165;
+static PyObject *__pyx_tuple__166;
 static PyObject *__pyx_tuple__167;
 static PyObject *__pyx_tuple__168;
 static PyObject *__pyx_tuple__169;
-static PyObject *__pyx_tuple__170;
 static PyObject *__pyx_tuple__171;
 static PyObject *__pyx_tuple__172;
+static PyObject *__pyx_tuple__174;
+static PyObject *__pyx_tuple__176;
+static PyObject *__pyx_tuple__178;
+static PyObject *__pyx_tuple__179;
+static PyObject *__pyx_tuple__181;
+static PyObject *__pyx_tuple__183;
+static PyObject *__pyx_tuple__185;
+static PyObject *__pyx_tuple__186;
+static PyObject *__pyx_tuple__187;
+static PyObject *__pyx_tuple__188;
+static PyObject *__pyx_tuple__189;
+static PyObject *__pyx_tuple__190;
+static PyObject *__pyx_codeobj__21;
 static PyObject *__pyx_codeobj__23;
-static PyObject *__pyx_codeobj__25;
+static PyObject *__pyx_codeobj__53;
 static PyObject *__pyx_codeobj__55;
 static PyObject *__pyx_codeobj__57;
-static PyObject *__pyx_codeobj__59;
-static PyObject *__pyx_codeobj__61;
-static PyObject *__pyx_codeobj__63;
-static PyObject *__pyx_codeobj__65;
-static PyObject *__pyx_codeobj__67;
-static PyObject *__pyx_codeobj__69;
+static PyObject *__pyx_codeobj__60;
+static PyObject *__pyx_codeobj__62;
+static PyObject *__pyx_codeobj__64;
+static PyObject *__pyx_codeobj__66;
+static PyObject *__pyx_codeobj__68;
 static PyObject *__pyx_codeobj__71;
-static PyObject *__pyx_codeobj__73;
-static PyObject *__pyx_codeobj__75;
-static PyObject *__pyx_codeobj__77;
-static PyObject *__pyx_codeobj__79;
-static PyObject *__pyx_codeobj__81;
-static PyObject *__pyx_codeobj__83;
-static PyObject *__pyx_codeobj__85;
-static PyObject *__pyx_codeobj__87;
+static PyObject *__pyx_codeobj__74;
+static PyObject *__pyx_codeobj__76;
+static PyObject *__pyx_codeobj__78;
+static PyObject *__pyx_codeobj__80;
+static PyObject *__pyx_codeobj__82;
+static PyObject *__pyx_codeobj__84;
+static PyObject *__pyx_codeobj__86;
 static PyObject *__pyx_codeobj__89;
-static PyObject *__pyx_codeobj__91;
-static PyObject *__pyx_codeobj__93;
-static PyObject *__pyx_codeobj__95;
-static PyObject *__pyx_codeobj__97;
-static PyObject *__pyx_codeobj__99;
-static PyObject *__pyx_codeobj__101;
-static PyObject *__pyx_codeobj__103;
-static PyObject *__pyx_codeobj__105;
-static PyObject *__pyx_codeobj__107;
-static PyObject *__pyx_codeobj__109;
-static PyObject *__pyx_codeobj__111;
+static PyObject *__pyx_codeobj__92;
+static PyObject *__pyx_codeobj__94;
+static PyObject *__pyx_codeobj__96;
+static PyObject *__pyx_codeobj__98;
+static PyObject *__pyx_codeobj__100;
+static PyObject *__pyx_codeobj__102;
+static PyObject *__pyx_codeobj__104;
+static PyObject *__pyx_codeobj__106;
+static PyObject *__pyx_codeobj__108;
+static PyObject *__pyx_codeobj__110;
 static PyObject *__pyx_codeobj__113;
 static PyObject *__pyx_codeobj__115;
-static PyObject *__pyx_codeobj__117;
-static PyObject *__pyx_codeobj__119;
+static PyObject *__pyx_codeobj__118;
 static PyObject *__pyx_codeobj__121;
-static PyObject *__pyx_codeobj__123;
-static PyObject *__pyx_codeobj__125;
+static PyObject *__pyx_codeobj__124;
 static PyObject *__pyx_codeobj__127;
 static PyObject *__pyx_codeobj__129;
-static PyObject *__pyx_codeobj__131;
-static PyObject *__pyx_codeobj__133;
+static PyObject *__pyx_codeobj__132;
 static PyObject *__pyx_codeobj__135;
 static PyObject *__pyx_codeobj__137;
 static PyObject *__pyx_codeobj__139;
-static PyObject *__pyx_codeobj__141;
-static PyObject *__pyx_codeobj__143;
+static PyObject *__pyx_codeobj__142;
 static PyObject *__pyx_codeobj__145;
 static PyObject *__pyx_codeobj__148;
+static PyObject *__pyx_codeobj__150;
 static PyObject *__pyx_codeobj__152;
-static PyObject *__pyx_codeobj__155;
-static PyObject *__pyx_codeobj__157;
+static PyObject *__pyx_codeobj__154;
+static PyObject *__pyx_codeobj__156;
 static PyObject *__pyx_codeobj__159;
-static PyObject *__pyx_codeobj__162;
 static PyObject *__pyx_codeobj__164;
-static PyObject *__pyx_codeobj__166;
+static PyObject *__pyx_codeobj__170;
 static PyObject *__pyx_codeobj__173;
+static PyObject *__pyx_codeobj__175;
+static PyObject *__pyx_codeobj__177;
+static PyObject *__pyx_codeobj__180;
+static PyObject *__pyx_codeobj__182;
+static PyObject *__pyx_codeobj__184;
+static PyObject *__pyx_codeobj__191;
 /* Late includes */
 
 /* "gvar/_utilities.pyx":78
  * 
  * # utility functions
  * def rebuild(g, corr=0.0, gvar=_gvar.gvar):             # <<<<<<<<<<<<<<
- *     """ Rebuild ``g`` stripping correlations with variables not in ``g``.
+ *     """  Rebuild ``g`` stripping correlations with variables not in ``g``.
  * 
  */
 
+static PyObject *__pyx_pf_4gvar_10_utilities_102__defaults__(CYTHON_UNUSED PyObject *__pyx_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  __Pyx_RefNannySetupContext("__defaults__", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_INCREF(((PyObject*)__pyx_float_0_0));
+  __Pyx_GIVEREF(((PyObject*)__pyx_float_0_0));
+  PyTuple_SET_ITEM(__pyx_t_1, 0, ((PyObject*)__pyx_float_0_0));
+  __Pyx_INCREF(__Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_self)->__pyx_arg_gvar);
+  __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_self)->__pyx_arg_gvar);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_self)->__pyx_arg_gvar);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
+  __Pyx_INCREF(Py_None);
+  __Pyx_GIVEREF(Py_None);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, Py_None);
+  __pyx_t_1 = 0;
+  __pyx_r = __pyx_t_2;
+  __pyx_t_2 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("gvar._utilities.__defaults__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_1rebuild(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_rebuild[] = "rebuild(g, corr=0.0, gvar=_gvar.gvar)\n Rebuild ``g`` stripping correlations with variables not in ``g``.\n\n    ``g`` is either an array of |GVar|\\s or a dictionary containing\n    |GVar|\\s and/or arrays of |GVar|\\s. ``rebuild(g)`` creates a new\n    collection |GVar|\\s with the same layout, means and covariance matrix\n    as those in ``g``, but discarding all correlations with variables not\n    in ``g``.\n\n    If ``corr`` is nonzero, ``rebuild`` will introduce correlations\n    wherever there aren't any using ::\n\n        cov[i,j] -> corr * sqrt(cov[i,i]*cov[j,j])\n\n    wherever ``cov[i,j]==0.0`` initially. Positive values for ``corr``\n    introduce positive correlations, negative values anti-correlations.\n\n    Parameter ``gvar`` specifies a function for creating new |GVar|\\s that\n    replaces :func:`gvar.gvar` (the default).\n\n    :param g: |GVar|\\s to be rebuilt.\n    :type g: array or dictionary\n    :param gvar: Replacement for :func:`gvar.gvar` to use in rebuilding.\n        Default is :func:`gvar.gvar`.\n    :type gvar: :class:`gvar.GVarFactory` or ``None``\n    :param corr: Size of correlations to introduce where none exist\n        initially.\n    :type corr: number\n    :returns: Array or dictionary (gvar.BufferDict) of |GVar|\\s  (same\n        layout as ``g``) where all correlations with variables other than\n        those in ``g`` are erased.\n    ";
+static char __pyx_doc_4gvar_10_utilities_rebuild[] = "  Rebuild ``g`` stripping correlations with variables not in ``g``.\n\n    ``g`` is either an array of |GVar|\\s or a dictionary containing\n    |GVar|\\s and/or arrays of |GVar|\\s. ``rebuild(g)`` creates a new\n    collection |GVar|\\s with the same layout, means and covariance matrix\n    as those in ``g``, but discarding all correlations with variables not\n    in ``g``.\n\n    If ``corr`` is nonzero, ``rebuild`` will introduce correlations\n    wherever there aren't any using ::\n\n        cov[i,j] -> corr * sqrt(cov[i,i]*cov[j,j])\n\n    wherever ``cov[i,j]==0.0`` initially. Positive values for ``corr``\n    introduce positive correlations, negative values anti-correlations.\n\n    Parameter ``gvar`` specifies a function for creating new |GVar|\\s that\n    replaces :func:`gvar.gvar` (the default).\n\n    :param g: |GVar|\\s to be rebuilt.\n    :type g: array or dictionary\n    :param gvar: Replacement for :func:`gvar.gvar` to use in rebuilding.\n        Default is :func:`gvar.gvar`.\n    :type gvar: :class:`gvar.GVarFactory` or ``None``\n    :param corr: Size of correlations to introduce where none exist\n        initially.\n    :type corr: number\n    :returns: Array or dictionary (gvar.BufferDict) of |GVar|\\s  (same\n        layout as ``g``) where all correlations with variables other than\n        those in ``g`` are erased.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_1rebuild = {"rebuild", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_1rebuild, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_rebuild};
 static PyObject *__pyx_pw_4gvar_10_utilities_1rebuild(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -4304,8 +4373,9 @@ static PyObject *__pyx_pw_4gvar_10_utilities_1rebuild(PyObject *__pyx_self, PyOb
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_corr,&__pyx_n_s_gvar,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)__pyx_float_0_0);
-    values[2] = __pyx_k_;
+    __pyx_defaults *__pyx_dynamic_args = __Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_self);
+    values[1] = ((PyObject *)((PyObject*)__pyx_float_0_0));
+    values[2] = __pyx_dynamic_args->__pyx_arg_gvar;
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -5082,7 +5152,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_rebuild(CYTHON_UNUSED PyObject *__p
  * 
  * # utility functions
  * def rebuild(g, corr=0.0, gvar=_gvar.gvar):             # <<<<<<<<<<<<<<
- *     """ Rebuild ``g`` stripping correlations with variables not in ``g``.
+ *     """  Rebuild ``g`` stripping correlations with variables not in ``g``.
  * 
  */
 
@@ -5124,7 +5194,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_rebuild(CYTHON_UNUSED PyObject *__p
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_3mean(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_2mean[] = "mean(g)\n Extract means from :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Result has the same layout as ``g``.\n\n    Elements of ``g`` that are not |GVar|\\s are left unchanged.\n    ";
+static char __pyx_doc_4gvar_10_utilities_2mean[] = " Extract means from :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Result has the same layout as ``g``.\n\n    Elements of ``g`` that are not |GVar|\\s are left unchanged.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_3mean = {"mean", (PyCFunction)__pyx_pw_4gvar_10_utilities_3mean, METH_O, __pyx_doc_4gvar_10_utilities_2mean};
 static PyObject *__pyx_pw_4gvar_10_utilities_3mean(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -5767,7 +5837,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_2mean(CYTHON_UNUSED PyObject *__pyx
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_5fmt(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_4fmt[] = "fmt(g, ndecimal=None, sep='', d=None)\n Format :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Each |GVar| ``gi`` in ``g`` is replaced\n    by the string generated by ``gi.fmt(ndecimal,sep)``. Result has same\n    structure as ``g``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_4fmt[] = " Format :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Each |GVar| ``gi`` in ``g`` is replaced\n    by the string generated by ``gi.fmt(ndecimal,sep)``. Result has same\n    structure as ``g``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_5fmt = {"fmt", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_5fmt, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_4fmt};
 static PyObject *__pyx_pw_4gvar_10_utilities_5fmt(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -5780,9 +5850,9 @@ static PyObject *__pyx_pw_4gvar_10_utilities_5fmt(PyObject *__pyx_self, PyObject
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_ndecimal,&__pyx_n_s_sep,&__pyx_n_s_d,0};
     PyObject* values[4] = {0,0,0,0};
-    values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)__pyx_kp_s__2);
-    values[3] = ((PyObject *)Py_None);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject*)__pyx_kp_s_));
+    values[3] = ((PyObject *)((PyObject *)Py_None));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -6285,7 +6355,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_4fmt(CYTHON_UNUSED PyObject *__pyx_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_7sdev(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_6sdev[] = "sdev(g)\n Extract standard deviations from :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Result has the same layout as ``g``.\n\n    The deviation is set to 0.0 for elements of ``g`` that are not |GVar|\\s.\n    ";
+static char __pyx_doc_4gvar_10_utilities_6sdev[] = " Extract standard deviations from :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Result has the same layout as ``g``.\n\n    The deviation is set to 0.0 for elements of ``g`` that are not |GVar|\\s.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_7sdev = {"sdev", (PyCFunction)__pyx_pw_4gvar_10_utilities_7sdev, METH_O, __pyx_doc_4gvar_10_utilities_6sdev};
 static PyObject *__pyx_pw_4gvar_10_utilities_7sdev(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -6929,7 +6999,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_6sdev(CYTHON_UNUSED PyObject *__pyx
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_9deriv(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_8deriv[] = "deriv(g, x)\n Compute partial derivatives of |GVar|\\s in ``g`` w.r.t. primary |GVar|\\s in ``x``.\n\n    Primary |GVar|\\s are those created using :func:`gvar.gvar` (or any function of \n    such a variable); see :func:`gvar.is_primary`.\n\n    Args:\n        g: A |GVar| or array of |GVar|\\s, or a dictionary whose values are \n            |GVar|\\s or arrays of |GVar|\\s.\n        x: A |GVar| or array of primary |GVar|\\s. Arrays are typically one \n            dimensional but can have any shape.\n    \n    Returns:\n        ``g`` but with each |GVar| in it replaced by an array of\n        derivatives with respect to the primary |GVar|\\s in ``x``.\n        The derivatives have the same shape as ``x``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_8deriv[] = " Compute partial derivatives of |GVar|\\s in ``g`` w.r.t. primary |GVar|\\s in ``x``.\n\n    Primary |GVar|\\s are those created using :func:`gvar.gvar` (or any function of \n    such a variable); see :func:`gvar.is_primary`.\n\n    Args:\n        g: A |GVar| or array of |GVar|\\s, or a dictionary whose values are \n            |GVar|\\s or arrays of |GVar|\\s.\n        x: A |GVar| or array of primary |GVar|\\s. Arrays are typically one \n            dimensional but can have any shape.\n    \n    Returns:\n        ``g`` but with each |GVar| in it replaced by an array of\n        derivatives with respect to the primary |GVar|\\s in ``x``.\n        The derivatives have the same shape as ``x``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_9deriv = {"deriv", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_9deriv, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_8deriv};
 static PyObject *__pyx_pw_4gvar_10_utilities_9deriv(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -7495,7 +7565,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_8deriv(CYTHON_UNUSED PyObject *__py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_11var(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_10var[] = "var(g)\n Extract variances from :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Result has the same layout as ``g``.\n\n    The variance is set to 0.0 for elements of ``g`` that are not |GVar|\\s.\n    ";
+static char __pyx_doc_4gvar_10_utilities_10var[] = " Extract variances from :class:`gvar.GVar`\\s in ``g``.\n\n    ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. Result has the same layout as ``g``.\n\n    The variance is set to 0.0 for elements of ``g`` that are not |GVar|\\s.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_11var = {"var", (PyCFunction)__pyx_pw_4gvar_10_utilities_11var, METH_O, __pyx_doc_4gvar_10_utilities_10var};
 static PyObject *__pyx_pw_4gvar_10_utilities_11var(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -8139,7 +8209,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_10var(CYTHON_UNUSED PyObject *__pyx
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_13is_primary(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_12is_primary[] = "is_primary(g)\n Determine whether or not the |GVar|\\s in ``g`` are primary |GVar|\\s.\n    \n    A *primary* |GVar| is one created using :func:`gvar.gvar` (or a \n    function of such a variable). A *derived* |GVar| is one that \n    is constructed from arithmetic expressions and functions that \n    combine multiple primary |GVar|\\s. The standard deviations for \n    all |GVar|\\s originate with the primary |GVar|\\s. \n    In particular, :: \n\n        z = z.mean + sum_p (p - p.mean) * dz/dp\n\n    is true for any |GVar| ``z``, where the sum is over all primary \n    |GVar|\\s ``p``.\n\n    Here ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. The result has the same layout as ``g``. \n    Each |GVar| is replaced by ``True`` or ``False`` depending upon whether\n    it is primary or not.\n    \n    When the same |GVar| appears more than once in ``g``, only the first \n    appearance is marked as a primary |GVar|. This avoids double counting \n    the same primary |GVar| --- each primary |GVar| in the list is unique. \n    ";
+static char __pyx_doc_4gvar_10_utilities_12is_primary[] = " Determine whether or not the |GVar|\\s in ``g`` are primary |GVar|\\s.\n    \n    A *primary* |GVar| is one created using :func:`gvar.gvar` (or a \n    function of such a variable). A *derived* |GVar| is one that \n    is constructed from arithmetic expressions and functions that \n    combine multiple primary |GVar|\\s. The standard deviations for \n    all |GVar|\\s originate with the primary |GVar|\\s. \n    In particular, :: \n\n        z = z.mean + sum_p (p - p.mean) * dz/dp\n\n    is true for any |GVar| ``z``, where the sum is over all primary \n    |GVar|\\s ``p``.\n\n    Here ``g`` can be a |GVar|, an array of |GVar|\\s, or a dictionary containing\n    |GVar|\\s or arrays of |GVar|\\s. The result has the same layout as ``g``. \n    Each |GVar| is replaced by ``True`` or ``False`` depending upon whether\n    it is primary or not.\n    \n    When the same |GVar| appears more than once in ``g``, only the first \n    appearance is marked as a primary |GVar|. This avoids double counting \n    the same primary |GVar| --- each primary |GVar| in the list is unique. \n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_13is_primary = {"is_primary", (PyCFunction)__pyx_pw_4gvar_10_utilities_13is_primary, METH_O, __pyx_doc_4gvar_10_utilities_12is_primary};
 static PyObject *__pyx_pw_4gvar_10_utilities_13is_primary(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -8810,7 +8880,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_12is_primary(CYTHON_UNUSED PyObject
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_15dependencies(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_14dependencies[] = "dependencies(g, all=False)\n Collect primary |GVar|\\s contributing to the covariances of |GVar|\\s in ``g``.\n\n    Args:\n        g: |GVar| or a dictionary, array, etc. containing |GVar|\\s.\n        all (bool): If ``True`` the result includes all primary |GVar|\\s including \n            those that are in ``g``; otherwise it only includes those not in ``g``.\n            Default is ``False``.\n\n    Returns:\n        An array containing the primary |GVar|\\s contributing to covariances of \n        |GVar|\\s in ``g``. \n    ";
+static char __pyx_doc_4gvar_10_utilities_14dependencies[] = " Collect primary |GVar|\\s contributing to the covariances of |GVar|\\s in ``g``.\n\n    Args:\n        g: |GVar| or a dictionary, array, etc. containing |GVar|\\s.\n        all (bool): If ``True`` the result includes all primary |GVar|\\s including \n            those that are in ``g``; otherwise it only includes those not in ``g``.\n            Default is ``False``.\n\n    Returns:\n        An array containing the primary |GVar|\\s contributing to covariances of \n        |GVar|\\s in ``g``. \n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_15dependencies = {"dependencies", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_15dependencies, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_14dependencies};
 static PyObject *__pyx_pw_4gvar_10_utilities_15dependencies(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -8821,7 +8891,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_15dependencies(PyObject *__pyx_self
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_all,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -9138,7 +9208,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_14dependencies(CYTHON_UNUSED PyObje
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_17_dependencies(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_16_dependencies[] = "_dependencies(g, all=False)\n Same as dependencies when ``g`` is all |GVar|\\s. ";
+static char __pyx_doc_4gvar_10_utilities_16_dependencies[] = " Same as dependencies when ``g`` is all |GVar|\\s. ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_17_dependencies = {"_dependencies", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_17_dependencies, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_16_dependencies};
 static PyObject *__pyx_pw_4gvar_10_utilities_17_dependencies(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -9149,7 +9219,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_17_dependencies(PyObject *__pyx_sel
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_all,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -10100,7 +10170,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_16_dependencies(CYTHON_UNUSED PyObj
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_19missing_dependencies(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_18missing_dependencies[] = "missing_dependencies(g)\n ``True`` if ``len(gvar.dependencies(g))!=0``; ``False`` otherwise.\n\n    Args:\n        g: |GVar| or array of |GVar|\\s, or a dictionary whose values are |GVar|\\s or \n            arrays of |GVar|\\s.\n    ";
+static char __pyx_doc_4gvar_10_utilities_18missing_dependencies[] = " ``True`` if ``len(gvar.dependencies(g))!=0``; ``False`` otherwise.\n\n    Args:\n        g: |GVar| or array of |GVar|\\s, or a dictionary whose values are |GVar|\\s or \n            arrays of |GVar|\\s.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_19missing_dependencies = {"missing_dependencies", (PyCFunction)__pyx_pw_4gvar_10_utilities_19missing_dependencies, METH_O, __pyx_doc_4gvar_10_utilities_18missing_dependencies};
 static PyObject *__pyx_pw_4gvar_10_utilities_19missing_dependencies(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -10429,7 +10499,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_18missing_dependencies(CYTHON_UNUSE
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_21uncorrelated(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_20uncorrelated[] = "uncorrelated(g1, g2)\n Return ``True`` if |GVar|\\s in ``g1`` uncorrelated with those in ``g2``.\n\n    ``g1`` and ``g2`` can be |GVar|\\s, arrays of |GVar|\\s, or dictionaries\n    containing |GVar|\\s or arrays of |GVar|\\s. Returns ``True`` if either\n    of ``g1`` or ``g2`` is ``None``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_20uncorrelated[] = " Return ``True`` if |GVar|\\s in ``g1`` uncorrelated with those in ``g2``.\n\n    ``g1`` and ``g2`` can be |GVar|\\s, arrays of |GVar|\\s, or dictionaries\n    containing |GVar|\\s or arrays of |GVar|\\s. Returns ``True`` if either\n    of ``g1`` or ``g2`` is ``None``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_21uncorrelated = {"uncorrelated", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_21uncorrelated, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_20uncorrelated};
 static PyObject *__pyx_pw_4gvar_10_utilities_21uncorrelated(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g1 = 0;
@@ -11116,7 +11186,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_20uncorrelated(CYTHON_UNUSED PyObje
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_23evalcorr(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_22evalcorr[] = "evalcorr(g)\n Compute correlation matrix for elements of\n    array/dictionary ``g``.\n\n    If ``g`` is an array of |GVar|\\s, ``evalcorr`` returns the\n    correlation matrix as an array with shape ``g.shape+g.shape``.\n    If ``g`` is a dictionary whose values are |GVar|\\s or arrays of\n    |GVar|\\s, the result is a doubly-indexed dictionary where\n    ``corr[k1,k2]`` is the correlation for ``g[k1]`` and ``g[k2]``.\n\n    The correlation matrix is related to the covariance matrix by::\n\n        corr[i,j] = cov[i,j] / (cov[i,i] * cov[j,j]) ** 0.5\n    ";
+static char __pyx_doc_4gvar_10_utilities_22evalcorr[] = " Compute correlation matrix for elements of\n    array/dictionary ``g``.\n\n    If ``g`` is an array of |GVar|\\s, ``evalcorr`` returns the\n    correlation matrix as an array with shape ``g.shape+g.shape``.\n    If ``g`` is a dictionary whose values are |GVar|\\s or arrays of\n    |GVar|\\s, the result is a doubly-indexed dictionary where\n    ``corr[k1,k2]`` is the correlation for ``g[k1]`` and ``g[k2]``.\n\n    The correlation matrix is related to the covariance matrix by::\n\n        corr[i,j] = cov[i,j] / (cov[i,i] * cov[j,j]) ** 0.5\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_23evalcorr = {"evalcorr", (PyCFunction)__pyx_pw_4gvar_10_utilities_23evalcorr, METH_O, __pyx_doc_4gvar_10_utilities_22evalcorr};
 static PyObject *__pyx_pw_4gvar_10_utilities_23evalcorr(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -12032,7 +12102,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcorr(CYTHON_UNUSED PyObject *
     } else {
       __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_ans, __pyx_n_s_reshape); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 476, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 476, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 476, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_t_10 = __pyx_t_3;
@@ -12092,7 +12162,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_22evalcorr(CYTHON_UNUSED PyObject *
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_25corr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_24corr[] = "corr(g1, g2)\n Correlation between :class:`gvar.GVar`\\s ``g1`` and ``g2``. ";
+static char __pyx_doc_4gvar_10_utilities_24corr[] = " Correlation between :class:`gvar.GVar`\\s ``g1`` and ``g2``. ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_25corr = {"corr", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_25corr, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_24corr};
 static PyObject *__pyx_pw_4gvar_10_utilities_25corr(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g1 = 0;
@@ -12192,7 +12262,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_24corr(CYTHON_UNUSED PyObject *__py
  *     return evalcorr([g1, g2])[0,1]
  * 
  */
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 481, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 481, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -12241,7 +12311,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_24corr(CYTHON_UNUSED PyObject *__py
   if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_tuple__5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 482, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_tuple__4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_r = __pyx_t_5;
@@ -12280,7 +12350,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_24corr(CYTHON_UNUSED PyObject *__py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_27cov(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_26cov[] = "cov(g1, g2)\n Covariance of :class:`gvar.GVar` ``g1`` with ``g2``. ";
+static char __pyx_doc_4gvar_10_utilities_26cov[] = " Covariance of :class:`gvar.GVar` ``g1`` with ``g2``. ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_27cov = {"cov", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_27cov, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_26cov};
 static PyObject *__pyx_pw_4gvar_10_utilities_27cov(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g1 = 0;
@@ -12380,7 +12450,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_26cov(CYTHON_UNUSED PyObject *__pyx
  *     return evalcov([g1, g2])[0,1]
  * 
  */
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 487, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 487, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -12429,7 +12499,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_26cov(CYTHON_UNUSED PyObject *__pyx
   if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 488, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_tuple__5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 488, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_t_4, __pyx_tuple__4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 488, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_r = __pyx_t_5;
@@ -12468,7 +12538,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_26cov(CYTHON_UNUSED PyObject *__pyx
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_29correlate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_28correlate[] = "correlate(g, corr)\n Add correlations to uncorrelated |GVar|\\s in ``g``.\n\n    This method creates correlated |GVar|\\s from uncorrelated |GVar|\\s ``g``,\n    using the correlations specified in ``corr``.\n\n    Note that correlations initially present in ``g``, if any, are ignored.\n\n    Examples:\n        A typical application involves the construction of correlated\n        |GVar|\\s give the means and standard deviations, together with\n        a correlation matrix:\n\n            >>> import gvar as gv\n            >>> g = gv.gvar(['1(1)', '2(10)'])\n            >>> print(gv.evalcorr(g))           # uncorrelated\n            [[ 1.  0.]\n             [ 0.  1.]]\n            >>> g =  gv.correlate(g, [[1. , 0.1], [0.1, 1.]])\n            >>> print(gv.evalcorr(g))           # correlated\n            [[ 1.   0.1]\n             [ 0.1  1. ]]\n\n        This also works when ``g`` and ``corr`` are dictionaries::\n\n            >>> g = gv.gvar(dict(a='1(1)', b='2(10)'))\n            >>> print(gv.evalcorr(g))\n            {('a', 'a'): array([[ 1.]]),('a', 'b'): array([[ 0.]]),('b', 'a'): array([[ 0.]]),('b', 'b'): array([[ 1.]])}\n            >>> corr = {}\n            >>> corr['a', 'a'] = 1.0\n            >>> corr['a', 'b'] = 0.1\n            >>> corr['b', 'a'] = 0.1\n            >>> corr['b', 'b'] = 1.0\n            >>> g = correlate(g, corr)\n            >>> print(gv.evalcorr(g))\n            {('a', 'a'): array([[ 1.]]),('a', 'b'): array([[ 0.1]]),('b', 'a'): array([[ 0.1]]),('b', 'b'): array([[ 1.]])}\n\n    Args:\n        g: An array of |GVar|\\s or a dictionary whose values are\n            |GVar|\\s or arrays of |GVar|\\s.\n        corr: Correlations between |GVar|\\s: ``corr[i, j]`` is the\n            correlation between ``g[i]`` and ``g[j]``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_28correlate[] = " Add correlations to uncorrelated |GVar|\\s in ``g``.\n\n    This method creates correlated |GVar|\\s from uncorrelated |GVar|\\s ``g``,\n    using the correlations specified in ``corr``.\n\n    Note that correlations initially present in ``g``, if any, are ignored.\n\n    Examples:\n        A typical application involves the construction of correlated\n        |GVar|\\s give the means and standard deviations, together with\n        a correlation matrix:\n\n            >>> import gvar as gv\n            >>> g = gv.gvar(['1(1)', '2(10)'])\n            >>> print(gv.evalcorr(g))           # uncorrelated\n            [[ 1.  0.]\n             [ 0.  1.]]\n            >>> g =  gv.correlate(g, [[1. , 0.1], [0.1, 1.]])\n            >>> print(gv.evalcorr(g))           # correlated\n            [[ 1.   0.1]\n             [ 0.1  1. ]]\n\n        This also works when ``g`` and ``corr`` are dictionaries::\n\n            >>> g = gv.gvar(dict(a='1(1)', b='2(10)'))\n            >>> print(gv.evalcorr(g))\n            {('a', 'a'): array([[ 1.]]),('a', 'b'): array([[ 0.]]),('b', 'a'): array([[ 0.]]),('b', 'b'): array([[ 1.]])}\n            >>> corr = {}\n            >>> corr['a', 'a'] = 1.0\n            >>> corr['a', 'b'] = 0.1\n            >>> corr['b', 'a'] = 0.1\n            >>> corr['b', 'b'] = 1.0\n            >>> g = correlate(g, corr)\n            >>> print(gv.evalcorr(g))\n            {('a', 'a'): array([[ 1.]]),('a', 'b'): array([[ 0.1]]),('b', 'a'): array([[ 0.1]]),('b', 'b'): array([[ 1.]])}\n\n    Args:\n        g: An array of |GVar|\\s or a dictionary whose values are\n            |GVar|\\s or arrays of |GVar|\\s.\n        corr: Correlations between |GVar|\\s: ``corr[i, j]`` is the\n            correlation between ``g[i]`` and ``g[j]``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_29correlate = {"correlate", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_29correlate, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_28correlate};
 static PyObject *__pyx_pw_4gvar_10_utilities_29correlate(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -13947,7 +14017,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_28correlate(CYTHON_UNUSED PyObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_31evalcov_blocks_dense(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_30evalcov_blocks_dense[] = "evalcov_blocks_dense(g, compress=False)\n Evaluate covariance matrix for elements of ``g``.\n\n    Same as :func:`gvar.evalcov_blocks` but optimized for \n    large, dense covariance matrices.\n    ";
+static char __pyx_doc_4gvar_10_utilities_30evalcov_blocks_dense[] = " Evaluate covariance matrix for elements of ``g``.\n\n    Same as :func:`gvar.evalcov_blocks` but optimized for \n    large, dense covariance matrices.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_31evalcov_blocks_dense = {"evalcov_blocks_dense", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_31evalcov_blocks_dense, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_30evalcov_blocks_dense};
 static PyObject *__pyx_pw_4gvar_10_utilities_31evalcov_blocks_dense(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -13958,7 +14028,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_31evalcov_blocks_dense(PyObject *__
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_compress,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -14068,7 +14138,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_30evalcov_blocks_dense(CYTHON_UNUSE
  */
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_g, __pyx_n_s_flat); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 581, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__6, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 581, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__5, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 581, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_object(__pyx_t_4, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 581, __pyx_L1_error)
@@ -14125,7 +14195,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_30evalcov_blocks_dense(CYTHON_UNUSE
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_flat); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 583, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__6, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 583, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__5, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 583, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_object(__pyx_t_4, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 583, __pyx_L1_error)
@@ -14175,7 +14245,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_30evalcov_blocks_dense(CYTHON_UNUSE
     __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_flat); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 585, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_6, 0, 0, NULL, NULL, &__pyx_slice__6, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 585, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_6, 0, 0, NULL, NULL, &__pyx_slice__5, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 585, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_object(__pyx_t_4, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 585, __pyx_L1_error)
@@ -14545,7 +14615,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_30evalcov_blocks_dense(CYTHON_UNUSE
  *     if not compress:
  */
     /*else*/ {
-      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_idx, __pyx_tuple__7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 600, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_idx, __pyx_tuple__6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 600, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_8 = PyTuple_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 600, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
@@ -14938,7 +15008,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_30evalcov_blocks_dense(CYTHON_UNUSE
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_33evalcov_blocks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_32evalcov_blocks[] = "evalcov_blocks(g, compress=False)\n Evaluate covariance matrix for elements of ``g``.\n\n    Evaluates the covariance matrices for |GVar|\\s stored in\n    array or dictionary of arrays/|GVar|\\s ``g``. The covariance matrix is\n    decomposed into its block diagonal components, and a list of\n    tuples ``(idx,bcov)`` is returned where ``bcov`` is a diagonal\n    block of the covariance matrix and ``idx`` an array containing the\n    corresponding indices in ``g.flat`` for that block. So to reassemble\n    the blocks into a single matrix ``cov``, for example, one would use::\n\n        import numpy as np\n        import gvar as gv\n        cov = np.zeros((len(g.flat), len(g.flat)), float)\n        for idx, bcov in gv.evalcov_blocks(g):\n            cov[idx[:, None], idx] = bcov\n\n    :func:`gvar.evalcov_blocks` is particularly useful when the covariance\n    matrix is sparse; only nonzero elements are retained.\n\n    Setting argument ``compress=True`` (default is ``False``) changes \n    the meaning of the first element in the list: ``idx`` for the first \n    element contains the indices of all |GVar|\\s in ``g.flat`` that \n    are uncorrelated from other |GVar|\\s in ``g.flat``, and ``bcov`` \n    contains the standard deviations for those |GVar|\\s. Thus the full\n    covariance matrix is reconstructed using the following code::\n\n        import numpy as np\n        import gvar as gv\n        cov = np.zeros((len(g.flat), len(g.flat)), float)\n        blocks = gv.evalcov_blocks(g, compress=True)\n        # uncorrelated pieces are diagonal\n        idx, sdev = blocks[0]\n        cov[idx, idx] = sdev ** 2\n        # correlated pieces\n        for idx, bcov in blocks[1:]:\n            cov[idx[:, None], idx] = bcov\n    \n    The code with ``compress=True`` should be slightly faster if \n    there are many uncorrelated |GVar|\\s.\n\n    It is easy to create an array of |GVar|\\s having the covariance\n    matrix from ``g.flat``: for example, ::\n\n        import ""numpy as np \n        import gvar as gv\n        new_g = np.empty(len(g.flat), dtype=object)\n        for idx, bcov in evalcov_blocks(g):\n            new_g[idx] = gv.gvar(new_g[idx], bcov)\n\n    creates an array of |GVar|\\s with zero mean and the same covariance\n    matrix as ``g.flat``. This works with either value for argument ``compress``.\n\n    Args:\n        g: A |GVar|, an array of |GVar|\\s, or a dictionary whose values \n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        compress (bool): Setting ``compress=True`` collects all of the \n            uncorrelated |GVar|\\s in ``g.flat`` into the first element of \n            the returned list (see above). Default is ``False``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_32evalcov_blocks[] = " Evaluate covariance matrix for elements of ``g``.\n\n    Evaluates the covariance matrices for |GVar|\\s stored in\n    array or dictionary of arrays/|GVar|\\s ``g``. The covariance matrix is\n    decomposed into its block diagonal components, and a list of\n    tuples ``(idx,bcov)`` is returned where ``bcov`` is a diagonal\n    block of the covariance matrix and ``idx`` an array containing the\n    corresponding indices in ``g.flat`` for that block. So to reassemble\n    the blocks into a single matrix ``cov``, for example, one would use::\n\n        import numpy as np\n        import gvar as gv\n        cov = np.zeros((len(g.flat), len(g.flat)), float)\n        for idx, bcov in gv.evalcov_blocks(g):\n            cov[idx[:, None], idx] = bcov\n\n    :func:`gvar.evalcov_blocks` is particularly useful when the covariance\n    matrix is sparse; only nonzero elements are retained.\n\n    Setting argument ``compress=True`` (default is ``False``) changes \n    the meaning of the first element in the list: ``idx`` for the first \n    element contains the indices of all |GVar|\\s in ``g.flat`` that \n    are uncorrelated from other |GVar|\\s in ``g.flat``, and ``bcov`` \n    contains the standard deviations for those |GVar|\\s. Thus the full\n    covariance matrix is reconstructed using the following code::\n\n        import numpy as np\n        import gvar as gv\n        cov = np.zeros((len(g.flat), len(g.flat)), float)\n        blocks = gv.evalcov_blocks(g, compress=True)\n        # uncorrelated pieces are diagonal\n        idx, sdev = blocks[0]\n        cov[idx, idx] = sdev ** 2\n        # correlated pieces\n        for idx, bcov in blocks[1:]:\n            cov[idx[:, None], idx] = bcov\n    \n    The code with ``compress=True`` should be slightly faster if \n    there are many uncorrelated |GVar|\\s.\n\n    It is easy to create an array of |GVar|\\s having the covariance\n    matrix from ``g.flat``: for example, ::\n\n        import numpy as np \n        import gvar a""s gv\n        new_g = np.empty(len(g.flat), dtype=object)\n        for idx, bcov in evalcov_blocks(g):\n            new_g[idx] = gv.gvar(new_g[idx], bcov)\n\n    creates an array of |GVar|\\s with zero mean and the same covariance\n    matrix as ``g.flat``. This works with either value for argument ``compress``.\n\n    Args:\n        g: A |GVar|, an array of |GVar|\\s, or a dictionary whose values \n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        compress (bool): Setting ``compress=True`` collects all of the \n            uncorrelated |GVar|\\s in ``g.flat`` into the first element of \n            the returned list (see above). Default is ``False``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_33evalcov_blocks = {"evalcov_blocks", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_33evalcov_blocks, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_32evalcov_blocks};
 static PyObject *__pyx_pw_4gvar_10_utilities_33evalcov_blocks(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -14949,7 +15019,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_33evalcov_blocks(PyObject *__pyx_se
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_compress,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -15105,7 +15175,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_32evalcov_blocks(CYTHON_UNUSED PyOb
  */
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_g, __pyx_n_s_flat); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 680, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__6, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 680, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__5, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 680, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_varlist = __pyx_t_4;
@@ -15159,7 +15229,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_32evalcov_blocks(CYTHON_UNUSED PyOb
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_flat); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 682, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__6, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 682, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_3, 0, 0, NULL, NULL, &__pyx_slice__5, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 682, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_varlist = __pyx_t_4;
@@ -15206,7 +15276,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_32evalcov_blocks(CYTHON_UNUSED PyOb
     __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_flat); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 684, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_5, 0, 0, NULL, NULL, &__pyx_slice__6, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 684, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_5, 0, 0, NULL, NULL, &__pyx_slice__5, 0, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 684, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_v_varlist = __pyx_t_4;
@@ -16944,7 +17014,7 @@ __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_t_26, 1, (PyObject *(*)(char *)) __
           __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 767, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_bidx, __pyx_tuple__7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 767, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_bidx, __pyx_tuple__6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 767, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           __pyx_t_16 = PyTuple_New(2); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 767, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
@@ -17384,7 +17454,7 @@ __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_t_26, 1, (PyObject *(*)(char *)) __
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_35mock_evalcov(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_34mock_evalcov[] = "mock_evalcov(ndarray cov, ndarray d)\n Mock evalcov for testing.\n\n    Assumes maximum density. It also has no overhead for collecting either ``cov`` or \n    ``d``, unlike the real ``evalcov``. The focus is on the N**3 part of the algorithm.\n\n    Args:\n        cov: Covariance matrix of primary |GVar|\\s.\n        d: ``d[a]`` is the derivative vector for |GVar| ``g[a]`` (i.e., \n            ``dg[a]/dx[i]`` for |GVar| ``ga[a]`` where ``x[i]`` are primary |GVar|\\s.)\n    ";
+static char __pyx_doc_4gvar_10_utilities_34mock_evalcov[] = " Mock evalcov for testing.\n\n    Assumes maximum density. It also has no overhead for collecting either ``cov`` or \n    ``d``, unlike the real ``evalcov``. The focus is on the N**3 part of the algorithm.\n\n    Args:\n        cov: Covariance matrix of primary |GVar|\\s.\n        d: ``d[a]`` is the derivative vector for |GVar| ``g[a]`` (i.e., \n            ``dg[a]/dx[i]`` for |GVar| ``ga[a]`` where ``x[i]`` are primary |GVar|\\s.)\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_35mock_evalcov = {"mock_evalcov", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_35mock_evalcov, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_34mock_evalcov};
 static PyObject *__pyx_pw_4gvar_10_utilities_35mock_evalcov(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_cov = 0;
@@ -17541,7 +17611,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_34mock_evalcov(CYTHON_UNUSED PyObje
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_37evalcov(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_36evalcov[] = "evalcov(g)\n Compute covariance matrix for elements of \n    array/dictionary ``g``.\n\n    If ``g`` is an array of |GVar|\\s, ``evalcov`` returns the\n    covariance matrix as an array with shape ``g.shape+g.shape``.\n    If ``g`` is a dictionary whose values are |GVar|\\s or arrays of\n    |GVar|\\s, the result is a doubly-indexed dictionary where\n    ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_36evalcov[] = " Compute covariance matrix for elements of \n    array/dictionary ``g``.\n\n    If ``g`` is an array of |GVar|\\s, ``evalcov`` returns the\n    covariance matrix as an array with shape ``g.shape+g.shape``.\n    If ``g`` is a dictionary whose values are |GVar|\\s or arrays of\n    |GVar|\\s, the result is a doubly-indexed dictionary where\n    ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_37evalcov = {"evalcov", (PyCFunction)__pyx_pw_4gvar_10_utilities_37evalcov, METH_O, __pyx_doc_4gvar_10_utilities_36evalcov};
 static PyObject *__pyx_pw_4gvar_10_utilities_37evalcov(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -17944,8 +18014,8 @@ static PyObject *__pyx_pf_4gvar_10_utilities_36evalcov(CYTHON_UNUSED PyObject *_
  *             for k2 in g:
  *                 k2_sl, k2_sh = g.slice_shape(k2)
  */
-        __Pyx_INCREF(__pyx_tuple__8);
-        __Pyx_DECREF_SET(__pyx_v_k1_sh, __pyx_tuple__8);
+        __Pyx_INCREF(__pyx_tuple__7);
+        __Pyx_DECREF_SET(__pyx_v_k1_sh, __pyx_tuple__7);
 
         /* "gvar/_utilities.pyx":831
  *         for k1 in g:
@@ -18114,8 +18184,8 @@ static PyObject *__pyx_pf_4gvar_10_utilities_36evalcov(CYTHON_UNUSED PyObject *_
  *                 ansd[k1, k2] = gcov[k1_sl, k2_sl].reshape(k1_sh + k2_sh)
  *         return ansd
  */
-          __Pyx_INCREF(__pyx_tuple__8);
-          __Pyx_DECREF_SET(__pyx_v_k2_sh, __pyx_tuple__8);
+          __Pyx_INCREF(__pyx_tuple__7);
+          __Pyx_DECREF_SET(__pyx_v_k2_sh, __pyx_tuple__7);
 
           /* "gvar/_utilities.pyx":836
  *             for k2 in g:
@@ -18389,7 +18459,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_36evalcov(CYTHON_UNUSED PyObject *_
  *     nc = cov.nrow
  */
   /*else*/ {
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 850, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 850, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_Raise(__pyx_t_6, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -19556,7 +19626,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_36evalcov(CYTHON_UNUSED PyObject *_
   } else {
     __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_ans), __pyx_n_s_reshape); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 910, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 910, __pyx_L1_error)
+    __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 910, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_13);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_5 = __pyx_t_13;
@@ -19640,7 +19710,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_36evalcov(CYTHON_UNUSED PyObject *_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_39evalcov_old(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_38evalcov_old[] = "evalcov_old(g)\n Compute covariance matrix for elements of\n    array/dictionary ``g``. Old version, for testing.\n\n    If ``g`` is an array of |GVar|\\s, ``evalcov`` returns the\n    covariance matrix as an array with shape ``g.shape+g.shape``.\n    If ``g`` is a dictionary whose values are |GVar|\\s or arrays of\n    |GVar|\\s, the result is a doubly-indexed dictionary where\n    ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_38evalcov_old[] = " Compute covariance matrix for elements of\n    array/dictionary ``g``. Old version, for testing.\n\n    If ``g`` is an array of |GVar|\\s, ``evalcov`` returns the\n    covariance matrix as an array with shape ``g.shape+g.shape``.\n    If ``g`` is a dictionary whose values are |GVar|\\s or arrays of\n    |GVar|\\s, the result is a doubly-indexed dictionary where\n    ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_39evalcov_old = {"evalcov_old", (PyCFunction)__pyx_pw_4gvar_10_utilities_39evalcov_old, METH_O, __pyx_doc_4gvar_10_utilities_38evalcov_old};
 static PyObject *__pyx_pw_4gvar_10_utilities_39evalcov_old(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -20014,8 +20084,8 @@ static PyObject *__pyx_pf_4gvar_10_utilities_38evalcov_old(CYTHON_UNUSED PyObjec
  *             for k2 in g:
  *                 k2_sl, k2_sh = g.slice_shape(k2)
  */
-        __Pyx_INCREF(__pyx_tuple__8);
-        __Pyx_DECREF_SET(__pyx_v_k1_sh, __pyx_tuple__8);
+        __Pyx_INCREF(__pyx_tuple__7);
+        __Pyx_DECREF_SET(__pyx_v_k1_sh, __pyx_tuple__7);
 
         /* "gvar/_utilities.pyx":937
  *         for k1 in g:
@@ -20184,8 +20254,8 @@ static PyObject *__pyx_pf_4gvar_10_utilities_38evalcov_old(CYTHON_UNUSED PyObjec
  *                 ansd[k1, k2] = gcov[k1_sl, k2_sl].reshape(k1_sh + k2_sh)
  *         return ansd
  */
-          __Pyx_INCREF(__pyx_tuple__8);
-          __Pyx_DECREF_SET(__pyx_v_k2_sh, __pyx_tuple__8);
+          __Pyx_INCREF(__pyx_tuple__7);
+          __Pyx_DECREF_SET(__pyx_v_k2_sh, __pyx_tuple__7);
 
           /* "gvar/_utilities.pyx":942
  *             for k2 in g:
@@ -20501,7 +20571,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_38evalcov_old(CYTHON_UNUSED PyObjec
  *     # mask restricts calculation to relevant primary GVars
  */
   /*else*/ {
-    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 955, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 955, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_Raise(__pyx_t_6, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -20984,7 +21054,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_38evalcov_old(CYTHON_UNUSED PyObjec
   } else {
     __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_ans), __pyx_n_s_reshape); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 972, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 972, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 972, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_4 = __pyx_t_3;
@@ -21057,8 +21127,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_38evalcov_old(CYTHON_UNUSED PyObjec
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_7GVarRef_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_7GVarRef___init__[] = "GVarRef.__init__(self, g, gvlist)";
-static PyMethodDef __pyx_mdef_4gvar_10_utilities_7GVarRef_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_7GVarRef_1__init__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_7GVarRef___init__};
+static PyMethodDef __pyx_mdef_4gvar_10_utilities_7GVarRef_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_7GVarRef_1__init__, METH_VARARGS|METH_KEYWORDS, 0};
 static PyObject *__pyx_pw_4gvar_10_utilities_7GVarRef_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_g = 0;
@@ -21190,8 +21259,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_7GVarRef___init__(CYTHON_UNUSED PyO
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_7GVarRef_3__call__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_7GVarRef_2__call__[] = "GVarRef.__call__(self, gvlist)";
-static PyMethodDef __pyx_mdef_4gvar_10_utilities_7GVarRef_3__call__ = {"__call__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_7GVarRef_3__call__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_7GVarRef_2__call__};
+static PyMethodDef __pyx_mdef_4gvar_10_utilities_7GVarRef_3__call__ = {"__call__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_7GVarRef_3__call__, METH_VARARGS|METH_KEYWORDS, 0};
 static PyObject *__pyx_pw_4gvar_10_utilities_7GVarRef_3__call__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_gvlist = 0;
@@ -21305,7 +21373,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_7GVarRef_2__call__(CYTHON_UNUSED Py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_41distribute_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_40distribute_gvars[] = "distribute_gvars(g, gvlist)\n Distribute |GVar|\\s from ``gvlist`` in structure g, replacing :class:`gvar.GVarRef`\\s. \n    \n    :func:`distribute_gvars` undoes what :func:`remove_gvars` does to ``g``.\n\n    Args:\n        g: Object containing :class:`GVarRef`\\s created by :func:`remove_gvars`.\n        gvlist: List of |GVar|\\s created by :func:`remove_gvars`.\n\n    Returns:\n        Object ``g`` with :class:`GVarRef`\\s replaced by corresponding |GVar|\\s\n        from list ``gvlist``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_40distribute_gvars[] = " Distribute |GVar|\\s from ``gvlist`` in structure g, replacing :class:`gvar.GVarRef`\\s. \n    \n    :func:`distribute_gvars` undoes what :func:`remove_gvars` does to ``g``.\n\n    Args:\n        g: Object containing :class:`GVarRef`\\s created by :func:`remove_gvars`.\n        gvlist: List of |GVar|\\s created by :func:`remove_gvars`.\n\n    Returns:\n        Object ``g`` with :class:`GVarRef`\\s replaced by corresponding |GVar|\\s\n        from list ``gvlist``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_41distribute_gvars = {"distribute_gvars", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_41distribute_gvars, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_40distribute_gvars};
 static PyObject *__pyx_pw_4gvar_10_utilities_41distribute_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -22575,7 +22643,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_40distribute_gvars(CYTHON_UNUSED Py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_43remove_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_42remove_gvars[] = "remove_gvars(g, gvlist)\n Remove |GVar|\\s from structure g, collecting them in ``gvlist``; replace with :class:`gvar.GVarRef`\\s. \n    \n    :func:`remove_gvars` searches container object ``g`` (recursively) \n    for |GVar|\\s and replaces them with :class:`GVarRef` objects. The \n    |GVar|\\s are collected in list ``gvlist``. Object ``g`` can be a \n    dictionary, list, etc., or nested instances of these.\n    \n    If ``g`` contains an object ``obj`` that is a not standard container, \n    :func:`gvar.remove_gvars` will replace the object by \n    ``obj._remove_gvars(gvlist)`` if that method exists; otherwise \n    it will attempt to look inside the object via ``obj.__dict__``.\n    The default treatment, when ``obj._remove_gvars`` is not defined, is \n    equivalent to adding the following method to the object's class::\n\n        def _remove_gvars(self, gvlist):\n            tmp = copy.copy(g)\n            tmp.__dict__ = gvar.remove_gvars(tmp.__dict__, gvlist)\n            return tmp \n\n    A class that has method ``obj._remove_gvars(gvlist)`` should have  \n    a corresponding method ``obj._distribute_gvars(gvlist)``, for \n    use by :func:`gvar.distribute_gvars`. The default behavior is \n    equivalent to method::\n\n        def _distribute_gvars(self, gvlist):\n            self.__dict__ = gvar.distribute_gvars(self.__dict__, gvlist)\n\n    Args:\n        g: Object containing |GVar|\\s.\n        gvlist: |GVar|\\s removed from ``g`` are appended to list ``gvlist``.\n\n    Returns:\n        Copy of object ``g`` with |GVar|\\s replaced by :class:`GVarRef`\\s. \n        The |GVar|\\s are appended to ``gvlist``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_42remove_gvars[] = " Remove |GVar|\\s from structure g, collecting them in ``gvlist``; replace with :class:`gvar.GVarRef`\\s. \n    \n    :func:`remove_gvars` searches container object ``g`` (recursively) \n    for |GVar|\\s and replaces them with :class:`GVarRef` objects. The \n    |GVar|\\s are collected in list ``gvlist``. Object ``g`` can be a \n    dictionary, list, etc., or nested instances of these.\n    \n    If ``g`` contains an object ``obj`` that is a not standard container, \n    :func:`gvar.remove_gvars` will replace the object by \n    ``obj._remove_gvars(gvlist)`` if that method exists; otherwise \n    it will attempt to look inside the object via ``obj.__dict__``.\n    The default treatment, when ``obj._remove_gvars`` is not defined, is \n    equivalent to adding the following method to the object's class::\n\n        def _remove_gvars(self, gvlist):\n            tmp = copy.copy(g)\n            tmp.__dict__ = gvar.remove_gvars(tmp.__dict__, gvlist)\n            return tmp \n\n    A class that has method ``obj._remove_gvars(gvlist)`` should have  \n    a corresponding method ``obj._distribute_gvars(gvlist)``, for \n    use by :func:`gvar.distribute_gvars`. The default behavior is \n    equivalent to method::\n\n        def _distribute_gvars(self, gvlist):\n            self.__dict__ = gvar.distribute_gvars(self.__dict__, gvlist)\n\n    Args:\n        g: Object containing |GVar|\\s.\n        gvlist: |GVar|\\s removed from ``g`` are appended to list ``gvlist``.\n\n    Returns:\n        Copy of object ``g`` with |GVar|\\s replaced by :class:`GVarRef`\\s. \n        The |GVar|\\s are appended to ``gvlist``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_43remove_gvars = {"remove_gvars", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_43remove_gvars, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_42remove_gvars};
 static PyObject *__pyx_pw_4gvar_10_utilities_43remove_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -23911,7 +23979,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_42remove_gvars(CYTHON_UNUSED PyObje
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_45collect_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_44collect_gvars[] = "collect_gvars(g, gvlist)\n Collect |GVar|\\s in ``gvlist`` from container object g. ";
+static char __pyx_doc_4gvar_10_utilities_44collect_gvars[] = " Collect |GVar|\\s in ``gvlist`` from container object g. ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_45collect_gvars = {"collect_gvars", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_45collect_gvars, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_44collect_gvars};
 static PyObject *__pyx_pw_4gvar_10_utilities_45collect_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -24564,7 +24632,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_44collect_gvars(CYTHON_UNUSED PyObj
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_47filter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_46filter[] = "filter(g, f, *args, **kargs)\n Filter |GVar|\\s in ``g`` through function ``f``. \n    \n    Sample usage::\n\n        import gvar as gv\n        g_mod = gv.filter(g, gv.mean)\n\n    replaces every |GVar| in ``g`` by its mean. This is useful \n    when ``gv.mean(g)`` doesn't work --- for example, because \n    ``g`` contains data types other than |GVar|\\s,\n    or consists of nested dictionaries.\n\n    Args:\n        g: Object consisting of (possibly nested) dictionaries,\n            deques, lists, ``numpy.array``\\s, tuples, and/or \n            other data types that contain |GVar|\\s and other \n            types of data.\n        f: Function that takes an array of |GVar|\\s as an argument\n            and returns an array of results having the same shape.\n            Given an array ``gvar_array`` containing all \n            the |GVar|\\s from ``g``, the function call is \n            ``f(gvar_array, *args, **kargs)``. Results \n            from the returned array replace the |GVar|\\s\n            in the original object.\n        args: Additional arguments for ``f``.\n        kargs: Additional keyword arguments for ``f``.\n\n    Returns:\n        An object like ``g``  but with all the |GVar|\\s \n        replaced by objects generated by function ``f``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_46filter[] = " Filter |GVar|\\s in ``g`` through function ``f``. \n    \n    Sample usage::\n\n        import gvar as gv\n        g_mod = gv.filter(g, gv.mean)\n\n    replaces every |GVar| in ``g`` by its mean. This is useful \n    when ``gv.mean(g)`` doesn't work --- for example, because \n    ``g`` contains data types other than |GVar|\\s,\n    or consists of nested dictionaries.\n\n    Args:\n        g: Object consisting of (possibly nested) dictionaries,\n            deques, lists, ``numpy.array``\\s, tuples, and/or \n            other data types that contain |GVar|\\s and other \n            types of data.\n        f: Function that takes an array of |GVar|\\s as an argument\n            and returns an array of results having the same shape.\n            Given an array ``gvar_array`` containing all \n            the |GVar|\\s from ``g``, the function call is \n            ``f(gvar_array, *args, **kargs)``. Results \n            from the returned array replace the |GVar|\\s\n            in the original object.\n        args: Additional arguments for ``f``.\n        kargs: Additional keyword arguments for ``f``.\n\n    Returns:\n        An object like ``g``  but with all the |GVar|\\s \n        replaced by objects generated by function ``f``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_47filter = {"filter", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_47filter, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_46filter};
 static PyObject *__pyx_pw_4gvar_10_utilities_47filter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -24840,7 +24908,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_46filter(CYTHON_UNUSED PyObject *__
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_49dumps(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_48dumps[] = "dumps(g, add_dependencies=False, **kargs)\n Return a serialized representation of ``g``.\n\n    This function is shorthand for::\n    \n        gvar.dump(g).getvalue()\n    \n    Typical usage is::\n\n        # create bytes object containing GVars in g\n        import gvar as gv \n        gbytes = gv.dumps(g)\n\n        # convert bytes object back into g\n        new_g = gv.loads(gbytes)\n    \n    Args:\n        g: Object to be serialized. Consists of (possibly nested) \n            dictionaries, deques, lists, ``numpy.array``\\s, \n            and/or tuples that contain |GVar|\\s and other types of data.\n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying serializer (:mod:`pickle`).\n    \n    Returns:\n        A bytes object containing a serialized representation \n        of object ``g``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_48dumps[] = " Return a serialized representation of ``g``.\n\n    This function is shorthand for::\n    \n        gvar.dump(g).getvalue()\n    \n    Typical usage is::\n\n        # create bytes object containing GVars in g\n        import gvar as gv \n        gbytes = gv.dumps(g)\n\n        # convert bytes object back into g\n        new_g = gv.loads(gbytes)\n    \n    Args:\n        g: Object to be serialized. Consists of (possibly nested) \n            dictionaries, deques, lists, ``numpy.array``\\s, \n            and/or tuples that contain |GVar|\\s and other types of data.\n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying serializer (:mod:`pickle`).\n    \n    Returns:\n        A bytes object containing a serialized representation \n        of object ``g``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_49dumps = {"dumps", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_49dumps, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_48dumps};
 static PyObject *__pyx_pw_4gvar_10_utilities_49dumps(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -24854,7 +24922,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_49dumps(PyObject *__pyx_self, PyObj
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_add_dependencies,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -24998,7 +25066,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_48dumps(CYTHON_UNUSED PyObject *__p
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_51loads(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_50loads[] = "loads(inputbytes, **kargs)\n Read and return object serialized in ``inputbytes`` by :func:`gvar.dumps`.\n\n    This function recovers data serialized with :func:`gvar.dumps`. It is \n    shorthand for::\n\n        gvar.load(BytesIO(inputbytes))\n\n    Typical usage is::\n\n        # create bytes object containing data in g\n        import gvar as gv \n        gbytes = gv.dumps(g)\n\n        # recreate g from bytes object gbytes\n        new_g = gv.gloads(gbytes)\n\n    Args:\n        inputbytes (bytes): Bytes object created by :func:`gvar.dumps`.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying serializer (:mod:`pickle`).\n\n    Returns:\n        The reconstructed data.\n    ";
+static char __pyx_doc_4gvar_10_utilities_50loads[] = " Read and return object serialized in ``inputbytes`` by :func:`gvar.dumps`.\n\n    This function recovers data serialized with :func:`gvar.dumps`. It is \n    shorthand for::\n\n        gvar.load(BytesIO(inputbytes))\n\n    Typical usage is::\n\n        # create bytes object containing data in g\n        import gvar as gv \n        gbytes = gv.dumps(g)\n\n        # recreate g from bytes object gbytes\n        new_g = gv.gloads(gbytes)\n\n    Args:\n        inputbytes (bytes): Bytes object created by :func:`gvar.dumps`.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying serializer (:mod:`pickle`).\n\n    Returns:\n        The reconstructed data.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_51loads = {"loads", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_51loads, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_50loads};
 static PyObject *__pyx_pw_4gvar_10_utilities_51loads(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_inputbytes = 0;
@@ -25134,7 +25202,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_50loads(CYTHON_UNUSED PyObject *__p
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_53dump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_52dump[] = "dump(g, outputfile=None, add_dependencies=False, **kargs)\n Write a representation of ``g``  to file ``outputfile``.\n\n    Object ``g`` consists of (possibly nested) dictionaries, deques,\n    lists, ``numpy.array``\\s, and/or tuples that contain |GVar|\\s and \n    other types of data. Calling ``gvar.dump(g, 'filename')`` writes a \n    serialized representation of ``g`` into the file named ``filename``. \n    Object ``g`` can be recovered later using ``gvar.load('filename')``.\n\n    Typical usage is::\n\n        # create file xxx.pickle containing GVars in g\n        import gvar as gv \n        gv.dump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.load('xxx.pickle')\n\n    :func:`gvar.dump` is an alternative to ``pickle.dump()`` which,\n    unlike the latter, works when there are |GVar|\\s in ``g``.\n    In particular it preserves correlations between different\n    |GVar|\\s, as well as relationships (i.e., derivatives) between\n    derived |GVar|\\s and primary |GVar|\\s in ``g``.\n    :func:`gvar.dump` uses :func:`gvar.remove_gvars` to search\n    (recursively) for the |GVar|\\s in ``g``.\n\n    The partial variances for derived |GVar|\\s in ``g`` coming from \n    primary |GVar|\\s in ``g`` are preserved by :func:`gvar.dump`.\n    (These are used, for example, to calculate error budgets.)\n    Partial variances coming from derived (rather than \n    primary) |GVar|\\s, however, are unreliable unless \n    every primary |GVar| that contributes to the covariances\n    in ``g`` is included in ``g``. To guarantee that\n    this is the case, set keyword ``add_dependencies=True``.\n    This can greatly increase the size of the output file,\n    and so should only be done if error budgets, etc. are needed. \n    (Also the cost of evaluating covariance matrices \n    for the reconstituted |GVar|\\s is increased if there \n    are large numbers of primary |GVar|\\s.) The default is \n    ``add_dependencies=False``.\n\n    Args:""\n        g: Object to be serialized. Consists of (possibly nested) \n            dictionaries, deques, lists, ``numpy.array``\\s, \n            and/or tuples that contain |GVar|\\s and other types of data.\n        outputfile: The name of a file or a file object in which the\n            serialized ``g`` is stored. If ``outputfile=None`` (default),\n            the results are written to a :class:`BytesIO`. \n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying serializer (:mod:`pickle`).\n\n    Returns:\n        The :class:`BytesIO` object containing the serialized data, \n        if ``outputfile=None``; otherwise ``outputfile``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_52dump[] = " Write a representation of ``g``  to file ``outputfile``.\n\n    Object ``g`` consists of (possibly nested) dictionaries, deques,\n    lists, ``numpy.array``\\s, and/or tuples that contain |GVar|\\s and \n    other types of data. Calling ``gvar.dump(g, 'filename')`` writes a \n    serialized representation of ``g`` into the file named ``filename``. \n    Object ``g`` can be recovered later using ``gvar.load('filename')``.\n\n    Typical usage is::\n\n        # create file xxx.pickle containing GVars in g\n        import gvar as gv \n        gv.dump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.load('xxx.pickle')\n\n    :func:`gvar.dump` is an alternative to ``pickle.dump()`` which,\n    unlike the latter, works when there are |GVar|\\s in ``g``.\n    In particular it preserves correlations between different\n    |GVar|\\s, as well as relationships (i.e., derivatives) between\n    derived |GVar|\\s and primary |GVar|\\s in ``g``.\n    :func:`gvar.dump` uses :func:`gvar.remove_gvars` to search\n    (recursively) for the |GVar|\\s in ``g``.\n\n    The partial variances for derived |GVar|\\s in ``g`` coming from \n    primary |GVar|\\s in ``g`` are preserved by :func:`gvar.dump`.\n    (These are used, for example, to calculate error budgets.)\n    Partial variances coming from derived (rather than \n    primary) |GVar|\\s, however, are unreliable unless \n    every primary |GVar| that contributes to the covariances\n    in ``g`` is included in ``g``. To guarantee that\n    this is the case, set keyword ``add_dependencies=True``.\n    This can greatly increase the size of the output file,\n    and so should only be done if error budgets, etc. are needed. \n    (Also the cost of evaluating covariance matrices \n    for the reconstituted |GVar|\\s is increased if there \n    are large numbers of primary |GVar|\\s.) The default is \n    ``add_dependencies=False``.\n\n    Args:\n        g: Object to be serialized. Consists of (possibly ""nested) \n            dictionaries, deques, lists, ``numpy.array``\\s, \n            and/or tuples that contain |GVar|\\s and other types of data.\n        outputfile: The name of a file or a file object in which the\n            serialized ``g`` is stored. If ``outputfile=None`` (default),\n            the results are written to a :class:`BytesIO`. \n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying serializer (:mod:`pickle`).\n\n    Returns:\n        The :class:`BytesIO` object containing the serialized data, \n        if ``outputfile=None``; otherwise ``outputfile``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_53dump = {"dump", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_53dump, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_52dump};
 static PyObject *__pyx_pw_4gvar_10_utilities_53dump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -25149,8 +25217,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_53dump(PyObject *__pyx_self, PyObje
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_outputfile,&__pyx_n_s_add_dependencies,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -25665,7 +25733,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_52dump(CYTHON_UNUSED PyObject *__py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_55load(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_54load[] = "load(inputfile, method=None, **kargs)\n Read and return object serialized in ``inputfile`` by :func:`gvar.dump`.\n\n    This function recovers data serialized with :func:`gvar.dump`.\n    Typical usage is::\n\n        # create file xxx.pickle containing data in g\n        import gvar as gv \n        gv.dump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.gload('xxx.pickle')\n\n    Note that the format used by :func:`gvar.dump` changed with \n    version |~| 11.0 of :mod:`gvar`. :func:`gvar.load` will \n    attempt to read the old formats if they are encountered, but \n    old data should be converted to the new format (by reading \n    it in with :func:`load` and them writing it out again \n    with :func:`dump`).\n\n    Args:\n        inputfile: The name of the file or a file object in which the\n            serialized |GVar|\\s are stored (created by :func:`gvar.dump`).\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying de-serializer (:mod:`pickle`).\n\n    Returns:\n        The reconstructed data object.\n    ";
+static char __pyx_doc_4gvar_10_utilities_54load[] = " Read and return object serialized in ``inputfile`` by :func:`gvar.dump`.\n\n    This function recovers data serialized with :func:`gvar.dump`.\n    Typical usage is::\n\n        # create file xxx.pickle containing data in g\n        import gvar as gv \n        gv.dump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.gload('xxx.pickle')\n\n    Note that the format used by :func:`gvar.dump` changed with \n    version |~| 11.0 of :mod:`gvar`. :func:`gvar.load` will \n    attempt to read the old formats if they are encountered, but \n    old data should be converted to the new format (by reading \n    it in with :func:`load` and them writing it out again \n    with :func:`dump`).\n\n    Args:\n        inputfile: The name of the file or a file object in which the\n            serialized |GVar|\\s are stored (created by :func:`gvar.dump`).\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying de-serializer (:mod:`pickle`).\n\n    Returns:\n        The reconstructed data object.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_55load = {"load", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_55load, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_54load};
 static PyObject *__pyx_pw_4gvar_10_utilities_55load(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_inputfile = 0;
@@ -25679,7 +25747,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_55load(PyObject *__pyx_self, PyObje
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_inputfile,&__pyx_n_s_method,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_None);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -26403,7 +26471,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_54load(CYTHON_UNUSED PyObject *__py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_57gdumps(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_56gdumps[] = "gdumps(g, method='json', add_dependencies=False)\n Return a serialized representation of ``g``.\n\n    This function is shorthand for::\n    \n        gvar.gdump(g, method='json').getvalue()\n    \n    Typical usage is::\n\n        # create string containing GVars in g\n        import gvar as gv \n        gstr = gv.gdumps(g)\n\n        # convert string back into GVars\n        new_g = gv.gloads(gstr)\n    \n    Args:\n        g: A |GVar|, array of |GVar|\\s, or dictionary whose values\n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        method: Serialization method, which should be either\n            ``'json'`` or ``'pickle'``. Default is ``'json'``.\n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n    \n    Returns:\n        A string or bytes object containing a serialized \n        representation of object ``g``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_56gdumps[] = " Return a serialized representation of ``g``.\n\n    This function is shorthand for::\n    \n        gvar.gdump(g, method='json').getvalue()\n    \n    Typical usage is::\n\n        # create string containing GVars in g\n        import gvar as gv \n        gstr = gv.gdumps(g)\n\n        # convert string back into GVars\n        new_g = gv.gloads(gstr)\n    \n    Args:\n        g: A |GVar|, array of |GVar|\\s, or dictionary whose values\n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        method: Serialization method, which should be either\n            ``'json'`` or ``'pickle'``. Default is ``'json'``.\n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n    \n    Returns:\n        A string or bytes object containing a serialized \n        representation of object ``g``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_57gdumps = {"gdumps", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_57gdumps, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_56gdumps};
 static PyObject *__pyx_pw_4gvar_10_utilities_57gdumps(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -26415,8 +26483,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_57gdumps(PyObject *__pyx_self, PyOb
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_method,&__pyx_n_s_add_dependencies,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)__pyx_n_s_json);
-    values[2] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject*)__pyx_n_s_json));
+    values[2] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -26687,7 +26755,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_56gdumps(CYTHON_UNUSED PyObject *__
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_59gdump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_58gdump[] = "gdump(g, outputfile=None, method=None, add_dependencies=False, **kargs)\n Write a representation of ``g``  to file ``outputfile``.\n\n    Object ``g`` is a |GVar|, an array of |GVar|\\s (any shape), or \n    a dictionary whose values are |GVar|\\s and/or arrays of |GVar|\\s;\n    it describes a general (multi-dimensional) Gaussian distribution.\n    Calling ``gvar.gdump(g, 'filename')`` writes a serialized representation\n    of ``g`` into the file named ``filename``. The Gaussian distribution\n    described by ``g`` can be recovered later using ``gvar.load('filename')``.\n    Correlations between different |GVar|\\s in ``g`` are preserved, as\n    are relationships (i.e., derivatives) between derived |GVar|\\s and \n    any primary |GVar|\\s in ``g``.\n\n    :func:`gvar.gdump` differs from :func:`gvar.dump` in that the elements \n    in ``g`` must all be |GVar|\\s for the former, whereas |GVar|\\s may be\n    mixed in with other data types for the latter. The structure of ``g``\n    is also more restricted for :func:`gvar.gdump`, but it is \n    typically faster than :func:`gvar.dump`.\n\n    Typical usage is::\n\n        # create file xxx.pickle containing GVars in g\n        import gvar as gv \n        gv.gdump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.gload('xxx.pickle')\n\n    Object ``g`` is serialized using one of the :mod:`json` (text\n    file) or :mod:`pickle` (binary file) Python modules. \n    Method ``'json'`` can produce smaller files, but\n    method ``'pickle'`` can be significantly faster. ``'json'`` \n    is more secure than ``'pickle'``, if that is an issue.\n    \n    :mod:`json` can have trouble with dictionaries whose keys are\n    not strings. A workaround is used here that succeeds provided\n    ``eval(repr(k)) == k`` for every key ``k``. This works for \n    a wide variety of standard key types including strings, integers, \n    and tuples of strings and/or integers. Try :mod:`pickle` if the \n    w""orkaround fails.\n\n    The partial variances for derived |GVar|\\s in ``g`` coming from \n    primary |GVar|\\s in ``g`` are preserved by :func:`gvar.gdump`.\n    (These are used, for example, to calculate error budgets.)\n    Partial variances coming from derived (rather than \n    primary) |GVar|\\s, however, are unreliable unless \n    every primary |GVar| that contributes to the covariances\n    in ``g`` is included in ``g``. To guarantee that\n    this is the case set keyword ``add_dependencies=True``.\n    This can greatly increase the size of the output file,\n    and so should only be done if error budgets, etc. are needed. \n    (Also the cost of evaluating covariance matrices \n    for the reconstituted |GVar|\\s is increased if there \n    are large numbers of primary |GVar|\\s.) The default is \n    ``add_dependencies=False``.\n\n    Args:\n        g: A |GVar|, array of |GVar|\\s, or dictionary whose values\n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        outputfile: The name of a file or a file object in which the\n            serialized |GVar|\\s are stored. If ``outputfile=None`` (default),\n            the results are written to a :class:`StringIO` (for \n            ``method='json'``) or :class:`BytesIO` (for\n            ``method='pickle'``) object. \n        method (str): Serialization method, which should be either\n            ``'json'`` or ``'pickle'``. If ``method=None`` (default),\n            the method is inferred from the filename's extension:\n            ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` \n            or ``.p`` for ``'pickle'``. If that fails the method \n            defaults to ``'json'``.\n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n        kargs (dict): Additional arguments, if any, that are passed to"" \n            the underlying serializer (:mod:`pickle` or :mod:`json`).\n\n    Returns:\n        if ``outputfile=None``, the :class:`StringIO` or :class:`BytesIO` \n        object containing the serialized data is returned. Otherwise\n        ``outputfile`` is returned.\n    ";
+static char __pyx_doc_4gvar_10_utilities_58gdump[] = " Write a representation of ``g``  to file ``outputfile``.\n\n    Object ``g`` is a |GVar|, an array of |GVar|\\s (any shape), or \n    a dictionary whose values are |GVar|\\s and/or arrays of |GVar|\\s;\n    it describes a general (multi-dimensional) Gaussian distribution.\n    Calling ``gvar.gdump(g, 'filename')`` writes a serialized representation\n    of ``g`` into the file named ``filename``. The Gaussian distribution\n    described by ``g`` can be recovered later using ``gvar.load('filename')``.\n    Correlations between different |GVar|\\s in ``g`` are preserved, as\n    are relationships (i.e., derivatives) between derived |GVar|\\s and \n    any primary |GVar|\\s in ``g``.\n\n    :func:`gvar.gdump` differs from :func:`gvar.dump` in that the elements \n    in ``g`` must all be |GVar|\\s for the former, whereas |GVar|\\s may be\n    mixed in with other data types for the latter. The structure of ``g``\n    is also more restricted for :func:`gvar.gdump`, but it is \n    typically faster than :func:`gvar.dump`.\n\n    Typical usage is::\n\n        # create file xxx.pickle containing GVars in g\n        import gvar as gv \n        gv.gdump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.gload('xxx.pickle')\n\n    Object ``g`` is serialized using one of the :mod:`json` (text\n    file) or :mod:`pickle` (binary file) Python modules. \n    Method ``'json'`` can produce smaller files, but\n    method ``'pickle'`` can be significantly faster. ``'json'`` \n    is more secure than ``'pickle'``, if that is an issue.\n    \n    :mod:`json` can have trouble with dictionaries whose keys are\n    not strings. A workaround is used here that succeeds provided\n    ``eval(repr(k)) == k`` for every key ``k``. This works for \n    a wide variety of standard key types including strings, integers, \n    and tuples of strings and/or integers. Try :mod:`pickle` if the \n    workaround fails.\n\n    The partial variances for derived |GVar|\\s in ``""g`` coming from \n    primary |GVar|\\s in ``g`` are preserved by :func:`gvar.gdump`.\n    (These are used, for example, to calculate error budgets.)\n    Partial variances coming from derived (rather than \n    primary) |GVar|\\s, however, are unreliable unless \n    every primary |GVar| that contributes to the covariances\n    in ``g`` is included in ``g``. To guarantee that\n    this is the case set keyword ``add_dependencies=True``.\n    This can greatly increase the size of the output file,\n    and so should only be done if error budgets, etc. are needed. \n    (Also the cost of evaluating covariance matrices \n    for the reconstituted |GVar|\\s is increased if there \n    are large numbers of primary |GVar|\\s.) The default is \n    ``add_dependencies=False``.\n\n    Args:\n        g: A |GVar|, array of |GVar|\\s, or dictionary whose values\n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        outputfile: The name of a file or a file object in which the\n            serialized |GVar|\\s are stored. If ``outputfile=None`` (default),\n            the results are written to a :class:`StringIO` (for \n            ``method='json'``) or :class:`BytesIO` (for\n            ``method='pickle'``) object. \n        method (str): Serialization method, which should be either\n            ``'json'`` or ``'pickle'``. If ``method=None`` (default),\n            the method is inferred from the filename's extension:\n            ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` \n            or ``.p`` for ``'pickle'``. If that fails the method \n            defaults to ``'json'``.\n        add_dependencies (bool): If ``True``, automatically includes \n            all primary |GVar|\\s that contribute to the covariances \n            of the |GVar|\\s in ``g`` but are not already in ``g``.\n            Default is ``False``.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying serializer (:mod:`pickle` or :mod:`json`).""\n\n    Returns:\n        if ``outputfile=None``, the :class:`StringIO` or :class:`BytesIO` \n        object containing the serialized data is returned. Otherwise\n        ``outputfile`` is returned.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_59gdump = {"gdump", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_59gdump, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_58gdump};
 static PyObject *__pyx_pw_4gvar_10_utilities_59gdump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -26703,9 +26771,9 @@ static PyObject *__pyx_pw_4gvar_10_utilities_59gdump(PyObject *__pyx_self, PyObj
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_outputfile,&__pyx_n_s_method,&__pyx_n_s_add_dependencies,0};
     PyObject* values[4] = {0,0,0,0};
-    values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)Py_None);
-    values[3] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject *)Py_None));
+    values[3] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -26990,7 +27058,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_58gdump(CYTHON_UNUSED PyObject *__p
  *                 _DUMPMETHODS.get(outputfile.split('.')[-1], 'json')
  *                 )
  */
-      __pyx_t_5 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__10, __pyx_v_outputfile, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 1493, __pyx_L1_error)
+      __pyx_t_5 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__9, __pyx_v_outputfile, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 1493, __pyx_L1_error)
       if ((__pyx_t_5 != 0)) {
         __Pyx_INCREF(__pyx_n_s_json);
         __pyx_t_4 = __pyx_n_s_json;
@@ -27020,7 +27088,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_58gdump(CYTHON_UNUSED PyObject *__p
             __Pyx_DECREF_SET(__pyx_t_7, function);
           }
         }
-        __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_8, __pyx_kp_s__10) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_s__10);
+        __pyx_t_2 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_8, __pyx_kp_s__9) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_s__9);
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1494, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -27520,7 +27588,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_58gdump(CYTHON_UNUSED PyObject *__p
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_61gloads(PyObject *__pyx_self, PyObject *__pyx_v_inputstr); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_60gloads[] = "gloads(inputstr)\n Return |GVar|\\s that are serialized in ``inputstr``.\n\n    This function recovers the |GVar|\\s serialized with :func:`gvar.gdumps(g)`.\n    It is shorthand for::\n\n        gvar.gload(StringIO(inputstr), method='json')\n    \n    Typical usage is::\n\n        # create string containing GVars in g\n        import gvar as gv \n        gstr = gv.gdumps(g)\n\n        # convert string back into GVars\n        new_g = gv.gloads(gstr)\n\n    Args:\n        inputstr (str or bytes): String or bytes object \n            created by :func:`gvar.dumps`. \n\n    Returns:\n        The reconstructed |GVar|, array of |GVar|\\s, or dictionary \n        whose values are |GVar|\\s and/or arrays of |GVar|\\s.\n    ";
+static char __pyx_doc_4gvar_10_utilities_60gloads[] = " Return |GVar|\\s that are serialized in ``inputstr``.\n\n    This function recovers the |GVar|\\s serialized with :func:`gvar.gdumps(g)`.\n    It is shorthand for::\n\n        gvar.gload(StringIO(inputstr), method='json')\n    \n    Typical usage is::\n\n        # create string containing GVars in g\n        import gvar as gv \n        gstr = gv.gdumps(g)\n\n        # convert string back into GVars\n        new_g = gv.gloads(gstr)\n\n    Args:\n        inputstr (str or bytes): String or bytes object \n            created by :func:`gvar.dumps`. \n\n    Returns:\n        The reconstructed |GVar|, array of |GVar|\\s, or dictionary \n        whose values are |GVar|\\s and/or arrays of |GVar|\\s.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_61gloads = {"gloads", (PyCFunction)__pyx_pw_4gvar_10_utilities_61gloads, METH_O, __pyx_doc_4gvar_10_utilities_60gloads};
 static PyObject *__pyx_pw_4gvar_10_utilities_61gloads(PyObject *__pyx_self, PyObject *__pyx_v_inputstr) {
   PyObject *__pyx_r = 0;
@@ -27749,7 +27817,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_60gloads(CYTHON_UNUSED PyObject *__
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_63gload(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_62gload[] = "gload(inputfile, method=None, **kargs)\n Read and return |GVar|\\s that are serialized in ``inputfile``.\n\n    This function recovers |GVar|\\s serialized with :func:`gvar.gdump`.\n    Typical usage is::\n\n        # create file xxx.pickle containing GVars in g\n        import gvar as gv \n        gv.gdump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.gload('xxx.pickle')\n\n    Args:\n        inputfile: The name of the file or a file object in which the\n            serialized |GVar|\\s are stored (created by :func:`gvar.gdump`).\n        method (str or None): Serialization method, which should be either\n            ``'pickle'`` or ``'json'``. If ``method=None`` (default),\n            the method is inferred from the filename's extension:\n            ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` \n            or ``.p`` for ``'pickle'``. If that fails the method \n            defaults to ``'json'``. Argument ``method`` is ignored \n            if ``inputfile`` is either a :class:`StringIO` or \n            :class:`BytesIO` object, with the method being set \n            to ``'json'`` or ``'pickle'``, respectively.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying de-serializer (:mod:`pickle` or :mod:`json`).\n\n    Returns:\n        The reconstructed |GVar|, array of |GVar|\\s, or dictionary \n        whose values are |GVar|\\s and/or arrays of |GVar|\\s.\n    ";
+static char __pyx_doc_4gvar_10_utilities_62gload[] = " Read and return |GVar|\\s that are serialized in ``inputfile``.\n\n    This function recovers |GVar|\\s serialized with :func:`gvar.gdump`.\n    Typical usage is::\n\n        # create file xxx.pickle containing GVars in g\n        import gvar as gv \n        gv.gdump(g, 'xxx.pickle')\n\n        # read file xxx.pickle to recreate g\n        new_g = gv.gload('xxx.pickle')\n\n    Args:\n        inputfile: The name of the file or a file object in which the\n            serialized |GVar|\\s are stored (created by :func:`gvar.gdump`).\n        method (str or None): Serialization method, which should be either\n            ``'pickle'`` or ``'json'``. If ``method=None`` (default),\n            the method is inferred from the filename's extension:\n            ``.json`` for ``'json'``; and ``.pickle`` or ``.pkl`` \n            or ``.p`` for ``'pickle'``. If that fails the method \n            defaults to ``'json'``. Argument ``method`` is ignored \n            if ``inputfile`` is either a :class:`StringIO` or \n            :class:`BytesIO` object, with the method being set \n            to ``'json'`` or ``'pickle'``, respectively.\n        kargs (dict): Additional arguments, if any, that are passed to \n            the underlying de-serializer (:mod:`pickle` or :mod:`json`).\n\n    Returns:\n        The reconstructed |GVar|, array of |GVar|\\s, or dictionary \n        whose values are |GVar|\\s and/or arrays of |GVar|\\s.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_63gload = {"gload", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_63gload, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_62gload};
 static PyObject *__pyx_pw_4gvar_10_utilities_63gload(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_inputfile = 0;
@@ -27763,7 +27831,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_63gload(PyObject *__pyx_self, PyObj
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_inputfile,&__pyx_n_s_method,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_None);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -28063,7 +28131,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_62gload(CYTHON_UNUSED PyObject *__p
  *                 _DUMPMETHODS.get(inputfile.split('.')[-1], 'json')
  *                 )
  */
-      __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__10, __pyx_v_inputfile, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 1595, __pyx_L1_error)
+      __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__9, __pyx_v_inputfile, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 1595, __pyx_L1_error)
       if ((__pyx_t_2 != 0)) {
         __Pyx_INCREF(__pyx_n_s_json);
         __pyx_t_3 = __pyx_n_s_json;
@@ -28093,7 +28161,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_62gload(CYTHON_UNUSED PyObject *__p
             __Pyx_DECREF_SET(__pyx_t_7, function);
           }
         }
-        __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_8, __pyx_kp_s__10) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_s__10);
+        __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_8, __pyx_kp_s__9) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_s__9);
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1596, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
@@ -28718,7 +28786,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_62gload(CYTHON_UNUSED PyObject *__p
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_65_gdump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_64_gdump[] = "_gdump(g, add_dependencies=False)\n Repack ``g`` in dictionary that can be serialized. Used by :func:`gdump`.\n    ";
+static char __pyx_doc_4gvar_10_utilities_64_gdump[] = " Repack ``g`` in dictionary that can be serialized. Used by :func:`gdump`.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_65_gdump = {"_gdump", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_65_gdump, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_64_gdump};
 static PyObject *__pyx_pw_4gvar_10_utilities_65_gdump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -28729,7 +28797,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_65_gdump(PyObject *__pyx_self, PyOb
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_add_dependencies,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_False);
+    values[1] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -29257,7 +29325,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_64_gdump(CYTHON_UNUSED PyObject *__
  */
   __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_g, __pyx_n_s_flat); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1641, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_8, 0, 0, NULL, NULL, &__pyx_slice__6, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1641, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetSlice(__pyx_t_8, 0, 0, NULL, NULL, &__pyx_slice__5, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1641, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __pyx_v_buf = __pyx_t_4;
@@ -30147,7 +30215,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_64_gdump(CYTHON_UNUSED PyObject *__
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_67_gload(PyObject *__pyx_self, PyObject *__pyx_v_data); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_66_gload[] = "_gload(data)\n Inverse of :func:`_gdump`.\n    ";
+static char __pyx_doc_4gvar_10_utilities_66_gload[] = " Inverse of :func:`_gdump`.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_67_gload = {"_gload", (PyCFunction)__pyx_pw_4gvar_10_utilities_67_gload, METH_O, __pyx_doc_4gvar_10_utilities_66_gload};
 static PyObject *__pyx_pw_4gvar_10_utilities_67_gload(PyObject *__pyx_self, PyObject *__pyx_v_data) {
   PyObject *__pyx_r = 0;
@@ -31325,7 +31393,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_66_gload(CYTHON_UNUSED PyObject *__
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_69_rebuild_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_68_rebuild_gvars[] = "_rebuild_gvars(buf, cov, primary, derivs, fix_cov)\n reconnect derived GVars to primary GVars; used by :func:`_gload` ";
+static char __pyx_doc_4gvar_10_utilities_68_rebuild_gvars[] = " reconnect derived GVars to primary GVars; used by :func:`_gload` ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_69_rebuild_gvars = {"_rebuild_gvars", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_69_rebuild_gvars, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_68_rebuild_gvars};
 static PyObject *__pyx_pw_4gvar_10_utilities_69_rebuild_gvars(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_buf = 0;
@@ -31653,7 +31721,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_68_rebuild_gvars(CYTHON_UNUSED PyOb
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_8, __pyx_tuple__11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1712, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_8, __pyx_tuple__10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1712, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __pyx_t_8 = PyNumber_Multiply(__pyx_t_2, __pyx_v_derivs); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1712, __pyx_L1_error)
@@ -31762,7 +31830,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_68_rebuild_gvars(CYTHON_UNUSED PyOb
  *             )
  *     else:
  */
-    __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_idx_derived, __pyx_tuple__7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1719, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_idx_derived, __pyx_tuple__6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1719, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1719, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
@@ -31940,7 +32008,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_68_rebuild_gvars(CYTHON_UNUSED PyOb
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_71olddump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_70olddump[] = "olddump(g, outputfile, method='pickle', use_json=False)\n Serialize a collection ``g`` of |GVar|\\s into file ``outputfile``.\n\n    Old verion, here for testing purposes only.\n\n    The |GVar|\\s are recovered using :func:`gvar.load`.\n\n    Three serialization methods are available: :mod:`pickle`, :mod:`json`,\n    and :mod:`yaml` (provided the :mod:`yaml` module is installed).\n\n    :mod:`json` can have trouble with dictionaries whose keys are not\n    strings. A workaround is used here that succeeds provided\n    ``eval(repr(k)) == k`` for every key ``k``, which is true for strings and\n    lots of other types of key. Use :mod:`pickle` where the workaround fails.\n\n    Args:\n        g: A |GVar|, array of |GVar|\\s, or dictionary whose values\n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        outputfile: The name of a file or a file object in which the\n            serialized |GVar|\\s are stored.\n        method (str): Serialization method, which should be one of\n            ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_70olddump[] = " Serialize a collection ``g`` of |GVar|\\s into file ``outputfile``.\n\n    Old verion, here for testing purposes only.\n\n    The |GVar|\\s are recovered using :func:`gvar.load`.\n\n    Three serialization methods are available: :mod:`pickle`, :mod:`json`,\n    and :mod:`yaml` (provided the :mod:`yaml` module is installed).\n\n    :mod:`json` can have trouble with dictionaries whose keys are not\n    strings. A workaround is used here that succeeds provided\n    ``eval(repr(k)) == k`` for every key ``k``, which is true for strings and\n    lots of other types of key. Use :mod:`pickle` where the workaround fails.\n\n    Args:\n        g: A |GVar|, array of |GVar|\\s, or dictionary whose values\n            are |GVar|\\s and/or arrays of |GVar|\\s.\n        outputfile: The name of a file or a file object in which the\n            serialized |GVar|\\s are stored.\n        method (str): Serialization method, which should be one of\n            ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_71olddump = {"olddump", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_71olddump, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_70olddump};
 static PyObject *__pyx_pw_4gvar_10_utilities_71olddump(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -31953,8 +32021,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_71olddump(PyObject *__pyx_self, PyO
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_outputfile,&__pyx_n_s_method,&__pyx_n_s_use_json,0};
     PyObject* values[4] = {0,0,0,0};
-    values[2] = ((PyObject *)__pyx_n_s_pickle);
-    values[3] = ((PyObject *)Py_False);
+    values[2] = ((PyObject *)((PyObject*)__pyx_n_s_pickle));
+    values[3] = ((PyObject *)((PyObject *)Py_False));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -32120,7 +32188,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_70olddump(CYTHON_UNUSED PyObject *_
  *     if isinstance(outputfile, str):
  *         with open(outputfile, 'w' if method in ['json', 'yaml'] else 'wb') as ofile:
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1753, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1753, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -32313,7 +32381,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_70olddump(CYTHON_UNUSED PyObject *_
       /*finally:*/ {
         /*normal exit:*/{
           if (__pyx_t_6) {
-            __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__13, NULL);
+            __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__12, NULL);
             __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
             if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1755, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_11);
@@ -32325,7 +32393,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_70olddump(CYTHON_UNUSED PyObject *_
           __pyx_t_11 = __pyx_r;
           __pyx_r = 0;
           if (__pyx_t_6) {
-            __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__13, NULL);
+            __pyx_t_10 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__12, NULL);
             __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
             if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1755, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_10);
@@ -32959,7 +33027,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_70olddump(CYTHON_UNUSED PyObject *_
  */
     __pyx_t_7 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1780, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_tag, __pyx_tuple__14) < 0) __PYX_ERR(0, 1780, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_tag, __pyx_tuple__13) < 0) __PYX_ERR(0, 1780, __pyx_L1_error)
     __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_gvar_2); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1780, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_mean); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1780, __pyx_L1_error)
@@ -33131,7 +33199,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_70olddump(CYTHON_UNUSED PyObject *_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_73_oldload1(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_72_oldload1[] = "_oldload1(inputfile, method=None, use_json=None)\n Load and return serialized |GVar|\\s from file ``inputfile``.\n\n    This is the version of :func:`gvar.load` used before  \n    version |~| 10.0 of :mod:`gvar`.\n\n    This function recovers |GVar|\\s pickled with :func:`gvar.dump`.\n    It will disappear eventually.\n\n    Args:\n        inputfile: The name of the file or a file object in which the\n            serialized |GVar|\\s are stored.\n        method (str or None): Serialization method, which should be one of\n            ``['pickle', 'json', 'yaml']``. If ``method=None``, then each\n            method is tried in turn.\n\n    Returns:\n        The reconstructed |GVar|, or array or dictionary of |GVar|\\s.\n    ";
+static char __pyx_doc_4gvar_10_utilities_72_oldload1[] = " Load and return serialized |GVar|\\s from file ``inputfile``.\n\n    This is the version of :func:`gvar.load` used before  \n    version |~| 10.0 of :mod:`gvar`.\n\n    This function recovers |GVar|\\s pickled with :func:`gvar.dump`.\n    It will disappear eventually.\n\n    Args:\n        inputfile: The name of the file or a file object in which the\n            serialized |GVar|\\s are stored.\n        method (str or None): Serialization method, which should be one of\n            ``['pickle', 'json', 'yaml']``. If ``method=None``, then each\n            method is tried in turn.\n\n    Returns:\n        The reconstructed |GVar|, or array or dictionary of |GVar|\\s.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_73_oldload1 = {"_oldload1", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_73_oldload1, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_72_oldload1};
 static PyObject *__pyx_pw_4gvar_10_utilities_73_oldload1(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_inputfile = 0;
@@ -33143,8 +33211,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_73_oldload1(PyObject *__pyx_self, P
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_inputfile,&__pyx_n_s_method,&__pyx_n_s_use_json,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)Py_None);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject *)Py_None));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -33250,7 +33318,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_72_oldload1(CYTHON_UNUSED PyObject 
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_warn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1804, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1804, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1804, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -33698,7 +33766,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_72_oldload1(CYTHON_UNUSED PyObject 
  *     if yaml is None and method == 'yaml':
  *         raise RuntimeError('yaml module not installed')
  */
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1826, __pyx_L26_except_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1826, __pyx_L26_except_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_Raise(__pyx_t_1, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -33764,7 +33832,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_72_oldload1(CYTHON_UNUSED PyObject 
  *     if isinstance(inputfile, str):
  *         with open(inputfile, 'rb' if method == 'pickle' else 'r') as ifile:
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1828, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1828, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -33943,7 +34011,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_72_oldload1(CYTHON_UNUSED PyObject 
       /*finally:*/ {
         /*normal exit:*/{
           if (__pyx_t_5) {
-            __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__13, NULL);
+            __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__12, NULL);
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1830, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_11);
@@ -33955,7 +34023,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_72_oldload1(CYTHON_UNUSED PyObject 
           __pyx_t_11 = __pyx_r;
           __pyx_r = 0;
           if (__pyx_t_5) {
-            __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__13, NULL);
+            __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__12, NULL);
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1830, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
@@ -34692,7 +34760,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_72_oldload1(CYTHON_UNUSED PyObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_75_oldload0(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_74_oldload0[] = "_oldload0(inputfile, use_json=None)\n\n    Older version of :func:`load`, included to allow loading\n    of previously dumped data.\n    ";
+static char __pyx_doc_4gvar_10_utilities_74_oldload0[] = "\n    Older version of :func:`load`, included to allow loading\n    of previously dumped data.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_75_oldload0 = {"_oldload0", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_75_oldload0, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_74_oldload0};
 static PyObject *__pyx_pw_4gvar_10_utilities_75_oldload0(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_inputfile = 0;
@@ -34703,7 +34771,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_75_oldload0(PyObject *__pyx_self, P
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_inputfile,&__pyx_n_s_use_json,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_None);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -35102,7 +35170,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_74_oldload0(CYTHON_UNUSED PyObject 
       /*finally:*/ {
         /*normal exit:*/{
           if (__pyx_t_5) {
-            __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__13, NULL);
+            __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__12, NULL);
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 1863, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
@@ -35114,7 +35182,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_74_oldload0(CYTHON_UNUSED PyObject 
           __pyx_t_13 = __pyx_r;
           __pyx_r = 0;
           if (__pyx_t_5) {
-            __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__13, NULL);
+            __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__12, NULL);
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1863, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
@@ -35599,7 +35667,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_74_oldload0(CYTHON_UNUSED PyObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_77disassemble(PyObject *__pyx_self, PyObject *__pyx_v_g); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_76disassemble[] = "disassemble(g)\n Disassemble collection ``g`` of |GVar|\\s.\n\n    Args:\n        g (dict, array, or gvar.GVar): Collection of |GVar|\\s to be\n            disassembled.\n    ";
+static char __pyx_doc_4gvar_10_utilities_76disassemble[] = " Disassemble collection ``g`` of |GVar|\\s.\n\n    Args:\n        g (dict, array, or gvar.GVar): Collection of |GVar|\\s to be\n            disassembled.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_77disassemble = {"disassemble", (PyCFunction)__pyx_pw_4gvar_10_utilities_77disassemble, METH_O, __pyx_doc_4gvar_10_utilities_76disassemble};
 static PyObject *__pyx_pw_4gvar_10_utilities_77disassemble(PyObject *__pyx_self, PyObject *__pyx_v_g) {
   PyObject *__pyx_r = 0;
@@ -36047,9 +36115,45 @@ static PyObject *__pyx_pf_4gvar_10_utilities_76disassemble(CYTHON_UNUSED PyObjec
  * 
  */
 
+static PyObject *__pyx_pf_4gvar_10_utilities_104__defaults__(CYTHON_UNUSED PyObject *__pyx_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  __Pyx_RefNannySetupContext("__defaults__", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_INCREF(((PyObject *)__Pyx_CyFunction_Defaults(__pyx_defaults1, __pyx_self)->__pyx_arg_cov));
+  __Pyx_GIVEREF(((PyObject *)__Pyx_CyFunction_Defaults(__pyx_defaults1, __pyx_self)->__pyx_arg_cov));
+  PyTuple_SET_ITEM(__pyx_t_1, 0, ((PyObject *)__Pyx_CyFunction_Defaults(__pyx_defaults1, __pyx_self)->__pyx_arg_cov));
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
+  __Pyx_INCREF(Py_None);
+  __Pyx_GIVEREF(Py_None);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, Py_None);
+  __pyx_t_1 = 0;
+  __pyx_r = __pyx_t_2;
+  __pyx_t_2 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("gvar._utilities.__defaults__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_79reassemble(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_78reassemble[] = "reassemble(data, smat cov=_gvar.gvar.cov)\n Convert data from :func:`gvar.disassemble` back into |GVar|\\s.\n\n    Args:\n        data (BufferDict, array): Disassembled collection of |GVar|\\s\n            from :func:`gvar.disassemble` that are to be reassembled.\n        cov (gvar.smat): Covariance matrix corresponding to the |GVar|\\s\n            in ``data``. (Default is ``gvar.gvar.cov``.)\n    ";
+static char __pyx_doc_4gvar_10_utilities_78reassemble[] = " Convert data from :func:`gvar.disassemble` back into |GVar|\\s.\n\n    Args:\n        data (BufferDict, array): Disassembled collection of |GVar|\\s\n            from :func:`gvar.disassemble` that are to be reassembled.\n        cov (gvar.smat): Covariance matrix corresponding to the |GVar|\\s\n            in ``data``. (Default is ``gvar.gvar.cov``.)\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_79reassemble = {"reassemble", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_79reassemble, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_78reassemble};
 static PyObject *__pyx_pw_4gvar_10_utilities_79reassemble(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_data = 0;
@@ -36060,7 +36164,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_79reassemble(PyObject *__pyx_self, 
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_data,&__pyx_n_s_cov,0};
     PyObject* values[2] = {0,0};
-    values[1] = (PyObject *)__pyx_k__17;
+    __pyx_defaults1 *__pyx_dynamic_args = __Pyx_CyFunction_Defaults(__pyx_defaults1, __pyx_self);
+    values[1] = (PyObject *)__pyx_dynamic_args->__pyx_arg_cov;
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -36630,7 +36735,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_78reassemble(CYTHON_UNUSED PyObject
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_81wsum_der(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_80wsum_der[] = "wsum_der(ndarray wgt, glist)\n weighted sum of |GVar| derivatives ";
+static char __pyx_doc_4gvar_10_utilities_80wsum_der[] = " weighted sum of |GVar| derivatives ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_81wsum_der = {"wsum_der", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_81wsum_der, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_80wsum_der};
 static PyObject *__pyx_pw_4gvar_10_utilities_81wsum_der(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_wgt = 0;
@@ -37034,7 +37139,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_80wsum_der(CYTHON_UNUSED PyObject *
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_83wsum_gvar(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_82wsum_gvar[] = "wsum_gvar(ndarray wgt, glist)\n weighted sum of |GVar|\\s ";
+static char __pyx_doc_4gvar_10_utilities_82wsum_gvar[] = " weighted sum of |GVar|\\s ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_83wsum_gvar = {"wsum_gvar", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_83wsum_gvar, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_82wsum_gvar};
 static PyObject *__pyx_pw_4gvar_10_utilities_83wsum_gvar(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_wgt = 0;
@@ -37739,7 +37844,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_82wsum_gvar(CYTHON_UNUSED PyObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_85fmt_values(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_84fmt_values[] = "fmt_values(outputs, ndecimal=None, ndigit=None)\n Tabulate :class:`gvar.GVar`\\s in ``outputs``.\n\n    Args:\n        outputs: A dictionary of :class:`gvar.GVar` objects.\n        ndecimal (int): Format values ``v`` using ``v.fmt(ndecimal)``.\n    Returns:\n        A table (``str``) containing values and standard\n        deviations for variables in ``outputs``, labeled by the keys\n        in ``outputs``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_84fmt_values[] = " Tabulate :class:`gvar.GVar`\\s in ``outputs``.\n\n    Args:\n        outputs: A dictionary of :class:`gvar.GVar` objects.\n        ndecimal (int): Format values ``v`` using ``v.fmt(ndecimal)``.\n    Returns:\n        A table (``str``) containing values and standard\n        deviations for variables in ``outputs``, labeled by the keys\n        in ``outputs``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_85fmt_values = {"fmt_values", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_85fmt_values, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_84fmt_values};
 static PyObject *__pyx_pw_4gvar_10_utilities_85fmt_values(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_outputs = 0;
@@ -37751,8 +37856,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_85fmt_values(PyObject *__pyx_self, 
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_outputs,&__pyx_n_s_ndecimal,&__pyx_n_s_ndigit,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)Py_None);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject *)Py_None));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -38023,7 +38128,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_84fmt_values(CYTHON_UNUSED PyObject
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_87fmt_errorbudget(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_86fmt_errorbudget[] = "fmt_errorbudget(outputs, inputs, ndecimal=2, percent=True, colwidth=None, verify=False, ndigit=None)\n Tabulate error budget for ``outputs[ko]`` due to ``inputs[ki]``.\n\n    For each output ``outputs[ko]``, ``fmt_errorbudget`` computes the\n    contributions to ``outputs[ko]``'s standard deviation coming from the\n    |GVar|\\s collected in ``inputs[ki]``. This is done for each key\n    combination ``(ko,ki)`` and the results are tabulated with columns and\n    rows labeled by ``ko`` and ``ki``, respectively. If a |GVar| in\n    ``inputs[ki]`` is correlated with other |GVar|\\s, the contribution from\n    the others is included in the ``ki`` contribution as well (since\n    contributions from correlated |GVar|\\s cannot be distinguished). The table\n    is returned as a string.\n\n    Args:\n        outputs: Dictionary of |GVar|\\s for which an error budget\n            is computed.\n        inputs: Dictionary of: |GVar|\\s, arrays/dictionaries of\n            |GVar|\\s, or lists of |GVar|\\s and/or arrays/dictionaries of\n            |GVar|\\s. ``fmt_errorbudget`` tabulates the parts of the standard\n            deviations of each ``outputs[ko]`` due to each ``inputs[ki]``.\n        ndecimal (int): Number of decimal places displayed in table.\n        percent (bool): Tabulate % errors if ``percent is True``;   \n            otherwise tabulate the errors themselves.\n        colwidth (int): Width of each column. This is set automatically,\n            to accommodate label widths, if ``colwidth=None`` (default).\n        verify (bool): If ``True``, a warning is issued if: 1) different \n            inputs are correlated (and therefore double count errors); or\n            2) the sum (in quadrature) of partial errors is not equal to \n            the total error to within 0.1% of the error (and the error \n            budget is incomplete or overcomplete). No checking is done \n            if ``verify==False`` (default).\n\n    Returns:\n        A table (``str``) con""taining the error budget.\n        Output variables are labeled by the keys in ``outputs``\n        (columns); sources of uncertainty are labeled by the keys in\n        ``inputs`` (rows).\n    ";
+static char __pyx_doc_4gvar_10_utilities_86fmt_errorbudget[] = " Tabulate error budget for ``outputs[ko]`` due to ``inputs[ki]``.\n\n    For each output ``outputs[ko]``, ``fmt_errorbudget`` computes the\n    contributions to ``outputs[ko]``'s standard deviation coming from the\n    |GVar|\\s collected in ``inputs[ki]``. This is done for each key\n    combination ``(ko,ki)`` and the results are tabulated with columns and\n    rows labeled by ``ko`` and ``ki``, respectively. If a |GVar| in\n    ``inputs[ki]`` is correlated with other |GVar|\\s, the contribution from\n    the others is included in the ``ki`` contribution as well (since\n    contributions from correlated |GVar|\\s cannot be distinguished). The table\n    is returned as a string.\n\n    Args:\n        outputs: Dictionary of |GVar|\\s for which an error budget\n            is computed.\n        inputs: Dictionary of: |GVar|\\s, arrays/dictionaries of\n            |GVar|\\s, or lists of |GVar|\\s and/or arrays/dictionaries of\n            |GVar|\\s. ``fmt_errorbudget`` tabulates the parts of the standard\n            deviations of each ``outputs[ko]`` due to each ``inputs[ki]``.\n        ndecimal (int): Number of decimal places displayed in table.\n        percent (bool): Tabulate % errors if ``percent is True``;   \n            otherwise tabulate the errors themselves.\n        colwidth (int): Width of each column. This is set automatically,\n            to accommodate label widths, if ``colwidth=None`` (default).\n        verify (bool): If ``True``, a warning is issued if: 1) different \n            inputs are correlated (and therefore double count errors); or\n            2) the sum (in quadrature) of partial errors is not equal to \n            the total error to within 0.1% of the error (and the error \n            budget is incomplete or overcomplete). No checking is done \n            if ``verify==False`` (default).\n\n    Returns:\n        A table (``str``) containing the error budget.\n        Output variables are labeled by the keys in ``outputs``\n        (c""olumns); sources of uncertainty are labeled by the keys in\n        ``inputs`` (rows).\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_87fmt_errorbudget = {"fmt_errorbudget", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_87fmt_errorbudget, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_86fmt_errorbudget};
 static PyObject *__pyx_pw_4gvar_10_utilities_87fmt_errorbudget(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_outputs = 0;
@@ -38039,7 +38144,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_87fmt_errorbudget(PyObject *__pyx_s
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_outputs,&__pyx_n_s_inputs,&__pyx_n_s_ndecimal,&__pyx_n_s_percent,&__pyx_n_s_colwidth,&__pyx_n_s_verify,&__pyx_n_s_ndigit,0};
     PyObject* values[7] = {0,0,0,0,0,0,0};
-    values[2] = ((PyObject *)__pyx_int_2);
+    values[2] = ((PyObject *)((PyObject *)__pyx_int_2));
 
     /* "gvar/_utilities.pyx":1999
  * 
@@ -38048,8 +38153,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_87fmt_errorbudget(PyObject *__pyx_s
  *     verify=False, ndigit=None
  *     ):
  */
-    values[3] = ((PyObject *)Py_True);
-    values[4] = ((PyObject *)Py_None);
+    values[3] = ((PyObject *)((PyObject *)Py_True));
+    values[4] = ((PyObject *)((PyObject *)Py_None));
 
     /* "gvar/_utilities.pyx":2000
  * def fmt_errorbudget(
@@ -38058,8 +38163,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_87fmt_errorbudget(PyObject *__pyx_s
  *     ):
  *     """ Tabulate error budget for ``outputs[ko]`` due to ``inputs[ki]``.
  */
-    values[5] = ((PyObject *)Py_False);
-    values[6] = ((PyObject *)Py_None);
+    values[5] = ((PyObject *)((PyObject *)Py_False));
+    values[6] = ((PyObject *)((PyObject *)Py_None));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -39335,7 +39440,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
   __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2090, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_kp_s__18, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2090, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_kp_s__16, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2090, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __pyx_t_10 = PyNumber_Add(__pyx_t_6, __pyx_kp_s_s); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2090, __pyx_L1_error)
@@ -39354,10 +39459,10 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_21 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_v_w); if (unlikely(!__pyx_t_21)) __PYX_ERR(0, 2091, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_21);
-  __pyx_t_3 = PyNumber_Add(__pyx_kp_s__18, __pyx_t_21); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2091, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_kp_s__16, __pyx_t_21); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2091, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_21); __pyx_t_21 = 0;
-  __pyx_t_21 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__10); if (unlikely(!__pyx_t_21)) __PYX_ERR(0, 2091, __pyx_L1_error)
+  __pyx_t_21 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__9); if (unlikely(!__pyx_t_21)) __PYX_ERR(0, 2091, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_21);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_v_ndecimal); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2091, __pyx_L1_error)
@@ -39393,7 +39498,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
  *         )
  *     hfmt = (
  */
-  __pyx_t_13 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__19); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2091, __pyx_L1_error)
+  __pyx_t_13 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__17); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2091, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_lfmt = __pyx_t_13;
@@ -39408,7 +39513,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
  */
   __pyx_t_13 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_v_w0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2094, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
-  __pyx_t_3 = PyNumber_Add(__pyx_kp_s__18, __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2094, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_kp_s__16, __pyx_t_13); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2094, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
   __pyx_t_13 = PyNumber_Add(__pyx_t_3, __pyx_n_s_s_2); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2094, __pyx_L1_error)
@@ -39419,7 +39524,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_10 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_v_w); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2094, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_6 = PyNumber_Add(__pyx_kp_s__18, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2094, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_kp_s__16, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2094, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __pyx_t_10 = PyNumber_Add(__pyx_t_6, __pyx_n_s_s_2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2094, __pyx_L1_error)
@@ -39433,7 +39538,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_10, __pyx_kp_s__19); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2094, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_t_10, __pyx_kp_s__17); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2094, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __pyx_v_hfmt = __pyx_t_6;
@@ -39622,7 +39727,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
  */
   __pyx_t_13 = PyList_AsTuple(__pyx_v_outputs_keys); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
-  __pyx_t_6 = PyNumber_Add(__pyx_tuple__20, __pyx_t_13); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2103, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_tuple__18, __pyx_t_13); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
   __pyx_t_13 = PyNumber_Remainder(__pyx_v_hfmt, __pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2103, __pyx_L1_error)
@@ -39650,10 +39755,10 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
   __pyx_t_6 = PyNumber_Add(__pyx_v_w0, __pyx_t_13); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-  __pyx_t_13 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s__21); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2104, __pyx_L1_error)
+  __pyx_t_13 = PyNumber_Multiply(__pyx_t_6, __pyx_kp_s__19); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_t_13, __pyx_kp_s__19); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2104, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_t_13, __pyx_kp_s__17); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
   __pyx_t_13 = PyNumber_InPlaceAdd(__pyx_v_ans, __pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2104, __pyx_L1_error)
@@ -39864,10 +39969,10 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
   __pyx_t_13 = PyNumber_Add(__pyx_v_w0, __pyx_t_10); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-  __pyx_t_10 = PyNumber_Multiply(__pyx_t_13, __pyx_kp_s__21); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2108, __pyx_L1_error)
+  __pyx_t_10 = PyNumber_Multiply(__pyx_t_13, __pyx_kp_s__19); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-  __pyx_t_13 = PyNumber_Add(__pyx_t_10, __pyx_kp_s__19); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2108, __pyx_L1_error)
+  __pyx_t_13 = PyNumber_Add(__pyx_t_10, __pyx_kp_s__17); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __pyx_t_10 = PyNumber_InPlaceAdd(__pyx_v_ans, __pyx_t_13); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2108, __pyx_L1_error)
@@ -40002,7 +40107,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyO
   __pyx_t_10 = __Pyx_PySequence_Tuple(__pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyNumber_Add(__pyx_tuple__22, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2109, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_tuple__20, __pyx_t_10); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 2109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __pyx_t_10 = PyNumber_Remainder(__pyx_v_lfmt, __pyx_t_6); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2109, __pyx_L1_error)
@@ -40085,7 +40190,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_90generator(__pyx_CoroutineObject *
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_88bootstrap_iter[] = "bootstrap_iter(g, n=None, svdcut=1e-12)\n Return iterator for bootstrap copies of ``g``.\n\n    The gaussian variables (|GVar| objects) in array (or dictionary) ``g``\n    collectively define a multidimensional gaussian distribution. The\n    iterator created by :func:`bootstrap_iter` generates an array (or\n    dictionary) of new |GVar|\\s whose covariance matrix is the same as\n    ``g``'s but whose means are drawn at random from the original ``g``\n    distribution. This is a *bootstrap copy* of the original distribution.\n    Each iteration of the iterator has different means (but the same\n    covariance matrix).\n\n    :func:`bootstrap_iter` also works when ``g`` is a single |GVar|, in\n    which case the resulting iterator returns bootstrap copies of the\n    ``g``.\n\n    Args:\n        g: An array (or dictionary) of objects of type |GVar|.\n        n: Maximum number of random iterations. Setting ``n=None``\n            (the default) implies there is no maximum number.\n        svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s\n            correlation matrix with ``max(eig, svdcut * max_eig)`` \n            wherec``max_eig`` is the largest eigenvalue; if negative,\n            discard eigenmodes with eigenvalues smaller\n            than ``|svdcut| * max_eig``. Default is ``1e-12``.\n\n    Returns:\n        An iterator that returns bootstrap copies of ``g``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_88bootstrap_iter[] = " Return iterator for bootstrap copies of ``g``.\n\n    The gaussian variables (|GVar| objects) in array (or dictionary) ``g``\n    collectively define a multidimensional gaussian distribution. The\n    iterator created by :func:`bootstrap_iter` generates an array (or\n    dictionary) of new |GVar|\\s whose covariance matrix is the same as\n    ``g``'s but whose means are drawn at random from the original ``g``\n    distribution. This is a *bootstrap copy* of the original distribution.\n    Each iteration of the iterator has different means (but the same\n    covariance matrix).\n\n    :func:`bootstrap_iter` also works when ``g`` is a single |GVar|, in\n    which case the resulting iterator returns bootstrap copies of the\n    ``g``.\n\n    Args:\n        g: An array (or dictionary) of objects of type |GVar|.\n        n: Maximum number of random iterations. Setting ``n=None``\n            (the default) implies there is no maximum number.\n        svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s\n            correlation matrix with ``max(eig, svdcut * max_eig)`` \n            wherec``max_eig`` is the largest eigenvalue; if negative,\n            discard eigenmodes with eigenvalues smaller\n            than ``|svdcut| * max_eig``. Default is ``1e-12``.\n\n    Returns:\n        An iterator that returns bootstrap copies of ``g``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_89bootstrap_iter = {"bootstrap_iter", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_89bootstrap_iter, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_88bootstrap_iter};
 static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -40097,8 +40202,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_se
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_svdcut,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)__pyx_float_1eneg_12);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -40622,7 +40727,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_88bootstrap_iter(CYTHON_UNUSED PyOb
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_svdcut);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_svdcut);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_4gvar_10_utilities_90generator, __pyx_codeobj__23, (PyObject *) __pyx_cur_scope, __pyx_n_s_bootstrap_iter, __pyx_n_s_bootstrap_iter, __pyx_n_s_gvar__utilities); if (unlikely(!gen)) __PYX_ERR(0, 2114, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_4gvar_10_utilities_90generator, __pyx_codeobj__21, (PyObject *) __pyx_cur_scope, __pyx_n_s_bootstrap_iter, __pyx_n_s_bootstrap_iter, __pyx_n_s_gvar__utilities); if (unlikely(!gen)) __PYX_ERR(0, 2114, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -41045,7 +41150,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_90generator(__pyx_CoroutineObject *
  *             buf[i] += sum(zi * wi for zi, wi in zip(z[i], wgts))
  *         if g.shape is None:
  */
-    __pyx_t_1 = __Pyx_PyObject_GetSlice(__pyx_cur_scope->__pyx_v_i_wgts, 1, 0, NULL, NULL, &__pyx_slice__24, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2154, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetSlice(__pyx_cur_scope->__pyx_v_i_wgts, 1, 0, NULL, NULL, &__pyx_slice__22, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2154, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
       __pyx_t_3 = __pyx_t_1; __Pyx_INCREF(__pyx_t_3); __pyx_t_10 = 0;
@@ -41370,7 +41475,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_90generator(__pyx_CoroutineObject *
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_92sample(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_91sample[] = "sample(g, svdcut=1e-12)\n Generate random sample from distribution ``g``.\n\n    Equivalent to ``next(gvar.raniter(g, svdcut=svdcut))``.\n\n    Args:\n        g: An array or dictionary of objects of type |GVar|; or a |GVar|.\n        svdcut (float or ``None``): If positive, replace eigenvalues\n            ``eig`` of ``g``'s correlation matrix with\n            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the\n            largest eigenvalue; if negative, discard eigenmodes with\n            eigenvalues smaller than ``|svdcut| * max_eig``.\n            Default is ``1e-12``.\n\n    Returns:\n        A random array or dictionary, with the same shape as ``g``,\n        drawn from the Gaussian distribution defined by ``g``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_91sample[] = " Generate random sample from distribution ``g``.\n\n    Equivalent to ``next(gvar.raniter(g, svdcut=svdcut))``.\n\n    Args:\n        g: An array or dictionary of objects of type |GVar|; or a |GVar|.\n        svdcut (float or ``None``): If positive, replace eigenvalues\n            ``eig`` of ``g``'s correlation matrix with\n            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the\n            largest eigenvalue; if negative, discard eigenmodes with\n            eigenvalues smaller than ``|svdcut| * max_eig``.\n            Default is ``1e-12``.\n\n    Returns:\n        A random array or dictionary, with the same shape as ``g``,\n        drawn from the Gaussian distribution defined by ``g``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_92sample = {"sample", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_92sample, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_91sample};
 static PyObject *__pyx_pw_4gvar_10_utilities_92sample(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -41381,7 +41486,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_92sample(PyObject *__pyx_self, PyOb
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_svdcut,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)__pyx_float_1eneg_12);
+    values[1] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -41507,7 +41612,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_95generator1(__pyx_CoroutineObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_94raniter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_93raniter[] = "raniter(g, n=None, svdcut=1e-12)\n Return iterator for random samples from distribution ``g``\n\n    The gaussian variables (|GVar| objects) in array (or dictionary) ``g``\n    collectively define a multidimensional gaussian distribution. The\n    iterator defined by :func:`raniter` generates an array (or dictionary)\n    containing random numbers drawn from that distribution, with\n    correlations intact.\n\n    The layout for the result is the same as for ``g``. So an array of the\n    same shape is returned if ``g`` is an array. When ``g`` is a dictionary,\n    individual entries ``g[k]`` may be |GVar|\\s or arrays of |GVar|\\s,\n    with arbitrary shapes.\n\n    :func:`raniter` also works when ``g`` is a single |GVar|, in which case\n    the resulting iterator returns random numbers drawn from the\n    distribution specified by ``g``.\n\n    Args:\n        g: An array (or dictionary) of objects of type |GVar|; or a |GVar|.\n        n (int or ``None``): Maximum number of random iterations.\n            Setting ``n=None`` (the default) implies there is\n            no maximum number.\n        svdcut (float or ``None``): If positive, replace eigenvalues\n            ``eig`` of ``g``'s correlation matrix with\n            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the\n            largest eigenvalue; if negative, discard eigenmodes with\n            eigenvalues smaller than ``|svdcut| * max_eig``.\n            Default is ``1e-12``.\n\n    Returns:\n        An iterator that returns random arrays or dictionaries\n        with the same shape as ``g`` drawn from the Gaussian distribution\n        defined by ``g``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_93raniter[] = " Return iterator for random samples from distribution ``g``\n\n    The gaussian variables (|GVar| objects) in array (or dictionary) ``g``\n    collectively define a multidimensional gaussian distribution. The\n    iterator defined by :func:`raniter` generates an array (or dictionary)\n    containing random numbers drawn from that distribution, with\n    correlations intact.\n\n    The layout for the result is the same as for ``g``. So an array of the\n    same shape is returned if ``g`` is an array. When ``g`` is a dictionary,\n    individual entries ``g[k]`` may be |GVar|\\s or arrays of |GVar|\\s,\n    with arbitrary shapes.\n\n    :func:`raniter` also works when ``g`` is a single |GVar|, in which case\n    the resulting iterator returns random numbers drawn from the\n    distribution specified by ``g``.\n\n    Args:\n        g: An array (or dictionary) of objects of type |GVar|; or a |GVar|.\n        n (int or ``None``): Maximum number of random iterations.\n            Setting ``n=None`` (the default) implies there is\n            no maximum number.\n        svdcut (float or ``None``): If positive, replace eigenvalues\n            ``eig`` of ``g``'s correlation matrix with\n            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the\n            largest eigenvalue; if negative, discard eigenmodes with\n            eigenvalues smaller than ``|svdcut| * max_eig``.\n            Default is ``1e-12``.\n\n    Returns:\n        An iterator that returns random arrays or dictionaries\n        with the same shape as ``g`` drawn from the Gaussian distribution\n        defined by ``g``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_94raniter = {"raniter", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_94raniter, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_93raniter};
 static PyObject *__pyx_pw_4gvar_10_utilities_94raniter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
@@ -41519,8 +41624,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_94raniter(PyObject *__pyx_self, PyO
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_svdcut,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)Py_None);
-    values[2] = ((PyObject *)__pyx_float_1eneg_12);
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -41823,7 +41928,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_93raniter(CYTHON_UNUSED PyObject *_
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_svdcut);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_svdcut);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_4gvar_10_utilities_95generator1, __pyx_codeobj__25, (PyObject *) __pyx_cur_scope, __pyx_n_s_raniter, __pyx_n_s_raniter, __pyx_n_s_gvar__utilities); if (unlikely(!gen)) __PYX_ERR(0, 2184, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_4gvar_10_utilities_95generator1, __pyx_codeobj__23, (PyObject *) __pyx_cur_scope, __pyx_n_s_raniter, __pyx_n_s_raniter, __pyx_n_s_gvar__utilities); if (unlikely(!gen)) __PYX_ERR(0, 2184, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -42259,7 +42364,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_95generator1(__pyx_CoroutineObject 
  *             buf[i] += z[i].dot(wgts)
  *         if g.shape is None:
  */
-    __pyx_t_1 = __Pyx_PyObject_GetSlice(__pyx_cur_scope->__pyx_v_i_wgts, 1, 0, NULL, NULL, &__pyx_slice__24, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2230, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetSlice(__pyx_cur_scope->__pyx_v_i_wgts, 1, 0, NULL, NULL, &__pyx_slice__22, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2230, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
       __pyx_t_2 = __pyx_t_1; __Pyx_INCREF(__pyx_t_2); __pyx_t_10 = 0;
@@ -42600,8 +42705,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_95generator1(__pyx_CoroutineObject 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_3SVD___init__[] = "SVD.__init__(self, mat, svdcut=None, svdnum=None, compute_delta=False, rescale=False)";
-static PyMethodDef __pyx_mdef_4gvar_10_utilities_3SVD_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_3SVD_1__init__, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_3SVD___init__};
+static PyMethodDef __pyx_mdef_4gvar_10_utilities_3SVD_1__init__ = {"__init__", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_3SVD_1__init__, METH_VARARGS|METH_KEYWORDS, 0};
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_1__init__(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
   PyObject *__pyx_v_mat = 0;
@@ -44192,8 +44296,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_3SVD___init__(CYTHON_UNUSED PyObjec
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_3_numpy_eigh(PyObject *__pyx_self, PyObject *__pyx_v_DmatD); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_3SVD_2_numpy_eigh[] = "SVD._numpy_eigh(DmatD)";
-static PyMethodDef __pyx_mdef_4gvar_10_utilities_3SVD_3_numpy_eigh = {"_numpy_eigh", (PyCFunction)__pyx_pw_4gvar_10_utilities_3SVD_3_numpy_eigh, METH_O, __pyx_doc_4gvar_10_utilities_3SVD_2_numpy_eigh};
+static PyMethodDef __pyx_mdef_4gvar_10_utilities_3SVD_3_numpy_eigh = {"_numpy_eigh", (PyCFunction)__pyx_pw_4gvar_10_utilities_3SVD_3_numpy_eigh, METH_O, 0};
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_3_numpy_eigh(PyObject *__pyx_self, PyObject *__pyx_v_DmatD) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -44603,8 +44706,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_2_numpy_eigh(CYTHON_UNUSED PyO
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_5_numpy_svd(PyObject *__pyx_self, PyObject *__pyx_v_DmatD); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_3SVD_4_numpy_svd[] = "SVD._numpy_svd(DmatD)";
-static PyMethodDef __pyx_mdef_4gvar_10_utilities_3SVD_5_numpy_svd = {"_numpy_svd", (PyCFunction)__pyx_pw_4gvar_10_utilities_3SVD_5_numpy_svd, METH_O, __pyx_doc_4gvar_10_utilities_3SVD_4_numpy_svd};
+static PyMethodDef __pyx_mdef_4gvar_10_utilities_3SVD_5_numpy_svd = {"_numpy_svd", (PyCFunction)__pyx_pw_4gvar_10_utilities_3SVD_5_numpy_svd, METH_O, 0};
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_5_numpy_svd(PyObject *__pyx_self, PyObject *__pyx_v_DmatD) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -44744,7 +44846,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_4_numpy_svd(CYTHON_UNUSED PyOb
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2419, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_vec, __pyx_slice__26); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 2419, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_vec, __pyx_slice__24); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 2419, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_2 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -44777,7 +44879,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_4_numpy_svd(CYTHON_UNUSED PyOb
   __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_array); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 2420, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_val, __pyx_slice__26); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2420, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_val, __pyx_slice__24); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 2420, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_2 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -44854,7 +44956,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_4_numpy_svd(CYTHON_UNUSED PyOb
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_7decomp(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_3SVD_6decomp[] = "SVD.decomp(self, n=1)\n Vector decomposition of input matrix raised to power ``n``.\n\n        Computes vectors ``w[i]`` such that\n\n            mat**n = sum_i numpy.outer(w[i],w[i])\n\n        where ``mat`` is the original input matrix to :class:`svd`. This\n        decomposition cannot be computed if the input matrix was rescaled\n        (``rescale=True``) except for ``n=1`` and ``n=-1``.\n\n        :param n: Power of input matrix.\n        :type n: number\n        :returns: Array ``w`` of vectors.\n        ";
+static char __pyx_doc_4gvar_10_utilities_3SVD_6decomp[] = " Vector decomposition of input matrix raised to power ``n``.\n\n        Computes vectors ``w[i]`` such that\n\n            mat**n = sum_i numpy.outer(w[i],w[i])\n\n        where ``mat`` is the original input matrix to :class:`svd`. This\n        decomposition cannot be computed if the input matrix was rescaled\n        (``rescale=True``) except for ``n=1`` and ``n=-1``.\n\n        :param n: Power of input matrix.\n        :type n: number\n        :returns: Array ``w`` of vectors.\n        ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_3SVD_7decomp = {"decomp", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_3SVD_7decomp, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_3SVD_6decomp};
 static PyObject *__pyx_pw_4gvar_10_utilities_3SVD_7decomp(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_self = 0;
@@ -45123,7 +45225,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_6decomp(CYTHON_UNUSED PyObject
  *                     "Can't compute decomposition for rescaled matrix.")
  *             w = numpy.array(self.vec)
  */
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2444, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__25, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2444, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_Raise(__pyx_t_1, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -45340,7 +45442,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_6decomp(CYTHON_UNUSED PyObject
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_97valder(PyObject *__pyx_self, PyObject *__pyx_v_v); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_96valder[] = "valder(v)\n Convert array ``v`` of numbers into an array of |GVar|\\s.\n\n    The |GVar|\\s created by ``valder(v)`` have means equal to the\n    values ``v[i]`` and standard deviations of zero. If ``v`` is\n    one-dimensional, for example, ``vd = valder(v)`` is functionally\n    equivalent to::\n\n        newgvar = gvar.gvar_factory()\n        vd = numpy.array([newgvar(vi,0.0) for vi in v])\n\n    The use of ``newgvar`` to create the |GVar|\\s means that these\n    variables are incompatible with those created by ``gvar.gvar``.\n    More usefully, it also means that the vector of derivatives ``x.der``\n    for any |GVar| ``x`` formed from elements of ``vd = valder(v)``\n    correspond to derivatives with respect to ``vd``: that is, ``x.der[i]``\n    is the derivative of ``x`` with respect to ``vd.flat[i]``.\n\n    In general, the shape of the array returned by ``valder`` is the\n    same as that of ``v``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_96valder[] = " Convert array ``v`` of numbers into an array of |GVar|\\s.\n\n    The |GVar|\\s created by ``valder(v)`` have means equal to the\n    values ``v[i]`` and standard deviations of zero. If ``v`` is\n    one-dimensional, for example, ``vd = valder(v)`` is functionally\n    equivalent to::\n\n        newgvar = gvar.gvar_factory()\n        vd = numpy.array([newgvar(vi,0.0) for vi in v])\n\n    The use of ``newgvar`` to create the |GVar|\\s means that these\n    variables are incompatible with those created by ``gvar.gvar``.\n    More usefully, it also means that the vector of derivatives ``x.der``\n    for any |GVar| ``x`` formed from elements of ``vd = valder(v)``\n    correspond to derivatives with respect to ``vd``: that is, ``x.der[i]``\n    is the derivative of ``x`` with respect to ``vd.flat[i]``.\n\n    In general, the shape of the array returned by ``valder`` is the\n    same as that of ``v``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_97valder = {"valder", (PyCFunction)__pyx_pw_4gvar_10_utilities_97valder, METH_O, __pyx_doc_4gvar_10_utilities_96valder};
 static PyObject *__pyx_pw_4gvar_10_utilities_97valder(PyObject *__pyx_self, PyObject *__pyx_v_v) {
   PyObject *__pyx_r = 0;
@@ -45495,7 +45597,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_96valder(CYTHON_UNUSED PyObject *__
  *     gv_gvar = _gvar.gvar_factory()
  *     return gv_gvar(v,numpy.zeros(v.shape,numpy.float_))
  */
-      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2481, __pyx_L5_except_error)
+      __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__26, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2481, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_Raise(__pyx_t_7, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -46371,7 +46473,7 @@ static double __pyx_f_4gvar_10_utilities_gammaQ_cf(double __pyx_v_a, double __py
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_99gammaQ(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_98gammaQ[] = "gammaQ(double a, double x, double rtol=1e-5, int itmax=10000)\n Complement of normalized incomplete gamma function, Q(a,x).\n\n    Q(a, x) = 1/Gamma(a) * \\int_x^\\infty dt exp(-t) t ** (a-1) = 1 - P(a, x)\n    ";
+static char __pyx_doc_4gvar_10_utilities_98gammaQ[] = " Complement of normalized incomplete gamma function, Q(a,x).\n\n    Q(a, x) = 1/Gamma(a) * \\int_x^\\infty dt exp(-t) t ** (a-1) = 1 - P(a, x)\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_99gammaQ = {"gammaQ", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_99gammaQ, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_98gammaQ};
 static PyObject *__pyx_pw_4gvar_10_utilities_99gammaQ(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_a;
@@ -46443,12 +46545,12 @@ static PyObject *__pyx_pw_4gvar_10_utilities_99gammaQ(PyObject *__pyx_self, PyOb
     if (values[2]) {
       __pyx_v_rtol = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_rtol == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 2561, __pyx_L3_error)
     } else {
-      __pyx_v_rtol = ((double)1e-5);
+      __pyx_v_rtol = ((double)((double)1e-5));
     }
     if (values[3]) {
       __pyx_v_itmax = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_itmax == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2561, __pyx_L3_error)
     } else {
-      __pyx_v_itmax = ((int)0x2710);
+      __pyx_v_itmax = ((int)((int)0x2710));
     }
   }
   goto __pyx_L4_argument_unpacking_done;
@@ -46674,7 +46776,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_98gammaQ(CYTHON_UNUSED PyObject *__
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_101gammaP(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_100gammaP[] = "gammaP(double a, double x, double rtol=1e-5, itmax=10000)\n Normalized incomplete gamma function, P(a,x).\n\n    P(a, x) = 1/Gamma(a) * \\int_0^x dt exp(-t) t ** (a-1) = 1 - Q(a, x)\n    ";
+static char __pyx_doc_4gvar_10_utilities_100gammaP[] = " Normalized incomplete gamma function, P(a,x).\n\n    P(a, x) = 1/Gamma(a) * \\int_0^x dt exp(-t) t ** (a-1) = 1 - Q(a, x)\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_101gammaP = {"gammaP", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_101gammaP, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_100gammaP};
 static PyObject *__pyx_pw_4gvar_10_utilities_101gammaP(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   double __pyx_v_a;
@@ -46687,7 +46789,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_101gammaP(PyObject *__pyx_self, PyO
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_a,&__pyx_n_s_x,&__pyx_n_s_rtol,&__pyx_n_s_itmax,0};
     PyObject* values[4] = {0,0,0,0};
-    values[3] = ((PyObject *)__pyx_int_10000);
+    values[3] = ((PyObject *)((PyObject *)__pyx_int_10000));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -46747,7 +46849,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_101gammaP(PyObject *__pyx_self, PyO
     if (values[2]) {
       __pyx_v_rtol = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_rtol == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 2577, __pyx_L3_error)
     } else {
-      __pyx_v_rtol = ((double)1e-5);
+      __pyx_v_rtol = ((double)((double)1e-5));
     }
     __pyx_v_itmax = values[3];
   }
@@ -47082,7 +47184,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__29, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 272, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__27, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 272, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -47138,7 +47240,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             info.buf = PyArray_DATA(self)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__30, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 276, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -47396,7 +47498,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 306, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__29, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 306, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -48276,7 +48378,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__32, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 856, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__30, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 856, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -48344,7 +48446,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  *             # One could encode it in the format string and have Cython
  *             # complain instead, BUT: < and > in format strings also imply
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 860, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__29, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 860, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -48453,7 +48555,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__33, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 880, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 880, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_Raise(__pyx_t_4, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -49081,7 +49183,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__34, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1038, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__32, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1038, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -49210,7 +49312,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__35, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1044, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__33, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1044, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -49336,7 +49438,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__35, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1050, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__33, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1050, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -49580,7 +49682,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if itemsize <= 0:
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__36, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 133, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__34, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 133, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -49612,7 +49714,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *         if not isinstance(format, bytes):
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__37, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 136, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__35, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 136, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -49739,7 +49841,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  * 
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__38, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 148, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__36, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 148, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -50013,7 +50115,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __
  * 
  *             if self.dtype_is_object:
  */
-      __pyx_t_10 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__39, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 176, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_Call(__pyx_builtin_MemoryError, __pyx_tuple__37, NULL); if (unlikely(!__pyx_t_10)) __PYX_ERR(2, 176, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __Pyx_Raise(__pyx_t_10, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
@@ -50254,7 +50356,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(stru
  *         info.buf = self.data
  *         info.len = self.len
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__40, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 192, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__38, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 192, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -50947,6 +51049,7 @@ static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_12__setitem__(struc
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_array_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_array_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_array_1__reduce_cython__, METH_NOARGS, 0};
 static PyObject *__pyx_pw___pyx_array_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -50970,7 +51073,7 @@ static PyObject *__pyx_pf___pyx_array___reduce_cython__(CYTHON_UNUSED struct __p
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__41, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__39, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -51001,6 +51104,7 @@ static PyObject *__pyx_pf___pyx_array___reduce_cython__(CYTHON_UNUSED struct __p
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_array_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_array_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_array_3__setstate_cython__, METH_O, 0};
 static PyObject *__pyx_pw___pyx_array_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -51023,7 +51127,7 @@ static PyObject *__pyx_pf___pyx_array_2__setstate_cython__(CYTHON_UNUSED struct 
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__42, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__40, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -51369,6 +51473,7 @@ static PyObject *__pyx_MemviewEnum___pyx_pf_15View_dot_MemoryView_4Enum_2__repr_
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_MemviewEnum_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_MemviewEnum_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_MemviewEnum_1__reduce_cython__, METH_NOARGS, 0};
 static PyObject *__pyx_pw___pyx_MemviewEnum_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -51601,6 +51706,7 @@ static PyObject *__pyx_pf___pyx_MemviewEnum___reduce_cython__(struct __pyx_Memvi
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_MemviewEnum_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_MemviewEnum_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_MemviewEnum_3__setstate_cython__, METH_O, 0};
 static PyObject *__pyx_pw___pyx_MemviewEnum_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -52706,7 +52812,7 @@ static int __pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_6__setit
  * 
  *         have_slices, index = _unellipsify(index, self.view.ndim)
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__43, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 418, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__41, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 418, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -53733,7 +53839,7 @@ static PyObject *__pyx_memoryview_convert_item_to_object(struct __pyx_memoryview
  *         else:
  *             if len(self.view.format) == 1:
  */
-      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__44, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 495, __pyx_L5_except_error)
+      __pyx_t_6 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__42, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 495, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_Raise(__pyx_t_6, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -54089,7 +54195,7 @@ static int __pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_8__getbu
  * 
  *         if flags & PyBUF_ND:
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__45, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 520, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__43, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 520, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -54629,7 +54735,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_7strides___get__(st
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__46, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 570, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__44, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 570, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -54743,7 +54849,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_10memoryview_10suboffsets___get_
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_self->view.ndim); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 577, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__47, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 577, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_tuple__45, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(2, 577, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_r = __pyx_t_3;
@@ -55398,6 +55504,7 @@ static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_14
 
 /* Python wrapper */
 static PyObject *__pyx_memoryview_is_c_contig(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_17is_c_contig = {"is_c_contig", (PyCFunction)__pyx_memoryview_is_c_contig, METH_NOARGS, 0};
 static PyObject *__pyx_memoryview_is_c_contig(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -55469,6 +55576,7 @@ static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_16
 
 /* Python wrapper */
 static PyObject *__pyx_memoryview_is_f_contig(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_19is_f_contig = {"is_f_contig", (PyCFunction)__pyx_memoryview_is_f_contig, METH_NOARGS, 0};
 static PyObject *__pyx_memoryview_is_f_contig(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -55540,6 +55648,7 @@ static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_18
 
 /* Python wrapper */
 static PyObject *__pyx_memoryview_copy(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_21copy = {"copy", (PyCFunction)__pyx_memoryview_copy, METH_NOARGS, 0};
 static PyObject *__pyx_memoryview_copy(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -55631,6 +55740,7 @@ static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_20
 
 /* Python wrapper */
 static PyObject *__pyx_memoryview_copy_fortran(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef_15View_dot_MemoryView_10memoryview_23copy_fortran = {"copy_fortran", (PyCFunction)__pyx_memoryview_copy_fortran, METH_NOARGS, 0};
 static PyObject *__pyx_memoryview_copy_fortran(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -55721,6 +55831,7 @@ static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_22
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_memoryview_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_memoryview_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_memoryview_1__reduce_cython__, METH_NOARGS, 0};
 static PyObject *__pyx_pw___pyx_memoryview_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -55744,7 +55855,7 @@ static PyObject *__pyx_pf___pyx_memoryview___reduce_cython__(CYTHON_UNUSED struc
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__48, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__46, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -55775,6 +55886,7 @@ static PyObject *__pyx_pf___pyx_memoryview___reduce_cython__(CYTHON_UNUSED struc
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_memoryview_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_memoryview_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_memoryview_3__setstate_cython__, METH_O, 0};
 static PyObject *__pyx_pw___pyx_memoryview_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -55797,7 +55909,7 @@ static PyObject *__pyx_pf___pyx_memoryview_2__setstate_cython__(CYTHON_UNUSED st
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__49, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__47, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -56148,9 +56260,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
         __Pyx_GOTREF(__pyx_t_7);
         { Py_ssize_t __pyx_temp;
           for (__pyx_temp=0; __pyx_temp < ((__pyx_v_ndim - __pyx_t_8) + 1); __pyx_temp++) {
-            __Pyx_INCREF(__pyx_slice__6);
-            __Pyx_GIVEREF(__pyx_slice__6);
-            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__6);
+            __Pyx_INCREF(__pyx_slice__5);
+            __Pyx_GIVEREF(__pyx_slice__5);
+            PyList_SET_ITEM(__pyx_t_7, __pyx_temp, __pyx_slice__5);
           }
         }
         __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_7); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(2, 682, __pyx_L1_error)
@@ -56183,7 +56295,7 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
  *         else:
  */
       /*else*/ {
-        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__6); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(2, 685, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_result, __pyx_slice__5); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(2, 685, __pyx_L1_error)
       }
       __pyx_L7:;
 
@@ -56323,9 +56435,9 @@ static PyObject *_unellipsify(PyObject *__pyx_v_index, int __pyx_v_ndim) {
     __Pyx_GOTREF(__pyx_t_3);
     { Py_ssize_t __pyx_temp;
       for (__pyx_temp=0; __pyx_temp < __pyx_v_nslices; __pyx_temp++) {
-        __Pyx_INCREF(__pyx_slice__6);
-        __Pyx_GIVEREF(__pyx_slice__6);
-        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__6);
+        __Pyx_INCREF(__pyx_slice__5);
+        __Pyx_GIVEREF(__pyx_slice__5);
+        PyList_SET_ITEM(__pyx_t_3, __pyx_temp, __pyx_slice__5);
       }
     }
     __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_result, __pyx_t_3); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(2, 696, __pyx_L1_error)
@@ -56449,7 +56561,7 @@ static PyObject *assert_direct_dimensions(Py_ssize_t *__pyx_v_suboffsets, int __
  * 
  * 
  */
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__50, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 703, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__48, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 703, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_Raise(__pyx_t_5, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -58589,6 +58701,7 @@ static PyObject *__pyx_pf_15View_dot_MemoryView_16_memoryviewslice_4base___get__
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_memoryviewslice_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_memoryviewslice_1__reduce_cython__ = {"__reduce_cython__", (PyCFunction)__pyx_pw___pyx_memoryviewslice_1__reduce_cython__, METH_NOARGS, 0};
 static PyObject *__pyx_pw___pyx_memoryviewslice_1__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -58612,7 +58725,7 @@ static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED 
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__51, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__49, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -58643,6 +58756,7 @@ static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED 
 
 /* Python wrapper */
 static PyObject *__pyx_pw___pyx_memoryviewslice_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyMethodDef __pyx_mdef___pyx_memoryviewslice_3__setstate_cython__ = {"__setstate_cython__", (PyCFunction)__pyx_pw___pyx_memoryviewslice_3__setstate_cython__, METH_O, 0};
 static PyObject *__pyx_pw___pyx_memoryviewslice_3__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -58665,7 +58779,7 @@ static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUS
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__52, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__50, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -63539,6 +63653,7 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
+  {&__pyx_kp_s_, __pyx_k_, sizeof(__pyx_k_), 0, 0, 1, 0},
   {&__pyx_kp_s_19s_20s, __pyx_k_19s_20s, sizeof(__pyx_k_19s_20s), 0, 0, 1, 0},
   {&__pyx_n_s_ASCII, __pyx_k_ASCII, sizeof(__pyx_k_ASCII), 0, 0, 1, 1},
   {&__pyx_kp_u_Add_correlations_to_uncorrelate, __pyx_k_Add_correlations_to_uncorrelate, sizeof(__pyx_k_Add_correlations_to_uncorrelate), 0, 1, 0, 0},
@@ -63603,11 +63718,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_kp_s_Values, __pyx_k_Values, sizeof(__pyx_k_Values), 0, 0, 1, 0},
   {&__pyx_n_s_View_MemoryView, __pyx_k_View_MemoryView, sizeof(__pyx_k_View_MemoryView), 0, 0, 1, 1},
-  {&__pyx_kp_s__10, __pyx_k__10, sizeof(__pyx_k__10), 0, 0, 1, 0},
-  {&__pyx_kp_s__18, __pyx_k__18, sizeof(__pyx_k__18), 0, 0, 1, 0},
+  {&__pyx_kp_s__16, __pyx_k__16, sizeof(__pyx_k__16), 0, 0, 1, 0},
+  {&__pyx_kp_s__17, __pyx_k__17, sizeof(__pyx_k__17), 0, 0, 1, 0},
   {&__pyx_kp_s__19, __pyx_k__19, sizeof(__pyx_k__19), 0, 0, 1, 0},
-  {&__pyx_kp_s__2, __pyx_k__2, sizeof(__pyx_k__2), 0, 0, 1, 0},
-  {&__pyx_kp_s__21, __pyx_k__21, sizeof(__pyx_k__21), 0, 0, 1, 0},
+  {&__pyx_kp_s__9, __pyx_k__9, sizeof(__pyx_k__9), 0, 0, 1, 0},
   {&__pyx_n_s_a, __pyx_k_a, sizeof(__pyx_k_a), 0, 0, 1, 1},
   {&__pyx_n_s_add, __pyx_k_add, sizeof(__pyx_k_add), 0, 0, 1, 1},
   {&__pyx_n_s_add_dependencies, __pyx_k_add_dependencies, sizeof(__pyx_k_add_dependencies), 0, 0, 1, 1},
@@ -64058,7 +64172,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(0, 37, __pyx_L1_error)
   __pyx_builtin_object = __Pyx_GetBuiltinName(__pyx_n_s_object); if (!__pyx_builtin_object) __PYX_ERR(0, 2240, __pyx_L1_error)
   __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 2401, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 127, __pyx_L1_error)
@@ -64094,9 +64208,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * def corr(g1, g2):
  */
-  __pyx_tuple__3 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_1); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 476, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__3);
-  __Pyx_GIVEREF(__pyx_tuple__3);
+  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_int_1, __pyx_int_1); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__2);
+  __Pyx_GIVEREF(__pyx_tuple__2);
 
   /* "gvar/_utilities.pyx":481
  *     """ Correlation between :class:`gvar.GVar`\s ``g1`` and ``g2``. """
@@ -64105,9 +64219,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     return evalcorr([g1, g2])[0,1]
  * 
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_g1_and_g2_must_be_GVars); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 481, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__4);
-  __Pyx_GIVEREF(__pyx_tuple__4);
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_g1_and_g2_must_be_GVars); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 481, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
 
   /* "gvar/_utilities.pyx":482
  *     if not isinstance(g1, GVar) and not isinstance(g2, GVar):
@@ -64116,9 +64230,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * def cov(g1, g2):
  */
-  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_1); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 482, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
+  __pyx_tuple__4 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_1); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 482, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__4);
+  __Pyx_GIVEREF(__pyx_tuple__4);
 
   /* "gvar/_utilities.pyx":581
  *     cdef smat cov
@@ -64127,9 +64241,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     elif hasattr(g, 'keys'):
  *         varlist = BufferDict(g).flat[:]
  */
-  __pyx_slice__6 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__6)) __PYX_ERR(0, 581, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__6);
-  __Pyx_GIVEREF(__pyx_slice__6);
+  __pyx_slice__5 = PySlice_New(Py_None, Py_None, Py_None); if (unlikely(!__pyx_slice__5)) __PYX_ERR(0, 581, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__5);
+  __Pyx_GIVEREF(__pyx_slice__5);
 
   /* "gvar/_utilities.pyx":600
  *             blocks[0][1].append(varlist[i].sdev)
@@ -64138,9 +64252,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     blocks[0] = (numpy.array(blocks[0][0], dtype=numpy.intp), numpy.array(blocks[0][1], dtype=float))
  *     if not compress:
  */
-  __pyx_tuple__7 = PyTuple_Pack(2, __pyx_slice__6, Py_None); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 600, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__7);
-  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_tuple__6 = PyTuple_Pack(2, __pyx_slice__5, Py_None); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 600, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__6);
+  __Pyx_GIVEREF(__pyx_tuple__6);
 
   /* "gvar/_utilities.pyx":833
  *             if k1_sh == ():
@@ -64149,9 +64263,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *             for k2 in g:
  *                 k2_sl, k2_sh = g.slice_shape(k2)
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_int_1); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 833, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__8);
-  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_int_1); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 833, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__7);
+  __Pyx_GIVEREF(__pyx_tuple__7);
 
   /* "gvar/_utilities.pyx":850
  *         cov = g[0].cov
@@ -64160,9 +64274,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     ####
  *     nc = cov.nrow
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s_g_does_not_contain_GVar_s); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 850, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__9);
-  __Pyx_GIVEREF(__pyx_tuple__9);
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_g_does_not_contain_GVar_s); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 850, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
 
   /* "gvar/_utilities.pyx":1712
  *     # contributions from primaries
@@ -64171,9 +64285,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         axis=1
  *         )
  */
-  __pyx_tuple__11 = PyTuple_Pack(2, Py_None, __pyx_slice__6); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 1712, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
+  __pyx_tuple__10 = PyTuple_Pack(2, Py_None, __pyx_slice__5); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 1712, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
 
   /* "gvar/_utilities.pyx":1753
  *         method = 'json'
@@ -64182,9 +64296,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     if isinstance(outputfile, str):
  *         with open(outputfile, 'w' if method in ['json', 'yaml'] else 'wb') as ofile:
  */
-  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_yaml_module_not_installed); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 1753, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__12);
-  __Pyx_GIVEREF(__pyx_tuple__12);
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_yaml_module_not_installed); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 1753, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__11);
+  __Pyx_GIVEREF(__pyx_tuple__11);
 
   /* "gvar/_utilities.pyx":1755
  *         raise RuntimeError('yaml module not installed')
@@ -64193,9 +64307,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *             return olddump(g, ofile, method=method)
  *     else:
  */
-  __pyx_tuple__13 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 1755, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
+  __pyx_tuple__12 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 1755, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
 
   /* "gvar/_utilities.pyx":1780
  *     elif method == 'pickle':
@@ -64204,9 +64318,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *             )
  *     else:
  */
-  __pyx_tuple__14 = PyTuple_Pack(2, __pyx_n_s_pickle, Py_None); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 1780, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__13 = PyTuple_Pack(2, __pyx_n_s_pickle, Py_None); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 1780, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
 
   /* "gvar/_utilities.pyx":1804
  *         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
@@ -64215,9 +64329,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     if use_json is True: # for legacy code
  *         method = 'json'
  */
-  __pyx_tuple__15 = PyTuple_Pack(2, __pyx_kp_s_using_old_dump_format, __pyx_builtin_DeprecationWarning); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 1804, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_tuple__14 = PyTuple_Pack(2, __pyx_kp_s_using_old_dump_format, __pyx_builtin_DeprecationWarning); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 1804, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "gvar/_utilities.pyx":1826
  *             return _oldload0(inputfile)
@@ -64226,9 +64340,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     if yaml is None and method == 'yaml':
  *         raise RuntimeError('yaml module not installed')
  */
-  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_s_cannot_read_file); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 1826, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__16);
-  __Pyx_GIVEREF(__pyx_tuple__16);
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_cannot_read_file); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 1826, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
 
   /* "gvar/_utilities.pyx":2103
  *         val = 1.
@@ -64237,9 +64351,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     ans += (w0 +len(outputs) * w) * '-' + "\n"
  *     for ck in inputs:
  */
-  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_kp_s__2); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 2103, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__20);
-  __Pyx_GIVEREF(__pyx_tuple__20);
+  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_kp_s_); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 2103, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
 
   /* "gvar/_utilities.pyx":2109
  *         ans += lfmt%((ck,)+tuple(verr))
@@ -64248,9 +64362,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *                                     for vk in outputs])/val))
  *     return ans
  */
-  __pyx_tuple__22 = PyTuple_Pack(1, __pyx_n_s_total); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 2109, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__22);
-  __Pyx_GIVEREF(__pyx_tuple__22);
+  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_n_s_total); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 2109, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
 
   /* "gvar/_utilities.pyx":2154
  *         if len(i) > 0:
@@ -64259,9 +64373,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *             buf[i] += sum(zi * wi for zi, wi in zip(z[i], wgts))
  *         if g.shape is None:
  */
-  __pyx_slice__24 = PySlice_New(__pyx_int_1, Py_None, Py_None); if (unlikely(!__pyx_slice__24)) __PYX_ERR(0, 2154, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__24);
-  __Pyx_GIVEREF(__pyx_slice__24);
+  __pyx_slice__22 = PySlice_New(__pyx_int_1, Py_None, Py_None); if (unlikely(!__pyx_slice__22)) __PYX_ERR(0, 2154, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__22);
+  __Pyx_GIVEREF(__pyx_slice__22);
 
   /* "gvar/_utilities.pyx":2419
  *         vec = vec.T # numpy.transpose(vec) # now 1st index labels eigenval
@@ -64270,9 +64384,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         val = numpy.array(val[-1::-1])
  *         return val, vec
  */
-  __pyx_slice__26 = PySlice_New(__pyx_int_neg_1, Py_None, __pyx_int_neg_1); if (unlikely(!__pyx_slice__26)) __PYX_ERR(0, 2419, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_slice__26);
-  __Pyx_GIVEREF(__pyx_slice__26);
+  __pyx_slice__24 = PySlice_New(__pyx_int_neg_1, Py_None, __pyx_int_neg_1); if (unlikely(!__pyx_slice__24)) __PYX_ERR(0, 2419, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_slice__24);
+  __Pyx_GIVEREF(__pyx_slice__24);
 
   /* "gvar/_utilities.pyx":2444
  *         else:
@@ -64281,9 +64395,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *                     "Can't compute decomposition for rescaled matrix.")
  *             w = numpy.array(self.vec)
  */
-  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_kp_s_Can_t_compute_decomposition_for); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 2444, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__27);
-  __Pyx_GIVEREF(__pyx_tuple__27);
+  __pyx_tuple__25 = PyTuple_Pack(1, __pyx_kp_s_Can_t_compute_decomposition_for); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 2444, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
 
   /* "gvar/_utilities.pyx":2481
  *         v = numpy.asarray(v,numpy.float_)
@@ -64292,9 +64406,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     gv_gvar = _gvar.gvar_factory()
  *     return gv_gvar(v,numpy.zeros(v.shape,numpy.float_))
  */
-  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_s_Bad_input); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 2481, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__28);
-  __Pyx_GIVEREF(__pyx_tuple__28);
+  __pyx_tuple__26 = PyTuple_Pack(1, __pyx_kp_s_Bad_input); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 2481, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__26);
+  __Pyx_GIVEREF(__pyx_tuple__26);
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":272
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
@@ -64303,9 +64417,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-  __pyx_tuple__29 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(1, 272, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__29);
-  __Pyx_GIVEREF(__pyx_tuple__29);
+  __pyx_tuple__27 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(1, 272, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__27);
+  __Pyx_GIVEREF(__pyx_tuple__27);
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":276
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
@@ -64314,9 +64428,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *             info.buf = PyArray_DATA(self)
  */
-  __pyx_tuple__30 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 276, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__30);
-  __Pyx_GIVEREF(__pyx_tuple__30);
+  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(1, 276, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__28);
+  __Pyx_GIVEREF(__pyx_tuple__28);
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":306
  *                 if ((descr.byteorder == c'>' and little_endian) or
@@ -64325,9 +64439,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(1, 306, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__31);
-  __Pyx_GIVEREF(__pyx_tuple__31);
+  __pyx_tuple__29 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(1, 306, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__29);
+  __Pyx_GIVEREF(__pyx_tuple__29);
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":856
  * 
@@ -64336,9 +64450,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-  __pyx_tuple__32 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(1, 856, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__32);
-  __Pyx_GIVEREF(__pyx_tuple__32);
+  __pyx_tuple__30 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(1, 856, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__30);
+  __Pyx_GIVEREF(__pyx_tuple__30);
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":880
  *             t = child.type_num
@@ -64347,9 +64461,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-  __pyx_tuple__33 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(1, 880, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__33);
-  __Pyx_GIVEREF(__pyx_tuple__33);
+  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(1, 880, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__31);
+  __Pyx_GIVEREF(__pyx_tuple__31);
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1038
  *         _import_array()
@@ -64358,9 +64472,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-  __pyx_tuple__34 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__34)) __PYX_ERR(1, 1038, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__34);
-  __Pyx_GIVEREF(__pyx_tuple__34);
+  __pyx_tuple__32 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(1, 1038, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__32);
+  __Pyx_GIVEREF(__pyx_tuple__32);
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1044
  *         _import_umath()
@@ -64369,9 +64483,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-  __pyx_tuple__35 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(1, 1044, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__35);
-  __Pyx_GIVEREF(__pyx_tuple__35);
+  __pyx_tuple__33 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(1, 1044, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__33);
+  __Pyx_GIVEREF(__pyx_tuple__33);
 
   /* "View.MemoryView":133
  * 
@@ -64380,9 +64494,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         if itemsize <= 0:
  */
-  __pyx_tuple__36 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__36)) __PYX_ERR(2, 133, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__36);
-  __Pyx_GIVEREF(__pyx_tuple__36);
+  __pyx_tuple__34 = PyTuple_Pack(1, __pyx_kp_s_Empty_shape_tuple_for_cython_arr); if (unlikely(!__pyx_tuple__34)) __PYX_ERR(2, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__34);
+  __Pyx_GIVEREF(__pyx_tuple__34);
 
   /* "View.MemoryView":136
  * 
@@ -64391,9 +64505,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         if not isinstance(format, bytes):
  */
-  __pyx_tuple__37 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(2, 136, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__37);
-  __Pyx_GIVEREF(__pyx_tuple__37);
+  __pyx_tuple__35 = PyTuple_Pack(1, __pyx_kp_s_itemsize_0_for_cython_array); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(2, 136, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__35);
+  __Pyx_GIVEREF(__pyx_tuple__35);
 
   /* "View.MemoryView":148
  * 
@@ -64402,9 +64516,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__38 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__38)) __PYX_ERR(2, 148, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__38);
-  __Pyx_GIVEREF(__pyx_tuple__38);
+  __pyx_tuple__36 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_shape_and_str); if (unlikely(!__pyx_tuple__36)) __PYX_ERR(2, 148, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__36);
+  __Pyx_GIVEREF(__pyx_tuple__36);
 
   /* "View.MemoryView":176
  *             self.data = <char *>malloc(self.len)
@@ -64413,9 +64527,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *             if self.dtype_is_object:
  */
-  __pyx_tuple__39 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(2, 176, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__39);
-  __Pyx_GIVEREF(__pyx_tuple__39);
+  __pyx_tuple__37 = PyTuple_Pack(1, __pyx_kp_s_unable_to_allocate_array_data); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(2, 176, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__37);
+  __Pyx_GIVEREF(__pyx_tuple__37);
 
   /* "View.MemoryView":192
  *             bufmode = PyBUF_F_CONTIGUOUS | PyBUF_ANY_CONTIGUOUS
@@ -64424,9 +64538,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         info.buf = self.data
  *         info.len = self.len
  */
-  __pyx_tuple__40 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__40)) __PYX_ERR(2, 192, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__40);
-  __Pyx_GIVEREF(__pyx_tuple__40);
+  __pyx_tuple__38 = PyTuple_Pack(1, __pyx_kp_s_Can_only_create_a_buffer_that_is); if (unlikely(!__pyx_tuple__38)) __PYX_ERR(2, 192, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__38);
+  __Pyx_GIVEREF(__pyx_tuple__38);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -64434,18 +64548,18 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__41 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(2, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__41);
-  __Pyx_GIVEREF(__pyx_tuple__41);
+  __pyx_tuple__39 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(2, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__39);
+  __Pyx_GIVEREF(__pyx_tuple__39);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__42 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__42)) __PYX_ERR(2, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__42);
-  __Pyx_GIVEREF(__pyx_tuple__42);
+  __pyx_tuple__40 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__40)) __PYX_ERR(2, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__40);
+  __Pyx_GIVEREF(__pyx_tuple__40);
 
   /* "View.MemoryView":418
  *     def __setitem__(memoryview self, object index, object value):
@@ -64454,9 +64568,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         have_slices, index = _unellipsify(index, self.view.ndim)
  */
-  __pyx_tuple__43 = PyTuple_Pack(1, __pyx_kp_s_Cannot_assign_to_read_only_memor); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(2, 418, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__43);
-  __Pyx_GIVEREF(__pyx_tuple__43);
+  __pyx_tuple__41 = PyTuple_Pack(1, __pyx_kp_s_Cannot_assign_to_read_only_memor); if (unlikely(!__pyx_tuple__41)) __PYX_ERR(2, 418, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__41);
+  __Pyx_GIVEREF(__pyx_tuple__41);
 
   /* "View.MemoryView":495
  *             result = struct.unpack(self.view.format, bytesitem)
@@ -64465,9 +64579,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         else:
  *             if len(self.view.format) == 1:
  */
-  __pyx_tuple__44 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__44)) __PYX_ERR(2, 495, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__44);
-  __Pyx_GIVEREF(__pyx_tuple__44);
+  __pyx_tuple__42 = PyTuple_Pack(1, __pyx_kp_s_Unable_to_convert_item_to_object); if (unlikely(!__pyx_tuple__42)) __PYX_ERR(2, 495, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__42);
+  __Pyx_GIVEREF(__pyx_tuple__42);
 
   /* "View.MemoryView":520
  *     def __getbuffer__(self, Py_buffer *info, int flags):
@@ -64476,9 +64590,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         if flags & PyBUF_ND:
  */
-  __pyx_tuple__45 = PyTuple_Pack(1, __pyx_kp_s_Cannot_create_writable_memory_vi); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(2, 520, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__45);
-  __Pyx_GIVEREF(__pyx_tuple__45);
+  __pyx_tuple__43 = PyTuple_Pack(1, __pyx_kp_s_Cannot_create_writable_memory_vi); if (unlikely(!__pyx_tuple__43)) __PYX_ERR(2, 520, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__43);
+  __Pyx_GIVEREF(__pyx_tuple__43);
 
   /* "View.MemoryView":570
  *         if self.view.strides == NULL:
@@ -64487,9 +64601,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([stride for stride in self.view.strides[:self.view.ndim]])
  */
-  __pyx_tuple__46 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__46)) __PYX_ERR(2, 570, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__46);
-  __Pyx_GIVEREF(__pyx_tuple__46);
+  __pyx_tuple__44 = PyTuple_Pack(1, __pyx_kp_s_Buffer_view_does_not_expose_stri); if (unlikely(!__pyx_tuple__44)) __PYX_ERR(2, 570, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__44);
+  __Pyx_GIVEREF(__pyx_tuple__44);
 
   /* "View.MemoryView":577
  *     def suboffsets(self):
@@ -64498,12 +64612,12 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *         return tuple([suboffset for suboffset in self.view.suboffsets[:self.view.ndim]])
  */
-  __pyx_tuple__47 = PyTuple_New(1); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(2, 577, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__47);
+  __pyx_tuple__45 = PyTuple_New(1); if (unlikely(!__pyx_tuple__45)) __PYX_ERR(2, 577, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__45);
   __Pyx_INCREF(__pyx_int_neg_1);
   __Pyx_GIVEREF(__pyx_int_neg_1);
-  PyTuple_SET_ITEM(__pyx_tuple__47, 0, __pyx_int_neg_1);
-  __Pyx_GIVEREF(__pyx_tuple__47);
+  PyTuple_SET_ITEM(__pyx_tuple__45, 0, __pyx_int_neg_1);
+  __Pyx_GIVEREF(__pyx_tuple__45);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -64511,18 +64625,18 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__48 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(2, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__48);
-  __Pyx_GIVEREF(__pyx_tuple__48);
+  __pyx_tuple__46 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__46)) __PYX_ERR(2, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__46);
+  __Pyx_GIVEREF(__pyx_tuple__46);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(2, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__49);
-  __Pyx_GIVEREF(__pyx_tuple__49);
+  __pyx_tuple__47 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__47)) __PYX_ERR(2, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__47);
+  __Pyx_GIVEREF(__pyx_tuple__47);
 
   /* "View.MemoryView":703
  *     for suboffset in suboffsets[:ndim]:
@@ -64531,9 +64645,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__50 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(2, 703, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__50);
-  __Pyx_GIVEREF(__pyx_tuple__50);
+  __pyx_tuple__48 = PyTuple_Pack(1, __pyx_kp_s_Indirect_dimensions_not_supporte); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(2, 703, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__48);
+  __Pyx_GIVEREF(__pyx_tuple__48);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -64541,41 +64655,41 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__51 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(2, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__51);
-  __Pyx_GIVEREF(__pyx_tuple__51);
+  __pyx_tuple__49 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__49)) __PYX_ERR(2, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__49);
+  __Pyx_GIVEREF(__pyx_tuple__49);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__52 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(2, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__52);
-  __Pyx_GIVEREF(__pyx_tuple__52);
+  __pyx_tuple__50 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(2, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__50);
+  __Pyx_GIVEREF(__pyx_tuple__50);
 
-  /* "gvar/_utilities.pyx":41
+  /* "gvar/_utilities.pyx":40
  *     yaml = None
  * 
  * if sys.version_info > (3, 0):             # <<<<<<<<<<<<<<
  *     # python 3
  *     from io import BytesIO
  */
-  __pyx_tuple__53 = PyTuple_Pack(2, __pyx_int_3, __pyx_int_0); if (unlikely(!__pyx_tuple__53)) __PYX_ERR(0, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__53);
-  __Pyx_GIVEREF(__pyx_tuple__53);
+  __pyx_tuple__51 = PyTuple_Pack(2, __pyx_int_3, __pyx_int_0); if (unlikely(!__pyx_tuple__51)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__51);
+  __Pyx_GIVEREF(__pyx_tuple__51);
 
   /* "gvar/_utilities.pyx":78
  * 
  * # utility functions
  * def rebuild(g, corr=0.0, gvar=_gvar.gvar):             # <<<<<<<<<<<<<<
- *     """ Rebuild ``g`` stripping correlations with variables not in ``g``.
+ *     """  Rebuild ``g`` stripping correlations with variables not in ``g``.
  * 
  */
-  __pyx_tuple__54 = PyTuple_Pack(9, __pyx_n_s_g, __pyx_n_s_corr, __pyx_n_s_gvar, __pyx_n_s_gcov, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_ng, __pyx_n_s_cr, __pyx_n_s_buf); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__54);
-  __Pyx_GIVEREF(__pyx_tuple__54);
-  __pyx_codeobj__55 = (PyObject*)__Pyx_PyCode_New(3, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__54, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_rebuild, 78, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__55)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_tuple__52 = PyTuple_Pack(9, __pyx_n_s_g, __pyx_n_s_corr, __pyx_n_s_gvar, __pyx_n_s_gcov, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_ng, __pyx_n_s_cr, __pyx_n_s_buf); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__52);
+  __Pyx_GIVEREF(__pyx_tuple__52);
+  __pyx_codeobj__53 = (PyObject*)__Pyx_PyCode_New(3, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__52, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_rebuild, 78, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__53)) __PYX_ERR(0, 78, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":137
  * 
@@ -64584,10 +64698,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Extract means from :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_tuple__56 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(0, 137, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__56);
-  __Pyx_GIVEREF(__pyx_tuple__56);
-  __pyx_codeobj__57 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__56, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_mean, 137, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__57)) __PYX_ERR(0, 137, __pyx_L1_error)
+  __pyx_tuple__54 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__54)) __PYX_ERR(0, 137, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__54);
+  __Pyx_GIVEREF(__pyx_tuple__54);
+  __pyx_codeobj__55 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__54, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_mean, 137, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__55)) __PYX_ERR(0, 137, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":164
  *     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -64596,10 +64710,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Format :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_tuple__58 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_ndecimal, __pyx_n_s_sep, __pyx_n_s_d, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __pyx_tuple__56 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_ndecimal, __pyx_n_s_sep, __pyx_n_s_d, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf); if (unlikely(!__pyx_tuple__56)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__56);
+  __Pyx_GIVEREF(__pyx_tuple__56);
+  __pyx_codeobj__57 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__56, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_fmt, 164, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__57)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __pyx_tuple__58 = PyTuple_Pack(3, ((PyObject *)Py_None), ((PyObject*)__pyx_kp_s_), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 164, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__58);
   __Pyx_GIVEREF(__pyx_tuple__58);
-  __pyx_codeobj__59 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__58, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_fmt, 164, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__59)) __PYX_ERR(0, 164, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":188
  *     return BufferDict(g,buf=buf) if g.shape is None else numpy.reshape(buf,g.shape)
@@ -64608,10 +64725,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Extract standard deviations from :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_tuple__60 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__60)) __PYX_ERR(0, 188, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__60);
-  __Pyx_GIVEREF(__pyx_tuple__60);
-  __pyx_codeobj__61 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__60, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_sdev, 188, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__61)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_tuple__59 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__59);
+  __Pyx_GIVEREF(__pyx_tuple__59);
+  __pyx_codeobj__60 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__59, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_sdev, 188, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__60)) __PYX_ERR(0, 188, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":215
  *     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -64620,10 +64737,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Compute partial derivatives of |GVar|\s in ``g`` w.r.t. primary |GVar|\s in ``x``.
  * 
  */
-  __pyx_tuple__62 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_x, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_ans, __pyx_n_s_ansdict, __pyx_n_s_k); if (unlikely(!__pyx_tuple__62)) __PYX_ERR(0, 215, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__62);
-  __Pyx_GIVEREF(__pyx_tuple__62);
-  __pyx_codeobj__63 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__62, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_deriv, 215, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__63)) __PYX_ERR(0, 215, __pyx_L1_error)
+  __pyx_tuple__61 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_x, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_ans, __pyx_n_s_ansdict, __pyx_n_s_k); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 215, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__61);
+  __Pyx_GIVEREF(__pyx_tuple__61);
+  __pyx_codeobj__62 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__61, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_deriv, 215, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__62)) __PYX_ERR(0, 215, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":251
  *         return ans.reshape(g.shape + x.shape)
@@ -64632,10 +64749,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Extract variances from :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_tuple__64 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__64)) __PYX_ERR(0, 251, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__64);
-  __Pyx_GIVEREF(__pyx_tuple__64);
-  __pyx_codeobj__65 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__64, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_var, 251, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__65)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __pyx_tuple__63 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__63)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__63);
+  __Pyx_GIVEREF(__pyx_tuple__63);
+  __pyx_codeobj__64 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__63, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_var, 251, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__64)) __PYX_ERR(0, 251, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":278
  *     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -64644,10 +64761,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Determine whether or not the |GVar|\s in ``g`` are primary |GVar|\s.
  * 
  */
-  __pyx_tuple__66 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_done, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__66)) __PYX_ERR(0, 278, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__66);
-  __Pyx_GIVEREF(__pyx_tuple__66);
-  __pyx_codeobj__67 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__66, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_is_primary, 278, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__67)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __pyx_tuple__65 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_gi, __pyx_n_s_buf, __pyx_n_s_done, __pyx_n_s_ogi); if (unlikely(!__pyx_tuple__65)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__65);
+  __Pyx_GIVEREF(__pyx_tuple__65);
+  __pyx_codeobj__66 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__65, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_is_primary, 278, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__66)) __PYX_ERR(0, 278, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":326
  *     return BufferDict(g, buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -64656,10 +64773,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Collect primary |GVar|\s contributing to the covariances of |GVar|\s in ``g``.
  * 
  */
-  __pyx_tuple__68 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_all, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__68)) __PYX_ERR(0, 326, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__68);
-  __Pyx_GIVEREF(__pyx_tuple__68);
-  __pyx_codeobj__69 = (PyObject*)__Pyx_PyCode_New(2, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__68, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_dependencies_2, 326, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__69)) __PYX_ERR(0, 326, __pyx_L1_error)
+  __pyx_tuple__67 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_all, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__67)) __PYX_ERR(0, 326, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__67);
+  __Pyx_GIVEREF(__pyx_tuple__67);
+  __pyx_codeobj__68 = (PyObject*)__Pyx_PyCode_New(2, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__67, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_dependencies_2, 326, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__68)) __PYX_ERR(0, 326, __pyx_L1_error)
+  __pyx_tuple__69 = PyTuple_Pack(1, ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__69)) __PYX_ERR(0, 326, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__69);
+  __Pyx_GIVEREF(__pyx_tuple__69);
 
   /* "gvar/_utilities.pyx":346
  *         return _dependencies(gvlist, all=all) if gvlist else []
@@ -64672,6 +64792,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__70);
   __Pyx_GIVEREF(__pyx_tuple__70);
   __pyx_codeobj__71 = (PyObject*)__Pyx_PyCode_New(2, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__70, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_dependencies, 346, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__71)) __PYX_ERR(0, 346, __pyx_L1_error)
+  __pyx_tuple__72 = PyTuple_Pack(1, ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__72)) __PYX_ERR(0, 346, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__72);
+  __Pyx_GIVEREF(__pyx_tuple__72);
 
   /* "gvar/_utilities.pyx":378
  *     return numpy.array(ans)
@@ -64680,10 +64803,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ ``True`` if ``len(gvar.dependencies(g))!=0``; ``False`` otherwise.
  * 
  */
-  __pyx_tuple__72 = PyTuple_Pack(4, __pyx_n_s_g, __pyx_n_s_gi, __pyx_n_s_dep, __pyx_n_s_pri); if (unlikely(!__pyx_tuple__72)) __PYX_ERR(0, 378, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__72);
-  __Pyx_GIVEREF(__pyx_tuple__72);
-  __pyx_codeobj__73 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__72, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_missing_dependencies, 378, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__73)) __PYX_ERR(0, 378, __pyx_L1_error)
+  __pyx_tuple__73 = PyTuple_Pack(4, __pyx_n_s_g, __pyx_n_s_gi, __pyx_n_s_dep, __pyx_n_s_pri); if (unlikely(!__pyx_tuple__73)) __PYX_ERR(0, 378, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__73);
+  __Pyx_GIVEREF(__pyx_tuple__73);
+  __pyx_codeobj__74 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__73, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_missing_dependencies, 378, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__74)) __PYX_ERR(0, 378, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":400
  *     return len(dep - pri) > 0
@@ -64692,10 +64815,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Return ``True`` if |GVar|\s in ``g1`` uncorrelated with those in ``g2``.
  * 
  */
-  __pyx_tuple__74 = PyTuple_Pack(8, __pyx_n_s_g1, __pyx_n_s_g2, __pyx_n_s_g, __pyx_n_s_cov, __pyx_n_s_i, __pyx_n_s_s_2, __pyx_n_s_gi, __pyx_n_s_s0); if (unlikely(!__pyx_tuple__74)) __PYX_ERR(0, 400, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__74);
-  __Pyx_GIVEREF(__pyx_tuple__74);
-  __pyx_codeobj__75 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__74, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_uncorrelated, 400, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__75)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __pyx_tuple__75 = PyTuple_Pack(8, __pyx_n_s_g1, __pyx_n_s_g2, __pyx_n_s_g, __pyx_n_s_cov, __pyx_n_s_i, __pyx_n_s_s_2, __pyx_n_s_gi, __pyx_n_s_s0); if (unlikely(!__pyx_tuple__75)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__75);
+  __Pyx_GIVEREF(__pyx_tuple__75);
+  __pyx_codeobj__76 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__75, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_uncorrelated, 400, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__76)) __PYX_ERR(0, 400, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":436
  *     return s0.isdisjoint(s[1])
@@ -64704,10 +64827,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Compute correlation matrix for elements of
  *     array/dictionary ``g``.
  */
-  __pyx_tuple__76 = PyTuple_Pack(15, __pyx_n_s_g, __pyx_n_s_covflat, __pyx_n_s_idx, __pyx_n_s_sdevflat, __pyx_n_s_corrflat, __pyx_n_s_ans, __pyx_n_s_i, __pyx_n_s_i_sl, __pyx_n_s_i_sh, __pyx_n_s_j, __pyx_n_s_j_sl, __pyx_n_s_j_sh, __pyx_n_s_g_shape, __pyx_n_s_cov, __pyx_n_s_sdev); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(0, 436, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__76);
-  __Pyx_GIVEREF(__pyx_tuple__76);
-  __pyx_codeobj__77 = (PyObject*)__Pyx_PyCode_New(1, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__76, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcorr, 436, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__77)) __PYX_ERR(0, 436, __pyx_L1_error)
+  __pyx_tuple__77 = PyTuple_Pack(15, __pyx_n_s_g, __pyx_n_s_covflat, __pyx_n_s_idx, __pyx_n_s_sdevflat, __pyx_n_s_corrflat, __pyx_n_s_ans, __pyx_n_s_i, __pyx_n_s_i_sl, __pyx_n_s_i_sh, __pyx_n_s_j, __pyx_n_s_j_sl, __pyx_n_s_j_sh, __pyx_n_s_g_shape, __pyx_n_s_cov, __pyx_n_s_sdev); if (unlikely(!__pyx_tuple__77)) __PYX_ERR(0, 436, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__77);
+  __Pyx_GIVEREF(__pyx_tuple__77);
+  __pyx_codeobj__78 = (PyObject*)__Pyx_PyCode_New(1, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__77, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcorr, 436, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__78)) __PYX_ERR(0, 436, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":478
  *         return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
@@ -64716,10 +64839,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Correlation between :class:`gvar.GVar`\s ``g1`` and ``g2``. """
  *     if not isinstance(g1, GVar) and not isinstance(g2, GVar):
  */
-  __pyx_tuple__78 = PyTuple_Pack(2, __pyx_n_s_g1, __pyx_n_s_g2); if (unlikely(!__pyx_tuple__78)) __PYX_ERR(0, 478, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__78);
-  __Pyx_GIVEREF(__pyx_tuple__78);
-  __pyx_codeobj__79 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__78, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_corr, 478, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__79)) __PYX_ERR(0, 478, __pyx_L1_error)
+  __pyx_tuple__79 = PyTuple_Pack(2, __pyx_n_s_g1, __pyx_n_s_g2); if (unlikely(!__pyx_tuple__79)) __PYX_ERR(0, 478, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__79);
+  __Pyx_GIVEREF(__pyx_tuple__79);
+  __pyx_codeobj__80 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__79, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_corr, 478, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__80)) __PYX_ERR(0, 478, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":484
  *     return evalcorr([g1, g2])[0,1]
@@ -64728,10 +64851,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Covariance of :class:`gvar.GVar` ``g1`` with ``g2``. """
  *     if not isinstance(g1, GVar) and not isinstance(g2, GVar):
  */
-  __pyx_tuple__80 = PyTuple_Pack(2, __pyx_n_s_g1, __pyx_n_s_g2); if (unlikely(!__pyx_tuple__80)) __PYX_ERR(0, 484, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__80);
-  __Pyx_GIVEREF(__pyx_tuple__80);
-  __pyx_codeobj__81 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__80, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_cov, 484, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__81)) __PYX_ERR(0, 484, __pyx_L1_error)
+  __pyx_tuple__81 = PyTuple_Pack(2, __pyx_n_s_g1, __pyx_n_s_g2); if (unlikely(!__pyx_tuple__81)) __PYX_ERR(0, 484, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__81);
+  __Pyx_GIVEREF(__pyx_tuple__81);
+  __pyx_codeobj__82 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__81, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_cov, 484, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__82)) __PYX_ERR(0, 484, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":491
  * 
@@ -64740,10 +64863,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Add correlations to uncorrelated |GVar|\s in ``g``.
  * 
  */
-  __pyx_tuple__82 = PyTuple_Pack(14, __pyx_n_s_g, __pyx_n_s_corr, __pyx_n_s_ni, __pyx_n_s_nj, __pyx_n_s_covflat, __pyx_n_s_sdevflat, __pyx_n_s_mean, __pyx_n_s_sdev, __pyx_n_s_i, __pyx_n_s_i_sl, __pyx_n_s_i_sh, __pyx_n_s_j, __pyx_n_s_j_sl, __pyx_n_s_j_sh); if (unlikely(!__pyx_tuple__82)) __PYX_ERR(0, 491, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__82);
-  __Pyx_GIVEREF(__pyx_tuple__82);
-  __pyx_codeobj__83 = (PyObject*)__Pyx_PyCode_New(2, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__82, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_correlate, 491, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__83)) __PYX_ERR(0, 491, __pyx_L1_error)
+  __pyx_tuple__83 = PyTuple_Pack(14, __pyx_n_s_g, __pyx_n_s_corr, __pyx_n_s_ni, __pyx_n_s_nj, __pyx_n_s_covflat, __pyx_n_s_sdevflat, __pyx_n_s_mean, __pyx_n_s_sdev, __pyx_n_s_i, __pyx_n_s_i_sl, __pyx_n_s_i_sh, __pyx_n_s_j, __pyx_n_s_j_sl, __pyx_n_s_j_sh); if (unlikely(!__pyx_tuple__83)) __PYX_ERR(0, 491, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__83);
+  __Pyx_GIVEREF(__pyx_tuple__83);
+  __pyx_codeobj__84 = (PyObject*)__Pyx_PyCode_New(2, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__83, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_correlate, 491, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__84)) __PYX_ERR(0, 491, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":570
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -64752,10 +64875,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Evaluate covariance matrix for elements of ``g``.
  * 
  */
-  __pyx_tuple__84 = PyTuple_Pack(15, __pyx_n_s_g, __pyx_n_s_compress, __pyx_n_s_nvar, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_nb, __pyx_n_s_ib, __pyx_n_s_varlist, __pyx_n_s_sdev, __pyx_n_s_cov, __pyx_n_s_allcov, __pyx_n_s_key, __pyx_n_s_allvar, __pyx_n_s_blocks, __pyx_n_s_idx); if (unlikely(!__pyx_tuple__84)) __PYX_ERR(0, 570, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__84);
-  __Pyx_GIVEREF(__pyx_tuple__84);
-  __pyx_codeobj__85 = (PyObject*)__Pyx_PyCode_New(2, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__84, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov_blocks_dense, 570, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__85)) __PYX_ERR(0, 570, __pyx_L1_error)
+  __pyx_tuple__85 = PyTuple_Pack(15, __pyx_n_s_g, __pyx_n_s_compress, __pyx_n_s_nvar, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_nb, __pyx_n_s_ib, __pyx_n_s_varlist, __pyx_n_s_sdev, __pyx_n_s_cov, __pyx_n_s_allcov, __pyx_n_s_key, __pyx_n_s_allvar, __pyx_n_s_blocks, __pyx_n_s_idx); if (unlikely(!__pyx_tuple__85)) __PYX_ERR(0, 570, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__85);
+  __Pyx_GIVEREF(__pyx_tuple__85);
+  __pyx_codeobj__86 = (PyObject*)__Pyx_PyCode_New(2, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__85, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov_blocks_dense, 570, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__86)) __PYX_ERR(0, 570, __pyx_L1_error)
+  __pyx_tuple__87 = PyTuple_Pack(1, ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__87)) __PYX_ERR(0, 570, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__87);
+  __Pyx_GIVEREF(__pyx_tuple__87);
 
   /* "gvar/_utilities.pyx":612
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -64764,10 +64890,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Evaluate covariance matrix for elements of ``g``.
  * 
  */
-  __pyx_tuple__86 = PyTuple_Pack(39, __pyx_n_s_g, __pyx_n_s_compress, __pyx_n_s_nvar, __pyx_n_s_iv, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_id, __pyx_n_s_nb, __pyx_n_s_ib, __pyx_n_s_sib, __pyx_n_s_snb, __pyx_n_s_nval, __pyx_n_s_nvalmax, __pyx_n_s_n, __pyx_n_s_nzeros, __pyx_n_s_sdev, __pyx_n_s_cov, __pyx_n_s_gi, __pyx_n_s_rows, __pyx_n_s_cols, __pyx_n_s_vals, __pyx_n_s_ivset_iv, __pyx_n_s_varlist, __pyx_n_s_ivlist_id, __pyx_n_s_ivlist_idset, __pyx_n_s_idset, __pyx_n_s_tmp, __pyx_n_s_graph, __pyx_n_s_key, __pyx_n_s_allvar, __pyx_n_s_blocks, __pyx_n_s_idx, __pyx_n_s_bcov, __pyx_n_s_allbcov, __pyx_n_s_skey, __pyx_n_s_sidx, __pyx_n_s_bidx, __pyx_n_s_sbcov, __pyx_n_s_i); if (unlikely(!__pyx_tuple__86)) __PYX_ERR(0, 612, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__86);
-  __Pyx_GIVEREF(__pyx_tuple__86);
-  __pyx_codeobj__87 = (PyObject*)__Pyx_PyCode_New(2, 0, 39, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__86, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov_blocks, 612, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__87)) __PYX_ERR(0, 612, __pyx_L1_error)
+  __pyx_tuple__88 = PyTuple_Pack(39, __pyx_n_s_g, __pyx_n_s_compress, __pyx_n_s_nvar, __pyx_n_s_iv, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_id, __pyx_n_s_nb, __pyx_n_s_ib, __pyx_n_s_sib, __pyx_n_s_snb, __pyx_n_s_nval, __pyx_n_s_nvalmax, __pyx_n_s_n, __pyx_n_s_nzeros, __pyx_n_s_sdev, __pyx_n_s_cov, __pyx_n_s_gi, __pyx_n_s_rows, __pyx_n_s_cols, __pyx_n_s_vals, __pyx_n_s_ivset_iv, __pyx_n_s_varlist, __pyx_n_s_ivlist_id, __pyx_n_s_ivlist_idset, __pyx_n_s_idset, __pyx_n_s_tmp, __pyx_n_s_graph, __pyx_n_s_key, __pyx_n_s_allvar, __pyx_n_s_blocks, __pyx_n_s_idx, __pyx_n_s_bcov, __pyx_n_s_allbcov, __pyx_n_s_skey, __pyx_n_s_sidx, __pyx_n_s_bidx, __pyx_n_s_sbcov, __pyx_n_s_i); if (unlikely(!__pyx_tuple__88)) __PYX_ERR(0, 612, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__88);
+  __Pyx_GIVEREF(__pyx_tuple__88);
+  __pyx_codeobj__89 = (PyObject*)__Pyx_PyCode_New(2, 0, 39, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__88, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov_blocks, 612, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__89)) __PYX_ERR(0, 612, __pyx_L1_error)
+  __pyx_tuple__90 = PyTuple_Pack(1, ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__90)) __PYX_ERR(0, 612, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__90);
+  __Pyx_GIVEREF(__pyx_tuple__90);
 
   /* "gvar/_utilities.pyx":780
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -64776,10 +64905,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Mock evalcov for testing.
  * 
  */
-  __pyx_tuple__88 = PyTuple_Pack(2, __pyx_n_s_cov, __pyx_n_s_d); if (unlikely(!__pyx_tuple__88)) __PYX_ERR(0, 780, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__88);
-  __Pyx_GIVEREF(__pyx_tuple__88);
-  __pyx_codeobj__89 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__88, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_mock_evalcov, 780, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__89)) __PYX_ERR(0, 780, __pyx_L1_error)
+  __pyx_tuple__91 = PyTuple_Pack(2, __pyx_n_s_cov, __pyx_n_s_d); if (unlikely(!__pyx_tuple__91)) __PYX_ERR(0, 780, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__91);
+  __Pyx_GIVEREF(__pyx_tuple__91);
+  __pyx_codeobj__92 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__91, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_mock_evalcov, 780, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__92)) __PYX_ERR(0, 780, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":797
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -64788,10 +64917,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Compute covariance matrix for elements of
  *     array/dictionary ``g``.
  */
-  __pyx_tuple__90 = PyTuple_Pack(37, __pyx_n_s_g, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_nc, __pyx_n_s_cov_zeros, __pyx_n_s_previousid, __pyx_n_s_bsize, __pyx_n_s_ni, __pyx_n_s_id, __pyx_n_s_vec_zeros, __pyx_n_s_ans, __pyx_n_s_np_gd, __pyx_n_s_imask, __pyx_n_s_np_imask, __pyx_n_s_mcov, __pyx_n_s_mvec, __pyx_n_s_is_dense, __pyx_n_s_ib, __pyx_n_s_ga, __pyx_n_s_da, __pyx_n_s_cov, __pyx_n_s_mask, __pyx_n_s_gdlist, __pyx_n_s_covd, __pyx_n_s_gcov, __pyx_n_s_ansd, __pyx_n_s_k1, __pyx_n_s_k1_sl, __pyx_n_s_k1_sh, __pyx_n_s_k2, __pyx_n_s_k2_sl, __pyx_n_s_k2_sh, __pyx_n_s_g_shape, __pyx_n_s_ga); if (unlikely(!__pyx_tuple__90)) __PYX_ERR(0, 797, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__90);
-  __Pyx_GIVEREF(__pyx_tuple__90);
-  __pyx_codeobj__91 = (PyObject*)__Pyx_PyCode_New(1, 0, 37, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__90, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov, 797, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__91)) __PYX_ERR(0, 797, __pyx_L1_error)
+  __pyx_tuple__93 = PyTuple_Pack(37, __pyx_n_s_g, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_nc, __pyx_n_s_cov_zeros, __pyx_n_s_previousid, __pyx_n_s_bsize, __pyx_n_s_ni, __pyx_n_s_id, __pyx_n_s_vec_zeros, __pyx_n_s_ans, __pyx_n_s_np_gd, __pyx_n_s_imask, __pyx_n_s_np_imask, __pyx_n_s_mcov, __pyx_n_s_mvec, __pyx_n_s_is_dense, __pyx_n_s_ib, __pyx_n_s_ga, __pyx_n_s_da, __pyx_n_s_cov, __pyx_n_s_mask, __pyx_n_s_gdlist, __pyx_n_s_covd, __pyx_n_s_gcov, __pyx_n_s_ansd, __pyx_n_s_k1, __pyx_n_s_k1_sl, __pyx_n_s_k1_sh, __pyx_n_s_k2, __pyx_n_s_k2_sl, __pyx_n_s_k2_sh, __pyx_n_s_g_shape, __pyx_n_s_ga); if (unlikely(!__pyx_tuple__93)) __PYX_ERR(0, 797, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__93);
+  __Pyx_GIVEREF(__pyx_tuple__93);
+  __pyx_codeobj__94 = (PyObject*)__Pyx_PyCode_New(1, 0, 37, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__93, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov, 797, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__94)) __PYX_ERR(0, 797, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":912
  *     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
@@ -64800,10 +64929,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Compute covariance matrix for elements of
  *     array/dictionary ``g``. Old version, for testing.
  */
-  __pyx_tuple__92 = PyTuple_Pack(24, __pyx_n_s_g, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_nc, __pyx_n_s_ans, __pyx_n_s_covd, __pyx_n_s_imask, __pyx_n_s_ga, __pyx_n_s_gb, __pyx_n_s_da, __pyx_n_s_db, __pyx_n_s_cov, __pyx_n_s_gcov, __pyx_n_s_ansd, __pyx_n_s_k1, __pyx_n_s_k1_sl, __pyx_n_s_k1_sh, __pyx_n_s_k2, __pyx_n_s_k2_sl, __pyx_n_s_k2_sh, __pyx_n_s_g_shape); if (unlikely(!__pyx_tuple__92)) __PYX_ERR(0, 912, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__92);
-  __Pyx_GIVEREF(__pyx_tuple__92);
-  __pyx_codeobj__93 = (PyObject*)__Pyx_PyCode_New(1, 0, 24, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__92, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov_old, 912, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__93)) __PYX_ERR(0, 912, __pyx_L1_error)
+  __pyx_tuple__95 = PyTuple_Pack(24, __pyx_n_s_g, __pyx_n_s_a, __pyx_n_s_b, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_nc, __pyx_n_s_ans, __pyx_n_s_covd, __pyx_n_s_imask, __pyx_n_s_ga, __pyx_n_s_gb, __pyx_n_s_da, __pyx_n_s_db, __pyx_n_s_cov, __pyx_n_s_gcov, __pyx_n_s_ansd, __pyx_n_s_k1, __pyx_n_s_k1_sl, __pyx_n_s_k1_sh, __pyx_n_s_k2, __pyx_n_s_k2_sl, __pyx_n_s_k2_sh, __pyx_n_s_g_shape); if (unlikely(!__pyx_tuple__95)) __PYX_ERR(0, 912, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__95);
+  __Pyx_GIVEREF(__pyx_tuple__95);
+  __pyx_codeobj__96 = (PyObject*)__Pyx_PyCode_New(1, 0, 24, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__95, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_evalcov_old, 912, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__96)) __PYX_ERR(0, 912, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":999
  *     where the |GVar|\s are drawn from list ``gvlist``.
@@ -64812,10 +64941,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         self.loc = len(gvlist)
  *         gvlist.append(g)
  */
-  __pyx_tuple__94 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_g, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__94)) __PYX_ERR(0, 999, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__94);
-  __Pyx_GIVEREF(__pyx_tuple__94);
-  __pyx_codeobj__95 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__94, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_init, 999, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__95)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __pyx_tuple__97 = PyTuple_Pack(3, __pyx_n_s_self, __pyx_n_s_g, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__97)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__97);
+  __Pyx_GIVEREF(__pyx_tuple__97);
+  __pyx_codeobj__98 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__97, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_init, 999, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__98)) __PYX_ERR(0, 999, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1003
  *         gvlist.append(g)
@@ -64824,10 +64953,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         return gvlist[self.loc]
  * 
  */
-  __pyx_tuple__96 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__96)) __PYX_ERR(0, 1003, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__96);
-  __Pyx_GIVEREF(__pyx_tuple__96);
-  __pyx_codeobj__97 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__96, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_call, 1003, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__97)) __PYX_ERR(0, 1003, __pyx_L1_error)
+  __pyx_tuple__99 = PyTuple_Pack(2, __pyx_n_s_self, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__99)) __PYX_ERR(0, 1003, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__99);
+  __Pyx_GIVEREF(__pyx_tuple__99);
+  __pyx_codeobj__100 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__99, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_call, 1003, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__100)) __PYX_ERR(0, 1003, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1006
  *         return gvlist[self.loc]
@@ -64836,10 +64965,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Distribute |GVar|\s from ``gvlist`` in structure g, replacing :class:`gvar.GVarRef`\s.
  * 
  */
-  __pyx_tuple__98 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_gvlist, __pyx_n_s_k, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x); if (unlikely(!__pyx_tuple__98)) __PYX_ERR(0, 1006, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__98);
-  __Pyx_GIVEREF(__pyx_tuple__98);
-  __pyx_codeobj__99 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__98, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_distribute_gvars, 1006, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__99)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __pyx_tuple__101 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_gvlist, __pyx_n_s_k, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x); if (unlikely(!__pyx_tuple__101)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__101);
+  __Pyx_GIVEREF(__pyx_tuple__101);
+  __pyx_codeobj__102 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__101, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_distribute_gvars, 1006, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__102)) __PYX_ERR(0, 1006, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1046
  *         return g
@@ -64848,10 +64977,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Remove |GVar|\s from structure g, collecting them in ``gvlist``; replace with :class:`gvar.GVarRef`\s.
  * 
  */
-  __pyx_tuple__100 = PyTuple_Pack(8, __pyx_n_s_g, __pyx_n_s_gvlist, __pyx_n_s_tmp, __pyx_n_s_k, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x); if (unlikely(!__pyx_tuple__100)) __PYX_ERR(0, 1046, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__100);
-  __Pyx_GIVEREF(__pyx_tuple__100);
-  __pyx_codeobj__101 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__100, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_remove_gvars, 1046, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__101)) __PYX_ERR(0, 1046, __pyx_L1_error)
+  __pyx_tuple__103 = PyTuple_Pack(8, __pyx_n_s_g, __pyx_n_s_gvlist, __pyx_n_s_tmp, __pyx_n_s_k, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x, __pyx_n_s_x); if (unlikely(!__pyx_tuple__103)) __PYX_ERR(0, 1046, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__103);
+  __Pyx_GIVEREF(__pyx_tuple__103);
+  __pyx_codeobj__104 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__103, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_remove_gvars, 1046, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__104)) __PYX_ERR(0, 1046, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1110
  *         return g
@@ -64860,10 +64989,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     " Collect |GVar|\s in ``gvlist`` from container object g. "
  *     if isinstance(g, _gvar.GVar):
  */
-  __pyx_tuple__102 = PyTuple_Pack(4, __pyx_n_s_g, __pyx_n_s_gvlist, __pyx_n_s_k, __pyx_n_s_x); if (unlikely(!__pyx_tuple__102)) __PYX_ERR(0, 1110, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__102);
-  __Pyx_GIVEREF(__pyx_tuple__102);
-  __pyx_codeobj__103 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__102, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_collect_gvars, 1110, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__103)) __PYX_ERR(0, 1110, __pyx_L1_error)
+  __pyx_tuple__105 = PyTuple_Pack(4, __pyx_n_s_g, __pyx_n_s_gvlist, __pyx_n_s_k, __pyx_n_s_x); if (unlikely(!__pyx_tuple__105)) __PYX_ERR(0, 1110, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__105);
+  __Pyx_GIVEREF(__pyx_tuple__105);
+  __pyx_codeobj__106 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__105, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_collect_gvars, 1110, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__106)) __PYX_ERR(0, 1110, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1128
  *             pass
@@ -64872,10 +65001,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Filter |GVar|\s in ``g`` through function ``f``.
  * 
  */
-  __pyx_tuple__104 = PyTuple_Pack(6, __pyx_n_s_g, __pyx_n_s_f, __pyx_n_s_args, __pyx_n_s_kargs, __pyx_n_s_gvlist, __pyx_n_s_new_g); if (unlikely(!__pyx_tuple__104)) __PYX_ERR(0, 1128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__104);
-  __Pyx_GIVEREF(__pyx_tuple__104);
-  __pyx_codeobj__105 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARARGS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__104, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_filter, 1128, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__105)) __PYX_ERR(0, 1128, __pyx_L1_error)
+  __pyx_tuple__107 = PyTuple_Pack(6, __pyx_n_s_g, __pyx_n_s_f, __pyx_n_s_args, __pyx_n_s_kargs, __pyx_n_s_gvlist, __pyx_n_s_new_g); if (unlikely(!__pyx_tuple__107)) __PYX_ERR(0, 1128, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__107);
+  __Pyx_GIVEREF(__pyx_tuple__107);
+  __pyx_codeobj__108 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARARGS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__107, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_filter, 1128, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__108)) __PYX_ERR(0, 1128, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1165
  *     return distribute_gvars(new_g, gvlist)
@@ -64884,10 +65013,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Return a serialized representation of ``g``.
  * 
  */
-  __pyx_tuple__106 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_add_dependencies, __pyx_n_s_kargs); if (unlikely(!__pyx_tuple__106)) __PYX_ERR(0, 1165, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__106);
-  __Pyx_GIVEREF(__pyx_tuple__106);
-  __pyx_codeobj__107 = (PyObject*)__Pyx_PyCode_New(2, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__106, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_dumps, 1165, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__107)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __pyx_tuple__109 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_add_dependencies, __pyx_n_s_kargs); if (unlikely(!__pyx_tuple__109)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__109);
+  __Pyx_GIVEREF(__pyx_tuple__109);
+  __pyx_codeobj__110 = (PyObject*)__Pyx_PyCode_New(2, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__109, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_dumps, 1165, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__110)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __pyx_tuple__111 = PyTuple_Pack(1, ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__111)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__111);
+  __Pyx_GIVEREF(__pyx_tuple__111);
 
   /* "gvar/_utilities.pyx":1198
  *     return dump(g, add_dependencies=add_dependencies).getvalue()
@@ -64896,10 +65028,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Read and return object serialized in ``inputbytes`` by :func:`gvar.dumps`.
  * 
  */
-  __pyx_tuple__108 = PyTuple_Pack(2, __pyx_n_s_inputbytes, __pyx_n_s_kargs); if (unlikely(!__pyx_tuple__108)) __PYX_ERR(0, 1198, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__108);
-  __Pyx_GIVEREF(__pyx_tuple__108);
-  __pyx_codeobj__109 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__108, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_loads, 1198, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__109)) __PYX_ERR(0, 1198, __pyx_L1_error)
+  __pyx_tuple__112 = PyTuple_Pack(2, __pyx_n_s_inputbytes, __pyx_n_s_kargs); if (unlikely(!__pyx_tuple__112)) __PYX_ERR(0, 1198, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__112);
+  __Pyx_GIVEREF(__pyx_tuple__112);
+  __pyx_codeobj__113 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__112, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_loads, 1198, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__113)) __PYX_ERR(0, 1198, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1225
  *     return load(BytesIO(inputbytes), **kargs)
@@ -64908,10 +65040,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Write a representation of ``g``  to file ``outputfile``.
  * 
  */
-  __pyx_tuple__110 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_outputfile, __pyx_n_s_add_dependencies, __pyx_n_s_kargs, __pyx_n_s_ofile, __pyx_n_s_datadict, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__110)) __PYX_ERR(0, 1225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__110);
-  __Pyx_GIVEREF(__pyx_tuple__110);
-  __pyx_codeobj__111 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__110, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_dump, 1225, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__111)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __pyx_tuple__114 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_outputfile, __pyx_n_s_add_dependencies, __pyx_n_s_kargs, __pyx_n_s_ofile, __pyx_n_s_datadict, __pyx_n_s_gvlist); if (unlikely(!__pyx_tuple__114)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__114);
+  __Pyx_GIVEREF(__pyx_tuple__114);
+  __pyx_codeobj__115 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__114, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_dump, 1225, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__115)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __pyx_tuple__116 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__116)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__116);
+  __Pyx_GIVEREF(__pyx_tuple__116);
 
   /* "gvar/_utilities.pyx":1307
  *     return outputfile
@@ -64920,10 +65055,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Read and return object serialized in ``inputfile`` by :func:`gvar.dump`.
  * 
  */
-  __pyx_tuple__112 = PyTuple_Pack(6, __pyx_n_s_inputfile, __pyx_n_s_method, __pyx_n_s_kargs, __pyx_n_s_ifile, __pyx_n_s_iloc, __pyx_n_s_datadict); if (unlikely(!__pyx_tuple__112)) __PYX_ERR(0, 1307, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__112);
-  __Pyx_GIVEREF(__pyx_tuple__112);
-  __pyx_codeobj__113 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__112, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_load, 1307, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__113)) __PYX_ERR(0, 1307, __pyx_L1_error)
+  __pyx_tuple__117 = PyTuple_Pack(6, __pyx_n_s_inputfile, __pyx_n_s_method, __pyx_n_s_kargs, __pyx_n_s_ifile, __pyx_n_s_iloc, __pyx_n_s_datadict); if (unlikely(!__pyx_tuple__117)) __PYX_ERR(0, 1307, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__117);
+  __Pyx_GIVEREF(__pyx_tuple__117);
+  __pyx_codeobj__118 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__117, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_load, 1307, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__118)) __PYX_ERR(0, 1307, __pyx_L1_error)
+  __pyx_tuple__119 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__119)) __PYX_ERR(0, 1307, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__119);
+  __Pyx_GIVEREF(__pyx_tuple__119);
 
   /* "gvar/_utilities.pyx":1364
  * ##### gdump/gload
@@ -64932,10 +65070,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Return a serialized representation of ``g``.
  * 
  */
-  __pyx_tuple__114 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_method, __pyx_n_s_add_dependencies); if (unlikely(!__pyx_tuple__114)) __PYX_ERR(0, 1364, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__114);
-  __Pyx_GIVEREF(__pyx_tuple__114);
-  __pyx_codeobj__115 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__114, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gdumps, 1364, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__115)) __PYX_ERR(0, 1364, __pyx_L1_error)
+  __pyx_tuple__120 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_method, __pyx_n_s_add_dependencies); if (unlikely(!__pyx_tuple__120)) __PYX_ERR(0, 1364, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__120);
+  __Pyx_GIVEREF(__pyx_tuple__120);
+  __pyx_codeobj__121 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__120, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gdumps, 1364, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__121)) __PYX_ERR(0, 1364, __pyx_L1_error)
+  __pyx_tuple__122 = PyTuple_Pack(2, ((PyObject*)__pyx_n_s_json), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__122)) __PYX_ERR(0, 1364, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__122);
+  __Pyx_GIVEREF(__pyx_tuple__122);
 
   /* "gvar/_utilities.pyx":1401
  *         raise ValueError('unknown method: ' + str(method))
@@ -64944,10 +65085,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Write a representation of ``g``  to file ``outputfile``.
  * 
  */
-  __pyx_tuple__116 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_outputfile, __pyx_n_s_method, __pyx_n_s_add_dependencies, __pyx_n_s_kargs, __pyx_n_s_sg, __pyx_n_s_ofile); if (unlikely(!__pyx_tuple__116)) __PYX_ERR(0, 1401, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__116);
-  __Pyx_GIVEREF(__pyx_tuple__116);
-  __pyx_codeobj__117 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__116, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gdump, 1401, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__117)) __PYX_ERR(0, 1401, __pyx_L1_error)
+  __pyx_tuple__123 = PyTuple_Pack(7, __pyx_n_s_g, __pyx_n_s_outputfile, __pyx_n_s_method, __pyx_n_s_add_dependencies, __pyx_n_s_kargs, __pyx_n_s_sg, __pyx_n_s_ofile); if (unlikely(!__pyx_tuple__123)) __PYX_ERR(0, 1401, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__123);
+  __Pyx_GIVEREF(__pyx_tuple__123);
+  __pyx_codeobj__124 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__123, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gdump, 1401, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__124)) __PYX_ERR(0, 1401, __pyx_L1_error)
+  __pyx_tuple__125 = PyTuple_Pack(3, ((PyObject *)Py_None), ((PyObject *)Py_None), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__125)) __PYX_ERR(0, 1401, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__125);
+  __Pyx_GIVEREF(__pyx_tuple__125);
 
   /* "gvar/_utilities.pyx":1520
  * _DUMPMETHODS = dict(json='json', p='pickle', pkl='pickle', pickle='pickle')
@@ -64956,10 +65100,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Return |GVar|\s that are serialized in ``inputstr``.
  * 
  */
-  __pyx_tuple__118 = PyTuple_Pack(1, __pyx_n_s_inputstr); if (unlikely(!__pyx_tuple__118)) __PYX_ERR(0, 1520, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__118);
-  __Pyx_GIVEREF(__pyx_tuple__118);
-  __pyx_codeobj__119 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__118, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gloads, 1520, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__119)) __PYX_ERR(0, 1520, __pyx_L1_error)
+  __pyx_tuple__126 = PyTuple_Pack(1, __pyx_n_s_inputstr); if (unlikely(!__pyx_tuple__126)) __PYX_ERR(0, 1520, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__126);
+  __Pyx_GIVEREF(__pyx_tuple__126);
+  __pyx_codeobj__127 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__126, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gloads, 1520, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__127)) __PYX_ERR(0, 1520, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1550
  *         return gload(BytesIO(inputstr), method='pickle')
@@ -64968,10 +65112,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Read and return |GVar|\s that are serialized in ``inputfile``.
  * 
  */
-  __pyx_tuple__120 = PyTuple_Pack(7, __pyx_n_s_inputfile, __pyx_n_s_method, __pyx_n_s_kargs, __pyx_n_s_ifile, __pyx_n_s_iloc, __pyx_n_s_sg, __pyx_n_s_TypeError); if (unlikely(!__pyx_tuple__120)) __PYX_ERR(0, 1550, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__120);
-  __Pyx_GIVEREF(__pyx_tuple__120);
-  __pyx_codeobj__121 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__120, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gload, 1550, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__121)) __PYX_ERR(0, 1550, __pyx_L1_error)
+  __pyx_tuple__128 = PyTuple_Pack(7, __pyx_n_s_inputfile, __pyx_n_s_method, __pyx_n_s_kargs, __pyx_n_s_ifile, __pyx_n_s_iloc, __pyx_n_s_sg, __pyx_n_s_TypeError); if (unlikely(!__pyx_tuple__128)) __PYX_ERR(0, 1550, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__128);
+  __Pyx_GIVEREF(__pyx_tuple__128);
+  __pyx_codeobj__129 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__128, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gload, 1550, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__129)) __PYX_ERR(0, 1550, __pyx_L1_error)
+  __pyx_tuple__130 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__130)) __PYX_ERR(0, 1550, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__130);
+  __Pyx_GIVEREF(__pyx_tuple__130);
 
   /* "gvar/_utilities.pyx":1620
  *         return _oldload1(inputfile, method)
@@ -64980,10 +65127,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Repack ``g`` in dictionary that can be serialized. Used by :func:`gdump`.
  *     """
  */
-  __pyx_tuple__122 = PyTuple_Pack(13, __pyx_n_s_g, __pyx_n_s_add_dependencies, __pyx_n_s_idx, __pyx_n_s_bcov, __pyx_n_s_primary, __pyx_n_s_derived, __pyx_n_s_data, __pyx_n_s_k, __pyx_n_s_slice, __pyx_n_s_shape, __pyx_n_s_buf, __pyx_n_s_first_pass, __pyx_n_s_derivs); if (unlikely(!__pyx_tuple__122)) __PYX_ERR(0, 1620, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__122);
-  __Pyx_GIVEREF(__pyx_tuple__122);
-  __pyx_codeobj__123 = (PyObject*)__Pyx_PyCode_New(2, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__122, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gdump_2, 1620, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__123)) __PYX_ERR(0, 1620, __pyx_L1_error)
+  __pyx_tuple__131 = PyTuple_Pack(13, __pyx_n_s_g, __pyx_n_s_add_dependencies, __pyx_n_s_idx, __pyx_n_s_bcov, __pyx_n_s_primary, __pyx_n_s_derived, __pyx_n_s_data, __pyx_n_s_k, __pyx_n_s_slice, __pyx_n_s_shape, __pyx_n_s_buf, __pyx_n_s_first_pass, __pyx_n_s_derivs); if (unlikely(!__pyx_tuple__131)) __PYX_ERR(0, 1620, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__131);
+  __Pyx_GIVEREF(__pyx_tuple__131);
+  __pyx_codeobj__132 = (PyObject*)__Pyx_PyCode_New(2, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__131, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gdump_2, 1620, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__132)) __PYX_ERR(0, 1620, __pyx_L1_error)
+  __pyx_tuple__133 = PyTuple_Pack(1, ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__133)) __PYX_ERR(0, 1620, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__133);
+  __Pyx_GIVEREF(__pyx_tuple__133);
 
   /* "gvar/_utilities.pyx":1668
  *     return data
@@ -64992,10 +65142,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Inverse of :func:`_gdump`.
  *     """
  */
-  __pyx_tuple__124 = PyTuple_Pack(11, __pyx_n_s_data, __pyx_n_s_buf, __pyx_n_s_idx, __pyx_n_s_bcov, __pyx_n_s_primary, __pyx_n_s_derivs, __pyx_n_s_keys, __pyx_n_s_g, __pyx_n_s_k, __pyx_n_s_sl, __pyx_n_s_sh); if (unlikely(!__pyx_tuple__124)) __PYX_ERR(0, 1668, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__124);
-  __Pyx_GIVEREF(__pyx_tuple__124);
-  __pyx_codeobj__125 = (PyObject*)__Pyx_PyCode_New(1, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__124, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gload_2, 1668, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__125)) __PYX_ERR(0, 1668, __pyx_L1_error)
+  __pyx_tuple__134 = PyTuple_Pack(11, __pyx_n_s_data, __pyx_n_s_buf, __pyx_n_s_idx, __pyx_n_s_bcov, __pyx_n_s_primary, __pyx_n_s_derivs, __pyx_n_s_keys, __pyx_n_s_g, __pyx_n_s_k, __pyx_n_s_sl, __pyx_n_s_sh); if (unlikely(!__pyx_tuple__134)) __PYX_ERR(0, 1668, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__134);
+  __Pyx_GIVEREF(__pyx_tuple__134);
+  __pyx_codeobj__135 = (PyObject*)__Pyx_PyCode_New(1, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__134, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gload_2, 1668, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__135)) __PYX_ERR(0, 1668, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1704
  *         return buf
@@ -65004,10 +65154,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     " reconnect derived GVars to primary GVars; used by :func:`_gload` "
  *     if primary == [] or derivs.size == 0:
  */
-  __pyx_tuple__126 = PyTuple_Pack(8, __pyx_n_s_buf, __pyx_n_s_cov, __pyx_n_s_primary, __pyx_n_s_derivs, __pyx_n_s_fix_cov, __pyx_n_s_idx_primary, __pyx_n_s_idx_derived, __pyx_n_s_tmp); if (unlikely(!__pyx_tuple__126)) __PYX_ERR(0, 1704, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__126);
-  __Pyx_GIVEREF(__pyx_tuple__126);
-  __pyx_codeobj__127 = (PyObject*)__Pyx_PyCode_New(5, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__126, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_rebuild_gvars, 1704, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__127)) __PYX_ERR(0, 1704, __pyx_L1_error)
+  __pyx_tuple__136 = PyTuple_Pack(8, __pyx_n_s_buf, __pyx_n_s_cov, __pyx_n_s_primary, __pyx_n_s_derivs, __pyx_n_s_fix_cov, __pyx_n_s_idx_primary, __pyx_n_s_idx_derived, __pyx_n_s_tmp); if (unlikely(!__pyx_tuple__136)) __PYX_ERR(0, 1704, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__136);
+  __Pyx_GIVEREF(__pyx_tuple__136);
+  __pyx_codeobj__137 = (PyObject*)__Pyx_PyCode_New(5, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__136, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_rebuild_gvars, 1704, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__137)) __PYX_ERR(0, 1704, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1727
  * ####### old versions kept for legacy purposes (for now)
@@ -65016,10 +65166,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
  * 
  */
-  __pyx_tuple__128 = PyTuple_Pack(11, __pyx_n_s_g, __pyx_n_s_outputfile, __pyx_n_s_method, __pyx_n_s_use_json, __pyx_n_s_ofile, __pyx_n_s_tag, __pyx_n_s_gmean, __pyx_n_s_gcov, __pyx_n_s_data, __pyx_n_s_k, __pyx_n_s_d); if (unlikely(!__pyx_tuple__128)) __PYX_ERR(0, 1727, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__128);
-  __Pyx_GIVEREF(__pyx_tuple__128);
-  __pyx_codeobj__129 = (PyObject*)__Pyx_PyCode_New(4, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__128, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_olddump, 1727, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__129)) __PYX_ERR(0, 1727, __pyx_L1_error)
+  __pyx_tuple__138 = PyTuple_Pack(11, __pyx_n_s_g, __pyx_n_s_outputfile, __pyx_n_s_method, __pyx_n_s_use_json, __pyx_n_s_ofile, __pyx_n_s_tag, __pyx_n_s_gmean, __pyx_n_s_gcov, __pyx_n_s_data, __pyx_n_s_k, __pyx_n_s_d); if (unlikely(!__pyx_tuple__138)) __PYX_ERR(0, 1727, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__138);
+  __Pyx_GIVEREF(__pyx_tuple__138);
+  __pyx_codeobj__139 = (PyObject*)__Pyx_PyCode_New(4, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__138, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_olddump, 1727, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__139)) __PYX_ERR(0, 1727, __pyx_L1_error)
+  __pyx_tuple__140 = PyTuple_Pack(2, ((PyObject*)__pyx_n_s_pickle), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__140)) __PYX_ERR(0, 1727, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__140);
+  __Pyx_GIVEREF(__pyx_tuple__140);
 
   /* "gvar/_utilities.pyx":1785
  *         raise ValueError('unknown method: ' + str(method))
@@ -65028,10 +65181,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Load and return serialized |GVar|\s from file ``inputfile``.
  * 
  */
-  __pyx_tuple__130 = PyTuple_Pack(8, __pyx_n_s_inputfile, __pyx_n_s_method, __pyx_n_s_use_json, __pyx_n_s_ifile, __pyx_n_s_data, __pyx_n_s_ans, __pyx_n_s_k, __pyx_n_s_d); if (unlikely(!__pyx_tuple__130)) __PYX_ERR(0, 1785, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__130);
-  __Pyx_GIVEREF(__pyx_tuple__130);
-  __pyx_codeobj__131 = (PyObject*)__Pyx_PyCode_New(3, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__130, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_oldload1, 1785, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__131)) __PYX_ERR(0, 1785, __pyx_L1_error)
+  __pyx_tuple__141 = PyTuple_Pack(8, __pyx_n_s_inputfile, __pyx_n_s_method, __pyx_n_s_use_json, __pyx_n_s_ifile, __pyx_n_s_data, __pyx_n_s_ans, __pyx_n_s_k, __pyx_n_s_d); if (unlikely(!__pyx_tuple__141)) __PYX_ERR(0, 1785, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__141);
+  __Pyx_GIVEREF(__pyx_tuple__141);
+  __pyx_codeobj__142 = (PyObject*)__Pyx_PyCode_New(3, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__141, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_oldload1, 1785, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__142)) __PYX_ERR(0, 1785, __pyx_L1_error)
+  __pyx_tuple__143 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__143)) __PYX_ERR(0, 1785, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__143);
+  __Pyx_GIVEREF(__pyx_tuple__143);
 
   /* "gvar/_utilities.pyx":1852
  *     return ans
@@ -65040,10 +65196,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """
  *     Older version of :func:`load`, included to allow loading
  */
-  __pyx_tuple__132 = PyTuple_Pack(7, __pyx_n_s_inputfile, __pyx_n_s_use_json, __pyx_n_s_ifile, __pyx_n_s_data, __pyx_n_s_ans, __pyx_n_s_k, __pyx_n_s_d); if (unlikely(!__pyx_tuple__132)) __PYX_ERR(0, 1852, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__132);
-  __Pyx_GIVEREF(__pyx_tuple__132);
-  __pyx_codeobj__133 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__132, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_oldload0, 1852, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__133)) __PYX_ERR(0, 1852, __pyx_L1_error)
+  __pyx_tuple__144 = PyTuple_Pack(7, __pyx_n_s_inputfile, __pyx_n_s_use_json, __pyx_n_s_ifile, __pyx_n_s_data, __pyx_n_s_ans, __pyx_n_s_k, __pyx_n_s_d); if (unlikely(!__pyx_tuple__144)) __PYX_ERR(0, 1852, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__144);
+  __Pyx_GIVEREF(__pyx_tuple__144);
+  __pyx_codeobj__145 = (PyObject*)__Pyx_PyCode_New(2, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__144, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_oldload0, 1852, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__145)) __PYX_ERR(0, 1852, __pyx_L1_error)
+  __pyx_tuple__146 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__146)) __PYX_ERR(0, 1852, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__146);
+  __Pyx_GIVEREF(__pyx_tuple__146);
 
   /* "gvar/_utilities.pyx":1878
  *     return ans
@@ -65052,10 +65211,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Disassemble collection ``g`` of |GVar|\s.
  * 
  */
-  __pyx_tuple__134 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gsize, __pyx_n_s_gi, __pyx_n_s_newbuf); if (unlikely(!__pyx_tuple__134)) __PYX_ERR(0, 1878, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__134);
-  __Pyx_GIVEREF(__pyx_tuple__134);
-  __pyx_codeobj__135 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__134, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_disassemble, 1878, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__135)) __PYX_ERR(0, 1878, __pyx_L1_error)
+  __pyx_tuple__147 = PyTuple_Pack(5, __pyx_n_s_g, __pyx_n_s_i, __pyx_n_s_gsize, __pyx_n_s_gi, __pyx_n_s_newbuf); if (unlikely(!__pyx_tuple__147)) __PYX_ERR(0, 1878, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__147);
+  __Pyx_GIVEREF(__pyx_tuple__147);
+  __pyx_codeobj__148 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__147, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_disassemble, 1878, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__148)) __PYX_ERR(0, 1878, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1899
  *     return BufferDict(g, buf=newbuf) if g.shape is None else newbuf.reshape(g.shape)
@@ -65064,10 +65223,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Convert data from :func:`gvar.disassemble` back into |GVar|\s.
  * 
  */
-  __pyx_tuple__136 = PyTuple_Pack(8, __pyx_n_s_data, __pyx_n_s_cov, __pyx_n_s_i, __pyx_n_s_datasize, __pyx_n_s_datai, __pyx_n_s_der, __pyx_n_s_val, __pyx_n_s_newbuf); if (unlikely(!__pyx_tuple__136)) __PYX_ERR(0, 1899, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__136);
-  __Pyx_GIVEREF(__pyx_tuple__136);
-  __pyx_codeobj__137 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__136, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_reassemble, 1899, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__137)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __pyx_tuple__149 = PyTuple_Pack(8, __pyx_n_s_data, __pyx_n_s_cov, __pyx_n_s_i, __pyx_n_s_datasize, __pyx_n_s_datai, __pyx_n_s_der, __pyx_n_s_val, __pyx_n_s_newbuf); if (unlikely(!__pyx_tuple__149)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__149);
+  __Pyx_GIVEREF(__pyx_tuple__149);
+  __pyx_codeobj__150 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__149, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_reassemble, 1899, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__150)) __PYX_ERR(0, 1899, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1928
  * 
@@ -65076,10 +65235,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ weighted sum of |GVar| derivatives """
  *     cdef GVar g
  */
-  __pyx_tuple__138 = PyTuple_Pack(8, __pyx_n_s_wgt, __pyx_n_s_glist, __pyx_n_s_g, __pyx_n_s_cov, __pyx_n_s_w, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_ans); if (unlikely(!__pyx_tuple__138)) __PYX_ERR(0, 1928, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__138);
-  __Pyx_GIVEREF(__pyx_tuple__138);
-  __pyx_codeobj__139 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__138, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_wsum_der, 1928, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__139)) __PYX_ERR(0, 1928, __pyx_L1_error)
+  __pyx_tuple__151 = PyTuple_Pack(8, __pyx_n_s_wgt, __pyx_n_s_glist, __pyx_n_s_g, __pyx_n_s_cov, __pyx_n_s_w, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_ans); if (unlikely(!__pyx_tuple__151)) __PYX_ERR(0, 1928, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__151);
+  __Pyx_GIVEREF(__pyx_tuple__151);
+  __pyx_codeobj__152 = (PyObject*)__Pyx_PyCode_New(2, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__151, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_wsum_der, 1928, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__152)) __PYX_ERR(0, 1928, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1947
  *     return ans
@@ -65088,10 +65247,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ weighted sum of |GVar|\s """
  *     cdef svec wd
  */
-  __pyx_tuple__140 = PyTuple_Pack(13, __pyx_n_s_wgt, __pyx_n_s_glist, __pyx_n_s_wd, __pyx_n_s_wv, __pyx_n_s_w, __pyx_n_s_g, __pyx_n_s_cov, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_nd, __pyx_n_s_size, __pyx_n_s_der, __pyx_n_s_idx); if (unlikely(!__pyx_tuple__140)) __PYX_ERR(0, 1947, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__140);
-  __Pyx_GIVEREF(__pyx_tuple__140);
-  __pyx_codeobj__141 = (PyObject*)__Pyx_PyCode_New(2, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__140, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_wsum_gvar, 1947, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__141)) __PYX_ERR(0, 1947, __pyx_L1_error)
+  __pyx_tuple__153 = PyTuple_Pack(13, __pyx_n_s_wgt, __pyx_n_s_glist, __pyx_n_s_wd, __pyx_n_s_wv, __pyx_n_s_w, __pyx_n_s_g, __pyx_n_s_cov, __pyx_n_s_ng, __pyx_n_s_i, __pyx_n_s_nd, __pyx_n_s_size, __pyx_n_s_der, __pyx_n_s_idx); if (unlikely(!__pyx_tuple__153)) __PYX_ERR(0, 1947, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__153);
+  __Pyx_GIVEREF(__pyx_tuple__153);
+  __pyx_codeobj__154 = (PyObject*)__Pyx_PyCode_New(2, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__153, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_wsum_gvar, 1947, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__154)) __PYX_ERR(0, 1947, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":1980
  *     return GVar(wv,wd,cov)
@@ -65100,10 +65259,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Tabulate :class:`gvar.GVar`\s in ``outputs``.
  * 
  */
-  __pyx_tuple__142 = PyTuple_Pack(5, __pyx_n_s_outputs, __pyx_n_s_ndecimal, __pyx_n_s_ndigit, __pyx_n_s_ans, __pyx_n_s_vk); if (unlikely(!__pyx_tuple__142)) __PYX_ERR(0, 1980, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__142);
-  __Pyx_GIVEREF(__pyx_tuple__142);
-  __pyx_codeobj__143 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__142, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_fmt_values, 1980, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__143)) __PYX_ERR(0, 1980, __pyx_L1_error)
+  __pyx_tuple__155 = PyTuple_Pack(5, __pyx_n_s_outputs, __pyx_n_s_ndecimal, __pyx_n_s_ndigit, __pyx_n_s_ans, __pyx_n_s_vk); if (unlikely(!__pyx_tuple__155)) __PYX_ERR(0, 1980, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__155);
+  __Pyx_GIVEREF(__pyx_tuple__155);
+  __pyx_codeobj__156 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__155, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_fmt_values, 1980, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__156)) __PYX_ERR(0, 1980, __pyx_L1_error)
+  __pyx_tuple__157 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__157)) __PYX_ERR(0, 1980, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__157);
+  __Pyx_GIVEREF(__pyx_tuple__157);
 
   /* "gvar/_utilities.pyx":1998
  *     return ans
@@ -65112,10 +65274,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     outputs, inputs, ndecimal=2, percent=True, colwidth=None,
  *     verify=False, ndigit=None
  */
-  __pyx_tuple__144 = PyTuple_Pack(27, __pyx_n_s_outputs, __pyx_n_s_inputs, __pyx_n_s_ndecimal, __pyx_n_s_percent, __pyx_n_s_colwidth, __pyx_n_s_verify, __pyx_n_s_ndigit, __pyx_n_s_err, __pyx_n_s_outputs_keys, __pyx_n_s_ko, __pyx_n_s_ki, __pyx_n_s_inputs_ki, __pyx_n_s_unprocessed_keys, __pyx_n_s_ki1, __pyx_n_s_ki2, __pyx_n_s_totvar, __pyx_n_s_w, __pyx_n_s_w0, __pyx_n_s_lfmt, __pyx_n_s_hfmt, __pyx_n_s_val, __pyx_n_s_ans, __pyx_n_s_ck, __pyx_n_s_verr, __pyx_n_s_vk, __pyx_n_s_vk, __pyx_n_s_vk); if (unlikely(!__pyx_tuple__144)) __PYX_ERR(0, 1998, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__144);
-  __Pyx_GIVEREF(__pyx_tuple__144);
-  __pyx_codeobj__145 = (PyObject*)__Pyx_PyCode_New(7, 0, 27, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__144, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_fmt_errorbudget, 1998, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__145)) __PYX_ERR(0, 1998, __pyx_L1_error)
+  __pyx_tuple__158 = PyTuple_Pack(27, __pyx_n_s_outputs, __pyx_n_s_inputs, __pyx_n_s_ndecimal, __pyx_n_s_percent, __pyx_n_s_colwidth, __pyx_n_s_verify, __pyx_n_s_ndigit, __pyx_n_s_err, __pyx_n_s_outputs_keys, __pyx_n_s_ko, __pyx_n_s_ki, __pyx_n_s_inputs_ki, __pyx_n_s_unprocessed_keys, __pyx_n_s_ki1, __pyx_n_s_ki2, __pyx_n_s_totvar, __pyx_n_s_w, __pyx_n_s_w0, __pyx_n_s_lfmt, __pyx_n_s_hfmt, __pyx_n_s_val, __pyx_n_s_ans, __pyx_n_s_ck, __pyx_n_s_verr, __pyx_n_s_vk, __pyx_n_s_vk, __pyx_n_s_vk); if (unlikely(!__pyx_tuple__158)) __PYX_ERR(0, 1998, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__158);
+  __Pyx_GIVEREF(__pyx_tuple__158);
+  __pyx_codeobj__159 = (PyObject*)__Pyx_PyCode_New(7, 0, 27, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__158, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_fmt_errorbudget, 1998, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__159)) __PYX_ERR(0, 1998, __pyx_L1_error)
+  __pyx_tuple__160 = PyTuple_Pack(5, ((PyObject *)__pyx_int_2), ((PyObject *)Py_True), ((PyObject *)Py_None), ((PyObject *)Py_False), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__160)) __PYX_ERR(0, 1998, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__160);
+  __Pyx_GIVEREF(__pyx_tuple__160);
 
   /* "gvar/_utilities.pyx":2114
  * 
@@ -65124,10 +65289,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
-  __pyx_tuple__146 = PyTuple_Pack(14, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_svdcut, __pyx_n_s_i_wgts, __pyx_n_s_g_flat, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_buf, __pyx_n_s_z, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__146)) __PYX_ERR(0, 2114, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__146);
-  __Pyx_GIVEREF(__pyx_tuple__146);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__146, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_bootstrap_iter, 2114, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 2114, __pyx_L1_error)
+  __pyx_tuple__161 = PyTuple_Pack(14, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_svdcut, __pyx_n_s_i_wgts, __pyx_n_s_g_flat, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_buf, __pyx_n_s_z, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__161)) __PYX_ERR(0, 2114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__161);
+  __Pyx_GIVEREF(__pyx_tuple__161);
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(3, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__161, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_bootstrap_iter, 2114, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 2114, __pyx_L1_error)
+  __pyx_tuple__162 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject*)__pyx_float_1eneg_12)); if (unlikely(!__pyx_tuple__162)) __PYX_ERR(0, 2114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__162);
+  __Pyx_GIVEREF(__pyx_tuple__162);
 
   /* "gvar/_utilities.pyx":2164
  *     raise StopIteration
@@ -65136,10 +65304,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Generate random sample from distribution ``g``.
  * 
  */
-  __pyx_tuple__147 = PyTuple_Pack(2, __pyx_n_s_g, __pyx_n_s_svdcut); if (unlikely(!__pyx_tuple__147)) __PYX_ERR(0, 2164, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__147);
-  __Pyx_GIVEREF(__pyx_tuple__147);
-  __pyx_codeobj__148 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__147, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_sample, 2164, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__148)) __PYX_ERR(0, 2164, __pyx_L1_error)
+  __pyx_tuple__163 = PyTuple_Pack(2, __pyx_n_s_g, __pyx_n_s_svdcut); if (unlikely(!__pyx_tuple__163)) __PYX_ERR(0, 2164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__163);
+  __Pyx_GIVEREF(__pyx_tuple__163);
+  __pyx_codeobj__164 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__163, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_sample, 2164, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__164)) __PYX_ERR(0, 2164, __pyx_L1_error)
+  __pyx_tuple__165 = PyTuple_Pack(1, ((PyObject*)__pyx_float_1eneg_12)); if (unlikely(!__pyx_tuple__165)) __PYX_ERR(0, 2164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__165);
+  __Pyx_GIVEREF(__pyx_tuple__165);
 
   /* "gvar/_utilities.pyx":2184
  *     return next(raniter(g, svdcut=svdcut))
@@ -65148,10 +65319,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
-  __pyx_tuple__149 = PyTuple_Pack(13, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_svdcut, __pyx_n_s_i_wgts, __pyx_n_s_g_mean, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_z, __pyx_n_s_buf, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__149)) __PYX_ERR(0, 2184, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__149);
-  __Pyx_GIVEREF(__pyx_tuple__149);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(3, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__149, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_raniter, 2184, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 2184, __pyx_L1_error)
+  __pyx_tuple__166 = PyTuple_Pack(13, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_svdcut, __pyx_n_s_i_wgts, __pyx_n_s_g_mean, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_z, __pyx_n_s_buf, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__166)) __PYX_ERR(0, 2184, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__166);
+  __Pyx_GIVEREF(__pyx_tuple__166);
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__166, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_raniter, 2184, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 2184, __pyx_L1_error)
+  __pyx_tuple__167 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject*)__pyx_float_1eneg_12)); if (unlikely(!__pyx_tuple__167)) __PYX_ERR(0, 2184, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__167);
+  __Pyx_GIVEREF(__pyx_tuple__167);
 
   /* "gvar/_utilities.pyx":2240
  *     raise StopIteration
@@ -65160,9 +65334,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ SVD decomposition of a pos. sym. matrix.
  * 
  */
-  __pyx_tuple__150 = PyTuple_Pack(1, __pyx_builtin_object); if (unlikely(!__pyx_tuple__150)) __PYX_ERR(0, 2240, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__150);
-  __Pyx_GIVEREF(__pyx_tuple__150);
+  __pyx_tuple__168 = PyTuple_Pack(1, __pyx_builtin_object); if (unlikely(!__pyx_tuple__168)) __PYX_ERR(0, 2240, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__168);
+  __Pyx_GIVEREF(__pyx_tuple__168);
 
   /* "gvar/_utilities.pyx":2327
  *         ``compute_delta==False``.
@@ -65171,13 +65345,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         self, mat, svdcut=None, svdnum=None, compute_delta=False, rescale=False
  *         ):
  */
-  __pyx_tuple__151 = PyTuple_Pack(15, __pyx_n_s_self, __pyx_n_s_mat, __pyx_n_s_svdcut, __pyx_n_s_svdnum, __pyx_n_s_compute_delta, __pyx_n_s_rescale, __pyx_n_s_diag, __pyx_n_s_D, __pyx_n_s_DmatD, __pyx_n_s_val, __pyx_n_s_key, __pyx_n_s_vec, __pyx_n_s_valmin, __pyx_n_s_dely, __pyx_n_s_i); if (unlikely(!__pyx_tuple__151)) __PYX_ERR(0, 2327, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__151);
-  __Pyx_GIVEREF(__pyx_tuple__151);
-  __pyx_codeobj__152 = (PyObject*)__Pyx_PyCode_New(6, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__151, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_init, 2327, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__152)) __PYX_ERR(0, 2327, __pyx_L1_error)
-  __pyx_tuple__153 = PyTuple_Pack(4, ((PyObject *)Py_None), ((PyObject *)Py_None), ((PyObject *)Py_False), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__153)) __PYX_ERR(0, 2327, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__153);
-  __Pyx_GIVEREF(__pyx_tuple__153);
+  __pyx_tuple__169 = PyTuple_Pack(15, __pyx_n_s_self, __pyx_n_s_mat, __pyx_n_s_svdcut, __pyx_n_s_svdnum, __pyx_n_s_compute_delta, __pyx_n_s_rescale, __pyx_n_s_diag, __pyx_n_s_D, __pyx_n_s_DmatD, __pyx_n_s_val, __pyx_n_s_key, __pyx_n_s_vec, __pyx_n_s_valmin, __pyx_n_s_dely, __pyx_n_s_i); if (unlikely(!__pyx_tuple__169)) __PYX_ERR(0, 2327, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__169);
+  __Pyx_GIVEREF(__pyx_tuple__169);
+  __pyx_codeobj__170 = (PyObject*)__Pyx_PyCode_New(6, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__169, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_init, 2327, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__170)) __PYX_ERR(0, 2327, __pyx_L1_error)
+  __pyx_tuple__171 = PyTuple_Pack(4, ((PyObject *)Py_None), ((PyObject *)Py_None), ((PyObject *)Py_False), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__171)) __PYX_ERR(0, 2327, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__171);
+  __Pyx_GIVEREF(__pyx_tuple__171);
 
   /* "gvar/_utilities.pyx":2402
  * 
@@ -65186,10 +65360,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         val, vec = numpy.linalg.eigh(DmatD)
  *         vec = numpy.transpose(vec) # now 1st index labels eigenval
  */
-  __pyx_tuple__154 = PyTuple_Pack(4, __pyx_n_s_DmatD, __pyx_n_s_val, __pyx_n_s_vec, __pyx_n_s_indices); if (unlikely(!__pyx_tuple__154)) __PYX_ERR(0, 2402, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__154);
-  __Pyx_GIVEREF(__pyx_tuple__154);
-  __pyx_codeobj__155 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__154, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_numpy_eigh, 2402, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__155)) __PYX_ERR(0, 2402, __pyx_L1_error)
+  __pyx_tuple__172 = PyTuple_Pack(4, __pyx_n_s_DmatD, __pyx_n_s_val, __pyx_n_s_vec, __pyx_n_s_indices); if (unlikely(!__pyx_tuple__172)) __PYX_ERR(0, 2402, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__172);
+  __Pyx_GIVEREF(__pyx_tuple__172);
+  __pyx_codeobj__173 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__172, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_numpy_eigh, 2402, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__173)) __PYX_ERR(0, 2402, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":2414
  * 
@@ -65198,10 +65372,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         # warnings.warn('numpy.linalg.eigh failed; trying numpy.linalg.svd')
  *         vec,val,dummy = numpy.linalg.svd(DmatD)
  */
-  __pyx_tuple__156 = PyTuple_Pack(4, __pyx_n_s_DmatD, __pyx_n_s_vec, __pyx_n_s_val, __pyx_n_s_dummy); if (unlikely(!__pyx_tuple__156)) __PYX_ERR(0, 2414, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__156);
-  __Pyx_GIVEREF(__pyx_tuple__156);
-  __pyx_codeobj__157 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__156, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_numpy_svd, 2414, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__157)) __PYX_ERR(0, 2414, __pyx_L1_error)
+  __pyx_tuple__174 = PyTuple_Pack(4, __pyx_n_s_DmatD, __pyx_n_s_vec, __pyx_n_s_val, __pyx_n_s_dummy); if (unlikely(!__pyx_tuple__174)) __PYX_ERR(0, 2414, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__174);
+  __Pyx_GIVEREF(__pyx_tuple__174);
+  __pyx_codeobj__175 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__174, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_numpy_svd, 2414, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__175)) __PYX_ERR(0, 2414, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":2423
  *         return val, vec
@@ -65210,13 +65384,13 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *         """ Vector decomposition of input matrix raised to power ``n``.
  * 
  */
-  __pyx_tuple__158 = PyTuple_Pack(6, __pyx_n_s_self, __pyx_n_s_n, __pyx_n_s_w, __pyx_n_s_j, __pyx_n_s_valj, __pyx_n_s_Dfac); if (unlikely(!__pyx_tuple__158)) __PYX_ERR(0, 2423, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__158);
-  __Pyx_GIVEREF(__pyx_tuple__158);
-  __pyx_codeobj__159 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__158, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_decomp, 2423, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__159)) __PYX_ERR(0, 2423, __pyx_L1_error)
-  __pyx_tuple__160 = PyTuple_Pack(1, ((PyObject *)__pyx_int_1)); if (unlikely(!__pyx_tuple__160)) __PYX_ERR(0, 2423, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__160);
-  __Pyx_GIVEREF(__pyx_tuple__160);
+  __pyx_tuple__176 = PyTuple_Pack(6, __pyx_n_s_self, __pyx_n_s_n, __pyx_n_s_w, __pyx_n_s_j, __pyx_n_s_valj, __pyx_n_s_Dfac); if (unlikely(!__pyx_tuple__176)) __PYX_ERR(0, 2423, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__176);
+  __Pyx_GIVEREF(__pyx_tuple__176);
+  __pyx_codeobj__177 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__176, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_decomp, 2423, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__177)) __PYX_ERR(0, 2423, __pyx_L1_error)
+  __pyx_tuple__178 = PyTuple_Pack(1, ((PyObject *)__pyx_int_1)); if (unlikely(!__pyx_tuple__178)) __PYX_ERR(0, 2423, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__178);
+  __Pyx_GIVEREF(__pyx_tuple__178);
 
   /* "gvar/_utilities.pyx":2457
  * SVD._analyzers['numpy_eigh']  = SVD._numpy_eigh
@@ -65225,10 +65399,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Convert array ``v`` of numbers into an array of |GVar|\s.
  * 
  */
-  __pyx_tuple__161 = PyTuple_Pack(2, __pyx_n_s_v, __pyx_n_s_gv_gvar); if (unlikely(!__pyx_tuple__161)) __PYX_ERR(0, 2457, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__161);
-  __Pyx_GIVEREF(__pyx_tuple__161);
-  __pyx_codeobj__162 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__161, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_valder, 2457, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__162)) __PYX_ERR(0, 2457, __pyx_L1_error)
+  __pyx_tuple__179 = PyTuple_Pack(2, __pyx_n_s_v, __pyx_n_s_gv_gvar); if (unlikely(!__pyx_tuple__179)) __PYX_ERR(0, 2457, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__179);
+  __Pyx_GIVEREF(__pyx_tuple__179);
+  __pyx_codeobj__180 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__179, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_valder, 2457, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__180)) __PYX_ERR(0, 2457, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":2561
  *     return exp(log(fj) - x + a * log(x) - lgamma(a))
@@ -65237,10 +65411,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Complement of normalized incomplete gamma function, Q(a,x).
  * 
  */
-  __pyx_tuple__163 = PyTuple_Pack(4, __pyx_n_s_a, __pyx_n_s_x, __pyx_n_s_rtol, __pyx_n_s_itmax); if (unlikely(!__pyx_tuple__163)) __PYX_ERR(0, 2561, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__163);
-  __Pyx_GIVEREF(__pyx_tuple__163);
-  __pyx_codeobj__164 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__163, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gammaQ, 2561, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__164)) __PYX_ERR(0, 2561, __pyx_L1_error)
+  __pyx_tuple__181 = PyTuple_Pack(4, __pyx_n_s_a, __pyx_n_s_x, __pyx_n_s_rtol, __pyx_n_s_itmax); if (unlikely(!__pyx_tuple__181)) __PYX_ERR(0, 2561, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__181);
+  __Pyx_GIVEREF(__pyx_tuple__181);
+  __pyx_codeobj__182 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__181, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gammaQ, 2561, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__182)) __PYX_ERR(0, 2561, __pyx_L1_error)
 
   /* "gvar/_utilities.pyx":2577
  *         return gammaQ_cf(a, x, rtol=rtol, itmax=itmax)
@@ -65249,10 +65423,10 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     """ Normalized incomplete gamma function, P(a,x).
  * 
  */
-  __pyx_tuple__165 = PyTuple_Pack(4, __pyx_n_s_a, __pyx_n_s_x, __pyx_n_s_rtol, __pyx_n_s_itmax); if (unlikely(!__pyx_tuple__165)) __PYX_ERR(0, 2577, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__165);
-  __Pyx_GIVEREF(__pyx_tuple__165);
-  __pyx_codeobj__166 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__165, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gammaP, 2577, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__166)) __PYX_ERR(0, 2577, __pyx_L1_error)
+  __pyx_tuple__183 = PyTuple_Pack(4, __pyx_n_s_a, __pyx_n_s_x, __pyx_n_s_rtol, __pyx_n_s_itmax); if (unlikely(!__pyx_tuple__183)) __PYX_ERR(0, 2577, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__183);
+  __Pyx_GIVEREF(__pyx_tuple__183);
+  __pyx_codeobj__184 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__183, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_gammaP, 2577, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__184)) __PYX_ERR(0, 2577, __pyx_L1_error)
 
   /* "View.MemoryView":286
  *         return self.name
@@ -65261,9 +65435,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_tuple__167 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__167)) __PYX_ERR(2, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__167);
-  __Pyx_GIVEREF(__pyx_tuple__167);
+  __pyx_tuple__185 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct_or_indirect); if (unlikely(!__pyx_tuple__185)) __PYX_ERR(2, 286, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__185);
+  __Pyx_GIVEREF(__pyx_tuple__185);
 
   /* "View.MemoryView":287
  * 
@@ -65272,9 +65446,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_tuple__168 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__168)) __PYX_ERR(2, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__168);
-  __Pyx_GIVEREF(__pyx_tuple__168);
+  __pyx_tuple__186 = PyTuple_Pack(1, __pyx_kp_s_strided_and_direct); if (unlikely(!__pyx_tuple__186)) __PYX_ERR(2, 287, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__186);
+  __Pyx_GIVEREF(__pyx_tuple__186);
 
   /* "View.MemoryView":288
  * cdef generic = Enum("<strided and direct or indirect>")
@@ -65283,9 +65457,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__169 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__169)) __PYX_ERR(2, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__169);
-  __Pyx_GIVEREF(__pyx_tuple__169);
+  __pyx_tuple__187 = PyTuple_Pack(1, __pyx_kp_s_strided_and_indirect); if (unlikely(!__pyx_tuple__187)) __PYX_ERR(2, 288, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__187);
+  __Pyx_GIVEREF(__pyx_tuple__187);
 
   /* "View.MemoryView":291
  * 
@@ -65294,9 +65468,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_tuple__170 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__170)) __PYX_ERR(2, 291, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__170);
-  __Pyx_GIVEREF(__pyx_tuple__170);
+  __pyx_tuple__188 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_direct); if (unlikely(!__pyx_tuple__188)) __PYX_ERR(2, 291, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__188);
+  __Pyx_GIVEREF(__pyx_tuple__188);
 
   /* "View.MemoryView":292
  * 
@@ -65305,19 +65479,19 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * 
  */
-  __pyx_tuple__171 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__171)) __PYX_ERR(2, 292, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__171);
-  __Pyx_GIVEREF(__pyx_tuple__171);
+  __pyx_tuple__189 = PyTuple_Pack(1, __pyx_kp_s_contiguous_and_indirect); if (unlikely(!__pyx_tuple__189)) __PYX_ERR(2, 292, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__189);
+  __Pyx_GIVEREF(__pyx_tuple__189);
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Enum(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     cdef object __pyx_PickleError
  *     cdef object __pyx_result
  */
-  __pyx_tuple__172 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__172)) __PYX_ERR(2, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__172);
-  __Pyx_GIVEREF(__pyx_tuple__172);
-  __pyx_codeobj__173 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__172, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__173)) __PYX_ERR(2, 1, __pyx_L1_error)
+  __pyx_tuple__190 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__190)) __PYX_ERR(2, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__190);
+  __Pyx_GIVEREF(__pyx_tuple__190);
+  __pyx_codeobj__191 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__190, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__191)) __PYX_ERR(2, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -65770,183 +65944,183 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "gvar/_utilities.pyx":16
+  /* "gvar/_utilities.pyx":15
  * # GNU General Public License for more details.
  * 
  * import gvar as _gvar             # <<<<<<<<<<<<<<
  * from gvar._gvarcore import GVar
  * from gvar._gvarcore cimport GVar
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_gvar, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_gvar, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gvar_2, __pyx_t_1) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gvar_2, __pyx_t_1) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "gvar/_utilities.pyx":17
+  /* "gvar/_utilities.pyx":16
  * 
  * import gvar as _gvar
  * from gvar._gvarcore import GVar             # <<<<<<<<<<<<<<
  * from gvar._gvarcore cimport GVar
  * 
  */
-  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_GVar);
   __Pyx_GIVEREF(__pyx_n_s_GVar);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_GVar);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_gvar__gvarcore, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_gvar__gvarcore, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":20
+  /* "gvar/_utilities.pyx":19
  * from gvar._gvarcore cimport GVar
  * 
  * from scipy.sparse.csgraph import connected_components as _connected_components             # <<<<<<<<<<<<<<
  * from scipy.sparse import csr_matrix as _csr_matrix
  * 
  */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_connected_components_2);
   __Pyx_GIVEREF(__pyx_n_s_connected_components_2);
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_connected_components_2);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_scipy_sparse_csgraph, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_scipy_sparse_csgraph, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_connected_components_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_connected_components_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_connected_components, __pyx_t_2) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_connected_components, __pyx_t_2) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "gvar/_utilities.pyx":21
+  /* "gvar/_utilities.pyx":20
  * 
  * from scipy.sparse.csgraph import connected_components as _connected_components
  * from scipy.sparse import csr_matrix as _csr_matrix             # <<<<<<<<<<<<<<
  * 
  * import numpy
  */
-  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_csr_matrix_2);
   __Pyx_GIVEREF(__pyx_n_s_csr_matrix_2);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_csr_matrix_2);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_scipy_sparse, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_scipy_sparse, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_csr_matrix_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_csr_matrix_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_csr_matrix, __pyx_t_1) < 0) __PYX_ERR(0, 21, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_csr_matrix, __pyx_t_1) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":23
+  /* "gvar/_utilities.pyx":22
  * from scipy.sparse import csr_matrix as _csr_matrix
  * 
  * import numpy             # <<<<<<<<<<<<<<
  * cimport numpy
  * import warnings
  */
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 22, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_numpy, __pyx_t_2) < 0) __PYX_ERR(0, 23, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_numpy, __pyx_t_2) < 0) __PYX_ERR(0, 22, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":25
+  /* "gvar/_utilities.pyx":24
  * import numpy
  * cimport numpy
  * import warnings             # <<<<<<<<<<<<<<
  * import pickle
  * import json
  */
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_warnings, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 25, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_warnings, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_warnings, __pyx_t_2) < 0) __PYX_ERR(0, 25, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_warnings, __pyx_t_2) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":26
+  /* "gvar/_utilities.pyx":25
  * cimport numpy
  * import warnings
  * import pickle             # <<<<<<<<<<<<<<
  * import json
  * import collections
  */
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pickle, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pickle, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_pickle, __pyx_t_2) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_pickle, __pyx_t_2) < 0) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":27
+  /* "gvar/_utilities.pyx":26
  * import warnings
  * import pickle
  * import json             # <<<<<<<<<<<<<<
  * import collections
  * import copy
  */
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_json, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_json, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_json, __pyx_t_2) < 0) __PYX_ERR(0, 27, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_json, __pyx_t_2) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":28
+  /* "gvar/_utilities.pyx":27
  * import pickle
  * import json
  * import collections             # <<<<<<<<<<<<<<
  * import copy
  * from math import lgamma
  */
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_collections, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_collections, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 27, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_collections, __pyx_t_2) < 0) __PYX_ERR(0, 28, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_collections, __pyx_t_2) < 0) __PYX_ERR(0, 27, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":29
+  /* "gvar/_utilities.pyx":28
  * import json
  * import collections
  * import copy             # <<<<<<<<<<<<<<
  * from math import lgamma
  * import sys
  */
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_copy, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_copy, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_copy, __pyx_t_2) < 0) __PYX_ERR(0, 29, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_copy, __pyx_t_2) < 0) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "gvar/_utilities.pyx":30
+  /* "gvar/_utilities.pyx":29
  * import collections
  * import copy
  * from math import lgamma             # <<<<<<<<<<<<<<
  * import sys
  * cimport cython
  */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_lgamma);
   __Pyx_GIVEREF(__pyx_n_s_lgamma);
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_lgamma);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_math, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_math, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_lgamma); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_lgamma); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lgamma, __pyx_t_2) < 0) __PYX_ERR(0, 30, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_lgamma, __pyx_t_2) < 0) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "gvar/_utilities.pyx":31
+  /* "gvar/_utilities.pyx":30
  * import copy
  * from math import lgamma
  * import sys             # <<<<<<<<<<<<<<
  * cimport cython
  * 
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_sys, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_sys, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sys, __pyx_t_1) < 0) __PYX_ERR(0, 31, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sys, __pyx_t_1) < 0) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "gvar/_utilities.pyx":34
+  /* "gvar/_utilities.pyx":33
  * cimport cython
  * 
  * try:             # <<<<<<<<<<<<<<
@@ -65962,26 +66136,26 @@ if (!__Pyx_RefNanny) {
     __Pyx_XGOTREF(__pyx_t_5);
     /*try:*/ {
 
-      /* "gvar/_utilities.pyx":36
+      /* "gvar/_utilities.pyx":35
  * try:
  *     # needed for oldload (optionally)
  *     import yaml             # <<<<<<<<<<<<<<
  *     from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
  * except ImportError:
  */
-      __pyx_t_1 = __Pyx_Import(__pyx_n_s_yaml, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L2_error)
+      __pyx_t_1 = __Pyx_Import(__pyx_n_s_yaml, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml, __pyx_t_1) < 0) __PYX_ERR(0, 36, __pyx_L2_error)
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml, __pyx_t_1) < 0) __PYX_ERR(0, 35, __pyx_L2_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "gvar/_utilities.pyx":37
+      /* "gvar/_utilities.pyx":36
  *     # needed for oldload (optionally)
  *     import yaml
  *     from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper             # <<<<<<<<<<<<<<
  * except ImportError:
  *     yaml = None
  */
-      __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L2_error)
+      __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_INCREF(__pyx_n_s_FullLoader);
       __Pyx_GIVEREF(__pyx_n_s_FullLoader);
@@ -65989,20 +66163,20 @@ if (!__Pyx_RefNanny) {
       __Pyx_INCREF(__pyx_n_s_Dumper);
       __Pyx_GIVEREF(__pyx_n_s_Dumper);
       PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_Dumper);
-      __pyx_t_2 = __Pyx_Import(__pyx_n_s_yaml, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L2_error)
+      __pyx_t_2 = __Pyx_Import(__pyx_n_s_yaml, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_FullLoader); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L2_error)
+      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_FullLoader); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml_Loader, __pyx_t_1) < 0) __PYX_ERR(0, 37, __pyx_L2_error)
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml_Loader, __pyx_t_1) < 0) __PYX_ERR(0, 36, __pyx_L2_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Dumper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L2_error)
+      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Dumper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml_Dumper, __pyx_t_1) < 0) __PYX_ERR(0, 37, __pyx_L2_error)
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml_Dumper, __pyx_t_1) < 0) __PYX_ERR(0, 36, __pyx_L2_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "gvar/_utilities.pyx":34
+      /* "gvar/_utilities.pyx":33
  * cimport cython
  * 
  * try:             # <<<<<<<<<<<<<<
@@ -66018,7 +66192,7 @@ if (!__Pyx_RefNanny) {
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "gvar/_utilities.pyx":38
+    /* "gvar/_utilities.pyx":37
  *     import yaml
  *     from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
  * except ImportError:             # <<<<<<<<<<<<<<
@@ -66028,19 +66202,19 @@ if (!__Pyx_RefNanny) {
     __pyx_t_6 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_ImportError);
     if (__pyx_t_6) {
       __Pyx_AddTraceback("gvar._utilities", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_2, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 38, __pyx_L4_except_error)
+      if (__Pyx_GetException(&__pyx_t_2, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 37, __pyx_L4_except_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "gvar/_utilities.pyx":39
+      /* "gvar/_utilities.pyx":38
  *     from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
  * except ImportError:
  *     yaml = None             # <<<<<<<<<<<<<<
  * 
  * if sys.version_info > (3, 0):
  */
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml, Py_None) < 0) __PYX_ERR(0, 39, __pyx_L4_except_error)
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_yaml, Py_None) < 0) __PYX_ERR(0, 38, __pyx_L4_except_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -66049,7 +66223,7 @@ if (!__Pyx_RefNanny) {
     goto __pyx_L4_except_error;
     __pyx_L4_except_error:;
 
-    /* "gvar/_utilities.pyx":34
+    /* "gvar/_utilities.pyx":33
  * cimport cython
  * 
  * try:             # <<<<<<<<<<<<<<
@@ -66069,67 +66243,67 @@ if (!__Pyx_RefNanny) {
     __pyx_L7_try_end:;
   }
 
-  /* "gvar/_utilities.pyx":41
+  /* "gvar/_utilities.pyx":40
  *     yaml = None
  * 
  * if sys.version_info > (3, 0):             # <<<<<<<<<<<<<<
  *     # python 3
  *     from io import BytesIO
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_sys); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_sys); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_version_info); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_version_info); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_tuple__53, Py_GT); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_tuple__51, Py_GT); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   if (__pyx_t_8) {
 
-    /* "gvar/_utilities.pyx":43
+    /* "gvar/_utilities.pyx":42
  * if sys.version_info > (3, 0):
  *     # python 3
  *     from io import BytesIO             # <<<<<<<<<<<<<<
  *     from io import StringIO
  * else:
  */
-    __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 42, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_INCREF(__pyx_n_s_BytesIO);
     __Pyx_GIVEREF(__pyx_n_s_BytesIO);
     PyList_SET_ITEM(__pyx_t_7, 0, __pyx_n_s_BytesIO);
-    __pyx_t_1 = __Pyx_Import(__pyx_n_s_io, __pyx_t_7, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_Import(__pyx_n_s_io, __pyx_t_7, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 42, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_BytesIO); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 43, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_BytesIO); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 42, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_BytesIO, __pyx_t_7) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_BytesIO, __pyx_t_7) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "gvar/_utilities.pyx":44
+    /* "gvar/_utilities.pyx":43
  *     # python 3
  *     from io import BytesIO
  *     from io import StringIO             # <<<<<<<<<<<<<<
  * else:
  *     # python 2
  */
-    __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_n_s_StringIO);
     __Pyx_GIVEREF(__pyx_n_s_StringIO);
     PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_StringIO);
-    __pyx_t_7 = __Pyx_Import(__pyx_n_s_io, __pyx_t_1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_Import(__pyx_n_s_io, __pyx_t_1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 43, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_7, __pyx_n_s_StringIO); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_7, __pyx_n_s_StringIO); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_StringIO, __pyx_t_1) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_StringIO, __pyx_t_1) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "gvar/_utilities.pyx":41
+    /* "gvar/_utilities.pyx":40
  *     yaml = None
  * 
  * if sys.version_info > (3, 0):             # <<<<<<<<<<<<<<
@@ -66139,7 +66313,7 @@ if (!__Pyx_RefNanny) {
     goto __pyx_L10;
   }
 
-  /* "gvar/_utilities.pyx":47
+  /* "gvar/_utilities.pyx":46
  * else:
  *     # python 2
  *     from StringIO import StringIO             # <<<<<<<<<<<<<<
@@ -66147,41 +66321,41 @@ if (!__Pyx_RefNanny) {
  *         pass
  */
   /*else*/ {
-    __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 47, __pyx_L1_error)
+    __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 46, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_INCREF(__pyx_n_s_StringIO);
     __Pyx_GIVEREF(__pyx_n_s_StringIO);
     PyList_SET_ITEM(__pyx_t_7, 0, __pyx_n_s_StringIO);
-    __pyx_t_1 = __Pyx_Import(__pyx_n_s_StringIO, __pyx_t_7, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_Import(__pyx_n_s_StringIO, __pyx_t_7, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_StringIO); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 47, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_StringIO); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 46, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_StringIO, __pyx_t_7) < 0) __PYX_ERR(0, 47, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_StringIO, __pyx_t_7) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "gvar/_utilities.pyx":48
+    /* "gvar/_utilities.pyx":47
  *     # python 2
  *     from StringIO import StringIO
  *     class BytesIO(StringIO):             # <<<<<<<<<<<<<<
  *         pass
  * 
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_StringIO); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_StringIO); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_GIVEREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_t_7, __pyx_n_s_BytesIO, __pyx_n_s_BytesIO, (PyObject *) NULL, __pyx_n_s_gvar__utilities, (PyObject *) NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_t_7, __pyx_n_s_BytesIO, __pyx_n_s_BytesIO, (PyObject *) NULL, __pyx_n_s_gvar__utilities, (PyObject *) NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_9 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_BytesIO, __pyx_t_7, __pyx_t_2, NULL, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_BytesIO, __pyx_t_7, __pyx_t_2, NULL, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_BytesIO, __pyx_t_9) < 0) __PYX_ERR(0, 48, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_BytesIO, __pyx_t_9) < 0) __PYX_ERR(0, 47, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -66189,36 +66363,36 @@ if (!__Pyx_RefNanny) {
   }
   __pyx_L10:;
 
-  /* "gvar/_utilities.pyx":51
+  /* "gvar/_utilities.pyx":50
  *         pass
  * 
  * cdef double EPSILON = sys.float_info.epsilon * 10.         # roundoff error threshold             # <<<<<<<<<<<<<<
  * 
  * from libc.math cimport  log, exp  # don't put lgamma here -- old C compilers don't have it
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_sys); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_sys); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float_info); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float_info); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_epsilon); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_epsilon); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyNumber_Multiply(__pyx_t_7, __pyx_float_10_); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Multiply(__pyx_t_7, __pyx_float_10_); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
+  __pyx_t_10 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_10 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_4gvar_10_utilities_EPSILON = __pyx_t_10;
 
-  /* "gvar/_utilities.pyx":55
+  /* "gvar/_utilities.pyx":54
  * from libc.math cimport  log, exp  # don't put lgamma here -- old C compilers don't have it
  * 
  * from ._svec_smat import svec, smat, smask             # <<<<<<<<<<<<<<
  * from ._svec_smat cimport svec, smat, smask
  * 
  */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_svec);
   __Pyx_GIVEREF(__pyx_n_s_svec);
@@ -66229,29 +66403,29 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_smask);
   __Pyx_GIVEREF(__pyx_n_s_smask);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_smask);
-  __pyx_t_7 = __Pyx_Import(__pyx_n_s_svec_smat, __pyx_t_1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_Import(__pyx_n_s_svec_smat, __pyx_t_1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "gvar/_utilities.pyx":58
+  /* "gvar/_utilities.pyx":57
  * from ._svec_smat cimport svec, smat, smask
  * 
  * from ._bufferdict import BufferDict             # <<<<<<<<<<<<<<
  * 
  * from numpy cimport npy_intp as INTP_TYPE
  */
-  __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_INCREF(__pyx_n_s_BufferDict);
   __Pyx_GIVEREF(__pyx_n_s_BufferDict);
   PyList_SET_ITEM(__pyx_t_7, 0, __pyx_n_s_BufferDict);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_bufferdict, __pyx_t_7, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_bufferdict, __pyx_t_7, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_BufferDict); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_BufferDict); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_BufferDict, __pyx_t_7) < 0) __PYX_ERR(0, 58, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_BufferDict, __pyx_t_7) < 0) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
@@ -66259,21 +66433,23 @@ if (!__Pyx_RefNanny) {
  * 
  * # utility functions
  * def rebuild(g, corr=0.0, gvar=_gvar.gvar):             # <<<<<<<<<<<<<<
- *     """ Rebuild ``g`` stripping correlations with variables not in ``g``.
+ *     """  Rebuild ``g`` stripping correlations with variables not in ``g``.
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_gvar_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_1rebuild, 0, __pyx_n_s_rebuild, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__53)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_gvar); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L1_error)
+  if (!__Pyx_CyFunction_InitDefaults(__pyx_t_1, sizeof(__pyx_defaults), 1)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_gvar_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_k_ = __pyx_t_7;
-  __Pyx_GIVEREF(__pyx_t_7);
-  __pyx_t_7 = 0;
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_1rebuild, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_rebuild, __pyx_t_7) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_gvar); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_t_1)->__pyx_arg_gvar = __pyx_t_2;
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_2 = 0;
+  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_4gvar_10_utilities_102__defaults__);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_rebuild, __pyx_t_1) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":137
  * 
@@ -66282,10 +66458,10 @@ if (!__Pyx_RefNanny) {
  *     """ Extract means from :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3mean, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 137, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_mean, __pyx_t_7) < 0) __PYX_ERR(0, 137, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3mean, 0, __pyx_n_s_mean, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__55)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_mean, __pyx_t_1) < 0) __PYX_ERR(0, 137, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":164
  *     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -66294,10 +66470,11 @@ if (!__Pyx_RefNanny) {
  *     """ Format :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_5fmt, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 164, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fmt, __pyx_t_7) < 0) __PYX_ERR(0, 164, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_5fmt, 0, __pyx_n_s_fmt, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__57)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__58);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fmt, __pyx_t_1) < 0) __PYX_ERR(0, 164, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":188
  *     return BufferDict(g,buf=buf) if g.shape is None else numpy.reshape(buf,g.shape)
@@ -66306,10 +66483,10 @@ if (!__Pyx_RefNanny) {
  *     """ Extract standard deviations from :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_7sdev, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 188, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sdev, __pyx_t_7) < 0) __PYX_ERR(0, 188, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_7sdev, 0, __pyx_n_s_sdev, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__60)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sdev, __pyx_t_1) < 0) __PYX_ERR(0, 188, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":215
  *     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -66318,10 +66495,10 @@ if (!__Pyx_RefNanny) {
  *     """ Compute partial derivatives of |GVar|\s in ``g`` w.r.t. primary |GVar|\s in ``x``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_9deriv, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 215, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_deriv, __pyx_t_7) < 0) __PYX_ERR(0, 215, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_9deriv, 0, __pyx_n_s_deriv, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__62)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_deriv, __pyx_t_1) < 0) __PYX_ERR(0, 215, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":251
  *         return ans.reshape(g.shape + x.shape)
@@ -66330,10 +66507,10 @@ if (!__Pyx_RefNanny) {
  *     """ Extract variances from :class:`gvar.GVar`\s in ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_11var, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 251, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_var, __pyx_t_7) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_11var, 0, __pyx_n_s_var, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__64)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_var, __pyx_t_1) < 0) __PYX_ERR(0, 251, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":278
  *     return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -66342,10 +66519,10 @@ if (!__Pyx_RefNanny) {
  *     """ Determine whether or not the |GVar|\s in ``g`` are primary |GVar|\s.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_13is_primary, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 278, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_is_primary, __pyx_t_7) < 0) __PYX_ERR(0, 278, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_13is_primary, 0, __pyx_n_s_is_primary, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__66)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_is_primary, __pyx_t_1) < 0) __PYX_ERR(0, 278, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":326
  *     return BufferDict(g, buf=buf) if g.shape is None else buf.reshape(g.shape)
@@ -66354,10 +66531,11 @@ if (!__Pyx_RefNanny) {
  *     """ Collect primary |GVar|\s contributing to the covariances of |GVar|\s in ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_15dependencies, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 326, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dependencies_2, __pyx_t_7) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_15dependencies, 0, __pyx_n_s_dependencies_2, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__68)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__69);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dependencies_2, __pyx_t_1) < 0) __PYX_ERR(0, 326, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":346
  *         return _dependencies(gvlist, all=all) if gvlist else []
@@ -66366,10 +66544,11 @@ if (!__Pyx_RefNanny) {
  *     " Same as dependencies when ``g`` is all |GVar|\s. "
  *     cdef INTP_TYPE i
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_17_dependencies, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 346, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dependencies, __pyx_t_7) < 0) __PYX_ERR(0, 346, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_17_dependencies, 0, __pyx_n_s_dependencies, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__71)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 346, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__72);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dependencies, __pyx_t_1) < 0) __PYX_ERR(0, 346, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":378
  *     return numpy.array(ans)
@@ -66378,10 +66557,10 @@ if (!__Pyx_RefNanny) {
  *     """ ``True`` if ``len(gvar.dependencies(g))!=0``; ``False`` otherwise.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_19missing_dependencies, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 378, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_missing_dependencies, __pyx_t_7) < 0) __PYX_ERR(0, 378, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_19missing_dependencies, 0, __pyx_n_s_missing_dependencies, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__74)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_missing_dependencies, __pyx_t_1) < 0) __PYX_ERR(0, 378, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":400
  *     return len(dep - pri) > 0
@@ -66390,10 +66569,10 @@ if (!__Pyx_RefNanny) {
  *     """ Return ``True`` if |GVar|\s in ``g1`` uncorrelated with those in ``g2``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_21uncorrelated, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 400, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_uncorrelated, __pyx_t_7) < 0) __PYX_ERR(0, 400, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_21uncorrelated, 0, __pyx_n_s_uncorrelated, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__76)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_uncorrelated, __pyx_t_1) < 0) __PYX_ERR(0, 400, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":436
  *     return s0.isdisjoint(s[1])
@@ -66402,10 +66581,10 @@ if (!__Pyx_RefNanny) {
  *     """ Compute correlation matrix for elements of
  *     array/dictionary ``g``.
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_23evalcorr, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 436, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcorr, __pyx_t_7) < 0) __PYX_ERR(0, 436, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_23evalcorr, 0, __pyx_n_s_evalcorr, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__78)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 436, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcorr, __pyx_t_1) < 0) __PYX_ERR(0, 436, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":478
  *         return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
@@ -66414,10 +66593,10 @@ if (!__Pyx_RefNanny) {
  *     """ Correlation between :class:`gvar.GVar`\s ``g1`` and ``g2``. """
  *     if not isinstance(g1, GVar) and not isinstance(g2, GVar):
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_25corr, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 478, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_corr, __pyx_t_7) < 0) __PYX_ERR(0, 478, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_25corr, 0, __pyx_n_s_corr, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__80)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 478, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_corr, __pyx_t_1) < 0) __PYX_ERR(0, 478, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":484
  *     return evalcorr([g1, g2])[0,1]
@@ -66426,10 +66605,10 @@ if (!__Pyx_RefNanny) {
  *     """ Covariance of :class:`gvar.GVar` ``g1`` with ``g2``. """
  *     if not isinstance(g1, GVar) and not isinstance(g2, GVar):
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_27cov, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 484, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cov, __pyx_t_7) < 0) __PYX_ERR(0, 484, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_27cov, 0, __pyx_n_s_cov, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__82)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_cov, __pyx_t_1) < 0) __PYX_ERR(0, 484, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":491
  * 
@@ -66438,10 +66617,10 @@ if (!__Pyx_RefNanny) {
  *     """ Add correlations to uncorrelated |GVar|\s in ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_29correlate, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 491, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_correlate, __pyx_t_7) < 0) __PYX_ERR(0, 491, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_29correlate, 0, __pyx_n_s_correlate, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__84)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 491, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_correlate, __pyx_t_1) < 0) __PYX_ERR(0, 491, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":570
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -66450,10 +66629,11 @@ if (!__Pyx_RefNanny) {
  *     """ Evaluate covariance matrix for elements of ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_31evalcov_blocks_dense, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 570, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov_blocks_dense, __pyx_t_7) < 0) __PYX_ERR(0, 570, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_31evalcov_blocks_dense, 0, __pyx_n_s_evalcov_blocks_dense, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__86)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 570, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__87);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov_blocks_dense, __pyx_t_1) < 0) __PYX_ERR(0, 570, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":612
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -66462,10 +66642,11 @@ if (!__Pyx_RefNanny) {
  *     """ Evaluate covariance matrix for elements of ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_33evalcov_blocks, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 612, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov_blocks, __pyx_t_7) < 0) __PYX_ERR(0, 612, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_33evalcov_blocks, 0, __pyx_n_s_evalcov_blocks, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__89)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__90);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov_blocks, __pyx_t_1) < 0) __PYX_ERR(0, 612, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":780
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -66474,10 +66655,10 @@ if (!__Pyx_RefNanny) {
  *     """ Mock evalcov for testing.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_35mock_evalcov, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 780, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_mock_evalcov, __pyx_t_7) < 0) __PYX_ERR(0, 780, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_35mock_evalcov, 0, __pyx_n_s_mock_evalcov, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__92)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 780, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_mock_evalcov, __pyx_t_1) < 0) __PYX_ERR(0, 780, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":797
  * @cython.wraparound(False)  # turn off negative index wrapping
@@ -66486,10 +66667,10 @@ if (!__Pyx_RefNanny) {
  *     """ Compute covariance matrix for elements of
  *     array/dictionary ``g``.
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_37evalcov, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 797, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov, __pyx_t_7) < 0) __PYX_ERR(0, 797, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_37evalcov, 0, __pyx_n_s_evalcov, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__94)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 797, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov, __pyx_t_1) < 0) __PYX_ERR(0, 797, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":912
  *     return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
@@ -66498,10 +66679,10 @@ if (!__Pyx_RefNanny) {
  *     """ Compute covariance matrix for elements of
  *     array/dictionary ``g``. Old version, for testing.
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_39evalcov_old, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 912, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov_old, __pyx_t_7) < 0) __PYX_ERR(0, 912, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_39evalcov_old, 0, __pyx_n_s_evalcov_old, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__96)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 912, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_evalcov_old, __pyx_t_1) < 0) __PYX_ERR(0, 912, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":976
  * ###### dump/load
@@ -66510,8 +66691,8 @@ if (!__Pyx_RefNanny) {
  *     """ Placeholder for a |GVar|, used by :func:`gvar.remove_gvars`.
  * 
  */
-  __pyx_t_7 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_GVarRef, __pyx_n_s_GVarRef, (PyObject *) NULL, __pyx_n_s_gvar__utilities, __pyx_kp_s_Placeholder_for_a_GVar_used_by); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 976, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_GVarRef, __pyx_n_s_GVarRef, (PyObject *) NULL, __pyx_n_s_gvar__utilities, __pyx_kp_s_Placeholder_for_a_GVar_used_by); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 976, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
 
   /* "gvar/_utilities.pyx":999
  *     where the |GVar|\s are drawn from list ``gvlist``.
@@ -66520,10 +66701,10 @@ if (!__Pyx_RefNanny) {
  *         self.loc = len(gvlist)
  *         gvlist.append(g)
  */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_7GVarRef_1__init__, 0, __pyx_n_s_GVarRef___init, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__95)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 999, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_SetNameInClass(__pyx_t_7, __pyx_n_s_init, __pyx_t_1) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_7GVarRef_1__init__, 0, __pyx_n_s_GVarRef___init, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__98)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_init, __pyx_t_2) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "gvar/_utilities.pyx":1003
  *         gvlist.append(g)
@@ -66532,10 +66713,10 @@ if (!__Pyx_RefNanny) {
  *         return gvlist[self.loc]
  * 
  */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_7GVarRef_3__call__, 0, __pyx_n_s_GVarRef___call, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__97)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1003, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_SetNameInClass(__pyx_t_7, __pyx_n_s_call, __pyx_t_1) < 0) __PYX_ERR(0, 1003, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_7GVarRef_3__call__, 0, __pyx_n_s_GVarRef___call, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__100)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1003, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_call, __pyx_t_2) < 0) __PYX_ERR(0, 1003, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "gvar/_utilities.pyx":976
  * ###### dump/load
@@ -66544,11 +66725,11 @@ if (!__Pyx_RefNanny) {
  *     """ Placeholder for a |GVar|, used by :func:`gvar.remove_gvars`.
  * 
  */
-  __pyx_t_1 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_GVarRef, __pyx_empty_tuple, __pyx_t_7, NULL, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 976, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_GVarRef, __pyx_t_1) < 0) __PYX_ERR(0, 976, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_GVarRef, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 976, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_GVarRef, __pyx_t_2) < 0) __PYX_ERR(0, 976, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":1006
  *         return gvlist[self.loc]
@@ -66557,10 +66738,10 @@ if (!__Pyx_RefNanny) {
  *     """ Distribute |GVar|\s from ``gvlist`` in structure g, replacing :class:`gvar.GVarRef`\s.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_41distribute_gvars, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1006, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_distribute_gvars, __pyx_t_7) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_41distribute_gvars, 0, __pyx_n_s_distribute_gvars, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__102)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_distribute_gvars, __pyx_t_1) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1046
  *         return g
@@ -66569,10 +66750,10 @@ if (!__Pyx_RefNanny) {
  *     """ Remove |GVar|\s from structure g, collecting them in ``gvlist``; replace with :class:`gvar.GVarRef`\s.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_43remove_gvars, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1046, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_remove_gvars, __pyx_t_7) < 0) __PYX_ERR(0, 1046, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_43remove_gvars, 0, __pyx_n_s_remove_gvars, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__104)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1046, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_remove_gvars, __pyx_t_1) < 0) __PYX_ERR(0, 1046, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1110
  *         return g
@@ -66581,10 +66762,10 @@ if (!__Pyx_RefNanny) {
  *     " Collect |GVar|\s in ``gvlist`` from container object g. "
  *     if isinstance(g, _gvar.GVar):
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_45collect_gvars, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1110, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_collect_gvars, __pyx_t_7) < 0) __PYX_ERR(0, 1110, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_45collect_gvars, 0, __pyx_n_s_collect_gvars, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__106)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1110, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_collect_gvars, __pyx_t_1) < 0) __PYX_ERR(0, 1110, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1128
  *             pass
@@ -66593,10 +66774,10 @@ if (!__Pyx_RefNanny) {
  *     """ Filter |GVar|\s in ``g`` through function ``f``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_47filter, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1128, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_filter, __pyx_t_7) < 0) __PYX_ERR(0, 1128, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_47filter, 0, __pyx_n_s_filter, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__108)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1128, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_filter, __pyx_t_1) < 0) __PYX_ERR(0, 1128, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1165
  *     return distribute_gvars(new_g, gvlist)
@@ -66605,10 +66786,11 @@ if (!__Pyx_RefNanny) {
  *     """ Return a serialized representation of ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_49dumps, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1165, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dumps, __pyx_t_7) < 0) __PYX_ERR(0, 1165, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_49dumps, 0, __pyx_n_s_dumps, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__110)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__111);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dumps, __pyx_t_1) < 0) __PYX_ERR(0, 1165, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1198
  *     return dump(g, add_dependencies=add_dependencies).getvalue()
@@ -66617,10 +66799,10 @@ if (!__Pyx_RefNanny) {
  *     """ Read and return object serialized in ``inputbytes`` by :func:`gvar.dumps`.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_51loads, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1198, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_loads, __pyx_t_7) < 0) __PYX_ERR(0, 1198, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_51loads, 0, __pyx_n_s_loads, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__113)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1198, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_loads, __pyx_t_1) < 0) __PYX_ERR(0, 1198, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1225
  *     return load(BytesIO(inputbytes), **kargs)
@@ -66629,10 +66811,11 @@ if (!__Pyx_RefNanny) {
  *     """ Write a representation of ``g``  to file ``outputfile``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_53dump, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1225, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dump, __pyx_t_7) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_53dump, 0, __pyx_n_s_dump, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__115)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__116);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dump, __pyx_t_1) < 0) __PYX_ERR(0, 1225, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1307
  *     return outputfile
@@ -66641,10 +66824,11 @@ if (!__Pyx_RefNanny) {
  *     """ Read and return object serialized in ``inputfile`` by :func:`gvar.dump`.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_55load, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1307, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_load, __pyx_t_7) < 0) __PYX_ERR(0, 1307, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_55load, 0, __pyx_n_s_load, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__118)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1307, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__119);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_load, __pyx_t_1) < 0) __PYX_ERR(0, 1307, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1364
  * ##### gdump/gload
@@ -66653,10 +66837,11 @@ if (!__Pyx_RefNanny) {
  *     """ Return a serialized representation of ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_57gdumps, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1364, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gdumps, __pyx_t_7) < 0) __PYX_ERR(0, 1364, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_57gdumps, 0, __pyx_n_s_gdumps, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__121)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1364, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__122);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gdumps, __pyx_t_1) < 0) __PYX_ERR(0, 1364, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1401
  *         raise ValueError('unknown method: ' + str(method))
@@ -66665,10 +66850,11 @@ if (!__Pyx_RefNanny) {
  *     """ Write a representation of ``g``  to file ``outputfile``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_59gdump, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1401, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gdump, __pyx_t_7) < 0) __PYX_ERR(0, 1401, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_59gdump, 0, __pyx_n_s_gdump, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__124)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1401, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__125);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gdump, __pyx_t_1) < 0) __PYX_ERR(0, 1401, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1518
  *     return outputfile
@@ -66677,14 +66863,14 @@ if (!__Pyx_RefNanny) {
  * 
  * def gloads(inputstr):
  */
-  __pyx_t_7 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1518, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_json, __pyx_n_s_json) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_p, __pyx_n_s_pickle) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_pkl, __pyx_n_s_pickle) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_pickle, __pyx_n_s_pickle) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DUMPMETHODS, __pyx_t_7) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1518, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_json, __pyx_n_s_json) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_p, __pyx_n_s_pickle) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_pkl, __pyx_n_s_pickle) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_pickle, __pyx_n_s_pickle) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DUMPMETHODS, __pyx_t_1) < 0) __PYX_ERR(0, 1518, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1520
  * _DUMPMETHODS = dict(json='json', p='pickle', pkl='pickle', pickle='pickle')
@@ -66693,10 +66879,10 @@ if (!__Pyx_RefNanny) {
  *     """ Return |GVar|\s that are serialized in ``inputstr``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_61gloads, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1520, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gloads, __pyx_t_7) < 0) __PYX_ERR(0, 1520, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_61gloads, 0, __pyx_n_s_gloads, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__127)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1520, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gloads, __pyx_t_1) < 0) __PYX_ERR(0, 1520, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1550
  *         return gload(BytesIO(inputstr), method='pickle')
@@ -66705,10 +66891,11 @@ if (!__Pyx_RefNanny) {
  *     """ Read and return |GVar|\s that are serialized in ``inputfile``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_63gload, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1550, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gload, __pyx_t_7) < 0) __PYX_ERR(0, 1550, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_63gload, 0, __pyx_n_s_gload, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__129)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1550, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__130);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gload, __pyx_t_1) < 0) __PYX_ERR(0, 1550, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1620
  *         return _oldload1(inputfile, method)
@@ -66717,10 +66904,11 @@ if (!__Pyx_RefNanny) {
  *     """ Repack ``g`` in dictionary that can be serialized. Used by :func:`gdump`.
  *     """
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_65_gdump, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1620, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gdump_2, __pyx_t_7) < 0) __PYX_ERR(0, 1620, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_65_gdump, 0, __pyx_n_s_gdump_2, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__132)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1620, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__133);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gdump_2, __pyx_t_1) < 0) __PYX_ERR(0, 1620, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1668
  *     return data
@@ -66729,10 +66917,10 @@ if (!__Pyx_RefNanny) {
  *     """ Inverse of :func:`_gdump`.
  *     """
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_67_gload, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1668, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gload_2, __pyx_t_7) < 0) __PYX_ERR(0, 1668, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_67_gload, 0, __pyx_n_s_gload_2, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__135)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1668, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_gload_2, __pyx_t_1) < 0) __PYX_ERR(0, 1668, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1704
  *         return buf
@@ -66741,10 +66929,10 @@ if (!__Pyx_RefNanny) {
  *     " reconnect derived GVars to primary GVars; used by :func:`_gload` "
  *     if primary == [] or derivs.size == 0:
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_69_rebuild_gvars, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1704, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_rebuild_gvars, __pyx_t_7) < 0) __PYX_ERR(0, 1704, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_69_rebuild_gvars, 0, __pyx_n_s_rebuild_gvars, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__137)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1704, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_rebuild_gvars, __pyx_t_1) < 0) __PYX_ERR(0, 1704, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1727
  * ####### old versions kept for legacy purposes (for now)
@@ -66753,10 +66941,11 @@ if (!__Pyx_RefNanny) {
  *     """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_71olddump, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1727, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_olddump, __pyx_t_7) < 0) __PYX_ERR(0, 1727, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_71olddump, 0, __pyx_n_s_olddump, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__139)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1727, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__140);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_olddump, __pyx_t_1) < 0) __PYX_ERR(0, 1727, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1785
  *         raise ValueError('unknown method: ' + str(method))
@@ -66765,10 +66954,11 @@ if (!__Pyx_RefNanny) {
  *     """ Load and return serialized |GVar|\s from file ``inputfile``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_73_oldload1, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1785, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_oldload1, __pyx_t_7) < 0) __PYX_ERR(0, 1785, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_73_oldload1, 0, __pyx_n_s_oldload1, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__142)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1785, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__143);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_oldload1, __pyx_t_1) < 0) __PYX_ERR(0, 1785, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1852
  *     return ans
@@ -66777,10 +66967,11 @@ if (!__Pyx_RefNanny) {
  *     """
  *     Older version of :func:`load`, included to allow loading
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_75_oldload0, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1852, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_oldload0, __pyx_t_7) < 0) __PYX_ERR(0, 1852, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_75_oldload0, 0, __pyx_n_s_oldload0, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__145)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1852, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__146);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_oldload0, __pyx_t_1) < 0) __PYX_ERR(0, 1852, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1878
  *     return ans
@@ -66789,10 +66980,10 @@ if (!__Pyx_RefNanny) {
  *     """ Disassemble collection ``g`` of |GVar|\s.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_77disassemble, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1878, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_disassemble, __pyx_t_7) < 0) __PYX_ERR(0, 1878, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_77disassemble, 0, __pyx_n_s_disassemble, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__148)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1878, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_disassemble, __pyx_t_1) < 0) __PYX_ERR(0, 1878, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1899
  *     return BufferDict(g, buf=newbuf) if g.shape is None else newbuf.reshape(g.shape)
@@ -66801,22 +66992,24 @@ if (!__Pyx_RefNanny) {
  *     """ Convert data from :func:`gvar.disassemble` back into |GVar|\s.
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_gvar_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1899, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_gvar); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_79reassemble, 0, __pyx_n_s_reassemble, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__150)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1899, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_cov); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  if (!__Pyx_CyFunction_InitDefaults(__pyx_t_1, sizeof(__pyx_defaults1), 1)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_gvar_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_gvar); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1899, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cov); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_4gvar_10_svec_smat_smat))))) __PYX_ERR(0, 1899, __pyx_L1_error)
+  __Pyx_CyFunction_Defaults(__pyx_defaults1, __pyx_t_1)->__pyx_arg_cov = ((struct __pyx_obj_4gvar_10_svec_smat_smat *)__pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_2 = 0;
+  __Pyx_CyFunction_SetDefaultsGetter(__pyx_t_1, __pyx_pf_4gvar_10_utilities_104__defaults__);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reassemble, __pyx_t_1) < 0) __PYX_ERR(0, 1899, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_7) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_7, __pyx_ptype_4gvar_10_svec_smat_smat))))) __PYX_ERR(0, 1899, __pyx_L1_error)
-  __pyx_k__17 = ((struct __pyx_obj_4gvar_10_svec_smat_smat *)__pyx_t_7);
-  __Pyx_GIVEREF(__pyx_t_7);
-  __pyx_t_7 = 0;
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_79reassemble, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1899, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reassemble, __pyx_t_7) < 0) __PYX_ERR(0, 1899, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":1928
  * 
@@ -66825,10 +67018,10 @@ if (!__Pyx_RefNanny) {
  *     """ weighted sum of |GVar| derivatives """
  *     cdef GVar g
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_81wsum_der, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1928, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wsum_der, __pyx_t_7) < 0) __PYX_ERR(0, 1928, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_81wsum_der, 0, __pyx_n_s_wsum_der, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__152)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1928, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wsum_der, __pyx_t_1) < 0) __PYX_ERR(0, 1928, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1947
  *     return ans
@@ -66837,10 +67030,10 @@ if (!__Pyx_RefNanny) {
  *     """ weighted sum of |GVar|\s """
  *     cdef svec wd
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_83wsum_gvar, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1947, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wsum_gvar, __pyx_t_7) < 0) __PYX_ERR(0, 1947, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_83wsum_gvar, 0, __pyx_n_s_wsum_gvar, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__154)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1947, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_wsum_gvar, __pyx_t_1) < 0) __PYX_ERR(0, 1947, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1980
  *     return GVar(wv,wd,cov)
@@ -66849,10 +67042,11 @@ if (!__Pyx_RefNanny) {
  *     """ Tabulate :class:`gvar.GVar`\s in ``outputs``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_85fmt_values, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1980, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fmt_values, __pyx_t_7) < 0) __PYX_ERR(0, 1980, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_85fmt_values, 0, __pyx_n_s_fmt_values, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__156)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1980, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__157);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fmt_values, __pyx_t_1) < 0) __PYX_ERR(0, 1980, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":1998
  *     return ans
@@ -66861,10 +67055,11 @@ if (!__Pyx_RefNanny) {
  *     outputs, inputs, ndecimal=2, percent=True, colwidth=None,
  *     verify=False, ndigit=None
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_87fmt_errorbudget, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1998, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fmt_errorbudget, __pyx_t_7) < 0) __PYX_ERR(0, 1998, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_87fmt_errorbudget, 0, __pyx_n_s_fmt_errorbudget, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__159)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1998, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__160);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_fmt_errorbudget, __pyx_t_1) < 0) __PYX_ERR(0, 1998, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":2114
  * 
@@ -66873,10 +67068,11 @@ if (!__Pyx_RefNanny) {
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_89bootstrap_iter, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2114, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bootstrap_iter, __pyx_t_7) < 0) __PYX_ERR(0, 2114, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_89bootstrap_iter, 0, __pyx_n_s_bootstrap_iter, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2114, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__162);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bootstrap_iter, __pyx_t_1) < 0) __PYX_ERR(0, 2114, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":2164
  *     raise StopIteration
@@ -66885,10 +67081,11 @@ if (!__Pyx_RefNanny) {
  *     """ Generate random sample from distribution ``g``.
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_92sample, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2164, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sample, __pyx_t_7) < 0) __PYX_ERR(0, 2164, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_92sample, 0, __pyx_n_s_sample, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__164)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2164, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__165);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_sample, __pyx_t_1) < 0) __PYX_ERR(0, 2164, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":2184
  *     return next(raniter(g, svdcut=svdcut))
@@ -66897,10 +67094,11 @@ if (!__Pyx_RefNanny) {
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
-  __pyx_t_7 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_94raniter, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2184, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_raniter, __pyx_t_7) < 0) __PYX_ERR(0, 2184, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_94raniter, 0, __pyx_n_s_raniter, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2184, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_1, __pyx_tuple__167);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_raniter, __pyx_t_1) < 0) __PYX_ERR(0, 2184, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":2240
  *     raise StopIteration
@@ -66909,10 +67107,10 @@ if (!__Pyx_RefNanny) {
  *     """ SVD decomposition of a pos. sym. matrix.
  * 
  */
-  __pyx_t_7 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__150); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2240, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_7, __pyx_tuple__150, __pyx_n_s_SVD, __pyx_n_s_SVD, (PyObject *) NULL, __pyx_n_s_gvar__utilities, __pyx_kp_s_SVD_decomposition_of_a_pos_sym); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2240, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__168); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2240, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__168, __pyx_n_s_SVD, __pyx_n_s_SVD, (PyObject *) NULL, __pyx_n_s_gvar__utilities, __pyx_kp_s_SVD_decomposition_of_a_pos_sym); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2240, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
 
   /* "gvar/_utilities.pyx":2327
  *         ``compute_delta==False``.
@@ -66921,11 +67119,11 @@ if (!__Pyx_RefNanny) {
  *         self, mat, svdcut=None, svdnum=None, compute_delta=False, rescale=False
  *         ):
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_1__init__, 0, __pyx_n_s_SVD___init, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__152)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2327, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_2, __pyx_tuple__153);
-  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_init, __pyx_t_2) < 0) __PYX_ERR(0, 2327, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_7 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_1__init__, 0, __pyx_n_s_SVD___init, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__170)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2327, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_7, __pyx_tuple__171);
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_init, __pyx_t_7) < 0) __PYX_ERR(0, 2327, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":2402
  * 
@@ -66934,8 +67132,8 @@ if (!__Pyx_RefNanny) {
  *         val, vec = numpy.linalg.eigh(DmatD)
  *         vec = numpy.transpose(vec) # now 1st index labels eigenval
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_3_numpy_eigh, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_SVD__numpy_eigh, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__155)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2402, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_7 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_3_numpy_eigh, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_SVD__numpy_eigh, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__173)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2402, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
 
   /* "gvar/_utilities.pyx":2401
  *             return  # val[i:],vec[i:],kappa,None
@@ -66944,10 +67142,10 @@ if (!__Pyx_RefNanny) {
  *     def _numpy_eigh(DmatD):
  *         val, vec = numpy.linalg.eigh(DmatD)
  */
-  __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_staticmethod, __pyx_t_2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 2401, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_staticmethod, __pyx_t_7); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 2401, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_numpy_eigh, __pyx_t_9) < 0) __PYX_ERR(0, 2402, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_numpy_eigh, __pyx_t_9) < 0) __PYX_ERR(0, 2402, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
   /* "gvar/_utilities.pyx":2414
@@ -66957,7 +67155,7 @@ if (!__Pyx_RefNanny) {
  *         # warnings.warn('numpy.linalg.eigh failed; trying numpy.linalg.svd')
  *         vec,val,dummy = numpy.linalg.svd(DmatD)
  */
-  __pyx_t_9 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_5_numpy_svd, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_SVD__numpy_svd, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__157)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 2414, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_5_numpy_svd, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_SVD__numpy_svd, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__175)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 2414, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
 
   /* "gvar/_utilities.pyx":2413
@@ -66967,11 +67165,11 @@ if (!__Pyx_RefNanny) {
  *     def _numpy_svd(DmatD):
  *         # warnings.warn('numpy.linalg.eigh failed; trying numpy.linalg.svd')
  */
-  __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_staticmethod, __pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2413, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_7 = __Pyx_PyObject_CallOneArg(__pyx_builtin_staticmethod, __pyx_t_9); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2413, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_numpy_svd, __pyx_t_2) < 0) __PYX_ERR(0, 2414, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_numpy_svd, __pyx_t_7) < 0) __PYX_ERR(0, 2414, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":2423
  *         return val, vec
@@ -66980,11 +67178,11 @@ if (!__Pyx_RefNanny) {
  *         """ Vector decomposition of input matrix raised to power ``n``.
  * 
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_7decomp, 0, __pyx_n_s_SVD_decomp, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__159)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2423, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_2, __pyx_tuple__160);
-  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_decomp, __pyx_t_2) < 0) __PYX_ERR(0, 2423, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_7 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_3SVD_7decomp, 0, __pyx_n_s_SVD_decomp, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__177)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2423, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_7, __pyx_tuple__178);
+  if (__Pyx_SetNameInClass(__pyx_t_2, __pyx_n_s_decomp, __pyx_t_7) < 0) __PYX_ERR(0, 2423, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":2240
  *     raise StopIteration
@@ -66993,12 +67191,12 @@ if (!__Pyx_RefNanny) {
  *     """ SVD decomposition of a pos. sym. matrix.
  * 
  */
-  __pyx_t_2 = __Pyx_Py3ClassCreate(__pyx_t_7, __pyx_n_s_SVD, __pyx_tuple__150, __pyx_t_1, NULL, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2240, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_SVD, __pyx_t_2) < 0) __PYX_ERR(0, 2240, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_SVD, __pyx_tuple__168, __pyx_t_2, NULL, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2240, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_SVD, __pyx_t_7) < 0) __PYX_ERR(0, 2240, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":2453
  * 
@@ -67007,19 +67205,19 @@ if (!__Pyx_RefNanny) {
  * SVD._analyzers['numpy_svd']  = SVD._numpy_svd
  * SVD._analyzers['numpy_eigh']  = SVD._numpy_eigh
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_collections); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2453, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_OrderedDict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2453, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_collections); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2453, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2453, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_OrderedDict); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2453, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_SVD); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2453, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2453, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_t_1, __pyx_n_s_analyzers, __pyx_t_7) < 0) __PYX_ERR(0, 2453, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_SVD); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2453, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (__Pyx_PyObject_SetAttrStr(__pyx_t_2, __pyx_n_s_analyzers, __pyx_t_1) < 0) __PYX_ERR(0, 2453, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "gvar/_utilities.pyx":2454
  * # use ordered dict for python2
@@ -67028,19 +67226,19 @@ if (!__Pyx_RefNanny) {
  * SVD._analyzers['numpy_eigh']  = SVD._numpy_eigh
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_SVD); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2454, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_numpy_svd); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2454, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_SVD); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2454, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_analyzers); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2454, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_SVD); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2454, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_numpy_svd_2, __pyx_t_7) < 0)) __PYX_ERR(0, 2454, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_numpy_svd); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2454, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_SVD); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2454, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_analyzers); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2454, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (unlikely(PyObject_SetItem(__pyx_t_7, __pyx_n_s_numpy_svd_2, __pyx_t_1) < 0)) __PYX_ERR(0, 2454, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "gvar/_utilities.pyx":2455
  * SVD._analyzers = collections.OrderedDict()
@@ -67049,19 +67247,19 @@ if (!__Pyx_RefNanny) {
  * 
  * def valder(v):
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_SVD); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2455, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_numpy_eigh); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2455, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_SVD); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2455, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_analyzers); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2455, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_SVD); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2455, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_n_s_numpy_eigh_2, __pyx_t_2) < 0)) __PYX_ERR(0, 2455, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_numpy_eigh); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2455, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_SVD); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2455, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_analyzers); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2455, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_n_s_numpy_eigh_2, __pyx_t_7) < 0)) __PYX_ERR(0, 2455, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":2457
  * SVD._analyzers['numpy_eigh']  = SVD._numpy_eigh
@@ -67070,10 +67268,10 @@ if (!__Pyx_RefNanny) {
  *     """ Convert array ``v`` of numbers into an array of |GVar|\s.
  * 
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_97valder, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2457, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_valder, __pyx_t_2) < 0) __PYX_ERR(0, 2457, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_7 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_97valder, 0, __pyx_n_s_valder, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__180)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2457, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_valder, __pyx_t_7) < 0) __PYX_ERR(0, 2457, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "gvar/_utilities.pyx":2561
  *     return exp(log(fj) - x + a * log(x) - lgamma(a))
@@ -67082,8 +67280,22 @@ if (!__Pyx_RefNanny) {
  *     """ Complement of normalized incomplete gamma function, Q(a,x).
  * 
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_99gammaQ, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2561, __pyx_L1_error)
+  __pyx_t_7 = PyFloat_FromDouble(((double)1e-5)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 2561, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_2 = __Pyx_PyInt_From_int(((int)0x2710)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2561, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2561, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_7);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_2);
+  __pyx_t_7 = 0;
+  __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_99gammaQ, 0, __pyx_n_s_gammaQ, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__182)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2561, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_2, __pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_gammaQ, __pyx_t_2) < 0) __PYX_ERR(0, 2561, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
@@ -67094,15 +67306,27 @@ if (!__Pyx_RefNanny) {
  *     """ Normalized incomplete gamma function, P(a,x).
  * 
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_101gammaP, NULL, __pyx_n_s_gvar__utilities); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2577, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(((double)1e-5)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2577, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2577, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2);
+  __Pyx_INCREF(((PyObject *)__pyx_int_10000));
+  __Pyx_GIVEREF(((PyObject *)__pyx_int_10000));
+  PyTuple_SET_ITEM(__pyx_t_1, 1, ((PyObject *)__pyx_int_10000));
+  __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_10_utilities_101gammaP, 0, __pyx_n_s_gammaP, NULL, __pyx_n_s_gvar__utilities, __pyx_d, ((PyObject *)__pyx_codeobj__184)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 2577, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_2, __pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_gammaP, __pyx_t_2) < 0) __PYX_ERR(0, 2577, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "gvar/_utilities.pyx":1
- * # cython: language_level=3str             # <<<<<<<<<<<<<<
- * # c#ython: embedsignature=True
+ * # cython: language_level=3str, binding=True             # <<<<<<<<<<<<<<
  * # Created by Peter Lepage (Cornell University) on 2012-05-31.
+ * # Copyright (c) 2012-20 G. Peter Lepage.
  */
   __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -67130,7 +67354,7 @@ if (!__Pyx_RefNanny) {
  * cdef strided = Enum("<strided and direct>") # default
  * cdef indirect = Enum("<strided and indirect>")
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__167, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 286, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__185, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 286, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_XGOTREF(generic);
   __Pyx_DECREF_SET(generic, __pyx_t_2);
@@ -67144,7 +67368,7 @@ if (!__Pyx_RefNanny) {
  * cdef indirect = Enum("<strided and indirect>")
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__168, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 287, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__186, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 287, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_XGOTREF(strided);
   __Pyx_DECREF_SET(strided, __pyx_t_2);
@@ -67158,7 +67382,7 @@ if (!__Pyx_RefNanny) {
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__169, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 288, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__187, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_XGOTREF(indirect);
   __Pyx_DECREF_SET(indirect, __pyx_t_2);
@@ -67172,7 +67396,7 @@ if (!__Pyx_RefNanny) {
  * cdef indirect_contiguous = Enum("<contiguous and indirect>")
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__170, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 291, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__188, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 291, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_XGOTREF(contiguous);
   __Pyx_DECREF_SET(contiguous, __pyx_t_2);
@@ -67186,7 +67410,7 @@ if (!__Pyx_RefNanny) {
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__171, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 292, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_MemviewEnum_type), __pyx_tuple__189, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 292, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_XGOTREF(indirect_contiguous);
   __Pyx_DECREF_SET(indirect_contiguous, __pyx_t_2);
@@ -72512,6 +72736,37 @@ __pyx_capsule_create(void *p, CYTHON_UNUSED const char *sig)
     }
 
 /* CIntToPy */
+        static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(int) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int),
+                                     little, !is_unsigned);
+    }
+}
+
+/* CIntToPy */
         static CYTHON_INLINE PyObject* __Pyx_PyInt_From_Py_intptr_t(Py_intptr_t value) {
     const Py_intptr_t neg_one = (Py_intptr_t) ((Py_intptr_t) 0 - (Py_intptr_t) 1), const_zero = (Py_intptr_t) 0;
     const int is_unsigned = neg_one > const_zero;
@@ -72584,37 +72839,6 @@ static int __pyx_memview_set_object(const char *itemp, PyObject *obj) {
     Py_DECREF(*(PyObject **) itemp);
     *(PyObject **) itemp = obj;
     return 1;
-}
-
-/* CIntToPy */
-        static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
-    const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(int) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(int) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(int) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(int) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(int),
-                                     little, !is_unsigned);
-    }
 }
 
 /* MemviewDtypeToObject */

@@ -1,4 +1,4 @@
-# cython: language_level=3str
+# cython: language_level=3str, binding=True
 # Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify

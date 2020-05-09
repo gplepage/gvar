@@ -1,5 +1,4 @@
-# cython: language_level=3str 
-# c#ython: embedsignature=True
+# cython: language_level=3str, binding=True
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
 # Copyright (c) 2012-20 G. Peter Lepage.
 #
@@ -58,6 +57,7 @@ from ._svec_smat cimport svec, smat, smask
 from ._bufferdict import BufferDict
 
 from numpy cimport npy_intp as INTP_TYPE
+cimport cython
 
 cdef extern from "math.h":
     double c_pow "pow" (double x,double y)
@@ -76,7 +76,7 @@ cdef extern from "math.h":
 
 # utility functions
 def rebuild(g, corr=0.0, gvar=_gvar.gvar):
-    """ Rebuild ``g`` stripping correlations with variables not in ``g``.
+    """  Rebuild ``g`` stripping correlations with variables not in ``g``.
 
     ``g`` is either an array of |GVar|\s or a dictionary containing
     |GVar|\s and/or arrays of |GVar|\s. ``rebuild(g)`` creates a new

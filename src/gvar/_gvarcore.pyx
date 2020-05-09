@@ -1,5 +1,4 @@
-# cython: boundscheck=False, language_level=3str 
-# c#ython: embedsignature=True
+# cython: boundscheck=False, language_level=3str, binding=True
 # c#ython: profile=True
 # remove extra # above for profiling
 

@@ -22,6 +22,7 @@ from distutils.command.build_py import build_py as _build_py
 
 # compile from existing .c files if USE_CYTHON is False
 USE_CYTHON = False
+CYTHON_DIRECTIVES = {}
 
 class build_ext(_build_ext):
     # delays using numpy and cython until they are installed;
@@ -31,7 +32,7 @@ class build_ext(_build_ext):
         import numpy
         if USE_CYTHON:
             from Cython.Build import cythonize
-            self.extensions = cythonize(self.extensions, force=True)
+            self.extensions = cythonize(self.extensions, force=True, compiler_directives=CYTHON_DIRECTIVES)
         numpy_include = numpy.get_include()
         for ext in self.extensions:
             ext.include_dirs.append(numpy_include)
