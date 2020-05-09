@@ -1,3 +1,7 @@
+Version 11.5.2 2020-05-09
+==========================
+Fix documentation problems introduced in 11.5.1.
+
 Version 11.5.1 2020-05-09
 ==========================
 More tuning of evalcov, for better performance on dense matrices of 
