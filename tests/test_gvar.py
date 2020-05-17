@@ -2224,8 +2224,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         if len(i) > 0:
             invcovr[i, i] = np.array(wgts) ** 2
         for i, wgts in i_wgts[1:]:
-            for w in wgts:
-                invcovr[i[:, None], i] += np.outer(w, w)
+                invcovr[i[:, None], i] += wgts.T @ wgts
         np.testing.assert_allclose(invcovr[0,0], 1/100.)
         np.testing.assert_allclose(invcovr[1:4,1:4], np.linalg.inv(cov))
         np.testing.assert_allclose(invcovr[4:7,4:7], 0.5 * np.linalg.inv(cov))

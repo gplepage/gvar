@@ -1,3 +1,13 @@
+Version 11.6 ????
+======================
+- gvar.regulate is a new alternative to gvar.svd that uses a different 
+  way of regulating singularities in covariance matrices, and 
+  Cholesky decomposition for generating i_wgts. chi2, raniter, 
+  and bootstrap_iter now have option of using gvar.regulate in place 
+  of gvar.svd.
+
+- More efficient implementations of gvar.sdev and gvar.var. 
+
 Version 11.5.2 2020-05-09
 ==========================
 Fix documentation problems introduced in 11.5.1.

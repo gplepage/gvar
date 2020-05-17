@@ -1376,7 +1376,7 @@ struct __pyx_obj_4gvar_9_gvarcore_GVar {
 /* "gvar/_utilities.pyx":2201
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -1437,7 +1437,7 @@ struct __pyx_obj_4gvar_10_utilities___pyx_scope_struct_2_genexpr {
 /* "gvar/_utilities.pyx":2293
  *     return next(raniter(g, svdcut=svdcut, eps=eps))
  * 
- * def raniter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -4220,10 +4220,10 @@ static PyObject *__pyx_pf_4gvar_10_utilities_84fmt_values(CYTHON_UNUSED PyObject
 static PyObject *__pyx_pf_4gvar_10_utilities_86fmt_errorbudget(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_outputs, PyObject *__pyx_v_inputs, PyObject *__pyx_v_ndecimal, PyObject *__pyx_v_percent, PyObject *__pyx_v_colwidth, PyObject *__pyx_v_verify, PyObject *__pyx_v_ndigit); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_14bootstrap_iter_genexpr(PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_14bootstrap_iter_3genexpr(PyObject *__pyx_self); /* proto */
-static PyObject *__pyx_pf_4gvar_10_utilities_88bootstrap_iter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_svdcut, PyObject *__pyx_v_eps); /* proto */
-static PyObject *__pyx_pf_4gvar_10_utilities_91sample(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_svdcut, PyObject *__pyx_v_eps); /* proto */
+static PyObject *__pyx_pf_4gvar_10_utilities_88bootstrap_iter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_eps, PyObject *__pyx_v_svdcut); /* proto */
+static PyObject *__pyx_pf_4gvar_10_utilities_91sample(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_eps, PyObject *__pyx_v_svdcut); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_7raniter_genexpr(PyObject *__pyx_self); /* proto */
-static PyObject *__pyx_pf_4gvar_10_utilities_93raniter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_svdcut, PyObject *__pyx_v_eps); /* proto */
+static PyObject *__pyx_pf_4gvar_10_utilities_93raniter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_eps, PyObject *__pyx_v_svdcut); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_3SVD___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_mat, PyObject *__pyx_v_svdcut, PyObject *__pyx_v_svdnum, PyObject *__pyx_v_compute_delta, PyObject *__pyx_v_rescale); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_2_numpy_eigh(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_DmatD); /* proto */
 static PyObject *__pyx_pf_4gvar_10_utilities_3SVD_4_numpy_svd(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_DmatD); /* proto */
@@ -41231,29 +41231,29 @@ static PyObject *__pyx_gb_4gvar_10_utilities_90generator(__pyx_CoroutineObject *
 /* "gvar/_utilities.pyx":2201
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_4gvar_10_utilities_88bootstrap_iter[] = " Return iterator for bootstrap copies of ``g``.\n\n    The gaussian variables (|GVar| objects) in array (or dictionary) ``g``\n    collectively define a multidimensional gaussian distribution. The\n    iterator created by :func:`bootstrap_iter` generates an array (or\n    dictionary) of new |GVar|\\s whose covariance matrix is the same as\n    ``g``'s but whose means are drawn at random from the original ``g``\n    distribution. This is a *bootstrap copy* of the original distribution.\n    Each iteration of the iterator has different means (but the same\n    covariance matrix).\n\n    :func:`bootstrap_iter` also works when ``g`` is a single |GVar|, in\n    which case the resulting iterator returns bootstrap copies of the\n    ``g``.\n\n    Args:\n        g: An array (or dictionary) of objects of type |GVar|.\n        n: Maximum number of random iterations. Setting ``n=None``\n            (the default) implies there is no maximum number.\n        eps (float): The correlation matrix for ``g`` is\n            regulated using :func:`gvar.regulate` with cutoff ``eps`` \n            provided ``eps>0`` and ``svdcut=None``. This makes the \n            correlation matrices less singular, and can improve the \n            stability and accuracy of a simulation. SVD cuts \n            accomplish the same goal and are numerically more robust, \n            but they can be slower. Ignored if \n            ``eps=None`` (default).\n        svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s\n            correlation matrix with ``max(eig, svdcut * max_eig)`` \n            wherec``max_eig`` is the largest eigenvalue; if negative,\n            discard eigenmodes with eigenvalues smaller\n            than ``|svdcut| * max_eig``. Ignored if \n            ``eps`` specified (and not ``None``). Default is \n            ``svdcut=1e-12``.\n\n    Returns:\n        An iterator that returns bootstrap copies of ``g``.\n    ";
+static char __pyx_doc_4gvar_10_utilities_88bootstrap_iter[] = " Return iterator for bootstrap copies of ``g``.\n\n    The gaussian variables (|GVar| objects) in array (or dictionary) ``g``\n    collectively define a multidimensional gaussian distribution. The\n    iterator created by :func:`bootstrap_iter` generates an array (or\n    dictionary) of new |GVar|\\s whose covariance matrix is the same as\n    ``g``'s but whose means are drawn at random from the original ``g``\n    distribution. This is a *bootstrap copy* of the original distribution.\n    Each iteration of the iterator has different means (but the same\n    covariance matrix).\n\n    :func:`bootstrap_iter` also works when ``g`` is a single |GVar|, in\n    which case the resulting iterator returns bootstrap copies of the\n    ``g``.\n\n    Args:\n        g: An array (or dictionary) of objects of type |GVar|.\n        n: Maximum number of random iterations. Setting ``n=None``\n            (the default) implies there is no maximum number.\n        eps (float): The correlation matrix for ``g`` is\n            regulated using :func:`gvar.regulate` with cutoff ``eps`` \n            provided ``eps>0`` and ``svdcut=None``. This makes the \n            correlation matrices less singular, and can improve the \n            stability and accuracy of a simulation. SVD cuts \n            accomplish the same goal and are numerically more robust, \n            but they can be slower. Ignored if \n            ``eps=None`` (default).\n        svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s\n            correlation matrix with ``max(eig, svdcut * max_eig)`` \n            wherec``max_eig`` is the largest eigenvalue; if negative,\n            discard eigenmodes with eigenvalues smaller\n            than ``|svdcut| * max_eig``. Ignored if \n            ``eps`` specified (and not ``None``); default is \n            ``svdcut=1e-12``.\n\n    Returns:\n        An iterator that returns bootstrap copies of ``g``.\n    ";
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_89bootstrap_iter = {"bootstrap_iter", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_89bootstrap_iter, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_88bootstrap_iter};
 static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
   PyObject *__pyx_v_n = 0;
-  PyObject *__pyx_v_svdcut = 0;
   PyObject *__pyx_v_eps = 0;
+  PyObject *__pyx_v_svdcut = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("bootstrap_iter (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_svdcut,&__pyx_n_s_eps,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_eps,&__pyx_n_s_svdcut,0};
     PyObject* values[4] = {0,0,0,0};
     values[1] = ((PyObject *)((PyObject *)Py_None));
-    values[2] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
-    values[3] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject *)Py_None));
+    values[3] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -41283,13 +41283,13 @@ static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_se
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_svdcut);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_eps);
           if (value) { values[2] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_eps);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_svdcut);
           if (value) { values[3] = value; kw_args--; }
         }
       }
@@ -41311,8 +41311,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_se
     }
     __pyx_v_g = values[0];
     __pyx_v_n = values[1];
-    __pyx_v_svdcut = values[2];
-    __pyx_v_eps = values[3];
+    __pyx_v_eps = values[2];
+    __pyx_v_svdcut = values[3];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -41322,7 +41322,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_89bootstrap_iter(PyObject *__pyx_se
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_4gvar_10_utilities_88bootstrap_iter(__pyx_self, __pyx_v_g, __pyx_v_n, __pyx_v_svdcut, __pyx_v_eps);
+  __pyx_r = __pyx_pf_4gvar_10_utilities_88bootstrap_iter(__pyx_self, __pyx_v_g, __pyx_v_n, __pyx_v_eps, __pyx_v_svdcut);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
@@ -41760,12 +41760,12 @@ static PyObject *__pyx_gb_4gvar_10_utilities_14bootstrap_iter_5generator3(__pyx_
 /* "gvar/_utilities.pyx":2201
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
 
-static PyObject *__pyx_pf_4gvar_10_utilities_88bootstrap_iter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_svdcut, PyObject *__pyx_v_eps) {
+static PyObject *__pyx_pf_4gvar_10_utilities_88bootstrap_iter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_eps, PyObject *__pyx_v_svdcut) {
   struct __pyx_obj_4gvar_10_utilities___pyx_scope_struct__bootstrap_iter *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -41784,12 +41784,12 @@ static PyObject *__pyx_pf_4gvar_10_utilities_88bootstrap_iter(CYTHON_UNUSED PyOb
   __pyx_cur_scope->__pyx_v_n = __pyx_v_n;
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_n);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_n);
-  __pyx_cur_scope->__pyx_v_svdcut = __pyx_v_svdcut;
-  __Pyx_INCREF(__pyx_cur_scope->__pyx_v_svdcut);
-  __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_svdcut);
   __pyx_cur_scope->__pyx_v_eps = __pyx_v_eps;
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_eps);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_eps);
+  __pyx_cur_scope->__pyx_v_svdcut = __pyx_v_svdcut;
+  __Pyx_INCREF(__pyx_cur_scope->__pyx_v_svdcut);
+  __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_svdcut);
   {
     __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_4gvar_10_utilities_90generator, __pyx_codeobj__21, (PyObject *) __pyx_cur_scope, __pyx_n_s_bootstrap_iter, __pyx_n_s_bootstrap_iter, __pyx_n_s_gvar__utilities); if (unlikely(!gen)) __PYX_ERR(0, 2201, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
@@ -42601,7 +42601,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_90generator(__pyx_CoroutineObject *
  *             yield buf.reshape(g.shape)
  *     raise StopIteration             # <<<<<<<<<<<<<<
  * 
- * def sample(g, svdcut=1e-12, eps=None):
+ * def sample(g, eps=None, svdcut=1e-12):
  */
   __Pyx_Raise(__pyx_builtin_StopIteration, 0, 0, 0);
   __PYX_ERR(0, 2262, __pyx_L1_error)
@@ -42610,7 +42610,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_90generator(__pyx_CoroutineObject *
   /* "gvar/_utilities.pyx":2201
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -42636,7 +42636,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_90generator(__pyx_CoroutineObject *
 /* "gvar/_utilities.pyx":2264
  *     raise StopIteration
  * 
- * def sample(g, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def sample(g, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Generate random sample from distribution ``g``.
  * 
  */
@@ -42647,16 +42647,16 @@ static char __pyx_doc_4gvar_10_utilities_91sample[] = " Generate random sample f
 static PyMethodDef __pyx_mdef_4gvar_10_utilities_92sample = {"sample", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_4gvar_10_utilities_92sample, METH_VARARGS|METH_KEYWORDS, __pyx_doc_4gvar_10_utilities_91sample};
 static PyObject *__pyx_pw_4gvar_10_utilities_92sample(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
-  PyObject *__pyx_v_svdcut = 0;
   PyObject *__pyx_v_eps = 0;
+  PyObject *__pyx_v_svdcut = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("sample (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_svdcut,&__pyx_n_s_eps,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_eps,&__pyx_n_s_svdcut,0};
     PyObject* values[3] = {0,0,0};
-    values[1] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
-    values[2] = ((PyObject *)((PyObject *)Py_None));
+    values[1] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -42678,13 +42678,13 @@ static PyObject *__pyx_pw_4gvar_10_utilities_92sample(PyObject *__pyx_self, PyOb
         CYTHON_FALLTHROUGH;
         case  1:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_svdcut);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_eps);
           if (value) { values[1] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_eps);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_svdcut);
           if (value) { values[2] = value; kw_args--; }
         }
       }
@@ -42703,8 +42703,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_92sample(PyObject *__pyx_self, PyOb
       }
     }
     __pyx_v_g = values[0];
-    __pyx_v_svdcut = values[1];
-    __pyx_v_eps = values[2];
+    __pyx_v_eps = values[1];
+    __pyx_v_svdcut = values[2];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -42714,14 +42714,14 @@ static PyObject *__pyx_pw_4gvar_10_utilities_92sample(PyObject *__pyx_self, PyOb
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_4gvar_10_utilities_91sample(__pyx_self, __pyx_v_g, __pyx_v_svdcut, __pyx_v_eps);
+  __pyx_r = __pyx_pf_4gvar_10_utilities_91sample(__pyx_self, __pyx_v_g, __pyx_v_eps, __pyx_v_svdcut);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4gvar_10_utilities_91sample(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_svdcut, PyObject *__pyx_v_eps) {
+static PyObject *__pyx_pf_4gvar_10_utilities_91sample(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_eps, PyObject *__pyx_v_svdcut) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -42735,7 +42735,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_91sample(CYTHON_UNUSED PyObject *__
  *     """
  *     return next(raniter(g, svdcut=svdcut, eps=eps))             # <<<<<<<<<<<<<<
  * 
- * def raniter(g, n=None, svdcut=1e-12, eps=None):
+ * def raniter(g, n=None, eps=None, svdcut=1e-12):
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_raniter); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2291, __pyx_L1_error)
@@ -42764,7 +42764,7 @@ static PyObject *__pyx_pf_4gvar_10_utilities_91sample(CYTHON_UNUSED PyObject *__
   /* "gvar/_utilities.pyx":2264
  *     raise StopIteration
  * 
- * def sample(g, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def sample(g, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Generate random sample from distribution ``g``.
  * 
  */
@@ -42787,7 +42787,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_95generator1(__pyx_CoroutineObject 
 /* "gvar/_utilities.pyx":2293
  *     return next(raniter(g, svdcut=svdcut, eps=eps))
  * 
- * def raniter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -42799,17 +42799,17 @@ static PyMethodDef __pyx_mdef_4gvar_10_utilities_94raniter = {"raniter", (PyCFun
 static PyObject *__pyx_pw_4gvar_10_utilities_94raniter(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_g = 0;
   PyObject *__pyx_v_n = 0;
-  PyObject *__pyx_v_svdcut = 0;
   PyObject *__pyx_v_eps = 0;
+  PyObject *__pyx_v_svdcut = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("raniter (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_svdcut,&__pyx_n_s_eps,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_g,&__pyx_n_s_n,&__pyx_n_s_eps,&__pyx_n_s_svdcut,0};
     PyObject* values[4] = {0,0,0,0};
     values[1] = ((PyObject *)((PyObject *)Py_None));
-    values[2] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
-    values[3] = ((PyObject *)((PyObject *)Py_None));
+    values[2] = ((PyObject *)((PyObject *)Py_None));
+    values[3] = ((PyObject *)((PyObject*)__pyx_float_1eneg_12));
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -42839,13 +42839,13 @@ static PyObject *__pyx_pw_4gvar_10_utilities_94raniter(PyObject *__pyx_self, PyO
         CYTHON_FALLTHROUGH;
         case  2:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_svdcut);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_eps);
           if (value) { values[2] = value; kw_args--; }
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_eps);
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_svdcut);
           if (value) { values[3] = value; kw_args--; }
         }
       }
@@ -42867,8 +42867,8 @@ static PyObject *__pyx_pw_4gvar_10_utilities_94raniter(PyObject *__pyx_self, PyO
     }
     __pyx_v_g = values[0];
     __pyx_v_n = values[1];
-    __pyx_v_svdcut = values[2];
-    __pyx_v_eps = values[3];
+    __pyx_v_eps = values[2];
+    __pyx_v_svdcut = values[3];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -42878,7 +42878,7 @@ static PyObject *__pyx_pw_4gvar_10_utilities_94raniter(PyObject *__pyx_self, PyO
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_4gvar_10_utilities_93raniter(__pyx_self, __pyx_v_g, __pyx_v_n, __pyx_v_svdcut, __pyx_v_eps);
+  __pyx_r = __pyx_pf_4gvar_10_utilities_93raniter(__pyx_self, __pyx_v_g, __pyx_v_n, __pyx_v_eps, __pyx_v_svdcut);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
@@ -43095,12 +43095,12 @@ static PyObject *__pyx_gb_4gvar_10_utilities_7raniter_2generator4(__pyx_Coroutin
 /* "gvar/_utilities.pyx":2293
  *     return next(raniter(g, svdcut=svdcut, eps=eps))
  * 
- * def raniter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
 
-static PyObject *__pyx_pf_4gvar_10_utilities_93raniter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_svdcut, PyObject *__pyx_v_eps) {
+static PyObject *__pyx_pf_4gvar_10_utilities_93raniter(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_g, PyObject *__pyx_v_n, PyObject *__pyx_v_eps, PyObject *__pyx_v_svdcut) {
   struct __pyx_obj_4gvar_10_utilities___pyx_scope_struct_3_raniter *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -43119,12 +43119,12 @@ static PyObject *__pyx_pf_4gvar_10_utilities_93raniter(CYTHON_UNUSED PyObject *_
   __pyx_cur_scope->__pyx_v_n = __pyx_v_n;
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_n);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_n);
-  __pyx_cur_scope->__pyx_v_svdcut = __pyx_v_svdcut;
-  __Pyx_INCREF(__pyx_cur_scope->__pyx_v_svdcut);
-  __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_svdcut);
   __pyx_cur_scope->__pyx_v_eps = __pyx_v_eps;
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_eps);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_eps);
+  __pyx_cur_scope->__pyx_v_svdcut = __pyx_v_svdcut;
+  __Pyx_INCREF(__pyx_cur_scope->__pyx_v_svdcut);
+  __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_svdcut);
   {
     __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_4gvar_10_utilities_95generator1, __pyx_codeobj__23, (PyObject *) __pyx_cur_scope, __pyx_n_s_raniter, __pyx_n_s_raniter, __pyx_n_s_gvar__utilities); if (unlikely(!gen)) __PYX_ERR(0, 2293, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
@@ -43973,7 +43973,7 @@ static PyObject *__pyx_gb_4gvar_10_utilities_95generator1(__pyx_CoroutineObject 
   /* "gvar/_utilities.pyx":2293
  *     return next(raniter(g, svdcut=svdcut, eps=eps))
  * 
- * def raniter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
@@ -73005,45 +73005,45 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "gvar/_utilities.pyx":2201
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
-  __pyx_tuple__167 = PyTuple_Pack(15, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_svdcut, __pyx_n_s_eps, __pyx_n_s_i_wgts, __pyx_n_s_g_flat, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_buf, __pyx_n_s_z, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__167)) __PYX_ERR(0, 2201, __pyx_L1_error)
+  __pyx_tuple__167 = PyTuple_Pack(15, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_eps, __pyx_n_s_svdcut, __pyx_n_s_i_wgts, __pyx_n_s_g_flat, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_buf, __pyx_n_s_z, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__167)) __PYX_ERR(0, 2201, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__167);
   __Pyx_GIVEREF(__pyx_tuple__167);
   __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(4, 0, 15, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__167, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_bootstrap_iter, 2201, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 2201, __pyx_L1_error)
-  __pyx_tuple__168 = PyTuple_Pack(3, ((PyObject *)Py_None), ((PyObject*)__pyx_float_1eneg_12), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__168)) __PYX_ERR(0, 2201, __pyx_L1_error)
+  __pyx_tuple__168 = PyTuple_Pack(3, ((PyObject *)Py_None), ((PyObject *)Py_None), ((PyObject*)__pyx_float_1eneg_12)); if (unlikely(!__pyx_tuple__168)) __PYX_ERR(0, 2201, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__168);
   __Pyx_GIVEREF(__pyx_tuple__168);
 
   /* "gvar/_utilities.pyx":2264
  *     raise StopIteration
  * 
- * def sample(g, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def sample(g, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Generate random sample from distribution ``g``.
  * 
  */
-  __pyx_tuple__169 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_svdcut, __pyx_n_s_eps); if (unlikely(!__pyx_tuple__169)) __PYX_ERR(0, 2264, __pyx_L1_error)
+  __pyx_tuple__169 = PyTuple_Pack(3, __pyx_n_s_g, __pyx_n_s_eps, __pyx_n_s_svdcut); if (unlikely(!__pyx_tuple__169)) __PYX_ERR(0, 2264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__169);
   __Pyx_GIVEREF(__pyx_tuple__169);
   __pyx_codeobj__170 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__169, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_sample, 2264, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__170)) __PYX_ERR(0, 2264, __pyx_L1_error)
-  __pyx_tuple__171 = PyTuple_Pack(2, ((PyObject*)__pyx_float_1eneg_12), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__171)) __PYX_ERR(0, 2264, __pyx_L1_error)
+  __pyx_tuple__171 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject*)__pyx_float_1eneg_12)); if (unlikely(!__pyx_tuple__171)) __PYX_ERR(0, 2264, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__171);
   __Pyx_GIVEREF(__pyx_tuple__171);
 
   /* "gvar/_utilities.pyx":2293
  *     return next(raniter(g, svdcut=svdcut, eps=eps))
  * 
- * def raniter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
-  __pyx_tuple__172 = PyTuple_Pack(14, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_svdcut, __pyx_n_s_eps, __pyx_n_s_i_wgts, __pyx_n_s_g_mean, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_z, __pyx_n_s_buf, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__172)) __PYX_ERR(0, 2293, __pyx_L1_error)
+  __pyx_tuple__172 = PyTuple_Pack(14, __pyx_n_s_g, __pyx_n_s_n, __pyx_n_s_eps, __pyx_n_s_svdcut, __pyx_n_s_i_wgts, __pyx_n_s_g_mean, __pyx_n_s_nwgt, __pyx_n_s_count, __pyx_n_s_z, __pyx_n_s_buf, __pyx_n_s_i, __pyx_n_s_wgts, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__172)) __PYX_ERR(0, 2293, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__172);
   __Pyx_GIVEREF(__pyx_tuple__172);
   __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(4, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__172, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_utilities_pyx, __pyx_n_s_raniter, 2293, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 2293, __pyx_L1_error)
-  __pyx_tuple__173 = PyTuple_Pack(3, ((PyObject *)Py_None), ((PyObject*)__pyx_float_1eneg_12), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__173)) __PYX_ERR(0, 2293, __pyx_L1_error)
+  __pyx_tuple__173 = PyTuple_Pack(3, ((PyObject *)Py_None), ((PyObject *)Py_None), ((PyObject*)__pyx_float_1eneg_12)); if (unlikely(!__pyx_tuple__173)) __PYX_ERR(0, 2293, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__173);
   __Pyx_GIVEREF(__pyx_tuple__173);
 
@@ -74885,7 +74885,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_utilities.pyx":2201
  * 
  * # bootstrap_iter, raniter, svd, valder
- * def bootstrap_iter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for bootstrap copies of ``g``.
  * 
  */
@@ -74898,7 +74898,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_utilities.pyx":2264
  *     raise StopIteration
  * 
- * def sample(g, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def sample(g, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Generate random sample from distribution ``g``.
  * 
  */
@@ -74911,7 +74911,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_utilities.pyx":2293
  *     return next(raniter(g, svdcut=svdcut, eps=eps))
  * 
- * def raniter(g, n=None, svdcut=1e-12, eps=None):             # <<<<<<<<<<<<<<
+ * def raniter(g, n=None, eps=None, svdcut=1e-12):             # <<<<<<<<<<<<<<
  *     """ Return iterator for random samples from distribution ``g``
  * 
  */
