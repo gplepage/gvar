@@ -958,6 +958,7 @@ class svd_diagnosis(object):
 
     Attributes:
         svdcut: SVD cut for bad eigenvalues in correlation matrix.
+        eps: ``eps`` corresponding to ``svdcut``, for use in :func:`gvar.regulate`.
         avgdata: Averaged data (``gvar.dataset.avg_data(dataset)``).
         val: Eigenvalues of the correlation matrix.
         bsval: Bootstrap average of correlation matrix eigenvalues.
@@ -993,6 +994,7 @@ class svd_diagnosis(object):
             self.bsval = self.val
             self.svdcut = 1.
             self.nmod = 0
+            self.eps = 1.
             return
         else:
             isdict = False
@@ -1040,6 +1042,7 @@ class svd_diagnosis(object):
             self.nmod = 0
         else:
             self.nmod = idx[-1] + 1
+        self.eps = self.svdcut * self.val[-1]
 
     def plot_ratio(self, plot=None, show=False):
         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.

@@ -1218,7 +1218,7 @@ struct __pyx_obj_4gvar_7dataset___pyx_scope_struct_7_genexpr {
 };
 
 
-/* "gvar/dataset.pyx":966
+/* "gvar/dataset.pyx":967
  *         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):             # <<<<<<<<<<<<<<
@@ -2238,6 +2238,7 @@ static const char __pyx_k_bz2[] = ".bz2";
 static const char __pyx_k_cov[] = "cov";
 static const char __pyx_k_dft[] = "dft";
 static const char __pyx_k_doc[] = "doc";
+static const char __pyx_k_eps[] = "eps";
 static const char __pyx_k_ext[] = "ext";
 static const char __pyx_k_fft[] = "fft";
 static const char __pyx_k_fmt[] = "fmt";
@@ -2458,7 +2459,7 @@ static const char __pyx_k_Compute_autocorrelation_in_data[] = " Compute autocorr
 static const char __pyx_k_Create_iterator_that_returns_bo[] = " Create iterator that returns bootstrap copies of ``dataset``.\n\n    ``dataset`` is a list of random numbers or random arrays, or a dictionary\n    of lists of random numbers/arrays. ``bootstrap_iter(dataset,n)`` is an\n    iterator that returns ``n`` bootstrap copies of ``dataset``. The random\n    numbers/arrays in a bootstrap copy are drawn at random (with repetition\n    allowed) from among the samples in ``dataset``: for example, ::\n\n        >>> dataset = [1.1, 2.3, 0.5, 1.9]\n        >>> data_iter = bootstrap_iter(dataset)\n        >>> print(next(data_iter))\n        [ 1.1  1.1  0.5  1.9]\n        >>> print(next(data_iter))\n        [ 0.5  2.3  1.9  0.5]\n\n        >>> dataset = dict(a=[1,2,3,4],b=[1,2,3,4])\n        >>> data_iter = bootstrap_iter(dataset)\n        >>> print(next(data_iter))\n        {'a': array([3, 3, 1, 2]), 'b': array([3, 3, 1, 2])}\n        >>> print(next(data_iter))\n        {'a': array([1, 3, 3, 2]), 'b': array([1, 3, 3, 2])}\n\n        >>> dataset = [[1,2],[3,4],[5,6],[7,8]]\n        >>> data_iter = bootstrap_iter(dataset)\n        >>> print(next(data_iter))\n        [[ 7.  8.]\n         [ 1.  2.]\n         [ 1.  2.]\n         [ 7.  8.]]\n        >>> print(next(data_iter))\n        [[ 3.  4.]\n         [ 7.  8.]\n         [ 3.  4.]\n         [ 1.  2.]]\n\n    The distribution of bootstrap copies is an approximation to the\n    distribution from which ``dataset`` was drawn. Consequently means,\n    variances and correlations for bootstrap copies should be similar to\n    those in ``dataset``. Analyzing variations from bootstrap copy to copy is\n    often useful when dealing with non-gaussian behavior or complicated\n    correlations between different quantities.\n\n    Parameter ``n`` specifies the maximum number of copies; there is no\n    maximum if ``n is None``.\n    ";
 static const char __pyx_k_Create_new_dataset_containing_i[] = " Create new dataset containing items whose keys match ``rexp``.\n\n        Returns a new :class:`gvar.dataset.Dataset`` containing only the\n        items ``self[k]`` whose keys ``k`` match regular expression\n        ``rexp`` (a string) according to Python module :mod:`re`::\n\n            >>> a = Dataset()\n            >>> a.append(xx=1.,xy=[10.,100.])\n            >>> a.append(xx=2.,xy=[20.,200.])\n            >>> print(a.grep('y'))\n            {'yy': [array([  10.,  100.]), array([  20.,  200.])]}\n            >>> print(a.grep('x'))\n            {'xx': [1.0, 2.0], 'xy': [array([  10.,  100.]), array([  20.,  200.])]}\n            >>> print(a.grep('x|y'))\n            {'xx': [1.0, 2.0], 'xy': [array([  10.,  100.]), array([  20.,  200.])]}\n            >>> print a.grep('[^y][^x]')\n            {'xy': [array([  10.,  100.]), array([  20.,  200.])]}\n\n        Items are retained even if ``rexp`` matches only part of the item's\n        key.\n        ";
 static const char __pyx_k_Dataset_arrayzip_locals_genexpr[] = "Dataset.arrayzip.<locals>.genexpr";
-static const char __pyx_k_Diagnose_the_need_for_an_SVD_cu[] = " Diagnose the need for an SVD cut.\n\n    :class:`gvar.dataset.svd_diagnosis` bootstraps the spectrum of\n    the correlation matrix for the data in ``dataset`` to determine\n    how much of that spectrum is reliably determined by this data.\n\n    Here ``dataset`` is a list of random arrays or a dictionary\n    (e.g., :class:`gvar.dataset.Dataset`) whose values are lists\n    of random numbers or random arrays. The random numbers or\n    arrays are averaged (using :func:`gvar.dataset.avg_data`)\n    to produce a set |GVar|\\s and their correlation matrix.\n    The smallest eigenvalues of the correlation matrix are poorly\n    estimated when the number of random samples is insufficiently\n    large --- the number of samples should typically be significantly\n    larger than the number of random variables being analyzed in\n    order to get good estimates of the correlations between these\n    variables.\n\n    Typical usage is ::\n\n        import gvar as gv\n\n        s = gv.dataset.svd_diagnosis(dataset)\n        avgdata = gv.svd(s.avgdata, svdcut=s.svdcut)\n        s.plot_ratio(show=True)\n\n    where the defective part of the correlation matrix is corrected by\n    applying an SVD cut to the averaged data. A plot showing the ratio\n    of bootstrapped eigenvalues to the actual eigenvalues is displayed\n    by the ``s.plot_ratio`` command.\n\n    Args:\n        dataset: List of random arrays or a dictionary\n            (e.g., :class:`gvar.dataset.Dataset`) whose values are lists\n            of random numbers or random arrays. Alternatively it can\n            be a tuple ``(g, Ns)`` where: ``g`` is an array of\n            |GVar|\\s or a dictionary whose values are |GVar|\\s or\n            arrays of |GVar|\\s; and ``Ns`` is the number of random\n            samples. Then the list of random data that is analyzed is\n            created is created using ``gvar.raniter(g, n=Ns)``.\n\n        nbstrap: Number of bootstrap copies used (default is 50).\n\n        mode""ls: For use in conjunction with :class:`lsqfit.MultiFitter`;\n            ignored when not specified. When specified, it is a list of multi-\n            fitter models used to specify which parts of the data are being\n            analyzed. The correlation matrix is restricted to the data\n            specified by the models and the data returned are \"processed data\"\n            for use with a multi-fitter using keyword ``pdata`` rather than\n            ``data``. Ignored if keyword ``process_datasets`` is specified.\n\n        process_datasets: Function that converts datasets into averaged\n            data. Function :func:`gvar.dataset.avg_data` is used if\n            set equal to ``None`` (default).\n\n        mincut: Minimum SVD cut (default 1e-12).\n\n    The main attributes are:\n\n    Attributes:\n        svdcut: SVD cut for bad eigenvalues in correlation matrix.\n        avgdata: Averaged data (``gvar.dataset.avg_data(dataset)``).\n        val: Eigenvalues of the correlation matrix.\n        bsval: Bootstrap average of correlation matrix eigenvalues.\n        nmod: Number of eigenmodes modified by SVD cut ``svdcut``.\n    ";
+static const char __pyx_k_Diagnose_the_need_for_an_SVD_cu[] = " Diagnose the need for an SVD cut.\n\n    :class:`gvar.dataset.svd_diagnosis` bootstraps the spectrum of\n    the correlation matrix for the data in ``dataset`` to determine\n    how much of that spectrum is reliably determined by this data.\n\n    Here ``dataset`` is a list of random arrays or a dictionary\n    (e.g., :class:`gvar.dataset.Dataset`) whose values are lists\n    of random numbers or random arrays. The random numbers or\n    arrays are averaged (using :func:`gvar.dataset.avg_data`)\n    to produce a set |GVar|\\s and their correlation matrix.\n    The smallest eigenvalues of the correlation matrix are poorly\n    estimated when the number of random samples is insufficiently\n    large --- the number of samples should typically be significantly\n    larger than the number of random variables being analyzed in\n    order to get good estimates of the correlations between these\n    variables.\n\n    Typical usage is ::\n\n        import gvar as gv\n\n        s = gv.dataset.svd_diagnosis(dataset)\n        avgdata = gv.svd(s.avgdata, svdcut=s.svdcut)\n        s.plot_ratio(show=True)\n\n    where the defective part of the correlation matrix is corrected by\n    applying an SVD cut to the averaged data. A plot showing the ratio\n    of bootstrapped eigenvalues to the actual eigenvalues is displayed\n    by the ``s.plot_ratio`` command.\n\n    Args:\n        dataset: List of random arrays or a dictionary\n            (e.g., :class:`gvar.dataset.Dataset`) whose values are lists\n            of random numbers or random arrays. Alternatively it can\n            be a tuple ``(g, Ns)`` where: ``g`` is an array of\n            |GVar|\\s or a dictionary whose values are |GVar|\\s or\n            arrays of |GVar|\\s; and ``Ns`` is the number of random\n            samples. Then the list of random data that is analyzed is\n            created is created using ``gvar.raniter(g, n=Ns)``.\n\n        nbstrap: Number of bootstrap copies used (default is 50).\n\n        mode""ls: For use in conjunction with :class:`lsqfit.MultiFitter`;\n            ignored when not specified. When specified, it is a list of multi-\n            fitter models used to specify which parts of the data are being\n            analyzed. The correlation matrix is restricted to the data\n            specified by the models and the data returned are \"processed data\"\n            for use with a multi-fitter using keyword ``pdata`` rather than\n            ``data``. Ignored if keyword ``process_datasets`` is specified.\n\n        process_datasets: Function that converts datasets into averaged\n            data. Function :func:`gvar.dataset.avg_data` is used if\n            set equal to ``None`` (default).\n\n        mincut: Minimum SVD cut (default 1e-12).\n\n    The main attributes are:\n\n    Attributes:\n        svdcut: SVD cut for bad eigenvalues in correlation matrix.\n        eps: ``eps`` corresponding to ``svdcut``, for use in :func:`gvar.regulate`.\n        avgdata: Averaged data (``gvar.dataset.avg_data(dataset)``).\n        val: Eigenvalues of the correlation matrix.\n        bsval: Bootstrap average of correlation matrix eigenvalues.\n        nmod: Number of eigenmodes modified by SVD cut ``svdcut``.\n    ";
 static const char __pyx_k_Dictionary_for_collecting_rando[] = " Dictionary for collecting random data.\n\n    A :class:`gvar.dataset.Dataset` is an ordered dictionary whose values\n    represent collections of random samples. Each value is  a :mod:`numpy`\n    array whose first index labels the random  sample. Random samples can be\n    numbers or arrays of numbers. The keys identify the quantity being\n    sampled.\n\n    A ``Dataset`` can be assembled piece by piece, as random data is\n    accumulated, or it can be read from a file. Consider a situation\n    where there are four random values for a scalar ``s`` and\n    four random values for vector ``v``. These can be collected as\n    follows::\n\n        >>> dset = Dataset()\n        >>> dset.append(s=1.1, v=[12.2, 20.6])\n        >>> dset.append(s=0.8, v=[14.1, 19.2])\n        >>> dset.append(s=0.95, v=[10.3, 19.7])\n        >>> dset.append(s=0.91, v=[8.2, 21.0])\n        >>> print(dset['s'])       # 4 random values of s\n        [ 1.1, 0.8, 0.95, 0.91]\n        >>> print(dset['v'])       # 4 random vector-values of v\n        [array([ 12.2,  20.6]), array([ 14.1,  19.2]), array([ 10.3,  19.7]), array([  8.2,  21. ])]\n\n    The argument to ``dset.append()`` can also be a dictionary: for example,\n    ``dd = dict(s=1.1,v=[12.2,20.6]); dset.append(dd)`` is equivalent to the\n    first ``append`` statement above. One can also append data key-by-key: for\n    example, ``dset.append('s',1.1); dset.append('v',[12.2,20.6])`` is\n    equivalent to the first ``append`` in the example above.\n\n    Use ``extend`` in place of ``append`` to add data in batches: for\n    example, ::\n\n        >>> dset = Dataset()\n        >>> dset.extend(s=[1.1, 0.8], v=[[12.2, 20.6], [14.1, 19.2]])\n        >>> dset.extend(s=[0.95, 0.91], v=[[10.3, 19.7],[8.2, 21.0]])\n        >>> print(dset['s'])       # 4 random values of s\n        [ 1.1, 0.8, 0.95, 0.91]\n\n    gives the same dataset as the first example above.\n\n    The same ``Dataset`` can also be created from a text file named\n    ``'dataf""ile'`` with the following contents::\n\n        # file: datafile\n        s 1.1\n        v [12.2, 20.6]\n        s 0.8\n        v [14.1, 19.2]\n        s 0.95\n        v [10.3, 19.7]\n        s 0.91\n        v [8.2, 21.0]\n\n    Here each line consists of a key  followed by a new random sample for that\n    key. Lines that begin with ``#`` are ignored. The file is  read using::\n\n        >>> dset = Dataset('datafile')\n        >>> print(dset['s'])\n        [ 1.1, 0.8, 0.95, 0.91]\n\n    Data can be binned while reading it in, which might be useful if\n    the data set is huge or if correlations are a concern.\n    To bin the data contained in file ``datafile`` in\n    bins of bin size 2 we use::\n\n        >>> dset = Dataset('datafile', binsize=2)\n        >>> print(dset['s'])\n        [0.95, 0.93]\n\n    The keys read from a data file are restricted to those listed in keyword\n    ``keys`` and those that are matched (or partially matched) by regular\n    expression ``grep`` if one or other of these is specified: for\n    example, ::\n\n        >>> dset = Dataset('datafile')\n        >>> print([k for k in dset])\n        ['s', 'v']\n        >>> dset = Dataset('datafile', keys=['v'])\n        >>> print([k for k in dset])\n        ['v']\n        >>> dset = Dataset('datafile', grep='[^v]')\n        >>> print([k for k in dset])\n        ['s']\n        >>> dset = Dataset('datafile', keys=['v'], grep='[^v]')\n        >>> print([k for k in dset])\n        []\n\n    In addition to text files, hdf5 files can also be read (provided\n    module :mod:`h5py` is available): for example, ::\n\n        >>> dset = Dataset('datafile.h5', h5group='/mcdata')\n\n    reads the hdf5 datasets in hdf5 group ``'/mcdata'``. An hdf5\n    equivalent to the text file above would contain two groups,\n    one with key ``'s'`` that is a one-dimensional array with shape (4,),\n    and another with key ``'v'`` that is a two-dimensional array\n    with shape (4, 2):\n\n        >>> import h5py\n      ""  >>> for v in h5py.File('datafile.h5')['/mcdata'].values():\n        ...     print(v)\n        <HDF5 dataset \"s\": shape (4,), type \"<f8\">\n        <HDF5 dataset \"v\": shape (4, 2), type \"<f8\">\n\n    Finally, :class:`Dataset`\\s can also be constructed from other\n    dictionaries (including other :class:`Dataset`\\s), or lists of key-data\n    tuples. For example, ::\n\n        >>> dset = Dataset('datafile')\n        >>> dset_binned = Dataset(dset, binsize=2)\n        >>> dset_v = Dataset(dset, keys=['v'])\n\n    reads data from file ``'datafile'`` into :class:`Dataset` ``dset``, and\n    then creates a new :class:`Dataset` with the data binned\n    (``dset_binned``), and another that only contains the data with key\n    ``'v'`` (``dset_v``).\n\n    Args:\n        inputdata (str or list or dictionary): If ``inputdata`` is a string,\n            it is the name of a file containing datasets. Two formats are\n            supported. If the filename ends in '.h5', the file is in hdf5\n            format,  with datasets that are :mod:`numpy` arrays whose first\n            index labels the random sample.\n\n            The other file format is a text file where each line consists of\n            a key followed by a number or array of numbers representing a new\n            random sample associated  with that key. Lines beginning with\n            ``#`` are comments. A list of text file names can also be\n            supplied, and text files can be compressed (with names ending in\n            ``.gz`` or ``.bz2``).\n\n            If ``inputdata`` is a dictionary or a list of (key,value) tuples,\n            its keys and values are copied into the dataset. Its values should\n            be arrays whose first index labels the random sample.\n        binsize (int): Bin the random samples in bins of size ``binsize``.\n            Default value is ``binsize=1`` (*i.e.*, no binning).\n        grep (str or ``None``): If not ``None``, only keys that match or\n            ""partially match regular expression ``grep`` are retained in\n            the data set. Keys that don't match are ignored. Default is\n            ``grep=None``.\n        keys (list): List of keys to retain in data set. Keys that are not\n            in the list are ignored. Default is ``keys=None`` which implies\n            that all keys are kept.\n        h5group (str or list): Address within the hdf5 file identified by\n            ``inputdata`` that contains the relevant datasets. Every\n            hdf5 dataset in group ``h5group`` is\n            read into the dataset, with the same key as in ``h5group``.\n            Default is the top group in the file: ``h5group='/'``.\n            ``h5group`` can also be a list of groups, in which case\n            datasets from all of the groups are read.\n    ";
 static const char __pyx_k_Merge_lists_of_random_data_acco[] = " Merge lists of random data according to ``template``.\n\n        ``template`` is an array of keys in the dataset, where the shapes\n        of ``self[k]`` are the same for all keys ``k`` in ``template``.\n        ``self.arrayzip(template)`` merges the lists of random\n        numbers/arrays associated with these keys to create a new list of\n        (merged) random arrays whose layout is specified by ``template``:\n        for example, ::\n\n            >>> d = Dataset()\n            >>> d.append(a=1,b=10)\n            >>> d.append(a=2,b=20)\n            >>> d.append(a=3,b=30)\n            >>> print(d)            # three random samples each for a and b\n            {'a': [1.0, 2.0, 3.0], 'b': [10.0, 20.0, 30.0]}\n            >>> # merge into list of 2-vectors:\n            >>> print(d.arrayzip(['a','b']))\n            [[  1.  10.]\n             [  2.  20.]\n             [  3.  30.]]\n            >>> # merge into list of (symmetric) 2x2 matrices:\n            >>> print(d.arrayzip([['b','a'],['a','b']]))\n            [[[ 10.   1.]\n              [  1.  10.]]\n\n             [[ 20.   2.]\n              [  2.  20.]]\n\n             [[ 30.   3.]\n              [  3.  30.]]]\n\n        The number of samples in each merged result is the same as the\n        number samples for each key (here 3). The keys used in this example\n        represent scalar quantities; in general, they could be either\n        scalars or arrays (of any shape, so long as all have the same\n        shape).\n        ";
 static const char __pyx_k_Need_matplotlib_library_to_make[] = "Need matplotlib library to make plots";
@@ -2605,6 +2606,7 @@ static PyObject *__pyx_n_s_empty;
 static PyObject *__pyx_n_s_encoding;
 static PyObject *__pyx_n_s_enter;
 static PyObject *__pyx_n_s_enumerate;
+static PyObject *__pyx_n_s_eps;
 static PyObject *__pyx_n_s_errorbar;
 static PyObject *__pyx_n_s_eval;
 static PyObject *__pyx_n_s_evalcorr;
@@ -15305,7 +15307,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_7Dataset_16arrayzip(CYTHON_UNUSED PyObj
   return __pyx_r;
 }
 
-/* "gvar/dataset.pyx":966
+/* "gvar/dataset.pyx":967
  *         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):             # <<<<<<<<<<<<<<
@@ -15361,7 +15363,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_1__init__(PyObject *__p
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dataset)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, 1); __PYX_ERR(0, 966, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, 1); __PYX_ERR(0, 967, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -15389,7 +15391,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_1__init__(PyObject *__p
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 966, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 967, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -15416,7 +15418,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_1__init__(PyObject *__p
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 966, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 967, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("gvar.dataset.svd_diagnosis.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -15429,7 +15431,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_1__init__(PyObject *__p
   return __pyx_r;
 }
 
-/* "gvar/dataset.pyx":982
+/* "gvar/dataset.pyx":983
  *             except:
  *                 raise ValueError('Need lsqfit module to use models.')
  *             def avg_data(dset, models=models):             # <<<<<<<<<<<<<<
@@ -15444,12 +15446,12 @@ static PyObject *__pyx_pf_4gvar_7dataset_15__defaults__(CYTHON_UNUSED PyObject *
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__defaults__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 982, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 983, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_self)->__pyx_arg_models);
   __Pyx_GIVEREF(__Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_self)->__pyx_arg_models);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_self)->__pyx_arg_models);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 982, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 983, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
@@ -15511,7 +15513,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_8__init___1avg_data(PyO
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "avg_data") < 0)) __PYX_ERR(0, 982, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "avg_data") < 0)) __PYX_ERR(0, 983, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -15527,7 +15529,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_8__init___1avg_data(PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("avg_data", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 982, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("avg_data", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 983, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("gvar.dataset.svd_diagnosis.__init__.avg_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -15554,7 +15556,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_8__init___avg_data(PyOb
   __pyx_outer_scope = (struct __pyx_obj_4gvar_7dataset___pyx_scope_struct_8___init__ *) __Pyx_CyFunction_GetClosure(__pyx_self);
   __pyx_cur_scope = __pyx_outer_scope;
 
-  /* "gvar/dataset.pyx":983
+  /* "gvar/dataset.pyx":984
  *                 raise ValueError('Need lsqfit module to use models.')
  *             def avg_data(dset, models=models):
  *                 return lsqfit.MultiFitter.process_dataset(dset, models)             # <<<<<<<<<<<<<<
@@ -15562,10 +15564,10 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_8__init___avg_data(PyOb
  *         self.avgdata = avgdata
  */
   __Pyx_XDECREF(__pyx_r);
-  if (unlikely(!__pyx_cur_scope->__pyx_v_lsqfit)) { __Pyx_RaiseClosureNameError("lsqfit"); __PYX_ERR(0, 983, __pyx_L1_error) }
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_lsqfit, __pyx_n_s_MultiFitter); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 983, __pyx_L1_error)
+  if (unlikely(!__pyx_cur_scope->__pyx_v_lsqfit)) { __Pyx_RaiseClosureNameError("lsqfit"); __PYX_ERR(0, 984, __pyx_L1_error) }
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_lsqfit, __pyx_n_s_MultiFitter); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 984, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_process_dataset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 983, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_process_dataset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 984, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -15583,7 +15585,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_8__init___avg_data(PyOb
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_dset, __pyx_v_models};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 983, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 984, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
@@ -15591,13 +15593,13 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_8__init___avg_data(PyOb
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_dset, __pyx_v_models};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 983, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 984, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 983, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 984, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (__pyx_t_2) {
       __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
@@ -15608,7 +15610,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_8__init___avg_data(PyOb
     __Pyx_INCREF(__pyx_v_models);
     __Pyx_GIVEREF(__pyx_v_models);
     PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_v_models);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 983, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 984, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
@@ -15617,7 +15619,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_8__init___avg_data(PyOb
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "gvar/dataset.pyx":982
+  /* "gvar/dataset.pyx":983
  *             except:
  *                 raise ValueError('Need lsqfit module to use models.')
  *             def avg_data(dset, models=models):             # <<<<<<<<<<<<<<
@@ -15639,7 +15641,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_8__init___avg_data(PyOb
   return __pyx_r;
 }
 
-/* "gvar/dataset.pyx":966
+/* "gvar/dataset.pyx":967
  *         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):             # <<<<<<<<<<<<<<
@@ -15686,13 +15688,13 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_4gvar_7dataset___pyx_scope_struct_8___init__ *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 966, __pyx_L1_error)
+    __PYX_ERR(0, 967, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
   __Pyx_INCREF(__pyx_v_dataset);
 
-  /* "gvar/dataset.pyx":967
+  /* "gvar/dataset.pyx":968
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):
  *         if isinstance(dataset, tuple):             # <<<<<<<<<<<<<<
@@ -15703,7 +15705,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "gvar/dataset.pyx":968
+    /* "gvar/dataset.pyx":969
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):
  *         if isinstance(dataset, tuple):
  *             data, ns = dataset             # <<<<<<<<<<<<<<
@@ -15716,7 +15718,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 968, __pyx_L1_error)
+        __PYX_ERR(0, 969, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -15729,21 +15731,21 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       __Pyx_INCREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_t_4);
       #else
-      __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 968, __pyx_L1_error)
+      __pyx_t_3 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 969, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 968, __pyx_L1_error)
+      __pyx_t_4 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 969, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       #endif
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_5 = PyObject_GetIter(__pyx_v_dataset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 968, __pyx_L1_error)
+      __pyx_t_5 = PyObject_GetIter(__pyx_v_dataset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 969, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_6 = Py_TYPE(__pyx_t_5)->tp_iternext;
       index = 0; __pyx_t_3 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_3)) goto __pyx_L4_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_3);
       index = 1; __pyx_t_4 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_4)) goto __pyx_L4_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_4);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(0, 968, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(0, 969, __pyx_L1_error)
       __pyx_t_6 = NULL;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       goto __pyx_L5_unpacking_done;
@@ -15751,7 +15753,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_6 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 968, __pyx_L1_error)
+      __PYX_ERR(0, 969, __pyx_L1_error)
       __pyx_L5_unpacking_done:;
     }
     __pyx_v_data = __pyx_t_3;
@@ -15759,19 +15761,19 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __pyx_v_ns = __pyx_t_4;
     __pyx_t_4 = 0;
 
-    /* "gvar/dataset.pyx":969
+    /* "gvar/dataset.pyx":970
  *         if isinstance(dataset, tuple):
  *             data, ns = dataset
  *             tset = _gvar.dataset.Dataset()             # <<<<<<<<<<<<<<
  *             for d in _gvar.raniter(data, n=ns):
  *                 tset.append(d)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_gvar); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 969, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_gvar); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 970, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dataset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 969, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dataset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 970, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_Dataset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 969, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_Dataset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 970, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_5 = NULL;
@@ -15786,33 +15788,33 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     }
     __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 969, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 970, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_tset = __pyx_t_4;
     __pyx_t_4 = 0;
 
-    /* "gvar/dataset.pyx":970
+    /* "gvar/dataset.pyx":971
  *             data, ns = dataset
  *             tset = _gvar.dataset.Dataset()
  *             for d in _gvar.raniter(data, n=ns):             # <<<<<<<<<<<<<<
  *                 tset.append(d)
  *             dataset = tset
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_gvar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 970, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_gvar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 971, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_raniter); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 970, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_raniter); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 971, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 970, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 971, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_INCREF(__pyx_v_data);
     __Pyx_GIVEREF(__pyx_v_data);
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_v_data);
-    __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 970, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 971, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_n, __pyx_v_ns) < 0) __PYX_ERR(0, 970, __pyx_L1_error)
-    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 970, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_n, __pyx_v_ns) < 0) __PYX_ERR(0, 971, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 971, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -15821,9 +15823,9 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       __pyx_t_5 = __pyx_t_7; __Pyx_INCREF(__pyx_t_5); __pyx_t_8 = 0;
       __pyx_t_9 = NULL;
     } else {
-      __pyx_t_8 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 970, __pyx_L1_error)
+      __pyx_t_8 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 971, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_9 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 970, __pyx_L1_error)
+      __pyx_t_9 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 971, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     for (;;) {
@@ -15831,17 +15833,17 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
         if (likely(PyList_CheckExact(__pyx_t_5))) {
           if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_5)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_7 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 970, __pyx_L1_error)
+          __pyx_t_7 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 971, __pyx_L1_error)
           #else
-          __pyx_t_7 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 970, __pyx_L1_error)
+          __pyx_t_7 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 971, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           #endif
         } else {
           if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_5)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 970, __pyx_L1_error)
+          __pyx_t_7 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_7); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 971, __pyx_L1_error)
           #else
-          __pyx_t_7 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 970, __pyx_L1_error)
+          __pyx_t_7 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 971, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           #endif
         }
@@ -15851,7 +15853,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 970, __pyx_L1_error)
+            else __PYX_ERR(0, 971, __pyx_L1_error)
           }
           break;
         }
@@ -15860,16 +15862,16 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       __Pyx_XDECREF_SET(__pyx_v_d, __pyx_t_7);
       __pyx_t_7 = 0;
 
-      /* "gvar/dataset.pyx":971
+      /* "gvar/dataset.pyx":972
  *             tset = _gvar.dataset.Dataset()
  *             for d in _gvar.raniter(data, n=ns):
  *                 tset.append(d)             # <<<<<<<<<<<<<<
  *             dataset = tset
  *         if process_dataset is not None:
  */
-      __pyx_t_10 = __Pyx_PyObject_Append(__pyx_v_tset, __pyx_v_d); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 971, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyObject_Append(__pyx_v_tset, __pyx_v_d); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 972, __pyx_L1_error)
 
-      /* "gvar/dataset.pyx":970
+      /* "gvar/dataset.pyx":971
  *             data, ns = dataset
  *             tset = _gvar.dataset.Dataset()
  *             for d in _gvar.raniter(data, n=ns):             # <<<<<<<<<<<<<<
@@ -15879,7 +15881,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     }
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "gvar/dataset.pyx":972
+    /* "gvar/dataset.pyx":973
  *             for d in _gvar.raniter(data, n=ns):
  *                 tset.append(d)
  *             dataset = tset             # <<<<<<<<<<<<<<
@@ -15889,7 +15891,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __Pyx_INCREF(__pyx_v_tset);
     __Pyx_DECREF_SET(__pyx_v_dataset, __pyx_v_tset);
 
-    /* "gvar/dataset.pyx":967
+    /* "gvar/dataset.pyx":968
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):
  *         if isinstance(dataset, tuple):             # <<<<<<<<<<<<<<
@@ -15898,7 +15900,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  */
   }
 
-  /* "gvar/dataset.pyx":973
+  /* "gvar/dataset.pyx":974
  *                 tset.append(d)
  *             dataset = tset
  *         if process_dataset is not None:             # <<<<<<<<<<<<<<
@@ -15909,7 +15911,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "gvar/dataset.pyx":974
+    /* "gvar/dataset.pyx":975
  *             dataset = tset
  *         if process_dataset is not None:
  *             avg_data = process_dataset             # <<<<<<<<<<<<<<
@@ -15919,7 +15921,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __Pyx_INCREF(__pyx_v_process_dataset);
     __pyx_v_avg_data = __pyx_v_process_dataset;
 
-    /* "gvar/dataset.pyx":973
+    /* "gvar/dataset.pyx":974
  *                 tset.append(d)
  *             dataset = tset
  *         if process_dataset is not None:             # <<<<<<<<<<<<<<
@@ -15929,7 +15931,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     goto __pyx_L8;
   }
 
-  /* "gvar/dataset.pyx":975
+  /* "gvar/dataset.pyx":976
  *         if process_dataset is not None:
  *             avg_data = process_dataset
  *         elif models is None or models == []:             # <<<<<<<<<<<<<<
@@ -15943,35 +15945,35 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __pyx_t_1 = __pyx_t_11;
     goto __pyx_L9_bool_binop_done;
   }
-  __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 975, __pyx_L1_error)
+  __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 976, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = PyObject_RichCompare(__pyx_v_models, __pyx_t_5, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 975, __pyx_L1_error)
+  __pyx_t_7 = PyObject_RichCompare(__pyx_v_models, __pyx_t_5, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 976, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 975, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 976, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_t_1 = __pyx_t_11;
   __pyx_L9_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "gvar/dataset.pyx":976
+    /* "gvar/dataset.pyx":977
  *             avg_data = process_dataset
  *         elif models is None or models == []:
  *             avg_data = _gvar.dataset.avg_data             # <<<<<<<<<<<<<<
  *         else:
  *             try:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_gvar); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 976, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_gvar); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 977, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_dataset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 976, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_dataset); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 977, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_avg_data); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 976, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_avg_data); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 977, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_v_avg_data = __pyx_t_7;
     __pyx_t_7 = 0;
 
-    /* "gvar/dataset.pyx":975
+    /* "gvar/dataset.pyx":976
  *         if process_dataset is not None:
  *             avg_data = process_dataset
  *         elif models is None or models == []:             # <<<<<<<<<<<<<<
@@ -15981,7 +15983,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     goto __pyx_L8;
   }
 
-  /* "gvar/dataset.pyx":978
+  /* "gvar/dataset.pyx":979
  *             avg_data = _gvar.dataset.avg_data
  *         else:
  *             try:             # <<<<<<<<<<<<<<
@@ -15998,20 +16000,20 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       __Pyx_XGOTREF(__pyx_t_14);
       /*try:*/ {
 
-        /* "gvar/dataset.pyx":979
+        /* "gvar/dataset.pyx":980
  *         else:
  *             try:
  *                 import lsqfit             # <<<<<<<<<<<<<<
  *             except:
  *                 raise ValueError('Need lsqfit module to use models.')
  */
-        __pyx_t_7 = __Pyx_Import(__pyx_n_s_lsqfit, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 979, __pyx_L11_error)
+        __pyx_t_7 = __Pyx_Import(__pyx_n_s_lsqfit, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 980, __pyx_L11_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_7);
         __pyx_cur_scope->__pyx_v_lsqfit = __pyx_t_7;
         __pyx_t_7 = 0;
 
-        /* "gvar/dataset.pyx":978
+        /* "gvar/dataset.pyx":979
  *             avg_data = _gvar.dataset.avg_data
  *         else:
  *             try:             # <<<<<<<<<<<<<<
@@ -16029,7 +16031,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "gvar/dataset.pyx":980
+      /* "gvar/dataset.pyx":981
  *             try:
  *                 import lsqfit
  *             except:             # <<<<<<<<<<<<<<
@@ -16038,27 +16040,27 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  */
       /*except:*/ {
         __Pyx_AddTraceback("gvar.dataset.svd_diagnosis.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-        if (__Pyx_GetException(&__pyx_t_7, &__pyx_t_5, &__pyx_t_4) < 0) __PYX_ERR(0, 980, __pyx_L13_except_error)
+        if (__Pyx_GetException(&__pyx_t_7, &__pyx_t_5, &__pyx_t_4) < 0) __PYX_ERR(0, 981, __pyx_L13_except_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GOTREF(__pyx_t_4);
 
-        /* "gvar/dataset.pyx":981
+        /* "gvar/dataset.pyx":982
  *                 import lsqfit
  *             except:
  *                 raise ValueError('Need lsqfit module to use models.')             # <<<<<<<<<<<<<<
  *             def avg_data(dset, models=models):
  *                 return lsqfit.MultiFitter.process_dataset(dset, models)
  */
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 981, __pyx_L13_except_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__24, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 982, __pyx_L13_except_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_Raise(__pyx_t_3, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __PYX_ERR(0, 981, __pyx_L13_except_error)
+        __PYX_ERR(0, 982, __pyx_L13_except_error)
       }
       __pyx_L13_except_error:;
 
-      /* "gvar/dataset.pyx":978
+      /* "gvar/dataset.pyx":979
  *             avg_data = _gvar.dataset.avg_data
  *         else:
  *             try:             # <<<<<<<<<<<<<<
@@ -16073,16 +16075,16 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       __pyx_L16_try_end:;
     }
 
-    /* "gvar/dataset.pyx":982
+    /* "gvar/dataset.pyx":983
  *             except:
  *                 raise ValueError('Need lsqfit module to use models.')
  *             def avg_data(dset, models=models):             # <<<<<<<<<<<<<<
  *                 return lsqfit.MultiFitter.process_dataset(dset, models)
  *         avgdata = avg_data(dataset)
  */
-    __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_7dataset_13svd_diagnosis_8__init___1avg_data, 0, __pyx_n_s_svd_diagnosis___init___locals_av, ((PyObject*)__pyx_cur_scope), __pyx_n_s_gvar_dataset, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 982, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_7dataset_13svd_diagnosis_8__init___1avg_data, 0, __pyx_n_s_svd_diagnosis___init___locals_av, ((PyObject*)__pyx_cur_scope), __pyx_n_s_gvar_dataset, __pyx_d, ((PyObject *)__pyx_codeobj__26)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 983, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (!__Pyx_CyFunction_InitDefaults(__pyx_t_4, sizeof(__pyx_defaults), 1)) __PYX_ERR(0, 982, __pyx_L1_error)
+    if (!__Pyx_CyFunction_InitDefaults(__pyx_t_4, sizeof(__pyx_defaults), 1)) __PYX_ERR(0, 983, __pyx_L1_error)
     __Pyx_INCREF(__pyx_v_models);
     __Pyx_CyFunction_Defaults(__pyx_defaults, __pyx_t_4)->__pyx_arg_models = __pyx_v_models;
     __Pyx_GIVEREF(__pyx_v_models);
@@ -16092,7 +16094,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   }
   __pyx_L8:;
 
-  /* "gvar/dataset.pyx":984
+  /* "gvar/dataset.pyx":985
  *             def avg_data(dset, models=models):
  *                 return lsqfit.MultiFitter.process_dataset(dset, models)
  *         avgdata = avg_data(dataset)             # <<<<<<<<<<<<<<
@@ -16112,42 +16114,42 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   }
   __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_v_dataset) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_dataset);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 984, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 985, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_avgdata = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "gvar/dataset.pyx":985
+  /* "gvar/dataset.pyx":986
  *                 return lsqfit.MultiFitter.process_dataset(dset, models)
  *         avgdata = avg_data(dataset)
  *         self.avgdata = avgdata             # <<<<<<<<<<<<<<
  *         self.mincut = mincut
  *         if hasattr(avgdata, 'keys'):
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_avgdata, __pyx_v_avgdata) < 0) __PYX_ERR(0, 985, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_avgdata, __pyx_v_avgdata) < 0) __PYX_ERR(0, 986, __pyx_L1_error)
 
-  /* "gvar/dataset.pyx":986
+  /* "gvar/dataset.pyx":987
  *         avgdata = avg_data(dataset)
  *         self.avgdata = avgdata
  *         self.mincut = mincut             # <<<<<<<<<<<<<<
  *         if hasattr(avgdata, 'keys'):
  *             isdict = True
  */
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_mincut, __pyx_v_mincut) < 0) __PYX_ERR(0, 986, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_mincut, __pyx_v_mincut) < 0) __PYX_ERR(0, 987, __pyx_L1_error)
 
-  /* "gvar/dataset.pyx":987
+  /* "gvar/dataset.pyx":988
  *         self.avgdata = avgdata
  *         self.mincut = mincut
  *         if hasattr(avgdata, 'keys'):             # <<<<<<<<<<<<<<
  *             isdict = True
  *             avgdata = avgdata.buf
  */
-  __pyx_t_1 = __Pyx_HasAttr(__pyx_v_avgdata, __pyx_n_s_keys); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(0, 987, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_HasAttr(__pyx_v_avgdata, __pyx_n_s_keys); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(0, 988, __pyx_L1_error)
   __pyx_t_11 = (__pyx_t_1 != 0);
   if (__pyx_t_11) {
 
-    /* "gvar/dataset.pyx":988
+    /* "gvar/dataset.pyx":989
  *         self.mincut = mincut
  *         if hasattr(avgdata, 'keys'):
  *             isdict = True             # <<<<<<<<<<<<<<
@@ -16156,19 +16158,19 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  */
     __pyx_v_isdict = 1;
 
-    /* "gvar/dataset.pyx":989
+    /* "gvar/dataset.pyx":990
  *         if hasattr(avgdata, 'keys'):
  *             isdict = True
  *             avgdata = avgdata.buf             # <<<<<<<<<<<<<<
  *         elif numpy.shape(avgdata) == ():
  *             # scalar --- no correlation matrix
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_avgdata, __pyx_n_s_buf); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 989, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_avgdata, __pyx_n_s_buf); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 990, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF_SET(__pyx_v_avgdata, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "gvar/dataset.pyx":987
+    /* "gvar/dataset.pyx":988
  *         self.avgdata = avgdata
  *         self.mincut = mincut
  *         if hasattr(avgdata, 'keys'):             # <<<<<<<<<<<<<<
@@ -16178,16 +16180,16 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     goto __pyx_L19;
   }
 
-  /* "gvar/dataset.pyx":990
+  /* "gvar/dataset.pyx":991
  *             isdict = True
  *             avgdata = avgdata.buf
  *         elif numpy.shape(avgdata) == ():             # <<<<<<<<<<<<<<
  *             # scalar --- no correlation matrix
  *             self.val = numpy.array([avgdata.var])
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_numpy); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 990, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_numpy); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 991, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_shape); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 990, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_shape); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 991, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
@@ -16202,30 +16204,30 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   }
   __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_5, __pyx_v_avgdata) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_avgdata);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 990, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 991, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyObject_RichCompare(__pyx_t_4, __pyx_empty_tuple, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 990, __pyx_L1_error)
+  __pyx_t_7 = PyObject_RichCompare(__pyx_t_4, __pyx_empty_tuple, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 991, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 990, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 991, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   if (__pyx_t_11) {
 
-    /* "gvar/dataset.pyx":992
+    /* "gvar/dataset.pyx":993
  *         elif numpy.shape(avgdata) == ():
  *             # scalar --- no correlation matrix
  *             self.val = numpy.array([avgdata.var])             # <<<<<<<<<<<<<<
  *             self.bsval = self.val
  *             self.svdcut = 1.
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_numpy); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 992, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_numpy); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 993, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 992, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_array); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 993, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_avgdata, __pyx_n_s_var); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 992, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_avgdata, __pyx_n_s_var); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 993, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 992, __pyx_L1_error)
+    __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 993, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_4);
     PyList_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
@@ -16243,45 +16245,54 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __pyx_t_7 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 992, __pyx_L1_error)
+    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 993, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_val, __pyx_t_7) < 0) __PYX_ERR(0, 992, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_val, __pyx_t_7) < 0) __PYX_ERR(0, 993, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "gvar/dataset.pyx":993
+    /* "gvar/dataset.pyx":994
  *             # scalar --- no correlation matrix
  *             self.val = numpy.array([avgdata.var])
  *             self.bsval = self.val             # <<<<<<<<<<<<<<
  *             self.svdcut = 1.
  *             self.nmod = 0
  */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 993, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 994, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_bsval, __pyx_t_7) < 0) __PYX_ERR(0, 993, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_bsval, __pyx_t_7) < 0) __PYX_ERR(0, 994, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "gvar/dataset.pyx":994
+    /* "gvar/dataset.pyx":995
  *             self.val = numpy.array([avgdata.var])
  *             self.bsval = self.val
  *             self.svdcut = 1.             # <<<<<<<<<<<<<<
  *             self.nmod = 0
- *             return
+ *             self.eps = 1.
  */
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_float_1_) < 0) __PYX_ERR(0, 994, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_float_1_) < 0) __PYX_ERR(0, 995, __pyx_L1_error)
 
-    /* "gvar/dataset.pyx":995
+    /* "gvar/dataset.pyx":996
  *             self.bsval = self.val
  *             self.svdcut = 1.
  *             self.nmod = 0             # <<<<<<<<<<<<<<
+ *             self.eps = 1.
+ *             return
+ */
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_nmod, __pyx_int_0) < 0) __PYX_ERR(0, 996, __pyx_L1_error)
+
+    /* "gvar/dataset.pyx":997
+ *             self.svdcut = 1.
+ *             self.nmod = 0
+ *             self.eps = 1.             # <<<<<<<<<<<<<<
  *             return
  *         else:
  */
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_nmod, __pyx_int_0) < 0) __PYX_ERR(0, 995, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_eps, __pyx_float_1_) < 0) __PYX_ERR(0, 997, __pyx_L1_error)
 
-    /* "gvar/dataset.pyx":996
- *             self.svdcut = 1.
+    /* "gvar/dataset.pyx":998
  *             self.nmod = 0
+ *             self.eps = 1.
  *             return             # <<<<<<<<<<<<<<
  *         else:
  *             isdict = False
@@ -16290,7 +16301,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "gvar/dataset.pyx":990
+    /* "gvar/dataset.pyx":991
  *             isdict = True
  *             avgdata = avgdata.buf
  *         elif numpy.shape(avgdata) == ():             # <<<<<<<<<<<<<<
@@ -16299,7 +16310,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  */
   }
 
-  /* "gvar/dataset.pyx":998
+  /* "gvar/dataset.pyx":1000
  *             return
  *         else:
  *             isdict = False             # <<<<<<<<<<<<<<
@@ -16311,21 +16322,21 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   }
   __pyx_L19:;
 
-  /* "gvar/dataset.pyx":999
+  /* "gvar/dataset.pyx":1001
  *         else:
  *             isdict = False
  *         self.val = _gvar.SVD(_gvar.evalcorr(avgdata)).val             # <<<<<<<<<<<<<<
  *         bsval_list = []
  *         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_gvar); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_gvar); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_SVD); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_SVD); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_gvar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_gvar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_evalcorr); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_evalcorr); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -16340,7 +16351,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   }
   __pyx_t_5 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_4, __pyx_v_avgdata) : __Pyx_PyObject_CallOneArg(__pyx_t_15, __pyx_v_avgdata);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 999, __pyx_L1_error)
+  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   __pyx_t_15 = NULL;
@@ -16356,51 +16367,51 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_7 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_15, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5);
   __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 999, __pyx_L1_error)
+  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 999, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_val, __pyx_t_3) < 0) __PYX_ERR(0, 999, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_val, __pyx_t_3) < 0) __PYX_ERR(0, 1001, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "gvar/dataset.pyx":1000
+  /* "gvar/dataset.pyx":1002
  *             isdict = False
  *         self.val = _gvar.SVD(_gvar.evalcorr(avgdata)).val
  *         bsval_list = []             # <<<<<<<<<<<<<<
  *         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):
  *             bsavgdata = avg_data(bsdata)
  */
-  __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1000, __pyx_L1_error)
+  __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1002, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_bsval_list = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "gvar/dataset.pyx":1001
+  /* "gvar/dataset.pyx":1003
  *         self.val = _gvar.SVD(_gvar.evalcorr(avgdata)).val
  *         bsval_list = []
  *         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):             # <<<<<<<<<<<<<<
  *             bsavgdata = avg_data(bsdata)
  *             if isdict:
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_gvar); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1001, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_gvar); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1003, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dataset); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1001, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dataset); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1003, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_bootstrap_iter); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1001, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_bootstrap_iter); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1003, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1001, __pyx_L1_error)
+  __pyx_t_7 = PyTuple_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1003, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_INCREF(__pyx_v_dataset);
   __Pyx_GIVEREF(__pyx_v_dataset);
   PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_v_dataset);
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1001, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1003, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_n, __pyx_v_nbstrap) < 0) __PYX_ERR(0, 1001, __pyx_L1_error)
-  __pyx_t_15 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, __pyx_t_5); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1001, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_n, __pyx_v_nbstrap) < 0) __PYX_ERR(0, 1003, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, __pyx_t_5); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1003, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -16409,9 +16420,9 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __pyx_t_5 = __pyx_t_15; __Pyx_INCREF(__pyx_t_5); __pyx_t_8 = 0;
     __pyx_t_9 = NULL;
   } else {
-    __pyx_t_8 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_15); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1001, __pyx_L1_error)
+    __pyx_t_8 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_15); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1003, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_9 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 1001, __pyx_L1_error)
+    __pyx_t_9 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 1003, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   for (;;) {
@@ -16419,17 +16430,17 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
       if (likely(PyList_CheckExact(__pyx_t_5))) {
         if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_5)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_15 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_15); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 1001, __pyx_L1_error)
+        __pyx_t_15 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_15); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 1003, __pyx_L1_error)
         #else
-        __pyx_t_15 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1001, __pyx_L1_error)
+        __pyx_t_15 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1003, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         #endif
       } else {
         if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_5)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_15 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_15); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 1001, __pyx_L1_error)
+        __pyx_t_15 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_8); __Pyx_INCREF(__pyx_t_15); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 1003, __pyx_L1_error)
         #else
-        __pyx_t_15 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1001, __pyx_L1_error)
+        __pyx_t_15 = PySequence_ITEM(__pyx_t_5, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1003, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         #endif
       }
@@ -16439,7 +16450,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 1001, __pyx_L1_error)
+          else __PYX_ERR(0, 1003, __pyx_L1_error)
         }
         break;
       }
@@ -16448,7 +16459,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __Pyx_XDECREF_SET(__pyx_v_bsdata, __pyx_t_15);
     __pyx_t_15 = 0;
 
-    /* "gvar/dataset.pyx":1002
+    /* "gvar/dataset.pyx":1004
  *         bsval_list = []
  *         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):
  *             bsavgdata = avg_data(bsdata)             # <<<<<<<<<<<<<<
@@ -16468,13 +16479,13 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     }
     __pyx_t_15 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_3, __pyx_v_bsdata) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_bsdata);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1002, __pyx_L1_error)
+    if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1004, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_XDECREF_SET(__pyx_v_bsavgdata, __pyx_t_15);
     __pyx_t_15 = 0;
 
-    /* "gvar/dataset.pyx":1003
+    /* "gvar/dataset.pyx":1005
  *         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):
  *             bsavgdata = avg_data(bsdata)
  *             if isdict:             # <<<<<<<<<<<<<<
@@ -16484,19 +16495,19 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __pyx_t_11 = (__pyx_v_isdict != 0);
     if (__pyx_t_11) {
 
-      /* "gvar/dataset.pyx":1004
+      /* "gvar/dataset.pyx":1006
  *             bsavgdata = avg_data(bsdata)
  *             if isdict:
  *                 bsavgdata = bsavgdata.buf             # <<<<<<<<<<<<<<
  *             bsval_list.append(_gvar.SVD(_gvar.evalcorr(bsavgdata)).val)
  *         self.bsval = _gvar.dataset.avg_data(bsval_list, bstrap=True)
  */
-      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_bsavgdata, __pyx_n_s_buf); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1004, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_bsavgdata, __pyx_n_s_buf); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1006, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF_SET(__pyx_v_bsavgdata, __pyx_t_15);
       __pyx_t_15 = 0;
 
-      /* "gvar/dataset.pyx":1003
+      /* "gvar/dataset.pyx":1005
  *         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):
  *             bsavgdata = avg_data(bsdata)
  *             if isdict:             # <<<<<<<<<<<<<<
@@ -16505,21 +16516,21 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  */
     }
 
-    /* "gvar/dataset.pyx":1005
+    /* "gvar/dataset.pyx":1007
  *             if isdict:
  *                 bsavgdata = bsavgdata.buf
  *             bsval_list.append(_gvar.SVD(_gvar.evalcorr(bsavgdata)).val)             # <<<<<<<<<<<<<<
  *         self.bsval = _gvar.dataset.avg_data(bsval_list, bstrap=True)
  *         # use heuristic to find recommended svdcut
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_gvar); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1005, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_gvar); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_SVD); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1005, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_SVD); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_gvar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1005, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_gvar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_evalcorr); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1005, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_evalcorr); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_t_4 = NULL;
@@ -16534,7 +16545,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     }
     __pyx_t_7 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_4, __pyx_v_bsavgdata) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_v_bsavgdata);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1005, __pyx_L1_error)
+    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
     __pyx_t_16 = NULL;
@@ -16550,16 +16561,16 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     __pyx_t_15 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_16, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_7);
     __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1005, __pyx_L1_error)
+    if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1005, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-    __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_bsval_list, __pyx_t_3); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 1005, __pyx_L1_error)
+    __pyx_t_10 = __Pyx_PyList_Append(__pyx_v_bsval_list, __pyx_t_3); if (unlikely(__pyx_t_10 == ((int)-1))) __PYX_ERR(0, 1007, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "gvar/dataset.pyx":1001
+    /* "gvar/dataset.pyx":1003
  *         self.val = _gvar.SVD(_gvar.evalcorr(avgdata)).val
  *         bsval_list = []
  *         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):             # <<<<<<<<<<<<<<
@@ -16569,50 +16580,50 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1006
+  /* "gvar/dataset.pyx":1008
  *                 bsavgdata = bsavgdata.buf
  *             bsval_list.append(_gvar.SVD(_gvar.evalcorr(bsavgdata)).val)
  *         self.bsval = _gvar.dataset.avg_data(bsval_list, bstrap=True)             # <<<<<<<<<<<<<<
  *         # use heuristic to find recommended svdcut
  *         ratio = _gvar.mean(self.bsval) / self.val
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_gvar); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_gvar); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1008, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_dataset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_dataset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1008, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_avg_data); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_avg_data); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1008, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1008, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_v_bsval_list);
   __Pyx_GIVEREF(__pyx_v_bsval_list);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_bsval_list);
-  __pyx_t_15 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1008, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  if (PyDict_SetItem(__pyx_t_15, __pyx_n_s_bstrap, Py_True) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_15); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1006, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_15, __pyx_n_s_bstrap, Py_True) < 0) __PYX_ERR(0, 1008, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_15); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1008, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_bsval, __pyx_t_7) < 0) __PYX_ERR(0, 1006, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_bsval, __pyx_t_7) < 0) __PYX_ERR(0, 1008, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "gvar/dataset.pyx":1008
+  /* "gvar/dataset.pyx":1010
  *         self.bsval = _gvar.dataset.avg_data(bsval_list, bstrap=True)
  *         # use heuristic to find recommended svdcut
  *         ratio = _gvar.mean(self.bsval) / self.val             # <<<<<<<<<<<<<<
  *         cuts = self.val / self.val[-1]
  *         chi_sig = (2. / self.avgdata.size) ** 0.5
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_gvar); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1008, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_gvar); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1010, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_mean); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1008, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_mean); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1010, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bsval); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1008, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bsval); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1010, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -16627,83 +16638,83 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_7 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_t_15) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_15);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1008, __pyx_L1_error)
+  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1010, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1008, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1010, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_15 = __Pyx_PyNumber_Divide(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1008, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyNumber_Divide(__pyx_t_7, __pyx_t_3); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1010, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ratio = __pyx_t_15;
   __pyx_t_15 = 0;
 
-  /* "gvar/dataset.pyx":1009
+  /* "gvar/dataset.pyx":1011
  *         # use heuristic to find recommended svdcut
  *         ratio = _gvar.mean(self.bsval) / self.val
  *         cuts = self.val / self.val[-1]             # <<<<<<<<<<<<<<
  *         chi_sig = (2. / self.avgdata.size) ** 0.5
  *         # 0) impose mincut
  */
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1009, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1011, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1009, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1011, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1009, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1011, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_15, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1009, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_15, __pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1011, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_cuts = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "gvar/dataset.pyx":1010
+  /* "gvar/dataset.pyx":1012
  *         ratio = _gvar.mean(self.bsval) / self.val
  *         cuts = self.val / self.val[-1]
  *         chi_sig = (2. / self.avgdata.size) ** 0.5             # <<<<<<<<<<<<<<
  *         # 0) impose mincut
  *         idx = numpy.where(
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_avgdata); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1010, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_avgdata); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1012, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_size); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1010, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_size); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1012, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyFloat_TrueDivideCObj(__pyx_float_2_, __pyx_t_7, 2., 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1010, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyFloat_TrueDivideCObj(__pyx_float_2_, __pyx_t_7, 2., 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1012, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyNumber_Power(__pyx_t_3, __pyx_float_0_5, Py_None); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1010, __pyx_L1_error)
+  __pyx_t_7 = PyNumber_Power(__pyx_t_3, __pyx_float_0_5, Py_None); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1012, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_chi_sig = __pyx_t_7;
   __pyx_t_7 = 0;
 
-  /* "gvar/dataset.pyx":1012
+  /* "gvar/dataset.pyx":1014
  *         chi_sig = (2. / self.avgdata.size) ** 0.5
  *         # 0) impose mincut
  *         idx = numpy.where(             # <<<<<<<<<<<<<<
  *             cuts > self.mincut
  *             )[0]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_numpy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1012, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_numpy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1014, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_where); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1012, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_where); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1014, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "gvar/dataset.pyx":1013
+  /* "gvar/dataset.pyx":1015
  *         # 0) impose mincut
  *         idx = numpy.where(
  *             cuts > self.mincut             # <<<<<<<<<<<<<<
  *             )[0]
  *         if len(idx) > 0:
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_mincut); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1013, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_mincut); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1015, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyObject_RichCompare(__pyx_v_cuts, __pyx_t_3, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1013, __pyx_L1_error)
+  __pyx_t_5 = PyObject_RichCompare(__pyx_v_cuts, __pyx_t_3, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1015, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_15))) {
@@ -16718,65 +16729,65 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_7 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_3, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_15, __pyx_t_5);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1012, __pyx_L1_error)
+  if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1014, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
 
-  /* "gvar/dataset.pyx":1014
+  /* "gvar/dataset.pyx":1016
  *         idx = numpy.where(
  *             cuts > self.mincut
  *             )[0]             # <<<<<<<<<<<<<<
  *         if len(idx) > 0:
  *             cuts = cuts[idx[0]:]
  */
-  __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_7, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1014, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_GetItemInt(__pyx_t_7, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1016, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_idx = __pyx_t_15;
   __pyx_t_15 = 0;
 
-  /* "gvar/dataset.pyx":1015
+  /* "gvar/dataset.pyx":1017
  *             cuts > self.mincut
  *             )[0]
  *         if len(idx) > 0:             # <<<<<<<<<<<<<<
  *             cuts = cuts[idx[0]:]
  *             ratio = ratio[idx[0]:]
  */
-  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1015, __pyx_L1_error)
+  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1017, __pyx_L1_error)
   __pyx_t_11 = ((__pyx_t_8 > 0) != 0);
   if (__pyx_t_11) {
 
-    /* "gvar/dataset.pyx":1016
+    /* "gvar/dataset.pyx":1018
  *             )[0]
  *         if len(idx) > 0:
  *             cuts = cuts[idx[0]:]             # <<<<<<<<<<<<<<
  *             ratio = ratio[idx[0]:]
  *         # 1) find last place that is 2 sig down
  */
-    __pyx_t_15 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1016, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1018, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
-    __pyx_t_7 = __Pyx_PyObject_GetSlice(__pyx_v_cuts, 0, 0, &__pyx_t_15, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1016, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetSlice(__pyx_v_cuts, 0, 0, &__pyx_t_15, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1018, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     __Pyx_DECREF_SET(__pyx_v_cuts, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "gvar/dataset.pyx":1017
+    /* "gvar/dataset.pyx":1019
  *         if len(idx) > 0:
  *             cuts = cuts[idx[0]:]
  *             ratio = ratio[idx[0]:]             # <<<<<<<<<<<<<<
  *         # 1) find last place that is 2 sig down
  *         idx = numpy.where(
  */
-    __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1017, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1019, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_15 = __Pyx_PyObject_GetSlice(__pyx_v_ratio, 0, 0, &__pyx_t_7, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1017, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_PyObject_GetSlice(__pyx_v_ratio, 0, 0, &__pyx_t_7, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1019, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF_SET(__pyx_v_ratio, __pyx_t_15);
     __pyx_t_15 = 0;
 
-    /* "gvar/dataset.pyx":1015
+    /* "gvar/dataset.pyx":1017
  *             cuts > self.mincut
  *             )[0]
  *         if len(idx) > 0:             # <<<<<<<<<<<<<<
@@ -16785,32 +16796,32 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  */
   }
 
-  /* "gvar/dataset.pyx":1019
+  /* "gvar/dataset.pyx":1021
  *             ratio = ratio[idx[0]:]
  *         # 1) find last place that is 2 sig down
  *         idx = numpy.where(             # <<<<<<<<<<<<<<
  *             ratio < 1. - 2 * chi_sig
  *             )[0]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_numpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1019, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_numpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1021, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_where); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1019, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_where); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1021, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "gvar/dataset.pyx":1020
+  /* "gvar/dataset.pyx":1022
  *         # 1) find last place that is 2 sig down
  *         idx = numpy.where(
  *             ratio < 1. - 2 * chi_sig             # <<<<<<<<<<<<<<
  *             )[0]
  *         if len(idx) > 0:
  */
-  __pyx_t_7 = PyNumber_Multiply(__pyx_int_2, __pyx_v_chi_sig); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1020, __pyx_L1_error)
+  __pyx_t_7 = PyNumber_Multiply(__pyx_int_2, __pyx_v_chi_sig); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1022, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_3 = __Pyx_PyFloat_SubtractCObj(__pyx_float_1_, __pyx_t_7, 1., 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1020, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyFloat_SubtractCObj(__pyx_float_1_, __pyx_t_7, 1., 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1022, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = PyObject_RichCompare(__pyx_v_ratio, __pyx_t_3, Py_LT); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1020, __pyx_L1_error)
+  __pyx_t_7 = PyObject_RichCompare(__pyx_v_ratio, __pyx_t_3, Py_LT); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1022, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -16825,65 +16836,65 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_15 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_3, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1019, __pyx_L1_error)
+  if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1021, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1021
+  /* "gvar/dataset.pyx":1023
  *         idx = numpy.where(
  *             ratio < 1. - 2 * chi_sig
  *             )[0]             # <<<<<<<<<<<<<<
  *         if len(idx) > 0:
  *             ratio = ratio[idx[-1]:]
  */
-  __pyx_t_5 = __Pyx_GetItemInt(__pyx_t_15, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1021, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_GetItemInt(__pyx_t_15, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1023, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   __Pyx_DECREF_SET(__pyx_v_idx, __pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1022
+  /* "gvar/dataset.pyx":1024
  *             ratio < 1. - 2 * chi_sig
  *             )[0]
  *         if len(idx) > 0:             # <<<<<<<<<<<<<<
  *             ratio = ratio[idx[-1]:]
  *             cuts = cuts[idx[-1]:]
  */
-  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1022, __pyx_L1_error)
+  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1024, __pyx_L1_error)
   __pyx_t_11 = ((__pyx_t_8 > 0) != 0);
   if (__pyx_t_11) {
 
-    /* "gvar/dataset.pyx":1023
+    /* "gvar/dataset.pyx":1025
  *             )[0]
  *         if len(idx) > 0:
  *             ratio = ratio[idx[-1]:]             # <<<<<<<<<<<<<<
  *             cuts = cuts[idx[-1]:]
  *         # 2) find first place (after position 1) where 1 sig down
  */
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1023, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1025, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_15 = __Pyx_PyObject_GetSlice(__pyx_v_ratio, 0, 0, &__pyx_t_5, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1023, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_PyObject_GetSlice(__pyx_v_ratio, 0, 0, &__pyx_t_5, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1025, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF_SET(__pyx_v_ratio, __pyx_t_15);
     __pyx_t_15 = 0;
 
-    /* "gvar/dataset.pyx":1024
+    /* "gvar/dataset.pyx":1026
  *         if len(idx) > 0:
  *             ratio = ratio[idx[-1]:]
  *             cuts = cuts[idx[-1]:]             # <<<<<<<<<<<<<<
  *         # 2) find first place (after position 1) where 1 sig down
  *         idx = numpy.where(
  */
-    __pyx_t_15 = __Pyx_GetItemInt(__pyx_v_idx, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1024, __pyx_L1_error)
+    __pyx_t_15 = __Pyx_GetItemInt(__pyx_v_idx, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1026, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
-    __pyx_t_5 = __Pyx_PyObject_GetSlice(__pyx_v_cuts, 0, 0, &__pyx_t_15, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1024, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetSlice(__pyx_v_cuts, 0, 0, &__pyx_t_15, NULL, NULL, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1026, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     __Pyx_DECREF_SET(__pyx_v_cuts, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "gvar/dataset.pyx":1022
+    /* "gvar/dataset.pyx":1024
  *             ratio < 1. - 2 * chi_sig
  *             )[0]
  *         if len(idx) > 0:             # <<<<<<<<<<<<<<
@@ -16892,29 +16903,29 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  */
   }
 
-  /* "gvar/dataset.pyx":1026
+  /* "gvar/dataset.pyx":1028
  *             cuts = cuts[idx[-1]:]
  *         # 2) find first place (after position 1) where 1 sig down
  *         idx = numpy.where(             # <<<<<<<<<<<<<<
  *             ratio >= 1. - chi_sig
  *             )[0]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_numpy); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1026, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_15, __pyx_n_s_numpy); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1028, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_where); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1026, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_15, __pyx_n_s_where); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1028, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
 
-  /* "gvar/dataset.pyx":1027
+  /* "gvar/dataset.pyx":1029
  *         # 2) find first place (after position 1) where 1 sig down
  *         idx = numpy.where(
  *             ratio >= 1. - chi_sig             # <<<<<<<<<<<<<<
  *             )[0]
  *         if len(idx) == 0:
  */
-  __pyx_t_15 = __Pyx_PyFloat_SubtractCObj(__pyx_float_1_, __pyx_v_chi_sig, 1., 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1027, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyFloat_SubtractCObj(__pyx_float_1_, __pyx_v_chi_sig, 1., 0, 0); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1029, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_3 = PyObject_RichCompare(__pyx_v_ratio, __pyx_t_15, Py_GE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1027, __pyx_L1_error)
+  __pyx_t_3 = PyObject_RichCompare(__pyx_v_ratio, __pyx_t_15, Py_GE); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1029, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   __pyx_t_15 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
@@ -16929,47 +16940,47 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_5 = (__pyx_t_15) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_15, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1026, __pyx_L1_error)
+  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1028, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "gvar/dataset.pyx":1028
+  /* "gvar/dataset.pyx":1030
  *         idx = numpy.where(
  *             ratio >= 1. - chi_sig
  *             )[0]             # <<<<<<<<<<<<<<
  *         if len(idx) == 0:
  *             self.svdcut = cuts[0]
  */
-  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_5, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1028, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_5, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1030, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF_SET(__pyx_v_idx, __pyx_t_7);
   __pyx_t_7 = 0;
 
-  /* "gvar/dataset.pyx":1029
+  /* "gvar/dataset.pyx":1031
  *             ratio >= 1. - chi_sig
  *             )[0]
  *         if len(idx) == 0:             # <<<<<<<<<<<<<<
  *             self.svdcut = cuts[0]
  *         elif idx[0] > 0:
  */
-  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1029, __pyx_L1_error)
+  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1031, __pyx_L1_error)
   __pyx_t_11 = ((__pyx_t_8 == 0) != 0);
   if (__pyx_t_11) {
 
-    /* "gvar/dataset.pyx":1030
+    /* "gvar/dataset.pyx":1032
  *             )[0]
  *         if len(idx) == 0:
  *             self.svdcut = cuts[0]             # <<<<<<<<<<<<<<
  *         elif idx[0] > 0:
  *             self.svdcut = (cuts[idx[0]] + cuts[idx[0] - 1]) / 2.
  */
-    __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_cuts, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1030, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_cuts, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1032, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_t_7) < 0) __PYX_ERR(0, 1030, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_t_7) < 0) __PYX_ERR(0, 1032, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "gvar/dataset.pyx":1029
+    /* "gvar/dataset.pyx":1031
  *             ratio >= 1. - chi_sig
  *             )[0]
  *         if len(idx) == 0:             # <<<<<<<<<<<<<<
@@ -16979,52 +16990,52 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     goto __pyx_L25;
   }
 
-  /* "gvar/dataset.pyx":1031
+  /* "gvar/dataset.pyx":1033
  *         if len(idx) == 0:
  *             self.svdcut = cuts[0]
  *         elif idx[0] > 0:             # <<<<<<<<<<<<<<
  *             self.svdcut = (cuts[idx[0]] + cuts[idx[0] - 1]) / 2.
  *         else:
  */
-  __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1031, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1033, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_5 = PyObject_RichCompare(__pyx_t_7, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1031, __pyx_L1_error)
+  __pyx_t_5 = PyObject_RichCompare(__pyx_t_7, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1033, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 1031, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 1033, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   if (__pyx_t_11) {
 
-    /* "gvar/dataset.pyx":1032
+    /* "gvar/dataset.pyx":1034
  *             self.svdcut = cuts[0]
  *         elif idx[0] > 0:
  *             self.svdcut = (cuts[idx[0]] + cuts[idx[0] - 1]) / 2.             # <<<<<<<<<<<<<<
  *         else:
  *             self.svdcut = cuts[idx[0]]
  */
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1032, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_cuts, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1032, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_cuts, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1032, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyInt_SubtractObjC(__pyx_t_5, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1032, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_SubtractObjC(__pyx_t_5, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_cuts, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1032, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_cuts, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1032, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Add(__pyx_t_7, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyFloat_TrueDivideObjC(__pyx_t_3, __pyx_float_2_, 2., 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1032, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyFloat_TrueDivideObjC(__pyx_t_3, __pyx_float_2_, 2., 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_t_5) < 0) __PYX_ERR(0, 1032, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_t_5) < 0) __PYX_ERR(0, 1034, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "gvar/dataset.pyx":1031
+    /* "gvar/dataset.pyx":1033
  *         if len(idx) == 0:
  *             self.svdcut = cuts[0]
  *         elif idx[0] > 0:             # <<<<<<<<<<<<<<
@@ -17034,7 +17045,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     goto __pyx_L25;
   }
 
-  /* "gvar/dataset.pyx":1034
+  /* "gvar/dataset.pyx":1036
  *             self.svdcut = (cuts[idx[0]] + cuts[idx[0] - 1]) / 2.
  *         else:
  *             self.svdcut = cuts[idx[0]]             # <<<<<<<<<<<<<<
@@ -17042,50 +17053,50 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
  *         idx = numpy.where(
  */
   /*else*/ {
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1034, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_idx, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1036, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_cuts, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1034, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_cuts, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1036, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_t_3) < 0) __PYX_ERR(0, 1034, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_svdcut, __pyx_t_3) < 0) __PYX_ERR(0, 1036, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __pyx_L25:;
 
-  /* "gvar/dataset.pyx":1036
+  /* "gvar/dataset.pyx":1038
  *             self.svdcut = cuts[idx[0]]
  *         # determine nmod
  *         idx = numpy.where(             # <<<<<<<<<<<<<<
  *             self.val < self.svdcut * self.val[-1]
  *             )[0]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_numpy); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1036, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_numpy); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1038, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_where); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1036, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_where); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1038, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1037
+  /* "gvar/dataset.pyx":1039
  *         # determine nmod
  *         idx = numpy.where(
  *             self.val < self.svdcut * self.val[-1]             # <<<<<<<<<<<<<<
  *             )[0]
  *         if len(idx) == 0:
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1037, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1039, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_svdcut); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1037, __pyx_L1_error)
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_svdcut); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 1039, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_15);
-  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1037, __pyx_L1_error)
+  __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1039, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
-  __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_16, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1037, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_16, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1039, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-  __pyx_t_16 = PyNumber_Multiply(__pyx_t_15, __pyx_t_4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1037, __pyx_L1_error)
+  __pyx_t_16 = PyNumber_Multiply(__pyx_t_15, __pyx_t_4); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 1039, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_16);
   __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyObject_RichCompare(__pyx_t_5, __pyx_t_16, Py_LT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1037, __pyx_L1_error)
+  __pyx_t_4 = PyObject_RichCompare(__pyx_t_5, __pyx_t_16, Py_LT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1039, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
   __pyx_t_16 = NULL;
@@ -17101,44 +17112,44 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   __pyx_t_3 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_16, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1036, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1038, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "gvar/dataset.pyx":1038
+  /* "gvar/dataset.pyx":1040
  *         idx = numpy.where(
  *             self.val < self.svdcut * self.val[-1]
  *             )[0]             # <<<<<<<<<<<<<<
  *         if len(idx) == 0:
  *             self.nmod = 0
  */
-  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1038, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1040, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF_SET(__pyx_v_idx, __pyx_t_7);
   __pyx_t_7 = 0;
 
-  /* "gvar/dataset.pyx":1039
+  /* "gvar/dataset.pyx":1041
  *             self.val < self.svdcut * self.val[-1]
  *             )[0]
  *         if len(idx) == 0:             # <<<<<<<<<<<<<<
  *             self.nmod = 0
  *         else:
  */
-  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1039, __pyx_L1_error)
+  __pyx_t_8 = PyObject_Length(__pyx_v_idx); if (unlikely(__pyx_t_8 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1041, __pyx_L1_error)
   __pyx_t_11 = ((__pyx_t_8 == 0) != 0);
   if (__pyx_t_11) {
 
-    /* "gvar/dataset.pyx":1040
+    /* "gvar/dataset.pyx":1042
  *             )[0]
  *         if len(idx) == 0:
  *             self.nmod = 0             # <<<<<<<<<<<<<<
  *         else:
  *             self.nmod = idx[-1] + 1
  */
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_nmod, __pyx_int_0) < 0) __PYX_ERR(0, 1040, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_nmod, __pyx_int_0) < 0) __PYX_ERR(0, 1042, __pyx_L1_error)
 
-    /* "gvar/dataset.pyx":1039
+    /* "gvar/dataset.pyx":1041
  *             self.val < self.svdcut * self.val[-1]
  *             )[0]
  *         if len(idx) == 0:             # <<<<<<<<<<<<<<
@@ -17148,25 +17159,46 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
     goto __pyx_L26;
   }
 
-  /* "gvar/dataset.pyx":1042
+  /* "gvar/dataset.pyx":1044
  *             self.nmod = 0
  *         else:
  *             self.nmod = idx[-1] + 1             # <<<<<<<<<<<<<<
+ *         self.eps = self.svdcut * self.val[-1]
  * 
- *     def plot_ratio(self, plot=None, show=False):
  */
   /*else*/ {
-    __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_idx, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1042, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_idx, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1044, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_7, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1042, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_AddObjC(__pyx_t_7, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1044, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_nmod, __pyx_t_3) < 0) __PYX_ERR(0, 1042, __pyx_L1_error)
+    if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_nmod, __pyx_t_3) < 0) __PYX_ERR(0, 1044, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
   __pyx_L26:;
 
-  /* "gvar/dataset.pyx":966
+  /* "gvar/dataset.pyx":1045
+ *         else:
+ *             self.nmod = idx[-1] + 1
+ *         self.eps = self.svdcut * self.val[-1]             # <<<<<<<<<<<<<<
+ * 
+ *     def plot_ratio(self, plot=None, show=False):
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_svdcut); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1045, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1045, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_7, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1045, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = PyNumber_Multiply(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1045, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_eps, __pyx_t_7) < 0) __PYX_ERR(0, 1045, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+
+  /* "gvar/dataset.pyx":967
  *         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):             # <<<<<<<<<<<<<<
@@ -17207,8 +17239,8 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis___init__(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "gvar/dataset.pyx":1044
- *             self.nmod = idx[-1] + 1
+/* "gvar/dataset.pyx":1047
+ *         self.eps = self.svdcut * self.val[-1]
  * 
  *     def plot_ratio(self, plot=None, show=False):             # <<<<<<<<<<<<<<
  *         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
@@ -17263,7 +17295,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_3plot_ratio(PyObject *_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "plot_ratio") < 0)) __PYX_ERR(0, 1044, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "plot_ratio") < 0)) __PYX_ERR(0, 1047, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -17282,7 +17314,7 @@ static PyObject *__pyx_pw_4gvar_7dataset_13svd_diagnosis_3plot_ratio(PyObject *_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("plot_ratio", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1044, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("plot_ratio", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 1047, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("gvar.dataset.svd_diagnosis.plot_ratio", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -17317,7 +17349,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   __Pyx_RefNannySetupContext("plot_ratio", 0);
   __Pyx_INCREF(__pyx_v_plot);
 
-  /* "gvar/dataset.pyx":1060
+  /* "gvar/dataset.pyx":1063
  *             show: Displays the plot if ``show=True`` (default ``False``).
  *         """
  *         if plot is None:             # <<<<<<<<<<<<<<
@@ -17328,33 +17360,33 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "gvar/dataset.pyx":1061
+    /* "gvar/dataset.pyx":1064
  *         """
  *         if plot is None:
  *             if _PLOT is not None:             # <<<<<<<<<<<<<<
  *                 plot = _PLOT
  *             else:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_PLOT); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1061, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_PLOT); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1064, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_2 = (__pyx_t_3 != Py_None);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_1 = (__pyx_t_2 != 0);
     if (__pyx_t_1) {
 
-      /* "gvar/dataset.pyx":1062
+      /* "gvar/dataset.pyx":1065
  *         if plot is None:
  *             if _PLOT is not None:
  *                 plot = _PLOT             # <<<<<<<<<<<<<<
  *             else:
  *                 warnings.warn('Need matplotlib library to make plots')
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_PLOT); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1062, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_PLOT); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1065, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF_SET(__pyx_v_plot, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "gvar/dataset.pyx":1061
+      /* "gvar/dataset.pyx":1064
  *         """
  *         if plot is None:
  *             if _PLOT is not None:             # <<<<<<<<<<<<<<
@@ -17364,7 +17396,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
       goto __pyx_L4;
     }
 
-    /* "gvar/dataset.pyx":1064
+    /* "gvar/dataset.pyx":1067
  *                 plot = _PLOT
  *             else:
  *                 warnings.warn('Need matplotlib library to make plots')             # <<<<<<<<<<<<<<
@@ -17372,9 +17404,9 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
  *         x = self.val / self.val[-1]
  */
     /*else*/ {
-      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_warnings); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1064, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_warnings); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1067, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_warn); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1064, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_warn); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1067, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_4 = NULL;
@@ -17389,12 +17421,12 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
       }
       __pyx_t_3 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_4, __pyx_kp_s_Need_matplotlib_library_to_make) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_kp_s_Need_matplotlib_library_to_make);
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1064, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1067, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-      /* "gvar/dataset.pyx":1065
+      /* "gvar/dataset.pyx":1068
  *             else:
  *                 warnings.warn('Need matplotlib library to make plots')
  *                 return None             # <<<<<<<<<<<<<<
@@ -17407,7 +17439,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
     }
     __pyx_L4:;
 
-    /* "gvar/dataset.pyx":1060
+    /* "gvar/dataset.pyx":1063
  *             show: Displays the plot if ``show=True`` (default ``False``).
  *         """
  *         if plot is None:             # <<<<<<<<<<<<<<
@@ -17416,93 +17448,93 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
  */
   }
 
-  /* "gvar/dataset.pyx":1066
+  /* "gvar/dataset.pyx":1069
  *                 warnings.warn('Need matplotlib library to make plots')
  *                 return None
  *         x = self.val / self.val[-1]             # <<<<<<<<<<<<<<
  *         ratio = self.bsval / self.val
  *         idx = x > self.mincut
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1066, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1069, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1066, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1069, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_5, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1066, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetItemInt(__pyx_t_5, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1069, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1066, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1069, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_x = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1067
+  /* "gvar/dataset.pyx":1070
  *                 return None
  *         x = self.val / self.val[-1]
  *         ratio = self.bsval / self.val             # <<<<<<<<<<<<<<
  *         idx = x > self.mincut
  *         ratio = ratio[idx]
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bsval); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1067, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_bsval); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1070, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1067, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1070, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1067, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1070, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_ratio = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "gvar/dataset.pyx":1068
+  /* "gvar/dataset.pyx":1071
  *         x = self.val / self.val[-1]
  *         ratio = self.bsval / self.val
  *         idx = x > self.mincut             # <<<<<<<<<<<<<<
  *         ratio = ratio[idx]
  *         x = x[idx]
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_mincut); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1068, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_mincut); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1071, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyObject_RichCompare(__pyx_v_x, __pyx_t_3, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1068, __pyx_L1_error)
+  __pyx_t_4 = PyObject_RichCompare(__pyx_v_x, __pyx_t_3, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1071, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_idx = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "gvar/dataset.pyx":1069
+  /* "gvar/dataset.pyx":1072
  *         ratio = self.bsval / self.val
  *         idx = x > self.mincut
  *         ratio = ratio[idx]             # <<<<<<<<<<<<<<
  *         x = x[idx]
  *         y = _gvar.mean(ratio)
  */
-  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_ratio, __pyx_v_idx); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1069, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_ratio, __pyx_v_idx); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1072, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF_SET(__pyx_v_ratio, __pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "gvar/dataset.pyx":1070
+  /* "gvar/dataset.pyx":1073
  *         idx = x > self.mincut
  *         ratio = ratio[idx]
  *         x = x[idx]             # <<<<<<<<<<<<<<
  *         y = _gvar.mean(ratio)
  *         yerr = _gvar.sdev(ratio)
  */
-  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_x, __pyx_v_idx); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1070, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_v_x, __pyx_v_idx); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1073, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF_SET(__pyx_v_x, __pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "gvar/dataset.pyx":1071
+  /* "gvar/dataset.pyx":1074
  *         ratio = ratio[idx]
  *         x = x[idx]
  *         y = _gvar.mean(ratio)             # <<<<<<<<<<<<<<
  *         yerr = _gvar.sdev(ratio)
  *         plot.errorbar(x=x, y=y, yerr=yerr, fmt='+', color='b')
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_gvar); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1071, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_gvar); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1074, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1071, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_mean); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1074, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = NULL;
@@ -17517,22 +17549,22 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   }
   __pyx_t_4 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_3, __pyx_v_ratio) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_ratio);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1071, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1074, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_y = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "gvar/dataset.pyx":1072
+  /* "gvar/dataset.pyx":1075
  *         x = x[idx]
  *         y = _gvar.mean(ratio)
  *         yerr = _gvar.sdev(ratio)             # <<<<<<<<<<<<<<
  *         plot.errorbar(x=x, y=y, yerr=yerr, fmt='+', color='b')
  *         sig = (2. / len(self.val)) ** 0.5
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_gvar); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1072, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_gvar); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1075, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_sdev); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1072, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_sdev); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1075, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
@@ -17547,65 +17579,65 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   }
   __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_v_ratio) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_ratio);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1072, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1075, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_yerr = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "gvar/dataset.pyx":1073
+  /* "gvar/dataset.pyx":1076
  *         y = _gvar.mean(ratio)
  *         yerr = _gvar.sdev(ratio)
  *         plot.errorbar(x=x, y=y, yerr=yerr, fmt='+', color='b')             # <<<<<<<<<<<<<<
  *         sig = (2. / len(self.val)) ** 0.5
  *         plot.plot([x[0], x[-1]], [1., 1.], 'k--')
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_errorbar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1073, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_errorbar); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1076, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1073, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1076, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_x, __pyx_v_x) < 0) __PYX_ERR(0, 1073, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_y, __pyx_v_y) < 0) __PYX_ERR(0, 1073, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_yerr, __pyx_v_yerr) < 0) __PYX_ERR(0, 1073, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_fmt, __pyx_kp_s__27) < 0) __PYX_ERR(0, 1073, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_color, __pyx_n_s_b) < 0) __PYX_ERR(0, 1073, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1073, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_x, __pyx_v_x) < 0) __PYX_ERR(0, 1076, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_y, __pyx_v_y) < 0) __PYX_ERR(0, 1076, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_yerr, __pyx_v_yerr) < 0) __PYX_ERR(0, 1076, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_fmt, __pyx_kp_s__27) < 0) __PYX_ERR(0, 1076, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_color, __pyx_n_s_b) < 0) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1076, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1074
+  /* "gvar/dataset.pyx":1077
  *         yerr = _gvar.sdev(ratio)
  *         plot.errorbar(x=x, y=y, yerr=yerr, fmt='+', color='b')
  *         sig = (2. / len(self.val)) ** 0.5             # <<<<<<<<<<<<<<
  *         plot.plot([x[0], x[-1]], [1., 1.], 'k--')
  *         plot.plot([x[0], x[-1]], [1. - sig, 1. - sig], 'k:')
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1074, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_val); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1077, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = PyObject_Length(__pyx_t_5); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1074, __pyx_L1_error)
+  __pyx_t_6 = PyObject_Length(__pyx_t_5); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 1077, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   if (unlikely(__pyx_t_6 == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 1074, __pyx_L1_error)
+    __PYX_ERR(0, 1077, __pyx_L1_error)
   }
   __pyx_v_sig = pow((2. / ((double)__pyx_t_6)), 0.5);
 
-  /* "gvar/dataset.pyx":1075
+  /* "gvar/dataset.pyx":1078
  *         plot.errorbar(x=x, y=y, yerr=yerr, fmt='+', color='b')
  *         sig = (2. / len(self.val)) ** 0.5
  *         plot.plot([x[0], x[-1]], [1., 1.], 'k--')             # <<<<<<<<<<<<<<
  *         plot.plot([x[0], x[-1]], [1. - sig, 1. - sig], 'k:')
  *         plot.ylabel('bootstrap eigenvalue / exact eigenvalue')
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_plot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1075, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_plot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1078, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_x, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1075, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_x, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1078, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_x, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1075, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_x, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1078, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_8 = PyList_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1075, __pyx_L1_error)
+  __pyx_t_8 = PyList_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1078, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_GIVEREF(__pyx_t_4);
   PyList_SET_ITEM(__pyx_t_8, 0, __pyx_t_4);
@@ -17613,7 +17645,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   PyList_SET_ITEM(__pyx_t_8, 1, __pyx_t_7);
   __pyx_t_4 = 0;
   __pyx_t_7 = 0;
-  __pyx_t_7 = PyList_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1075, __pyx_L1_error)
+  __pyx_t_7 = PyList_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1078, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_INCREF(__pyx_float_1_);
   __Pyx_GIVEREF(__pyx_float_1_);
@@ -17636,7 +17668,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_8, __pyx_t_7, __pyx_kp_s_k_2};
-    __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1075, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1078, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -17646,7 +17678,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_8, __pyx_t_7, __pyx_kp_s_k_2};
-    __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1075, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1078, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -17654,7 +17686,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   } else
   #endif
   {
-    __pyx_t_10 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1075, __pyx_L1_error)
+    __pyx_t_10 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1078, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -17668,27 +17700,27 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
     PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_kp_s_k_2);
     __pyx_t_8 = 0;
     __pyx_t_7 = 0;
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1075, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1078, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1076
+  /* "gvar/dataset.pyx":1079
  *         sig = (2. / len(self.val)) ** 0.5
  *         plot.plot([x[0], x[-1]], [1., 1.], 'k--')
  *         plot.plot([x[0], x[-1]], [1. - sig, 1. - sig], 'k:')             # <<<<<<<<<<<<<<
  *         plot.ylabel('bootstrap eigenvalue / exact eigenvalue')
  *         plot.xlabel('eigenvalue / largest eigenvalue')
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_plot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_plot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1079, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_10 = __Pyx_GetItemInt(__pyx_v_x, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_10 = __Pyx_GetItemInt(__pyx_v_x, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1079, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_x, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_x, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1079, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_8 = PyList_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_8 = PyList_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1079, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_GIVEREF(__pyx_t_10);
   PyList_SET_ITEM(__pyx_t_8, 0, __pyx_t_10);
@@ -17696,11 +17728,11 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   PyList_SET_ITEM(__pyx_t_8, 1, __pyx_t_7);
   __pyx_t_10 = 0;
   __pyx_t_7 = 0;
-  __pyx_t_7 = PyFloat_FromDouble((1. - __pyx_v_sig)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_7 = PyFloat_FromDouble((1. - __pyx_v_sig)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1079, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_10 = PyFloat_FromDouble((1. - __pyx_v_sig)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_10 = PyFloat_FromDouble((1. - __pyx_v_sig)); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1079, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __pyx_t_4 = PyList_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1076, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1079, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_7);
   PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_7);
@@ -17723,7 +17755,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_10, __pyx_t_8, __pyx_t_4, __pyx_kp_s_k_3};
-    __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1076, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1079, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -17733,7 +17765,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_10, __pyx_t_8, __pyx_t_4, __pyx_kp_s_k_3};
-    __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1076, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1079, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -17741,7 +17773,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   } else
   #endif
   {
-    __pyx_t_7 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1076, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1079, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     if (__pyx_t_10) {
       __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_10); __pyx_t_10 = NULL;
@@ -17755,21 +17787,21 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
     PyTuple_SET_ITEM(__pyx_t_7, 2+__pyx_t_9, __pyx_kp_s_k_3);
     __pyx_t_8 = 0;
     __pyx_t_4 = 0;
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1076, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1079, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1077
+  /* "gvar/dataset.pyx":1080
  *         plot.plot([x[0], x[-1]], [1., 1.], 'k--')
  *         plot.plot([x[0], x[-1]], [1. - sig, 1. - sig], 'k:')
  *         plot.ylabel('bootstrap eigenvalue / exact eigenvalue')             # <<<<<<<<<<<<<<
  *         plot.xlabel('eigenvalue / largest eigenvalue')
  *         plot.xscale('log')
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_ylabel); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1077, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_ylabel); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1080, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -17783,19 +17815,19 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   }
   __pyx_t_5 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_kp_s_bootstrap_eigenvalue_exact_eigen) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_s_bootstrap_eigenvalue_exact_eigen);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1077, __pyx_L1_error)
+  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1080, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1078
+  /* "gvar/dataset.pyx":1081
  *         plot.plot([x[0], x[-1]], [1. - sig, 1. - sig], 'k:')
  *         plot.ylabel('bootstrap eigenvalue / exact eigenvalue')
  *         plot.xlabel('eigenvalue / largest eigenvalue')             # <<<<<<<<<<<<<<
  *         plot.xscale('log')
  *         plot.plot([self.svdcut, self.svdcut], [0.8, 1.2], 'r:')
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_xlabel); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1078, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_xlabel); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1081, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -17809,19 +17841,19 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   }
   __pyx_t_5 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_kp_s_eigenvalue_largest_eigenvalue) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_s_eigenvalue_largest_eigenvalue);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1078, __pyx_L1_error)
+  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1081, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1079
+  /* "gvar/dataset.pyx":1082
  *         plot.ylabel('bootstrap eigenvalue / exact eigenvalue')
  *         plot.xlabel('eigenvalue / largest eigenvalue')
  *         plot.xscale('log')             # <<<<<<<<<<<<<<
  *         plot.plot([self.svdcut, self.svdcut], [0.8, 1.2], 'r:')
  *         if show == True:
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_xscale); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1079, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_xscale); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1082, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_7 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -17835,25 +17867,25 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   }
   __pyx_t_5 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_n_s_log) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_log);
   __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1079, __pyx_L1_error)
+  if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1082, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1080
+  /* "gvar/dataset.pyx":1083
  *         plot.xlabel('eigenvalue / largest eigenvalue')
  *         plot.xscale('log')
  *         plot.plot([self.svdcut, self.svdcut], [0.8, 1.2], 'r:')             # <<<<<<<<<<<<<<
  *         if show == True:
  *             plot.show()
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_plot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1080, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_plot); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1083, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_svdcut); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1080, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_svdcut); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1083, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_svdcut); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1080, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_svdcut); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1083, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_8 = PyList_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1080, __pyx_L1_error)
+  __pyx_t_8 = PyList_New(2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 1083, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_GIVEREF(__pyx_t_7);
   PyList_SET_ITEM(__pyx_t_8, 0, __pyx_t_7);
@@ -17861,7 +17893,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   PyList_SET_ITEM(__pyx_t_8, 1, __pyx_t_4);
   __pyx_t_7 = 0;
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyList_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1080, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1083, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_INCREF(__pyx_float_0_8);
   __Pyx_GIVEREF(__pyx_float_0_8);
@@ -17884,7 +17916,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_7, __pyx_t_8, __pyx_t_4, __pyx_kp_s_r_2};
-    __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1080, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1083, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -17894,7 +17926,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_7, __pyx_t_8, __pyx_t_4, __pyx_kp_s_r_2};
-    __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1080, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1083, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -17902,7 +17934,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   } else
   #endif
   {
-    __pyx_t_10 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1080, __pyx_L1_error)
+    __pyx_t_10 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1083, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_10);
     if (__pyx_t_7) {
       __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -17916,33 +17948,33 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
     PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_kp_s_r_2);
     __pyx_t_8 = 0;
     __pyx_t_4 = 0;
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1080, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1083, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1081
+  /* "gvar/dataset.pyx":1084
  *         plot.xscale('log')
  *         plot.plot([self.svdcut, self.svdcut], [0.8, 1.2], 'r:')
  *         if show == True:             # <<<<<<<<<<<<<<
  *             plot.show()
  *         return plot
  */
-  __pyx_t_5 = PyObject_RichCompare(__pyx_v_show, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1081, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 1081, __pyx_L1_error)
+  __pyx_t_5 = PyObject_RichCompare(__pyx_v_show, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1084, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 1084, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   if (__pyx_t_1) {
 
-    /* "gvar/dataset.pyx":1082
+    /* "gvar/dataset.pyx":1085
  *         plot.plot([self.svdcut, self.svdcut], [0.8, 1.2], 'r:')
  *         if show == True:
  *             plot.show()             # <<<<<<<<<<<<<<
  *         return plot
  * 
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_show); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1082, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_plot, __pyx_n_s_show); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1085, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_10 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -17956,12 +17988,12 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
     }
     __pyx_t_5 = (__pyx_t_10) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_10) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
     __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1082, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1085, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "gvar/dataset.pyx":1081
+    /* "gvar/dataset.pyx":1084
  *         plot.xscale('log')
  *         plot.plot([self.svdcut, self.svdcut], [0.8, 1.2], 'r:')
  *         if show == True:             # <<<<<<<<<<<<<<
@@ -17970,7 +18002,7 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
  */
   }
 
-  /* "gvar/dataset.pyx":1083
+  /* "gvar/dataset.pyx":1086
  *         if show == True:
  *             plot.show()
  *         return plot             # <<<<<<<<<<<<<<
@@ -17982,8 +18014,8 @@ static PyObject *__pyx_pf_4gvar_7dataset_13svd_diagnosis_2plot_ratio(CYTHON_UNUS
   __pyx_r = __pyx_v_plot;
   goto __pyx_L0;
 
-  /* "gvar/dataset.pyx":1044
- *             self.nmod = idx[-1] + 1
+  /* "gvar/dataset.pyx":1047
+ *         self.eps = self.svdcut * self.val[-1]
  * 
  *     def plot_ratio(self, plot=None, show=False):             # <<<<<<<<<<<<<<
  *         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
@@ -21583,6 +21615,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_encoding, __pyx_k_encoding, sizeof(__pyx_k_encoding), 0, 0, 1, 1},
   {&__pyx_n_s_enter, __pyx_k_enter, sizeof(__pyx_k_enter), 0, 0, 1, 1},
   {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
+  {&__pyx_n_s_eps, __pyx_k_eps, sizeof(__pyx_k_eps), 0, 0, 1, 1},
   {&__pyx_n_s_errorbar, __pyx_k_errorbar, sizeof(__pyx_k_errorbar), 0, 0, 1, 1},
   {&__pyx_n_s_eval, __pyx_k_eval, sizeof(__pyx_k_eval), 0, 0, 1, 1},
   {&__pyx_n_s_evalcorr, __pyx_k_evalcorr, sizeof(__pyx_k_evalcorr), 0, 0, 1, 1},
@@ -21958,28 +21991,28 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_slice__23);
   __Pyx_GIVEREF(__pyx_slice__23);
 
-  /* "gvar/dataset.pyx":981
+  /* "gvar/dataset.pyx":982
  *                 import lsqfit
  *             except:
  *                 raise ValueError('Need lsqfit module to use models.')             # <<<<<<<<<<<<<<
  *             def avg_data(dset, models=models):
  *                 return lsqfit.MultiFitter.process_dataset(dset, models)
  */
-  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_s_Need_lsqfit_module_to_use_models); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 981, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(1, __pyx_kp_s_Need_lsqfit_module_to_use_models); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 982, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
 
-  /* "gvar/dataset.pyx":982
+  /* "gvar/dataset.pyx":983
  *             except:
  *                 raise ValueError('Need lsqfit module to use models.')
  *             def avg_data(dset, models=models):             # <<<<<<<<<<<<<<
  *                 return lsqfit.MultiFitter.process_dataset(dset, models)
  *         avgdata = avg_data(dataset)
  */
-  __pyx_tuple__25 = PyTuple_Pack(2, __pyx_n_s_dset, __pyx_n_s_models); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 982, __pyx_L1_error)
+  __pyx_tuple__25 = PyTuple_Pack(2, __pyx_n_s_dset, __pyx_n_s_models); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 983, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__25);
   __Pyx_GIVEREF(__pyx_tuple__25);
-  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_dataset_pyx, __pyx_n_s_avg_data, 982, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 982, __pyx_L1_error)
+  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_dataset_pyx, __pyx_n_s_avg_data, 983, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 983, __pyx_L1_error)
 
   /* "../../../../../opt/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":272
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
@@ -22284,33 +22317,33 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__72);
   __Pyx_GIVEREF(__pyx_tuple__72);
 
-  /* "gvar/dataset.pyx":966
+  /* "gvar/dataset.pyx":967
  *         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):             # <<<<<<<<<<<<<<
  *         if isinstance(dataset, tuple):
  *             data, ns = dataset
  */
-  __pyx_tuple__73 = PyTuple_Pack(22, __pyx_n_s_self, __pyx_n_s_dataset, __pyx_n_s_nbstrap, __pyx_n_s_mincut, __pyx_n_s_models, __pyx_n_s_process_dataset, __pyx_n_s_data, __pyx_n_s_ns, __pyx_n_s_tset, __pyx_n_s_d, __pyx_n_s_avg_data, __pyx_n_s_lsqfit, __pyx_n_s_avg_data, __pyx_n_s_avgdata, __pyx_n_s_isdict, __pyx_n_s_bsval_list, __pyx_n_s_bsdata, __pyx_n_s_bsavgdata, __pyx_n_s_ratio, __pyx_n_s_cuts, __pyx_n_s_chi_sig, __pyx_n_s_idx); if (unlikely(!__pyx_tuple__73)) __PYX_ERR(0, 966, __pyx_L1_error)
+  __pyx_tuple__73 = PyTuple_Pack(22, __pyx_n_s_self, __pyx_n_s_dataset, __pyx_n_s_nbstrap, __pyx_n_s_mincut, __pyx_n_s_models, __pyx_n_s_process_dataset, __pyx_n_s_data, __pyx_n_s_ns, __pyx_n_s_tset, __pyx_n_s_d, __pyx_n_s_avg_data, __pyx_n_s_lsqfit, __pyx_n_s_avg_data, __pyx_n_s_avgdata, __pyx_n_s_isdict, __pyx_n_s_bsval_list, __pyx_n_s_bsdata, __pyx_n_s_bsavgdata, __pyx_n_s_ratio, __pyx_n_s_cuts, __pyx_n_s_chi_sig, __pyx_n_s_idx); if (unlikely(!__pyx_tuple__73)) __PYX_ERR(0, 967, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__73);
   __Pyx_GIVEREF(__pyx_tuple__73);
-  __pyx_codeobj__74 = (PyObject*)__Pyx_PyCode_New(6, 0, 22, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__73, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_dataset_pyx, __pyx_n_s_init, 966, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__74)) __PYX_ERR(0, 966, __pyx_L1_error)
-  __pyx_tuple__75 = PyTuple_Pack(4, ((PyObject *)__pyx_int_50), ((PyObject*)__pyx_float_1eneg_12), ((PyObject *)Py_None), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__75)) __PYX_ERR(0, 966, __pyx_L1_error)
+  __pyx_codeobj__74 = (PyObject*)__Pyx_PyCode_New(6, 0, 22, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__73, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_dataset_pyx, __pyx_n_s_init, 967, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__74)) __PYX_ERR(0, 967, __pyx_L1_error)
+  __pyx_tuple__75 = PyTuple_Pack(4, ((PyObject *)__pyx_int_50), ((PyObject*)__pyx_float_1eneg_12), ((PyObject *)Py_None), ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__75)) __PYX_ERR(0, 967, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__75);
   __Pyx_GIVEREF(__pyx_tuple__75);
 
-  /* "gvar/dataset.pyx":1044
- *             self.nmod = idx[-1] + 1
+  /* "gvar/dataset.pyx":1047
+ *         self.eps = self.svdcut * self.val[-1]
  * 
  *     def plot_ratio(self, plot=None, show=False):             # <<<<<<<<<<<<<<
  *         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
  * 
  */
-  __pyx_tuple__76 = PyTuple_Pack(9, __pyx_n_s_self, __pyx_n_s_plot, __pyx_n_s_show, __pyx_n_s_x, __pyx_n_s_ratio, __pyx_n_s_idx, __pyx_n_s_y, __pyx_n_s_yerr, __pyx_n_s_sig); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(0, 1044, __pyx_L1_error)
+  __pyx_tuple__76 = PyTuple_Pack(9, __pyx_n_s_self, __pyx_n_s_plot, __pyx_n_s_show, __pyx_n_s_x, __pyx_n_s_ratio, __pyx_n_s_idx, __pyx_n_s_y, __pyx_n_s_yerr, __pyx_n_s_sig); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(0, 1047, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__76);
   __Pyx_GIVEREF(__pyx_tuple__76);
-  __pyx_codeobj__77 = (PyObject*)__Pyx_PyCode_New(3, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__76, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_dataset_pyx, __pyx_n_s_plot_ratio, 1044, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__77)) __PYX_ERR(0, 1044, __pyx_L1_error)
-  __pyx_tuple__78 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__78)) __PYX_ERR(0, 1044, __pyx_L1_error)
+  __pyx_codeobj__77 = (PyObject*)__Pyx_PyCode_New(3, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__76, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_dataset_pyx, __pyx_n_s_plot_ratio, 1047, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__77)) __PYX_ERR(0, 1047, __pyx_L1_error)
+  __pyx_tuple__78 = PyTuple_Pack(2, ((PyObject *)Py_None), ((PyObject *)Py_False)); if (unlikely(!__pyx_tuple__78)) __PYX_ERR(0, 1047, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__78);
   __Pyx_GIVEREF(__pyx_tuple__78);
   __Pyx_RefNannyFinishContext();
@@ -22443,7 +22476,7 @@ static int __Pyx_modinit_type_init_code(void) {
     __pyx_type_4gvar_7dataset___pyx_scope_struct_7_genexpr.tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
   }
   __pyx_ptype_4gvar_7dataset___pyx_scope_struct_7_genexpr = &__pyx_type_4gvar_7dataset___pyx_scope_struct_7_genexpr;
-  if (PyType_Ready(&__pyx_type_4gvar_7dataset___pyx_scope_struct_8___init__) < 0) __PYX_ERR(0, 966, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_4gvar_7dataset___pyx_scope_struct_8___init__) < 0) __PYX_ERR(0, 967, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_4gvar_7dataset___pyx_scope_struct_8___init__.tp_print = 0;
   #endif
@@ -23304,30 +23337,30 @@ if (!__Pyx_RefNanny) {
   __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_7, __pyx_tuple__72, __pyx_n_s_svd_diagnosis, __pyx_n_s_svd_diagnosis, (PyObject *) NULL, __pyx_n_s_gvar_dataset, __pyx_kp_s_Diagnose_the_need_for_an_SVD_cu); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 899, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "gvar/dataset.pyx":966
+  /* "gvar/dataset.pyx":967
  *         nmod: Number of eigenmodes modified by SVD cut ``svdcut``.
  *     """
  *     def __init__(self, dataset, nbstrap=50, mincut=1e-12, models=None, process_dataset=None):             # <<<<<<<<<<<<<<
  *         if isinstance(dataset, tuple):
  *             data, ns = dataset
  */
-  __pyx_t_5 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_7dataset_13svd_diagnosis_1__init__, 0, __pyx_n_s_svd_diagnosis___init, NULL, __pyx_n_s_gvar_dataset, __pyx_d, ((PyObject *)__pyx_codeobj__74)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 966, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_7dataset_13svd_diagnosis_1__init__, 0, __pyx_n_s_svd_diagnosis___init, NULL, __pyx_n_s_gvar_dataset, __pyx_d, ((PyObject *)__pyx_codeobj__74)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 967, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_5, __pyx_tuple__75);
-  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_init, __pyx_t_5) < 0) __PYX_ERR(0, 966, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_init, __pyx_t_5) < 0) __PYX_ERR(0, 967, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "gvar/dataset.pyx":1044
- *             self.nmod = idx[-1] + 1
+  /* "gvar/dataset.pyx":1047
+ *         self.eps = self.svdcut * self.val[-1]
  * 
  *     def plot_ratio(self, plot=None, show=False):             # <<<<<<<<<<<<<<
  *         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
  * 
  */
-  __pyx_t_5 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_7dataset_13svd_diagnosis_3plot_ratio, 0, __pyx_n_s_svd_diagnosis_plot_ratio, NULL, __pyx_n_s_gvar_dataset, __pyx_d, ((PyObject *)__pyx_codeobj__77)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1044, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_CyFunction_NewEx(&__pyx_mdef_4gvar_7dataset_13svd_diagnosis_3plot_ratio, 0, __pyx_n_s_svd_diagnosis_plot_ratio, NULL, __pyx_n_s_gvar_dataset, __pyx_d, ((PyObject *)__pyx_codeobj__77)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1047, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_5, __pyx_tuple__78);
-  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_plot_ratio, __pyx_t_5) < 0) __PYX_ERR(0, 1044, __pyx_L1_error)
+  if (__Pyx_SetNameInClass(__pyx_t_1, __pyx_n_s_plot_ratio, __pyx_t_5) < 0) __PYX_ERR(0, 1047, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
   /* "gvar/dataset.pyx":899

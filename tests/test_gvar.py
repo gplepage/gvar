@@ -990,6 +990,24 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertTrue(all(sdev(b)==[2., 0., 6.]))
         self.assertTrue(all(var(b)==[4., 0., 36.]))
 
+    def test_sdev_var(self):
+        " sdev var from covariance matrices "
+        a = np.random.rand(10, 10)
+        cov = a.dot(a.T)
+        x = gvar(cov.shape[0] * [1], cov)
+        xd = gvar(cov.shape[0] * [1], cov.diagonal() ** 0.5)
+        xt = a.dot(x)
+        covt = a.dot(cov.dot(a.T))
+        for nthreshold in [1, 1000]:
+            tmp, gv._CONFIG['var'] = gv._CONFIG['var'], nthreshold
+            numpy.testing.assert_allclose(var(x), cov.diagonal())
+            numpy.testing.assert_allclose(sdev(x), cov.diagonal() ** 0.5)
+            numpy.testing.assert_allclose(var(xd), cov.diagonal())
+            numpy.testing.assert_allclose(sdev(xd), cov.diagonal() ** 0.5)
+            numpy.testing.assert_allclose(var(xt), covt.diagonal())
+            numpy.testing.assert_allclose(sdev(xt), covt.diagonal() ** 0.5)
+            gv._CONFIG['var'] = tmp
+
     def test_uncorrelated(self):
         """ uncorrelated(g1, g2) """
         a = dict(x=gvar(1,2),y=np.array([gvar(3,4),gvar(5,6)]))
@@ -1501,7 +1519,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(svd.nblocks[2], 1)
 
         # remove svd correction
-        g -= g.svdcorrection
+        g -= g.correction
         y = g[1] + g[3] * 10.
         dy = g[1] - g[3] * 10.
         test_gvar(y, x)
@@ -1510,21 +1528,21 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         test_gvar(g[2], g4)
         np.testing.assert_allclose(evalcov(g.flat), evalcov(orig_g), atol=1e-7)
 
-        # add_svdnoise=True
+        # addnoise=True
         x, dx = gvar(['1(1)', '0.01(1)'])
-        g, wgts = svd([(x+dx)/2, (x-dx)/2.], svdcut=0.2 ** 2, wgts=-1, add_svdnoise=True)
+        g, wgts = svd([(x+dx)/2, (x-dx)/2.], svdcut=0.2 ** 2, wgts=-1, addnoise=True)
         y = g[0] + g[1]
         dy = g[0] - g[1]
-        offsets = mean(g.svdcorrection)
+        offsets = mean(g.correction)
         self.assertEqual(g.nmod, 1)
         self.assertAlmostEqual(offsets[0], -offsets[1])
-        self.assertGreater(chi2(g.svdcorrection[0]).Q, 0.01)
-        self.assertLess(chi2(g.svdcorrection[0]).Q, 0.99)
+        self.assertGreater(chi2(g.correction[0]).Q, 0.01)
+        self.assertLess(chi2(g.correction[0]).Q, 0.99)
         with self.assertRaises(AssertionError):
             test_gvar(y, x)
             test_gvar(dy, gvar('0.01(20)'))
         self.assertTrue(equivalent(
-            g - g.svdcorrection, [(x+dx)/2, (x-dx)/2.]
+            g - g.correction, [(x+dx)/2, (x-dx)/2.]
             ))
         self.assertTrue(not equivalent(
             g, [(x+dx)/2, (x-dx)/2.]
@@ -1544,7 +1562,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertEqual(svd.nmod, 1)
         self.assertAlmostEqual(svd.eigen_range, 0.01**2)
         self.assertTrue(equivalent(
-            g - g.svdcorrection, {0:(x+dx)/2, 1:(x-dx)/20.}
+            g - g.correction, {0:(x+dx)/2, 1:(x-dx)/20.}
             ))
         self.assertTrue(not equivalent(
             g, {0:(x+dx)/2, 1:(x-dx)/20.}
@@ -2093,6 +2111,124 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertTrue(
                 abs(stats.minus.mean - g.sdev) < 5 * stats.minus.sdev
                 )
+
+    def test_regulate(self):
+        D = np.array([1., 2., 3.])
+        corr = np.array([[1., .1, .2], [.1, 1., .3], [.2, .3, 1.]])
+        cov = D[:, None] * corr * D[None, :]
+        g1 = gvar(1, 10)
+        g2 = gvar(3 * [2], cov)
+        g3 = gvar(3 * [3], 2 * cov)
+        g = np.concatenate(([g1], g2, g3))
+        cov = evalcov(g)
+        eps = 0.25
+        
+        gr = regulate(g, eps=eps, wgts=False)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        self.assertEqual(g.size, gr.dof)
+        self.assertEqual(g.size - 1, gr.nmod)
+        covr = evalcov(gr)
+        np.testing.assert_allclose(covr[0, :], cov[0, :])
+        np.testing.assert_allclose(covr[:, 0], cov[:, 0])
+        covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
+        np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
+        
+        gr, dummy = regulate(g, eps=eps, wgts=True)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        self.assertEqual(g.size - 1, gr.nmod)
+        self.assertEqual(g.size, gr.dof)
+        covr = evalcov(gr)
+        np.testing.assert_allclose(covr[0, :], cov[0, :])
+        np.testing.assert_allclose(covr[:, 0], cov[:, 0])
+        covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
+        np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
+
+    def test_regulate_singular(self):
+        D = np.array([1., 2., 3.])
+        # two zero eigenvalues
+        corr = np.array([[1., 1., 1.], [1., 1., 1.], [1.,1.,1.]])
+        cov = D[:, None] * corr * D[None, :]
+        g1 = gvar(1, 10)
+        g2 = gvar(3 * [2], cov)
+        g3 = gvar(3 * [3], 2 * cov)
+        g = np.concatenate(([g1], g2, g3))
+        cov = evalcov(g)
+        eps = 0.1
+        gr = regulate(g, eps=eps, wgts=False)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        covr = evalcov(gr)
+        np.testing.assert_allclose(covr[0, :], cov[0, :])
+        np.testing.assert_allclose(covr[:, 0], cov[:, 0])
+        covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
+        np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
+    
+        gr, dummy = regulate(g, eps=eps, wgts=True)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        covr = evalcov(gr)
+        np.testing.assert_allclose(covr[0, :], cov[0, :])
+        np.testing.assert_allclose(covr[:, 0], cov[:, 0])
+        covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
+        np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
+        with self.assertRaises(np.linalg.LinAlgError):
+            # det(corr)=0, so this should trigger an error
+            gr, dummy = regulate(g, eps=0, wgts=True)
+
+    def test_regulate_dict(self):
+        D = np.array([1., 2., 3.])
+        corr = np.array([[1., .1, .2], [.1, 1., .3], [.2, .3, 1.]])
+        cov = D[:, None] * corr * D[None, :]
+        g = BufferDict()
+        g[1] = gvar(1, 10)
+        g[2] = gvar(3 * [2], cov)
+        g[3] = gvar(3 * [3], 2 * cov)
+        cov = evalcov(g.flat)
+        eps = 0.1
+        gr = regulate(g, eps=0.1, wgts=False)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        covr = evalcov(gr.flat)
+        np.testing.assert_allclose(covr[0, :], cov[0, :])
+        np.testing.assert_allclose(covr[:, 0], cov[:, 0])
+        covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
+        np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
+
+        gr, dummy = regulate(g, eps=0.1, wgts=True)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        covr = evalcov(gr.flat)
+        np.testing.assert_allclose(covr[0, :], cov[0, :])
+        np.testing.assert_allclose(covr[:, 0], cov[:, 0])
+        covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
+        np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
+    
+    def test_regulate_wgts(self):
+        D = np.array([1., 2., 3.])
+        corr = np.array([[1., .1, .2], [.1, 1., .3], [.2, .3, 1.]])
+        cov = D[:, None] * corr * D[None, :]
+        g1 = gvar(1, 10)
+        g2 = gvar(3 * [2], cov)
+        g3 = gvar(3 * [3], 2 * cov)
+        g = np.concatenate(([g1], g2, g3))
+        gr, i_wgts = regulate(g, eps=1e-15, wgts=1)
+        covr = np.zeros((g.size, g.size), dtype=float) 
+        i, wgts = i_wgts[0]
+        if len(i) > 0:
+            covr[i, i] = np.array(wgts) ** 2
+        for i, wgts in i_wgts[1:]:
+            covr[i[:, None], i] = wgts.T @ wgts
+        np.testing.assert_allclose(numpy.log(numpy.linalg.det(covr)), gr.logdet)
+        np.testing.assert_allclose(covr[0,0], 100.)
+        np.testing.assert_allclose(covr[1:4,1:4], cov)
+        np.testing.assert_allclose(covr[4:7,4:7], 2 * cov)
+        gr, i_wgts = regulate(g, eps=1e-15, wgts=-1)
+        invcovr = np.zeros((g.size, g.size), dtype=float) 
+        i, wgts = i_wgts[0]
+        if len(i) > 0:
+            invcovr[i, i] = np.array(wgts) ** 2
+        for i, wgts in i_wgts[1:]:
+            for w in wgts:
+                invcovr[i[:, None], i] += np.outer(w, w)
+        np.testing.assert_allclose(invcovr[0,0], 1/100.)
+        np.testing.assert_allclose(invcovr[1:4,1:4], np.linalg.inv(cov))
+        np.testing.assert_allclose(invcovr[4:7,4:7], 0.5 * np.linalg.inv(cov))
 
 class C:
     def __init__(self, x, y, z):
