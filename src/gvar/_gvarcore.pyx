@@ -707,14 +707,23 @@ cdef class GVar:
         def __get__(self):
             return self.v, self.d, self.cov
 
-    def dotder(self,numpy.ndarray[numpy.float_t,ndim=1] v not None):
+    def dotder(self, numpy.float_t[:] v not None):
         """ Return the dot product of ``self.der`` and ``v``. """
         cdef double ans = 0
         cdef INTP_TYPE i
         for i in range(self.d.size):
-            ans += v[self.d.v[i].i]*self.d.v[i].v
+            ans += v[self.d.v[i].i] * self.d.v[i].v
         return ans
 
+    def mdotder(self, numpy.float_t[:, :]  m not None):
+        """ Return the dot product of m and ``self.der``. """
+        cdef numpy.ndarray[numpy.float_t, ndim=1] ans 
+        cdef INTP_TYPE i, j 
+        ans = numpy.zeros(m.shape[0], dtype=numpy.float)
+        for j in range(m.shape[0]):
+            for i in range(self.d.size):
+                ans[j] += m[j, self.d.v[i].i] * self.d.v[i].v
+        return ans
 
 
 

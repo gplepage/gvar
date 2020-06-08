@@ -1,3 +1,4 @@
+# cython: language_level=3str, binding=True
 # Copyright (c) 2013-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -12,3 +13,5 @@
 
 from gvar._svec_smat cimport svec, smat
 from gvar._gvarcore cimport GVar
+cimport numpy
+

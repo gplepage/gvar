@@ -992,13 +992,14 @@ class svd_diagnosis(object):
             # scalar --- no correlation matrix
             self.val = numpy.array([avgdata.var])
             self.bsval = self.val
-            self.svdcut = 1.
+            self.svdcut = 0.
             self.nmod = 0
-            self.eps = 1.
+            self.eps = 0.
             return
         else:
             isdict = False
-        self.val = _gvar.SVD(_gvar.evalcorr(avgdata)).val
+        avgdata_corr = _gvar.evalcorr(avgdata)
+        self.val = _gvar.SVD(avgdata_corr).val
         bsval_list = []
         for bsdata in _gvar.dataset.bootstrap_iter(dataset, n=nbstrap):
             bsavgdata = avg_data(bsdata)
@@ -1042,7 +1043,10 @@ class svd_diagnosis(object):
             self.nmod = 0
         else:
             self.nmod = idx[-1] + 1
-        self.eps = self.svdcut * self.val[-1]
+        self.eps = (
+            self.svdcut * self.val[-1] / 
+            numpy.linalg.norm(avgdata_corr, numpy.inf)
+            )
 
     def plot_ratio(self, plot=None, show=False):
         """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.

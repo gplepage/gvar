@@ -106,8 +106,7 @@ cdef class svec:
             ans[self.v[i].i] = self.v[i].v
         return ans
 
-    cpdef _assign(self,numpy.ndarray[numpy.float_t,ndim=1] v,
-                     numpy.ndarray[INTP_TYPE, ndim=1] idx):
+    cpdef _assign(self,numpy.float_t[:] v, INTP_TYPE[:] idx):
         """ Assign v and idx to self.v[i].v and self.v[i].i.
 
         Assumes that len(v)==len(idx)==self.size and idx sorted
@@ -125,6 +124,7 @@ cdef class svec:
             self.v = <svec_element *> PyMem_Realloc(
                 <void*> self.v, self.size * sizeof(self.v[0])
                 )
+
     def assign(self, v, idx):
         """ assign v and idx to self.v[i].v and self.v[i].i """
         cdef INTP_TYPE nv, i, j
@@ -326,8 +326,7 @@ cdef class smat:
         self.nrow_max = 2 * self.nrow_max
         # print('added memory')
 
-    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self,
-                                    numpy.ndarray[numpy.float_t,ndim=1] d):
+    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, numpy.float_t[:] d):
         """ Add d[i] along diagonal. """
         cdef INTP_TYPE i, nr
         cdef numpy.ndarray[numpy.float_t, ndim=1] v
@@ -352,8 +351,7 @@ cdef class smat:
             self.nrow += 1
         return vrange
         
-    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self,
-                                    numpy.ndarray[numpy.float_t,ndim=2] m):
+    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, numpy.float_t[:, :] m):
         cdef INTP_TYPE i, j, nr, nm, n_nonzero
         cdef numpy.ndarray[numpy.float_t, ndim=1] v
         cdef numpy.ndarray[INTP_TYPE, ndim=1] idx,vrange
@@ -419,7 +417,7 @@ cdef class smat:
             ans.v[i].i = idx[i]
         return ans
 
-    cpdef svec masked_dot(self, svec vv, numpy.ndarray[numpy.int8_t,ndim=1] imask):
+    cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask):
         """ Compute masked dot product self|vv>.
 
         imask indicates which components to compute and keep in final result;

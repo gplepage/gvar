@@ -1165,6 +1165,12 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             ranseed(12)
             s2 = next(raniter(g, svdcut=svdcut))
             self.assertEqual(str(s1), str(s2))
+            ranseed(12)
+            eps = 0.9
+            s1 = sample(g, eps=eps)
+            ranseed(12)
+            s2 = next(raniter(g, eps=eps))
+            self.assertEqual(str(s1), str(s2))
 
     @unittest.skipIf(FAST,"skipping test_raniter for speed")
     def test_raniter(self):
@@ -1528,9 +1534,9 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         test_gvar(g[2], g4)
         np.testing.assert_allclose(evalcov(g.flat), evalcov(orig_g), atol=1e-7)
 
-        # addnoise=True
+        # noise=True
         x, dx = gvar(['1(1)', '0.01(1)'])
-        g, wgts = svd([(x+dx)/2, (x-dx)/2.], svdcut=0.2 ** 2, wgts=-1, addnoise=True)
+        g, wgts = svd([(x+dx)/2, (x-dx)/2.], svdcut=0.2 ** 2, wgts=-1, noise=True)
         y = g[0] + g[1]
         dy = g[0] - g[1]
         offsets = mean(g.correction)
@@ -1618,7 +1624,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g = gvar([1., 2.], [1., 2.])
         x = [2., 4.]
         ans = chi2(x, g)
-        self.assertAlmostEqual(ans, 2.)
+        self.assertAlmostEqual(ans, 2., places=5)
         self.assertEqual(ans.dof, 2)
         self.assertAlmostEqual(ans.Q, 0.36787944, places=2)
 
@@ -1626,7 +1632,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g = np.array([g[0]+g[1], g[0]-g[1]])
         x = np.array([x[0]+x[1], x[0]-x[1]])
         ans = chi2(x, g)
-        self.assertAlmostEqual(ans, 2.)
+        self.assertAlmostEqual(ans, 2., places=5)
         self.assertEqual(ans.dof, 2)
         self.assertAlmostEqual(ans.Q, 0.36787944, places=2)
 
@@ -1634,7 +1640,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g = np.array([g[0], g[1], g[0]+g[1]])
         x = np.array([x[0], x[1], x[0]+x[1]])
         ans = chi2(x, g, svdcut=-1e-10)
-        self.assertAlmostEqual(ans, 2.)
+        self.assertAlmostEqual(ans, 2., places=5)
         self.assertEqual(ans.dof, 2)
         self.assertAlmostEqual(ans.Q, 0.36787944, places=2)
 
@@ -2122,18 +2128,21 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g = np.concatenate(([g1], g2, g3))
         cov = evalcov(g)
         eps = 0.25
+        norm = np.linalg.norm(evalcorr(g), np.inf)
         
-        gr = regulate(g, eps=eps, wgts=False)
+        gr = regulate(g, eps=eps / norm, wgts=False)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         self.assertEqual(g.size, gr.dof)
         self.assertEqual(g.size - 1, gr.nmod)
+        self.assertAlmostEqual(gr.eps, eps / norm)
+        self.assertEqual(gr.svdcut, None)
         covr = evalcov(gr)
         np.testing.assert_allclose(covr[0, :], cov[0, :])
         np.testing.assert_allclose(covr[:, 0], cov[:, 0])
         covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
         np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
         
-        gr, dummy = regulate(g, eps=eps, wgts=True)
+        gr, dummy = regulate(g, eps=eps / norm, wgts=True)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         self.assertEqual(g.size - 1, gr.nmod)
         self.assertEqual(g.size, gr.dof)
@@ -2142,6 +2151,32 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         np.testing.assert_allclose(covr[:, 0], cov[:, 0])
         covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
         np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
+
+    def test_regulate_svdcut(self):
+        " regulate -> svd "
+        D = np.array([1., 2., 3.])
+        corr = np.array([[1., .1, .2], [.1, 1., .3], [.2, .3, 1.]])
+        cov = D[:, None] * corr * D[None, :]
+        g1 = gvar(1, 10)
+        g2 = gvar(3 * [2], cov)
+        g3 = gvar(3 * [3], 2 * cov)
+        g = np.concatenate(([g1], g2, g3))
+        svdcut = 0.25
+        # verify that svd is being called in each case
+        gr = regulate(g, svdcut=svdcut, wgts=False)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        self.assertEqual(gr.svdcut, svdcut)
+        self.assertEqual(gr.eps, None)
+
+        gr = regulate(g, wgts=False)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        self.assertEqual(gr.svdcut, 1e-12) # default
+        self.assertEqual(gr.eps, None)
+
+        gr = regulate(g, svdcut=svdcut, eps=svdcut, wgts=False)
+        self.assertTrue(gv.equivalent(gr - gr.correction, g))
+        self.assertEqual(gr.svdcut, svdcut)
+        self.assertEqual(gr.eps, None)
 
     def test_regulate_singular(self):
         D = np.array([1., 2., 3.])
@@ -2153,8 +2188,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g3 = gvar(3 * [3], 2 * cov)
         g = np.concatenate(([g1], g2, g3))
         cov = evalcov(g)
+        corr = evalcorr(g)
         eps = 0.1
-        gr = regulate(g, eps=eps, wgts=False)
+        norm = np.linalg.norm(evalcorr(g), np.inf)
+        gr = regulate(g, eps=eps / norm, wgts=False)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         covr = evalcov(gr)
         np.testing.assert_allclose(covr[0, :], cov[0, :])
@@ -2162,7 +2199,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
         np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
     
-        gr, dummy = regulate(g, eps=eps, wgts=True)
+        gr, dummy = regulate(g, eps=eps / norm, wgts=True)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         covr = evalcov(gr)
         np.testing.assert_allclose(covr[0, :], cov[0, :])
@@ -2183,7 +2220,8 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g[3] = gvar(3 * [3], 2 * cov)
         cov = evalcov(g.flat)
         eps = 0.1
-        gr = regulate(g, eps=0.1, wgts=False)
+        norm = np.linalg.norm(evalcorr(g.flat), np.inf)
+        gr = regulate(g, eps=eps / norm, wgts=False)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         covr = evalcov(gr.flat)
         np.testing.assert_allclose(covr[0, :], cov[0, :])
@@ -2191,7 +2229,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
         np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
 
-        gr, dummy = regulate(g, eps=0.1, wgts=True)
+        gr, dummy = regulate(g, eps=eps / norm, wgts=True)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         covr = evalcov(gr.flat)
         np.testing.assert_allclose(covr[0, :], cov[0, :])
@@ -2213,8 +2251,9 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         if len(i) > 0:
             covr[i, i] = np.array(wgts) ** 2
         for i, wgts in i_wgts[1:]:
-            covr[i[:, None], i] = wgts.T @ wgts
+            covr[i[:, None], i] = (wgts.T).dot(wgts) # wgts.T @ wgts
         np.testing.assert_allclose(numpy.log(numpy.linalg.det(covr)), gr.logdet)
+        self.assertEqual(gr.nmod, 6)
         np.testing.assert_allclose(covr[0,0], 100.)
         np.testing.assert_allclose(covr[1:4,1:4], cov)
         np.testing.assert_allclose(covr[4:7,4:7], 2 * cov)
@@ -2224,7 +2263,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         if len(i) > 0:
             invcovr[i, i] = np.array(wgts) ** 2
         for i, wgts in i_wgts[1:]:
-                invcovr[i[:, None], i] += wgts.T @ wgts
+                invcovr[i[:, None], i] += (wgts.T).dot(wgts) # wgts.T @ wgts
         np.testing.assert_allclose(invcovr[0,0], 1/100.)
         np.testing.assert_allclose(invcovr[1:4,1:4], np.linalg.inv(cov))
         np.testing.assert_allclose(invcovr[4:7,4:7], 0.5 * np.linalg.inv(cov))
@@ -2256,156 +2295,6 @@ class CC:
     def _distribute_gvars(self, gvlist):
         self.__dict__ = gv.distribute_gvars(self.__dict__, gvlist)
         return self 
-
-
-# def chi2(g1, g2=None, svdcut=1e-12, nocorr=False, dof=None):
-#     """ Compute chi**2 of ``dg = g1-g2``.
-
-#     ``chi**2 = dg.invcov.dg``, where ``dg = g1 - g2`` and 
-#     ``invcov`` is the inverse of ``dg``'s covariance matrix, 
-#     provides a measure  of how well multi-dimensional Gaussian 
-#     distributions ``g1`` and ``g2`` (dictionaries or arrays)  
-#     agree with each other ---  that is, do their means agree 
-#     within errors for corresponding elements. The probability 
-#     is high if ``chi2(g1,g2)/dof`` is of order 1 or smaller,
-#     where ``dof`` is the number  of degrees of freedom
-#     being compared.
-
-#     Usually ``g1`` and ``g2`` are dictionaries with the same keys,
-#     where ``g1[k]`` and ``g2[k]`` are |GVar|\s or arrays of
-#     |GVar|\s having the same shape. Alternatively ``g1`` and ``g2``
-#     can be |GVar|\s, or arrays of |GVar|\s having the same shape.
-
-#     One of ``g1`` or ``g2`` can contain numbers instead of |GVar|\s,
-#     in which case ``chi**2`` is a measure of the likelihood that
-#     the numbers came from the distribution specified by the other
-#     argument.
-
-#     One or the other of ``g1`` or ``g2`` can be missing keys, or missing
-#     elements from arrays. Only the parts of ``g1`` and ``g2`` that
-#     overlap are used. Also setting ``g2=None`` is equivalent 
-#     to replacing its elements by zeros.
-
-#     Args:
-#         g1: |GVar| or array of |GVar|\s, or a dictionary whose values are
-#             |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
-#             Gaussian distribution. 
-#         g2: |GVar| or array of |GVar|\s, or a dictionary whose values are
-#             |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
-#             Gaussian distribution. Alternatively the elements can be 
-#             numbers instead of |GVar|\s, in which case ``g2`` can specify 
-#             a random sample from a distribution. Setting ``g2=None`` 
-#             (default) is equivalent to setting its elements all to zero.
-#         svdcut (float or None): SVD cut used when inverting the covariance
-#             matrix of ``g1-g2``. See documentation for :func:`gvar.svd` 
-#             for more information.
-#         nocorr (bool): Correlations between different |GVar|\s are ignored
-#             if ``nocorr=True``; otherwise they are included (default).
-#         dof (int or None): Number of independent degrees of freedom in
-#             ``g1-g2``. This is set equal to the number of elements in
-#             ``g1-g2`` if ``dof=None`` is set. This parameter affects
-#             the ``Q`` value assigned to the ``chi**2``.
-    
-#     Returns:
-#         The return value is the ``chi**2``. Extra attributes attached 
-#         to this number give additional information:
-
-#         - **dof** --- Number of degrees of freedom (that is, the number 
-#         of variables compared if not specified).
-
-#         - **Q** --- The probability that the ``chi**2`` could have 
-#         been larger, by chance, even if ``g1`` and ``g2`` agree. Values 
-#         smaller than 0.1 or so suggest that they do not agree. 
-#         Also called the *p-value*.
-
-#         - **residuals** --- Decomposition of the ``chi**2`` in terms of the 
-#         eigenmodes of the correlation matrix: ``chi**2 = sum(residuals**2)``.
-
-#     """
-#     # customized class for answer
-#     class ans(float):
-#         def __new__(cls, chi2, dof, res):
-#             return float.__new__(cls, chi2)
-#         def __init__(self, chi2, dof, res):
-#             self.dof = dof
-#             self.chi2 = chi2
-#             self.residuals = res
-#         def _get_Q(self):
-#             return gammaQ(self.dof / 2., self.chi2 / 2.)  
-#         Q = property(_get_Q)
-
-#     # leaving nocorr (turn off correlations) undocumented because I
-#     #   suspect I will remove it
-#     if g2 is None:
-#         diff = (
-#             BufferDict(g1).buf if hasattr(g1, 'keys') else 
-#             numpy.asarray(g1).flatten()
-#             )
-#     elif hasattr(g1, 'keys') and hasattr(g2, 'keys'):
-#         # g1 and g2 are dictionaries
-#         g1 = BufferDict(g1)
-#         g2 = BufferDict(g2)
-#         diff = BufferDict()
-#         keys = set(g1.keys())
-#         keys = keys.intersection(g2.keys())
-#         for k in keys:
-#             g1k = g1[k]
-#             g2k = g2[k]
-#             shape = tuple(
-#                 [min(s1,s2) for s1, s2 in zip(numpy.shape(g1k), numpy.shape(g2k))]
-#                 )
-#             diff[k] = numpy.zeros(shape, object)
-#             if len(shape) == 0:
-#                 diff[k] = g1k - g2k
-#             else:
-#                 for i in numpy.ndindex(shape):
-#                     diff[k][i] = g1k[i] - g2k[i]
-#         diff = diff.buf
-#     elif not hasattr(g1, 'keys') and not hasattr(g2, 'keys'):
-#         # g1 and g2 are arrays or scalars
-#         g1 = numpy.asarray(g1)
-#         g2 = numpy.asarray(g2)
-#         shape = tuple(
-#             [min(s1,s2) for s1, s2 in zip(numpy.shape(g1), numpy.shape(g2))]
-#             )
-#         diff = numpy.zeros(shape, object)
-#         if len(shape) == 0:
-#             diff = numpy.array(g1 - g2)
-#         else:
-#             for i in numpy.ndindex(shape):
-#                 diff[i] = g1[i] - g2[i]
-#         diff = diff.flatten()
-#     else:
-#         # g1 and g2 are something else
-#         raise ValueError(
-#             'cannot compute chi**2 for types ' + str(type(g1)) + ' ' +
-#             str(type(g2))
-#             )
-#     if diff.size == 0:
-#         return ans(0.0, 0)
-#     if nocorr:
-#         # ignore correlations
-#         res = mean(diff) / sdev(diff)
-#         chi2 = numpy.sum(res ** 2)
-#         if dof is None:
-#             dof = len(diff)
-#     else:
-#         diffmod, i_wgts = svd(diff, svdcut=svdcut, wgts=-1)
-#         diffmean = mean(diffmod)
-#         res = numpy.zeros(diffmod.shape, float)
-#         i, wgts = i_wgts[0]
-#         res[i] = diffmean[i] * wgts
-#         for i, wgts in i_wgts[1:]:
-#             res[i[:wgts.shape[0]]] = wgts.dot(diffmean[i])
-#         chi2 = numpy.sum(res ** 2)
-#         # chi2 = 0.0
-#         # if len(i) > 0:
-#         #     chi2 += numpy.sum((diffmean[i] * wgts) ** 2)
-#         # for i, wgts in i_wgts[1:]:
-#         #     chi2 += numpy.sum(wgts.dot(diffmean[i]) ** 2)
-#         if dof is None:
-#             dof = sum(len(wgts) for i, wgts in i_wgts)
-#     return ans(chi2, dof, res)
 
 
 if __name__ == '__main__':

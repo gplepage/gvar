@@ -2012,12 +2012,12 @@ def reassemble(data, smat cov=_gvar.gvar.cov):
         )
 
 
-def wsum_der(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):
+def wsum_der(numpy.float_t[:] wgt, GVar[:] glist):
     """ weighted sum of |GVar| derivatives """
     cdef GVar g
     cdef smat cov
     cdef double w
-    cdef INTP_TYPE ng,i
+    cdef INTP_TYPE ng,i,j
     cdef numpy.ndarray[numpy.float_t,ndim=1] ans
     ng = len(glist)
     assert ng==len(wgt),"wgt and glist have different lengths."
@@ -2027,19 +2027,24 @@ def wsum_der(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):
         w = wgt[i]
         g = glist[i]
         assert g.cov is cov,"Incompatible |GVar|\s."
-        for i in range(g.d.size):
-            ans[g.d.v[i].i] += w*g.d.v[i].v
+        for j in range(g.d.size):
+            ans[g.d.v[j].i] += w*g.d.v[j].v
     return ans
 
-def wsum_gvar(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):
+def msum_gvar(numpy.float_t[:, :] wgt, GVar[:] glist, GVar[:] out):
+    cdef INTP_TYPE i
+    for i in range(wgt.shape[0]):
+        out[i] = wsum_gvar(wgt[i], glist)
+
+cpdef GVar wsum_gvar(numpy.float_t[:] wgt, GVar[:] glist):
     """ weighted sum of |GVar|\s """
     cdef svec wd
-    cdef double wv,w
+    cdef double wv, w
     cdef GVar g
     cdef smat cov
-    cdef INTP_TYPE ng,i,nd,size
-    cdef numpy.ndarray[numpy.float_t,ndim=1] der
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
+    cdef INTP_TYPE ng, i, j, nd, size
+    cdef double[:] der
+    cdef INTP_TYPE[:] idx
     ng = len(glist)
     assert ng==len(wgt),"wgt and glist have different lengths."
     cov = glist[0].cov
@@ -2049,9 +2054,9 @@ def wsum_gvar(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):
         w = wgt[i]
         g = glist[i]
         assert g.cov is cov,"Incompatible |GVar|\s."
-        wv += w*g.v
-        for i in range(g.d.size):
-            der[g.d.v[i].i] += w*g.d.v[i].v
+        wv += w * g.v
+        for j in range(g.d.size):
+            der[g.d.v[j].i] += w * g.d.v[j].v
     idx = numpy.zeros(len(cov), numpy.intp) # der.nonzero()[0]
     nd = 0
     for i in range(der.shape[0]):
@@ -2062,7 +2067,7 @@ def wsum_gvar(numpy.ndarray[numpy.float_t,ndim=1] wgt,glist):
     for i in range(nd):
         wd.v[i].i = idx[i]
         wd.v[i].v = der[idx[i]]
-    return GVar(wv,wd,cov)
+    return GVar(wv, wd, cov)
 
 def fmt_values(outputs, ndecimal=None, ndigit=None):
     """ Tabulate :class:`gvar.GVar`\s in ``outputs``.
@@ -2198,7 +2203,7 @@ def fmt_errorbudget(
     return ans
 
 # bootstrap_iter, raniter, svd, valder
-def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):
+def bootstrap_iter(g, n=None, eps=None, svdcut=None):
     """ Return iterator for bootstrap copies of ``g``.
 
     The gaussian variables (|GVar| objects) in array (or dictionary) ``g``
@@ -2218,29 +2223,18 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):
         g: An array (or dictionary) of objects of type |GVar|.
         n: Maximum number of random iterations. Setting ``n=None``
             (the default) implies there is no maximum number.
-        eps (float): The correlation matrix for ``g`` is
-            regulated using :func:`gvar.regulate` with cutoff ``eps`` 
-            provided ``eps>0`` and ``svdcut=None``. This makes the 
-            correlation matrices less singular, and can improve the 
-            stability and accuracy of a simulation. SVD cuts 
-            accomplish the same goal and are numerically more robust, 
-            but they can be slower. Ignored if 
-            ``eps=None`` (default).
-        svdcut: If positive, replace eigenvalues ``eig`` of ``g``'s
-            correlation matrix with ``max(eig, svdcut * max_eig)`` 
-            wherec``max_eig`` is the largest eigenvalue; if negative,
-            discard eigenmodes with eigenvalues smaller
-            than ``|svdcut| * max_eig``. Ignored if 
-            ``eps`` specified (and not ``None``); default is 
-            ``svdcut=1e-12``.
+        eps (float): If positive, singularities in the correlation matrix 
+            for ``g`` are regulated using :func:`gvar.regulate` 
+            with cutoff ``eps``. Ignored if ``svdcut`` is specified (and 
+            not ``None``).
+        svdcut (float): If nonzero, singularities in the correlation
+            matrix are regulated using :func:`gvar.regulate`
+            with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
 
     Returns:
         An iterator that returns bootstrap copies of ``g``.
     """
-    if eps is not None:
-        g, i_wgts = _gvar.regulate(g, eps=eps, wgts=1.)
-    else:
-        g, i_wgts = _gvar.svd(g, svdcut=svdcut, wgts=1.)
+    g, i_wgts = _gvar.regulate(g, eps=eps, svdcut=svdcut, wgts=1.)
     g_flat = g.flat
     nwgt = sum(len(wgts) for i, wgts in i_wgts)
     count = 0
@@ -2261,28 +2255,20 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=1e-12):
             yield buf.reshape(g.shape)
     raise StopIteration
 
-def sample(g, eps=None, svdcut=1e-12):
+def sample(g, eps=None, svdcut=None):
     """ Generate random sample from distribution ``g``.
 
     Equivalent to ``next(gvar.raniter(g, svdcut=svdcut, eps=eps))``.
 
     Args:
         g: An array or dictionary of objects of type |GVar|; or a |GVar|.
-        eps (float): The correlation matrix for ``g`` is
-            regulated using :func:`gvar.regulate` with cutoff ``eps`` 
-            provided ``eps>0`` and ``svdcut=None``. This makes the 
-            correlation matrices less singular, and can improve the 
-            stability and accuracy of a simulation. SVD cuts 
-            accomplish the same goal and are numerically more robust, 
-            but they can be slower. Ignored if 
-            ``eps=None`` (default).
-        svdcut (float or ``None``): If positive, replace eigenvalues
-            ``eig`` of ``g``'s correlation matrix with
-            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the
-            largest eigenvalue; if negative, discard eigenmodes with
-            eigenvalues smaller than ``|svdcut| * max_eig``. Ignored
-            if ``eps`` specified (and not ``None``). Default 
-            is ``svdcut=1e-12``.
+        eps (float): If positive, singularities in the correlation matrix 
+            for ``g`` are regulated using :func:`gvar.regulate` 
+            with cutoff ``eps``. Ignored if ``svdcut`` is specified (and 
+            not ``None``).
+        svdcut (float): If nonzero, singularities in the correlation
+            matrix are regulated using :func:`gvar.regulate`
+            with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
 
     Returns:
         A random array or dictionary, with the same shape as ``g``,
@@ -2290,7 +2276,7 @@ def sample(g, eps=None, svdcut=1e-12):
     """
     return next(raniter(g, svdcut=svdcut, eps=eps))
 
-def raniter(g, n=None, eps=None, svdcut=1e-12):
+def raniter(g, n=None, eps=None, svdcut=None):
     """ Return iterator for random samples from distribution ``g``
 
     The gaussian variables (|GVar| objects) in array (or dictionary) ``g``
@@ -2313,30 +2299,20 @@ def raniter(g, n=None, eps=None, svdcut=1e-12):
         n (int or ``None``): Maximum number of random iterations.
             Setting ``n=None`` (the default) implies there is
             no maximum number.
-        eps (float): If positive, the correlation matrix for ``g`` is
-            regulated using :func:`gvar.regulate` with cutoff ``eps``. 
-            This makes the correlation matrices less singular, and 
-            can improve the stability and accuracy of a simulation. 
-            SVD cuts accomplish the same goal and are numerically 
-            more robust, but they can be slower. Ignored if 
-            ``eps=None`` (default).
-        svdcut (float or ``None``): If positive, replace eigenvalues
-            ``eig`` of ``g``'s correlation matrix with
-            ``max(eig, svdcut * max_eig)`` where ``max_eig`` is the
-            largest eigenvalue; if negative, discard eigenmodes with
-            eigenvalues smaller than ``|svdcut| * max_eig``. 
-            Default is ``svdcut=1e-12``; ignored
-            if ``eps`` is specified (and not ``None``).
+        eps (float): If positive, singularities in the correlation matrix 
+            for ``g`` are regulated using :func:`gvar.regulate` 
+            with cutoff ``eps``. Ignored if ``svdcut`` is specified (and 
+            not ``None``).
+        svdcut (float): If nonzero, singularities in the correlation
+            matrix are regulated using :func:`gvar.regulate`
+            with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
 
     Returns:
         An iterator that returns random arrays or dictionaries
         with the same shape as ``g`` drawn from the Gaussian distribution
         defined by ``g``.
     """
-    if eps is not None:
-        g, i_wgts = _gvar.regulate(g, eps=eps, wgts=1.)
-    else:
-        g, i_wgts = _gvar.svd(g, svdcut=svdcut, wgts=1.)
+    g, i_wgts = _gvar.regulate(g, eps=eps, svdcut=svdcut, wgts=1.)
     g_mean = mean(g.flat)
     nwgt = sum(len(wgts) for i, wgts in i_wgts)
     count = 0
@@ -2361,7 +2337,7 @@ class SVD(object):
     """ SVD decomposition of a pos. sym. matrix.
 
     :class:`SVD` is a function-class that computes the eigenvalues and
-    eigenvectors of a positive symmetric matrix ``mat``. Eigenvalues that
+    eigenvectors of a symmetric matrix ``mat``. Eigenvalues that
     are small (or negative, because of roundoff) can be eliminated or
     modified using *svd* cuts. Typical usage is::
 
@@ -2533,7 +2509,7 @@ class SVD(object):
     @staticmethod
     def _numpy_svd(DmatD):
         # warnings.warn('numpy.linalg.eigh failed; trying numpy.linalg.svd')
-        vec,val,dummy = numpy.linalg.svd(DmatD)
+        vec,val,dummy = numpy.linalg.svd(DmatD, hermitian=True)
         vec = vec.T # numpy.transpose(vec) # now 1st index labels eigenval
         # guarantee that sorted, with smallest val[i] first
         vec = numpy.array(vec[-1::-1])
@@ -2711,19 +2687,24 @@ def gammaP(double a, double x, double rtol=1e-5, itmax=10000):
         return 1. - gammaQ_cf(a, x, rtol=rtol, itmax=itmax)
 
 
-def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
-    """ Regulate correlation matrix of collection of |GVar|\s in ``g``.
+def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
+    """ Regulate singularities in the correlation matrix of the |GVar|\s in ``g``.
 
     Standard usage is, for example, ::
 
         import gvar as gv
-        ...
+        
+        # with eps cutoff
         gmod = gv.regulate(g, eps=1e-6)
+
+        # or with svd cutoff
+        gmod = gv.regulate(g, svdcut=1e-6)
     
     where ``g`` is an array of |GVar|\s or a dictionary containing |GVar|\s
     and/or arrays of |GVar|\s. The result ``gmod`` is a copy of ``g`` 
     whose |GVar|\s have been modified to make their correlation matrix 
-    less singular than that of the original ``g``.
+    less singular than that of the original ``g``. Parameter ``eps`` or
+    ``svdcut`` specifies the extent of the modification.
   
     The modification of ``g`` is implemented by adding a set of |GVar|\s
     with zero means::
@@ -2731,22 +2712,26 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
         gmod = g + gmod.correction
 
     where ``gmod.correction`` is an array/dictionary containing the |GVar|\s.
-    When ``g`` is an array, for example, ``g[i]`` is modified by adding::
+    When ``g`` is an array and ``eps`` is specified, for example, 
+    ``g[i]`` is modified by adding::
 
-        gmod.correction[i] = gv.gvar(0, eps ** 0.5 * g[i].sdev)
+        gmod.correction[i] = gv.gvar(0, (eps * norm) ** 0.5 * g[i].sdev)
 
-    This typically has a negligible effect on the final standard deviations 
-    (relative order ``eps/2``), but can make noticeable changes in the 
-    correlation matrix for highly correlated data. Strong correlations 
-    lead to small eigenvalues in the correlation matrix, and these can be
-    significantly increased by the cutoff, which in effect replaces each 
-    eigenvalue ``eig`` by  ``eig + eps``. Only members of ``g`` that 
-    are correlated with other members of ``g`` are modified; uncorrelated
-    members are left unchanged (i.e., the correction is ``gv.gvar(0,0)``).
+    where ``norm = numpy.linalg.norm(corr, numpy.inf)`` is an estimate
+    of the largest eigenvalue of the correlation matrix ``corr``. This
+    correction typically has a negligible effect on the final standard 
+    deviations (relative order ``eps*norm/2``), but can make noticeable 
+    changes in the correlation matrix for highly correlated data. Strong 
+    correlations lead to small eigenvalues in the correlation matrix, 
+    and these are significantly increased by the cutoff, which in effect 
+    replaces each eigenvalue ``eig`` by  ``eig + eps * norm``. Only members 
+    of ``g`` that are correlated with other members of ``g`` are modified; 
+    uncorrelated members are left unchanged (i.e., the correction 
+    is ``gv.gvar(0,0)``).
 
     Adding ``gmod.correction`` to ``g`` increases the uncertainties in ``g``
     but does not affect random fluctuations in its mean values. 
-    If parameter ``addnoise=True``, random noise is included in
+    If parameter ``noise=True``, random noise is included in
     ``gmod.correction``, ::
 
         gmod.correction += gv.sample(gmod.correction),
@@ -2754,12 +2739,21 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
     before it is added to ``g``. This adds random fluctuations to the means
     in ``gmod`` that are commensurate with the additions to the uncertainties.
     This is important, for example, when interpreting a ``chi**2`` 
-    involving ``gmod``, since ``chi**2`` tests whether fluctuations in 
-    the means are consistent with the uncertainties. 
+    involving ``gmod``, since ``chi**2`` compares fluctuations in 
+    the means with the uncertainties. 
+
+    Specifying ``svdcut`` rather than ``eps`` regulates the correlation
+    matrix using :func:`gvar.svd`: calling ``gvar.regulate(g, svdcut=1e-4)`` 
+    is the same as calling ``gvar.svd(g, svdcut=1e-4)``. When ``svdcut>=0``,
+    each eigenvalue ``eig`` of the correlation matrix is
+    replaced by ``max(eig, svdcut * max_eig)`` where ``max_eig`` is
+    the largest eigenvalue. See the :func:`gvar.svd` documentation for 
+    more details. SVD cuts are numerically more robust, but more costly, 
+    especially for large systems.
 
     There are a variety of reasons for regulating the correlation matrices. 
     Roundoff error, for example, can make the smallest eigenvalues unreliable
-    and destabilize calulations involving the correlation matrix. Another 
+    and destabilize calulations involving the correlation matrix. A similar 
     situation arises when the correlation matrix is estimated from a small set
     of random data. This can result in small eigenvalues that are badly 
     underestimated.
@@ -2767,7 +2761,7 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
     There is an additional parameter ``wgts`` in :func:`gvar.regulate` whose
     default value is ``False``. Setting ``wgts=1`` or ``wgts=-1`` instead
     causes :func:`gvar.regulate` to return a tuple ``(gmod, i_wgts)`` where
-    ``gmod``  is the modified copy of ``g``, and ``i_wgts`` contains a Cholesky
+    ``gmod``  is the modified copy of ``g``, and ``i_wgts`` contains a
     decomposition of either the modified covariance matrix, when ``wgts=1``, or 
     the inverse of the modified covariance matrix, when ``wgts=-1``. 
     The covariance matrix is decomposed into non-overlapping sub-matrices,
@@ -2796,27 +2790,36 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
         for i, wgts in i_wgts[1:]:                
             result += numpy.sum(wgts.dot(u[i]) * wgts.dot(v[i]))
 
-    where ``result`` is the desired expectation value. The Cholesky 
-    decompositions are useful for least squares fitting and simulating 
-    correlated data.
+    where ``result`` is the desired expectation value. 
+    
+    These decompositions are useful for least squares fitting and simulating 
+    correlated data. A Cholesky decomposition is used when ``eps`` is specified,
+    while an SVD decomposition is used with ``svdcut``.
 
     Args:
         g: An array of |GVar|\s or a dicitionary whose values are
             |GVar|\s and/or arrays of |GVar|\s.
         eps (float): The diagonal elements of the ``g`` covariance matrix
-            are multiplied by ``1+eps``. Default is 1e-12.
+            are multiplied by ``1 + eps*norm`` where ``norm`` is the norm of
+            the correlation matrix, ``numpy.linalg.norm(corr, numpy.inf)``. 
+            Ignored if ``svdcut`` is specified (and not ``None``).
+        svdcut (float): If positive, replaces eigenvalues ``eig``
+            of the correlation matrix with ``max(eig, svdcut * max_eig)``
+            where ``max_eig`` is the largest eigenvalue; if negative, discards
+            eigenmodes with eigenvalues smaller than ``|svdcut| * max_eig``.
+            Note ``|svdcut| < 1``. Default is 1e-12.
         wgts: Setting ``wgts=1`` causes :func:`gvar.regulate` to compute
-            and return a Cholesky decomposition of the covariance matrix of
+            and return a decomposition of the covariance matrix of
             the modified |GVar|\s, ``gmod``. Setting ``wgts=-1`` results in
             a decomposition of the inverse of the covariance matrix. The
             default value is ``False``, in which case only ``gmod`` is returned.
-        addnoise: If ``True``, noise is added to the correction (see
+        noise (bool): If ``True``, noise is added to the correction (see
             above).
 
     Returns:
         A copy ``gmod`` of ``g`` with the modified correlation matrix.
         If ``wgts`` is not ``False``, a tuple ``(g, i_wgts)`` is returned 
-        where ``i_wgts`` contains a Cholesky decomposition of the ``gmod``
+        where ``i_wgts`` contains a decomposition of the ``gmod``
         covariance matrix or its inverse (see above).
 
     Additional information is stored in ``gmod``:
@@ -2828,22 +2831,25 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
 
     .. attribute:: gmod.eps
 
-        ``eps`` used to create ``gmod``.
+        ``eps`` used to create ``gmod`` if set (otherwise ``None``).
+
+    .. attribute:: gmod.svdcut
+
+        ``svdcut`` used to create ``gmod`` if set (otherwise ``None``).
 
     .. attribute:: gmod.dof
 
-        Number of degrees of freedom in ``gmod`` (same as ``gmod.size``).
+        Number of degrees of freedom in ``gmod``.
 
     .. attribute:: gmod.nmod
 
-        Number of members of ``gmod`` modified by ``eps`` regulation. 
-        Mainly for debugging.
+        Number of members of ``gmod`` modified by regulation. 
 
     .. attribute:: gmod.nblocks
 
         A dictionary where ``gmod.nblocks[s]`` contains the number of
         block-diagonal ``s``-by-``s`` sub-matrices in the correlation
-        matrix. Mainly for debugging.
+        matrix. Useful for debugging.
 
     .. attribute:: gmod.logdet
 
@@ -2852,9 +2858,25 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
     """
     cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
     cdef numpy.ndarray[numpy.float_t, ndim=2] block_cov 
-    cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D, sd, mn
+    cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D, sd, mn, z
     cdef numpy.ndarray[object, ndim=1] correction
-    cdef double root_eps, logdet
+    cdef double root_eps_norm, logdet
+    # which cutoff?
+    if eps is None and svdcut is None:
+        svdcut = 1e-12   # default
+    if svdcut is not None:
+        ans = svd(g, wgts=wgts, svdcut=svdcut, noise=noise)
+        if wgts is False:
+            ans.svdcut = svdcut 
+            ans.eps = None
+        else:
+            ans[0].svdcut = svdcut 
+            ans[0].eps = None
+        return ans
+    # eps must be not None, from above ifs
+    if eps < 0:
+        raise ValueError('negative eps = ' + str(eps))
+    # ... continue with eps cutoff
     # replace g by a copy of g
     if hasattr(g,'keys'):
         is_dict = True
@@ -2867,14 +2889,10 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
                 return obj
         g = regarray(g)
     # begin setup and analysis
-    if eps is None:
-        eps = 0.0
-    elif eps < 0:
-        raise ValueError('negative eps = ' + str(eps))
     g.dof = g.size
     g.nmod = 0 
     g.eps = eps
-    root_eps = (eps ** 0.5) if eps > 0 else 0.0
+    g.svdcut = None
     correction = numpy.empty(len(g.flat), object)
     correction[:] = 0 * _gvar.gvar(0, 1)
     i_wgts = [([], [])]     # 1st entry, for all 1x1 blocks 
@@ -2896,17 +2914,20 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
     for idx, block_cov in idx_bcov[1:]:
         g.nblocks[len(idx)] = g.nblocks.get(len(idx), 0) + 1
         D = block_cov.diagonal() ** 0.5
-        if wgts is False:
-            if root_eps > 0:
-                correction[idx] = _gvar.gvar(numpy.zeros(D.size), root_eps * D)
-                g.nmod += len(idx)
-        else:
-            Dinv = 1 / D
-            corr = Dinv[:, None] * block_cov * Dinv[None, :]
-            if root_eps > 0:
-                correction[idx] = _gvar.gvar(numpy.zeros(D.size), root_eps * D)
-                corr[numpy.diag_indices_from(corr)] += eps 
-                g.nmod += len(idx)
+        Dinv = 1 / D
+        corr = Dinv[:, None] * block_cov * Dinv[None, :]
+        if eps > 0:
+            root_eps_norm = (eps * numpy.linalg.norm(corr, numpy.inf)) ** 0.5
+            if noise:
+                sd = root_eps_norm * D
+                correction[idx] = _gvar.gvar(numpy.random.normal(0, sd), sd)
+            else:
+                correction[idx] = _gvar.gvar(numpy.zeros(D.size), root_eps_norm * D)
+            g.nmod += len(idx)
+            g.flat[idx] += correction[idx] 
+        if wgts is not False:
+            if eps > 0:
+                corr[numpy.diag_indices_from(corr)] += root_eps_norm
             ex = False
             try:
                 U = _cholesky(corr, lower=False)
@@ -2927,14 +2948,13 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
             else:
                 raise ValueError('invalid wgts = ' + str(wgts))
             logdet += 2 * numpy.sum(numpy.log(U.diagonal() * D))
-        g.flat[idx] += correction[idx] 
     # format the correction
     if is_dict:
         g.correction = _gvar.BufferDict(g, buf=correction)
     else:
         g.correction = correction.reshape(g.shape)
     if wgts is False:
-        return g 
+        return g
     else:
         g.logdet = logdet
         # repack i_wgts into numpy arrays
@@ -2946,13 +2966,14 @@ def regulate(g, float eps=1e-12, wgts=False, addnoise=False):
         i_wgts = tmp
         return g, i_wgts
 
-def svd(g, svdcut=1e-12, wgts=False, addnoise=False, add_svdnoise=None):
+def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     """ Apply SVD cuts to collection of |GVar|\s in ``g``.
 
     Standard usage is, for example, ::
 
-        svdcut = ...
-        gmod = svd(g, svdcut=svdcut)
+        import gvar as gv
+        ...
+        gmod = gv.svd(g, svdcut=1e-4)
 
     where ``g`` is an array of |GVar|\s or a dictionary containing |GVar|\s
     and/or arrays of |GVar|\s. When ``svdcut>0``, ``gmod`` is
@@ -2974,7 +2995,7 @@ def svd(g, svdcut=1e-12, wgts=False, addnoise=False, add_svdnoise=None):
 
     Adding ``gmod.correction`` to ``g`` increases the uncertainties in ``g``
     but does not affect random fluctuations in the mean values. 
-    If parameter ``addnoise=True``, random noise is included in
+    If parameter ``noise=True``, random noise is included in
     ``gmod.correction``, ::
 
         gmod.correction += gv.sample(gmod.correction),
@@ -3039,7 +3060,7 @@ def svd(g, svdcut=1e-12, wgts=False, addnoise=False, add_svdnoise=None):
             the modified |GVar|\s, ``gmod``. Setting ``wgts=-1`` results in
             a decomposition of the inverse of the covariance matrix. The
             default value is ``False``, in which case only ``gmod`` is returned.
-        addnoise: If ``True``, noise is added to the SVD correction (see
+        noise: If ``True``, noise is added to the SVD correction (see
             above).
 
     Returns:
@@ -3094,7 +3115,7 @@ def svd(g, svdcut=1e-12, wgts=False, addnoise=False, add_svdnoise=None):
     cdef numpy.ndarray[object, ndim=1] correction
     # legacy keyword
     if add_svdnoise is not None:
-        addnoise = add_svdnoise
+        noise = add_svdnoise
     # replace g by a copy of g
     if hasattr(g,'keys'):
         is_dict = True
@@ -3136,7 +3157,7 @@ def svd(g, svdcut=1e-12, wgts=False, addnoise=False, add_svdnoise=None):
         g.logdet += sum(numpy.log(vali) for vali in s.val)
         g.nmod += s.nmod
         if s.delta is not None:
-            if addnoise:
+            if noise:
                 for vali, valorigi, veci in zip(s.val, s.valorig, s.vec):
                     if vali > valorigi:
                         # add next(raniter(s.delta)) to s.delta in correction

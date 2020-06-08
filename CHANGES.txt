@@ -1,10 +1,17 @@
-Version 11.6 ????
-======================
-- gvar.regulate is a new alternative to gvar.svd that uses a different 
-  way of regulating singularities in covariance matrices, and 
-  Cholesky decomposition for generating i_wgts. chi2, raniter, 
-  and bootstrap_iter now have option of using gvar.regulate in place 
-  of gvar.svd.
+Version 11.6 2020-06-08
+========================
+- gvar.regulate is a new tool for regulating the singularities 
+  in correlation matrices.singular correlation 
+  matrices. It has two regulation schemes, one tailored for 
+  Cholesky decompositions of the correlation matrix (eps),
+  and the other using an SVD decomposition (svdcut). The 
+  Cholesky/eps scheme is typically faster, but is less 
+  robust numerically. The SVD scheme uses gvar.svd.
+  The Cholesky implementation is based on a 
+  recommendation from Giacomo Petrillo.
+
+- gvar.chi2, gvar.raniter, gvar.bootstrap_iter now have the option
+  of specifying either eps or svdcut (passed on to gvar.regulate).
 
 - More efficient implementations of gvar.sdev and gvar.var. 
 

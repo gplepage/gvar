@@ -73,7 +73,7 @@ variables including:
 
     - ``bootstrap_iter(g,N)`` --- bootstrap iterator.
 
-    - ``regulate(g, eps)`` --- regulate correlation matrix.
+    - ``regulate(g, eps|svdcut)`` --- regulate correlation matrix.
 
     - ``svd(g, svdcut)`` --- SVD regulation of correlation matrix.
 
@@ -229,7 +229,7 @@ def gvar_factory(cov=None):
     """
     return GVarFactory(cov)
 
-def qqplot(g1, g2=None, plot=None, eps=None, svdcut=1e-12, dof=None, nocorr=False):
+def qqplot(g1, g2=None, plot=None, eps=None, svdcut=None, dof=None, nocorr=False):
     """ QQ plot ``g1-g2``.
 
     The QQ plot compares the distribution of the means of Gaussian 
@@ -276,12 +276,12 @@ def qqplot(g1, g2=None, plot=None, eps=None, svdcut=1e-12, dof=None, nocorr=Fals
             (default) is equivalent to setting its elements all to zero.
         plot: a :mod:`matplotlib` plotter. If ``None`` (default), 
             uses ``matplotlib.pyplot``.
-        eps (float or None): ``eps`` used by :func:`gvar.regulate` when inverting
-            the covariance matrix. Ignored if ``eps=None`` (default).
+        eps (float or None): ``eps`` used by :func:`gvar.regulate` when 
+            inverting the covariance matrix. Ignored if ``svdcut`` is 
+            set (and not ``None``). 
         svdcut (float): SVD cut used when inverting the covariance
             matrix of ``g1-g2``. See documentation for :func:`gvar.svd` 
-            for more information. Ignored if ``eps`` set (and not ``None``);
-            default value is ``svdcut=1e-12``. 
+            for more information. Default is ``svdcut=1e-12``.
         dof (int or None): Number of independent degrees of freedom in
             ``g1-g2``. This is set equal to the number of elements in
             ``g1-g2`` if ``dof=None`` is set. This parameter affects
@@ -315,7 +315,7 @@ def qqplot(g1, g2=None, plot=None, eps=None, svdcut=1e-12, dof=None, nocorr=Fals
     plot.text(minx, ylim[0] + (ylim[1] - ylim[0]) * 0.84,text, color='r')
     return plot 
 
-def chi2(g1, g2=None, eps=None, svdcut=1e-12, dof=None, nocorr=False):
+def chi2(g1, g2=None, eps=None, svdcut=None, dof=None, nocorr=False):
     """ Compute chi**2 of ``g1-g2``.
 
     chi**2 equals ``dg.invcov.dg, where ``dg = g1 - g2`` and 
@@ -367,12 +367,13 @@ def chi2(g1, g2=None, eps=None, svdcut=1e-12, dof=None, nocorr=False):
             numbers instead of |GVar|\s, in which case ``g2`` specifies 
             a sample from a distribution. Setting ``g2=None`` 
             (default) is equivalent to setting its elements all to zero.
-        eps (float): ``eps`` used by :func:`gvar.regulate` when inverting
-            the covariance matrix. Ignored if ``eps=None``.
-        svdcut (float or None): SVD cut used when inverting the covariance
-            matrix of ``g1-g2``. See documentation for :func:`gvar.svd` 
-            for more information. Default is ``svdcut=1e-12``; ignored 
-            if ``eps`` set (and not ``None``).
+        eps (float): If positive, singularities in the correlation matrix 
+            for ``g1-g2`` are regulated using :func:`gvar.regulate` 
+            with cutoff ``eps``. Ignored if ``svdcut`` is specified (and 
+            not ``None``).
+        svdcut (float): If nonzero, singularities in the correlation 
+            matrix for ``g1-g2`` are regulated using :func:`gvar.regulate`
+            with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
         dof (int or None): Number of independent degrees of freedom in
             ``g1-g2``. This is set equal to the number of elements in
             ``g1-g2`` if ``dof=None`` is set. This parameter affects
@@ -461,10 +462,7 @@ def chi2(g1, g2=None, eps=None, svdcut=1e-12, dof=None, nocorr=False):
         if dof is None:
             dof = len(diff)
     else:
-        if eps is not None:
-            diffmod, i_wgts = regulate(diff, eps=eps, wgts=-1)
-        else:
-            diffmod, i_wgts = svd(diff, svdcut=svdcut, wgts=-1)
+        diffmod, i_wgts = regulate(diff, eps=eps, svdcut=svdcut, wgts=-1)
         diffmean = mean(diffmod)
         res = numpy.zeros(diffmod.shape, float)
         i, wgts = i_wgts[0]
