@@ -2833,7 +2833,7 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
             a decomposition of the inverse of the covariance matrix. The
             default value is ``False``, in which case only ``gmod`` is returned.
         noise (bool): If ``True``, noise is added to the correction (see
-            above).
+            above). Default is ``False``.
 
     Returns:
         A copy ``gmod`` of ``g`` with the modified correlation matrix.
@@ -3080,7 +3080,7 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
             a decomposition of the inverse of the covariance matrix. The
             default value is ``False``, in which case only ``gmod`` is returned.
         noise: If ``True``, noise is added to the SVD correction (see
-            above).
+            above). Default is ``False``.
 
     Returns:
         A copy ``gmod`` of ``g`` whose correlation matrix is modified by

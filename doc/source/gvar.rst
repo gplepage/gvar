@@ -115,9 +115,9 @@ manipulating gaussian random variables, including:
 
     - :any:`bootstrap_iter`\ ``(g,N)`` --- bootstrap iterator.
 
-    - :any:`regulate`\ ``(g, eps)`` --- regulate correlation matrix.
+    - :any:`regulate`\ ``(g, svdcut|eps)`` --- regulate correlation matrix.
 
-    - :any:`svd`\ ``(g, svdcut)`` --- SVD modification of correlation matrix.
+    - :any:`svd`\ ``(g, svdcut)`` --- SVD regulation of correlation matrix.
 
     - :any:`dataset.bin_data`\ ``(data)`` --- bin random sample data.
 
@@ -240,9 +240,9 @@ other |GVar|\s come from:
 The following functions are used to make correlation matrices 
 less singular:
 
-.. autofunction:: gvar.regulate 
+.. autofunction:: gvar.regulate(g, svdcut=1e-12, eps=None, wgts=False, noise=False)
 
-.. autofunction:: gvar.svd
+.. autofunction:: gvar.svd(g, svdcut=1e-12, wgts=False, noise=False)
 
 This function is useful when the correlation matrix is singular
 or almost singular, and its inverse is needed (as in curve fitting).
