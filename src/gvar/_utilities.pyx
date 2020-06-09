@@ -2527,7 +2527,7 @@ class SVD(object):
         # warnings.warn('numpy.linalg.eigh failed; trying numpy.linalg.svd')
         DmatD = (DmatD.T + DmatD) / 2.
         # different algorithm from eigh if hermitian=False
-        vec,val,dummy = numpy.linalg.svd(DmatD, hermitian=False)  
+        vec,val,dummy = numpy.linalg.svd(DmatD)  
         vec = vec.T # numpy.transpose(vec) # now 1st index labels eigenval
         # guarantee that sorted, with smallest val[i] first
         vec = numpy.array(vec[-1::-1], dtype=float)
