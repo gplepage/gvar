@@ -1260,7 +1260,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
     def test_SVD(self):
         """ SVD """
         # error system
-        with self.assertRaises(np.linalg.LinAlgError):
+        with self.assertRaises(ValueError):
             SVD([1,2])
         # non-singular
         x,y = gvar([1,1],[1,4])
@@ -1446,7 +1446,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
         # degenerate
         g, wgts = svd(3 * [gvar('1(1)')], svdcut=1e-10, wgts=-1)
-        test_cov(wgts, evalcov(g), atol=1e-6)
+        test_cov(wgts, evalcov(g), atol=1e-4)
         self.assertEqual(svd.nmod, 2)
         self.assertAlmostEqual(svd.eigen_range, 0.0)
 

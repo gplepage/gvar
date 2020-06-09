@@ -10,6 +10,9 @@ Version 11.6 2020-06-08
   The Cholesky implementation is based on a 
   recommendation from Giacomo Petrillo.
 
+- Keyword add_svdnoise in gvar.svd has been replaced by keyword noise. 
+  The old keyword still works, however (for legacy code).
+  
 - gvar.chi2, gvar.raniter, gvar.bootstrap_iter now have the option
   of specifying either eps or svdcut (passed on to gvar.regulate).
 

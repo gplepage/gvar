@@ -20,6 +20,7 @@ from scipy.sparse.csgraph import connected_components as _connected_components
 from scipy.sparse import csr_matrix as _csr_matrix
 from scipy.linalg import solve_triangular as _solve_triangular
 from scipy.linalg import cholesky as _cholesky
+from scipy.linalg import eigh as scipy_eigh
 import numpy
 cimport numpy
 import warnings
@@ -2424,18 +2425,21 @@ class SVD(object):
         self, mat, svdcut=None, svdnum=None, compute_delta=False, rescale=False
         ):
         super(SVD,self).__init__()
+        mat = numpy.asarray(mat)
+        if len(mat.shape) != 2 or mat.shape[0] != mat.shape[1]:
+            raise ValueError('mat is not a square')
         self.svdcut = svdcut
         self.svdnum = svdnum
         if rescale:
-            mat = numpy.asarray(mat)
             diag = numpy.fabs(mat.diagonal())
             diag[diag==0.0] = 1.
             D = (diag)**(-0.5)
-            DmatD = mat*D
-            DmatD = (DmatD.transpose()*D).transpose()
+            # DmatD = mat*D
+            # DmatD = (DmatD.transpose()*D).transpose()
+            DmatD = D[:, None] * mat * D[None, :]
             self.D = D
         else:
-            DmatD = numpy.asarray(mat)
+            DmatD = mat
             self.D = None
         val = None
         for key in SVD._analyzers:
@@ -2502,18 +2506,32 @@ class SVD(object):
         # guarantee that sorted, with smallest val[i] first
         indices = numpy.arange(val.size) # in case val[i]==val[j]
         val, indices, vec = zip(*sorted(zip(val, indices, vec)))
-        val = numpy.array(val)
-        vec = numpy.array(vec)
+        val = numpy.array(val, dtype=float)
+        vec = numpy.array(vec, dtype=float)
+        return val, vec 
+    
+    @staticmethod 
+    def _scipy_eigh(DmatD):
+        val, vec = scipy_eigh(DmatD)
+        vec = numpy.transpose(vec) # now 1st index labels eigenval
+        val = numpy.fabs(val)
+        # guarantee that sorted, with smallest val[i] first
+        indices = numpy.arange(val.size) # in case val[i]==val[j]
+        val, indices, vec = zip(*sorted(zip(val, indices, vec)))
+        val = numpy.array(val, dtype=float)
+        vec = numpy.array(vec, dtype=float)
         return val, vec 
 
     @staticmethod
     def _numpy_svd(DmatD):
         # warnings.warn('numpy.linalg.eigh failed; trying numpy.linalg.svd')
-        vec,val,dummy = numpy.linalg.svd(DmatD, hermitian=True)
+        DmatD = (DmatD.T + DmatD) / 2.
+        # different algorithm from eigh if hermitian=False
+        vec,val,dummy = numpy.linalg.svd(DmatD, hermitian=False)  
         vec = vec.T # numpy.transpose(vec) # now 1st index labels eigenval
         # guarantee that sorted, with smallest val[i] first
-        vec = numpy.array(vec[-1::-1])
-        val = numpy.array(val[-1::-1])
+        vec = numpy.array(vec[-1::-1], dtype=float)
+        val = numpy.array(val[-1::-1], dtype=float)
         return val, vec 
 
     def decomp(self,n=1):
@@ -2547,8 +2565,9 @@ class SVD(object):
 
 # use ordered dict for python2
 SVD._analyzers = collections.OrderedDict()
-SVD._analyzers['numpy_svd']  = SVD._numpy_svd
+SVD._analyzers['scipy_eigh']  = SVD._scipy_eigh
 SVD._analyzers['numpy_eigh']  = SVD._numpy_eigh
+SVD._analyzers['numpy_svd']  = SVD._numpy_svd
 
 def valder(v):
     """ Convert array ``v`` of numbers into an array of |GVar|\s.
