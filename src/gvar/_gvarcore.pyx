@@ -914,8 +914,9 @@ class GVarFactory:
                         idx = self.cov.append_diag(xsdev.reshape(nx) ** 2)
                     elif xsdev.shape==2 * x.shape: # x,cov
                         xcov = xsdev.reshape(nx, nx)
-                        if not numpy.allclose(xcov, xcov.T):
-                            raise ValueError('non-symmetric covariance matrix:\n' + str(xcov))
+                        with numpy.errstate(under='ignore'):
+                            if not numpy.allclose(xcov, xcov.T):
+                                raise ValueError('non-symmetric covariance matrix:\n' + str(xcov))
                         if verify:
                             try:
                                 numpy.linalg.cholesky(xcov)
