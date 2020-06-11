@@ -1,4 +1,4 @@
-Version 11.6 2020-06-09
+Version 11.6 2020-06-11
 ========================
 - gvar.regulate is a new tool for regulating singularities 
   in correlation matrices. It has two regulation schemes, 
