@@ -2877,7 +2877,7 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
     """
     cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
     cdef numpy.ndarray[numpy.float_t, ndim=2] block_cov 
-    cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D, sd, mn, z
+    cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D, sd, mn, z, Dinv
     cdef numpy.ndarray[object, ndim=1] correction
     cdef double root_eps_norm, logdet
     # which cutoff?
