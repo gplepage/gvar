@@ -818,7 +818,7 @@ reduced (here to <code class="docutils literal notranslate"><span class="pre">(1
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>                              <span class="c1"># evaluate pade at x=1</span>
 <span class="go">2.67(20)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="o">.</span><span class="n">num</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">pade</span><span class="o">.</span><span class="n">den</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">pade</span><span class="o">.</span><span class="n">order</span><span class="p">)</span> <span class="c1"># evaluate num and den at x=1</span>
-<span class="go">1.33(27) 0.500(69) [1, 2]</span>
+<span class="go">1.33(27) 0.500(69) (1, 2)</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -835,8 +835,8 @@ uncertainties in the <code class="docutils literal notranslate"><span class="pre
 <code class="docutils literal notranslate"><span class="pre">'gavg'</span></code> for the geometric mean (default); <code class="docutils literal notranslate"><span class="pre">'avg'</span></code> for
 the average; <code class="docutils literal notranslate"><span class="pre">'min'</span></code> for the minimum; or <code class="docutils literal notranslate"><span class="pre">'max'</span></code> for
 the maximum. Otherwise a number can be specified, in which case
-the uncertainties in <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> are ignored. The SVD algorithm
-is bypassed if <code class="docutils literal notranslate"><span class="pre">rtol=None</span></code>.</p></li>
+the uncertainties in <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> are ignored. The SVD analysis
+is skipped if <code class="docutils literal notranslate"><span class="pre">rtol=None</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -890,7 +890,7 @@ normalized to 1.</p>
 (numerator) and <code class="docutils literal notranslate"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
 with that of the original series up to order <code class="docutils literal notranslate"><span class="pre">m+n</span></code>.</p>
 <p>This code is adapted from P. Gonnet,  S. Guttel, L. N. Trefethen, SIAM
-Review Vol 55, No. 1, 101 (2013). It uses an <em>svd</em> algorithm to deal with
+Review Vol 55, No. 1, 101 (2013). It uses an SVD algorithm to deal with
 imprecision in the input data,  here specified by the relative tolerance
 <code class="docutils literal notranslate"><span class="pre">rtol</span></code> for the  input coefficients <code class="docutils literal notranslate"><span class="pre">f[i]</span></code>. It automatically reduces
 the order of the approximant if the extraction of Pade coefficients
@@ -1103,9 +1103,9 @@ the array is padded with zeros at the end.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="attribute">
 <dt id="gvar.powerseries.PowerSeries.coeff">
-<em class="property">property </em><code class="sig-name descname">coeff</code><a class="headerlink" href="#gvar.powerseries.PowerSeries.coeff" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">coeff</code><a class="headerlink" href="#gvar.powerseries.PowerSeries.coeff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy of power series coefficients (numpy.array).</p>
 </dd></dl>
 
@@ -1126,7 +1126,7 @@ the array is padded with zeros at the end.</p></li>
 
 <dl class="method">
 <dt id="gvar.powerseries.PowerSeries.integ">
-<code class="sig-name descname">integ</code><span class="sig-paren">(</span><em class="sig-param">*n</em>, <em class="sig-param">x0=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.integ" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">integ</code><span class="sig-paren">(</span><em class="sig-param">*n</em>, <em class="sig-param">x0=0.</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.integ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute <em>n</em>-th indefinite integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 <p>If <em>x0</em> is specified, then the definite integral,
 integrating from point <em>x0</em>, is returned.</p>
@@ -1142,12 +1142,6 @@ in each direction (default is 0).</p></li>
 <dd class="field-even"><p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> object representing the <em>n</em>-th integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="gvar.powerseries.PowerSeries.order">
-<em class="property">property </em><code class="sig-name descname">order</code><a class="headerlink" href="#gvar.powerseries.PowerSeries.order" title="Permalink to this definition">¶</a></dt>
-<dd><p>Highest power in power series.</p>
 </dd></dl>
 
 </dd></dl>

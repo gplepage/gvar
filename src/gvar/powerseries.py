@@ -612,7 +612,7 @@ class PowerSeries(object):
         elif n==0:
             return self
 
-    def integ(self, *n, x0=0.): #=1,x0=None):
+    def integ(self, *n, **kargs): # should be (self, *n, x0=1) but not with Py2
         """ Compute *n*-th indefinite integral of ``self``.
 
         If *x0* is specified, then the definite integral,
@@ -625,6 +625,7 @@ class PowerSeries(object):
         Returns:
             :class:`PowerSeries` object representing the *n*-th integral of ``self``.
         """
+        x0 = kargs.get('x0', 0.)
         if len(n) > 1:
             if numpy.shape(x0) == ():
                 x0 = numpy.zeros(len(n), dtype=float) + x0 

@@ -27,9 +27,6 @@ except:
 def optprint(*args):
     pass
 
-if False:
-    optprint = print
-
 class ArrayTests(object):
     def __init__(self):
         pass

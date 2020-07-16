@@ -115,7 +115,12 @@ Power Series
     :synopsis: Power series arithmetic and evaluation.
 
 .. autoclass:: gvar.powerseries.PowerSeries
-    :members:
+    
+    .. autoattribute:: coeff          
+
+    .. automethod:: deriv(*n)
+
+    .. automethod:: integ(*n, x0=0.)
 
 .. autofunction:: gvar.powerseries.multiseries
 
