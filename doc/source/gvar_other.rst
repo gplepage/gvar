@@ -96,6 +96,18 @@ one-dimensional integrals (using its adaptive Runge-Kutta algorithm):
 .. autofunction:: gvar.ode.integral
 
 
+Pade Approximants
+-------------------
+
+Module :mod:`gvar.pade` provides a class to represent Pade 
+approximants of functions:
+
+.. autoclass:: gvar.pade.Pade 
+
+.. autofunction:: gvar.pade.pade_gvar 
+
+.. autofunction:: gvar.pade.pade_svd
+
 
 Power Series
 --------------
@@ -104,6 +116,10 @@ Power Series
 
 .. autoclass:: gvar.powerseries.PowerSeries
     :members:
+
+.. autofunction:: gvar.powerseries.multiseries
+
+.. autofunction:: gvar.powerseries.multivar
 
 
 

@@ -17,11 +17,18 @@ import numpy as np
 import random
 import gvar as gv
 from gvar import *
-from gvar.powerseries import PowerSeries
+from gvar.powerseries import PowerSeries, multiseries, multivar 
+from gvar.pade import Pade, pade_gvar, pade_svd
 try:
     import scipy.interpolate as scipy_interpolate
 except:
     scipy_interpolate = None
+
+def optprint(*args):
+    pass
+
+if False:
+    optprint = print
 
 class ArrayTests(object):
     def __init__(self):
@@ -660,7 +667,7 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
         for i in range(self.order + 1):
             y.c[i] *= 2
         self.assert_close(y, 2 * self.exp_x)
-        self.assert_close(PowerSeries(), PowerSeries([0.]))
+        self.assertTrue(PowerSeries(order=0).c == PowerSeries([0]).c)
         with self.assertRaises(ValueError):
             PowerSeries([])
         with self.assertRaises(ValueError):
@@ -764,10 +771,10 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
     def test_deviv_integ(self):
         " p.deriv() p.integ() "
         self.assert_close(self.exp_x.integ().deriv(), self.exp_x)
-        self.assert_close(self.exp_x.integ(n=2).deriv(n=2), self.exp_x)
-        self.assert_close(self.exp_x.integ(n=0), self.exp_x)
-        self.assert_close(self.exp_x.deriv(n=0), self.exp_x)
-        self.assert_close(self.x.deriv(self.order + 2), PowerSeries([0]))
+        self.assert_close(self.exp_x.integ(2).deriv(2), self.exp_x)
+        self.assert_close(self.exp_x.integ(0), self.exp_x)
+        self.assert_close(self.exp_x.deriv(0), self.exp_x)
+        self.assertTrue(self.x.deriv(self.order + 2) == 0.0)
         self.assert_close(
             self.exp_x.deriv(),
             PowerSeries(self.exp_x, order=self.order - 1)
@@ -776,6 +783,131 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
             self.exp_x.integ(x0=0),
             exp(PowerSeries(self.x, order=self.order+1)) - 1
             )
+
+    def test_multiseries(self):
+        def layout_test(m):
+            ndim = 0 
+            c = m.c[0]
+            while isinstance(c, PowerSeries):
+                ndim += 1 
+                c = c.c[0]
+            shape = ndim * (m.order + 1, )
+            for idx in np.ndindex(shape):
+                try:
+                    m[idx]
+                    if sum(idx) > m.order:
+                        raise AssertionError('sum(idx) > m.order')
+                except:
+                    self.assertGreater(sum(idx), m.order)
+        # begin
+        c = np.arange(2 * 3 * 4, dtype=float)
+        c.shape = (2, 3, 4)
+
+        # check order
+        m = multiseries(c.tolist(), order=3)
+        assert m.order == 3
+        layout_test(m)
+        for ijk in np.ndindex(7, 7, 7):
+            try:
+                assert m[ijk] == (c[ijk] if np.all(np.array(c.shape) > ijk) else 0.)
+                if sum(ijk) > m.order:
+                    raise AssertionError('sum(ijk) > m.order')
+            except:
+                self.assertGreater(sum(ijk), 3)
+
+        # now without order; arithmetic; function evaluation
+        m = multiseries(c)
+        # check linear arithmetic 
+        c = 2 * c + c / 2
+        m = 2 * m + m / 2
+        c[0, 0, 0] = 13.
+        m[0, 0, 0] = 13.
+        assert m.order == 6
+        for ijk in np.ndindex(7, 7, 7):
+            try:
+                assert m[ijk] == (c[ijk] if np.all(np.array(c.shape) > ijk) else 0.)
+                if sum(ijk) > m.order:
+                    raise AssertionError('sum(ijk) > m.order')
+            except:
+                self.assertGreater(sum(ijk), m.order)
+        def f(x, y, z):
+            return sum(m[ijk] * x ** ijk[0] * y ** ijk[1] * z ** ijk[2] for ijk in np.ndindex(c.shape))
+        self.assertEqual(f(1,2,3), m(1, 2, 3))
+
+        # derivatives
+        def Df(x, y, z):
+            return [
+                sum(ijk[0] * m[ijk] * x ** (ijk[0] - 1) * y ** ijk[1] * z ** ijk[2] for ijk in np.ndindex(c.shape)),
+                sum(ijk[1] * m[ijk] * x ** ijk[0] * y ** (ijk[1] - 1) * z ** ijk[2] for ijk in np.ndindex(c.shape)),
+                sum(ijk[2] * m[ijk] * x ** ijk[0] * y ** ijk[1] * z ** (ijk[2] - 1) for ijk in np.ndindex(c.shape)),
+            ]
+        self.assertEqual(Df(1,2,3), [m.deriv(1,0,0)(1,2,3), m.deriv(0,1,0)(1,2,3), m.deriv(0,0,1)(1,2,3)])
+        self.assertEqual(Df(1,2,3), [m.deriv(1)(1,2,3), m.deriv(0,1)(1,2,3), m.deriv(0,0,1)(1,2,3)])
+        layout_test(m.deriv(1))
+        self.assertEqual(m.deriv(1).order, m.order - 1)
+        layout_test(m.deriv(1, 1))
+        layout_test(m.deriv(1, 2, 3))
+        self.assertEqual(m.deriv(1, 2, 3).order, m.order - 6)
+        self.assertEqual(m.deriv(1,1)(1,2,3), m.deriv(1,1,0)(1,2,3))
+        def DDf(x, y, z):
+            return [
+                sum(ijk[0] * ijk[1] * m[ijk] * x ** (ijk[0] - 1) * y ** (ijk[1] - 1) * z ** ijk[2] for ijk in np.ndindex(c.shape)),
+                sum(ijk[1] * ijk[2] * m[ijk] * x ** ijk[0] * y ** (ijk[1] - 1) * z ** (ijk[2] - 1) for ijk in np.ndindex(c.shape)),
+                sum(ijk[2] * ijk[0] * m[ijk] * x ** (ijk[0] - 1) * y ** ijk[1] * z ** (ijk[2] - 1) for ijk in np.ndindex(c.shape)),
+            ]
+        self.assertEqual(DDf(1,2,3), [m.deriv(1,1,0)(1,2,3), m.deriv(0,1,1)(1,2,3), m.deriv(1,0,1)(1,2,3)])
+        def D2f(x, y, z):
+            return [
+                sum(ijk[0] * (ijk[0] - 1) * m[ijk] * x ** (ijk[0] - 2) * y ** ijk[1] * z ** ijk[2] for ijk in np.ndindex(c.shape)),
+                sum(ijk[1] * (ijk[1] - 1) * m[ijk] * x ** ijk[0] * y ** (ijk[1] - 2) * z ** ijk[2] for ijk in np.ndindex(c.shape)),
+                sum(ijk[2] * (ijk[2] - 1) * m[ijk] * x ** ijk[0] * y ** ijk[1] * z ** (ijk[2] - 2) for ijk in np.ndindex(c.shape)),
+            ]
+        self.assertEqual(D2f(1,2,3), [m.deriv(2,0,0)(1,2,3), m.deriv(0,2,0)(1,2,3), m.deriv(0,0,2)(1,2,3)])
+        self.assertEqual(D2f(1,2,3), [m.deriv(2)(1,2,3), m.deriv(0,2)(1,2,3), m.deriv(0,0,2)(1,2,3)])
+        self.assertEqual([0.,0.,0.],[ m.deriv(m.order + 1), m.deriv(0, m.order + 1), m.deriv(0, 0, m.order+1)])
+
+        # derivatives undo integrals (not true of reverse)
+        self.assertEqual(m(1,2,3), m.integ(1,2,3).deriv(1,2,3)(1,2,3))
+        self.assertEqual(m(1,2,3), m.integ(1,2,3, x0=[3,2,1]).deriv(1,2,3)(1,2,3))
+        self.assertEqual(m(1,2,3), m.integ(0,0,3).deriv(0,0,3)(1,2,3))
+        self.assertEqual(m(1,2,3), m.integ(3).deriv(3,0,0)(1,2,3))
+
+        # integrate from x0=[0,0,0]
+        mm = m.integ(1,2,3)
+        self.assertNotEqual(mm(1,2,3), 0)
+        assert np.allclose(
+            0, 
+            [mm(0,2,3), mm(1,0,3), mm(1,2,0), mm(1,0,0), mm(0,2,0), mm(0,0,3), mm(0,0,0)],
+            )
+        # integrate from x0=[1,2,3]
+        mm = m.integ(1,2,3, x0=[1,2,3])
+        assert np.allclose(
+            0, 
+            [mm(1,2,3), mm(0,2,3), mm(1,0,3), mm(1,2,0), mm(1,0,0), mm(0,2,0), mm(0,0,3)],
+            )
+        assert not np.allclose(m(0,0,0), 0)
+        assert not np.allclose(m(2,0,0), 0)
+        assert not np.allclose(m(0,3,0), 0)
+        assert not np.allclose(m(0,0,1), 0)
+
+        # multivar
+        c = np.arange(1 * 2 * 3, dtype=float)
+        c.shape = (1, 2, 3)
+        m = multiseries(c)
+        x, y, z = multivar(3, order=m.order)
+        newm = sum(c[ijk] * x ** ijk[0] * y ** ijk[1] * z ** ijk[2] for ijk in np.ndindex(c.shape))
+        self.assertEqual(newm.order, m.order)
+        for ijk in np.ndindex(3 * (m.order,)):
+            if sum(ijk) <= m.order:
+                self.assertEqual(newm[ijk], m[ijk])
+        exp1 = gv.exp(x + 2 * y + z)
+        exp2 = gv.exp(x + 2 * y) * gv.exp(z)
+        assert np.allclose(exp1(0,0).c, [1., 1., 0.5, 1/6.])
+        assert exp1.order == 3 and exp2.order == 3
+        assert np.allclose(exp1(0,0).c, [1., 1., 0.5, 1/6.])
+        for ijk in np.ndindex(3 * (exp1.order,)):
+            if sum(ijk) <= m.order:
+                self.assertEqual(exp1[ijk], exp2[ijk])
 
 class test_root(unittest.TestCase,ArrayTests):
     def setUp(self):
@@ -896,7 +1028,6 @@ class test_linalg(unittest.TestCase, ArrayTests):
         np.testing.assert_allclose(valnp, gv.mean(val))
         np.testing.assert_allclose(vecnp, gv.mean(vec))
 
-
     def test_svd(self):
         " linalg.svd(a) "
         def reassemble(u,s,vT):
@@ -932,6 +1063,122 @@ class test_linalg(unittest.TestCase, ArrayTests):
         cnp, residual, rank, s = np.linalg.lstsq(gv.mean(M), gv.mean(y), rcond=None)
         np.testing.assert_allclose(cnp, gv.mean(c))
 
+class test_pade(unittest.TestCase,ArrayTests):
+    def setUp(self): pass
+
+    def tearDown(self): pass
+
+    def test_Pade(self):
+        pass 
+
+    def test_pade_svd(self):
+        " pade_svd(tayl, n, m) "
+        optprint('\n=========== Test pade_svd')
+        # Taylor expansion for exp(x)
+        e_exp = [1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24.0, 1.0/120.0]
+
+        # test against scipy
+        p0, q0 = Pade._scipy_pade(e_exp, 2)
+        p, q = pade_svd(e_exp, 3, 2)
+        assert numpy.allclose(p, p0)
+        assert numpy.allclose(q, q0)
+        optprint('(3,2) Pade of exp(x) - num:', p)
+        optprint('(3,2) Pade of exp(x) - den:', q)
+        e = sum(p) / sum(q)
+        optprint('Pade(x=1) = {:.6}    error = {:7.2}'.format(
+            e,
+            abs(e/numpy.exp(1) - 1.),
+            ))
+
+        # now with 10% errors --- automatically reduces to (2,1)
+        p0, q0 = Pade._scipy_pade(e_exp[:4], 1)
+        p, q = pade_svd(e_exp, 3, 2, rtol=0.1)
+        assert numpy.allclose(p, p0)
+        assert numpy.allclose(q, q0)
+        optprint('(2,1) Pade of exp(x) - num:', p)
+        optprint('(2,1) Pade of exp(x) - den:', q)
+        e = sum(p) / sum(q)
+        optprint('Pade(x=1) = {:.6}    error = {:7.2}'.format(
+            e,
+            abs(e/numpy.exp(1) - 1.)
+            ))
+
+        # now with 90% errors --- automatically reduces to (1,0)
+        p, q = pade_svd(e_exp, 3, 2, rtol=0.9)
+        optprint('(1,0) Pade of exp(x) - num:', p)
+        optprint('(1,0) Pade of exp(x) - den:', q)
+        e = sum(p) / sum(q)
+        optprint('Pade(x=1) = {:.6}    error = {:7.2}'.format(
+            e,
+            abs(e/numpy.exp(1) - 1.)
+            ))
+        assert numpy.allclose(p, [1., 1.])
+        assert numpy.allclose(q, [1.])
+
+    def test_pade_svd_consistency(self):
+        " pade_svd self consistency "
+        # high-order taylor series
+        x = gv.powerseries.PowerSeries([0,1], order=20)
+        f = np.exp(x).c
+        # verify that reduced-order Pades are exact Pades
+        m,n = 7,7
+        for rtol in [1, 0.1, 0.01, 0.001]:
+            a, b = pade_svd(f, m, n, rtol=rtol)
+            mm = len(a) - 1
+            nn = len(b) - 1
+            if (m,n) != (mm,nn):
+                aa, bb = pade_svd(f, mm, nn)
+                self.assertTrue(np.allclose(aa, a))
+                self.assertTrue(np.allclose(bb, b))
+
+    def test_pade_gvar(self):
+        " pade_gvar(tayl, m, n) and Pade(tayl, order=(m,n))"
+        optprint('\n=========== Test pade_gvar')
+        e_exp = [1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24.0, 1.0/120.0, 1.0/720.]
+        def _scipy_pade(m, n):
+            return Pade._scipy_pade(e_exp[:m + n + 1], n)
+        def print_result(p, q):
+            optprint('num =', p)
+            optprint('den =', q)
+        def test_result(p, q, e_exp):
+            m = len(p) - 1
+            n = len(q) - 1
+            # test against scipy
+            p0, q0 = _scipy_pade(m, n)
+            try:
+                assert numpy.allclose(mean(p), p0)
+            except:
+                print (m,n, p0, p, q0, q)
+            assert numpy.allclose(mean(q), q0)
+            # test that errors correlate with input coefficients
+            num = powerseries.PowerSeries(p, order=m + n)
+            den = powerseries.PowerSeries(q, order=m + n)
+            ratio = (num/den).c / e_exp[:m + n + 1]
+            assert numpy.allclose(mean(ratio), 1.)
+            assert numpy.allclose(sdev(ratio), 0.0)
+
+        # print('scipy', _scipy_pade(1,1), pade_svd(e_exp, 3,2, rtol=0.01))
+        # 1% noise --- automatically reduces to (2,1)
+        e_exp_noise = [x * gvar('1.0(1)') for x in e_exp]
+        p, q = pade_gvar(e_exp_noise, 3, 2)
+        print_result(p, q)
+        self.assertEqual(len(p), 3)
+        self.assertEqual(len(q), 2)
+        test_result(p, q, e_exp_noise)
+
+        # 30% noise --- automatically reduces to (1,1)
+        e_exp_noise = [x * gvar('1.0(3)') for x in e_exp]
+        p, q = pade_gvar(e_exp_noise, 3, 2)
+        self.assertEqual(len(p), 2)
+        self.assertEqual(len(q), 2)
+        test_result(p, q, e_exp_noise)
+
+        # 30% noise, rtol=None --- no reduction
+        e_exp_noise = [x * gvar('1.0(3)') for x in e_exp]
+        p, q = pade_gvar(e_exp_noise, 3, 2, rtol=None)
+        self.assertEqual(len(p), 4)
+        self.assertEqual(len(q), 3)
+        test_result(p, q, e_exp_noise)
 
 
 if __name__ == '__main__':

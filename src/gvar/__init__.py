@@ -95,7 +95,9 @@ tools for use with |GVar|\s (or ``float``\s):
 
     - ``linalg`` --- basic linear algebra.
 
-    - ``powerseries`` --- power series representation
+    - ``pade`` --- Pade approximants of functions.
+
+    - ``powerseries`` --- power series representations
         of functions.
 
     - ``root`` --- root-finding for one-dimensional functions.
@@ -134,6 +136,7 @@ from gvar import dataset
 from gvar import ode
 from gvar import cspline
 from gvar import linalg
+from gvar import pade
 from gvar import powerseries
 from gvar import root
 
@@ -728,7 +731,9 @@ def erf(x):
         return math.erf(x)
     except TypeError:
         pass
-    if isinstance(x, GVar):
+    if hasattr(x, 'erf'):
+        return x.erf()
+    elif isinstance(x, GVar):
         f = math.erf(x.mean)
         dfdx = 2. * math.exp(- x.mean ** 2) / math.sqrt(math.pi)
         return gvar_function(x, f, dfdx)

@@ -4,8 +4,8 @@ approximations of functions. A function's power series is specified by the
 coefficients in its Taylor expansion with respect to an independent variable,
 say ``x``::
 
-    f(x) = f(0) + f'(0)*x + (f''(0)/2)*x**2 + (f'''(0)/6)*x**3 + ...
-         = f0 + f1*x + f2*x**2 + f3*x**3 + ...
+    f(x) = f(0) + f'(0) * x + (f''(0)/2) * x**2 + (f'''(0)/6) * x**3 + ...
+         = f0 + f1 * x + f2 * x**2 + f3 * x**3 + ...
 
 In practice a power series is different from a polynomial because power
 series, while infinite order in principle, are truncated at some finite
@@ -16,14 +16,14 @@ for still higher-order terms are assumed to be unknown (as opposed to zero).
 Taylor's theorem can be used to generate power series for functions of
 power series::
 
-    g(f(x)) = g(f0) + g'(f0)*(f(x)-f0) + (g''(f0)/2)*(f(x)-f0)**2 + ...
-            = g0 + g1*x + g2*x**2 + ...
+    g(f(x)) = g(f0) + g'(f0) * (f(x)-f0) + (g''(f0)/2) * (f(x)-f0)**2 + ...
+            = g0 + g1 * x + g2 * x**2 + ...
 
 This allows us to define a full calculus for power series, where arithmetic
 expressions and (sufficiently differentiable) functions of power series
 return new power series.
 
-Power series arithmetic
+Using power series
 -----------------------
 Class :class:`PowerSeries` provides a numerical implementation of the power series
 calculus. ``PowerSeries([f0,f1,f2,f3...])`` is a numerical representation of
@@ -31,19 +31,20 @@ a power series with coefficients ``f0, f1, f2, f3...`` (as in ``f(x)``
 above). Thus, for example, we can define a 4th-order power series
 approximation ``f`` to ``exp(x)=1+x+x**2/2+...`` using
 
-    >>> from gvar.powerseries import *
-    >>> f = PowerSeries([1., 1., 1/2., 1/6., 1/24.])
-    >>> print f             # print the coefficients
+    >>> import gvar as gv 
+    >>> import gvar.powerseries as ps
+    >>> f = ps.PowerSeries([1., 1., 1/2., 1/6., 1/24.])
+    >>> print(f)            # print the coefficients
     [ 1.          1.          0.5         0.16666667  0.04166667]
 
 Arithmetic expressions involving instances of class :class:`PowerSeries` are
 themselves :class:`PowerSeries` as in, for example,
 
-    >>> print 1/f           # power series for exp(-x)
+    >>> print(1/f)              # power series for exp(-x)
     [ 1.         -1.          0.5        -0.16666667  0.04166667]
-    >>> print log(f)        # power series for x
+    >>> print(gv.log(f))        # power series for x
     [ 0.  1.  0. -0.  0.]
-    >>> print f/f           # power series for 1
+    >>> print(f / f)            # power series for 1
     [ 1.  0.  0.  0.  0.]
 
 The standard arithmetic operators (``+,-,*,/,=,**``) are supported, as are
@@ -54,9 +55,9 @@ lowest order.
 
 :class:`PowerSeries` can be differentiated and integrated::
 
-    >>> print f.deriv()     # derivative of exp(x)
+    >>> print(f.deriv())    # derivative of exp(x)
     [ 1.          1.          0.5         0.16666667]
-    >>> print f.integ()     # integral of exp(x) (from x=0)
+    >>> print(f.integ())    # integral of exp(x) (from x=0)
     [ 0.          1.          0.5         0.16666667  0.04166667  0.00833333]
 
 Each :class:`PowerSeries` represents a function. The :class:`PowerSeries` for
@@ -64,62 +65,92 @@ a function of a function is easily obtained. For example, assume ``f``
 represents function ``f(x)=exp(x)``, as above, and ``g``
 represents ``g(x)=log(1+x)``::
 
-    >>> g = PowerSeries([0, 1, -1/2., 1/3., -1/4.])
+    >>> g = ps.PowerSeries([0, 1, -1/2., 1/3., -1/4.])
 
 Then ``f(g)`` gives the :class:`PowerSeries` for ``exp(log(1+x)) = 1 + x``::
 
-    >>> print f(g)
+    >>> print(f(g))
     [  1.0000e+00   1.0000e+00   0.0000e+00  -2.7755e-17 -7.6327e-17]
 
 Individual coefficients from the powerseries can be accessed using
 array-element notation: for example,
 
-    >>> print f[0], f[1], f[2], f[3]
+    >>> print(f[0], f[1], f[2], f[3])
     1.0 1.0 0.5 0.166666666667
     >>> f[0] = f[0] - 1.
-    >>> print f             # f is now the power series for exp(x)-1
+    >>> print(f)            # f is now the power series for exp(x)-1
     [ 0.          1.          0.5         0.16666667  0.04166667]
 
-Numerical evaluation of power series
---------------------------------------
-The power series can also be evaluated for a particular
-numerical value of x: continuing the example,
+Finally, a power series can be evaluated for a particular
+numerical value of x:
 
     >>> x = 0.01
-    >>> print f(x)          # should be exp(0.01)-1 approximately
+    >>> print(f(x))             # should be exp(0.01)-1 approximately
     0.0100501670833
-
-    >>> print exp(x)-1      # verify that it is
+    >>> print(gv.exp(x)-1)      # verify that it is
     0.0100501670842
 
 The independent variable ``x`` could be of any arithmetic type (it need not
 be a ``float``).
 
+Multivariate power series
+-------------------------
+The coefficients in a :class:`PowerSeries` object can themselves by :class:`PowerSeries` 
+objects. The is used to represent multivariate power series such as::
+
+    f(x,y) = f00 + f10 * x + f01 * y + f20 * x**2 + f11 * x*y + f02 * y**2 + ...
+
+One way to construct a :class:`PowerSeries` object ``f`` representing this series, through
+``order=2``, is from an array ``c`` containing the coefficients::
+
+    c = [[f00, f01, f02], [f10, f11, 0], [f20, 0, 0]]
+    f = ps.multiseries(c, order=2)
+
+Here entries for ``c[1,2]``, ``c[2,1]``,  and ``c[2,2]`` are ignored because they 
+correspond to ``order=3`` or higher.
+The individual coefficients ``c[i,j]`` are accessed using ``f[i,j]``, and the 
+function is evaluate at point ``(x,y)`` using ``f(x,y)``. Similarly the first-order 
+partial derivative with respect to ``x`` and ``y``, for example, is given by 
+:class:`PowerSeries` object
+``f.deriv(1,1)``, while first-order integrals with respect to ``x`` and ``y`` 
+are given by ``f.integ(1,1)``.
+
 Taylor expansions of Python functions
 -------------------------------------
 :class:`PowerSeries` can be used to compute Taylor series for more-or-less
-arbitrary pure-Python functions provided the functions are locally analytic
-(or at least sufficiently differentiable). To compute the ``N``-th order
+arbitrary pure-Python functions provided the functions are
+sufficiently differentiable. To compute the ``N``-th order
 expansion of a Python function ``g(x)``, first create a ``N``-th order
 :class:`PowerSeries` variable that represents the expansion parameter: say,
 ``x = PowerSeries([0.,1.],order=N)``. The Taylor series for function ``g``
 is then given by ``g_taylor = g(x)`` which is a :class:`PowerSeries` instance.
-For example, consider:
+For example, consider::
 
-    >>> from gvar.powerseries import *
-    >>> def g(x):           # an example of a Python function
+    >>> def g(x):              # an example of a Python function
     ...     return 0.5/sqrt(1+x) + 0.5/sqrt(1-x)
     ...
-    >>> x = PowerSeries([0.,1.],order=5)    # Taylor series for x
-    >>> print x
+    >>> x = ps.PowerSeries([0.,1.],order=5)    # Taylor series for x
+    >>> print(x)
     [ 0.  1.  0.  0.  0.  0.]
-    >>> g_taylor = g(x)     # Taylor series for g(x) about x=0
-    >>> print g_taylor
+    >>> g_taylor = g(x)        # Taylor series for g(x) about x=0
+    >>> print(g_taylor)
     [ 1.         0.         0.375      0.         0.2734375  0.       ]
-    >>> exp_taylor = exp(x) # Taylor series for exp(x) about x=0
-    >>> print exp_taylor
+    >>> exp_taylor = gv.exp(x) # Taylor series for exp(x) about x=0
+    >>> print(exp_taylor)
     [ 1.          1.          0.5         0.16666667  0.04166667  0.00833333]
 
+This generalizes easily to multivariate expansions. For example, 
+one can calculate the Taylor expansion coefficients for ``exp(x+y)`` using::
+
+    >>> x,y = ps.multivar(dim=2, order=3)
+    >>> exp_taylor = gv.exp(x + y)
+    >>> print(exp_taylor)
+    [[1.         1.         0.5        0.16666667], [1.  1.  0.5], [0.5 0.5], [0.16666667]]
+    >>> print(exp_taylor(.1,.2), gv.exp(.1 + .2))
+    1.3495000000000001 1.3498588075760032
+
+Here function :func:`multivar` creates :class:`PowerSeries` objects corresponding to the 
+expansion variables through a given order.
 """
 # Created by G. Peter Lepage on 2009-12-14.
 # Copyright (c) 2009-2020 G. Peter Lepage.
@@ -138,6 +169,7 @@ import numpy
 import math
 from numpy import exp, log, sqrt, sin, cos, tan, arcsin, arccos, arctan
 from numpy import sinh, cosh, tanh, arcsinh, arccosh, arctanh
+from scipy.special import eval_hermite as _scipy_eval_hermite
 
 class PowerSeries(object):
     """
@@ -165,20 +197,19 @@ class PowerSeries(object):
     :class:`PowerSeries` can also be differentiated (``p.deriv()``)
     and integrated (``p.integ()``).
 
-    :param c: Power series coefficients (optional if parameter
-            *order* specified).
-    :type c: list or array
-    :param order: Highest power in power series (optional if parameter
-            *c* specified).
-    :type order: integer
+    Args:
+        c (array): Power series coefficients.
+        order (int or None): Highest power in power series. If ``None``, 
+            the order is inferred from the array of coefficients. 
+            If array ``c`` is too small for the specified ``order``, 
+            the array is padded with zeros at the end.
     """
-    def __init__(self,c=None, order=None):
-        self.__array_priority__ = 100.
+    def __init__(self, c=None, order=None):
         if isinstance(c, PowerSeries):
             c = numpy.array(c.c)
         if order is None:
             if c is None:
-                c = [0]
+                raise ValueError('must specify c or order')
             elif len(c) == 0:
                 raise ValueError("empty coefficient array: c = "+str(c))
             order = len(c) - 1
@@ -188,14 +219,19 @@ class PowerSeries(object):
                 str(order)
                 )
         if c is None or len(c) == 0:
-            self.c = numpy.zeros(order+1, object)
-        elif order<len(c):
-            self.c = numpy.array(c[:order+1])
-        elif order>=len(c):
+            self.c = numpy.zeros(order + 1, object)
+        elif order < len(c):
+            self.c = numpy.array(c[:order + 1])
+        elif order >= len(c):
             c = numpy.asarray(c)
             shape = (order + 1,) + c.shape[1:]
-            self.c = numpy.zeros(shape,c.dtype)
+            self.c = numpy.zeros(shape, c.dtype)
             self.c[:len(c)] = c
+            self.c[len(c):] *= c[0]
+        # check for PowerSeries, fix orders
+        for i in range(len(self.c)):
+            if isinstance(self.c[i], PowerSeries):
+                self.c[i] = PowerSeries(self.c[i].c, order=order - i)
 
     def _getorder(self):
         return len(self.c)-1
@@ -206,13 +242,19 @@ class PowerSeries(object):
     coeff = property(_getcoeff,
                 doc="Copy of power series coefficients (numpy.array).")
 
-    def __getitem__(self,i):
+    def __getitem__(self, i):
         """ Return C{i}th coefficient of power series. """
-        return self.c[i]
+        if numpy.size(i) > 1:
+            return self.c[i[0]][i[1:]]
+        else:
+            return self.c[i if numpy.shape(i) == () else i[0]]
 
-    def __setitem__(self,i,val):
+    def __setitem__(self, i, val):
         """ Set C{i}th coefficient of power series equal to C{val}. """
-        self.c[i] = val
+        if numpy.size(i) > 1:
+            self.c[i[0]][i[1:]] = val
+        else:
+            self.c[i if numpy.shape(i) == () else i[0]] = val
 
     def __iter__(self):
         """ Iterate over coefficients of power series C{self}. """
@@ -345,23 +387,51 @@ class PowerSeries(object):
         return exp(self*log(x))
 
     def __str__(self):
-        return str(self.c)
+        if isinstance(self.c[0], PowerSeries):
+            return str([str(ci) for ci in self.c]).replace('"','').replace("'",'') # .replace(',','')
+        else:
+            return str(self.c)
 
     def __repr__(self):
         return "PowerSeries(%s)" % str(self.c.tolist())
 
-    def __call__(self,x):
+    def __call__(self, *x):
+        if len(x) > 1:
+            return self(x[0])(*x[1:])
+        elif len(x) == 1:
+            x = x[0]
         ans = 0.0
         xn = 1.
-        for ci in self.c:
-            ans += ci*xn
-            xn *= x
+        if isinstance(self.c[0], PowerSeries):
+            # multivariate power series
+            order = self.c[0].order
+            for ci in self.c:
+                ans += PowerSeries(ci, order=order) * xn
+                xn *= x        
+        else:
+            for ci in self.c:
+                ans += ci * xn
+                xn *= x
         return ans
-        # xn = x**numpy.arange(self.order+1)
-        # return numpy.sum([c*x for c,x in zip(self.c,xn)])
 
     def sqrt(self):
         return self**0.5
+
+    def erf(self):
+        from gvar import erf as _gvar_erf 
+        jmax = self.order + 1
+        jarray = numpy.arange(jmax + 1)
+        deriv = (
+            _scipy_eval_hermite(jarray, self.c[0])
+            * (-1) ** jarray
+            ) * (2 * numpy.exp(-self.c[0] ** 2) / numpy.sqrt(numpy.pi))
+        x = self - self.c[0]
+        fac = 1.
+        ans = _gvar_erf(self.c[0])
+        for j in range(1, jmax + 1):
+            fac *= x / j
+            ans = ans + fac * deriv[j - 1]
+        return ans
 
     def sin(self):
         # use Taylor series about x=self.c[0]
@@ -487,10 +557,10 @@ class PowerSeries(object):
     def exp(self):
         f = exp(self.c[0])
         ans = 1.
-        x = self-self.c[0]
-        for n in range(self.order,0,-1):
-            ans = 1. + x*ans/float(n)
-        return f*ans
+        x = self - self.c[0]
+        for n in range(self.order, 0, -1):
+            ans = 1. + x * ans/ float(n)
+        return f * ans
 
     def log(self):
         ans = log(self.c[0])
@@ -502,47 +572,142 @@ class PowerSeries(object):
         # ans[0] = ans[0] + log(self.c[0])
         return ans
 
-    def deriv(self, n=1):
-        """ Compute *n*-th derivative of ``self``.
+    def deriv(self, *n):
+        """ Compute *n*-th derivative (or partial derivative) of ``self``.
 
-        :param n: Number of derivatives.
-        :type n: positive integer
-        :returns: *n*-th derivative of ``self``.
+        Args:
+            n (array): Number of derivatives in each direction.  Default is ``n=[1]``.
+
+        Returns:
+            :class:`PowerSeries` object representing the 
+            *n*-th derivative or partial derivative of ``self``.
         """
+        if len(n) == 0:
+            n = [1]
+        if len(n) > 1:
+            ps = self.deriv(n[0])
+            if ps == 0:
+                return 0
+            c = numpy.array(ps.c)
+            for i in range(len(c)):
+                if isinstance(c[i], PowerSeries):
+                    c[i] = c[i].deriv(*n[1:])
+                else:
+                    c[i] = 0.0
+            order = ps.order - sum(n[1:])
+            if order >= 0:
+                return PowerSeries(c, order=order)
+            else:
+                return 0.
+        elif len(n) == 1:
+            n = n[0]
         if n==1:
             if self.order > 0:
-                return PowerSeries(self.c[1:]*range(1,len(self.c)))
+                return PowerSeries(self.c[1:] * range(1, len(self.c)))
             else:
-                return PowerSeries([0. * self.c[0]])
+                return 0.
         elif n>1:
-            return self.deriv().deriv(n-1)
+            ans = self.deriv(1)
+            return ans.deriv(n-1) if isinstance(ans, PowerSeries) else 0.
         elif n==0:
             return self
 
-    def integ(self,n=1,x0=None):
+    def integ(self, *n, x0=0.): #=1,x0=None):
         """ Compute *n*-th indefinite integral of ``self``.
 
         If *x0* is specified, then the definite integral,
         integrating from point *x0*, is returned.
 
-        :param n: Number of integrations.
-        :type n: integer
-        :param x0: Starting point for definite integral (optional).
-        :returns: *n*-th integral of ``self``.
+        Args:
+            n (array): Number of integrations in each direction. Default is ``n=[1]``.
+            x0 (array or float): Starting point for definite integral 
+                in each direction (default is 0).
+        Returns:
+            :class:`PowerSeries` object representing the *n*-th integral of ``self``.
         """
+        if len(n) > 1:
+            if numpy.shape(x0) == ():
+                x0 = numpy.zeros(len(n), dtype=float) + x0 
+            ps = self.integ(n[0], x0=x0[0])
+            c = numpy.array(ps.c) 
+            for i in range(len(c)):
+                c[i] = c[i].integ(*n[1:], x0=x0[1:])
+            order = ps.order + sum(n[1:])
+            return PowerSeries(c, order=order)
+        elif len(n) == 0:
+            n = 1
+        else:
+            n = n[0]
+        if numpy.shape(x0) != ():
+            x0 = x0[0]
         if n==1:
             if self.order<0:
                 ans = PowerSeries([0])
             else:
                 ans = PowerSeries([0.*self.c[0]] +
                     [x/(i+1.) for i,x in enumerate(self.c)])
-            if x0 is not None:
                 return PowerSeries([ans.c[0]-ans(x0)]+list(ans.c[1:]))
-            else:
-                return ans
         elif n>1:
-            return self.integ().integ(n=n-1, x0=x0)
+            return self.integ().integ(n-1, x0=x0)
         elif n==0:
             return self
 
 
+def multiseries(c, order=None):
+    """ Create multivariate power series from coefficients in array ``c``.
+
+    Args:
+        c (array): :mod:`numpy`-like array containing the power series 
+            coefficients. In ``d`` dimensions, ``c[i1,i2,...,id]`` is the 
+            coefficient of ``x1**i1 * x2**i2 * ... * xd**id``.
+        order (int or None): Highest power in power series, where the power 
+            associated with term ``x1**i1 * x2**i2 * ... * xd**id`` 
+            is the sum of the exponents: ``i1 + i2 + ... + id``. If ``None``,
+            the order is inferred from the array of coefficients.
+    
+    Returns:
+        :class:`PowerSeries` object representing the multivariate power series. 
+    """
+    c = numpy.asarray(c)
+    if c.ndim <= 0:
+        return None
+    if c.size == 0:
+        c = numpy.zeros(c.ndim * (1,), dtype=c.dtype)
+    if order is None:
+        order = sum([n - 1 for n in c.shape])
+    ans = []
+    for i, ci in enumerate(c[:order + 1]):
+        if ci.shape == ():
+            ans.append(ci)
+        else:
+            ans.append(multiseries(ci, order=order - i))
+    ans = PowerSeries(ans, order=order)
+    ans.ndim = c.ndim
+    return ans
+    
+def multivar(dim, order):
+    """ Create :class:`PowerSeries` objects representing the expansion variables.
+
+    Args:
+        dim (int): The dimensionality of the multivariate space.
+        order (int): Highest power in the power series,  where the power 
+            associated with term ``x1**i1 * x2**i2 * ... * xd**id`` 
+            is the sum of the exponents: ``i1 + i2 + ... + id``.
+
+    Returns:
+        An array of ``dim`` :class:`PowerSeries` objects corresponding to 
+        each of the expansion variables in a ``dim``-dimensional multivariate
+        power series.
+    """
+    if dim <= 0 or order < 0:
+        return []
+    shape = dim * (order + 1,)
+    ans = numpy.empty(dim, dtype=object)
+    idx = numpy.zeros(dim, dtype=int)
+    zeros = numpy.zeros(shape, dtype=float)
+    for i in range(dim):
+        ans[i] = multiseries(zeros, order=order)
+        idx[i] = 1
+        ans[i][idx] = 1.
+        idx[i] = 0
+    return ans

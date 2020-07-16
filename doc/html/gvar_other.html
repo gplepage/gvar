@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Numerical Analysis Modules in gvar &#8212; gvar 11.6 documentation</title>
+    <title>Numerical Analysis Modules in gvar &#8212; gvar 11.7 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.7 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -772,14 +772,158 @@ default value is <code class="docutils literal notranslate"><span class="pre">No
 </dd></dl>
 
 </div>
+<div class="section" id="pade-approximants">
+<h2>Pade Approximants<a class="headerlink" href="#pade-approximants" title="Permalink to this headline">¶</a></h2>
+<p>Module <code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.pade</span></code> provides a class to represent Pade
+approximants of functions:</p>
+<dl class="class">
+<dt id="gvar.pade.Pade">
+<em class="property">class </em><code class="sig-prename descclassname">gvar.pade.</code><code class="sig-name descname">Pade</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">order</em>, <em class="sig-param">rtol='gavg'</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.pade.Pade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pade approximant to <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">x**i</span></code> for <code class="docutils literal notranslate"><span class="pre">GVar</span></code>s.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">order=(m,n)</span></code> Pade approximant to a series given by
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">*</span> <span class="pre">x**i</span></code> is the ratio of  polynomials of order <code class="docutils literal notranslate"><span class="pre">m</span></code>
+(numerator) and <code class="docutils literal notranslate"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
+with that of the original series up to order <code class="docutils literal notranslate"><span class="pre">m+n</span></code>.</p>
+<p>A <a class="reference internal" href="#gvar.pade.Pade" title="gvar.pade.Pade"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pade</span></code></a> object <code class="docutils literal notranslate"><span class="pre">pade</span></code> creates <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.powerseries.PowerSeries</span></code></a>
+objects for the numerator (<code class="docutils literal notranslate"><span class="pre">pade.num</span></code>) and the denominator (<code class="docutils literal notranslate"><span class="pre">pade.den</span></code>)
+of the Pade approximant corresponding to the input series <code class="docutils literal notranslate"><span class="pre">f[i]</span></code>. The
+approximant can be evaluated for arbitrary <code class="docutils literal notranslate"><span class="pre">x</span></code> using <code class="docutils literal notranslate"><span class="pre">pade(x)</span></code>. The
+coefficients used in the numerator and denominator are given by <code class="docutils literal notranslate"><span class="pre">pade.num.c</span></code>
+and <code class="docutils literal notranslate"><span class="pre">pade.den.c</span></code>, respectively.</p>
+<p>Elements in the series <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> may be numbers or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.
+When the latter appear, the code uses an SVD algorithm (see <a class="reference internal" href="#gvar.pade.pade_svd" title="gvar.pade.pade_svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">pade_svd()</span></code></a>)
+to deal with the imprecision in the input data. It automatically reduces
+the order of the approximant if the extraction of Pade coefficients
+is too unstable given the noise in the input data. The actual order used
+in the approximant is given by <code class="docutils literal notranslate"><span class="pre">pade.order</span></code>.</p>
+<p class="rubric">Examples</p>
+<p>Typical usage is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;1(0)&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0(1)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.500(10)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.1667(100)&#39;</span><span class="p">,</span><span class="s1">&#39;.04167(100)&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pade</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">pade</span><span class="o">.</span><span class="n">Pade</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="o">.</span><span class="n">num</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">pade</span><span class="o">.</span><span class="n">den</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>               <span class="c1"># num and den coefficients</span>
+<span class="go">[1(0) 0.50(14) 0.08(11)] [1(0) -0.50(14) 0.083(55)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>                              <span class="c1"># evaluate pade at x=1</span>
+<span class="go">2.714(99)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="o">.</span><span class="n">num</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">pade</span><span class="o">.</span><span class="n">den</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">pade</span><span class="o">.</span><span class="n">order</span><span class="p">)</span> <span class="c1"># evaluate num and den at x=1</span>
+<span class="go">1.58(21) 0.583(82) (2, 2)</span>
+</pre></div>
+</div>
+<p>When errors are larger (see <code class="docutils literal notranslate"><span class="pre">c[0]</span></code>), the order may be automatically
+reduced (here to <code class="docutils literal notranslate"><span class="pre">(1,2)</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;1.0(1)&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0(1)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.500(10)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.1667(100)&#39;</span><span class="p">,</span><span class="s1">&#39;.04167(100)&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pade</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">pade</span><span class="o">.</span><span class="n">Pade</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="o">.</span><span class="n">num</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">pade</span><span class="o">.</span><span class="n">den</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>               <span class="c1"># num and den coefficients</span>
+<span class="go">[1.00(10) 0.33(29)] [1(0) -0.67(17) 0.17(11)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>                              <span class="c1"># evaluate pade at x=1</span>
+<span class="go">2.67(20)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pade</span><span class="o">.</span><span class="n">num</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">pade</span><span class="o">.</span><span class="n">den</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">pade</span><span class="o">.</span><span class="n">order</span><span class="p">)</span> <span class="c1"># evaluate num and den at x=1</span>
+<span class="go">1.33(27) 0.500(69) [1, 2]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Array <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> of power series coefficients for <code class="docutils literal notranslate"><span class="pre">i=0...n+m</span></code>.</p></li>
+<li><p><strong>order</strong> (<em>tuple</em>) – <code class="docutils literal notranslate"><span class="pre">order=(m,n)</span></code> specifies that the numerator and
+denominator of the Pade approximant have maximum order
+<code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span></code>, respectively.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em><em> or </em><em>str</em>) – Relative uncertainty in the coefficients, for
+use by the SVD algorithm. If <code class="docutils literal notranslate"><span class="pre">rtol</span></code> is a string, it determines
+how the relative tolerance is determined from the relative
+uncertainties in the <code class="docutils literal notranslate"><span class="pre">f[i]</span></code>. Set <code class="docutils literal notranslate"><span class="pre">rtol</span></code> equal to:
+<code class="docutils literal notranslate"><span class="pre">'gavg'</span></code> for the geometric mean (default); <code class="docutils literal notranslate"><span class="pre">'avg'</span></code> for
+the average; <code class="docutils literal notranslate"><span class="pre">'min'</span></code> for the minimum; or <code class="docutils literal notranslate"><span class="pre">'max'</span></code> for
+the maximum. Otherwise a number can be specified, in which case
+the uncertainties in <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> are ignored. The SVD algorithm
+is bypassed if <code class="docutils literal notranslate"><span class="pre">rtol=None</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.pade.pade_gvar">
+<code class="sig-prename descclassname">gvar.pade.</code><code class="sig-name descname">pade_gvar</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">m</em>, <em class="sig-param">n</em>, <em class="sig-param">rtol='gavg'</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.pade.pade_gvar" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(m,n)</span></code> Pade approximant to <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">x**i</span></code> for <code class="docutils literal notranslate"><span class="pre">GVar</span></code>s.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">(m,n)</span></code> Pade approximant to a series given by
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">*</span> <span class="pre">x**i</span></code> is the ratio of  polynomials of order <code class="docutils literal notranslate"><span class="pre">m</span></code>
+(numerator) and <code class="docutils literal notranslate"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
+with that of the original series up to order <code class="docutils literal notranslate"><span class="pre">m+n</span></code>.</p>
+<p>This code uses an SVD algorithm (see <a class="reference internal" href="#gvar.pade.pade_svd" title="gvar.pade.pade_svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">pade_svd()</span></code></a>) to deal with
+imprecision in the input data. It automatically reduces
+the order of the approximant if the extraction of Pade coefficients
+is too unstable given noise in the input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Array <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> of power series coefficients for <code class="docutils literal notranslate"><span class="pre">i=0...n+m</span></code>.</p></li>
+<li><p><strong>m</strong> – Maximum order of polynomial in numerator of Pade
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</p></li>
+<li><p><strong>n</strong> – Maximum order of polynomial in denominator of Pade
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</p></li>
+<li><p><strong>rtol</strong> (<em>float</em><em> or </em><em>str</em>) – If <code class="docutils literal notranslate"><span class="pre">rtol</span></code> is a string, it determines how the
+relative tolerance is determined from the relative
+uncertainties in the <code class="docutils literal notranslate"><span class="pre">f[i]</span></code>. Set <code class="docutils literal notranslate"><span class="pre">rtol</span></code> equal to:
+<code class="docutils literal notranslate"><span class="pre">'gavg'</span></code> for the geometric mean (default); <code class="docutils literal notranslate"><span class="pre">'avg'</span></code> for
+the average; <code class="docutils literal notranslate"><span class="pre">'min'</span></code> for the minimum; or <code class="docutils literal notranslate"><span class="pre">'max'</span></code> for
+the maximum. Otherwise a number can be specified, in which case
+the uncertainties in <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> are ignored. The SVD analysis is
+skipped if <code class="docutils literal notranslate"><span class="pre">rtol=None</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of power series coefficients <code class="docutils literal notranslate"><span class="pre">(p,</span> <span class="pre">q)</span></code> such that
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">p[i]</span> <span class="pre">x**i</span></code> is the numerator of the approximant,
+and <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">q[i]</span> <span class="pre">x**i</span></code> is the denominator. <code class="docutils literal notranslate"><span class="pre">q[0]</span></code> is
+normalized to 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.pade.pade_svd">
+<code class="sig-prename descclassname">gvar.pade.</code><code class="sig-name descname">pade_svd</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">m</em>, <em class="sig-param">n</em>, <em class="sig-param">rtol=1e-14</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.pade.pade_svd" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(m,n)</span></code> Pade approximant to <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">x**i</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">(m,n)</span></code> Pade approximant to a series given by
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">f[i]</span> <span class="pre">*</span> <span class="pre">x**i</span></code> is the ratio of  polynomials of order <code class="docutils literal notranslate"><span class="pre">m</span></code>
+(numerator) and <code class="docutils literal notranslate"><span class="pre">n</span></code> (denominator) whose  Taylor expansion agrees
+with that of the original series up to order <code class="docutils literal notranslate"><span class="pre">m+n</span></code>.</p>
+<p>This code is adapted from P. Gonnet,  S. Guttel, L. N. Trefethen, SIAM
+Review Vol 55, No. 1, 101 (2013). It uses an <em>svd</em> algorithm to deal with
+imprecision in the input data,  here specified by the relative tolerance
+<code class="docutils literal notranslate"><span class="pre">rtol</span></code> for the  input coefficients <code class="docutils literal notranslate"><span class="pre">f[i]</span></code>. It automatically reduces
+the order of the approximant if the extraction of Pade coefficients
+is too unstable given tolerance <code class="docutils literal notranslate"><span class="pre">rtol</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f</strong> – Array <code class="docutils literal notranslate"><span class="pre">f[i]</span></code> of power series coefficients for <code class="docutils literal notranslate"><span class="pre">i=0...n+m</span></code>.</p></li>
+<li><p><strong>m</strong> – Maximum order of polynomial in numerator of Pade
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</p></li>
+<li><p><strong>n</strong> – Maximum order of polynomial in denominator of Pade
+approximant (<code class="docutils literal notranslate"><span class="pre">m&gt;=0</span></code>).</p></li>
+<li><p><strong>rtol</strong> – Relative accuracy of input coefficients. (Default is 1e-14.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple of power series coefficients <code class="docutils literal notranslate"><span class="pre">(p,</span> <span class="pre">q)</span></code> such that
+<code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">p[i]</span> <span class="pre">x**i</span></code> is the numerator of the approximant,
+and <code class="docutils literal notranslate"><span class="pre">sum_i</span> <span class="pre">q[i]</span> <span class="pre">x**i</span></code> is the denominator. <code class="docutils literal notranslate"><span class="pre">q[0]</span></code> is
+normalized to 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="section" id="module-gvar.powerseries">
 <span id="power-series"></span><h2>Power Series<a class="headerlink" href="#module-gvar.powerseries" title="Permalink to this headline">¶</a></h2>
 <p>Module <a class="reference internal" href="#module-gvar.powerseries" title="gvar.powerseries: Power series arithmetic and evaluation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.powerseries</span></code></a> provides tools for manipulating power series
 approximations of functions. A function’s power series is specified by the
 coefficients in its Taylor expansion with respect to an independent variable,
 say <code class="docutils literal notranslate"><span class="pre">x</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="s1">&#39;(0)*x + (f&#39;&#39;(0)/2)*x**2 + (f&#39;&#39;&#39;</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
-     <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">f1</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">f2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">f3</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="s1">&#39;(0) * x + (f&#39;&#39;(0)/2) * x**2 + (f&#39;&#39;&#39;</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
+     <span class="o">=</span> <span class="n">f0</span> <span class="o">+</span> <span class="n">f1</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">f2</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">f3</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
 <p>In practice a power series is different from a polynomial because power
@@ -789,33 +933,34 @@ highest power of <code class="docutils literal notranslate"><span class="pre">x<
 for still higher-order terms are assumed to be unknown (as opposed to zero).</p>
 <p>Taylor’s theorem can be used to generate power series for functions of
 power series:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span><span class="s1">&#39;(f0)*(f(x)-f0) + (g&#39;&#39;(f0)/2)*(f(x)-f0)**2 + ...</span>
-        <span class="o">=</span> <span class="n">g0</span> <span class="o">+</span> <span class="n">g1</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">g2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">f0</span><span class="p">)</span> <span class="o">+</span> <span class="n">g</span><span class="s1">&#39;(f0) * (f(x)-f0) + (g&#39;&#39;(f0)/2) * (f(x)-f0)**2 + ...</span>
+        <span class="o">=</span> <span class="n">g0</span> <span class="o">+</span> <span class="n">g1</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">g2</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span>
 </pre></div>
 </div>
 <p>This allows us to define a full calculus for power series, where arithmetic
 expressions and (sufficiently differentiable) functions of power series
 return new power series.</p>
-<div class="section" id="power-series-arithmetic">
-<h3>Power series arithmetic<a class="headerlink" href="#power-series-arithmetic" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="using-power-series">
+<h3>Using power series<a class="headerlink" href="#using-power-series" title="Permalink to this headline">¶</a></h3>
 <p>Class <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> provides a numerical implementation of the power series
 calculus. <code class="docutils literal notranslate"><span class="pre">PowerSeries([f0,f1,f2,f3...])</span></code> is a numerical representation of
 a power series with coefficients <code class="docutils literal notranslate"><span class="pre">f0,</span> <span class="pre">f1,</span> <span class="pre">f2,</span> <span class="pre">f3...</span></code> (as in <code class="docutils literal notranslate"><span class="pre">f(x)</span></code>
 above). Thus, for example, we can define a 4th-order power series
 approximation <code class="docutils literal notranslate"><span class="pre">f</span></code> to <code class="docutils literal notranslate"><span class="pre">exp(x)=1+x+x**2/2+...</span></code> using</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">24.</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># print the coefficients</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar.powerseries</span> <span class="k">as</span> <span class="nn">ps</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">PowerSeries</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">6.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">24.</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>            <span class="c1"># print the coefficients</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667]</span>
 </pre></div>
 </div>
 <p>Arithmetic expressions involving instances of class <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> are
 themselves <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> as in, for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="mi">1</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for exp(-x)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">f</span><span class="p">)</span>              <span class="c1"># power series for exp(-x)</span>
 <span class="go">[ 1.         -1.          0.5        -0.16666667  0.04166667]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>        <span class="c1"># power series for x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>        <span class="c1"># power series for x</span>
 <span class="go">[ 0.  1.  0. -0.  0.]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">/</span><span class="n">f</span>           <span class="c1"># power series for 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span> <span class="o">/</span> <span class="n">f</span><span class="p">)</span>            <span class="c1"># power series for 1</span>
 <span class="go">[ 1.  0.  0.  0.  0.]</span>
 </pre></div>
 </div>
@@ -825,9 +970,9 @@ the usual elementary functions (<code class="docutils literal notranslate"><span
 <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a>; the order of the result is that of the operand with the
 lowest order.</p>
 <p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> can be differentiated and integrated:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">deriv</span><span class="p">()</span>     <span class="c1"># derivative of exp(x)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">deriv</span><span class="p">())</span>    <span class="c1"># derivative of exp(x)</span>
 <span class="go">[ 1.          1.          0.5         0.16666667]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">()</span>     <span class="c1"># integral of exp(x) (from x=0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">integ</span><span class="p">())</span>    <span class="c1"># integral of exp(x) (from x=0)</span>
 <span class="go">[ 0.          1.          0.5         0.16666667  0.04166667  0.00833333]</span>
 </pre></div>
 </div>
@@ -835,65 +980,93 @@ lowest order.</p>
 a function of a function is easily obtained. For example, assume <code class="docutils literal notranslate"><span class="pre">f</span></code>
 represents function <code class="docutils literal notranslate"><span class="pre">f(x)=exp(x)</span></code>, as above, and <code class="docutils literal notranslate"><span class="pre">g</span></code>
 represents <code class="docutils literal notranslate"><span class="pre">g(x)=log(1+x)</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">4.</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">PowerSeries</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mf">4.</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Then <code class="docutils literal notranslate"><span class="pre">f(g)</span></code> gives the <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> for <code class="docutils literal notranslate"><span class="pre">exp(log(1+x))</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">x</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
 <span class="go">[  1.0000e+00   1.0000e+00   0.0000e+00  -2.7755e-17 -7.6327e-17]</span>
 </pre></div>
 </div>
 <p>Individual coefficients from the powerseries can be accessed using
 array-element notation: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 <span class="go">1.0 1.0 0.5 0.166666666667</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span>             <span class="c1"># f is now the power series for exp(x)-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>            <span class="c1"># f is now the power series for exp(x)-1</span>
 <span class="go">[ 0.          1.          0.5         0.16666667  0.04166667]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="numerical-evaluation-of-power-series">
-<h3>Numerical evaluation of power series<a class="headerlink" href="#numerical-evaluation-of-power-series" title="Permalink to this headline">¶</a></h3>
-<p>The power series can also be evaluated for a particular
-numerical value of x: continuing the example,</p>
+<p>Finally, a power series can be evaluated for a particular
+numerical value of x:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.01</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># should be exp(0.01)-1 approximately</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>             <span class="c1"># should be exp(0.01)-1 approximately</span>
 <span class="go">0.0100501670833</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>      <span class="c1"># verify that it is</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>      <span class="c1"># verify that it is</span>
 <span class="go">0.0100501670842</span>
 </pre></div>
 </div>
 <p>The independent variable <code class="docutils literal notranslate"><span class="pre">x</span></code> could be of any arithmetic type (it need not
 be a <code class="docutils literal notranslate"><span class="pre">float</span></code>).</p>
 </div>
+<div class="section" id="multivariate-power-series">
+<h3>Multivariate power series<a class="headerlink" href="#multivariate-power-series" title="Permalink to this headline">¶</a></h3>
+<p>The coefficients in a <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> object can themselves by <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a>
+objects. The is used to represent multivariate power series such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">f00</span> <span class="o">+</span> <span class="n">f10</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">f01</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">f20</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">f11</span> <span class="o">*</span> <span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="n">f02</span> <span class="o">*</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>One way to construct a <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> object <code class="docutils literal notranslate"><span class="pre">f</span></code> representing this series, through
+<code class="docutils literal notranslate"><span class="pre">order=2</span></code>, is from an array <code class="docutils literal notranslate"><span class="pre">c</span></code> containing the coefficients:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="p">[[</span><span class="n">f00</span><span class="p">,</span> <span class="n">f01</span><span class="p">,</span> <span class="n">f02</span><span class="p">],</span> <span class="p">[</span><span class="n">f10</span><span class="p">,</span> <span class="n">f11</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">f20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">multiseries</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here entries for <code class="docutils literal notranslate"><span class="pre">c[1,2]</span></code>, <code class="docutils literal notranslate"><span class="pre">c[2,1]</span></code>,  and <code class="docutils literal notranslate"><span class="pre">c[2,2]</span></code> are ignored because they
+correspond to <code class="docutils literal notranslate"><span class="pre">order=3</span></code> or higher.
+The individual coefficients <code class="docutils literal notranslate"><span class="pre">c[i,j]</span></code> are accessed using <code class="docutils literal notranslate"><span class="pre">f[i,j]</span></code>, and the
+function is evaluate at point <code class="docutils literal notranslate"><span class="pre">(x,y)</span></code> using <code class="docutils literal notranslate"><span class="pre">f(x,y)</span></code>. Similarly the first-order
+partial derivative with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>, for example, is given by
+<a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> object
+<code class="docutils literal notranslate"><span class="pre">f.deriv(1,1)</span></code>, while first-order integrals with respect to <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>
+are given by <code class="docutils literal notranslate"><span class="pre">f.integ(1,1)</span></code>.</p>
+</div>
 <div class="section" id="taylor-expansions-of-python-functions">
 <h3>Taylor expansions of Python functions<a class="headerlink" href="#taylor-expansions-of-python-functions" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> can be used to compute Taylor series for more-or-less
-arbitrary pure-Python functions provided the functions are locally analytic
-(or at least sufficiently differentiable). To compute the <code class="docutils literal notranslate"><span class="pre">N</span></code>-th order
+arbitrary pure-Python functions provided the functions are
+sufficiently differentiable. To compute the <code class="docutils literal notranslate"><span class="pre">N</span></code>-th order
 expansion of a Python function <code class="docutils literal notranslate"><span class="pre">g(x)</span></code>, first create a <code class="docutils literal notranslate"><span class="pre">N</span></code>-th order
 <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> variable that represents the expansion parameter: say,
 <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">PowerSeries([0.,1.],order=N)</span></code>. The Taylor series for function <code class="docutils literal notranslate"><span class="pre">g</span></code>
 is then given by <code class="docutils literal notranslate"><span class="pre">g_taylor</span> <span class="pre">=</span> <span class="pre">g(x)</span></code> which is a <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> instance.
 For example, consider:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar.powerseries</span> <span class="k">import</span> <span class="o">*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>           <span class="c1"># an example of a Python function</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>              <span class="c1"># an example of a Python function</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">PowerSeries</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>    <span class="c1"># Taylor series for x</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">PowerSeries</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>    <span class="c1"># Taylor series for x</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="go">[ 0.  1.  0.  0.  0.  0.]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g_taylor</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>     <span class="c1"># Taylor series for g(x) about x=0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">g_taylor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g_taylor</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>        <span class="c1"># Taylor series for g(x) about x=0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">g_taylor</span><span class="p">)</span>
 <span class="go">[ 1.         0.         0.375      0.         0.2734375  0.       ]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_taylor</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># Taylor series for exp(x) about x=0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">exp_taylor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_taylor</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># Taylor series for exp(x) about x=0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">exp_taylor</span><span class="p">)</span>
 <span class="go">[ 1.          1.          0.5         0.16666667  0.04166667  0.00833333]</span>
 </pre></div>
 </div>
+<p>This generalizes easily to multivariate expansions. For example,
+one can calculate the Taylor expansion coefficients for <code class="docutils literal notranslate"><span class="pre">exp(x+y)</span></code> using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="n">multivar</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_taylor</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">exp_taylor</span><span class="p">)</span>
+<span class="go">[[1.         1.         0.5        0.16666667], [1.  1.  0.5], [0.5 0.5], [0.16666667]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">exp_taylor</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">),</span> <span class="n">gv</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span> <span class="o">+</span> <span class="o">.</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">1.3495000000000001 1.3498588075760032</span>
+</pre></div>
+</div>
+<p>Here function <a class="reference internal" href="#gvar.powerseries.multivar" title="gvar.powerseries.multivar"><code class="xref py py-func docutils literal notranslate"><span class="pre">multivar()</span></code></a> creates <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> objects corresponding to the
+expansion variables through a given order.</p>
 </div>
 <dl class="class">
 <dt id="gvar.powerseries.PowerSeries">
@@ -922,10 +1095,11 @@ and integrated (<code class="docutils literal notranslate"><span class="pre">p.i
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>c</strong> (<em>list</em><em> or </em><em>array</em>) – Power series coefficients (optional if parameter
-<em>order</em> specified).</p></li>
-<li><p><strong>order</strong> (<em>integer</em>) – Highest power in power series (optional if parameter
-<em>c</em> specified).</p></li>
+<li><p><strong>c</strong> (<em>array</em>) – Power series coefficients.</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>None</em>) – Highest power in power series. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+the order is inferred from the array of coefficients.
+If array <code class="docutils literal notranslate"><span class="pre">c</span></code> is too small for the specified <code class="docutils literal notranslate"><span class="pre">order</span></code>,
+the array is padded with zeros at the end.</p></li>
 </ul>
 </dd>
 </dl>
@@ -937,33 +1111,35 @@ and integrated (<code class="docutils literal notranslate"><span class="pre">p.i
 
 <dl class="method">
 <dt id="gvar.powerseries.PowerSeries.deriv">
-<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param">n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.deriv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute <em>n</em>-th derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+<code class="sig-name descname">deriv</code><span class="sig-paren">(</span><em class="sig-param">*n</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.deriv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute <em>n</em>-th derivative (or partial derivative) of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> (<em>positive integer</em>) – Number of derivatives.</p>
+<dd class="field-odd"><p><strong>n</strong> (<em>array</em>) – Number of derivatives in each direction.  Default is <code class="docutils literal notranslate"><span class="pre">n=[1]</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>n</em>-th derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+<dd class="field-even"><p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> object representing the
+<em>n</em>-th derivative or partial derivative of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="gvar.powerseries.PowerSeries.integ">
-<code class="sig-name descname">integ</code><span class="sig-paren">(</span><em class="sig-param">n=1</em>, <em class="sig-param">x0=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.integ" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">integ</code><span class="sig-paren">(</span><em class="sig-param">*n</em>, <em class="sig-param">x0=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.PowerSeries.integ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute <em>n</em>-th indefinite integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 <p>If <em>x0</em> is specified, then the definite integral,
 integrating from point <em>x0</em>, is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> (<em>integer</em>) – Number of integrations.</p></li>
-<li><p><strong>x0</strong> – Starting point for definite integral (optional).</p></li>
+<li><p><strong>n</strong> (<em>array</em>) – Number of integrations in each direction. Default is <code class="docutils literal notranslate"><span class="pre">n=[1]</span></code>.</p></li>
+<li><p><strong>x0</strong> (<em>array</em><em> or </em><em>float</em>) – Starting point for definite integral
+in each direction (default is 0).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>n</em>-th integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
+<dd class="field-even"><p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> object representing the <em>n</em>-th integral of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -974,6 +1150,49 @@ integrating from point <em>x0</em>, is returned.</p>
 <dd><p>Highest power in power series.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.powerseries.multiseries">
+<code class="sig-prename descclassname">gvar.powerseries.</code><code class="sig-name descname">multiseries</code><span class="sig-paren">(</span><em class="sig-param">c</em>, <em class="sig-param">order=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.multiseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create multivariate power series from coefficients in array <code class="docutils literal notranslate"><span class="pre">c</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c</strong> (<em>array</em>) – <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code>-like array containing the power series
+coefficients. In <code class="docutils literal notranslate"><span class="pre">d</span></code> dimensions, <code class="docutils literal notranslate"><span class="pre">c[i1,i2,...,id]</span></code> is the
+coefficient of <code class="docutils literal notranslate"><span class="pre">x1**i1</span> <span class="pre">*</span> <span class="pre">x2**i2</span> <span class="pre">*</span> <span class="pre">...</span> <span class="pre">*</span> <span class="pre">xd**id</span></code>.</p></li>
+<li><p><strong>order</strong> (<em>int</em><em> or </em><em>None</em>) – Highest power in power series, where the power
+associated with term <code class="docutils literal notranslate"><span class="pre">x1**i1</span> <span class="pre">*</span> <span class="pre">x2**i2</span> <span class="pre">*</span> <span class="pre">...</span> <span class="pre">*</span> <span class="pre">xd**id</span></code>
+is the sum of the exponents: <code class="docutils literal notranslate"><span class="pre">i1</span> <span class="pre">+</span> <span class="pre">i2</span> <span class="pre">+</span> <span class="pre">...</span> <span class="pre">+</span> <span class="pre">id</span></code>. If <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+the order is inferred from the array of coefficients.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> object representing the multivariate power series.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="gvar.powerseries.multivar">
+<code class="sig-prename descclassname">gvar.powerseries.</code><code class="sig-name descname">multivar</code><span class="sig-paren">(</span><em class="sig-param">dim</em>, <em class="sig-param">order</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.powerseries.multivar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> objects representing the expansion variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> (<em>int</em>) – The dimensionality of the multivariate space.</p></li>
+<li><p><strong>order</strong> (<em>int</em>) – Highest power in the power series,  where the power
+associated with term <code class="docutils literal notranslate"><span class="pre">x1**i1</span> <span class="pre">*</span> <span class="pre">x2**i2</span> <span class="pre">*</span> <span class="pre">...</span> <span class="pre">*</span> <span class="pre">xd**id</span></code>
+is the sum of the exponents: <code class="docutils literal notranslate"><span class="pre">i1</span> <span class="pre">+</span> <span class="pre">i2</span> <span class="pre">+</span> <span class="pre">...</span> <span class="pre">+</span> <span class="pre">id</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An array of <code class="docutils literal notranslate"><span class="pre">dim</span></code> <a class="reference internal" href="#gvar.powerseries.PowerSeries" title="gvar.powerseries.PowerSeries"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerSeries</span></code></a> objects corresponding to
+each of the expansion variables in a <code class="docutils literal notranslate"><span class="pre">dim</span></code>-dimensional multivariate
+power series.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <span class="target" id="module-gvar.root"></span></div>
@@ -1176,9 +1395,10 @@ the root, where <code class="docutils literal notranslate"><span class="pre">b</
 <li><a class="reference internal" href="#linear-algebra">Linear Algebra</a></li>
 <li><a class="reference internal" href="#ordinary-differential-equations">Ordinary Differential Equations</a></li>
 <li><a class="reference internal" href="#one-dimensional-integration">One-Dimensional Integration</a></li>
+<li><a class="reference internal" href="#pade-approximants">Pade Approximants</a></li>
 <li><a class="reference internal" href="#module-gvar.powerseries">Power Series</a><ul>
-<li><a class="reference internal" href="#power-series-arithmetic">Power series arithmetic</a></li>
-<li><a class="reference internal" href="#numerical-evaluation-of-power-series">Numerical evaluation of power series</a></li>
+<li><a class="reference internal" href="#using-power-series">Using power series</a></li>
+<li><a class="reference internal" href="#multivariate-power-series">Multivariate power series</a></li>
 <li><a class="reference internal" href="#taylor-expansions-of-python-functions">Taylor expansions of Python functions</a></li>
 </ul>
 </li>
@@ -1229,7 +1449,7 @@ the root, where <code class="docutils literal notranslate"><span class="pre">b</
         <li class="right" >
           <a href="gvar_dataset.html" title="gvar.dataset - Random Data Sets"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.7 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
