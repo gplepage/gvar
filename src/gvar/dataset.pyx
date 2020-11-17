@@ -235,7 +235,7 @@ def avg_data(dataset, median=False, spread=False, bstrap=False, noerror=False, w
         samplesize_list = [len(dk) for dk in dataset.values()]
         samplesize = min(samplesize_list)
         if noerror:
-            ans = {}
+            ans = collections.OrderedDict()
             for k in dataset:
                 ans[k] = avg_data(dataset[k], **kargs)
             return ans
@@ -400,7 +400,7 @@ def bootstrap_iter(dataset, n=None):
         if not dataset:
             return
         ns = min(len(dataset[k]) for k in dataset)  # number of samples
-        datadict = {}
+        datadict = collections.OrderedDict()
         for k in dataset:
             datadict[k] = numpy.asarray(dataset[k],numpy.float_)
         ct = 0
@@ -629,7 +629,7 @@ class Dataset(collections.OrderedDict):
         # inputdata = files
         super(Dataset, self).__init__()
         if binsize>1:
-            acc = {}
+            acc = collections.OrderedDict()
         if isinstance(inputdata, fileinput.FileInput):
             finput = inputdata
         else:
@@ -648,7 +648,7 @@ class Dataset(collections.OrderedDict):
             if len(f)==2:
                 d = eval(f[1])
             elif f[1][0] in "[(":
-                d = eval(" ".join(f[1:]), {}, {})
+                d = eval(" ".join(f[1:]), collections.OrderedDict(), collections.OrderedDict())
             else:
                 try:
                     d = [float(x) for x in f[1:]]
