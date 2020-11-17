@@ -720,13 +720,13 @@ resulting distribution (or any other statistical quantity, particularly if
 the resulting distribution is not Gaussian)::
 
     # estimate mean,sdev from 1000 random x's
-    >>> ran_x = numpy.array([x() for in range(1000)])
+    >>> ran_x = numpy.array([x() for _ in range(1000)])
     >>> ran_cos = numpy.cos(ran_x)
     >>> print('mean =', ran_cos.mean(), '  std dev =', ran_cos.std())
     mean = 0.0350548954142   std dev = 0.718647118869
 
     # check by doing more (and different) random numbers
-    >>> ran_x = numpy.array([x() for in range(100000)])
+    >>> ran_x = numpy.array([x() for _ in range(100000)])
     >>> ran_cos = numpy.cos(ran_x)
     >>> print('mean =', ran_cos.mean(), '  std dev =', ran_cos.std())
     mean = 0.00806276057656   std dev = 0.706357174056

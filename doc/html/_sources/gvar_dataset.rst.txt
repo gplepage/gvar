@@ -146,7 +146,7 @@ Functions
 ----------
 The functions defined in the module are:
 
-.. autofunction:: gvar.dataset.avg_data(dataset, spread=False, median=False, bstrap=False, noerror=False, warn=True)
+.. autofunction:: gvar.dataset.avg_data(dataset, spread=False, median=False, bstrap=False, noerror=False, warn=False)
 
 .. autofunction:: gvar.dataset.autocorr(dataset)
 

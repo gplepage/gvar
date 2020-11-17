@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.7 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.8 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -1318,7 +1318,7 @@ The random numbers incorporate any correlations implied by the <code class="docu
 <dt id="gvar.raniter">
 <code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">raniter</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n=None</em>, <em class="sig-param">svdcut=1e-12</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.raniter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return iterator for random samples from distribution <code class="docutils literal notranslate"><span class="pre">g</span></code></p>
-<p>The gaussian variables (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects) in array (or dictionary) <code class="docutils literal notranslate"><span class="pre">g</span></code>
+<p>The Gaussian variables (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> objects) in array (or dictionary) <code class="docutils literal notranslate"><span class="pre">g</span></code>
 collectively define a multidimensional gaussian distribution. The
 iterator defined by <a class="reference internal" href="#gvar.raniter" title="gvar.raniter"><code class="xref py py-func docutils literal notranslate"><span class="pre">raniter()</span></code></a> generates an array (or dictionary)
 containing random numbers drawn from that distribution, with
@@ -1344,6 +1344,11 @@ not <code class="docutils literal notranslate"><span class="pre">None</span></co
 <li><p><strong>svdcut</strong> (<em>float</em>) – If nonzero, singularities in the correlation
 matrix are regulated using <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>
 with an SVD cutoff <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">svdcut=1e-12</span></code>.</p></li>
+<li><p><strong>uniform</strong> (<em>float</em><em> or </em><em>None</em>) – Replace Gaussian distribution specified
+by <code class="docutils literal notranslate"><span class="pre">g</span></code> with a uniform distribution covering the interval
+<code class="docutils literal notranslate"><span class="pre">[-uniform,</span> <span class="pre">uniform]</span></code> times the standard deviation centered
+on the mean (along each principal axis of the error ellipse).
+Ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2838,7 +2843,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

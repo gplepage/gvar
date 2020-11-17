@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.7 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.8 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -182,7 +182,7 @@ sample in code: for example,</p>
 <p>The functions defined in the module are:</p>
 <dl class="function">
 <dt id="gvar.dataset.avg_data">
-<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">avg_data</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">spread=False</em>, <em class="sig-param">median=False</em>, <em class="sig-param">bstrap=False</em>, <em class="sig-param">noerror=False</em>, <em class="sig-param">warn=True</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">avg_data</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">spread=False</em>, <em class="sig-param">median=False</em>, <em class="sig-param">bstrap=False</em>, <em class="sig-param">noerror=False</em>, <em class="sig-param">warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Average <code class="docutils literal notranslate"><span class="pre">dataset</span></code> to estimate means and covariance.</p>
 <p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers, a list of random arrays, or a dictionary
 of lists of random numbers and/or arrays: for example,</p>
@@ -213,7 +213,8 @@ assuming that the lists of random numbers/arrays for the different
 <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code>s are synchronized, with the first element in one list
 corresponding to the first elements in all other lists, and so on. If
 some lists are shorter than others, the longer lists are truncated to
-the same length as the shortest list (discarding data samples).</p>
+the same length as the shortest list when calculating correlations; the
+full lists are used to evaluate standard deviations.</p>
 <p>There are four optional arguments. If argument <code class="docutils literal notranslate"><span class="pre">spread=True</span></code> each
 standard deviation in the results refers to the spread in the data, not
 the uncertainty in the estimate of the mean. The former is <code class="docutils literal notranslate"><span class="pre">sqrt(N)</span></code>
@@ -231,11 +232,12 @@ averaged:</p>
 value is <code class="docutils literal notranslate"><span class="pre">spread=False</span></code>.</p>
 <p>The second option is triggered by setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code>. This
 replaces the means in the results by medians, while the standard
-deviations are approximated by the half-width of the interval, centered
-around the median, that contains 68% of the data. These estimates are
-more robust than the mean and standard deviation when averaging over
-small amounts of data; in particular, they are unaffected by extreme
-outliers in the data. The default is <code class="docutils literal notranslate"><span class="pre">median=False</span></code>.</p>
+deviations are approximated by the width of the larger interval
+above or below the median that contains 34% of the data. These
+estimates are more robust than the mean and standard deviation when
+averaging over small amounts of data; in particular, they are
+unaffected by extreme outliers in the data. The default
+is <code class="docutils literal notranslate"><span class="pre">median=False</span></code>.</p>
 <p>The third option is triggered by setting <code class="docutils literal notranslate"><span class="pre">bstrap=True</span></code>. This is
 shorthand for setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code> and <code class="docutils literal notranslate"><span class="pre">spread=True</span></code>, and
 overrides any explicit setting for these keyword arguments. This is the
@@ -830,7 +832,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.7 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
