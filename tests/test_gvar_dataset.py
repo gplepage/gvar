@@ -4,7 +4,7 @@
 test-dataset.py
 
 """
-# Copyright (c) 2012-17 G. Peter Lepage.
+# Copyright (c) 2012-20 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ class txest_dataset(unittest.TestCase,ArrayTests):
         self.assertEqual(avg_data(dict()),BufferDict())
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
-            avg_data(dict(s=[1.],v=[1.,2.]))
+            avg_data(dict(s=[1., 2.],v=[1.,2.,3.]), warn=True)
             self.assertEqual(len(w), 1)
         with self.assertRaises(ValueError):
             avg_data(dict(s=[],v=[1.,2.]), warn=False)
@@ -144,13 +144,13 @@ class txest_dataset(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(mean.var,sum((vi-1.5)**2
                                for vi in [1,2])/2.)
         #
-        mean = avg_data([1,2],median=True)
+        mean = avg_data([1,2], median=True)
         self.assertAlmostEqual(mean.mean,1.5)
-        self.assertAlmostEqual(mean.var,0.5**2/2.)
+        self.assertAlmostEqual(mean.var, 0.341344746**2 / 2)
         #
-        mean = avg_data([1,2],median=True,spread=True)
-        self.assertAlmostEqual(mean.mean,1.5)
-        self.assertAlmostEqual(mean.var,0.5**2)
+        mean = avg_data([1,2], median=True, spread=True)
+        self.assertAlmostEqual(mean.mean, 1.5)
+        self.assertAlmostEqual(mean.var, 0.341344746**2)
         #
         mean = avg_data([1,2,3])
         self.assertAlmostEqual(mean.mean,2.0)
@@ -173,43 +173,43 @@ class txest_dataset(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(mean.var,sum((vi-2.)**2
                                for vi in [1,2,3])/3.)
         #
-        mean = avg_data([1,2,3],median=True)
+        mean = avg_data([1,2,3], median=True)
         self.assertAlmostEqual(mean.mean,2.0)
-        self.assertAlmostEqual(mean.var,1./3.)
+        self.assertAlmostEqual(mean.var, (0.341344746 * 2)**2 / 3.)
         #
-        mean = avg_data([[1],[2],[3]],median=True)
-        self.assertAlmostEqual(mean[0].mean,2.0)
-        self.assertAlmostEqual(mean[0].var,1./3.)
+        mean = avg_data([[1],[2],[3]], median=True)
+        self.assertAlmostEqual(mean[0].mean, 2.0)
+        self.assertAlmostEqual(mean[0].var, (0.341344746 * 2)**2 / 3.)
         #
-        mean = avg_data([1,2,3],median=True,spread=True)
-        self.assertAlmostEqual(mean.mean,2.0)
-        self.assertAlmostEqual(mean.var,1.)
+        mean = avg_data([1,2,3],median=True, spread=True)
+        self.assertAlmostEqual(mean.mean, 2.0)
+        self.assertAlmostEqual(mean.var, (0.341344746 * 2)**2)
         #
-        mean = avg_data([1,2,3,4,5,6,7,8,9],median=True)
+        mean = avg_data([1,2,3,4,5,6,7,8,9], median=True)
         self.assertAlmostEqual(mean.mean,5)
-        self.assertAlmostEqual(mean.var,3.**2/9.)
+        self.assertAlmostEqual(mean.var,  (0.341344746 * 8)**2 / 9.)
         #
         mean = avg_data([1,2,3,4,5,6,7,8,9],median=True,spread=True)
         self.assertAlmostEqual(mean.mean,5.)
-        self.assertAlmostEqual(mean.var,3.**2)
+        self.assertAlmostEqual(mean.var, (0.341344746 * 8)**2)
         #
         mean = avg_data([1,2,3,4,5,6,7,8,9,10],median=True)
-        self.assertAlmostEqual(mean.mean,5.5)
-        self.assertAlmostEqual(mean.var,3.5**2/10.)
+        self.assertAlmostEqual(mean.mean, 5.5)
+        self.assertAlmostEqual(mean.var, (0.341344746 * 9)**2/10.)
         #
         mean = avg_data([1,2,3,4,5,6,7,8,9,10],median=True,spread=True)
         self.assertAlmostEqual(mean.mean,5.5)
-        self.assertAlmostEqual(mean.var,3.5**2)
+        self.assertAlmostEqual(mean.var, (0.341344746 * 9)**2)
         #
         data = dict(s=[1,2,3],v=[[1,1],[2,2],[3,3]])
-        mean = avg_data(data,median=True,spread=True)
-        self.assertAlmostEqual(mean['s'].mean,2.0)
-        self.assertAlmostEqual(mean['s'].var,1.0)
+        mean = avg_data(data, median=True, spread=True)
+        self.assertAlmostEqual(mean['s'].mean ,2.0)
+        self.assertAlmostEqual(mean['s'].var, (0.341344746 * 2)**2)
         self.assertEqual(mean['v'].shape,(2,))
-        self.assert_gvclose(mean['v'],[gvar(2,1),gvar(2,1)])
+        self.assert_gvclose(mean['v'], [gvar(2,0.341344746 * 2), gvar(2, 0.341344746 * 2)])
 
         mean = avg_data(data, median=True, noerror=True)
-        self.assertAlmostEqual(mean['s'],2.0)
+        self.assertAlmostEqual(mean['s'], 2.0)
         self.assertEqual(mean['v'].shape,(2,))
         self.assert_arraysclose(mean['v'], [2,2])
 
@@ -217,6 +217,15 @@ class txest_dataset(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(mean['s'],2.0)
         self.assertEqual(mean['v'].shape,(2,))
         self.assert_arraysclose(mean['v'], [2,2])
+
+        # check different sample sizes
+        data = dict(s=[1,2,3],v=[[1,1],[2,2],[3,3],[1,1],[2,2],[3,4]])
+        mean = avg_data(data)
+        self.assertAlmostEqual(mean['s'].var, np.cov(data['s'],rowvar=False, bias=True) / 3.)
+        np.testing.assert_allclose(evalcov(mean['v']), np.cov(data['v'], rowvar=False, bias=True) / 6.)
+        np.testing.assert_allclose(evalcorr(mean)['s', 'v'], evalcorr(avg_data(dict(s=data['s'], v=data['v'][:3])))['s', 'v'])
+        np.testing.assert_allclose(evalcorr(mean)['v', 's'], evalcorr(avg_data(dict(s=data['s'], v=data['v'][:3])))['v', 's'])
+        # print(evalcorr(mean))
 
     def test_autocorr(self):
         """ dataset.autocorr """

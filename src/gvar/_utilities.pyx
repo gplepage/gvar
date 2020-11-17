@@ -2277,10 +2277,10 @@ def sample(g, eps=None, svdcut=None):
     """
     return next(raniter(g, svdcut=svdcut, eps=eps))
 
-def raniter(g, n=None, eps=None, svdcut=None):
+def raniter(g, n=None, eps=None, svdcut=None, uniform=None):
     """ Return iterator for random samples from distribution ``g``
 
-    The gaussian variables (|GVar| objects) in array (or dictionary) ``g``
+    The Gaussian variables (|GVar| objects) in array (or dictionary) ``g``
     collectively define a multidimensional gaussian distribution. The
     iterator defined by :func:`raniter` generates an array (or dictionary)
     containing random numbers drawn from that distribution, with
@@ -2307,6 +2307,11 @@ def raniter(g, n=None, eps=None, svdcut=None):
         svdcut (float): If nonzero, singularities in the correlation
             matrix are regulated using :func:`gvar.regulate`
             with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
+        uniform (float or None): Replace Gaussian distribution specified 
+            by ``g`` with a uniform distribution covering the interval 
+            ``[-uniform, uniform]`` times the standard deviation centered 
+            on the mean (along each principal axis of the error ellipse).
+            Ignored if ``None`` (default).
 
     Returns:
         An iterator that returns random arrays or dictionaries
@@ -2319,7 +2324,7 @@ def raniter(g, n=None, eps=None, svdcut=None):
     count = 0
     while (n is None) or (count < n):
         count += 1
-        z = numpy.random.normal(0.0, 1.0, nwgt)
+        z = numpy.random.normal(0.0, 1.0, nwgt) if uniform is None else numpy.random.uniform(-uniform, uniform, nwgt)
         buf = numpy.array(g_mean)
         i, wgts = i_wgts[0]
         if len(i) > 0:

@@ -1,3 +1,14 @@
+Version 11.8 2020-11-15
+=======================
+Small upgrade to support feature request: dataset.avg_data(dataset) no longer 
+discards data when dataset is a dictionary whose entries have different 
+sample sizes. It used to truncate entries that had more samples (by 
+discarding from the end) so that all entries had the same (smallest)
+sample size. 
+
+Also added keyword uniform to raniter.
+
+
 Version 11.7 2020-07-17
 ========================
 - Adds support for multivariate power series to gvar.powerseries, as well 
