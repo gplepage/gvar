@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.8.1 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.9 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -212,6 +212,13 @@ quantities in <code class="docutils literal notranslate"><span class="pre">datas
 assuming that the lists of random numbers/arrays for the different
 <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code>s are synchronized, with the first element in one list
 corresponding to the first elements in all other lists, and so on.</p>
+<p>Note that estimates of the correlations are robust only if the
+number of samples being averaged is substantially larger (eg, 10x) than
+the number of quantities being averaged. The correlation matrix is
+poorly conditioned or singular if the number of samples is too small.
+Function <a class="reference internal" href="#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis()</span></code></a> can be used to determine
+whether there is a problem, and, if so, the problem can be ameliorated by
+applying an SVD cut to the data after averaging (<a class="reference internal" href="gvar.html#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>).</p>
 <p>There are four optional arguments. If argument <code class="docutils literal notranslate"><span class="pre">spread=True</span></code> each
 standard deviation in the results refers to the spread in the data, not
 the uncertainty in the estimate of the mean. The former is <code class="docutils literal notranslate"><span class="pre">sqrt(N)</span></code>
@@ -850,7 +857,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
