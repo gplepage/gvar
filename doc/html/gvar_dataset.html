@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.8 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.8.1 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -182,7 +182,7 @@ sample in code: for example,</p>
 <p>The functions defined in the module are:</p>
 <dl class="function">
 <dt id="gvar.dataset.avg_data">
-<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">avg_data</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">spread=False</em>, <em class="sig-param">median=False</em>, <em class="sig-param">bstrap=False</em>, <em class="sig-param">noerror=False</em>, <em class="sig-param">warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">avg_data</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">spread=False</em>, <em class="sig-param">median=False</em>, <em class="sig-param">bstrap=False</em>, <em class="sig-param">noerror=False</em>, <em class="sig-param">mismatch='truncate'</em>, <em class="sig-param">warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Average <code class="docutils literal notranslate"><span class="pre">dataset</span></code> to estimate means and covariance.</p>
 <p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers, a list of random arrays, or a dictionary
 of lists of random numbers and/or arrays: for example,</p>
@@ -211,10 +211,7 @@ can have any shape.</p>
 quantities in <code class="docutils literal notranslate"><span class="pre">dataset</span></code>. When <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a dictionary, it does this by
 assuming that the lists of random numbers/arrays for the different
 <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code>s are synchronized, with the first element in one list
-corresponding to the first elements in all other lists, and so on. If
-some lists are shorter than others, the longer lists are truncated to
-the same length as the shortest list when calculating correlations; the
-full lists are used to evaluate standard deviations.</p>
+corresponding to the first elements in all other lists, and so on.</p>
 <p>There are four optional arguments. If argument <code class="docutils literal notranslate"><span class="pre">spread=True</span></code> each
 standard deviation in the results refers to the spread in the data, not
 the uncertainty in the estimate of the mean. The former is <code class="docutils literal notranslate"><span class="pre">sqrt(N)</span></code>
@@ -246,8 +243,29 @@ default value is <code class="docutils literal notranslate"><span class="pre">bs
 <p>The fourth option is to omit the error estimates on the averages, which
 is triggered by setting <code class="docutils literal notranslate"><span class="pre">noerror=True</span></code>. Just the mean values are
 returned. The default value is <code class="docutils literal notranslate"><span class="pre">noerror=False</span></code>.</p>
-<p>The final option <code class="docutils literal notranslate"><span class="pre">warn</span></code> determines whether or not a warning is issued when
-different components of a dictionary data set have different sample sizes.</p>
+<p>The fifth option, <code class="docutils literal notranslate"><span class="pre">mismatch</span></code>, is only relevant when <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a
+dictionary whose entries <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code> have different sample sizes. This
+complicates the calculation of correlations between the different entries.
+There are three choices for <code class="docutils literal notranslate"><span class="pre">mismatch</span></code>:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">mismatch='truncate'</span></code>: Samples are discarded from the ends of
+entries so that all entries have the same sample size (equal to the
+smallest sample size). This is the default.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mismatch='wavg'</span></code>: The dataset is decomposed into a collection of data sets
+so that the entries in any given data set all have the same sample size;
+no samples are discarded. Each of the resulting data sets is averaged
+separately, and the final result is the weighted average of these averages.
+This choice is the most accurate but also the slowest, especially for
+large problems. It should only be used when the smallest sample size is
+much larger (eg, 10x) than the number of quantities being averaged.
+It also requires the <code class="xref py py-mod docutils literal notranslate"><span class="pre">lsqfit</span></code> Python module.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mismatch='decorrelate'</span></code>: Ignores correlations between different
+entries <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code>. All samples are used and correlations within
+an entry <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code> are retained. This is the fastest choice.</p>
+</div></blockquote>
+<p>The final option <code class="docutils literal notranslate"><span class="pre">warn</span></code> determines whether or not a warning is issued
+when different entries in a dictionary data set have different sample
+sizes. The default is <code class="docutils literal notranslate"><span class="pre">warn=False</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -832,7 +850,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.8.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

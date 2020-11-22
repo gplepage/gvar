@@ -998,22 +998,14 @@ class GVarFactory:
                     ans[k] = self(x[k])
                 return ans
 
-            elif hasattr(x,'__iter__'):
+            elif hasattr(x, '__iter__'):
                 # case 5: x is an array
-                try:
-                    xa = numpy.asarray(x)
-                except ValueError:
-                    xa = numpy.asarray(x,object)
-                if xa.size==0:
-                    return xa
-                if xa.shape != () and xa.shape[-1]==2 and xa.dtype!=object and xa.ndim>1:
-                    # array of tuples?
-                    xxa = numpy.empty(xa.shape[:-1],object)
-                    xxa[:] = x
-                    if all(type(xxai)==tuple for xxai in xxa.flat):
-                        return self(xa[...,0],xa[...,1])
-                return numpy.array([xai if isinstance(xai,GVar) else self(xai)
-                                    for xai in xa.flat]).reshape(xa.shape)
+                if isinstance(x, numpy.ndarray) and x.shape == ():
+                    return self(x.flat[0])
+                return numpy.array(
+                    [xi if isinstance(xi,GVar) else self(xi) for xi in x], 
+                    object,
+                    )
 
             else:   # case 6: a number
                 return self(x,0.0)

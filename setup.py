@@ -13,7 +13,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-GVAR_VERSION = '11.8'
+GVAR_VERSION = '11.9'
 
 from distutils.core import setup
 from distutils.extension import Extension
@@ -110,6 +110,7 @@ setup(name='gvar',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Cython',
         'Topic :: Scientific/Engineering'

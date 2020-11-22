@@ -101,48 +101,10 @@ def bin_data(dataset, binsize=2):
         accum += dataset[i:nd:binsize]
     return list(accum/float(binsize))
 
-def _avg_arraydata(dataset, median=False, spread=False, bstrap=False, noerror=False, warn=False):
-    # dataset is a list of arrays (all same shape) or numbers
-    # N.B. Use 1/N not 1/(N-1) for cov as is more accurate, though slightly biased
-    #      -- see "bias-variance tradeoff."
-    if len(dataset) == 0:
-        return None
-    try:
-        dataset = numpy.asarray(dataset, float)
-    except ValueError:
-        raise ValueError("Inconsistent array shapes or data types in dataset.")
-    if noerror:
-        return numpy.median(dataset, axis=0) if median else dataset.mean(axis=0) 
-    # calculate covariance
-    dataset_shape = dataset.shape 
-    data_shape = dataset.shape[1:]
-    dataset.shape = (dataset.shape[0], -1)
-    if dataset.shape[0] >= 2:
-        cov = numpy.cov(dataset, rowvar=False, bias=True)
-    else:
-        cov = numpy.zeros(dataset.shape[1:] + dataset.shape[1:], float)
-    if not spread:
-        cov /= dataset.shape[0]
-    if median:
-        meanm, mean, meanp = numpy.percentile(dataset, q=[50 - 34.1344746, 50, 50 + 34.1344746], axis=0)
-        sdev = numpy.maximum(meanp - mean, mean - meanm)
-        if not spread:
-            sdev /= dataset.shape[0] ** 0.5 
-        # replace std dev by sdev from percentiles in cov
-        if data_shape == ():
-            cov = sdev ** 2
-        elif mean.size == 1:
-            cov.flat[:] = sdev ** 2
-        else:
-            D = sdev / numpy.diagonal(cov) ** 0.5 
-            cov = D[None, :] * cov * D[:, None]
-    else:
-        mean = dataset.mean(axis=0)
-    mean.shape = data_shape 
-    cov.shape = data_shape + data_shape
-    return mean, cov    
-
-def avg_data(dataset, median=False, spread=False, bstrap=False, noerror=False, warn=False):
+def avg_data(
+    dataset, median=False, spread=False, bstrap=False, noerror=False, 
+    mismatch='truncate', warn=False
+    ):
     """ Average ``dataset`` to estimate means and covariance.
 
     ``dataset`` is a list of random numbers, a list of random arrays, or a dictionary
@@ -173,10 +135,15 @@ def avg_data(dataset, median=False, spread=False, bstrap=False, noerror=False, w
     quantities in ``dataset``. When ``dataset`` is a dictionary, it does this by
     assuming that the lists of random numbers/arrays for the different
     ``dataset[k]``\s are synchronized, with the first element in one list
-    corresponding to the first elements in all other lists, and so on. If
-    some lists are shorter than others, the longer lists are truncated to
-    the same length as the shortest list when calculating correlations; the 
-    full lists are used to evaluate standard deviations.
+    corresponding to the first elements in all other lists, and so on.
+
+    Note that estimates of the correlations are robust only if the 
+    number of samples being averaged is substantially larger (eg, 10x) than
+    the number of quantities being averaged. The correlation matrix is 
+    poorly conditioned or singular if the number of samples is too small.
+    Function :func:`gvar.dataset.svd_diagnosis` can be used to determine 
+    whether there is a problem, and, if so, the problem can be ameliorated by 
+    applying an SVD cut to the data after averaging (:func:`gvar.regulate`).
 
     There are four optional arguments. If argument ``spread=True`` each
     standard deviation in the results refers to the spread in the data, not
@@ -213,21 +180,80 @@ def avg_data(dataset, median=False, spread=False, bstrap=False, noerror=False, w
     is triggered by setting ``noerror=True``. Just the mean values are
     returned. The default value is ``noerror=False``.
 
-    The final option ``warn`` determines whether or not a warning is issued when
-    different components of a dictionary data set have different sample sizes.
+    The fifth option, ``mismatch``, is only relevant when ``dataset`` is a
+    dictionary whose entries ``dataset[k]`` have different sample sizes. This
+    complicates the calculation of correlations between the different entries.
+    There are three choices for ``mismatch``:
+
+        ``mismatch='truncate'``: Samples are discarded from the ends of
+        entries so that all entries have the same sample size (equal to the 
+        smallest sample size). This is the default. 
+        
+        ``mismatch='wavg'``: The dataset is decomposed into a collection of data sets 
+        so that the entries in any given data set all have the same sample size;
+        no samples are discarded. Each of the resulting data sets is averaged 
+        separately, and the final result is the weighted average of these averages.
+        This choice is the most accurate but also the slowest, especially for 
+        large problems. It should only be used when the smallest sample size is 
+        much larger (eg, 10x) than the number of quantities being averaged.
+        It also requires the :mod:`lsqfit` Python module.
+
+        ``mismatch='decorrelate'``: Ignores correlations between different
+        entries ``dataset[k]``. All samples are used and correlations within
+        an entry ``dataset[k]`` are retained. This is the fastest choice.
+    
+    The final option ``warn`` determines whether or not a warning is issued
+    when different entries in a dictionary data set have different sample
+    sizes. The default is ``warn=False``.
     """
     if bstrap:
         median = True
         spread = True
     kargs = dict(median=median, spread=spread, noerror=noerror, warn=False)
     if not hasattr(dataset,'keys'):
-        result = _avg_arraydata(dataset, **kargs)
-        if not isinstance(result, tuple):
-            return result
-        mean, cov = result
+        # dataset is a list of arrays (all same shape) or numbers
+        if len(dataset) == 0:
+            return None
+        
+        try:
+            dataset = numpy.asarray(dataset, float)
+        except ValueError:
+            raise ValueError("Inconsistent array shapes or data types in dataset.")
+        if noerror:
+            return numpy.median(dataset, axis=0) if median else dataset.mean(axis=0) 
+
+        # calculate covariance
+        dataset_shape = dataset.shape 
+        data_shape = dataset.shape[1:]
+        dataset.shape = (dataset.shape[0], -1)
+        if dataset.shape[0] >= 2:
+            cov = numpy.cov(dataset, rowvar=False, bias=True)
+        else:
+            cov = numpy.zeros(dataset.shape[1:] + dataset.shape[1:], float)
+        if not spread:
+            cov /= dataset.shape[0]
+        if median:
+            meanm, mean, meanp = numpy.percentile(dataset, q=[50 - 34.1344746, 50, 50 + 34.1344746], axis=0)
+            sdev = numpy.maximum(meanp - mean, mean - meanm)
+            if not spread:
+                sdev /= dataset.shape[0] ** 0.5 
+            # replace std dev by sdev from percentiles in cov
+            if data_shape == ():
+                cov = sdev ** 2
+            elif mean.size == 1:
+                cov.flat[:] = sdev ** 2
+            else:
+                D = sdev / numpy.diagonal(cov) ** 0.5 
+                cov = D[None, :] * cov * D[:, None]
+        else:
+            mean = dataset.mean(axis=0)
+        mean.shape = data_shape 
+        cov.shape = data_shape + data_shape
+        dataset.shape = dataset_shape
         if mean.shape == ():
             cov = cov ** 0.5
         return _gvar.gvar(mean, cov)    
+
     else:
         # dataset is a dictionary filled with lists of arrays or numbers
         if len(dataset) == 0:
@@ -235,64 +261,261 @@ def avg_data(dataset, median=False, spread=False, bstrap=False, noerror=False, w
         samplesize_list = [len(dk) for dk in dataset.values()]
         samplesize = min(samplesize_list)
         if noerror:
-            ans = collections.OrderedDict()
+            ans = _gvar.BufferDict()
             for k in dataset:
                 ans[k] = avg_data(dataset[k], **kargs)
             return ans
+
         if samplesize<=0:
             raise ValueError(
                 "Empty entries in dataset; can't compute correlations."
                 )
+
         elif samplesize == 1:
             # can't compute correlations between different entries
             ans = _gvar.BufferDict()
             for k in dataset:
                 ans[k] = avg_data(dataset[k], **kargs)
             return ans
-        if samplesize != max(samplesize_list):
-            # samplesize differs in different dataset[k]
-            if warn:
-                warnings.warn(
-                'sample sizes differ for different entries: %d %d'
-                % (samplesize, max(samplesize_list))
-                )
-            newdataset = []                 # dataset repacked as a list of flat arrays
-            mean = _gvar.BufferDict()
-            cov = _gvar.BufferDict()
-            sdev = _gvar.BufferDict()
+
+        if samplesize == max(samplesize_list):
+            # all samples same size
+            newdataset = []                     # dataset repacked as a list of flat arrays
+            ans = _gvar.BufferDict()
             for k in dataset:
-                newdataset.append(
-                    numpy.asarray(dataset[k][:samplesize]).reshape(samplesize, -1)
-                    )
-                mean[k], tcov = _avg_arraydata(dataset[k], **kargs)
-                if mean[k].shape == ():
-                    sdev[k] = tcov ** 0.5 
-                    cov[k] = tcov
-                else:
-                    cov[k] = tcov.reshape(mean[k].size, mean[k].size)
-                    sdev[k] = numpy.diagonal(cov[k]) ** 0.5 
+                data_k = numpy.asarray(dataset[k][:samplesize])
+                ans[k] = data_k[0]              # dummy place holder
+                newdataset.append(data_k.reshape(samplesize, -1))
             newdataset = numpy.concatenate(tuple(newdataset),axis=1)
-            cov_flat = numpy.cov(newdataset, rowvar=False, bias=True)
-            if not spread:
-                cov_flat /= samplesize
-            D = sdev.buf / numpy.diagonal(cov_flat) ** 0.5
-            cov_flat *= D[:, None] * D[None, :] 
-            for k in mean:
-                slk = mean.slice(k)
-                cov_flat[slk, slk] = cov[k]
-            ans_flat = _gvar.gvar(mean.buf, cov_flat)
-            return _gvar.BufferDict(mean, buf=ans_flat)
-        newdataset = []                     # dataset repacked as a list of flat arrays
-        ans = _gvar.BufferDict()
-        for k in dataset:
-            data_k = numpy.asarray(dataset[k][:samplesize])
-            ans[k] = data_k[0]              # dummy place holder
-            newdataset.append(data_k.reshape(samplesize, -1))
-        newdataset = numpy.concatenate(tuple(newdataset),axis=1)
-        return _gvar.BufferDict(
-            ans,
-            buf=avg_data(newdataset, **kargs)
+            return _gvar.BufferDict(
+                ans,
+                buf=avg_data(newdataset, **kargs)
+                )
+
+        # samplesize differs in different dataset[k]
+        if warn:
+            warnings.warn(
+            'sample sizes differ for different entries: %d -> %d'
+            % (samplesize, max(samplesize_list))
             )
+        if mismatch == 'truncate':
+            truncated_dataset = _gvar.BufferDict()
+            for k in dataset:
+                truncated_dataset[k] = dataset[k][:samplesize]
+            return avg_data(truncated_dataset) 
+        
+        if mismatch == 'decorrelate':
+            ans = _gvar.BufferDict()
+            for k in dataset:
+                ans[k] = avg_data(dataset[k])
+            return ans 
+
+        elif mismatch == 'wavg':
+            try:
+                import lsqfit
+            except ImportError:
+                raise ImportError('lsqfit module required for wavg')
+            extra_dataset = _gvar.BufferDict()
+            for k in dataset:
+                if len(dataset[k]) > samplesize + 1: # want at least 2 samples
+                    extra_dataset[k] = dataset[k][samplesize:]
+            ans1 = avg_data(dataset, mismatch='truncate', **kargs)
+            ans2 = avg_data(extra_dataset, mismatch='wavg', **kargs)
+            return lsqfit.wavg([ans1, ans2])
+                
+
+# def _avg_arraydata(dataset, median=False, spread=False, bstrap=False, noerror=False, warn=False):
+#     # dataset is a list of arrays (all same shape) or numbers
+#     # N.B. Use 1/N not 1/(N-1) for cov as is more accurate, though slightly biased
+#     #      -- see "bias-variance tradeoff."
+#     if len(dataset) == 0:
+#         return None
+#     try:
+#         dataset = numpy.asarray(dataset, float)
+#     except ValueError:
+#         raise ValueError("Inconsistent array shapes or data types in dataset.")
+#     if noerror:
+#         return numpy.median(dataset, axis=0) if median else dataset.mean(axis=0) 
+#     # calculate covariance
+#     dataset_shape = dataset.shape 
+#     data_shape = dataset.shape[1:]
+#     dataset.shape = (dataset.shape[0], -1)
+#     if dataset.shape[0] >= 2:
+#         cov = numpy.cov(dataset, rowvar=False, bias=True)
+#     else:
+#         cov = numpy.zeros(dataset.shape[1:] + dataset.shape[1:], float)
+#     if not spread:
+#         cov /= dataset.shape[0]
+#     if median:
+#         meanm, mean, meanp = numpy.percentile(dataset, q=[50 - 34.1344746, 50, 50 + 34.1344746], axis=0)
+#         sdev = numpy.maximum(meanp - mean, mean - meanm)
+#         if not spread:
+#             sdev /= dataset.shape[0] ** 0.5 
+#         # replace std dev by sdev from percentiles in cov
+#         if data_shape == ():
+#             cov = sdev ** 2
+#         elif mean.size == 1:
+#             cov.flat[:] = sdev ** 2
+#         else:
+#             D = sdev / numpy.diagonal(cov) ** 0.5 
+#             cov = D[None, :] * cov * D[:, None]
+#     else:
+#         mean = dataset.mean(axis=0)
+#     mean.shape = data_shape 
+#     cov.shape = data_shape + data_shape
+#     return mean, cov    
+
+# def avg_data(dataset, median=False, spread=False, bstrap=False, noerror=False, warn=False):
+#     """ Average ``dataset`` to estimate means and covariance.
+
+#     ``dataset`` is a list of random numbers, a list of random arrays, or a dictionary
+#     of lists of random numbers and/or arrays: for example, ::
+
+#         >>> random_numbers = [1.60, 0.99, 1.28, 1.30, 0.54, 2.15]
+#         >>> random_arrays = [[12.2,121.3],[13.4,149.2],[11.7,135.3],
+#         ...                  [7.2,64.6],[15.2,69.0],[8.3,108.3]]
+#         >>> random_dict = dict(n=random_numbers,a=random_arrays)
+
+#     where in each case there are six random numbers/arrays. ``avg_data``
+#     estimates the means of the distributions from which the random
+#     numbers/arrays are drawn, together with the uncertainties in those
+#     estimates. The results are returned as a |GVar| or an array of
+#     |GVar|\s, or a dictionary of |GVar|\s and/or arrays of |GVar|\s::
+
+#         >>> print(avg_data(random_numbers))
+#         1.31(20)
+#         >>> print(avg_data(random_arrays))
+#         [11.3(1.1) 108(13)]
+#         >>> print(avg_data(random_dict))
+#         {'a': array([11.3(1.1), 108(13)], dtype=object),'n': 1.31(20)}
+
+#     The arrays in ``random_arrays`` are one dimensional; in general, they
+#     can have any shape.
+
+#     ``avg_data(dataset)`` also estimates any correlations between different
+#     quantities in ``dataset``. When ``dataset`` is a dictionary, it does this by
+#     assuming that the lists of random numbers/arrays for the different
+#     ``dataset[k]``\s are synchronized, with the first element in one list
+#     corresponding to the first elements in all other lists, and so on. If
+#     some lists are shorter than others, the longer lists are truncated to
+#     the same length as the shortest list when calculating correlations; the 
+#     full lists are used to evaluate standard deviations.
+
+#     There are four optional arguments. If argument ``spread=True`` each
+#     standard deviation in the results refers to the spread in the data, not
+#     the uncertainty in the estimate of the mean. The former is ``sqrt(N)``
+#     larger where ``N`` is the number of random numbers (or arrays) being
+#     averaged::
+
+#         >>> print(avg_data(random_numbers,spread=True))
+#         1.31(50)
+#         >>> print(avg_data(random_numbers))
+#         1.31(20)
+#         >>> print((0.50 / 0.20) ** 2)   # should be (about) 6
+#         6.25
+
+#     This is useful, for example, when averaging bootstrap data. The default
+#     value is ``spread=False``.
+
+#     The second option is triggered by setting ``median=True``. This
+#     replaces the means in the results by medians, while the standard
+#     deviations are approximated by the width of the larger interval 
+#     above or below the median that contains 34% of the data. These 
+#     estimates are more robust than the mean and standard deviation when 
+#     averaging over small amounts of data; in particular, they are 
+#     unaffected by extreme outliers in the data. The default 
+#     is ``median=False``.
+
+#     The third option is triggered by setting ``bstrap=True``. This is
+#     shorthand for setting ``median=True`` and ``spread=True``, and
+#     overrides any explicit setting for these keyword arguments. This is the
+#     typical choice for analyzing bootstrap data --- hence its name. The
+#     default value is ``bstrap=False``.
+
+#     The fourth option is to omit the error estimates on the averages, which
+#     is triggered by setting ``noerror=True``. Just the mean values are
+#     returned. The default value is ``noerror=False``.
+
+#     The final option ``warn`` determines whether or not a warning is issued when
+#     different components of a dictionary data set have different sample sizes.
+#     """
+#     if bstrap:
+#         median = True
+#         spread = True
+#     kargs = dict(median=median, spread=spread, noerror=noerror, warn=False)
+#     if not hasattr(dataset,'keys'):
+#         result = _avg_arraydata(dataset, **kargs)
+#         if not isinstance(result, tuple):
+#             return result
+#         mean, cov = result
+#         if mean.shape == ():
+#             cov = cov ** 0.5
+#         return _gvar.gvar(mean, cov)    
+#     else:
+#         # dataset is a dictionary filled with lists of arrays or numbers
+#         if len(dataset) == 0:
+#             return _gvar.BufferDict()
+#         samplesize_list = [len(dk) for dk in dataset.values()]
+#         samplesize = min(samplesize_list)
+#         if noerror:
+#             ans = collections.OrderedDict()
+#             for k in dataset:
+#                 ans[k] = avg_data(dataset[k], **kargs)
+#             return ans
+#         if samplesize<=0:
+#             raise ValueError(
+#                 "Empty entries in dataset; can't compute correlations."
+#                 )
+#         elif samplesize == 1:
+#             # can't compute correlations between different entries
+#             ans = _gvar.BufferDict()
+#             for k in dataset:
+#                 ans[k] = avg_data(dataset[k], **kargs)
+#             return ans
+#         if samplesize != max(samplesize_list):
+#             # samplesize differs in different dataset[k]
+#             if warn:
+#                 warnings.warn(
+#                 'sample sizes differ for different entries: %d %d'
+#                 % (samplesize, max(samplesize_list))
+#                 )
+#             newdataset = []                 # dataset repacked as a list of flat arrays
+#             mean = _gvar.BufferDict()
+#             cov = _gvar.BufferDict()
+#             sdev = _gvar.BufferDict()
+#             for k in dataset:
+#                 newdataset.append(
+#                     numpy.asarray(dataset[k][:samplesize]).reshape(samplesize, -1)
+#                     )
+#                 mean[k], tcov = _avg_arraydata(dataset[k], **kargs)
+#                 if mean[k].shape == ():
+#                     sdev[k] = tcov ** 0.5 
+#                     cov[k] = tcov
+#                 else:
+#                     cov[k] = tcov.reshape(mean[k].size, mean[k].size)
+#                     sdev[k] = numpy.diagonal(cov[k]) ** 0.5 
+#             newdataset = numpy.concatenate(tuple(newdataset),axis=1)
+#             cov_flat = numpy.cov(newdataset, rowvar=False, bias=True)
+#             if not spread:
+#                 cov_flat /= samplesize
+#             D = sdev.buf / numpy.diagonal(cov_flat) ** 0.5
+#             cov_flat *= D[:, None] * D[None, :] 
+#             for k in mean:
+#                 slk = mean.slice(k)
+#                 cov_flat[slk, slk] = cov[k]
+#             ans_flat = _gvar.gvar(mean.buf, cov_flat)
+#             return _gvar.BufferDict(mean, buf=ans_flat)
+#         newdataset = []                     # dataset repacked as a list of flat arrays
+#         ans = _gvar.BufferDict()
+#         for k in dataset:
+#             data_k = numpy.asarray(dataset[k][:samplesize])
+#             ans[k] = data_k[0]              # dummy place holder
+#             newdataset.append(data_k.reshape(samplesize, -1))
+#         newdataset = numpy.concatenate(tuple(newdataset),axis=1)
+#         return _gvar.BufferDict(
+#             ans,
+#             buf=avg_data(newdataset, **kargs)
+#             )
 
 def autocorr(dataset):
     """ Compute autocorrelation in ``dataset``.

@@ -17248,7 +17248,7 @@ if (!__Pyx_RefNanny) {
  * import gvar as _gvar
  * 
  * try:             # <<<<<<<<<<<<<<
- *     from collections import MutableMapping as collections_MMapping
+ *     from collections.abc import MutableMapping as collections_MMapping
  * except ImportError:
  */
   {
@@ -17263,16 +17263,16 @@ if (!__Pyx_RefNanny) {
       /* "gvar/_bufferdict.pyx":24
  * 
  * try:
- *     from collections import MutableMapping as collections_MMapping             # <<<<<<<<<<<<<<
+ *     from collections.abc import MutableMapping as collections_MMapping             # <<<<<<<<<<<<<<
  * except ImportError:
- *     from collections.abc import MutableMapping as collections_MMapping
+ *     from collections import MutableMapping as collections_MMapping
  */
       __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_INCREF(__pyx_n_s_MutableMapping);
       __Pyx_GIVEREF(__pyx_n_s_MutableMapping);
       PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_MutableMapping);
-      __pyx_t_5 = __Pyx_Import(__pyx_n_s_collections, __pyx_t_1, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 24, __pyx_L2_error)
+      __pyx_t_5 = __Pyx_Import(__pyx_n_s_collections_abc, __pyx_t_1, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 24, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_5, __pyx_n_s_MutableMapping); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L2_error)
@@ -17285,7 +17285,7 @@ if (!__Pyx_RefNanny) {
  * import gvar as _gvar
  * 
  * try:             # <<<<<<<<<<<<<<
- *     from collections import MutableMapping as collections_MMapping
+ *     from collections.abc import MutableMapping as collections_MMapping
  * except ImportError:
  */
     }
@@ -17299,9 +17299,9 @@ if (!__Pyx_RefNanny) {
 
     /* "gvar/_bufferdict.pyx":25
  * try:
- *     from collections import MutableMapping as collections_MMapping
- * except ImportError:             # <<<<<<<<<<<<<<
  *     from collections.abc import MutableMapping as collections_MMapping
+ * except ImportError:             # <<<<<<<<<<<<<<
+ *     from collections import MutableMapping as collections_MMapping
  * 
  */
     __pyx_t_6 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_ImportError);
@@ -17313,9 +17313,9 @@ if (!__Pyx_RefNanny) {
       __Pyx_GOTREF(__pyx_t_7);
 
       /* "gvar/_bufferdict.pyx":26
- *     from collections import MutableMapping as collections_MMapping
+ *     from collections.abc import MutableMapping as collections_MMapping
  * except ImportError:
- *     from collections.abc import MutableMapping as collections_MMapping             # <<<<<<<<<<<<<<
+ *     from collections import MutableMapping as collections_MMapping             # <<<<<<<<<<<<<<
  * 
  * BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])
  */
@@ -17324,7 +17324,7 @@ if (!__Pyx_RefNanny) {
       __Pyx_INCREF(__pyx_n_s_MutableMapping);
       __Pyx_GIVEREF(__pyx_n_s_MutableMapping);
       PyList_SET_ITEM(__pyx_t_8, 0, __pyx_n_s_MutableMapping);
-      __pyx_t_9 = __Pyx_Import(__pyx_n_s_collections_abc, __pyx_t_8, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 26, __pyx_L4_except_error)
+      __pyx_t_9 = __Pyx_Import(__pyx_n_s_collections, __pyx_t_8, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 26, __pyx_L4_except_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __pyx_t_8 = __Pyx_ImportFrom(__pyx_t_9, __pyx_n_s_MutableMapping); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 26, __pyx_L4_except_error)
@@ -17344,7 +17344,7 @@ if (!__Pyx_RefNanny) {
  * import gvar as _gvar
  * 
  * try:             # <<<<<<<<<<<<<<
- *     from collections import MutableMapping as collections_MMapping
+ *     from collections.abc import MutableMapping as collections_MMapping
  * except ImportError:
  */
     __Pyx_XGIVEREF(__pyx_t_2);
@@ -17361,7 +17361,7 @@ if (!__Pyx_RefNanny) {
   }
 
   /* "gvar/_bufferdict.pyx":28
- *     from collections.abc import MutableMapping as collections_MMapping
+ *     from collections import MutableMapping as collections_MMapping
  * 
  * BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])             # <<<<<<<<<<<<<<
  * """ Data type for BufferDict._data[k]. Note shape==() implies a scalar. """

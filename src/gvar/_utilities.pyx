@@ -157,6 +157,8 @@ def mean(g):
     buf = numpy.zeros(g.size,numpy.float_)
     try:
         for i, gi in enumerate(g.flat):
+            if gi == None:
+                raise ValueError('g contains None')
             buf[i] = gi.v
     except TypeError:
         for i, ogi in enumerate(g.flat):
@@ -184,6 +186,8 @@ def fmt(g, ndecimal=None, sep='', d=None):
         g = numpy.asarray(g)
     buf = []
     for i,gi in enumerate(g.flat):
+        if gi == None:
+            raise ValueError('g contains None')
         buf.append(gi.fmt(ndecimal=ndecimal,sep=sep))
     return BufferDict(g,buf=buf) if g.shape is None else numpy.reshape(buf,g.shape)
 
@@ -239,6 +243,8 @@ def deriv(g, x):
             return g.flat[0].deriv(x)
         ans = numpy.zeros((g.size,  ) + x.shape, dtype=float)
         for i in range(g.size):
+            if g.flat[i] == None:
+                raise ValueError('g contains None')
             gi = g.flat[i]
             ans[i] = gi.deriv(x)
         return ans.reshape(g.shape + x.shape)
@@ -281,6 +287,8 @@ def is_primary(g):
     done = set()
     try:
         for i, gi in enumerate(g.flat):
+            if gi == None:
+                raise ValueError('g contains None')
             if gi.d.size == 1 and gi.d.v[0].i not in done:
                 buf[i] = True 
                 done.add(gi.d.v[0].i)
@@ -325,6 +333,8 @@ def _dependencies(g, all=False):
     dep = set()
     pri = set()
     for gi in g.flat:
+        if gi == None:
+            raise ValueError('g contains None')
         if gi.d.size == 1:
             pri.add(gi.d.v[0].i)
             if not all:
@@ -359,6 +369,8 @@ def missing_dependencies(g):
     dep = set()
     pri = set()
     for gi in g.flat:
+        if gi == None:
+            raise ValueError('g contains None')
         if gi.d.size == 1:
             pri.add(gi.d.v[0].i)
             continue
@@ -388,6 +400,8 @@ def uncorrelated(g1,g2):
             else:
                 gi = numpy.asarray(gi)
         for g in gi.flat:
+            if g == None:
+                continue
             s[i].update(g.d.indices())
     if not s[0].isdisjoint(s[1]):
         # index sets overlap, so g1 and g2 not orthogonal
@@ -811,12 +825,12 @@ def var(g):
     gdlist = numpy.empty(ng, object)
     cov = None
     for a in range(ng):
-        try:
+        if isinstance(g[a], GVar):
             ga = g[a]
             gdlist[a] = ga.d 
             if cov is None:
                 cov = ga.cov
-        except:
+        else:
             gdlist[a] = None
     nc = cov.nrow
 
@@ -1981,6 +1995,8 @@ def disassemble(g):
     gsize = g.size
     newbuf = numpy.empty(gsize, object)
     for i,gi in enumerate(g.flat):
+        if gi == None:
+            raise ValueError('g contains None')
         newbuf[i] = (gi.v, gi.d)
     return BufferDict(g, buf=newbuf) if g.shape is None else newbuf.reshape(g.shape)
 

@@ -85,7 +85,7 @@ class ArrayTests(object):
 
 
 
-class txest_dataset(unittest.TestCase,ArrayTests):
+class test_dataset(unittest.TestCase,ArrayTests):
     def setUp(self): pass
 
     def tearDown(self): pass
@@ -218,14 +218,36 @@ class txest_dataset(unittest.TestCase,ArrayTests):
         self.assertEqual(mean['v'].shape,(2,))
         self.assert_arraysclose(mean['v'], [2,2])
 
-        # check different sample sizes
-        data = dict(s=[1,2,3],v=[[1,1],[2,2],[3,3],[1,1],[2,2],[3,4]])
-        mean = avg_data(data)
-        self.assertAlmostEqual(mean['s'].var, np.cov(data['s'],rowvar=False, bias=True) / 3.)
-        np.testing.assert_allclose(evalcov(mean['v']), np.cov(data['v'], rowvar=False, bias=True) / 6.)
-        np.testing.assert_allclose(evalcorr(mean)['s', 'v'], evalcorr(avg_data(dict(s=data['s'], v=data['v'][:3])))['s', 'v'])
-        np.testing.assert_allclose(evalcorr(mean)['v', 's'], evalcorr(avg_data(dict(s=data['s'], v=data['v'][:3])))['v', 's'])
-        # print(evalcorr(mean))
+    def test_avg_data_mismatch(self):
+        """ avg_data(...,mismatch=...) """
+        N = 20
+        M = 400
+        x1 = gvar(N * [(1,1)])
+        x2 = x1 + gvar(0,10)
+        if lsqfit is not None:
+            for x, ratio in [(x1, dict(x=1,y=2)), (x2, dict(x=2,y=2))]:
+                sx = np.array([_ for _ in raniter(x, M)])
+                ds = dict(x=sx[:M//4, :N//2], y = sx[:, N//2:])
+                a1 = avg_data(ds, mismatch='truncate')
+                sdev1 = dict(x=np.mean(sdev(a1['x'])), y=np.mean(sdev(a1['y'])))
+                a2 = avg_data(ds, mismatch='wavg')
+                sdev2 = dict(x=np.mean(sdev(a2['x'])), y=np.mean(sdev(a2['y'])))
+                assert round(sdev1['x'] / sdev2['x']) == ratio['x']
+                assert round(sdev1['y'] / sdev2['y']) == ratio['y']
+        else:
+            sx = np.array([_ for _ in raniter(x2, M)])
+            ds = dict(x=sx[:M//4, :N//2], y = sx[:, N//2:])
+            a1 = avg_data(ds, mismatch='truncate')
+
+        # x2 case
+        a3 = avg_data(ds, mismatch='decorrelate')
+        sdev3 = dict(x=np.mean(sdev(a3['x'])), y=np.mean(sdev(a3['y'])))
+        assert round(sdev1['x'] / sdev2['x']) == 2
+        assert round(sdev1['y'] / sdev2['y']) == 2
+        assert round(corr(a3['x'][0], a3['x'][1])) == 1
+        assert round(corr(a3['x'][0], a3['y'][0])) == 0
+        assert round(corr(a1['x'][0], a1['x'][1])) == 1
+        assert round(corr(a1['x'][0], a1['y'][0])) == 1
 
     def test_autocorr(self):
         """ dataset.autocorr """

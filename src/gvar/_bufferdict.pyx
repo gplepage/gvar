@@ -21,9 +21,9 @@ import json
 import gvar as _gvar
 
 try:
-    from collections import MutableMapping as collections_MMapping
-except ImportError:
     from collections.abc import MutableMapping as collections_MMapping
+except ImportError:
+    from collections import MutableMapping as collections_MMapping
 
 BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])
 """ Data type for BufferDict._data[k]. Note shape==() implies a scalar. """
