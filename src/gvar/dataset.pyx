@@ -189,7 +189,7 @@ def avg_data(
         entries so that all entries have the same sample size (equal to the 
         smallest sample size). This is the default. 
         
-        ``mismatch='wavg'``: The dataset is decomposed into a collection of data sets 
+        ``mismatch='wavg'``: The data set is decomposed into a collection of data sets 
         so that the entries in any given data set all have the same sample size;
         no samples are discarded. Each of the resulting data sets is averaged 
         separately, and the final result is the weighted average of these averages.
@@ -252,7 +252,7 @@ def avg_data(
         dataset.shape = dataset_shape
         if mean.shape == ():
             cov = cov ** 0.5
-        return _gvar.gvar(mean, cov)    
+        return _gvar.gvar(mean, cov, fast=True)    
 
     else:
         # dataset is a dictionary filled with lists of arrays or numbers
