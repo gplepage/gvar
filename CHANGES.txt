@@ -1,10 +1,17 @@
+Version 11.9.1 2020-11-25
+=========================
+Yet another tweak to gvar.dataset.avg_data(dataset). This makes 
+it a bit faster for very large problems and avoids a bug 
+in scipy's sparse matrix code when the covariance 
+matrix has more than 2**31 elements.
+
 Version 11.9 2020-11-22
 ========================
-- Further fixes to dataset.avg(dataset). The previous fix (in v11.8) 
-  could lead to problems for dictionary datasets where entries 
-  dataset[k] have different sample sizes. The new version has 
-  a new keyword (mismatch) that offers three options for dealing 
-  with this situation.
+- Further fixes to gvar.dataset.avg_data(dataset). The previous 
+  fix (in v11.8) could lead to problems for dictionary datasets 
+  where entries dataset[k] have different sample sizes. The new 
+  version has a new keyword (mismatch) that offers three options 
+  for dealing with this situation.
 
 - Several functions (eg, gvar.var) generated segmentation errors if GVars
   in the arguments were replaced by None. This has been fixed. What happens
