@@ -470,7 +470,7 @@ def cov(g1, g2):
     return evalcov([g1, g2])[0,1]
 
 
-def correlate(g, corr):
+def correlate(g, corr, upper=False, lower=False, verify=False):
     """ Add correlations to uncorrelated |GVar|\s in ``g``.
 
     This method creates correlated |GVar|\s from uncorrelated |GVar|\s ``g``,
@@ -510,16 +510,27 @@ def correlate(g, corr):
     Args:
         g: An array of |GVar|\s or a dictionary whose values are
             |GVar|\s or arrays of |GVar|\s.
-        corr: Correlations between |GVar|\s: ``corr[i, j]`` is the
-            correlation between ``g[i]`` and ``g[j]``.
+        corr: Correlations between |GVar|\s: ``corr[i, j]``
+            is the correlation between ``g[i]`` and ``g[j]``. Should 
+            be a symmetric and positive-definite (unless ``upper`` 
+            or ``lower`` is specified).
+        upper (bool): If ``True``, replaces lower triangular part 
+            of ``corr`` with transpose of the upper triangular part.
+            The diagonal is set to one. Default is ``False``.
+        lower (bool): If ``True``, replaces upper triangular part 
+            of ``corr`` with transpose of the lower triangular part.
+            The diagonal is set to one. Default is ``False``.
+        verify (bool): If ``True``, verifies that ``corr`` 
+            is symmetric and positive definite. Default is 
+            ``False`` because verification is costly for large
+            matrices.
     """
     cdef INTP_TYPE ni, nj
-    cdef numpy.ndarray[numpy.float_t, ndim=2] covflat
-    cdef numpy.ndarray[numpy.float_t, ndim=1] sdevflat, mean, sdev
+    cdef numpy.ndarray[numpy.float_t, ndim=2] corrflat
+    cdef numpy.ndarray[numpy.float_t, ndim=1] sdevflat, meanflat
     if hasattr(g, 'keys'):
         g = _gvar.asbufferdict(g)
-        sdevflat = _gvar.sdev(g.buf)
-        covflat = numpy.empty((len(sdevflat), len(sdevflat)), numpy.float_)
+        corrflat = numpy.empty((len(g.buf), len(g.buf)), numpy.float_)
         for i in g:
             i_sl, i_sh = g.slice_shape(i)
             if i_sh == ():
@@ -534,17 +545,27 @@ def correlate(g, corr):
                     nj = 1
                 else:
                     nj = numpy.product(j_sh)
-                covflat[i_sl, j_sl] = (
-                    numpy.asarray(corr[i, j]).reshape(ni, nj) *
-                    numpy.outer(sdevflat[i_sl], sdevflat[j_sl])
-                    )
-        return BufferDict(g, buf=_gvar.gvar(_gvar.mean(g.buf), covflat))
+                corrflat[i_sl, j_sl] = numpy.asarray(corr[i, j]).reshape(ni, nj) 
+        return BufferDict(g, buf=correlate(g.buf, corrflat, upper=upper, lower=lower, verify=verify))
     else:
         g = numpy.asarray(g)
-        mean = _gvar.mean(g.flat)
-        sdev = _gvar.sdev(g.flat)
-        corr = numpy.asarray(corr).reshape(mean.shape[0], -1)
-        return _gvar.gvar(mean, corr * numpy.outer(sdev, sdev)).reshape(g.shape)
+        meanflat = _gvar.mean(g.flat)
+        sdevflat = _gvar.sdev(g.flat)
+        corrflat = numpy.asarray(corr).reshape(meanflat.shape[0], -1)
+        if upper:
+            corrflat = numpy.triu(corrflat)
+            corrflat += corrflat.T 
+            numpy.fill_diagonal(corrflat, 1)
+        elif lower:
+            corrflat = numpy.tril(corrflat)
+            corrflat += corrflat.T 
+            numpy.fill_diagonal(corrflat, 1)
+        return _gvar.gvar(
+            meanflat, 
+            sdevflat[:, None] * corrflat * sdevflat[None, :], 
+            verify=verify
+            ).reshape(g.shape)
+
 
 @cython.boundscheck(False) # turn off bounds-checking
 @cython.wraparound(False)  # turn off negative index wrapping

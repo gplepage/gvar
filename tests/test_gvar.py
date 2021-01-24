@@ -1071,12 +1071,32 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         xx = correlate(gvar(xmean, xsdev), evalcorr(x))
         self.assert_arraysequal(xmean, mean(xx))
         self.assert_arraysequal(evalcov(x), evalcov(xx))
+        # with upper, verify
+        corr = evalcorr(x)
+        corr[1, 0] = 0.
+        corr[1, 1] = 10.
+        with self.assertRaises(ValueError):
+            xx = correlate(gvar(xmean, xsdev), corr, upper=False, verify=True)
+        xx = correlate(gvar(xmean, xsdev), corr, upper=True, verify=True)
+        self.assert_arraysequal(xmean, mean(xx))
+        self.assert_arraysequal(evalcov(x), evalcov(xx))
+        # with lower, verify
+        corr = evalcorr(x)
+        corr[0, 1] = 0.
+        corr[0, 0] = 0.
+        with self.assertRaises(ValueError):
+            xx = correlate(gvar(xmean, xsdev), corr, lower=False, verify=True)
+        xx = correlate(gvar(xmean, xsdev), corr, lower=True, verify=True)
+        self.assert_arraysequal(xmean, mean(xx))
+        self.assert_arraysequal(evalcov(x), evalcov(xx))
+        # matrix
         x.shape = (2, 1)
         xmean = mean(x)
         xsdev = sdev(x)
         xx = correlate(gvar(xmean, xsdev), evalcorr(x))
         self.assert_arraysequal(xmean, mean(xx))
         self.assert_arraysequal(evalcov(x), evalcov(xx))
+        # dict
         y = BufferDict()
         y['a'] = x[0, 0]
         y['b'] = x

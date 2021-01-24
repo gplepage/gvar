@@ -158,7 +158,7 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.tabulate(g, ncol=1, headers=True, offset='', ndecimal=None)
 
-.. autofunction:: gvar.correlate(g, corr)
+.. autofunction:: gvar.correlate(g, corr, upper=False, lower=False, verify=False)
 
 .. autofunction:: gvar.evalcov(g)
 

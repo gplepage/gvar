@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.9.1 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.9.2 documentation</title>
     <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -453,7 +453,7 @@ show 2 digits of error.</p></li>
 
 <dl class="function">
 <dt id="gvar.correlate">
-<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">correlate</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">corr</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.correlate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">gvar.</code><code class="sig-name descname">correlate</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">corr</em>, <em class="sig-param">upper=False</em>, <em class="sig-param">lower=False</em>, <em class="sig-param">verify=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.correlate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add correlations to uncorrelated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>This method creates correlated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s from uncorrelated <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal notranslate"><span class="pre">g</span></code>,
 using the correlations specified in <code class="docutils literal notranslate"><span class="pre">corr</span></code>.</p>
@@ -492,8 +492,20 @@ a correlation matrix:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> – An array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or a dictionary whose values are
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
-<li><p><strong>corr</strong> – Correlations between <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s: <code class="docutils literal notranslate"><span class="pre">corr[i,</span> <span class="pre">j]</span></code> is the
-correlation between <code class="docutils literal notranslate"><span class="pre">g[i]</span></code> and <code class="docutils literal notranslate"><span class="pre">g[j]</span></code>.</p></li>
+<li><p><strong>corr</strong> – Correlations between <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s: <code class="docutils literal notranslate"><span class="pre">corr[i,</span> <span class="pre">j]</span></code>
+is the correlation between <code class="docutils literal notranslate"><span class="pre">g[i]</span></code> and <code class="docutils literal notranslate"><span class="pre">g[j]</span></code>. Should
+be a symmetric and positive-definite (unless <code class="docutils literal notranslate"><span class="pre">upper</span></code>
+or <code class="docutils literal notranslate"><span class="pre">lower</span></code> is specified).</p></li>
+<li><p><strong>upper</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, replaces lower triangular part
+of <code class="docutils literal notranslate"><span class="pre">corr</span></code> with transpose of the upper triangular part.
+The diagonal is set to one. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>lower</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, replaces upper triangular part
+of <code class="docutils literal notranslate"><span class="pre">corr</span></code> with transpose of the lower triangular part.
+The diagonal is set to one. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>verify</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, verifies that <code class="docutils literal notranslate"><span class="pre">corr</span></code>
+is symmetric and positive definite. Default is
+<code class="docutils literal notranslate"><span class="pre">False</span></code> because verification is costly for large
+matrices.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2843,7 +2855,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
