@@ -1,8 +1,12 @@
-Version 11.9.2?
-===========
+Version 11.9.2 2021-04-15
+=========================
+- Bug fix in evalcov to get rid of (unusual) divide-by-0 error.
+  Thanks to Giacomo Petrillo for pointing out the problem.
+
 - New keywords for correlate: upper, lower, verify. These 
   make it easier to build the correlation matrix from an 
-  upper or lower matrix, and to verify the final GVar.
+  upper or lower matrix, and to verify (optionally) the 
+  final GVar.
 
 Version 11.9.1 2020-11-25
 =========================

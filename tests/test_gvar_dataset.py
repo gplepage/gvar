@@ -238,12 +238,13 @@ class test_dataset(unittest.TestCase,ArrayTests):
             sx = np.array([_ for _ in raniter(x2, M)])
             ds = dict(x=sx[:M//4, :N//2], y = sx[:, N//2:])
             a1 = avg_data(ds, mismatch='truncate')
+            sdev1 = dict(x=np.mean(sdev(a1['x'])), y=np.mean(sdev(a1['y'])))
 
         # x2 case
         a3 = avg_data(ds, mismatch='decorrelate')
         sdev3 = dict(x=np.mean(sdev(a3['x'])), y=np.mean(sdev(a3['y'])))
-        assert round(sdev1['x'] / sdev2['x']) == 2
-        assert round(sdev1['y'] / sdev2['y']) == 2
+        assert round(sdev1['x'] / sdev3['x']) == 1
+        assert round(sdev1['y'] / sdev3['y']) == 2
         assert round(corr(a3['x'][0], a3['x'][1])) == 1
         assert round(corr(a3['x'][0], a3['y'][0])) == 0
         assert round(corr(a1['x'][0], a1['x'][1])) == 1

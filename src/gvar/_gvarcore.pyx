@@ -3,7 +3,7 @@
 # remove extra # above for profiling
 
 # Created by Peter Lepage (Cornell University) on 2011-08-17.
-# Copyright (c) 2011-2020 G. Peter Lepage.
+# Copyright (c) 2011-2021 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -915,7 +915,7 @@ class GVarFactory:
                     elif xsdev.shape==2 * x.shape: # x,cov
                         xcov = xsdev.reshape(nx, nx)
                         with numpy.errstate(under='ignore'):
-                            if not numpy.allclose(xcov, xcov.T):
+                            if not numpy.allclose(xcov, xcov.T, equal_nan=True):
                                 raise ValueError('non-symmetric covariance matrix:\n' + str(xcov))
                         if verify:
                             try:

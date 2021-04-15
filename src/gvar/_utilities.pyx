@@ -1,6 +1,6 @@
 # cython: language_level=3str, binding=True
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-20 G. Peter Lepage.
+# Copyright (c) 2012-21 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -931,7 +931,6 @@ def evalcov(g):
     """
     cdef INTP_TYPE a,b,ng,i,j,nc
     cdef INTP_TYPE cov_zeros, previousid, bsize, ni, id
-    cdef double vec_zeros
     cdef numpy.ndarray[numpy.float_t, ndim=2] ans
     cdef numpy.ndarray[numpy.float_t, ndim=2] np_gd
     cdef numpy.int8_t[::1] imask
@@ -1003,20 +1002,24 @@ def evalcov(g):
         cov_zeros += bsize * bsize
         # convert to zeros
         cov_zeros = ni * ni - cov_zeros 
-        # vec_zeros = ni - vec_zeros / ng
-        # less than 50% zero is defined as dense (ad hoc)
-        is_dense = cov_zeros / ni / ni < 0.5 # and vec_zeros / ni < 0.5  # sparse vecs ok 
-        if is_dense:
-            # collect cov matrix for primary GVars and
-            # derivative vectors for g[a]; form dot products
-            mask = smask(imask)
-            np_gd = numpy.zeros((ng, mask.len), dtype=float)
-            mcov = cov.masked_mat(mask)
-            for a in range(ng):
-                da = gdlist[a]
-                da.masked_vec(mask, out=np_gd[a])
-            # ans = numpy.matmul(np_gd, numpy.matmul(mcov,np_gd.T))
-            ans = np_gd.dot(mcov.dot(np_gd.T))
+        if ni <= 0:
+            # GVars don't depend on other GVars (eg, 0*gvar('1(1)') gives such a thing)
+            is_dense = True 
+            ans = numpy.zeros((ng, ng), numpy.float_)
+        else:
+            # less than 50% zero is defined as dense (ad hoc)
+            is_dense = cov_zeros / ni / ni < 0.5  # N.B. sparse vecs ok 
+            if is_dense:
+                # collect cov matrix for primary GVars and
+                # derivative vectors for g[a]; form dot products
+                mask = smask(imask)
+                np_gd = numpy.zeros((ng, mask.len), dtype=float)
+                mcov = cov.masked_mat(mask)
+                for a in range(ng):
+                    da = gdlist[a]
+                    da.masked_vec(mask, out=np_gd[a])
+                # ans = numpy.matmul(np_gd, numpy.matmul(mcov,np_gd.T))
+                ans = np_gd.dot(mcov.dot(np_gd.T))
     else:
         is_dense = False
     if not is_dense:
