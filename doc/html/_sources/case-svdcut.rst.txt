@@ -7,7 +7,7 @@
 Case Study: Correlations and SVD Cuts
 =====================================================
 This case study illustrates a problem that arises when constructing
-correlation matrices from a small number random samples. It shows how
+correlation matrices from a small number of random samples. It shows how
 to fix the problem using an SVD |~| cut.
 
 
