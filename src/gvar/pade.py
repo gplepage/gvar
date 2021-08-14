@@ -15,7 +15,7 @@
 import sys
 import numpy 
 import gvar as _gvar 
-import scipy.linalg 
+# import scipy.linalg 
 from scipy.interpolate import pade as _scipy_pade
 
 class Pade(object):
@@ -223,7 +223,8 @@ def pade_svd(f, m, n, rtol=1e-14):
         and ``sum_i q[i] x**i`` is the denominator. ``q[0]`` is
         normalized to 1.
     """
-    linalg = scipy.linalg
+    import scipy.linalg as linalg
+    # linalg = scipy.linalg
     mn_save = m,n
     c = numpy.array(f[:n + m + 1], float)
     if len(f) < (m + n + 1):

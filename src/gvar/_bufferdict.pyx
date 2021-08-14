@@ -83,7 +83,7 @@ class BufferDict(collections_MMapping):
     """
 
     extension_pattern = re.compile('^([^()]+)\((.+)\)$')
-    extension_fcn = {}
+    invfcn = {}
 
     def __init__(self, *args, **kargs):
         self._extension = {}
@@ -312,14 +312,14 @@ class BufferDict(collections_MMapping):
             return self._extension[k]
         except KeyError:
             pass
-        for f in BufferDict.extension_fcn:
+        for f in BufferDict.invfcn:
             altk = f + '(' + str(k) + ')'
             try:
                 d = self._odict.__getitem__(altk)
                 ans = self._buf[d.slice]
                 if d.shape != ():
                     ans = ans.reshape(d.shape)
-                ans = BufferDict.extension_fcn[f](ans)
+                ans = BufferDict.invfcn[f](ans)
                 self._extension[k] = ans
                 return ans
             except KeyError:
@@ -336,7 +336,7 @@ class BufferDict(collections_MMapping):
             if m is None:
                 continue
             k_fcn, k_stripped = m.groups()
-            if k_fcn in BufferDict.extension_fcn:
+            if k_fcn in BufferDict.invfcn:
                 ans.append(k_stripped)
         return ans
 
@@ -530,14 +530,14 @@ class BufferDict(collections_MMapping):
             name (str): Distributions' function name.
             invfcn (callable): Inverse of the transformation function.
         """
-        BufferDict.extension_fcn[name] = invfcn
+        BufferDict.invfcn[name] = invfcn
 
     @staticmethod
     def del_distribution(name):
         """ Delete |BufferDict| distribution ``name``. """
-        del BufferDict.extension_fcn[name]
-        if name in BufferDict.uniform.extension_fcn:
-            del BufferDict.uniform.extension_fcn[name]
+        del BufferDict.invfcn[name]
+        if name in BufferDict.uniform.invfcn:
+            del BufferDict.uniform.invfcn[name]
 
     @staticmethod
     def uniform(fname, umin, umax, shape=()):
@@ -565,13 +565,13 @@ class BufferDict(collections_MMapping):
         Returns:
             :class:`gvar.GVar` object corresponding to a uniform distribution.
         """
-        if not hasattr(BufferDict.uniform, 'extension_fcn'):
-            BufferDict.uniform.extension_fcn = {}
-        if fname in BufferDict.uniform.extension_fcn:
-            if sorted(BufferDict.uniform.extension_fcn[fname]) != sorted((umin, umax)):
+        if not hasattr(BufferDict.uniform, 'invfcn'):
+            BufferDict.uniform.invfcn = {}
+        if fname in BufferDict.uniform.invfcn:
+            if sorted(BufferDict.uniform.invfcn[fname]) != sorted((umin, umax)):
                 raise ValueError("can't reuse function name -- " + str(fname))
         else:
-            BufferDict.uniform.extension_fcn[fname] = (umin, umax)
+            BufferDict.uniform.invfcn[fname] = (umin, umax)
             root2 = numpy.sqrt(2)
             BufferDict.add_distribution(fname, lambda x : umin + (_gvar.erf(x / root2) + 1) * (umax - umin) / 2.)
         if shape == ():
@@ -599,7 +599,7 @@ def get_dictkeys(bdict, klist):
     ans = []
     for k in klist:
         if k not in bdict:
-            for f in BufferDict.extension_fcn:
+            for f in BufferDict.invfcn:
                 newk = f + '(' + str(k) + ')'
                 if newk in bdict:
                     break
@@ -617,7 +617,7 @@ def dictkey(bdict, k):
     such as ``log(k)`` or ``sqrt(k)``.
     """
     if k not in bdict:
-        for f in BufferDict.extension_fcn:
+        for f in BufferDict.invfcn:
             newk = f + '(' + str(k) + ')'
             if newk in bdict:
                 return newk
@@ -635,7 +635,7 @@ def has_dictkey(b, k):
     if k in b:
         return True
     else:
-        for f in BufferDict.extension_fcn:
+        for f in BufferDict.invfcn:
             newk = f + '(' + str(k) + ')'
             if newk in b:
                 return True
@@ -652,9 +652,9 @@ def _stripkey(k):
     if m is None:
         return k, None
     k_fcn, k_stripped = m.groups()
-    if k_fcn not in BufferDict.extension_fcn:
+    if k_fcn not in BufferDict.invfcn:
         return k, None
-    return k_stripped, BufferDict.extension_fcn[k_fcn]
+    return k_stripped, BufferDict.invfcn[k_fcn]
 
 
 def nonredundant_keys(keys):

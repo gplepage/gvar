@@ -117,8 +117,6 @@ tools for use with |GVar|\s (or ``float``\s):
 # GNU General Public License for more details.
 
 import collections
-import math
-import sys
 
 import numpy
 
@@ -722,34 +720,6 @@ def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None):
         mtable.append('  '.join([tabcol[i] for tabcol in table[:-1]]))
     return offset + ('\n' + offset).join(mtable)
 
-def erf(x):
-    """ Error function.
-
-    Works for floats, |GVar|\s, and :mod:`numpy` arrays.
-    """
-    try:
-        return math.erf(x)
-    except TypeError:
-        pass
-    if hasattr(x, 'erf'):
-        return x.erf()
-    elif isinstance(x, GVar):
-        f = math.erf(x.mean)
-        dfdx = 2. * math.exp(- x.mean ** 2) / math.sqrt(math.pi)
-        return gvar_function(x, f, dfdx)
-    else:
-        x = numpy.asarray(x)
-        ans = numpy.empty(x.shape, x.dtype)
-        for i in range(x.size):
-            try:
-                ans.flat[i] = erf(x.flat[i])
-            except TypeError:
-                xi = x.flat[i]
-                f = math.erf(xi.mean)
-                dfdx = 2. * math.exp(- xi.mean ** 2) / math.sqrt(math.pi)
-                ans.flat[i] = gvar_function(xi, f, dfdx)
-        return ans
-
 # default extensions
 BufferDict.add_distribution('log', numpy.exp)
 BufferDict.add_distribution('sqrt', numpy.square)
@@ -1103,7 +1073,7 @@ class PDFHistogram(object):
                 x.sort()
                 dx = (x - self.g.mean) / self.g.sdev
                 y = (erf(dx / 2**0.5) + 1) / 2.
-                yspline = cspline.CSpline(x, y)
+                yspline = cspline.CSpline(x, y, alg='cspline')
                 plot.ylabel('cumulative probability')
                 plot.ylim(0, 1.0)
             elif plottype in ['density', 'probability']:
@@ -1117,7 +1087,7 @@ class PDFHistogram(object):
                     plot.ylabel('probability density')
                 else:
                     plot.ylabel('probability')
-                yspline = cspline.CSpline(x, y)
+                yspline = cspline.CSpline(x, y, alg='cspline')
             else:
                 raise ValueError('unknown plottype: ' + str(plottype))
             if len(x) < 100:
@@ -1167,7 +1137,7 @@ class PDFStatistics(object):
             bins, prob = histogram
             prob = prob / sum(prob)
             cumprob = numpy.cumsum(prob)[:-1]
-            probspline = cspline.CSpline(bins, cumprob)
+            probspline = cspline.CSpline(bins, cumprob, alg='cspline')
             x0 = []
             for p0 in [0.317310507863 / 2., 0.5, 1 - 0.317310507863 / 2.]:
                 if cumprob[0] < p0 and cumprob[-1] > p0:

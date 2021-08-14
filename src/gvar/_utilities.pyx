@@ -20,7 +20,8 @@ from scipy.sparse.csgraph import connected_components as _connected_components
 from scipy.sparse import csr_matrix as _csr_matrix
 from scipy.linalg import solve_triangular as _solve_triangular
 from scipy.linalg import cholesky as _cholesky
-from scipy.linalg import eigh as scipy_eigh
+from scipy.linalg import eigh as _scipy_eigh
+from scipy.special import erf as _scipy_erf
 import numpy
 cimport numpy
 import warnings
@@ -2557,7 +2558,7 @@ class SVD(object):
     
     @staticmethod 
     def _scipy_eigh(DmatD):
-        val, vec = scipy_eigh(DmatD)
+        val, vec = _scipy_eigh(DmatD)
         vec = numpy.transpose(vec) # now 1st index labels eigenval
         val = numpy.fabs(val)
         # guarantee that sorted, with smallest val[i] first
@@ -3276,3 +3277,23 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
         return (g, i_wgts)
     else:
         return g
+
+def erf(x):
+    """ Error function.
+
+    Works for floats, |GVar|\s, and :mod:`numpy` arrays.
+    """
+    cdef int i
+    if isinstance(x, GVar):
+        f = _scipy_erf(x.mean)
+        dfdx = 2. * numpy.exp(- x.mean ** 2) / numpy.sqrt(numpy.pi)
+        return _gvar.gvar_function(x, f, dfdx)
+    if hasattr(x, 'erf'):
+        return x.erf()
+    x = numpy.asarray(x)
+    if x.dtype != object:
+        return _scipy_erf(x)
+    ans = numpy.empty(x.shape, x.dtype)
+    for i in range(x.size):
+        ans.flat[i] = erf(x.flat[i])
+    return ans

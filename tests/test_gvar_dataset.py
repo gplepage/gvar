@@ -607,7 +607,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
         s = svd_diagnosis(dset)
         self.assertGreater(0.01, s.svdcut)
         # print(s.svdcut)
-        # s.plot_ratio(show=True)
+        # s.plot_ratio(show=False)
 
         # with models (only if lsqfit installed)
         if lsqfit is None:

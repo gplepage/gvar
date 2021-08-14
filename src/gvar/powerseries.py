@@ -166,7 +166,7 @@ expansion variables through a given order.
 # GNU General Public License for more details.
 
 import numpy
-import math
+# import math
 from numpy import exp, log, sqrt, sin, cos, tan, arcsin, arccos, arctan
 from numpy import sinh, cosh, tanh, arcsinh, arccosh, arctanh
 from scipy.special import eval_hermite as _scipy_eval_hermite

@@ -17,6 +17,7 @@ test-gvar.py
 import os
 import unittest
 import collections
+import math
 import pickle
 import numpy as np
 import random
@@ -2026,6 +2027,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             )
         x = gv.gvar('1.5(2)')
         self.assertAlmostEqual(erf(x).mean, math.erf(x.mean))
+        x = gv.gvar(['0(2)', '1.5(2)'])
+        erfx = erf(x)
+        self.assertAlmostEqual(erfx[0].mean, math.erf(x[0].mean))
+        self.assertAlmostEqual(erfx[1].mean, math.erf(x[1].mean))
 
     def test_equivalent(self):
         " equivalent(g1, g2) "

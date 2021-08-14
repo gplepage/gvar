@@ -21,10 +21,10 @@ import warnings
 
 import numpy
 
-try:
-    import matplotlib.pyplot as _PLOT
-except ImportError:
-    _PLOT = None
+# try:
+#     import matplotlib.pyplot as _PLOT
+# except ImportError:
+#     _PLOT = None
 
 import gvar as _gvar
 
@@ -1299,9 +1299,12 @@ class svd_diagnosis(object):
             show: Displays the plot if ``show=True`` (default ``False``).
         """
         if plot is None:
-            if _PLOT is not None:
-                plot = _PLOT
-            else:
+            try:
+                import matplotlib.pyplot as plot 
+            except ImportError:
+            # if _PLOT is not None:
+            #     plot = _PLOT
+            # else:
                 warnings.warn('Need matplotlib library to make plots')
                 return None
         x = self.val / self.val[-1]
