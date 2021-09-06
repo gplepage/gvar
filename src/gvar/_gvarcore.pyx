@@ -719,7 +719,7 @@ cdef class GVar:
         """ Return the dot product of m and ``self.der``. """
         cdef numpy.ndarray[numpy.float_t, ndim=1] ans 
         cdef INTP_TYPE i, j 
-        ans = numpy.zeros(m.shape[0], dtype=numpy.float)
+        ans = numpy.zeros(m.shape[0], dtype=float)
         for j in range(m.shape[0]):
             for i in range(self.d.size):
                 ans[j] += m[j, self.d.v[i].i] * self.d.v[i].v

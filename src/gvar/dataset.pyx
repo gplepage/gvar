@@ -1107,7 +1107,7 @@ class Dataset(collections.OrderedDict):
         shape).
         """
         # regularize and test the template
-        template = numpy.array(template, dtype=numpy.object)
+        template = numpy.array(template, dtype=object)
         template_shape = template.shape
         template_flat = template.flat
         if not template_flat:

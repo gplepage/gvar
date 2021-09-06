@@ -2861,7 +2861,6 @@ static const char __pyx_k_arctan2[] = "arctan2";
 static const char __pyx_k_arctanh[] = "arctanh";
 static const char __pyx_k_asarray[] = "asarray";
 static const char __pyx_k_compile[] = "compile";
-static const char __pyx_k_float_2[] = "float";
 static const char __pyx_k_fortran[] = "fortran";
 static const char __pyx_k_indices[] = "indices";
 static const char __pyx_k_md_size[] = "md_size";
@@ -3250,7 +3249,6 @@ static PyObject *__pyx_n_s_fast;
 static PyObject *__pyx_n_s_flags;
 static PyObject *__pyx_n_s_flat;
 static PyObject *__pyx_n_s_float;
-static PyObject *__pyx_n_s_float_2;
 static PyObject *__pyx_n_s_floor;
 static PyObject *__pyx_n_s_fmt;
 static PyObject *__pyx_n_s_format;
@@ -14380,20 +14378,19 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_94mdotder(struct __pyx_obj_4gva
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyArrayObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
+  PyArrayObject *__pyx_t_5 = NULL;
+  int __pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
   PyObject *__pyx_t_8 = NULL;
   PyObject *__pyx_t_9 = NULL;
-  PyObject *__pyx_t_10 = NULL;
+  Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
-  Py_ssize_t __pyx_t_12;
-  npy_intp __pyx_t_13;
-  int __pyx_t_14;
-  npy_intp __pyx_t_15;
+  npy_intp __pyx_t_12;
+  int __pyx_t_13;
+  npy_intp __pyx_t_14;
+  Py_ssize_t __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
-  Py_ssize_t __pyx_t_18;
   __Pyx_RefNannySetupContext("mdotder", 0);
   __pyx_pybuffer_ans.pybuffer.buf = NULL;
   __pyx_pybuffer_ans.refcount = 0;
@@ -14403,7 +14400,7 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_94mdotder(struct __pyx_obj_4gva
   /* "gvar/_gvarcore.pyx":722
  *         cdef numpy.ndarray[numpy.float_t, ndim=1] ans
  *         cdef INTP_TYPE i, j
- *         ans = numpy.zeros(m.shape[0], dtype=numpy.float)             # <<<<<<<<<<<<<<
+ *         ans = numpy.zeros(m.shape[0], dtype=float)             # <<<<<<<<<<<<<<
  *         for j in range(m.shape[0]):
  *             for i in range(self.d.size):
  */
@@ -14421,64 +14418,58 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_94mdotder(struct __pyx_obj_4gva
   __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 722, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_numpy); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 722, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, ((PyObject *)(&PyFloat_Type))) < 0) __PYX_ERR(0, 722, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 722, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_float_2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 722, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 722, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 722, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 722, __pyx_L1_error)
-  __pyx_t_6 = ((PyArrayObject *)__pyx_t_5);
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 722, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_ans.rcbuffer->pybuffer);
-    __pyx_t_7 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ans.rcbuffer->pybuffer, (PyObject*)__pyx_t_6, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack);
-    if (unlikely(__pyx_t_7 < 0)) {
-      PyErr_Fetch(&__pyx_t_8, &__pyx_t_9, &__pyx_t_10);
+    __pyx_t_6 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ans.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack);
+    if (unlikely(__pyx_t_6 < 0)) {
+      PyErr_Fetch(&__pyx_t_7, &__pyx_t_8, &__pyx_t_9);
       if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ans.rcbuffer->pybuffer, (PyObject*)__pyx_v_ans, &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
-        Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_9); Py_XDECREF(__pyx_t_10);
+        Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_9);
         __Pyx_RaiseBufferFallbackError();
       } else {
-        PyErr_Restore(__pyx_t_8, __pyx_t_9, __pyx_t_10);
+        PyErr_Restore(__pyx_t_7, __pyx_t_8, __pyx_t_9);
       }
-      __pyx_t_8 = __pyx_t_9 = __pyx_t_10 = 0;
+      __pyx_t_7 = __pyx_t_8 = __pyx_t_9 = 0;
     }
     __pyx_pybuffernd_ans.diminfo[0].strides = __pyx_pybuffernd_ans.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_ans.diminfo[0].shape = __pyx_pybuffernd_ans.rcbuffer->pybuffer.shape[0];
-    if (unlikely(__pyx_t_7 < 0)) __PYX_ERR(0, 722, __pyx_L1_error)
+    if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 722, __pyx_L1_error)
   }
-  __pyx_t_6 = 0;
-  __pyx_v_ans = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
+  __pyx_v_ans = ((PyArrayObject *)__pyx_t_4);
+  __pyx_t_4 = 0;
 
   /* "gvar/_gvarcore.pyx":723
  *         cdef INTP_TYPE i, j
- *         ans = numpy.zeros(m.shape[0], dtype=numpy.float)
+ *         ans = numpy.zeros(m.shape[0], dtype=float)
  *         for j in range(m.shape[0]):             # <<<<<<<<<<<<<<
  *             for i in range(self.d.size):
  *                 ans[j] += m[j, self.d.v[i].i] * self.d.v[i].v
  */
-  __pyx_t_11 = (__pyx_v_m.shape[0]);
-  __pyx_t_12 = __pyx_t_11;
-  for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
-    __pyx_v_j = __pyx_t_13;
+  __pyx_t_10 = (__pyx_v_m.shape[0]);
+  __pyx_t_11 = __pyx_t_10;
+  for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
+    __pyx_v_j = __pyx_t_12;
 
     /* "gvar/_gvarcore.pyx":724
- *         ans = numpy.zeros(m.shape[0], dtype=numpy.float)
+ *         ans = numpy.zeros(m.shape[0], dtype=float)
  *         for j in range(m.shape[0]):
  *             for i in range(self.d.size):             # <<<<<<<<<<<<<<
  *                 ans[j] += m[j, self.d.v[i].i] * self.d.v[i].v
  *         return ans
  */
-    __pyx_t_7 = __pyx_v_self->d->size;
-    __pyx_t_14 = __pyx_t_7;
-    for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
-      __pyx_v_i = __pyx_t_15;
+    __pyx_t_6 = __pyx_v_self->d->size;
+    __pyx_t_13 = __pyx_t_6;
+    for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
+      __pyx_v_i = __pyx_t_14;
 
       /* "gvar/_gvarcore.pyx":725
  *         for j in range(m.shape[0]):
@@ -14487,13 +14478,13 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_94mdotder(struct __pyx_obj_4gva
  *         return ans
  * 
  */
-      __pyx_t_16 = __pyx_v_j;
-      __pyx_t_17 = (__pyx_v_self->d->v[__pyx_v_i]).i;
-      if (__pyx_t_16 < 0) __pyx_t_16 += __pyx_v_m.shape[0];
-      if (__pyx_t_17 < 0) __pyx_t_17 += __pyx_v_m.shape[1];
-      __pyx_t_18 = __pyx_v_j;
-      if (__pyx_t_18 < 0) __pyx_t_18 += __pyx_pybuffernd_ans.diminfo[0].shape;
-      *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_ans.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_ans.diminfo[0].strides) += ((*((__pyx_t_5numpy_float_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_m.data + __pyx_t_16 * __pyx_v_m.strides[0]) ) + __pyx_t_17 * __pyx_v_m.strides[1]) ))) * (__pyx_v_self->d->v[__pyx_v_i]).v);
+      __pyx_t_15 = __pyx_v_j;
+      __pyx_t_16 = (__pyx_v_self->d->v[__pyx_v_i]).i;
+      if (__pyx_t_15 < 0) __pyx_t_15 += __pyx_v_m.shape[0];
+      if (__pyx_t_16 < 0) __pyx_t_16 += __pyx_v_m.shape[1];
+      __pyx_t_17 = __pyx_v_j;
+      if (__pyx_t_17 < 0) __pyx_t_17 += __pyx_pybuffernd_ans.diminfo[0].shape;
+      *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_ans.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_ans.diminfo[0].strides) += ((*((__pyx_t_5numpy_float_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_m.data + __pyx_t_15 * __pyx_v_m.strides[0]) ) + __pyx_t_16 * __pyx_v_m.strides[1]) ))) * (__pyx_v_self->d->v[__pyx_v_i]).v);
     }
   }
 
@@ -14523,7 +14514,6 @@ static PyObject *__pyx_pf_4gvar_9_gvarcore_4GVar_94mdotder(struct __pyx_obj_4gva
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
   { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
@@ -39082,7 +39072,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_flags, __pyx_k_flags, sizeof(__pyx_k_flags), 0, 0, 1, 1},
   {&__pyx_n_s_flat, __pyx_k_flat, sizeof(__pyx_k_flat), 0, 0, 1, 1},
   {&__pyx_n_s_float, __pyx_k_float, sizeof(__pyx_k_float), 0, 0, 1, 1},
-  {&__pyx_n_s_float_2, __pyx_k_float_2, sizeof(__pyx_k_float_2), 0, 0, 1, 1},
   {&__pyx_n_s_floor, __pyx_k_floor, sizeof(__pyx_k_floor), 0, 0, 1, 1},
   {&__pyx_n_s_fmt, __pyx_k_fmt, sizeof(__pyx_k_fmt), 0, 0, 1, 1},
   {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
