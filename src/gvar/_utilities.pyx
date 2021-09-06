@@ -592,7 +592,7 @@ def evalcov_blocks_dense(g, compress=False):
         return [([], [])] if compress else [([], [[]])]
     allcov = evalcov(varlist)
     nb, key = _connected_components(allcov != 0, directed=False)
-    allvar = numpy.arange(nvar)
+    allvar = numpy.arange(nvar, dtype=numpy.intp)
     blocks = [([], [])]
     for ib in range(nb):
         idx = allvar[key == ib]
@@ -601,12 +601,12 @@ def evalcov_blocks_dense(g, compress=False):
             blocks[0][0].append(i)
             blocks[0][1].append(varlist[i].sdev)
         else:
-            blocks.append((idx, allcov[idx[:, None], idx]))
+            blocks.append((numpy.array(idx, dtype=numpy.intp), allcov[idx[:, None], idx]))
     blocks[0] = (numpy.array(blocks[0][0], dtype=numpy.intp), numpy.array(blocks[0][1], dtype=float))
     if not compress: 
         if len(blocks[0][0]) > 0:
             for i,sdev in zip(*blocks[0]):
-               blocks.append((numpy.array([i]), numpy.array([[sdev**2]])))
+               blocks.append((numpy.array([i], dtype=numpy.intp), numpy.array([[sdev**2]])))
         blocks = blocks[1:]
     return blocks
 
@@ -746,7 +746,7 @@ def evalcov_blocks(g, compress=False):
     graph = _csr_matrix((vals[:nval], (rows[:nval], cols[:nval])))
     # find and collect the sub-blocks
     nb, key = _connected_components(graph, directed=False)
-    allvar = numpy.arange(nvar)
+    allvar = numpy.arange(nvar, dtype=numpy.intp)
     blocks = [([], [])]
     for ib in range(nb):
         idx = allvar[key == ib]
@@ -769,12 +769,12 @@ def evalcov_blocks(g, compress=False):
                 else:
                     bidx = allbcov[skey == sib]
                     sbcov = numpy.array(bcov[bidx[:, None], bidx])
-                    blocks.append((sidx, sbcov))
+                    blocks.append((numpy.array(sidx, dtype=numpy.intp), sbcov))
     blocks[0] = (numpy.array(blocks[0][0], dtype=numpy.intp), numpy.array(blocks[0][1], dtype=float))
     if not compress: 
         if len(blocks[0][0]) > 0:
             for i,sdev in zip(*blocks[0]):
-               blocks.append((numpy.array([i]), numpy.array([[sdev**2]])))
+               blocks.append((numpy.array([i], dtype=numpy.intp), numpy.array([[sdev**2]])))
         blocks = blocks[1:]
     return blocks
 
