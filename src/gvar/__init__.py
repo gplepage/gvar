@@ -599,7 +599,7 @@ def fmt_chi2(f):
         chi2_dof = f.chi2 / f.dof if f.dof != 0 else 0
         return fmt % (chi2_dof, f.dof, f.Q)
 
-def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None):
+def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None, keys=None):
     """ Tabulate contents of an array or dictionary of |GVar|\s.
 
     Given an array ``g`` of |GVar|\s or a dictionary whose values are
@@ -646,13 +646,18 @@ def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None):
         ndecimal: Number of digits displayed after the decimal point.
             Default is ``ndecimal=None`` which adjusts table entries to
             show 2 digits of error.
+        keys: When ``g`` is a dictionary and ``keys`` is a list of 
+            keys, entries will be tabulated only for keys in the ``keys``
+            list; ignored if ``keys=None`` (default).
     """
     entries = []
     if hasattr(g, 'keys'):
         if headers is True:
             headers = ('key/index', 'value')
         g = BufferDict(g)
-        for k in g:
+        if keys is None:
+            keys = g.keys()
+        for k in keys:
             if g[k].shape == ():
                 entries.append((
                     str(k), fmt(g[k], sep=' ', ndecimal=ndecimal)
