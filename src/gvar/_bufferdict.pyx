@@ -87,6 +87,7 @@ class BufferDict(collections_MMapping):
 
     def __init__(self, *args, **kargs):
         self._extension = {}
+        self._ver_l = BufferDict._ver_g
         self.shape = None
         if len(args)==0:
             # kargs are dictionary entries
@@ -308,10 +309,14 @@ class BufferDict(collections_MMapping):
             return ans if d.shape is () else ans.reshape(d.shape)
         except KeyError:
             pass
-        try:
-            return self._extension[k]
-        except KeyError:
-            pass
+        if self._ver_l == BufferDict._ver_g:
+            try:
+                return self._extension[k]
+            except KeyError:
+                pass
+        else:
+            self._extension = {}
+            self._ver_l = BufferDict._ver_g 
         for f in BufferDict.invfcn:
             altk = f + '(' + str(k) + ')'
             try:
@@ -530,14 +535,20 @@ class BufferDict(collections_MMapping):
             name (str): Distributions' function name.
             invfcn (callable): Inverse of the transformation function.
         """
+        if name in BufferDict.invfcn:
+            raise ValueError('distribution {} already defined'.format(name))
         BufferDict.invfcn[name] = invfcn
 
     @staticmethod
     def del_distribution(name):
         """ Delete |BufferDict| distribution ``name``. """
-        del BufferDict.invfcn[name]
-        if name in BufferDict.uniform.invfcn:
+        if name in BufferDict.invfcn:
+            del BufferDict.invfcn[name]
+        else:
+            raise ValueError('{} is not a distribution'.format(name))
+        if hasattr(BufferDict.uniform, 'invfcn') and name in BufferDict.uniform.invfcn:
             del BufferDict.uniform.invfcn[name]
+        BufferDict._ver_g += 1
 
     @staticmethod
     def uniform(fname, umin, umax, shape=()):
@@ -580,7 +591,9 @@ class BufferDict(collections_MMapping):
             ans = _gvar.gvar(int(numpy.prod(shape)) * [(0, 1.)]) 
             ans.shape = shape 
             return ans
-    
+
+BufferDict._ver_g = 0    # version of distribution collection (for cache synch)
+
 def asbufferdict(g, dtype=None):
     """ Convert ``g`` to a BufferDict, keeping only ``g[k]`` for ``k in keylist``.
 

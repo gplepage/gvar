@@ -104,7 +104,7 @@ tools for use with |GVar|\s (or ``float``\s):
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-20 G. Peter Lepage.
+# Copyright (c) 2012-22 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -123,12 +123,14 @@ import numpy
 from gvar._gvarcore import *
 gvar = GVarFactory()            # order matters for this statement
 
-from gvar._svec_smat import *
-from gvar._bufferdict import BufferDict, asbufferdict
-from gvar._bufferdict import has_dictkey, dictkey, get_dictkeys
-from gvar._bufferdict import trim_redundant_keys    # legacy
-from gvar._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
-from gvar._utilities import *
+from ._svec_smat import *
+from ._bufferdict import BufferDict, asbufferdict
+from ._bufferdict import has_dictkey, dictkey, get_dictkeys
+from ._bufferdict import trim_redundant_keys    # legacy
+from ._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
+from ._utilities import *
+
+from ._version import __version__
 
 from gvar import dataset
 from gvar import ode

@@ -13,12 +13,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 """
 
-GVAR_VERSION = '11.9.5'
+GVAR_VERSION = open('src/gvar/_version.py', 'r').readlines()[0].split("'")[1]
 
 from distutils.core import setup
 from distutils.extension import Extension
 from distutils.command.build_ext import build_ext as _build_ext
-from distutils.command.build_py import build_py as _build_py
+from distutils.command.build_py import build_py # as _build_py
 
 # compile from existing .c files if USE_CYTHON is False
 USE_CYTHON = False
@@ -38,13 +38,13 @@ class build_ext(_build_ext):
             ext.include_dirs.append(numpy_include)
         _build_ext.build_extensions(self)
 
-class build_py(_build_py):
-    # adds version info
-    def run(self):
-        """ Append version number to gvar/__init__.py """
-        with open('src/gvar/__init__.py', 'a') as gvfile:
-            gvfile.write("\n__version__ = '%s'\n" % GVAR_VERSION)
-        _build_py.run(self)
+# class build_py(_build_py):
+#     # adds version info
+#     def run(self):
+#         """ Append version number to gvar/__init__.py """
+#         with open('src/gvar/__init__.py', 'a') as gvfile:
+#             gvfile.write("\n__version__ = '%s'\n" % GVAR_VERSION)
+#         _build_py.run(self)
 
 # extension modules
 # Add explicit directories to the ..._dirs variables if

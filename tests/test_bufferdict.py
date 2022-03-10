@@ -427,6 +427,22 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             self.assertEqual(str(b['a']), str(np.array(4 * [w])))
         BufferDict.del_distribution('f')
 
+    def test_add_del_distribution(self):
+        " BufferDict.add_distribution/del_distribution "
+        BufferDict.add_distribution('ln', np.exp)
+        a = BufferDict({'ln(x)':1})
+        self.assertAlmostEqual(a['x'], np.exp(1)) 
+        with self.assertRaises(ValueError):
+            BufferDict.add_distribution('ln', np.log)
+        BufferDict.del_distribution('ln')
+        BufferDict.add_distribution('ln', np.log)
+        self.assertAlmostEqual(a['x'], np.log(1)) 
+        with self.assertRaises(ValueError):
+            BufferDict.del_distribution('lnln')
+        a['f(w)'] = BufferDict.uniform('f', 0, 1)
+        BufferDict.del_distribution('f')
+
+
 if __name__ == '__main__':
     unittest.main()
 
