@@ -532,7 +532,11 @@ class BufferDict(collections_MMapping):
             gv.BufferDict.add_distribution('erfinv', gv.erf)
 
         Args:
-            name (str): Distributions' function name.
+            name (str): Distributions' function name. An error is 
+                raised if the ``name`` is already being used for 
+                a distribution; the error can be avoided by deleting
+                the old definition first using 
+                :meth:`BufferDict.del_distribution`.
             invfcn (callable): Inverse of the transformation function.
         """
         if name in BufferDict.invfcn:
@@ -541,7 +545,11 @@ class BufferDict(collections_MMapping):
 
     @staticmethod
     def del_distribution(name):
-        """ Delete |BufferDict| distribution ``name``. """
+        """ Delete |BufferDict| distribution ``name``. 
+        
+        Raises an ``ValueError`` if ``name`` is not the name of 
+        an existing distribution.
+        """
         if name in BufferDict.invfcn:
             del BufferDict.invfcn[name]
         else:
@@ -550,6 +558,11 @@ class BufferDict(collections_MMapping):
             del BufferDict.uniform.invfcn[name]
         BufferDict._ver_g += 1
 
+    @staticmethod
+    def has_distribution(name):
+        """ ``True`` if ``name`` has been defined as a distribution; ``False`` otherwise. """
+        return name in BufferDict.invfcn
+    
     @staticmethod
     def uniform(fname, umin, umax, shape=()):
         """ Create uniform distribution on interval ``[umin, umax]``.
@@ -567,7 +580,7 @@ class BufferDict(collections_MMapping):
 
         Args:
             fname (str): Name of function used in the :class:`BufferDict` key. 
-                Note that names can reused provided they correspond to the 
+                Note that names can be reused provided they correspond to the 
                 same interval as in previous calls.
             umin (float): Minimum value of the uniform distribution.
             umax (float): Maximum value of the uniform distribution.
@@ -580,7 +593,7 @@ class BufferDict(collections_MMapping):
             BufferDict.uniform.invfcn = {}
         if fname in BufferDict.uniform.invfcn:
             if sorted(BufferDict.uniform.invfcn[fname]) != sorted((umin, umax)):
-                raise ValueError("can't reuse function name -- " + str(fname))
+                raise ValueError("distribution {} already defined".format(fname))
         else:
             BufferDict.uniform.invfcn[fname] = (umin, umax)
             root2 = numpy.sqrt(2)

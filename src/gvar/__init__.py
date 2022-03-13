@@ -120,7 +120,7 @@ import collections
 
 import numpy
 
-from gvar._gvarcore import *
+from ._gvarcore import *
 gvar = GVarFactory()            # order matters for this statement
 
 from ._svec_smat import *

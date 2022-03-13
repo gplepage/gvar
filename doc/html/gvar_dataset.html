@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.9.5 documentation</title>
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.9.6 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Numerical Analysis Modules in gvar" href="gvar_other.html" />
@@ -39,7 +40,8 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>  
 
@@ -48,9 +50,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="gvar-dataset-random-data-sets">
+  <section id="gvar-dataset-random-data-sets">
 <h1><a class="reference internal" href="#module-gvar.dataset" title="gvar.dataset: Tools for analyzing collections of random samples."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code></a> - Random Data Sets<a class="headerlink" href="#gvar-dataset-random-data-sets" title="Permalink to this headline">¶</a></h1>
-<span class="target" id="module-gvar.dataset"></span><div class="section" id="introduction">
+<span class="target" id="module-gvar.dataset"></span><section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="#module-gvar.dataset" title="gvar.dataset: Tools for analyzing collections of random samples."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code></a> contains a several tools for collecting and analyzing
 random samples from arbitrary distributions. The random samples are
@@ -176,13 +178,13 @@ sample in code: for example,</p>
 </pre></div>
 </div>
 <p>creates the same dataset as above.</p>
-</div>
-<div class="section" id="functions">
+</section>
+<section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <p>The functions defined in the module are:</p>
-<dl class="function">
-<dt id="gvar.dataset.avg_data">
-<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">avg_data</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">spread=False</em>, <em class="sig-param">median=False</em>, <em class="sig-param">bstrap=False</em>, <em class="sig-param">noerror=False</em>, <em class="sig-param">mismatch='truncate'</em>, <em class="sig-param">warn=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="gvar.dataset.avg_data">
+<span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">avg_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spread</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">median</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bstrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noerror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mismatch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'truncate'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.avg_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Average <code class="docutils literal notranslate"><span class="pre">dataset</span></code> to estimate means and covariance.</p>
 <p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers, a list of random arrays, or a dictionary
 of lists of random numbers and/or arrays: for example,</p>
@@ -275,9 +277,9 @@ when different entries in a dictionary data set have different sample
 sizes. The default is <code class="docutils literal notranslate"><span class="pre">warn=False</span></code>.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="gvar.dataset.autocorr">
-<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">autocorr</code><span class="sig-paren">(</span><em class="sig-param">dataset</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.autocorr" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="gvar.dataset.autocorr">
+<span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">autocorr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.autocorr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute autocorrelation in <code class="docutils literal notranslate"><span class="pre">dataset</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers or random arrays, or a dictionary
 of lists of random numbers/arrays.</p>
@@ -302,9 +304,9 @@ of computing the autocorrelations should grow roughly linearly with the
 number of random samples in <code class="docutils literal notranslate"><span class="pre">dataset</span></code> (up to logarithms).</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="gvar.dataset.bin_data">
-<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">bin_data</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">binsize=2</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bin_data" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="gvar.dataset.bin_data">
+<span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">bin_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bin_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin random data.</p>
 <p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers or random arrays, or a
 dictionary of lists of random numbers/arrays.
@@ -324,9 +326,9 @@ faster and to reduce measurement-to-measurement correlations, if they
 exist. Over-binning erases useful information.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="gvar.dataset.bootstrap_iter">
-<code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">bootstrap_iter</code><span class="sig-paren">(</span><em class="sig-param">dataset</em>, <em class="sig-param">n=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bootstrap_iter" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="gvar.dataset.bootstrap_iter">
+<span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">bootstrap_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.bootstrap_iter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create iterator that returns bootstrap copies of <code class="docutils literal notranslate"><span class="pre">dataset</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a list of random numbers or random arrays, or a dictionary
 of lists of random numbers/arrays. <code class="docutils literal notranslate"><span class="pre">bootstrap_iter(dataset,n)</span></code> is an
@@ -371,14 +373,14 @@ correlations between different quantities.</p>
 maximum if <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">is</span> <span class="pre">None</span></code>.</p>
 </dd></dl>
 
-</div>
-<div class="section" id="classes">
+</section>
+<section id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.Dataset</span></code></a> is used to assemble random samples from
 multidimensional distributions:</p>
-<dl class="class">
-<dt id="gvar.dataset.Dataset">
-<em class="property">class </em><code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">Dataset</code><a class="headerlink" href="#gvar.dataset.Dataset" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary for collecting random data.</p>
 <p>A <a class="reference internal" href="#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.Dataset</span></code></a> is an ordered dictionary whose values
 represent collections of random samples. Each value is  a <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code>
@@ -473,7 +475,7 @@ equivalent to the text file above would contain two groups,
 one with key <code class="docutils literal notranslate"><span class="pre">'s'</span></code> that is a one-dimensional array with shape (4,),
 and another with key <code class="docutils literal notranslate"><span class="pre">'v'</span></code> that is a two-dimensional array
 with shape (4, 2):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">h5py</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">h5py</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;datafile.h5&#39;</span><span class="p">)[</span><span class="s1">&#39;/mcdata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 <span class="go">&lt;HDF5 dataset &quot;s&quot;: shape (4,), type &quot;&lt;f8&quot;&gt;</span>
@@ -530,15 +532,15 @@ datasets from all of the groups are read.</p></li>
 </dd>
 </dl>
 <p>The main attributes and methods are:</p>
-<dl class="attribute">
-<dt id="gvar.dataset.Dataset.samplesize">
-<code class="sig-name descname">samplesize</code><a class="headerlink" href="#gvar.dataset.Dataset.samplesize" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.samplesize">
+<span class="sig-name descname"><span class="pre">samplesize</span></span><a class="headerlink" href="#gvar.dataset.Dataset.samplesize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smallest number of samples for any key.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="gvar.dataset.Dataset.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.append" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.append" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append data to dataset.</p>
 <p>There are three equivalent ways of adding data to a dataset
 <code class="docutils literal notranslate"><span class="pre">data</span></code>: for example, each of</p>
@@ -555,9 +557,9 @@ datasets from all of the groups are read.</p></li>
 vector to <code class="docutils literal notranslate"><span class="pre">data['a']</span></code>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="gvar.dataset.Dataset.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.extend" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add batched data to dataset.</p>
 <p>There are three equivalent ways of adding batched data, containing
 multiple samples for each quantity, to a dataset <code class="docutils literal notranslate"><span class="pre">data</span></code>: for
@@ -584,9 +586,9 @@ share keys: for example,</p>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="gvar.dataset.Dataset.grep">
-<code class="sig-name descname">grep</code><span class="sig-paren">(</span><em class="sig-param">rexp</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.grep" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.grep">
+<span class="sig-name descname"><span class="pre">grep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rexp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.grep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new dataset containing items whose keys match <code class="docutils literal notranslate"><span class="pre">rexp</span></code>.</p>
 <p>Returns a new <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.Dataset`</span></code> containing only the
 items <code class="docutils literal notranslate"><span class="pre">self[k]</span></code> whose keys <code class="docutils literal notranslate"><span class="pre">k</span></code> match regular expression
@@ -608,9 +610,9 @@ items <code class="docutils literal notranslate"><span class="pre">self[k]</span
 key.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="gvar.dataset.Dataset.slice">
-<code class="sig-name descname">slice</code><span class="sig-paren">(</span><em class="sig-param">sl</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.slice" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.slice">
+<span class="sig-name descname"><span class="pre">slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.slice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new dataset with <code class="docutils literal notranslate"><span class="pre">self[k]</span> <span class="pre">-&gt;</span> <span class="pre">self[k][sl].</span></code></p>
 <p>Parameter <code class="docutils literal notranslate"><span class="pre">sl</span></code> is a slice object that is applied to every
 item in the dataset to produce a new <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.Dataset</span></code>.
@@ -624,9 +626,9 @@ is called if the number of slice objects exceeds the number
 of dimensions for any <code class="docutils literal notranslate"><span class="pre">self[k]</span></code>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="gvar.dataset.Dataset.arrayzip">
-<code class="sig-name descname">arrayzip</code><span class="sig-paren">(</span><em class="sig-param">template</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.arrayzip" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.arrayzip">
+<span class="sig-name descname"><span class="pre">arrayzip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.arrayzip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge lists of random data according to <code class="docutils literal notranslate"><span class="pre">template</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">template</span></code> is an array of keys in the dataset, where the shapes
 of <code class="docutils literal notranslate"><span class="pre">self[k]</span></code> are the same for all keys <code class="docutils literal notranslate"><span class="pre">k</span></code> in <code class="docutils literal notranslate"><span class="pre">template</span></code>.
@@ -664,23 +666,23 @@ scalars or arrays (of any shape, so long as all have the same
 shape).</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="gvar.dataset.Dataset.trim">
-<code class="sig-name descname">trim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.trim" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.trim">
+<span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.trim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new dataset where all entries have same sample size.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="gvar.dataset.Dataset.toarray">
-<code class="sig-name descname">toarray</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.toarray" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.Dataset.toarray">
+<span class="sig-name descname"><span class="pre">toarray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset.toarray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create new dictionary <code class="docutils literal notranslate"><span class="pre">d</span></code> where <code class="docutils literal notranslate"><span class="pre">d[k]=numpy.array(self[k])</span></code> for all <code class="docutils literal notranslate"><span class="pre">k</span></code>.</p>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="gvar.dataset.svd_diagnosis">
-<em class="property">class </em><code class="sig-prename descclassname">gvar.dataset.</code><code class="sig-name descname">svd_diagnosis</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">svd_diagnosis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbstrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mincut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.svd_diagnosis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Diagnose the need for an SVD cut.</p>
 <p><a class="reference internal" href="#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis</span></code></a> bootstraps the spectrum of
 the correlation matrix for the data in <code class="docutils literal notranslate"><span class="pre">dataset</span></code> to determine
@@ -735,46 +737,46 @@ set equal to <code class="docutils literal notranslate"><span class="pre">None</
 </dd>
 </dl>
 <p>The main attributes are:</p>
-<dl class="attribute">
-<dt id="gvar.dataset.svd_diagnosis.svdcut">
-<code class="sig-name descname">svdcut</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis.svdcut" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis.svdcut">
+<span class="sig-name descname"><span class="pre">svdcut</span></span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.svdcut" title="Permalink to this definition">¶</a></dt>
 <dd><p>SVD cut for bad eigenvalues in correlation matrix.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="gvar.dataset.svd_diagnosis.eps">
-<code class="sig-name descname">eps</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis.eps" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis.eps">
+<span class="sig-name descname"><span class="pre">eps</span></span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.eps" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">eps</span></code> corresponding to <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>, for use in <a class="reference internal" href="gvar.html#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="gvar.dataset.svd_diagnosis.avgdata">
-<code class="sig-name descname">avgdata</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis.avgdata" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis.avgdata">
+<span class="sig-name descname"><span class="pre">avgdata</span></span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.avgdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Averaged data (<code class="docutils literal notranslate"><span class="pre">gvar.dataset.avg_data(dataset)</span></code>).</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="gvar.dataset.svd_diagnosis.val">
-<code class="sig-name descname">val</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis.val" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis.val">
+<span class="sig-name descname"><span class="pre">val</span></span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.val" title="Permalink to this definition">¶</a></dt>
 <dd><p>Eigenvalues of the correlation matrix.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="gvar.dataset.svd_diagnosis.bsval">
-<code class="sig-name descname">bsval</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis.bsval" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis.bsval">
+<span class="sig-name descname"><span class="pre">bsval</span></span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.bsval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bootstrap average of correlation matrix eigenvalues.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="gvar.dataset.svd_diagnosis.nmod">
-<code class="sig-name descname">nmod</code><a class="headerlink" href="#gvar.dataset.svd_diagnosis.nmod" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis.nmod">
+<span class="sig-name descname"><span class="pre">nmod</span></span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.nmod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of eigenmodes modified by SVD cut <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>.</p>
 </dd></dl>
 
 <p>A method is available to display the eigenvalues:</p>
-<dl class="method">
-<dt id="gvar.dataset.svd_diagnosis.plot_ratio">
-<code class="sig-name descname">plot_ratio</code><span class="sig-paren">(</span><em class="sig-param">plot=None</em>, <em class="sig-param">show=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.plot_ratio" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis.plot_ratio">
+<span class="sig-name descname"><span class="pre">plot_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.svd_diagnosis.plot_ratio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.</p>
 <p>Ratios (blue points) are plotted versus the value of the actual
 eigenvalues divided by the maximum eigenvalue. Error bars on
@@ -796,10 +798,11 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -832,12 +835,12 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -857,12 +860,13 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.5 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.9.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2020, G. P. Lepage.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>
