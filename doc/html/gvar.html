@@ -2329,7 +2329,7 @@ even though <code class="docutils literal notranslate"><span class="pre">'a'</sp
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Distributions’ function name. An error is
+<li><p><strong>name</strong> (<em>str</em>) – Distributions’ function name. A <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is
 raised if the <code class="docutils literal notranslate"><span class="pre">name</span></code> is already being used for
 a distribution; the error can be avoided by deleting
 the old definition first using
@@ -2342,10 +2342,16 @@ the old definition first using
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gvar.BufferDict.del_distribution">
-<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">del_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invfcn</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.del_distribution" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">del_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.del_distribution" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> distribution <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
-<p>Raises an <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">name</span></code> is not the name of
+<p>Raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if <code class="docutils literal notranslate"><span class="pre">name</span></code> is not the name of
 an existing distribution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.BufferDict.has_distribution">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">has_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict.has_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="docutils literal notranslate"><span class="pre">name</span></code> has been defined as a distribution; <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
 </dd></dl>
 
 <dl class="py method">

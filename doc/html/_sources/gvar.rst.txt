@@ -420,7 +420,9 @@ below.
 
    .. automethod:: add_distribution(name, invfcn)
 
-   .. automethod:: del_distribution(invfcn)
+   .. automethod:: del_distribution(name)
+
+   .. automethod:: has_distribution(name)
 
    .. automethod:: uniform(fname, umin, umax, shape=())
 

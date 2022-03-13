@@ -532,8 +532,8 @@ class BufferDict(collections_MMapping):
             gv.BufferDict.add_distribution('erfinv', gv.erf)
 
         Args:
-            name (str): Distributions' function name. An error is 
-                raised if the ``name`` is already being used for 
+            name (str): Distributions' function name. A ``ValueError`` is 
+                raised if ``name`` is already being used for 
                 a distribution; the error can be avoided by deleting
                 the old definition first using 
                 :meth:`BufferDict.del_distribution`.
@@ -547,7 +547,7 @@ class BufferDict(collections_MMapping):
     def del_distribution(name):
         """ Delete |BufferDict| distribution ``name``. 
         
-        Raises an ``ValueError`` if ``name`` is not the name of 
+        Raises a ``ValueError`` if ``name`` is not the name of 
         an existing distribution.
         """
         if name in BufferDict.invfcn:
