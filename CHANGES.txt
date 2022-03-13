@@ -1,3 +1,9 @@
+Version 11.9.6 2022-03-13
+==========================
+Fixes bug in BufferDict.del_distribution that caused it to crash. Also 
+adds more protection to BufferDict.add_distribution. Adds new 
+static method BufferDict.has_distribution.
+
 Version 11.9.5 2021-12-13
 ===========================
 - Fixes issue with Python 3.10.
