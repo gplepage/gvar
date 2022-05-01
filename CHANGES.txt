@@ -1,3 +1,19 @@
+Version 11.10 2022-05-01
+==========================
+Thanks to Giacomo Petrillo for these ideas and issues.
+
+- Fixes bug in raniter when svdcut<0.
+
+- Fixes var, sdev, evalcorr when given [] as an argument -- ie,
+  they no longer crash.
+
+- More legible __str__ and __repr__ for BufferDict. Thanks to 
+  Giacomo Petrillo for the code.
+
+- New iterator all_keys() for BufferDict which iterates over 
+  the dictionary keys and the extension keys. Thanks again to 
+  Giacomo Petrillo for code.
+
 Version 11.9.6 2022-03-13
 ==========================
 Fixes bug in BufferDict.del_distribution that caused it to crash. Also 

@@ -166,12 +166,15 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
 
     def test_str(self):
         """ str(b) repr(b) """
-        outstr = "{'scalar':0.0,'vector':array([1.,2.]),"
-        outstr += "'tensor':array([[3.,4.],[5.,6.]])}"
-        self.assertEqual(''.join(str(b).split()),outstr)
-        outstr = "BufferDict([('scalar',0.0),('vector',array([1.,2.])),"
-        outstr += "('tensor',array([[3.,4.],[5.,6.]]))])"
-        self.assertEqual(''.join(repr(b).split()),outstr)
+        # don't check white space
+        bstripped = str(b).replace(' ', '')
+        bstripped = bstripped.replace('\n', '')
+        correct = (
+            "{'scalar':0.0,'vector':array([1.,2.]),"
+            + "'tensor':array([[3.,4.],[5.,6.]]),}"
+            )
+        self.assertEqual(bstripped, correct)
+        self.assertEqual('BufferDict(' + str(b) + ')', repr(b))
 
     def test_arithmetic(self):
         a = BufferDict(a=1., b=[2., 3.])
@@ -415,6 +418,18 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(gv.exp(pvar['log(c(23))']), pvar['c(23)'])
         BufferDict.del_distribution('f')
 
+    def test_all_keys(self):
+        p = BufferDict()
+        p['a'] = 1.
+        p['b'] = [2., 3.]
+        p['log(c)'] = 0.
+        p['sqrt(d)'] = [5., 6.]
+        p['erfinv(e)'] = [[33.]]
+        p['f(w)'] = BufferDict.uniform('f', 2., 3.).mean
+        allkeys = list(p.all_keys())
+        correct = ['a', 'b', 'log(c)', 'c', 'sqrt(d)', 'd', 'erfinv(e)', 'e', 'f(w)', 'w']
+        self.assertEqual(allkeys, correct)
+        
     def test_uniform(self):
         " BufferDict.uniform "
         b = BufferDict()

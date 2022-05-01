@@ -37,7 +37,7 @@ class BufferDict(collections_MMapping):
         >>> b['a'] = 1.
         >>> b['b'] = 2
         >>> print(b)
-        {'a': 1.0,'b':2.0}
+        {'a': 1.0, 'b':2.0}
         >>> b = BufferDict(a=1., b=2.)
         >>> b = BufferDict([('a',1.), ('b',2.)])
 
@@ -45,7 +45,7 @@ class BufferDict(collections_MMapping):
 
         >>> c = BufferDict(b)
         >>> print(c)
-        {'a': 1.0,'b': 2.0}
+        {'a': 1.0, 'b': 2.0}
         >>> c = BufferDict(b, keys=['b'])
         >>> print(c)
         {'b': 2.0}
@@ -67,7 +67,7 @@ class BufferDict(collections_MMapping):
         >>> a = BufferDict(a=1., b=[2., 3.])
         >>> b = BufferDict(a=10., b=[20., 30.])
         >>> print(a + b)
-            {'a': 11.0,'b': array([22., 33.])}
+            {'a': 11.0, 'b': array([22., 33.])}
 
     Subtraction is also defined, as are multiplication and division
     by scalars. The corresponding ``+=``, ``-=``, ``*=``, ``/=`` operators
@@ -79,7 +79,7 @@ class BufferDict(collections_MMapping):
         >>> b = BufferDict(a=1., b=2.)
         >>> c = BufferDict(b, buf=[10, 20])
         >>> print(c)
-        {'a': 10,'b': 20}
+        {'a': 10, 'b': 20}
     """
 
     extension_pattern = re.compile('^([^()]+)\((.+)\)$')
@@ -345,6 +345,38 @@ class BufferDict(collections_MMapping):
                 ans.append(k_stripped)
         return ans
 
+    def all_keys(self):
+        """ Iterator over all keys and implicit keys.
+        
+        For example, the following code ::
+
+            b = BufferDict()
+            b['log(x)'] = 1.
+            for k in b.keys():
+                print(k, b[k])
+            print()
+            for k in b.all_keys():
+                print(k, b[k])
+
+        gives the following output::
+
+            log(x) 1
+
+            log(x) 1
+            x 2.718281828459045
+
+        Here ``'x'`` is not a key in dictionary ``b`` 
+        but ``b['x']`` is defined implicitly from ``b['log(x)']``.
+        See :meth:`gvar.BufferDict.add_distribution` for more 
+        information.
+        """
+        # Code from Giacomo Petrillo.
+        for k in self:
+            yield k
+            m = self.extension_pattern.match(k)
+            if m and m.group(1) in BufferDict.invfcn:
+                yield m.group(2)
+
     def values(self):
         # needed for python3.5
         return [self[k] for k in self]
@@ -427,18 +459,32 @@ class BufferDict(collections_MMapping):
     def __contains__(self, k):
         return k in self._odict
 
-    def __str__(self):
-        ans = "{"
-        for k in self:
-            ans += "%s: %s," % (repr(k), repr(self[k]))
-        if ans[-1] == ',':
-            ans = ans[:-1]
-            ans += "}"
-        return ans
-
     def __repr__(self):
-        cn = self.__class__.__name__
-        return cn+"("+repr([k for k in self.items()])+")"
+        return self.__class__.__name__ + '(' + str(self) + ')'
+
+    def __str__(self):
+        # Code from Giacomo Petrillo.
+        out = '{'
+
+        listrepr = [(repr(k), repr(v)) for k, v in self.items()]
+        newlinemode = any('\n' in rv for _, rv in listrepr)
+        
+        for rk, rv in listrepr:
+            if not newlinemode:
+                out += '{}: {}, '.format(rk, rv)
+            elif '\n' in rv:
+                rv = rv.replace('\n', '\n    ')
+                out += '\n    {}:\n    {},'.format(rk, rv)
+            else:
+                out += '\n    {}: {},'.format(rk, rv)
+                
+        if out.endswith(', '):
+            out = out[:-2]
+        elif newlinemode:
+            out += '\n'
+        out += '}'
+        
+        return out
 
     def _getflat(self):
         self._extension = {}

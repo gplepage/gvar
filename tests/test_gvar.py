@@ -1009,6 +1009,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             numpy.testing.assert_allclose(sdev(xt), covt.diagonal() ** 0.5)
             gv._CONFIG['var'] = tmp
 
+    def test_empty(self):
+        self.assertEqual(mean([]).size, 0)
+        self.assertEqual(sdev([]).size, 0)
+        self.assertEqual(var([]).size, 0)
+        self.assertEqual(evalcov([]).size, 0)
+        self.assertEqual(evalcorr([]).size, 0)
+        for i, b in evalcov_blocks([]):
+            self.assertEqual(i.size, 0)
+            self.assertEqual(b.size, 0)
+
     def test_uncorrelated(self):
         """ uncorrelated(g1, g2) """
         a = dict(x=gvar(1,2),y=np.array([gvar(3,4),gvar(5,6)]))
@@ -1230,6 +1240,17 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             self.assertAlmostEqual(da.std(),dda,delta=rtol*dda)
             self.assertAlmostEqual(a0.mean(),1.,delta=rtol)
             self.assertAlmostEqual(da.mean(),0.1,delta=rtol*da.std())
+
+    def test_raniter4(self):
+        """ raniter with svdcut<0 """
+        svdcut = -0.9e-1     # only one eigenmode survives
+        cov = ( 
+            np.array([[1,1,1], [1,1,1], [1,1,1]]) 
+            + np.array([[1,0,0],[0,1,0],[0,0,1]]) * 1e-1
+            )
+        g = gvar(np.zeros(len(cov)), cov)
+        y = next(raniter(g, svdcut=svdcut))
+        np.testing.assert_allclose(y, y[0] * np.array([1, 1, 1]))
 
     def test_bootstrap_iter(self):
         """ bootstrap_iter """

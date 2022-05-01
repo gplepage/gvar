@@ -209,6 +209,8 @@ def sdev(g):
         return BufferDict(g, buf=var(g.buf) ** 0.5)
     else:
         g = numpy.asarray(g)
+        if g.size == 0:
+            return numpy.array([])
         buf = var(g.flat) ** 0.5
         return buf.reshape(g.shape)
 
@@ -450,6 +452,8 @@ def evalcorr(g):
         return ans
     else:
         g = numpy.asarray(g)
+        if g.size == 0:
+            return numpy.array([[]], float)
         g_shape = g.shape
         cov = evalcov(g.flat)
         idx = numpy.arange(cov.shape[0])
@@ -688,7 +692,10 @@ def evalcov_blocks(g, compress=False):
         varlist = numpy.array(g).flat[:]
     nvar = len(varlist)
     if nvar <= 0:
-        return [([], [])] if compress else [([], [[]])]
+        return (
+            [(numpy.array([]), numpy.array([]))] if compress else 
+            [(numpy.array([]), numpy.array([[]]))] 
+            )
     cov = varlist[0].cov
     ivlist_id = {} 
     ivlist_idset = {}
@@ -838,6 +845,8 @@ def var(g):
             ansd[k1] = varlist[k1_sl].reshape(k1_sh)
         return ansd
     g = numpy.asarray(g)
+    if g.size == 0:
+        return numpy.array([])
     g_shape = g.shape
     g = g.flat
     ng = len(g)
@@ -967,7 +976,7 @@ def evalcov(g):
     g = g.flat
     ng = len(g)
     if ng <= 0:
-        return numpy.array([[]])
+        return numpy.array([[]], float)
     if hasattr(g[0], 'cov'):
         cov = g[0].cov
     else:
@@ -2366,12 +2375,18 @@ def raniter(g, n=None, eps=None, svdcut=None, uniform=None):
     while (n is None) or (count < n):
         count += 1
         z = numpy.random.normal(0.0, 1.0, nwgt) if uniform is None else numpy.random.uniform(-uniform, uniform, nwgt)
+        zstart = 0 
+        zstop = 0
         buf = numpy.array(g_mean)
         i, wgts = i_wgts[0]
         if len(i) > 0:
-            buf[i] += z[i] * wgts
+            zstop += len(i)
+            buf[i] += z[zstart:zstop] * wgts
+            zstart = zstop
         for i, wgts in i_wgts[1:]:
-            buf[i] += z[i].dot(wgts) 
+            zstop += len(i)
+            buf[i] += z[zstart:zstop].dot(wgts) 
+            zstart = zstop
         if g.shape is None:
             yield BufferDict(g, buf=buf)
         elif g.shape == ():

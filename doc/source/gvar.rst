@@ -329,8 +329,12 @@ dictionaries, ::
   >>> b['v'] = [1., 2.]
   >>> b['t'] = [[3., 4.], [5., 6.]]
   >>> print(b)
-  {'s': 0.0,'v': array([1., 2.]),'t': array([[3., 4.],
-         [5., 6.]])}
+  {
+      's': 0.0,
+      'v': array([1., 2.]),
+      't': array([[3., 4.],
+                  [5., 6.]]),
+   }
 
 but the values can also be accessed all at once through the buffer::
 
@@ -418,6 +422,8 @@ below.
 
    .. automethod:: has_dictkey(k)
 
+   .. automethod:: all_keys()
+
    .. automethod:: add_distribution(name, invfcn)
 
    .. automethod:: del_distribution(name)
@@ -425,6 +431,7 @@ below.
    .. automethod:: has_distribution(name)
 
    .. automethod:: uniform(fname, umin, umax, shape=())
+
 
 :class:`gvar.SVD` Objects
 ---------------------------
