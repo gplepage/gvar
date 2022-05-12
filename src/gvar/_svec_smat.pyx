@@ -382,6 +382,56 @@ cdef class smat:
         self.next_block += 1
         return vrange
 
+    cpdef add_offdiag_m(self, numpy.npy_intp[:] xrow, numpy.npy_intp[:] yrow, numpy.float_t[:, :] xym):
+        cdef INTP_TYPE i, j, k
+        cdef svec x, y, newx, newy
+        try:
+            assert xym.shape[0] == xrow.shape[0] and xym.shape[1] == yrow.shape[0]
+        except:
+            raise ValueError('m.shape != ', str((xrow.shape[0], yrow.shape[0])))
+        # fix block ids
+        blockid = self.nrow
+        idset = set()
+        for i in xrow:
+            if self.block[i] < blockid:
+                blockid = self.block[i]
+            idset.add(self.block[i])
+        for i in range(self.nrow):
+            if self.block[i] in idset:
+                self.block[i] = blockid 
+        for i in yrow:
+            self.block[i] = blockid
+        for i in range(len(xrow)):
+            x = self.row[xrow[i]]
+            newx = svec(x.size + len(yrow))
+            k = 0
+            for j in range(x.size):
+                newx.v[k].i = x.v[j].i
+                newx.v[k].v = x.v[j].v
+                k += 1
+            for j in range(len(yrow)):
+                newx.v[k].i = yrow[j]
+                newx.v[k].v = xym[i, j]
+                k += 1
+            self.row[xrow[i]] = newx
+        for i in range(len(yrow)):
+            y = self.row[yrow[i]]
+            newy = svec(y.size + len(xrow))
+            k = 0
+            for j in range(len(xrow)):
+                newy.v[k].i = xrow[j]
+                newy.v[k].v = xym[j, i]
+                k += 1
+            for j in range(y.size):
+                newy.v[k].i = y.v[j].i
+                newy.v[k].v = y.v[j].v
+                k += 1
+            self.row[yrow[i]] = newy
+            
+
+
+
+
     cpdef double expval(self, svec vv):
         """ Compute expectation value <vv|self|vv>. """
         cdef INTP_TYPE i

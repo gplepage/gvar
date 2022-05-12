@@ -815,6 +815,143 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_gvclose(z.flat, y.flat)
         self.assert_arraysclose(evalcov(z.flat), evalcov(x))
 
+    def test_phased_construction(self):
+        " gvar(ymean, ycov, x, xycov)"
+        assert_almost_equal = np.testing.assert_almost_equal
+        acov = [[4, .1], [.1, 9]]
+        a = gvar([2, 3], acov)
+        b = gvar('1(1)')
+
+        # test 1
+        accov = [[12.], [13.]]
+        c = gvar([4], [[16]], a, accov)
+        abc = BufferDict(a=a, b=b, c=c)
+        assert_almost_equal(
+            evalcov(abc.buf), 
+            [[ 4,   0.1, 0., 12.],
+            [ 0.1, 9.,  0., 13.],
+            [ 0.,  0.,  1.,  0.],
+            [12., 13.,  0., 16.]]
+            )
+        abcblk = evalcov_blocks(abc.buf, compress=True)
+        assert_almost_equal(abcblk[0][0], [2])  # b
+        assert_almost_equal(abcblk[0][1], [1.])
+        assert_almost_equal(abcblk[1][0], [0, 1, 3]) # a and c
+        assert_almost_equal(
+            abcblk[1][1], 
+            [[ 4.,   0.1, 12.],
+            [ 0.1,  9.,  13.],
+            [12.,  13.,  16.]]
+            )
+        
+        abccov = evalcov(abc)
+        assert_almost_equal(abccov['a', 'a'], acov)
+        assert_almost_equal(abccov['c', 'a'], np.transpose(accov))
+        assert_almost_equal(abccov['a', 'c'], accov)
+        assert_almost_equal(abccov['c', 'c'], [[16]])
+        assert_almost_equal(abccov['b', 'b'], [[1]])
+        assert_almost_equal(abccov['b', 'c'], [[0]])
+        assert_almost_equal(abccov['b', 'a'], [[0, 0]])
+        assert_almost_equal(abccov['c', 'b'], [[0]])
+        assert_almost_equal(abccov['a', 'b'], [[0], [0]])
+
+        # test 2 (out of order)
+        d = gvar([5.], [[25.]])
+        adcov = [[14.], [15.]]
+        c = gvar([4], [[16]], list(reversed(a)), list(reversed(adcov)))
+        adc = BufferDict(a=a, d=d, c=c)
+        assert_almost_equal(
+            evalcov(adc.buf), 
+            [[ 4,   0.1, 0., 14.],
+            [ 0.1, 9.,  0., 15.],
+            [ 0.,  0., 25.,  0.],
+            [14., 15.,  0., 16.]]
+            )
+        adcblk = evalcov_blocks(adc.buf, compress=True)
+        assert_almost_equal(adcblk[0][0], [2])  # b
+        assert_almost_equal(adcblk[0][1], [5.])
+        assert_almost_equal(adcblk[1][0], [0, 1, 3]) # a and d
+        assert_almost_equal(
+            adcblk[1][1], 
+            [[ 4.,   0.1, 14.],
+            [ 0.1,  9.,  15.],
+            [14.,  15.,  16.]]    
+            )
+        adccov = evalcov(adc)
+        assert_almost_equal(adccov['a', 'a'], acov)
+        assert_almost_equal(adccov['c', 'a'], np.transpose(adcov))
+        assert_almost_equal(adccov['a', 'c'], adcov)
+        assert_almost_equal(adccov['c', 'c'], [[16]])
+        assert_almost_equal(adccov['d', 'd'], [[25]])
+        assert_almost_equal(adccov['d', 'c'], [[0]])
+        assert_almost_equal(adccov['d', 'a'], [[0, 0]])
+        assert_almost_equal(adccov['c', 'd'], [[0]])
+        assert_almost_equal(adccov['a', 'd'], [[0], [0]])
+
+        # test 3 (partial overlap)
+        ecov = [[36, .2], [.2, 49]]
+        aecov = [[16., 17.]]
+        e = gvar([6, 7], ecov, [a[1]], aecov)
+        ade = list(a) + [d[0]] + list(e)
+        adeblk = evalcov_blocks(ade, compress=True)
+        assert_almost_equal(adeblk[0][0], [2])
+        assert_almost_equal(adeblk[0][1], [5])
+        assert_almost_equal(adeblk[1][0], [0, 1, 3, 4])
+        assert_almost_equal(
+            adeblk[1][1], 
+            [[4.,  0.1, 0.,   0.],
+            [0.1, 9., 16.,  17.],
+            [0., 16., 36.,   0.2],
+            [0., 17.,  0.2, 49.]]
+            )
+        assert_almost_equal(
+            evalcov(ade),
+            [[ 4. ,  0.1,  0. ,  0. ,  0. ],
+             [ 0.1,  9. ,  0. , 16. , 17. ],
+             [ 0. ,  0. , 25. ,  0. ,  0. ],
+             [ 0. , 16. ,  0. , 36. ,  0.2],
+             [ 0. , 17. ,  0. ,  0.2, 49. ]]
+            )
+
+        # test 4 (big matrices)
+        cov = numpy.random.uniform(size=(100,100))
+        cov = cov.T @ cov
+        mean = numpy.linspace(0, 1., 100)
+        g = gvar(mean, cov)
+        h = gvar('1(8)')
+        gmcov = np.linspace(0.,1., 100).reshape(1,-1)
+        m = gvar(mean, cov, [g[0]], gmcov)
+        ghm = BufferDict(g=g, h=h, m=m)
+        ghmcov = evalcov(ghm)
+        assert_almost_equal(ghmcov['g', 'g'], cov)
+        assert_almost_equal(ghmcov['m', 'm'], cov)
+        assert_almost_equal(ghmcov['g', 'm'][:1, :], gmcov)
+        assert_almost_equal(ghmcov['m', 'g'][:, :1], gmcov.T)
+
+        blks = iter(evalcov_blocks(ghm, compress=True))
+        blk = next(blks)
+        assert_almost_equal(blk[0][0], 100)
+        assert_almost_equal(blk[1][0], 8.)
+        blk = next(blks)
+        assert_almost_equal(blk[0][:100], numpy.arange(100))
+        assert_almost_equal(blk[0][100:], 101 + numpy.arange(100))
+        assert_almost_equal(blk[1][0, 100:], gmcov[0])
+        assert_almost_equal(blk[1][100:, 0], gmcov[0])
+        with self.assertRaises(StopIteration):
+            next(blks)
+
+        # test misc. exceptions
+        with self.assertRaises(ValueError):
+            f = gvar([8], [[64.]], d, [[200.]], verify=True)
+        with self.assertRaises(ValueError):
+            f = gvar([8], [[64.]], d, [[.2, .3]])
+        with self.assertRaises(ValueError):
+            f = gvar([8], [[64.]], d[0], [[.2, .3]])
+        with self.assertRaises(ValueError):
+            f = gvar(8, [[64.]], d, [[.2, .3]])
+        with self.assertRaises(ValueError):
+            f = gvar([8], [[64.]], d, [[.2], [.3]])
+
     def _tst_compare_evalcovs(self):
         " evalcov evalcov_blocks evalcov_blocks_dense agree "
         def reconstruct(x, blocks, compress):

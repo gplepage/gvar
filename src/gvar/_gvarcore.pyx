@@ -817,6 +817,17 @@ class GVarFactory:
         every element ``a[i...] = gvar.gvar(xarray[i...])``. The values in
         ``xarray``, therefore, can be strings, tuples or |GVar|\s (see
         above).
+
+    .. function:: gvar.gvar(ymean, ycov, x, xycov)
+
+        Returns a 1-d array of |GVar|\s ``y[i]`` constructed from the 1-d array 
+        of mean values ``ymean`` and the 2-d covariance matrix ``ycov``. The 
+        ``y[i]`` are correlated with the primary |GVar|\s in 1-d array ``x``.
+        The ``x-y`` covariance matrix is ``xycov`` whose shape 
+        is ``x.shape + y.shape``. Note that this changes the |GVar|\s
+        in ``x`` (because they are correlated with the ``y[i]``); it 
+        has no effect on the variance or on correlations between 
+        different ``x[i]``\s.
     """
     def __init__(self,cov=None):
         if cov is None:
@@ -829,12 +840,13 @@ class GVarFactory:
         cdef INTP_TYPE nx, i, nd, ib, nb
         cdef svec der
         cdef smat cov
-        cdef GVar gv
+        cdef GVar gv, xg, yg
         cdef numpy.ndarray[numpy.float_t, ndim=1] d
         cdef numpy.ndarray[numpy.float_t, ndim=1] d_v
         cdef numpy.ndarray[numpy.float_t, ndim=2] xcov
         cdef numpy.ndarray[INTP_TYPE, ndim=1] d_idx
         cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] xrow, yrow
 
         if len(args)==2:
             if hasattr(args[0], 'keys'):
@@ -875,171 +887,261 @@ class GVarFactory:
                                 )
                     xflat = self(x.flat, xcov, verify=verify, fast=fast)
                     return BufferDict(x, buf=xflat)
-            else:
-                # (x,xsdev) or (xarray,sdev-array) or (xarray,cov)
-                # unpack arguments and verify types
-                try:
-                    x = numpy.asarray(args[0],numpy.float_)
-                    xsdev = numpy.asarray(args[1],numpy.float_)
-                except (ValueError,TypeError):
-                    raise TypeError(
-                        "arguments must be numbers or arrays of numbers"
-                        )
-
-                if len(x.shape)==0:
-                    # single gvar from x and xsdev
-                    if xsdev.shape == (1, 1):
-                        # xsdev is actually a variance (1x1 matrix)
-                        xsdev = c_sqrt(abs(xsdev[0, 0]))
-                    elif len(xsdev.shape) != 0:
-                        raise ValueError("x and xsdev different shapes.")
-                    if verify and xsdev < 0:
-                        raise ValueError('negative standard deviation: ' + str(xsdev))
-                    idx = self.cov.append_diag(numpy.array([xsdev**2]))
-                    der = svec(1)
-                    der.v[0].i = idx[0]
-                    der.v[0].v = 1.0
-                    # gv = GVar.__new__(GVar)
-                    # gv.v = x
-                    # gv.d = der
-                    # gv.cov = self.cov
-                    # return gv
-                    return GVar(x, der, self.cov)
-                else:
-                    # array of gvars from x and sdev/cov arrays
-                    nx = len(x.flat)
-                    if x.shape==xsdev.shape:  # x,sdev
-                        if verify and numpy.any(xsdev < 0):
-                            raise ValueError('negative standard deviation: ' + str(xsdev))
-                        idx = self.cov.append_diag(xsdev.reshape(nx) ** 2)
-                    elif xsdev.shape==2 * x.shape: # x,cov
-                        xcov = xsdev.reshape(nx, nx)
-                        with numpy.errstate(under='ignore'):
-                            if not numpy.allclose(xcov, xcov.T, equal_nan=True):
-                                raise ValueError('non-symmetric covariance matrix:\n' + str(xcov))
-                        if verify:
-                            try:
-                                numpy.linalg.cholesky(xcov)
-                            except numpy.linalg.LinAlgError:
-                                raise ValueError('covariance matrix not positive definite')
-                        if fast:
-                            idx = self.cov.append_diag_m(xcov)
-                        else:
-                            allxcov = numpy.arange(nx)
-                            ans = numpy.empty(nx, dtype=object)
-                            nb, key = _connected_components(xcov != 0, directed=False)
-                            for ib in range(nb):
-                                bidx = allxcov[key == ib]
-                                ans[bidx] = self(x.flat[bidx], xcov[bidx[:, None], bidx], fast=True)
-                            return ans.reshape(x.shape)
-                    else:
-                        raise ValueError("Argument shapes mismatched: " +
-                            str(x.shape) + ' ' + str(xsdev.shape))
-                    d = numpy.ones(nx, dtype=numpy.float_)
-                    ans = numpy.empty(nx, dtype=object)
-                    for i in range(nx):
-                        der = svec(1)
-                        der.v[0].i = idx[i]
-                        der.v[0].v = 1.0
-                        ans[i] = GVar(x.flat[i], der, self.cov)
-                    return ans.reshape(x.shape)
-        elif len(args)==1:
-            x = args[0]
-            if isinstance(x,str):
-                # case 1: x is a string like "3.72(41)" or "3.2 +- 4"
-                x = x.strip()
-                try:
-                    # eg: 3.4 +- 0.7e-4
-                    a,c = _RE1.match(x).groups()
-                    return self(float(a), float(c))
-                except AttributeError:
-                    pass
-                try:
-                    # eg: 3.4(1)e+10
-                    a,c = _RE2.match(x).groups()
-                    return self(a)*float("1e"+c)
-                except AttributeError:
-                    pass
-                try:
-                    # eg: +3.456(33)
-                    s,a,b,c = _RE3.match(x).groups()
-                    s = -1. if s == '-' else 1.
-                    if not a and not b:
-                        raise ValueError("Poorly formatted string: "+x)
-                    elif not b:
-                        return s*self(float(a),float(c))
-                    else:
-                        if not a:
-                            a = '0'
-                        fac = 1./10.**len(b)
-                        a,b,c = [float(xi) for xi in [a,b,c]]
-                        return s*self(a + b*fac, c*fac)
-                except AttributeError:
-                    pass
-                try:
-                    # eg: 3.456(1.234)
-                    a,c = _RE3a.match(x).groups()
-                    return self(float(a), float(c))
-                except AttributeError:
-                    raise ValueError("Poorly formatted string: "+x)
-
-            elif isinstance(x,GVar):
-                # case 2: x is a GVar
-                return x
-
-            elif isinstance(x,tuple) and len(x)==2:
-                # case 3: x = (x,sdev) tuple
-                return self(x[0],x[1])
-
-            elif hasattr(x,'keys'):
-                # case 4: x is a dictionary
-                ans = BufferDict()
-                for k in x:
-                    ans[k] = self(x[k])
-                return ans
-
-            elif hasattr(x, '__iter__'):
-                # case 5: x is an array
-                if isinstance(x, numpy.ndarray) and x.shape == ():
-                    return self(x.flat[0])
-                return numpy.array(
-                    [xi if isinstance(xi,GVar) else self(xi) for xi in x], 
-                    object,
+            # else:
+            # (x,xsdev) or (xarray,sdev-array) or (xarray,cov)
+            # unpack arguments and verify types
+            try:
+                x = numpy.asarray(args[0],numpy.float_)
+                xsdev = numpy.asarray(args[1],numpy.float_)
+            except (ValueError,TypeError):
+                raise TypeError(
+                    "arguments must be numbers or arrays of numbers"
                     )
 
-            else:   # case 6: a number
-                return self(x,0.0)
+            if len(x.shape)==0:
+                # single gvar from x and xsdev
+                if xsdev.shape == (1, 1):
+                    # xsdev is actually a variance (1x1 matrix)
+                    xsdev = c_sqrt(abs(xsdev[0, 0]))
+                elif len(xsdev.shape) != 0:
+                    raise ValueError("x and xsdev different shapes.")
+                if verify and xsdev < 0:
+                    raise ValueError('negative standard deviation: ' + str(xsdev))
+                idx = self.cov.append_diag(numpy.array([xsdev**2]))
+                der = svec(1)
+                der.v[0].i = idx[0]
+                der.v[0].v = 1.0
+                # gv = GVar.__new__(GVar)
+                # gv.v = x
+                # gv.d = der
+                # gv.cov = self.cov
+                # return gv
+                return GVar(x, der, self.cov)
+            else:
+                # array of gvars from x and sdev/cov arrays
+                nx = len(x.flat)
+                if x.shape==xsdev.shape:  # x,sdev
+                    if verify and numpy.any(xsdev < 0):
+                        raise ValueError('negative standard deviation: ' + str(xsdev))
+                    idx = self.cov.append_diag(xsdev.reshape(nx) ** 2)
+                elif xsdev.shape==2 * x.shape: # x,cov
+                    xcov = xsdev.reshape(nx, nx)
+                    with numpy.errstate(under='ignore'):
+                        if not numpy.allclose(xcov, xcov.T, equal_nan=True):
+                            raise ValueError('non-symmetric covariance matrix:\n' + str(xcov))
+                    if verify:
+                        try:
+                            numpy.linalg.cholesky(xcov)
+                        except numpy.linalg.LinAlgError:
+                            raise ValueError('covariance matrix not positive definite')
+                    if fast:
+                        idx = self.cov.append_diag_m(xcov)
+                    else:
+                        allxcov = numpy.arange(nx)
+                        ans = numpy.empty(nx, dtype=object)
+                        nb, key = _connected_components(xcov != 0, directed=False)
+                        for ib in range(nb):
+                            bidx = allxcov[key == ib]
+                            ans[bidx] = self(x.flat[bidx], xcov[bidx[:, None], bidx], fast=True)
+                        return ans.reshape(x.shape)
+                else:
+                    raise ValueError("Argument shapes mismatched: " +
+                        str(x.shape) + ' ' + str(xsdev.shape))
+                d = numpy.ones(nx, dtype=numpy.float_)
+                ans = numpy.empty(nx, dtype=object)
+                for i in range(nx):
+                    der = svec(1)
+                    der.v[0].i = idx[i]
+                    der.v[0].v = 1.0
+                    ans[i] = GVar(x.flat[i], der, self.cov)
+                return ans.reshape(x.shape)
+        elif len(args)==1:
+            # ('1(1)') etc
+            return self._call1(*args)
         elif len(args)==3:
             # (x,der,cov)
-            try:
-                x = float(args[0])
-            except (ValueError, TypeError):
-                raise TypeError('Value not a number.')
-            cov = args[2]
-            assert isinstance(cov, smat), "cov not type gvar.smat."
-            if isinstance(args[1], svec):
-                return GVar(x, args[1], cov)
-            elif isinstance(args[1], tuple):
-                try:
-                    d_idx = numpy.asarray(args[1][1], numpy.intp)
-                    d_v = numpy.asarray(args[1][0], numpy.float_)
-                    assert d_idx.ndim == 1 and d_v.ndim == 1 and d_idx.shape[0] == d_v.shape[0]
-                except (ValueError, TypeError, AssertionError):
-                    raise TypeError('Badly formed derivative.')
-            else:
-                try:
-                    d = numpy.asarray(args[1], numpy.float_)
-                    assert d.ndim == 1
-                except (ValueError, TypeError, AssertionError):
-                    raise TypeError('Badly formed derivative.')
-                d_idx = d.nonzero()[0]
-                d_v = d[d_idx]
-            assert len(cov) > d_idx[-1], "length mismatch between der and cov"
-            der = svec(len(d_idx))
-            der.assign(d_v, d_idx)
-            return GVar(x, der, cov)
+            return self._call3(*args)
+        elif len(args) == 4:
+            # (ymean, ycov, x, xycov)
+            return self._call4(*args, verify=verify, fast=fast)
         else:
             raise ValueError("Wrong number of arguments: "+str(len(args)))
+    
+    def _call1(self, *args):
+        # gvar('1(1)') etc
+        x = args[0]
+        if isinstance(x, str):
+            # case 1: x is a string like "3.72(41)" or "3.2 +- 4"
+            x = x.strip()
+            try:
+                # eg: 3.4 +- 0.7e-4
+                a,c = _RE1.match(x).groups()
+                return self(float(a), float(c))
+            except AttributeError:
+                pass
+            try:
+                # eg: 3.4(1)e+10
+                a, c = _RE2.match(x).groups()
+                return self(a)*float("1e"+c)
+            except AttributeError:
+                pass
+            try:
+                # eg: +3.456(33)
+                s, a, b, c = _RE3.match(x).groups()
+                s = -1. if s == '-' else 1.
+                if not a and not b:
+                    raise ValueError("Poorly formatted string: "+x)
+                elif not b:
+                    return s*self(float(a),float(c))
+                else:
+                    if not a:
+                        a = '0'
+                    fac = 1./10.**len(b)
+                    a,b,c = [float(xi) for xi in [a,b,c]]
+                    return s*self(a + b*fac, c*fac)
+            except AttributeError:
+                pass
+            try:
+                # eg: 3.456(1.234)
+                a, c = _RE3a.match(x).groups()
+                return self(float(a), float(c))
+            except AttributeError:
+                raise ValueError("Poorly formatted string: "+x)
+
+        elif isinstance(x,GVar):
+            # case 2: x is a GVar
+            return x
+
+        elif isinstance(x,tuple) and len(x)==2:
+            # case 3: x = (x,sdev) tuple
+            return self(x[0], x[1])
+
+        elif hasattr(x,'keys'):
+            # case 4: x is a dictionary
+            ans = BufferDict()
+            for k in x:
+                ans[k] = self(x[k])
+            return ans
+
+        elif hasattr(x, '__iter__'):
+            # case 5: x is an array
+            if isinstance(x, numpy.ndarray) and x.shape == ():
+                return self(x.flat[0])
+            return numpy.array(
+                [xi if isinstance(xi, GVar) else self(xi) for xi in x], 
+                object,
+                )
+
+        else:   # case 6: a number
+            return self(x, 0.0)
+    
+    def _call3(self, *args):
+        # gvar(x,der,cov)
+        cdef INTP_TYPE nx, i, nd, ib, nb
+        cdef svec der
+        cdef smat cov
+        cdef numpy.ndarray[numpy.float_t, ndim=1] d
+        cdef numpy.ndarray[numpy.float_t, ndim=1] d_v
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] d_idx
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
+        try:
+            x = float(args[0])
+        except (ValueError, TypeError):
+            raise TypeError('Value not a number.')
+        cov = args[2]
+        assert isinstance(cov, smat), "cov not type gvar.smat."
+        if isinstance(args[1], svec):
+            return GVar(x, args[1], cov)
+        elif isinstance(args[1], tuple):
+            try:
+                d_idx = numpy.asarray(args[1][1], numpy.intp)
+                d_v = numpy.asarray(args[1][0], numpy.float_)
+                assert d_idx.ndim == 1 and d_v.ndim == 1 and d_idx.shape[0] == d_v.shape[0]
+            except (ValueError, TypeError, AssertionError):
+                raise TypeError('Badly formed derivative.')
+        else:
+            try:
+                d = numpy.asarray(args[1], numpy.float_)
+                assert d.ndim == 1
+            except (ValueError, TypeError, AssertionError):
+                raise TypeError('Badly formed derivative.')
+            d_idx = d.nonzero()[0]
+            d_v = d[d_idx]
+        assert len(cov) > d_idx[-1], "length mismatch between der and cov"
+        der = svec(len(d_idx))
+        der.assign(d_v, d_idx)
+        return GVar(x, der, cov)
+                
+    def _call4(self, *args, verify=False, fast=False):
+        # gvar(ymean, ycov, x, xycov)
+        # y,x 1-d arrays, ycov, xycov 2-d arrays
+        cdef INTP_TYPE i, j, k, ni, nj
+        cdef smat cov
+        cdef GVar xg, yg
+        cdef numpy.ndarray[numpy.float_t, ndim=1] ymean
+        cdef numpy.ndarray[numpy.float_t, ndim=2] ycov, xycov
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
+        cdef numpy.ndarray[INTP_TYPE, ndim=1] xrow, yrow
+        try:
+            ymean = numpy.asarray(args[0], float)
+            assert ymean.ndim == 1 and ymean.shape[0] > 0
+        except:
+            raise ValueError('y must be a 1-d array of numbers')
+        try:
+            ycov = numpy.asarray(args[1], float)
+            assert ycov.shape[0] == ymean.shape[0]
+            assert ycov.shape[1] == ymean.shape[0]
+        except:
+            raise ValueError(
+                'ycov must be a matrix of numbers '
+                + str((ymean.shape[0], ymean.shape[0]))
+                )
+        try:
+            x = numpy.asarray(args[2])
+            assert len(x.shape) == 1
+        except:
+            raise ValueError('x must be a 1-d array of numbers')
+        try:
+            xycov = numpy.asarray(args[3])
+            assert xycov.shape[0] == x.shape[0]
+            assert xycov.shape[1] == ymean.shape[0]
+        except:
+            raise ValueError(
+                'xycov must be a matrix of numbers with shape ' 
+                + str((x.shape[0], ymean.shape[0]))
+                )
+        if x.shape[0] == 0:
+            return self(ymean, ycov, verify=verify, fast=fast)
+        else:
+            y = self(ymean, ycov, verify=verify, fast=False)
+        xrow = numpy.zeros(len(x), numpy.intp)
+        yrow = numpy.zeros(len(y), numpy.intp)
+        for j, xg in enumerate(x):
+            if xg.d.size != 1 or xg.d.v[0].v != 1.:
+                raise ValueError('x[i] must be primary GVars')
+            xrow[j] = xg.d.v[0].i
+        for j, yg in enumerate(y):
+            yrow[j] = yg.d.v[0].i
+        idx = numpy.argsort(xrow)
+        y[0].cov.add_offdiag_m(xrow[idx], yrow, xycov[idx])
+        if verify:
+            allrow = list(xrow) + list(yrow)
+            allcov = numpy.zeros(2*(len(allrow),), float)
+            cov = self.cov
+            for ni, i in enumerate(allrow):
+                indices = cov.row[i].indices()
+                values = cov.row[i].values()
+                for nj, j in enumerate(allrow):
+                    idx = (indices == j).nonzero()[0]
+                    if len(idx) == 1:
+                        allcov[ni, nj] = values[idx[0]]
+                    if nj < ni and allcov[nj, ni] != allcov[ni, nj]:
+                        raise ValueError('covariance matrix not symmetric')
+            try:
+                numpy.linalg.cholesky(allcov)
+            except numpy.linalg.LinAlgError:
+                raise ValueError('covariance matrix not positive definite')
+        return y 
 
 
 def gvar_function(x, double f, dfdx):

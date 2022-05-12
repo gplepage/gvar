@@ -47,6 +47,7 @@ cdef class smat:
     cpdef INTP_TYPE blockid(smat self, INTP_TYPE i)
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag(self, numpy.float_t[:])
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag_m(self, numpy.float_t[:,:])
+    cpdef add_offdiag_m(self, numpy.npy_intp[:], numpy.npy_intp[:], numpy.float_t[:, :])
     cpdef svec dot(self,svec)
     cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask)
     cpdef double expval(self,svec)

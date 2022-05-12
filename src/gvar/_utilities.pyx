@@ -453,7 +453,7 @@ def evalcorr(g):
     else:
         g = numpy.asarray(g)
         if g.size == 0:
-            return numpy.array([[]], float)
+            return numpy.array([], float).reshape(0, 0)
         g_shape = g.shape
         cov = evalcov(g.flat)
         idx = numpy.arange(cov.shape[0])
@@ -593,7 +593,10 @@ def evalcov_blocks_dense(g, compress=False):
         varlist = numpy.array(g).flat[:]
     nvar = len(varlist)
     if nvar <= 0:
-        return [([], [])] if compress else [([], [[]])]
+        return (
+            [(numpy.array([]), numpy.array([]))] if compress else 
+            [(numpy.array([]), numpy.reshape([], (0,0)))] 
+            )
     allcov = evalcov(varlist)
     nb, key = _connected_components(allcov != 0, directed=False)
     allvar = numpy.arange(nvar, dtype=numpy.intp)
@@ -694,7 +697,7 @@ def evalcov_blocks(g, compress=False):
     if nvar <= 0:
         return (
             [(numpy.array([]), numpy.array([]))] if compress else 
-            [(numpy.array([]), numpy.array([[]]))] 
+            [(numpy.array([]), numpy.reshape([], (0,0)))] 
             )
     cov = varlist[0].cov
     ivlist_id = {} 
@@ -886,14 +889,10 @@ def var(g):
             if imask[i]:
                 ni += 1
                 id = cov.block[i]
-                if id != previousid:
-                    # finish previous block
+                if id > previousid:
+                    bsize = cov.row[i].size
                     cov_zeros += bsize * bsize 
-                    bsize = 0
                     previousid = id 
-                bsize += 1
-        # finish last block
-        cov_zeros += bsize * bsize
         # convert to zeros
         vec_zeros = ni - vec_zeros // ng
         cov_zeros = ni * ni - cov_zeros 
@@ -976,7 +975,7 @@ def evalcov(g):
     g = g.flat
     ng = len(g)
     if ng <= 0:
-        return numpy.array([[]], float)
+        return numpy.array([], float).reshape(0,0)
     if hasattr(g[0], 'cov'):
         cov = g[0].cov
     else:
@@ -1002,12 +1001,10 @@ def evalcov(g):
             if imask[i]:
                 ni += 1
                 id = cov.block[i]
-                if id != previousid:
-                    # finish previous block
+                if id > previousid:
+                    bsize = cov.row[i].size
                     cov_zeros += bsize * bsize 
-                    bsize = 0
                     previousid = id 
-                bsize += 1
         # finish last block
         cov_zeros += bsize * bsize
         # convert to zeros
@@ -2727,11 +2724,11 @@ cdef double gammaQ_cf(double a, double x, double rtol, int itmax):
         fj = fac * fj
         if abs(fac-1) < rtol:
             break
-    else:
-        warnings.warn(
-            'gammaQ convergence not complete -- want: %.3g << %.3g'
-            % (abs(fac-1), rtol)
-            )
+    # else:
+    #     warnings.warn(
+    #         'gammaQ convergence not complete -- want: %.3g << %.3g'
+    #         % (abs(fac-1), rtol)
+    #         )
     return exp(log(fj) - x + a * log(x) - lgamma(a))
 
 def gammaQ(double a, double x, double rtol=1e-5, int itmax=10000):
