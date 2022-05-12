@@ -919,8 +919,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         mean = numpy.linspace(0, 1., 100)
         g = gvar(mean, cov)
         h = gvar('1(8)')
+        z = g[0] + g[1]  # function of g evaluated before m defined but will be correlated
         gmcov = np.linspace(0.,1., 100).reshape(1,-1)
         m = gvar(mean, cov, [g[0]], gmcov)
+        assert_almost_equal(evalcov([z, m[-1]])[0, 1],gmcov[0, -1])
         ghm = BufferDict(g=g, h=h, m=m)
         ghmcov = evalcov(ghm)
         assert_almost_equal(ghmcov['g', 'g'], cov)

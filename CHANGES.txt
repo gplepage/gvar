@@ -1,3 +1,13 @@
+Version 11.10 2022-05-12
+=========================
+Adds the possibility of phasing the construction of a set 
+of correlated GVars. gvar(ymean, ycov, x, xycov) returns 
+primary GVars y that have covariance matrix ycov and 
+covariance matrix xycov with previously defined 
+primary GVars x. The first and third arguments 
+(ymean and x) are 1-d arrays; the other two are 
+2-d arrays.
+
 Version 11.9.7  2022-05-01
 ==========================
 Thanks to Giacomo Petrillo for these ideas and issues.
