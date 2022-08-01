@@ -26,8 +26,8 @@ cdef class svec:
     cpdef numpy.ndarray[numpy.float_t, ndim=1] toarray(svec,INTP_TYPE msize=?)
     cpdef numpy.ndarray[INTP_TYPE, ndim=1] indices(svec)
     cpdef numpy.ndarray[numpy.float_t, ndim=1] values(svec)
-    cpdef _assign(self, numpy.float_t[:], INTP_TYPE[:])
-    cpdef double dot(svec,svec)
+    cpdef _assign(self, const numpy.float_t[:], const INTP_TYPE[:])
+    cpdef double dot(svec, svec)
     cpdef svec clone(svec)
     cpdef svec add(svec,svec,double a=*,double b=*)
     cpdef svec mul(svec self,double a)
@@ -39,17 +39,17 @@ cdef class smask:
     cdef readonly INTP_TYPE starti, stopi, len
  
 cdef class smat:
-    # cdef object rowlist
-    cdef object[:] row
-    cdef INTP_TYPE[:] block
+    cdef object[::1] row
+    # cdef svec[::1] row
+    cdef INTP_TYPE[::1] block
     cdef INTP_TYPE nrow, nrow_max, next_block
     cpdef _add_memory(smat self)
     cpdef INTP_TYPE blockid(smat self, INTP_TYPE i)
-    cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag(self, numpy.float_t[:])
-    cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag_m(self, numpy.float_t[:,:])
-    cpdef add_offdiag_m(self, numpy.npy_intp[:], numpy.npy_intp[:], numpy.float_t[:, :])
+    cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag(self, const numpy.float_t[:])
+    cpdef numpy.ndarray[INTP_TYPE, ndim=1] append_diag_m(self, const numpy.float_t[:,:])
+    cpdef add_offdiag_m(self, const numpy.npy_intp[:], const numpy.npy_intp[:], const numpy.float_t[:, :])
     cpdef svec dot(self,svec)
-    cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask)
+    cpdef svec masked_dot(self, svec vv, const numpy.int8_t[:] imask)
     cpdef double expval(self,svec)
     cpdef numpy.ndarray[numpy.float_t, ndim=2] toarray(self)
     cpdef numpy.ndarray[numpy.float_t, ndim=2] masked_mat(smat self, smask mask, out=*)

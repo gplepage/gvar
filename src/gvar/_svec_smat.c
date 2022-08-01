@@ -1278,7 +1278,7 @@ struct __pyx_opt_args_4gvar_10_svec_smat_4svec_toarray {
 };
 
 /* "gvar/_svec_smat.pxd":32
- *     cpdef double dot(svec,svec)
+ *     cpdef double dot(svec, svec)
  *     cpdef svec clone(svec)
  *     cpdef svec add(svec,svec,double a=*,double b=*)             # <<<<<<<<<<<<<<
  *     cpdef svec mul(svec self,double a)
@@ -1348,8 +1348,8 @@ struct __pyx_obj_4gvar_10_svec_smat_smask {
  *     cdef readonly INTP_TYPE starti, stopi, len
  * 
  * cdef class smat:             # <<<<<<<<<<<<<<
- *     # cdef object rowlist
- *     cdef object[:] row
+ *     cdef object[::1] row
+ *     # cdef svec[::1] row
  */
 struct __pyx_obj_4gvar_10_svec_smat_smat {
   PyObject_HEAD
@@ -2245,27 +2245,25 @@ static int __Pyx_ValidateAndInit_memviewslice(
                 PyObject *original_obj);
 
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t__const__(PyObject *, int writable_flag);
 
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp__const__(PyObject *, int writable_flag);
 
 /* ObjectToMemviewSlice.proto */
 static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_int8_t(PyObject *, int writable_flag);
 
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t__const__(PyObject *, int writable_flag);
 
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int8_t(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int8_t__const__(PyObject *, int writable_flag);
 
 /* MemviewDtypeToObject.proto */
-static CYTHON_INLINE PyObject *__pyx_memview_get_nn___pyx_t_5numpy_float_t(const char *itemp);
-static CYTHON_INLINE int __pyx_memview_set_nn___pyx_t_5numpy_float_t(const char *itemp, PyObject *obj);
+static CYTHON_INLINE PyObject *__pyx_memview_get_nn___pyx_t_5numpy_float_t__const__(const char *itemp);
 
 /* MemviewDtypeToObject.proto */
-static CYTHON_INLINE PyObject *__pyx_memview_get_nn_npy_intp(const char *itemp);
-static CYTHON_INLINE int __pyx_memview_set_nn_npy_intp(const char *itemp, PyObject *obj);
+static CYTHON_INLINE PyObject *__pyx_memview_get_nn_npy_intp__const__(const char *itemp);
 
 /* MemviewDtypeToObject.proto */
 static CYTHON_INLINE PyObject *__pyx_memview_get_nn___pyx_t_5numpy_int8_t(const char *itemp);
@@ -2274,12 +2272,19 @@ static CYTHON_INLINE int __pyx_memview_set_nn___pyx_t_5numpy_int8_t(const char *
 /* ObjectToMemviewSlice.proto */
 static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_nn_npy_intp(PyObject *, int writable_flag);
 
+/* MemviewDtypeToObject.proto */
+static CYTHON_INLINE PyObject *__pyx_memview_get_nn_npy_intp(const char *itemp);
+static CYTHON_INLINE int __pyx_memview_set_nn_npy_intp(const char *itemp, PyObject *obj);
+
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_object(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_object(PyObject *, int writable_flag);
 
 /* MemviewObjectToObject.proto */
 static PyObject *__pyx_memview_get_object(const char *itemp);
 static int __pyx_memview_set_object(const char *itemp, PyObject *obj);
+
+/* MemviewDtypeToObject.proto */
+static CYTHON_INLINE PyObject *__pyx_memview_get_nn___pyx_t_5numpy_int8_t__const__(const char *itemp);
 
 /* RealImag.proto */
 #if CYTHON_CCOMPLEX
@@ -2541,7 +2546,10 @@ static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize
 static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, PyObject *); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn_npy_intp = { "npy_intp", NULL, sizeof(npy_intp), { 0 }, 0, IS_UNSIGNED(npy_intp) ? 'U' : 'I', IS_UNSIGNED(npy_intp), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float_t = { "float_t", NULL, sizeof(__pyx_t_5numpy_float_t), { 0 }, 0, 'R', 0, 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float_t__const__ = { "const float_t", NULL, sizeof(__pyx_t_5numpy_float_t const ), { 0 }, 0, 'R', 0, 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn_npy_intp__const__ = { "const npy_intp", NULL, sizeof(npy_intp const ), { 0 }, 0, IS_UNSIGNED(npy_intp const ) ? 'U' : 'I', IS_UNSIGNED(npy_intp const ), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t = { "int8_t", NULL, sizeof(__pyx_t_5numpy_int8_t), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int8_t) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int8_t), 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t__const__ = { "const int8_t", NULL, sizeof(__pyx_t_5numpy_int8_t const ), { 0 }, 0, IS_UNSIGNED(__pyx_t_5numpy_int8_t const ) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_5numpy_int8_t const ), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_object = { "Python object", NULL, sizeof(PyObject *), { 0 }, 0, 'O', 0, 0 };
 #define __Pyx_MODULE_NAME "gvar._svec_smat"
 extern int __pyx_module_is_main_gvar___svec_smat;
@@ -4710,7 +4718,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4svec_values(struct __pyx_obj_4
  *             ans[i] = self.v[i].v
  *         return ans             # <<<<<<<<<<<<<<
  * 
- *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self,INTP_TYPE msize=0):
+ *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self, INTP_TYPE msize=0):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_ans));
@@ -4793,7 +4801,7 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4svec_16values(struct __pyx_obj_4gv
 /* "gvar/_svec_smat.pyx":95
  *         return ans
  * 
- *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self,INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self, INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
  *         """ Create numpy.array version of self, padded with zeros to length
  *         msize if msize is not None and larger than the actual size.
  */
@@ -5119,7 +5127,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4svec_toarray(struct __pyx_obj_
  *             ans[self.v[i].i] = self.v[i].v
  *         return ans             # <<<<<<<<<<<<<<
  * 
- *     cpdef _assign(self,numpy.float_t[:] v, INTP_TYPE[:] idx):
+ *     cpdef _assign(self, const numpy.float_t[:] v, const INTP_TYPE[:] idx):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_ans));
@@ -5129,7 +5137,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4svec_toarray(struct __pyx_obj_
   /* "gvar/_svec_smat.pyx":95
  *         return ans
  * 
- *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self,INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self, INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
  *         """ Create numpy.array version of self, padded with zeros to length
  *         msize if msize is not None and larger than the actual size.
  */
@@ -5256,7 +5264,7 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4svec_18toarray(struct __pyx_obj_4g
 /* "gvar/_svec_smat.pyx":109
  *         return ans
  * 
- *     cpdef _assign(self,numpy.float_t[:] v, INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
+ *     cpdef _assign(self, const numpy.float_t[:] v, const INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
  *         """ Assign v and idx to self.v[i].v and self.v[i].i.
  * 
  */
@@ -5297,10 +5305,10 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4svec__assign(struct __pyx_obj_4gvar
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_4gvar_10_svec_smat_4svec_21_assign)) {
         __Pyx_XDECREF(__pyx_r);
         if (unlikely(!__pyx_v_v.memview)) { __Pyx_RaiseUnboundLocalError("v"); __PYX_ERR(0, 109, __pyx_L1_error) }
-        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_v, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_float_t, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_v, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 109, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         if (unlikely(!__pyx_v_idx.memview)) { __Pyx_RaiseUnboundLocalError("idx"); __PYX_ERR(0, 109, __pyx_L1_error) }
-        __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_idx, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp, (int (*)(char *, PyObject *)) __pyx_memview_set_nn_npy_intp, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_idx, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 109, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_5 = __pyx_t_1; __pyx_t_6 = NULL;
@@ -5399,7 +5407,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4svec__assign(struct __pyx_obj_4gvar
  *                 self.v[j].i = idx[i]
  */
     __pyx_t_11 = __pyx_v_i;
-    __pyx_t_12 = (((*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_11 * __pyx_v_v.strides[0]) ))) != 0.0) != 0);
+    __pyx_t_12 = (((*((__pyx_t_5numpy_float_t const  *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_11 * __pyx_v_v.strides[0]) ))) != 0.0) != 0);
     if (__pyx_t_12) {
 
       /* "gvar/_svec_smat.pyx":119
@@ -5410,7 +5418,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4svec__assign(struct __pyx_obj_4gvar
  *                 j = j + 1
  */
       __pyx_t_11 = __pyx_v_i;
-      (__pyx_v_self->v[__pyx_v_j]).v = (*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_11 * __pyx_v_v.strides[0]) )));
+      (__pyx_v_self->v[__pyx_v_j]).v = (*((__pyx_t_5numpy_float_t const  *) ( /* dim=0 */ (__pyx_v_v.data + __pyx_t_11 * __pyx_v_v.strides[0]) )));
 
       /* "gvar/_svec_smat.pyx":120
  *             if v[i] != 0.0:
@@ -5420,7 +5428,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4svec__assign(struct __pyx_obj_4gvar
  *         if j < self.size:
  */
       __pyx_t_11 = __pyx_v_i;
-      (__pyx_v_self->v[__pyx_v_j]).i = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_idx.data + __pyx_t_11 * __pyx_v_idx.strides[0]) )));
+      (__pyx_v_self->v[__pyx_v_j]).i = (*((npy_intp const  *) ( /* dim=0 */ (__pyx_v_idx.data + __pyx_t_11 * __pyx_v_idx.strides[0]) )));
 
       /* "gvar/_svec_smat.pyx":121
  *                 self.v[j].v = v[i]
@@ -5481,7 +5489,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4svec__assign(struct __pyx_obj_4gvar
   /* "gvar/_svec_smat.pyx":109
  *         return ans
  * 
- *     cpdef _assign(self,numpy.float_t[:] v, INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
+ *     cpdef _assign(self, const numpy.float_t[:] v, const INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
  *         """ Assign v and idx to self.v[i].v and self.v[i].i.
  * 
  */
@@ -5553,8 +5561,8 @@ static PyObject *__pyx_pw_4gvar_10_svec_smat_4svec_21_assign(PyObject *__pyx_v_s
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_v = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_v.memview)) __PYX_ERR(0, 109, __pyx_L3_error)
-    __pyx_v_idx = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_idx.memview)) __PYX_ERR(0, 109, __pyx_L3_error)
+    __pyx_v_v = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t__const__(values[0], 0); if (unlikely(!__pyx_v_v.memview)) __PYX_ERR(0, 109, __pyx_L3_error)
+    __pyx_v_idx = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp__const__(values[1], 0); if (unlikely(!__pyx_v_idx.memview)) __PYX_ERR(0, 109, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -8846,7 +8854,7 @@ static int __pyx_pf_4gvar_10_svec_smat_4smat___cinit__(struct __pyx_obj_4gvar_10
   __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_ds_object(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(0, 295, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_to_MemoryviewSlice_dc_object(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_3.memview)) __PYX_ERR(0, 295, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->row, 0);
   __pyx_v_self->row = __pyx_t_3;
@@ -8917,7 +8925,7 @@ static int __pyx_pf_4gvar_10_svec_smat_4smat___cinit__(struct __pyx_obj_4gvar_10
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_npy_intp(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 296, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->block, 0);
   __pyx_v_self->block = __pyx_t_8;
@@ -9282,7 +9290,7 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4smat_6__setstate__(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_7 = __Pyx_PyInt_As_Py_intptr_t(__pyx_t_2); if (unlikely((__pyx_t_7 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(0, 308, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_ds_object(__pyx_t_3, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 308, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_object(__pyx_t_3, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 308, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_self->nrow = __pyx_t_6;
   __pyx_v_self->nrow_max = __pyx_t_7;
@@ -9452,7 +9460,7 @@ static npy_intp __pyx_f_4gvar_10_svec_smat_4smat_blockid(struct __pyx_obj_4gvar_
  */
   if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 315, __pyx_L1_error)}
   __pyx_t_7 = __pyx_v_i;
-  __pyx_r = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_7 * __pyx_v_self->block.strides[0]) )));
+  __pyx_r = (*((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_7)) )));
   goto __pyx_L0;
 
   /* "gvar/_svec_smat.pyx":314
@@ -9535,7 +9543,7 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4smat_10blockid(struct __pyx_obj_4g
  * 
  *     cpdef _add_memory(smat self):             # <<<<<<<<<<<<<<
  *         cdef object[:] oldrow = self.row
- *         cdef INTP_TYPE[:] oldblock = self.block
+ *         cdef INTP_TYPE[::1] oldblock = self.block
  */
 
 static PyObject *__pyx_pw_4gvar_10_svec_smat_4smat_13_add_memory(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
@@ -9615,7 +9623,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
  * 
  *     cpdef _add_memory(smat self):
  *         cdef object[:] oldrow = self.row             # <<<<<<<<<<<<<<
- *         cdef INTP_TYPE[:] oldblock = self.block
+ *         cdef INTP_TYPE[::1] oldblock = self.block
  *         cdef INTP_TYPE i
  */
   if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 318, __pyx_L1_error)}
@@ -9628,7 +9636,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
   /* "gvar/_svec_smat.pyx":319
  *     cpdef _add_memory(smat self):
  *         cdef object[:] oldrow = self.row
- *         cdef INTP_TYPE[:] oldblock = self.block             # <<<<<<<<<<<<<<
+ *         cdef INTP_TYPE[::1] oldblock = self.block             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i
  *         self.row = numpy.empty(2 * self.nrow_max, object)
  */
@@ -9640,7 +9648,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
   __pyx_t_6.data = NULL;
 
   /* "gvar/_svec_smat.pyx":321
- *         cdef INTP_TYPE[:] oldblock = self.block
+ *         cdef INTP_TYPE[::1] oldblock = self.block
  *         cdef INTP_TYPE i
  *         self.row = numpy.empty(2 * self.nrow_max, object)             # <<<<<<<<<<<<<<
  *         self.block = numpy.empty(2 * self.nrow_max, numpy.intp)
@@ -9700,7 +9708,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_ds_object(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_object(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->row, 0);
   __pyx_v_self->row = __pyx_t_5;
@@ -9775,7 +9783,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   }
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn_npy_intp(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 322, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __PYX_XDEC_MEMVIEW(&__pyx_v_self->block, 0);
   __pyx_v_self->block = __pyx_t_6;
@@ -9806,7 +9814,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
     __Pyx_INCREF((PyObject*)__pyx_t_1);
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 324, __pyx_L1_error)}
     __pyx_t_13 = __pyx_v_i;
-    __pyx_t_14 = ((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_13 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_14 = ((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_13)) ));
     __Pyx_GOTREF(*__pyx_t_14);
     __Pyx_INCREF(__pyx_t_1); __Pyx_DECREF(*__pyx_t_14);
     *__pyx_t_14 = __pyx_t_1;
@@ -9818,19 +9826,19 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
  *             self.row[i] = oldrow[i]
  *             self.block[i] = oldblock[i]             # <<<<<<<<<<<<<<
  *         self.nrow_max = 2 * self.nrow_max
- *         # print('added memory')
+ *         # print('**** added memory')
  */
     __pyx_t_13 = __pyx_v_i;
     if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 325, __pyx_L1_error)}
     __pyx_t_15 = __pyx_v_i;
-    *((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_15 * __pyx_v_self->block.strides[0]) )) = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_oldblock.data + __pyx_t_13 * __pyx_v_oldblock.strides[0]) )));
+    *((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_15)) )) = (*((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_oldblock.data) + __pyx_t_13)) )));
   }
 
   /* "gvar/_svec_smat.pyx":326
  *             self.row[i] = oldrow[i]
  *             self.block[i] = oldblock[i]
  *         self.nrow_max = 2 * self.nrow_max             # <<<<<<<<<<<<<<
- *         # print('added memory')
+ *         # print('**** added memory')
  * 
  */
   __pyx_v_self->nrow_max = (2 * __pyx_v_self->nrow_max);
@@ -9840,7 +9848,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat__add_memory(struct __pyx_obj_4
  * 
  *     cpdef _add_memory(smat self):             # <<<<<<<<<<<<<<
  *         cdef object[:] oldrow = self.row
- *         cdef INTP_TYPE[:] oldblock = self.block
+ *         cdef INTP_TYPE[::1] oldblock = self.block
  */
 
   /* function exit code */
@@ -9906,9 +9914,9 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4smat_12_add_memory(struct __pyx_ob
 }
 
 /* "gvar/_svec_smat.pyx":329
- *         # print('added memory')
+ *         # print('**** added memory')
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, numpy.float_t[:] d):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, const numpy.float_t[:] d):             # <<<<<<<<<<<<<<
  *         """ Add d[i] along diagonal. """
  *         cdef INTP_TYPE i, nr
  */
@@ -9980,7 +9988,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag(struct __pyx_
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_4gvar_10_svec_smat_4smat_15append_diag)) {
         __Pyx_XDECREF(((PyObject *)__pyx_r));
         if (unlikely(!__pyx_v_d.memview)) { __Pyx_RaiseUnboundLocalError("d"); __PYX_ERR(0, 329, __pyx_L1_error) }
-        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_d, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_float_t, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 329, __pyx_L1_error)
+        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_d, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 329, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -10284,7 +10292,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag(struct __pyx_
  */
     __pyx_t_15 = __pyx_v_i;
     __pyx_t_16 = 0;
-    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_v.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_v.diminfo[0].strides) = (*((__pyx_t_5numpy_float_t *) ( /* dim=0 */ (__pyx_v_d.data + __pyx_t_15 * __pyx_v_d.strides[0]) )));
+    *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_v.rcbuffer->pybuffer.buf, __pyx_t_16, __pyx_pybuffernd_v.diminfo[0].strides) = (*((__pyx_t_5numpy_float_t const  *) ( /* dim=0 */ (__pyx_v_d.data + __pyx_t_15 * __pyx_v_d.strides[0]) )));
 
     /* "gvar/_svec_smat.pyx":341
  *         for i in range(d.shape[0]):
@@ -10346,8 +10354,8 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag(struct __pyx_
  *             self.row[self.nrow] = new_svec
  *             self.block[self.nrow] = self.next_block
  */
-    __pyx_t_19 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(((PyObject *)__pyx_v_v), PyBUF_WRITABLE); if (unlikely(!__pyx_t_19.memview)) __PYX_ERR(0, 347, __pyx_L1_error)
-    __pyx_t_20 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(((PyObject *)__pyx_v_idx), PyBUF_WRITABLE); if (unlikely(!__pyx_t_20.memview)) __PYX_ERR(0, 347, __pyx_L1_error)
+    __pyx_t_19 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t__const__(((PyObject *)__pyx_v_v), 0); if (unlikely(!__pyx_t_19.memview)) __PYX_ERR(0, 347, __pyx_L1_error)
+    __pyx_t_20 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp__const__(((PyObject *)__pyx_v_idx), 0); if (unlikely(!__pyx_t_20.memview)) __PYX_ERR(0, 347, __pyx_L1_error)
     __pyx_t_4 = ((struct __pyx_vtabstruct_4gvar_10_svec_smat_svec *)__pyx_v_new_svec->__pyx_vtab)->_assign(__pyx_v_new_svec, __pyx_t_19, __pyx_t_20, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 347, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __PYX_XDEC_MEMVIEW(&__pyx_t_19, 1);
@@ -10367,7 +10375,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag(struct __pyx_
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 348, __pyx_L1_error)}
     __pyx_t_15 = __pyx_v_self->nrow;
-    __pyx_t_21 = ((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_15 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_21 = ((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_15)) ));
     __Pyx_GOTREF(*__pyx_t_21);
     __Pyx_INCREF(__pyx_v_new_svec); __Pyx_DECREF(*__pyx_t_21);
     *__pyx_t_21 = __pyx_v_new_svec;
@@ -10383,7 +10391,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag(struct __pyx_
     __pyx_t_17 = __pyx_v_self->next_block;
     if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 349, __pyx_L1_error)}
     __pyx_t_15 = __pyx_v_self->nrow;
-    *((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_15 * __pyx_v_self->block.strides[0]) )) = __pyx_t_17;
+    *((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_15)) )) = __pyx_t_17;
 
     /* "gvar/_svec_smat.pyx":350
  *             self.row[self.nrow] = new_svec
@@ -10409,7 +10417,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag(struct __pyx_
  *             self.nrow += 1
  *         return vrange             # <<<<<<<<<<<<<<
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, numpy.float_t[:, :] m):
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, const numpy.float_t[:, :] m):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_vrange));
@@ -10417,9 +10425,9 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag(struct __pyx_
   goto __pyx_L0;
 
   /* "gvar/_svec_smat.pyx":329
- *         # print('added memory')
+ *         # print('**** added memory')
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, numpy.float_t[:] d):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, const numpy.float_t[:] d):             # <<<<<<<<<<<<<<
  *         """ Add d[i] along diagonal. """
  *         cdef INTP_TYPE i, nr
  */
@@ -10471,7 +10479,7 @@ static PyObject *__pyx_pw_4gvar_10_svec_smat_4smat_15append_diag(PyObject *__pyx
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("append_diag (wrapper)", 0);
   assert(__pyx_arg_d); {
-    __pyx_v_d = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(__pyx_arg_d, PyBUF_WRITABLE); if (unlikely(!__pyx_v_d.memview)) __PYX_ERR(0, 329, __pyx_L3_error)
+    __pyx_v_d = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t__const__(__pyx_arg_d, 0); if (unlikely(!__pyx_v_d.memview)) __PYX_ERR(0, 329, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -10517,7 +10525,7 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4smat_14append_diag(struct __pyx_ob
 /* "gvar/_svec_smat.pyx":354
  *         return vrange
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, const numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, nr, nm, n_nonzero
  *         cdef numpy.ndarray[numpy.float_t, ndim=1] v
  */
@@ -10597,7 +10605,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_4gvar_10_svec_smat_4smat_17append_diag_m)) {
         __Pyx_XDECREF(((PyObject *)__pyx_r));
         if (unlikely(!__pyx_v_m.memview)) { __Pyx_RaiseUnboundLocalError("m"); __PYX_ERR(0, 354, __pyx_L1_error) }
-        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_m, 2, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_float_t, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 354, __pyx_L1_error)
+        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_m, 2, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 354, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -10955,7 +10963,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
  */
       __pyx_t_20 = __pyx_v_i;
       __pyx_t_21 = __pyx_v_j;
-      __pyx_t_22 = (((*((__pyx_t_5numpy_float_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_m.data + __pyx_t_20 * __pyx_v_m.strides[0]) ) + __pyx_t_21 * __pyx_v_m.strides[1]) ))) != 0.0) != 0);
+      __pyx_t_22 = (((*((__pyx_t_5numpy_float_t const  *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_m.data + __pyx_t_20 * __pyx_v_m.strides[0]) ) + __pyx_t_21 * __pyx_v_m.strides[1]) ))) != 0.0) != 0);
       if (!__pyx_t_22) {
       } else {
         __pyx_t_19 = __pyx_t_22;
@@ -10976,7 +10984,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
         __pyx_t_21 = __pyx_v_i;
         __pyx_t_20 = __pyx_v_j;
         __pyx_t_23 = __pyx_v_n_nonzero;
-        *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_v.rcbuffer->pybuffer.buf, __pyx_t_23, __pyx_pybuffernd_v.diminfo[0].strides) = (*((__pyx_t_5numpy_float_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_m.data + __pyx_t_21 * __pyx_v_m.strides[0]) ) + __pyx_t_20 * __pyx_v_m.strides[1]) )));
+        *__Pyx_BufPtrStrided1d(__pyx_t_5numpy_float_t *, __pyx_pybuffernd_v.rcbuffer->pybuffer.buf, __pyx_t_23, __pyx_pybuffernd_v.diminfo[0].strides) = (*((__pyx_t_5numpy_float_t const  *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_m.data + __pyx_t_21 * __pyx_v_m.strides[0]) ) + __pyx_t_20 * __pyx_v_m.strides[1]) )));
 
         /* "gvar/_svec_smat.pyx":371
  *                 if m[i, j] != 0.0 or i == j:
@@ -11095,7 +11103,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
     __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_v), __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 378, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_24 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(__pyx_t_3, PyBUF_WRITABLE); if (unlikely(!__pyx_t_24.memview)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __pyx_t_24 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t__const__(__pyx_t_3, 0); if (unlikely(!__pyx_t_24.memview)) __PYX_ERR(0, 378, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = __Pyx_PyInt_From_Py_intptr_t(__pyx_v_n_nonzero); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 378, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
@@ -11105,7 +11113,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
     __pyx_t_3 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_idx), __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 378, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_25 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(__pyx_t_3, PyBUF_WRITABLE); if (unlikely(!__pyx_t_25.memview)) __PYX_ERR(0, 378, __pyx_L1_error)
+    __pyx_t_25 = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp__const__(__pyx_t_3, 0); if (unlikely(!__pyx_t_25.memview)) __PYX_ERR(0, 378, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = ((struct __pyx_vtabstruct_4gvar_10_svec_smat_svec *)__pyx_v_new_svec->__pyx_vtab)->_assign(__pyx_v_new_svec, __pyx_t_24, __pyx_t_25, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 378, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
@@ -11126,7 +11134,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 379, __pyx_L1_error)}
     __pyx_t_20 = __pyx_v_self->nrow;
-    __pyx_t_26 = ((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_20 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_26 = ((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_20)) ));
     __Pyx_GOTREF(*__pyx_t_26);
     __Pyx_INCREF(__pyx_v_new_svec); __Pyx_DECREF(*__pyx_t_26);
     *__pyx_t_26 = __pyx_v_new_svec;
@@ -11142,7 +11150,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
     __pyx_t_16 = __pyx_v_self->next_block;
     if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 380, __pyx_L1_error)}
     __pyx_t_20 = __pyx_v_self->nrow;
-    *((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_20 * __pyx_v_self->block.strides[0]) )) = __pyx_t_16;
+    *((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_20)) )) = __pyx_t_16;
 
     /* "gvar/_svec_smat.pyx":381
  *             self.row[self.nrow] = new_svec
@@ -11169,7 +11177,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
  *         self.next_block += 1
  *         return vrange             # <<<<<<<<<<<<<<
  * 
- *     cpdef add_offdiag_m(self, numpy.npy_intp[:] xrow, numpy.npy_intp[:] yrow, numpy.float_t[:, :] xym):
+ *     cpdef add_offdiag_m(self, const numpy.npy_intp[:] xrow, const numpy.npy_intp[:] yrow, const numpy.float_t[:, :] xym):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_vrange));
@@ -11179,7 +11187,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_append_diag_m(struct __py
   /* "gvar/_svec_smat.pyx":354
  *         return vrange
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, const numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, nr, nm, n_nonzero
  *         cdef numpy.ndarray[numpy.float_t, ndim=1] v
  */
@@ -11231,7 +11239,7 @@ static PyObject *__pyx_pw_4gvar_10_svec_smat_4smat_17append_diag_m(PyObject *__p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("append_diag_m (wrapper)", 0);
   assert(__pyx_arg_m); {
-    __pyx_v_m = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t(__pyx_arg_m, PyBUF_WRITABLE); if (unlikely(!__pyx_v_m.memview)) __PYX_ERR(0, 354, __pyx_L3_error)
+    __pyx_v_m = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t__const__(__pyx_arg_m, 0); if (unlikely(!__pyx_v_m.memview)) __PYX_ERR(0, 354, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -11277,7 +11285,7 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4smat_16append_diag_m(struct __pyx_
 /* "gvar/_svec_smat.pyx":385
  *         return vrange
  * 
- *     cpdef add_offdiag_m(self, numpy.npy_intp[:] xrow, numpy.npy_intp[:] yrow, numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
+ *     cpdef add_offdiag_m(self, const numpy.npy_intp[:] xrow, const numpy.npy_intp[:] yrow, const numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, k
  *         cdef svec x, y, newx, newy
  */
@@ -11342,13 +11350,13 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_4gvar_10_svec_smat_4smat_19add_offdiag_m)) {
         __Pyx_XDECREF(__pyx_r);
         if (unlikely(!__pyx_v_xrow.memview)) { __Pyx_RaiseUnboundLocalError("xrow"); __PYX_ERR(0, 385, __pyx_L1_error) }
-        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_xrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp, (int (*)(char *, PyObject *)) __pyx_memview_set_nn_npy_intp, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 385, __pyx_L1_error)
+        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_xrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 385, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         if (unlikely(!__pyx_v_yrow.memview)) { __Pyx_RaiseUnboundLocalError("yrow"); __PYX_ERR(0, 385, __pyx_L1_error) }
-        __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_yrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp, (int (*)(char *, PyObject *)) __pyx_memview_set_nn_npy_intp, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 385, __pyx_L1_error)
+        __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_yrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 385, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         if (unlikely(!__pyx_v_xym.memview)) { __Pyx_RaiseUnboundLocalError("xym"); __PYX_ERR(0, 385, __pyx_L1_error) }
-        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_xym, 2, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_float_t, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 385, __pyx_L1_error)
+        __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_xym, 2, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_float_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 385, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_1; __pyx_t_7 = NULL;
@@ -11585,7 +11593,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  *             if self.block[i] < blockid:
  *                 blockid = self.block[i]
  */
-  __pyx_t_6 = __pyx_memoryview_fromslice(__pyx_v_xrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp, (int (*)(char *, PyObject *)) __pyx_memview_set_nn_npy_intp, 0);; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 395, __pyx_L1_error)
+  __pyx_t_6 = __pyx_memoryview_fromslice(__pyx_v_xrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 395, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   if (likely(PyList_CheckExact(__pyx_t_6)) || PyTuple_CheckExact(__pyx_t_6)) {
     __pyx_t_2 = __pyx_t_6; __Pyx_INCREF(__pyx_t_2); __pyx_t_15 = 0;
@@ -11640,7 +11648,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
     if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 396, __pyx_L1_error)}
     __pyx_t_18 = __pyx_v_i;
-    __pyx_t_6 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_18 * __pyx_v_self->block.strides[0]) )))); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 396, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_18)) )))); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 396, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_1 = PyObject_RichCompare(__pyx_t_6, __pyx_v_blockid, Py_LT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -11657,7 +11665,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
       if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 397, __pyx_L1_error)}
       __pyx_t_18 = __pyx_v_i;
-      __pyx_t_1 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_18 * __pyx_v_self->block.strides[0]) )))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_18)) )))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF_SET(__pyx_v_blockid, __pyx_t_1);
       __pyx_t_1 = 0;
@@ -11680,7 +11688,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
     if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 398, __pyx_L1_error)}
     __pyx_t_18 = __pyx_v_i;
-    __pyx_t_1 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_18 * __pyx_v_self->block.strides[0]) )))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 398, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_18)) )))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 398, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_19 = PySet_Add(__pyx_v_idset, __pyx_t_1); if (unlikely(__pyx_t_19 == ((int)-1))) __PYX_ERR(0, 398, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -11716,7 +11724,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
     if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 400, __pyx_L1_error)}
     __pyx_t_18 = __pyx_v_i;
-    __pyx_t_2 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_18 * __pyx_v_self->block.strides[0]) )))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 400, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_Py_intptr_t((*((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_18)) )))); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 400, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_13 = (__Pyx_PySet_ContainsTF(__pyx_t_2, __pyx_v_idset, Py_EQ)); if (unlikely(__pyx_t_13 < 0)) __PYX_ERR(0, 400, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -11733,7 +11741,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
       __pyx_t_22 = __Pyx_PyInt_As_Py_intptr_t(__pyx_v_blockid); if (unlikely((__pyx_t_22 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(0, 401, __pyx_L1_error)
       if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 401, __pyx_L1_error)}
       __pyx_t_18 = __pyx_v_i;
-      *((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_18 * __pyx_v_self->block.strides[0]) )) = __pyx_t_22;
+      *((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_18)) )) = __pyx_t_22;
 
       /* "gvar/_svec_smat.pyx":400
  *             idset.add(self.block[i])
@@ -11752,7 +11760,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  *             self.block[i] = blockid
  *         for i in range(len(xrow)):
  */
-  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_yrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp, (int (*)(char *, PyObject *)) __pyx_memview_set_nn_npy_intp, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
+  __pyx_t_2 = __pyx_memoryview_fromslice(__pyx_v_yrow, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn_npy_intp__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
     __pyx_t_1 = __pyx_t_2; __Pyx_INCREF(__pyx_t_1); __pyx_t_15 = 0;
@@ -11808,7 +11816,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
     __pyx_t_17 = __Pyx_PyInt_As_Py_intptr_t(__pyx_v_blockid); if (unlikely((__pyx_t_17 == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(0, 403, __pyx_L1_error)
     if (unlikely(!__pyx_v_self->block.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 403, __pyx_L1_error)}
     __pyx_t_18 = __pyx_v_i;
-    *((npy_intp *) ( /* dim=0 */ (__pyx_v_self->block.data + __pyx_t_18 * __pyx_v_self->block.strides[0]) )) = __pyx_t_17;
+    *((npy_intp *) ( /* dim=0 */ ((char *) (((npy_intp *) __pyx_v_self->block.data) + __pyx_t_18)) )) = __pyx_t_17;
 
     /* "gvar/_svec_smat.pyx":402
  *             if self.block[i] in idset:
@@ -11841,8 +11849,8 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 405, __pyx_L1_error)}
     __pyx_t_18 = __pyx_v_i;
-    __pyx_t_24 = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_xrow.data + __pyx_t_18 * __pyx_v_xrow.strides[0]) )));
-    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_24 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_24 = (*((npy_intp const  *) ( /* dim=0 */ (__pyx_v_xrow.data + __pyx_t_18 * __pyx_v_xrow.strides[0]) )));
+    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_24)) ));
     __Pyx_INCREF((PyObject*)__pyx_t_1);
     if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4gvar_10_svec_smat_svec))))) __PYX_ERR(0, 405, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_x, ((struct __pyx_obj_4gvar_10_svec_smat_svec *)__pyx_t_1));
@@ -11935,7 +11943,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  *                 k += 1
  */
       __pyx_t_18 = __pyx_v_j;
-      (__pyx_v_newx->v[__pyx_v_k]).i = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_yrow.data + __pyx_t_18 * __pyx_v_yrow.strides[0]) )));
+      (__pyx_v_newx->v[__pyx_v_k]).i = (*((npy_intp const  *) ( /* dim=0 */ (__pyx_v_yrow.data + __pyx_t_18 * __pyx_v_yrow.strides[0]) )));
 
       /* "gvar/_svec_smat.pyx":414
  *             for j in range(len(yrow)):
@@ -11946,7 +11954,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
       __pyx_t_18 = __pyx_v_i;
       __pyx_t_24 = __pyx_v_j;
-      (__pyx_v_newx->v[__pyx_v_k]).v = (*((__pyx_t_5numpy_float_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_xym.data + __pyx_t_18 * __pyx_v_xym.strides[0]) ) + __pyx_t_24 * __pyx_v_xym.strides[1]) )));
+      (__pyx_v_newx->v[__pyx_v_k]).v = (*((__pyx_t_5numpy_float_t const  *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_xym.data + __pyx_t_18 * __pyx_v_xym.strides[0]) ) + __pyx_t_24 * __pyx_v_xym.strides[1]) )));
 
       /* "gvar/_svec_smat.pyx":415
  *                 newx.v[k].i = yrow[j]
@@ -11967,8 +11975,8 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 416, __pyx_L1_error)}
     __pyx_t_24 = __pyx_v_i;
-    __pyx_t_18 = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_xrow.data + __pyx_t_24 * __pyx_v_xrow.strides[0]) )));
-    __pyx_t_29 = ((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_18 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_18 = (*((npy_intp const  *) ( /* dim=0 */ (__pyx_v_xrow.data + __pyx_t_24 * __pyx_v_xrow.strides[0]) )));
+    __pyx_t_29 = ((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_18)) ));
     __Pyx_GOTREF(*__pyx_t_29);
     __Pyx_INCREF(__pyx_v_newx); __Pyx_DECREF(*__pyx_t_29);
     *__pyx_t_29 = __pyx_v_newx;
@@ -11996,8 +12004,8 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 418, __pyx_L1_error)}
     __pyx_t_24 = __pyx_v_i;
-    __pyx_t_18 = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_yrow.data + __pyx_t_24 * __pyx_v_yrow.strides[0]) )));
-    __pyx_t_2 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_18 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_18 = (*((npy_intp const  *) ( /* dim=0 */ (__pyx_v_yrow.data + __pyx_t_24 * __pyx_v_yrow.strides[0]) )));
+    __pyx_t_2 = (PyObject *) *((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_18)) ));
     __Pyx_INCREF((PyObject*)__pyx_t_2);
     if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_4gvar_10_svec_smat_svec))))) __PYX_ERR(0, 418, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_y, ((struct __pyx_obj_4gvar_10_svec_smat_svec *)__pyx_t_2));
@@ -12048,7 +12056,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  *                 k += 1
  */
       __pyx_t_24 = __pyx_v_j;
-      (__pyx_v_newy->v[__pyx_v_k]).i = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_xrow.data + __pyx_t_24 * __pyx_v_xrow.strides[0]) )));
+      (__pyx_v_newy->v[__pyx_v_k]).i = (*((npy_intp const  *) ( /* dim=0 */ (__pyx_v_xrow.data + __pyx_t_24 * __pyx_v_xrow.strides[0]) )));
 
       /* "gvar/_svec_smat.pyx":423
  *             for j in range(len(xrow)):
@@ -12059,7 +12067,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
       __pyx_t_24 = __pyx_v_j;
       __pyx_t_18 = __pyx_v_i;
-      (__pyx_v_newy->v[__pyx_v_k]).v = (*((__pyx_t_5numpy_float_t *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_xym.data + __pyx_t_24 * __pyx_v_xym.strides[0]) ) + __pyx_t_18 * __pyx_v_xym.strides[1]) )));
+      (__pyx_v_newy->v[__pyx_v_k]).v = (*((__pyx_t_5numpy_float_t const  *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_xym.data + __pyx_t_24 * __pyx_v_xym.strides[0]) ) + __pyx_t_18 * __pyx_v_xym.strides[1]) )));
 
       /* "gvar/_svec_smat.pyx":424
  *                 newy.v[k].i = xrow[j]
@@ -12122,8 +12130,8 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 429, __pyx_L1_error)}
     __pyx_t_18 = __pyx_v_i;
-    __pyx_t_24 = (*((npy_intp *) ( /* dim=0 */ (__pyx_v_yrow.data + __pyx_t_18 * __pyx_v_yrow.strides[0]) )));
-    __pyx_t_29 = ((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_24 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_24 = (*((npy_intp const  *) ( /* dim=0 */ (__pyx_v_yrow.data + __pyx_t_18 * __pyx_v_yrow.strides[0]) )));
+    __pyx_t_29 = ((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_24)) ));
     __Pyx_GOTREF(*__pyx_t_29);
     __Pyx_INCREF(__pyx_v_newy); __Pyx_DECREF(*__pyx_t_29);
     *__pyx_t_29 = __pyx_v_newy;
@@ -12133,7 +12141,7 @@ static PyObject *__pyx_f_4gvar_10_svec_smat_4smat_add_offdiag_m(struct __pyx_obj
   /* "gvar/_svec_smat.pyx":385
  *         return vrange
  * 
- *     cpdef add_offdiag_m(self, numpy.npy_intp[:] xrow, numpy.npy_intp[:] yrow, numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
+ *     cpdef add_offdiag_m(self, const numpy.npy_intp[:] xrow, const numpy.npy_intp[:] yrow, const numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, k
  *         cdef svec x, y, newx, newy
  */
@@ -12221,9 +12229,9 @@ static PyObject *__pyx_pw_4gvar_10_svec_smat_4smat_19add_offdiag_m(PyObject *__p
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
-    __pyx_v_xrow = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_xrow.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
-    __pyx_v_yrow = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_yrow.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
-    __pyx_v_xym = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t(values[2], PyBUF_WRITABLE); if (unlikely(!__pyx_v_xym.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
+    __pyx_v_xrow = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp__const__(values[0], 0); if (unlikely(!__pyx_v_xrow.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
+    __pyx_v_yrow = __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp__const__(values[1], 0); if (unlikely(!__pyx_v_yrow.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
+    __pyx_v_xym = __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t__const__(values[2], 0); if (unlikely(!__pyx_v_xym.memview)) __PYX_ERR(0, 385, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -12377,7 +12385,7 @@ static double __pyx_f_4gvar_10_svec_smat_4smat_expval(struct __pyx_obj_4gvar_10_
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 442, __pyx_L1_error)}
     __pyx_t_9 = (__pyx_v_vv->v[__pyx_v_i]).i;
-    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_9 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_9)) ));
     __Pyx_INCREF((PyObject*)__pyx_t_1);
     if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4gvar_10_svec_smat_svec))))) __PYX_ERR(0, 442, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_row, ((struct __pyx_obj_4gvar_10_svec_smat_svec *)__pyx_t_1));
@@ -12797,7 +12805,7 @@ static struct __pyx_obj_4gvar_10_svec_smat_svec *__pyx_f_4gvar_10_svec_smat_4sma
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 458, __pyx_L1_error)}
     __pyx_t_16 = __pyx_v_i;
-    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_16 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_16)) ));
     __Pyx_INCREF((PyObject*)__pyx_t_1);
     if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4gvar_10_svec_smat_svec))))) __PYX_ERR(0, 458, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_row, ((struct __pyx_obj_4gvar_10_svec_smat_svec *)__pyx_t_1));
@@ -12914,7 +12922,7 @@ static struct __pyx_obj_4gvar_10_svec_smat_svec *__pyx_f_4gvar_10_svec_smat_4sma
  *             ans.v[i].i = idx[i]
  *         return ans             # <<<<<<<<<<<<<<
  * 
- *     cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask):
+ *     cpdef svec masked_dot(self, svec vv, const numpy.int8_t[:] imask):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_ans));
@@ -13012,7 +13020,7 @@ static PyObject *__pyx_pf_4gvar_10_svec_smat_4smat_22dot(struct __pyx_obj_4gvar_
 /* "gvar/_svec_smat.pyx":470
  *         return ans
  * 
- *     cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
+ *     cpdef svec masked_dot(self, svec vv, const numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
  *         """ Compute masked dot product self|vv>.
  * 
  */
@@ -13076,7 +13084,7 @@ static struct __pyx_obj_4gvar_10_svec_smat_svec *__pyx_f_4gvar_10_svec_smat_4sma
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_4gvar_10_svec_smat_4smat_25masked_dot)) {
         __Pyx_XDECREF(((PyObject *)__pyx_r));
         if (unlikely(!__pyx_v_imask.memview)) { __Pyx_RaiseUnboundLocalError("imask"); __PYX_ERR(0, 470, __pyx_L1_error) }
-        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_imask, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_int8_t, (int (*)(char *, PyObject *)) __pyx_memview_set_nn___pyx_t_5numpy_int8_t, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 470, __pyx_L1_error)
+        __pyx_t_3 = __pyx_memoryview_fromslice(__pyx_v_imask, 1, (PyObject *(*)(char *)) __pyx_memview_get_nn___pyx_t_5numpy_int8_t__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 470, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -13366,7 +13374,7 @@ static struct __pyx_obj_4gvar_10_svec_smat_svec *__pyx_f_4gvar_10_svec_smat_4sma
  *             row = self.row[i] # self.rowlist[i]
  */
     __pyx_t_16 = __pyx_v_i;
-    __pyx_t_17 = ((!((*((__pyx_t_5numpy_int8_t *) ( /* dim=0 */ (__pyx_v_imask.data + __pyx_t_16 * __pyx_v_imask.strides[0]) ))) != 0)) != 0);
+    __pyx_t_17 = ((!((*((__pyx_t_5numpy_int8_t const  *) ( /* dim=0 */ (__pyx_v_imask.data + __pyx_t_16 * __pyx_v_imask.strides[0]) ))) != 0)) != 0);
     if (__pyx_t_17) {
 
       /* "gvar/_svec_smat.pyx":488
@@ -13396,7 +13404,7 @@ static struct __pyx_obj_4gvar_10_svec_smat_svec *__pyx_f_4gvar_10_svec_smat_4sma
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 489, __pyx_L1_error)}
     __pyx_t_16 = __pyx_v_i;
-    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_16 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_16)) ));
     __Pyx_INCREF((PyObject*)__pyx_t_1);
     if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4gvar_10_svec_smat_svec))))) __PYX_ERR(0, 489, __pyx_L1_error)
     __Pyx_XDECREF_SET(__pyx_v_row, ((struct __pyx_obj_4gvar_10_svec_smat_svec *)__pyx_t_1));
@@ -13524,7 +13532,7 @@ static struct __pyx_obj_4gvar_10_svec_smat_svec *__pyx_f_4gvar_10_svec_smat_4sma
   /* "gvar/_svec_smat.pyx":470
  *         return ans
  * 
- *     cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
+ *     cpdef svec masked_dot(self, svec vv, const numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
  *         """ Compute masked dot product self|vv>.
  * 
  */
@@ -13609,7 +13617,7 @@ static PyObject *__pyx_pw_4gvar_10_svec_smat_4smat_25masked_dot(PyObject *__pyx_
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
     __pyx_v_vv = ((struct __pyx_obj_4gvar_10_svec_smat_svec *)values[0]);
-    __pyx_v_imask = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int8_t(values[1], PyBUF_WRITABLE); if (unlikely(!__pyx_v_imask.memview)) __PYX_ERR(0, 470, __pyx_L3_error)
+    __pyx_v_imask = __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int8_t__const__(values[1], 0); if (unlikely(!__pyx_v_imask.memview)) __PYX_ERR(0, 470, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
@@ -13881,7 +13889,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_toarray(struct __pyx_obj_
  */
     if (unlikely(!__pyx_v_self->row.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 508, __pyx_L1_error)}
     __pyx_t_15 = __pyx_v_i;
-    __pyx_t_3 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_15 * __pyx_v_self->row.strides[0]) ));
+    __pyx_t_3 = (PyObject *) *((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_15)) ));
     __Pyx_INCREF((PyObject*)__pyx_t_3);
     __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_toarray); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 508, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
@@ -14277,7 +14285,7 @@ static PyArrayObject *__pyx_f_4gvar_10_svec_smat_4smat_masked_mat(struct __pyx_o
  *                 rowi.masked_vec(mask, out=ans[mask.map[i],:])
  */
       __pyx_t_16 = __pyx_v_i;
-      __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ (__pyx_v_self->row.data + __pyx_t_16 * __pyx_v_self->row.strides[0]) ));
+      __pyx_t_1 = (PyObject *) *((PyObject * *) ( /* dim=0 */ ((char *) (((PyObject * *) __pyx_v_self->row.data) + __pyx_t_16)) ));
       __Pyx_INCREF((PyObject*)__pyx_t_1);
       if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4gvar_10_svec_smat_svec))))) __PYX_ERR(0, 527, __pyx_L1_error)
       __Pyx_XDECREF_SET(__pyx_v_rowi, ((struct __pyx_obj_4gvar_10_svec_smat_svec *)__pyx_t_1));
@@ -30242,7 +30250,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "gvar/_svec_smat.pyx":95
  *         return ans
  * 
- *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self,INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self, INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
  *         """ Create numpy.array version of self, padded with zeros to length
  *         msize if msize is not None and larger than the actual size.
  */
@@ -30254,7 +30262,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "gvar/_svec_smat.pyx":109
  *         return ans
  * 
- *     cpdef _assign(self,numpy.float_t[:] v, INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
+ *     cpdef _assign(self, const numpy.float_t[:] v, const INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
  *         """ Assign v and idx to self.v[i].v and self.v[i].i.
  * 
  */
@@ -30397,7 +30405,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  *     cpdef _add_memory(smat self):             # <<<<<<<<<<<<<<
  *         cdef object[:] oldrow = self.row
- *         cdef INTP_TYPE[:] oldblock = self.block
+ *         cdef INTP_TYPE[::1] oldblock = self.block
  */
   __pyx_tuple__64 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__64)) __PYX_ERR(0, 317, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__64);
@@ -30405,9 +30413,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_codeobj__65 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__64, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_svec_smat_pyx, __pyx_n_s_add_memory, 317, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__65)) __PYX_ERR(0, 317, __pyx_L1_error)
 
   /* "gvar/_svec_smat.pyx":329
- *         # print('added memory')
+ *         # print('**** added memory')
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, numpy.float_t[:] d):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, const numpy.float_t[:] d):             # <<<<<<<<<<<<<<
  *         """ Add d[i] along diagonal. """
  *         cdef INTP_TYPE i, nr
  */
@@ -30419,7 +30427,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "gvar/_svec_smat.pyx":354
  *         return vrange
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, const numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, nr, nm, n_nonzero
  *         cdef numpy.ndarray[numpy.float_t, ndim=1] v
  */
@@ -30431,7 +30439,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "gvar/_svec_smat.pyx":385
  *         return vrange
  * 
- *     cpdef add_offdiag_m(self, numpy.npy_intp[:] xrow, numpy.npy_intp[:] yrow, numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
+ *     cpdef add_offdiag_m(self, const numpy.npy_intp[:] xrow, const numpy.npy_intp[:] yrow, const numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, k
  *         cdef svec x, y, newx, newy
  */
@@ -30467,7 +30475,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "gvar/_svec_smat.pyx":470
  *         return ans
  * 
- *     cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
+ *     cpdef svec masked_dot(self, svec vv, const numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
  *         """ Compute masked dot product self|vv>.
  * 
  */
@@ -31127,7 +31135,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_svec_smat.pyx":95
  *         return ans
  * 
- *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self,INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self, INTP_TYPE msize=0):             # <<<<<<<<<<<<<<
  *         """ Create numpy.array version of self, padded with zeros to length
  *         msize if msize is not None and larger than the actual size.
  */
@@ -31140,7 +31148,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_svec_smat.pyx":109
  *         return ans
  * 
- *     cpdef _assign(self,numpy.float_t[:] v, INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
+ *     cpdef _assign(self, const numpy.float_t[:] v, const INTP_TYPE[:] idx):             # <<<<<<<<<<<<<<
  *         """ Assign v and idx to self.v[i].v and self.v[i].i.
  * 
  */
@@ -31293,7 +31301,7 @@ if (!__Pyx_RefNanny) {
  * 
  *     cpdef _add_memory(smat self):             # <<<<<<<<<<<<<<
  *         cdef object[:] oldrow = self.row
- *         cdef INTP_TYPE[:] oldblock = self.block
+ *         cdef INTP_TYPE[::1] oldblock = self.block
  */
   __pyx_t_1 = __Pyx_CyFunction_New(&__pyx_mdef_4gvar_10_svec_smat_4smat_13_add_memory, __Pyx_CYFUNCTION_CCLASS, __pyx_n_s_smat__add_memory, NULL, __pyx_n_s_gvar__svec_smat, __pyx_d, ((PyObject *)__pyx_codeobj__65)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 317, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -31302,9 +31310,9 @@ if (!__Pyx_RefNanny) {
   PyType_Modified(__pyx_ptype_4gvar_10_svec_smat_smat);
 
   /* "gvar/_svec_smat.pyx":329
- *         # print('added memory')
+ *         # print('**** added memory')
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, numpy.float_t[:] d):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, const numpy.float_t[:] d):             # <<<<<<<<<<<<<<
  *         """ Add d[i] along diagonal. """
  *         cdef INTP_TYPE i, nr
  */
@@ -31317,7 +31325,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_svec_smat.pyx":354
  *         return vrange
  * 
- *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
+ *     cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, const numpy.float_t[:, :] m):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, nr, nm, n_nonzero
  *         cdef numpy.ndarray[numpy.float_t, ndim=1] v
  */
@@ -31330,7 +31338,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_svec_smat.pyx":385
  *         return vrange
  * 
- *     cpdef add_offdiag_m(self, numpy.npy_intp[:] xrow, numpy.npy_intp[:] yrow, numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
+ *     cpdef add_offdiag_m(self, const numpy.npy_intp[:] xrow, const numpy.npy_intp[:] yrow, const numpy.float_t[:, :] xym):             # <<<<<<<<<<<<<<
  *         cdef INTP_TYPE i, j, k
  *         cdef svec x, y, newx, newy
  */
@@ -31369,7 +31377,7 @@ if (!__Pyx_RefNanny) {
   /* "gvar/_svec_smat.pyx":470
  *         return ans
  * 
- *     cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
+ *     cpdef svec masked_dot(self, svec vv, const numpy.int8_t[:] imask):             # <<<<<<<<<<<<<<
  *         """ Compute masked dot product self|vv>.
  * 
  */
@@ -35703,7 +35711,7 @@ no_fail:
 }
 
 /* ObjectToMemviewSlice */
-    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t(PyObject *obj, int writable_flag) {
+    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_float_t__const__(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
     int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
@@ -35714,7 +35722,7 @@ no_fail:
     }
     retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
                                                  PyBUF_RECORDS_RO | writable_flag, 1,
-                                                 &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, stack,
+                                                 &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t__const__, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
         goto __pyx_fail;
@@ -35726,7 +35734,7 @@ __pyx_fail:
 }
 
 /* ObjectToMemviewSlice */
-    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp(PyObject *obj, int writable_flag) {
+    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn_npy_intp__const__(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
     int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
@@ -35737,7 +35745,7 @@ __pyx_fail:
     }
     retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
                                                  PyBUF_RECORDS_RO | writable_flag, 1,
-                                                 &__Pyx_TypeInfo_nn_npy_intp, stack,
+                                                 &__Pyx_TypeInfo_nn_npy_intp__const__, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
         goto __pyx_fail;
@@ -35772,7 +35780,7 @@ __pyx_fail:
 }
 
 /* ObjectToMemviewSlice */
-    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t(PyObject *obj, int writable_flag) {
+    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dsds_nn___pyx_t_5numpy_float_t__const__(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
     int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED), (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
@@ -35783,7 +35791,7 @@ __pyx_fail:
     }
     retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
                                                  PyBUF_RECORDS_RO | writable_flag, 2,
-                                                 &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t, stack,
+                                                 &__Pyx_TypeInfo_nn___pyx_t_5numpy_float_t__const__, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
         goto __pyx_fail;
@@ -35795,7 +35803,7 @@ __pyx_fail:
 }
 
 /* ObjectToMemviewSlice */
-    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int8_t(PyObject *obj, int writable_flag) {
+    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_nn___pyx_t_5numpy_int8_t__const__(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
     int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
@@ -35806,7 +35814,7 @@ __pyx_fail:
     }
     retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
                                                  PyBUF_RECORDS_RO | writable_flag, 1,
-                                                 &__Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t, stack,
+                                                 &__Pyx_TypeInfo_nn___pyx_t_5numpy_int8_t__const__, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
         goto __pyx_fail;
@@ -35818,27 +35826,13 @@ __pyx_fail:
 }
 
 /* MemviewDtypeToObject */
-    static CYTHON_INLINE PyObject *__pyx_memview_get_nn___pyx_t_5numpy_float_t(const char *itemp) {
-    return (PyObject *) PyFloat_FromDouble(*(__pyx_t_5numpy_float_t *) itemp);
-}
-static CYTHON_INLINE int __pyx_memview_set_nn___pyx_t_5numpy_float_t(const char *itemp, PyObject *obj) {
-    __pyx_t_5numpy_float_t value = __pyx_PyFloat_AsDouble(obj);
-    if ((value == ((npy_double)-1)) && PyErr_Occurred())
-        return 0;
-    *(__pyx_t_5numpy_float_t *) itemp = value;
-    return 1;
+    static CYTHON_INLINE PyObject *__pyx_memview_get_nn___pyx_t_5numpy_float_t__const__(const char *itemp) {
+    return (PyObject *) PyFloat_FromDouble(*(__pyx_t_5numpy_float_t const  *) itemp);
 }
 
 /* MemviewDtypeToObject */
-    static CYTHON_INLINE PyObject *__pyx_memview_get_nn_npy_intp(const char *itemp) {
-    return (PyObject *) __Pyx_PyInt_From_Py_intptr_t(*(npy_intp *) itemp);
-}
-static CYTHON_INLINE int __pyx_memview_set_nn_npy_intp(const char *itemp, PyObject *obj) {
-    npy_intp value = __Pyx_PyInt_As_Py_intptr_t(obj);
-    if ((value == ((npy_intp)-1)) && PyErr_Occurred())
-        return 0;
-    *(npy_intp *) itemp = value;
-    return 1;
+    static CYTHON_INLINE PyObject *__pyx_memview_get_nn_npy_intp__const__(const char *itemp) {
+    return (PyObject *) __Pyx_PyInt_From_Py_intptr_t(*(npy_intp const  *) itemp);
 }
 
 /* MemviewDtypeToObject */
@@ -35876,18 +35870,30 @@ __pyx_fail:
     return result;
 }
 
+/* MemviewDtypeToObject */
+    static CYTHON_INLINE PyObject *__pyx_memview_get_nn_npy_intp(const char *itemp) {
+    return (PyObject *) __Pyx_PyInt_From_Py_intptr_t(*(npy_intp *) itemp);
+}
+static CYTHON_INLINE int __pyx_memview_set_nn_npy_intp(const char *itemp, PyObject *obj) {
+    npy_intp value = __Pyx_PyInt_As_Py_intptr_t(obj);
+    if ((value == ((npy_intp)-1)) && PyErr_Occurred())
+        return 0;
+    *(npy_intp *) itemp = value;
+    return 1;
+}
+
 /* ObjectToMemviewSlice */
-    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_object(PyObject *obj, int writable_flag) {
+    static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_object(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
-    int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
+    int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_CONTIG) };
     int retcode;
     if (obj == Py_None) {
         result.memview = (struct __pyx_memoryview_obj *) Py_None;
         return result;
     }
-    retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
-                                                 PyBUF_RECORDS_RO | writable_flag, 1,
+    retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, __Pyx_IS_C_CONTIG,
+                                                 (PyBUF_C_CONTIGUOUS | PyBUF_FORMAT) | writable_flag, 1,
                                                  &__Pyx_TypeInfo_object, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
@@ -35910,6 +35916,11 @@ static int __pyx_memview_set_object(const char *itemp, PyObject *obj) {
     Py_DECREF(*(PyObject **) itemp);
     *(PyObject **) itemp = obj;
     return 1;
+}
+
+/* MemviewDtypeToObject */
+    static CYTHON_INLINE PyObject *__pyx_memview_get_nn___pyx_t_5numpy_int8_t__const__(const char *itemp) {
+    return (PyObject *) __Pyx_PyInt_From_npy_int8(*(__pyx_t_5numpy_int8_t const  *) itemp);
 }
 
 /* Declarations */

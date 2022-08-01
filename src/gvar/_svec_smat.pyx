@@ -92,7 +92,7 @@ cdef class svec:
             ans[i] = self.v[i].v
         return ans    
 
-    cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self,INTP_TYPE msize=0):
+    cpdef numpy.ndarray[numpy.float_t,ndim=1] toarray(self, INTP_TYPE msize=0):
         """ Create numpy.array version of self, padded with zeros to length
         msize if msize is not None and larger than the actual size.
         """
@@ -106,7 +106,7 @@ cdef class svec:
             ans[self.v[i].i] = self.v[i].v
         return ans
 
-    cpdef _assign(self,numpy.float_t[:] v, INTP_TYPE[:] idx):
+    cpdef _assign(self, const numpy.float_t[:] v, const INTP_TYPE[:] idx):
         """ Assign v and idx to self.v[i].v and self.v[i].i.
 
         Assumes that len(v)==len(idx)==self.size and idx sorted
@@ -316,7 +316,7 @@ cdef class smat:
     
     cpdef _add_memory(smat self):
         cdef object[:] oldrow = self.row
-        cdef INTP_TYPE[:] oldblock = self.block 
+        cdef INTP_TYPE[::1] oldblock = self.block 
         cdef INTP_TYPE i
         self.row = numpy.empty(2 * self.nrow_max, object)
         self.block = numpy.empty(2 * self.nrow_max, numpy.intp)
@@ -324,9 +324,9 @@ cdef class smat:
             self.row[i] = oldrow[i]
             self.block[i] = oldblock[i]
         self.nrow_max = 2 * self.nrow_max
-        # print('added memory')
+        # print('**** added memory')
 
-    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, numpy.float_t[:] d):
+    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag(self, const numpy.float_t[:] d):
         """ Add d[i] along diagonal. """
         cdef INTP_TYPE i, nr
         cdef numpy.ndarray[numpy.float_t, ndim=1] v
@@ -351,7 +351,7 @@ cdef class smat:
             self.nrow += 1
         return vrange
         
-    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, numpy.float_t[:, :] m):
+    cpdef numpy.ndarray[INTP_TYPE,ndim=1] append_diag_m(self, const numpy.float_t[:, :] m):
         cdef INTP_TYPE i, j, nr, nm, n_nonzero
         cdef numpy.ndarray[numpy.float_t, ndim=1] v
         cdef numpy.ndarray[INTP_TYPE, ndim=1] idx,vrange
@@ -382,7 +382,7 @@ cdef class smat:
         self.next_block += 1
         return vrange
 
-    cpdef add_offdiag_m(self, numpy.npy_intp[:] xrow, numpy.npy_intp[:] yrow, numpy.float_t[:, :] xym):
+    cpdef add_offdiag_m(self, const numpy.npy_intp[:] xrow, const numpy.npy_intp[:] yrow, const numpy.float_t[:, :] xym):
         cdef INTP_TYPE i, j, k
         cdef svec x, y, newx, newy
         try:
@@ -467,7 +467,7 @@ cdef class smat:
             ans.v[i].i = idx[i]
         return ans
 
-    cpdef svec masked_dot(self, svec vv, numpy.int8_t[:] imask):
+    cpdef svec masked_dot(self, svec vv, const numpy.int8_t[:] imask):
         """ Compute masked dot product self|vv>.
 
         imask indicates which components to compute and keep in final result;

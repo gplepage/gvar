@@ -635,6 +635,8 @@ class BufferDict(collections_MMapping):
         Returns:
             :class:`gvar.GVar` object corresponding to a uniform distribution.
         """
+        if not isinstance(fname, str):
+            raise ValueError('fname must be a string')
         if not hasattr(BufferDict.uniform, 'invfcn'):
             BufferDict.uniform.invfcn = {}
         if fname in BufferDict.uniform.invfcn:
