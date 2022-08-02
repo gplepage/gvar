@@ -4,8 +4,9 @@ Version 11.10.1 2022-08-01
   a read-only covariance matrix cov.
 
 - Fixes a bug in BufferDict.uniform which allowed 
-  incorrect arguments to cripple BufferDict.
-  
+  incorrect arguments to cripple BufferDict. The 
+  incorrect arguments now raise exceptions.
+
 Version 11.10 2022-05-12
 =========================
 Adds the possibility of phasing the construction of a set 

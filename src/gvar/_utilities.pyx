@@ -2902,33 +2902,40 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
     Additional information is stored in ``gmod``:
 
     .. attribute:: gmod.correction
+        :noindex:
 
         Array or dictionary containing the SVD corrections added to ``g``
         to create ``gmod``: ``gmod = g + gmod.correction``.
 
     .. attribute:: gmod.eps
+        :noindex:
 
         ``eps`` used to create ``gmod`` if set (otherwise ``None``).
 
     .. attribute:: gmod.svdcut
+        :noindex:
 
         ``svdcut`` used to create ``gmod`` if set (otherwise ``None``).
 
     .. attribute:: gmod.dof
+        :noindex:
 
         Number of degrees of freedom in ``gmod``.
 
     .. attribute:: gmod.nmod
+        :noindex:
 
         Number of members of ``gmod`` modified by regulation. 
 
     .. attribute:: gmod.nblocks
+        :noindex:
 
         A dictionary where ``gmod.nblocks[s]`` contains the number of
         block-diagonal ``s``-by-``s`` sub-matrices in the correlation
         matrix. Useful for debugging.
 
     .. attribute:: gmod.logdet
+        :noindex:
 
         Logarithm of the determinant of the covariance matrix after ``eps``
         regulation is applied.
@@ -3150,38 +3157,45 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     Data from the SVD analysis is stored in ``gmod``:
 
     .. attribute:: gmod.svdcut
+        :noindex:
 
         SVD cut used to create ``gmod``.
 
     .. attribute:: gmod.dof
+        :noindex:
 
         Number of independent degrees of freedom left after the
         SVD cut. This is the same as the number initially unless
         ``svdcut < 0`` in which case it may be smaller.
 
     .. attribute:: gmod.nmod
+        :noindex:
 
         Number of modes whose eignevalue was modified by the
         SVD cut.
 
     .. attribute:: gmod.nblocks
+        :noindex:
 
         A dictionary where ``gmod.nblocks[s]`` contains the number of
         block-diagonal ``s``-by-``s`` sub-matrices in the correlation
         matrix.
 
     .. attribute:: gmod.eigen_range
+        :noindex:
 
         Ratio of the smallest to largest eigenvalue before SVD cuts are
         applied (but after rescaling).
 
     .. attribute:: gmod.logdet
+        :noindex:
 
         Logarithm of the determinant of the covariance matrix after SVD
         cuts are applied (excluding any omitted modes when
         ``svdcut < 0`` and any diagonal zero modes).
 
     .. attribute:: gmod.correction
+        :noindex:
 
         Array or dictionary containing the SVD corrections added to ``g``
         to create ``gmod``: ``gmod = g + gmod.correction``.

@@ -741,6 +741,7 @@ class GVarFactory:
     Each of the following creates new |GVar|\s:
 
     .. function:: gvar.gvar(x, xsdev)
+        :noindex:
 
         Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.
         Returns an array of |GVar|\s if ``x`` and ``xsdev`` are arrays
@@ -750,6 +751,7 @@ class GVarFactory:
         the same keys and layout as ``x``.
 
     .. function:: gvar.gvar(x, xcov)
+        :noindex:
 
         Returns an array of |GVar|\s with means given by array ``x`` and a
         covariance matrix given by array ``xcov``, where ``xcov.shape =
@@ -767,6 +769,7 @@ class GVarFactory:
         dictionary of |GVar|\s.
 
     .. function:: gvar.gvar(x, xcov, verify=True)
+        :noindex:
 
         Same as ``gvar.gvar(x, xcov)`` above but checks that the covariance 
         matrix is symmetric and positive definite (which covariance matrices 
@@ -775,6 +778,7 @@ class GVarFactory:
         will result from specifying an improper covariance matrix.
         
     .. function:: gvar.gvar(x, xcov, fast=True)
+        :noindex:
 
         Normally ``gvar.gvar(x, xcov)`` tries to break the covariance matrix
         into disjoint diagonal blocks, if there are any. For example, ::
@@ -791,20 +795,24 @@ class GVarFactory:
         the difference is about efficiency.
         
     .. function:: gvar.gvar((x, xsdev))
+        :noindex:
 
         Returns a |GVar| with mean ``x`` and standard deviation ``xsdev``.
 
     .. function:: gvar.gvar(xstr)
+        :noindex:
 
         Returns a |GVar| corresponding to string ``xstr`` which is
         either of the form ``"xmean +- xsdev"`` or ``"x(xerr)"`` (see
         :meth:`GVar.fmt`).
 
     .. function:: gvar.gvar(xgvar)
+        :noindex:
 
         Returns |GVar| ``xgvar`` unchanged.
 
     .. function:: gvar.gvar(xdict)
+        :noindex:
 
         Returns a dictionary (:class:`BufferDict`) ``b`` where
         ``b[k] = gvar.gvar(xdict[k])`` for every key in dictionary ``xdict``.
@@ -812,6 +820,7 @@ class GVarFactory:
         |GVar|\s (see above), or arrays of these.
 
     .. function:: gvar.gvar(xarray)
+        :noindex:
 
         Returns an array ``a`` having the same shape as ``xarray`` where
         every element ``a[i...] = gvar.gvar(xarray[i...])``. The values in
@@ -819,6 +828,7 @@ class GVarFactory:
         above).
 
     .. function:: gvar.gvar(ymean, ycov, x, xycov)
+        :noindex:
 
         Returns a 1-d array of |GVar|\s ``y[i]`` constructed from the 1-d array 
         of mean values ``ymean`` and the 2-d covariance matrix ``ycov``. The 

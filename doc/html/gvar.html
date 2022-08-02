@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.10 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.10.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.10.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>  
@@ -131,8 +131,8 @@ manipulating gaussian random variables, including:</p>
 <p><code class="docutils literal notranslate"><span class="pre">gvar.gvar</span></code> is an object of type <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVarFactory</span></code>.
 Each of the following creates new <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s:</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="gvar.gvar.gvar">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsdev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.gvar.gvar" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsdev</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> with mean <code class="docutils literal notranslate"><span class="pre">x</span></code> and standard deviation <code class="docutils literal notranslate"><span class="pre">xsdev</span></code>.
 Returns an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s if <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">xsdev</span></code> are arrays
 with the same shape; the shape of the result is the same as the
@@ -142,8 +142,8 @@ the same keys and layout as <code class="docutils literal notranslate"><span cla
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcov</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcov</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s with means given by array <code class="docutils literal notranslate"><span class="pre">x</span></code> and a
 covariance matrix given by array <code class="docutils literal notranslate"><span class="pre">xcov</span></code>, where <code class="docutils literal notranslate"><span class="pre">xcov.shape</span> <span class="pre">=</span>
 <span class="pre">2*x.shape</span></code>; the result has the same shape as <code class="docutils literal notranslate"><span class="pre">x</span></code>. Returns a
@@ -161,8 +161,8 @@ dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar">
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Same as <code class="docutils literal notranslate"><span class="pre">gvar.gvar(x,</span> <span class="pre">xcov)</span></code> above but checks that the covariance
 matrix is symmetric and positive definite (which covariance matrices
 should be). This check is expensive for large matrices and so is
@@ -171,8 +171,8 @@ will result from specifying an improper covariance matrix.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Normally <code class="docutils literal notranslate"><span class="pre">gvar.gvar(x,</span> <span class="pre">xcov)</span></code> tries to break the covariance matrix
 into disjoint diagonal blocks, if there are any. For example,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xcov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
@@ -189,28 +189,28 @@ the difference is about efficiency.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">(x</span></em>, <em class="sig-param"><span class="pre">xsdev)</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">(x</span></em>, <em class="sig-param"><span class="pre">xsdev)</span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> with mean <code class="docutils literal notranslate"><span class="pre">x</span></code> and standard deviation <code class="docutils literal notranslate"><span class="pre">xsdev</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xstr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xstr</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> corresponding to string <code class="docutils literal notranslate"><span class="pre">xstr</span></code> which is
 either of the form <code class="docutils literal notranslate"><span class="pre">&quot;xmean</span> <span class="pre">+-</span> <span class="pre">xsdev&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;x(xerr)&quot;</span></code> (see
 <a class="reference internal" href="#gvar.GVar.fmt" title="gvar.GVar.fmt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">GVar.fmt()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xgvar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xgvar</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">xgvar</span></code> unchanged.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xdict</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a dictionary (<a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">BufferDict</span></code></a>) <code class="docutils literal notranslate"><span class="pre">b</span></code> where
 <code class="docutils literal notranslate"><span class="pre">b[k]</span> <span class="pre">=</span> <span class="pre">gvar.gvar(xdict[k])</span></code> for every key in dictionary <code class="docutils literal notranslate"><span class="pre">xdict</span></code>.
 The values in <code class="docutils literal notranslate"><span class="pre">xdict</span></code>, therefore, can be strings, tuples or
@@ -218,8 +218,8 @@ The values in <code class="docutils literal notranslate"><span class="pre">xdict
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xarray</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns an array <code class="docutils literal notranslate"><span class="pre">a</span></code> having the same shape as <code class="docutils literal notranslate"><span class="pre">xarray</span></code> where
 every element <code class="docutils literal notranslate"><span class="pre">a[i...]</span> <span class="pre">=</span> <span class="pre">gvar.gvar(xarray[i...])</span></code>. The values in
 <code class="docutils literal notranslate"><span class="pre">xarray</span></code>, therefore, can be strings, tuples or <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (see
@@ -227,8 +227,8 @@ above).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ymean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ycov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xycov</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ymean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ycov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xycov</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a 1-d array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal notranslate"><span class="pre">y[i]</span></code> constructed from the 1-d array
 of mean values <code class="docutils literal notranslate"><span class="pre">ymean</span></code> and the 2-d covariance matrix <code class="docutils literal notranslate"><span class="pre">ycov</span></code>. The
 <code class="docutils literal notranslate"><span class="pre">y[i]</span></code> are correlated with the primary <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in 1-d array <code class="docutils literal notranslate"><span class="pre">x</span></code>.
@@ -1678,47 +1678,47 @@ covariance matrix or its inverse (see above).</p>
 </dl>
 <p>Additional information is stored in <code class="docutils literal notranslate"><span class="pre">gmod</span></code>:</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.correction">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">correction</span></span><a class="headerlink" href="#gvar.gmod.correction" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">correction</span></span></dt>
 <dd><p>Array or dictionary containing the SVD corrections added to <code class="docutils literal notranslate"><span class="pre">g</span></code>
 to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code>: <code class="docutils literal notranslate"><span class="pre">gmod</span> <span class="pre">=</span> <span class="pre">g</span> <span class="pre">+</span> <span class="pre">gmod.correction</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.eps">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">eps</span></span><a class="headerlink" href="#gvar.gmod.eps" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">eps</span></span></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">eps</span></code> used to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code> if set (otherwise <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.svdcut">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">svdcut</span></span><a class="headerlink" href="#gvar.gmod.svdcut" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">svdcut</span></span></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">svdcut</span></code> used to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code> if set (otherwise <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.dof">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">dof</span></span><a class="headerlink" href="#gvar.gmod.dof" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">dof</span></span></dt>
 <dd><p>Number of degrees of freedom in <code class="docutils literal notranslate"><span class="pre">gmod</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.nmod">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nmod</span></span><a class="headerlink" href="#gvar.gmod.nmod" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nmod</span></span></dt>
 <dd><p>Number of members of <code class="docutils literal notranslate"><span class="pre">gmod</span></code> modified by regulation.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.nblocks">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nblocks</span></span><a class="headerlink" href="#gvar.gmod.nblocks" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nblocks</span></span></dt>
 <dd><p>A dictionary where <code class="docutils literal notranslate"><span class="pre">gmod.nblocks[s]</span></code> contains the number of
 block-diagonal <code class="docutils literal notranslate"><span class="pre">s</span></code>-by-<code class="docutils literal notranslate"><span class="pre">s</span></code> sub-matrices in the correlation
 matrix. Useful for debugging.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.logdet">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">logdet</span></span><a class="headerlink" href="#gvar.gmod.logdet" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">logdet</span></span></dt>
 <dd><p>Logarithm of the determinant of the covariance matrix after <code class="docutils literal notranslate"><span class="pre">eps</span></code>
 regulation is applied.</p>
 </dd></dl>
@@ -1831,52 +1831,52 @@ covariance matrix or its inverse.</p>
 </dl>
 <p>Data from the SVD analysis is stored in <code class="docutils literal notranslate"><span class="pre">gmod</span></code>:</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">svdcut</span></span><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">svdcut</span></span></dt>
 <dd><p>SVD cut used to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id10">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">dof</span></span><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">dof</span></span></dt>
 <dd><p>Number of independent degrees of freedom left after the
 SVD cut. This is the same as the number initially unless
 <code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> in which case it may be smaller.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id11">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nmod</span></span><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nmod</span></span></dt>
 <dd><p>Number of modes whose eignevalue was modified by the
 SVD cut.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id12">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nblocks</span></span><a class="headerlink" href="#id12" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">nblocks</span></span></dt>
 <dd><p>A dictionary where <code class="docutils literal notranslate"><span class="pre">gmod.nblocks[s]</span></code> contains the number of
 block-diagonal <code class="docutils literal notranslate"><span class="pre">s</span></code>-by-<code class="docutils literal notranslate"><span class="pre">s</span></code> sub-matrices in the correlation
 matrix.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.gmod.eigen_range">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">eigen_range</span></span><a class="headerlink" href="#gvar.gmod.eigen_range" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">eigen_range</span></span></dt>
 <dd><p>Ratio of the smallest to largest eigenvalue before SVD cuts are
 applied (but after rescaling).</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id13">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">logdet</span></span><a class="headerlink" href="#id13" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">logdet</span></span></dt>
 <dd><p>Logarithm of the determinant of the covariance matrix after SVD
 cuts are applied (excluding any omitted modes when
 <code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> and any diagonal zero modes).</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id14">
-<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">correction</span></span><a class="headerlink" href="#id14" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">gmod.</span></span><span class="sig-name descname"><span class="pre">correction</span></span></dt>
 <dd><p>Array or dictionary containing the SVD corrections added to <code class="docutils literal notranslate"><span class="pre">g</span></code>
 to create <code class="docutils literal notranslate"><span class="pre">gmod</span></code>: <code class="docutils literal notranslate"><span class="pre">gmod</span> <span class="pre">=</span> <span class="pre">g</span> <span class="pre">+</span> <span class="pre">gmod.correction</span></code>.</p>
 </dd></dl>
@@ -2917,7 +2917,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.10.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>
