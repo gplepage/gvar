@@ -2,7 +2,7 @@
 test-bufferdict.py
 
 """
-# Copyright (c) 2012-2020 G. Peter Lepage.
+# Copyright (c) 2012-2022 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@ test-bufferdict.py
 
 import unittest
 import copy
-import pickle as pckl
+import pickle
 import numpy as np
 import gvar as gv
 from gvar import BufferDict, add_parameter_parentheses, trim_redundant_keys
@@ -291,8 +291,8 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
 
     def test_pickle(self):
         global b
-        sb = pckl.dumps(b)
-        c = pckl.loads(sb)
+        sb = pickle.dumps(b)
+        c = pickle.loads(sb)
         for k in b:
             self.assert_arraysequal(b[k],c[k])
 
@@ -302,14 +302,19 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         b['b'] = [gv.gvar(3,4), gv.gvar(5,6)] 
         b['b'] += gv.gvar(1, 1)
         b['c'] = gv.gvar(10,1)
-        sb = pckl.dumps(b)
-        c = pckl.loads(sb)
+        b['fd(d)'] = gv.BufferDict.uniform('fd', 0., 1.)
+        sb = pickle.dumps(b)
+        BufferDict.del_distribution('fd')
+        with self.assertRaises(KeyError):
+            print(b['d'])
+        c = pickle.loads(sb)  # restores fd
         self.assertEqual(str(b), str(c))
         self.assertEqual(str(gv.evalcov(b)), str(gv.evalcov(c)))
+        self.assertEqual(str(b['d']), str(c['d']))
         # no uncorrelated bits
         b['a'] += b['c']
-        sb = pckl.dumps(b)
-        c = pckl.loads(sb)
+        sb = pickle.dumps(b)
+        c = pickle.loads(sb)
         self.assertEqual(str(b), str(c))
         self.assertEqual(str(gv.evalcov(b)), str(gv.evalcov(c)))
 

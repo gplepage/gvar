@@ -124,7 +124,7 @@ from ._gvarcore import *
 gvar = GVarFactory()            # order matters for this statement
 
 from ._svec_smat import *
-from ._bufferdict import BufferDict, asbufferdict
+from ._bufferdict import BufferDict, asbufferdict, _BDict_UDistribution
 from ._bufferdict import has_dictkey, dictkey, get_dictkeys
 from ._bufferdict import trim_redundant_keys    # legacy
 from ._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy

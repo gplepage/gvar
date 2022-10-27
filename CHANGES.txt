@@ -1,3 +1,17 @@
+Version 11.10.2 2022-10-27
+==========================
+- Fixed bug causing gvar.var to crash under certain circumstances 
+  when one or more arguments are not a GVars.
+
+- Made it impossible to pickle GVars with pickle.dump/load (pickling leads
+  to serious problems). Use gvar.load/dump instead.
+
+- Fixed bug in pickling of BufferDicts (didn't capture distributions properly).
+
+- Forces Cython to regenerate *.c files when using Python 3.11 or later (deals
+  with incompatibilities introduced by 3.11).
+
+
 Version 11.10.1 2022-08-01
 ===========================
 - Fixes bug that prevented gvar.gvar(x, cov) from using 

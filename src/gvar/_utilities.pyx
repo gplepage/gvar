@@ -825,7 +825,7 @@ def var(g):
     cdef numpy.ndarray[numpy.int8_t, ndim=1] np_imask
     cdef numpy.ndarray[numpy.float_t, ndim=2] mcov, mcov_gd
     cdef numpy.ndarray[numpy.float_t, ndim=1] varlist
-    cdef numpy.int8_t is_dense, ib
+    cdef numpy.int8_t is_dense, ib, only_gvars
     cdef GVar ga
     cdef svec da
     cdef smat cov
@@ -858,6 +858,7 @@ def var(g):
     ans = numpy.zeros(ng, dtype=float)
     gdlist = numpy.empty(ng, object)
     cov = None
+    only_gvars = True
     for a in range(ng):
         if isinstance(g[a], GVar):
             ga = g[a]
@@ -865,10 +866,11 @@ def var(g):
             if cov is None:
                 cov = ga.cov
         else:
+            only_gvars = False
             gdlist[a] = None
     nc = cov.nrow
 
-    if ng > _gvar._CONFIG['var']:
+    if ng > _gvar._CONFIG['var'] and only_gvars:
         # only efficient for larger systems
         # create a mask indentifying relevant primary GVars 
         imask = numpy.zeros(nc, numpy.int8)

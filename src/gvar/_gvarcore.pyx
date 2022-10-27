@@ -68,6 +68,9 @@ cdef class GVar:
     cpdef GVar clone(self):
         return GVar(self.v,self.d,self.cov)
 
+    def __getstate__(self):
+        raise NotImplementedError('use gvar.dump/load in place of pickle.load/dump with GVars')
+
     def __deepcopy__(self, *args):
         return self
 

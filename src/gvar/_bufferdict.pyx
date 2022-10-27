@@ -1,6 +1,6 @@
 # cython: language_level=3str, binding=True
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-20 G. Peter Lepage.
+# Copyright (c) 2012-22 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -163,18 +163,28 @@ class BufferDict(collections_MMapping):
         return BufferDict(self, buf=copy.deepcopy(self.buf, memo))
 
     def __getstate__(self):
-        """ Capture state for pickling when elements are GVars. """
-        return _gvar.dumps(collections.OrderedDict(self))
+        """ Capture state for pickling. """
+        return (_gvar.dumps(collections.OrderedDict(self)), BufferDict.invfcn)
 
     def __setstate__(self, state):
-        """ Restore state when unpickling when elements are GVars. """
+        """ Restore state when unpickling. """
         if not hasattr(state, 'keys'):
-            tmp = _gvar.BufferDict(_gvar.loads(state))
+            if isinstance(state, tuple):
+                contents, invfcn = state
+            else:
+                # legacy code
+                contents = state 
+                invfcn = {}
+            tmp = _gvar.BufferDict(_gvar.loads(contents))
             self._odict = tmp._odict 
             self._buf = tmp._buf 
             self._extension = {}
             self.shape = None
+            for k in invfcn:
+                if k not in self.invfcn:
+                    self.invfcn[k] = invfcn[k]
             return
+        # even older legacy code
         layout = state['layout']
         buf = state['buf']
         if isinstance(buf, tuple):
@@ -600,8 +610,6 @@ class BufferDict(collections_MMapping):
             del BufferDict.invfcn[name]
         else:
             raise ValueError('{} is not a distribution'.format(name))
-        if hasattr(BufferDict.uniform, 'invfcn') and name in BufferDict.uniform.invfcn:
-            del BufferDict.uniform.invfcn[name]
         BufferDict._ver_g += 1
 
     @staticmethod
@@ -637,21 +645,29 @@ class BufferDict(collections_MMapping):
         """
         if not isinstance(fname, str):
             raise ValueError('fname must be a string')
-        if not hasattr(BufferDict.uniform, 'invfcn'):
-            BufferDict.uniform.invfcn = {}
-        if fname in BufferDict.uniform.invfcn:
-            if sorted(BufferDict.uniform.invfcn[fname]) != sorted((umin, umax)):
+        if fname in BufferDict.invfcn:
+            invfcn = BufferDict.invfcn[fname]
+            if not isinstance(invfcn, _BDict_UDistribution):
+                raise ValueError("distribution {} already defined".format(fname))
+            elif sorted((invfcn.umin, invfcn.umax)) != sorted((umin, umax)):
                 raise ValueError("distribution {} already defined".format(fname))
         else:
-            BufferDict.uniform.invfcn[fname] = (umin, umax)
-            root2 = numpy.sqrt(2)
-            BufferDict.add_distribution(fname, lambda x : umin + (_gvar.erf(x / root2) + 1) * (umax - umin) / 2.)
+            BufferDict.add_distribution(fname, _BDict_UDistribution(umin, umax))
         if shape == ():
             return _gvar.gvar(0, 1)
         else:
             ans = _gvar.gvar(int(numpy.prod(shape)) * [(0, 1.)]) 
             ans.shape = shape 
             return ans
+
+class _BDict_UDistribution(object):
+    def __init__(self, umin, umax):
+        self.umin = umin 
+        self.umax = umax
+        self.umax_umin_2 = (umax - umin) / 2.
+        self.root2 = numpy.sqrt(2)
+    def __call__(self, x):
+        return self.umin + (_gvar.erf(x / self.root2) + 1) * self.umax_umin_2
 
 BufferDict._ver_g = 0    # version of distribution collection (for cache synch)
 

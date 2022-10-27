@@ -2475,7 +2475,7 @@ class CC:
     def _remove_gvars(self, gvlist):
         c = copy.copy(self)
         c.z = None
-        c._dict__ = gv.remove_gvars(c.__dict__, gvlist)
+        c.__dict__ = gv.remove_gvars(c.__dict__, gvlist)
         return c
     def _distribute_gvars(self, gvlist):
         self.__dict__ = gv.distribute_gvars(self.__dict__, gvlist)
