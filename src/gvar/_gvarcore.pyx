@@ -45,8 +45,8 @@ import numpy
 from numpy import sin, cos, tan, exp, log, sqrt, fabs
 from numpy import sinh, cosh, tanh, arcsin, arccos, arctan, arctan2
 from numpy import arcsinh, arccosh, arctanh, square
-# from re import compile as _compile
 import copy
+import warnings
 
 import gvar.powerseries
 _ARRAY_TYPES = [numpy.ndarray, gvar.powerseries.PowerSeries]
@@ -69,7 +69,12 @@ cdef class GVar:
         return GVar(self.v,self.d,self.cov)
 
     def __getstate__(self):
-        raise NotImplementedError('use gvar.dump/load in place of pickle.load/dump with GVars')
+        warnings.warn('Pickling GVars with pickle.dump/load loses correlations; use gvar.dump/load to preserve them.')
+        return (self.mean, self.sdev)
+
+    def __setstate__(self, state):
+        from gvar import gvar
+        self.v, self.d, self.cov = gvar(*state).internaldata
 
     def __deepcopy__(self, *args):
         return self

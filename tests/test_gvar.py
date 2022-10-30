@@ -1921,10 +1921,16 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         g['f'] = ['str', g['b'][1][0] * gv.gvar('5(2)')]
         d = _test(g, outputfile='xxx', test_cov=False)
 
-        # dumping classes, without and with special methods
-        g['C'] = C(gv.gvar(2 * ['3(4)']) * gv.gvar('10(1)'), 'str', (1,2,gv.gvar('2(1)')))
+        # dumping classes, without and with special methods and/or __slots__
+        fac = gvar('10(1)')
+        g['C'] = C(gv.gvar(2 * ['3(4)']) * fac, 'str', (1,2, fac * gv.gvar('2(1)')))
         d = _test(g, test_cov=False)
         self.assertEqual(str(gv.evalcov(d['C'].x)), str(gv.evalcov(g['C'].x)))
+        self.assertAlmostEqual(corr(d['C'].x[0], d['C'].z[2]), corr(g['C'].x[0], g['C'].z[2]))        
+        g['CS'] = CS(gv.gvar(2 * ['3(4)']) * fac, 'str', (1,2,fac * gv.gvar('2(1)')))
+        d = _test(g, test_cov=False)
+        self.assertEqual(str(gv.evalcov(d['CS'].x)), str(gv.evalcov(g['CS'].x)))
+        self.assertAlmostEqual(corr(d['CS'].x[0], d['C'].z[2]), corr(g['CS'].x[0], g['C'].z[2]))        
         g['C'] = CC(gv.gvar(2 * ['3(4)']) * gv.gvar('10(1)'), 'str', 12.)
         d = gv.loads(gv.dumps(g))
         self.assertEqual(d['C'].z, None)
@@ -2453,7 +2459,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         np.testing.assert_allclose(invcovr[1:4,1:4], np.linalg.inv(cov))
         np.testing.assert_allclose(invcovr[4:7,4:7], 0.5 * np.linalg.inv(cov))
 
-class C:
+class C(object):
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
@@ -2463,7 +2469,18 @@ class C:
     def __repr__(self):
         return str(self.__dict__)
 
-class CC:
+class CS(object):
+    __slots__ = ('x', 'y', 'z')
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+    def __str__(self):
+        return str((self.x, self.y, self.z))
+    def __repr__(self):
+        return str((self.x, self.y, self.z))
+
+class CC(object):
     def __init__(self, x, y, z):
         self.x = x
         self.y = y

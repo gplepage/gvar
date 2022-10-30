@@ -699,6 +699,11 @@ def evalcov_blocks(g, compress=False):
             [(numpy.array([]), numpy.array([]))] if compress else 
             [(numpy.array([]), numpy.reshape([], (0,0)))] 
             )
+    elif nvar == 1:
+        if compress:
+            return [(numpy.array([0]), numpy.array([varlist[0].sdev]))]
+        else:
+            return [(numpy.array([0]), numpy.array([[varlist[0].var]]))]
     cov = varlist[0].cov
     ivlist_id = {} 
     ivlist_idset = {}
@@ -1169,7 +1174,14 @@ def distribute_gvars(g, gvlist):
             return g
     elif type(g) == numpy.ndarray:
         return numpy.array([distribute_gvars(x, gvlist) for x in g])
-    elif hasattr(g, '__dict__'):
+    elif hasattr(g, '__slots__'):
+        try:
+            for k in g.__slots__:
+                setattr(g, k, _gvar.distribute_gvars(getattr(g, k), gvlist))
+            return g
+        except:
+            return g
+    elif hasattr(g, '__dict__') and not hasattr(g, '__slots__'):
         try:
             g.__dict__ = _gvar.distribute_gvars(g.__dict__, gvlist)
             return g
@@ -1194,7 +1206,7 @@ def remove_gvars(g, gvlist):
     equivalent to adding the following method to the object's class::
 
         def _remove_gvars(self, gvlist):
-            tmp = copy.copy(g)
+            tmp = copy.copy(self)
             tmp.__dict__ = gvar.remove_gvars(tmp.__dict__, gvlist)
             return tmp 
 
@@ -1205,6 +1217,8 @@ def remove_gvars(g, gvlist):
 
         def _distribute_gvars(self, gvlist):
             self.__dict__ = gvar.distribute_gvars(self.__dict__, gvlist)
+
+    The defaults are somewhat different when the object has ``__slots__``.
 
     Args:
         g: Object containing |GVar|\s.
@@ -1232,7 +1246,15 @@ def remove_gvars(g, gvlist):
             return g
     elif type(g) == numpy.ndarray:
         return numpy.array([remove_gvars(x, gvlist) for x in g])
-    elif hasattr(g, '__dict__'):
+    elif hasattr(g, '__slots__'):
+        try:
+            tmp = copy.copy(g)
+            for k in tmp.__slots__:
+                setattr(tmp, k, _gvar.remove_gvars(getattr(tmp, k), gvlist))
+            return tmp
+        except:
+            return g
+    elif hasattr(g, '__dict__') and not hasattr(g, '__slots__'):
         try:
             tmp = copy.copy(g)
             tmp.__dict__ = _gvar.remove_gvars(tmp.__dict__, gvlist)
@@ -1243,7 +1265,7 @@ def remove_gvars(g, gvlist):
         return g
 
 def collect_gvars(g, gvlist):
-    " Collect |GVar|\s in ``gvlist`` from container object g. "
+    " Collect |GVar|\s into ``gvlist`` from container object g. "
     if isinstance(g, _gvar.GVar):
         gvlist.append(g)
     elif hasattr(g, 'keys'):
@@ -1254,7 +1276,13 @@ def collect_gvars(g, gvlist):
             collect_gvars(x, gvlist)
     elif hasattr(g, '_remove_gvars'):
         g._remove_gvars(gvlist)
-    elif hasattr(g, '__dict__'):
+    elif hasattr(g, '__slots__'):
+        for k in g.__slots__:
+            try:
+                collect_gvars(getattr(g, k), gvlist)
+            except:
+                pass
+    elif hasattr(g, '__dict__') and not hasattr(g, '__slots__'):
         try:
             collect_gvars(g.__dict__, gvlist)
         except:
