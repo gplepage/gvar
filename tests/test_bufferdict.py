@@ -328,6 +328,8 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         p['sqrt(d)'] = [5., 6.]
         p['erfinv(e)'] = [[33.]]
         p['f(w)'] = BufferDict.uniform('f', 2., 3.).mean
+        # check that pickle doesn't lose f(w)
+        p = pickle.loads(pickle.dumps(p))
         newp = BufferDict(p)
         for i in range(2):
             for k in p:

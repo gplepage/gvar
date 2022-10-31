@@ -1,9 +1,9 @@
-Version 11.10.2 2022-10-27
+Version 11.10.2 2022-10-31
 ==========================
-- Fixed bug causing gvar.var to crash under certain circumstances 
+- Fixes bug causing gvar.var to crash under certain circumstances 
   when one or more arguments are not a GVars.
 
-- Fixed pickling of GVars using pickle.dump/load. Added warning that 
+- Fixes pickling of GVars using pickle.dump/load. Added warning that 
   using pickle.dump/load loses the correlations between GVars.
   To preserve correlations use gvar.load/dump instead.
 

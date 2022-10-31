@@ -1218,7 +1218,7 @@ it will attempt to look inside the object via <code class="docutils literal notr
 The default treatment, when <code class="docutils literal notranslate"><span class="pre">obj._remove_gvars</span></code> is not defined, is
 equivalent to adding the following method to the object’s class:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_remove_gvars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gvlist</span><span class="p">):</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
     <span class="n">tmp</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">remove_gvars</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">gvlist</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">tmp</span>
 </pre></div>
@@ -1231,6 +1231,7 @@ equivalent to method:</p>
     <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">distribute_gvars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">gvlist</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>The defaults are somewhat different when the object has <code class="docutils literal notranslate"><span class="pre">__slots__</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

@@ -614,11 +614,11 @@ in the Gaussian approximate are listed.
 
 The exact mean of the ``f(p)`` distribution is 0.0186(1), which is somewhat
 lower than Gaussian approximation of 0.020. A more important difference is
-in the standard deviation which is 0.2072(3) for the real distribution,
+in the standard deviation which is 0.2069(3) for the real distribution,
 but less than half that size (0.094) in the Gaussian approximation. The
 real distribution is significantly broader than the Gaussian approximation
 suggests, though its mean is close. The real distribution also has
-nonzero skewness (0.28(1)) and excess kurtosis (3.11(2)), which suggest
+nonzero skewness (0.26(1)) and excess kurtosis (3.12(2)), which suggest
 that it is not well described by any Gaussian. (Skewness and excess kurtosis
 vanish for Gaussian distributions.)
 
