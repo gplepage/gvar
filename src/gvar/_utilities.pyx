@@ -1146,7 +1146,8 @@ class GVarRef:
 def distribute_gvars(g, gvlist):
     """ Distribute |GVar|\s from ``gvlist`` in structure g, replacing :class:`gvar.GVarRef`\s. 
     
-    :func:`distribute_gvars` undoes what :func:`remove_gvars` does to ``g``.
+    :func:`distribute_gvars` undoes what :func:`remove_gvars` does to ``g``. See discussion
+    of :func:`remove_gvars` for more details.
 
     Args:
         g: Object containing :class:`GVarRef`\s created by :func:`remove_gvars`.
@@ -1158,10 +1159,10 @@ def distribute_gvars(g, gvlist):
     """
     if isinstance(g, GVarRef):
         return g(gvlist)
-    elif hasattr(g, 'keys'):
-        return type(g)([(k, distribute_gvars(g[k], gvlist)) for k in g])
     elif hasattr(g, '_distribute_gvars'):
         return g._distribute_gvars(gvlist)
+    elif hasattr(g, 'keys'):
+        return type(g)([(k, distribute_gvars(g[k], gvlist)) for k in g])
     elif type(g) in [collections.deque, list]:
         return type(g)([distribute_gvars(x, gvlist) for x in g])
     elif isinstance(g, tuple):
@@ -1191,34 +1192,46 @@ def distribute_gvars(g, gvlist):
         return g
 
 def remove_gvars(g, gvlist):
-    """ Remove |GVar|\s from structure g, collecting them in ``gvlist``; replace with :class:`gvar.GVarRef`\s. 
+    """ Remove |GVar|\s from structure g, replacing them with :class:`gvar.GVarRef`\s and collecting them in ``gvlist``. 
     
-    :func:`remove_gvars` searches container object ``g`` (recursively) 
-    for |GVar|\s and replaces them with :class:`GVarRef` objects. The 
-    |GVar|\s are collected in list ``gvlist``. Object ``g`` can be a 
-    dictionary, list, etc., or nested instances of these.
-    
-    If ``g`` contains an object ``obj`` that is a not standard container, 
-    :func:`gvar.remove_gvars` will replace the object by 
-    ``obj._remove_gvars(gvlist)`` if that method exists; otherwise 
-    it will attempt to look inside the object via ``obj.__dict__``.
-    The default treatment, when ``obj._remove_gvars`` is not defined, is 
-    equivalent to adding the following method to the object's class::
+    :func:`remove_gvars` searches object ``g`` (recursively) 
+    for |GVar|\s and replaces them with :class:`GVarRef` objects. 
+    The |GVar|\s are collected in list ``gvlist``. ``g`` can 
+    be a standard container object (dictionary, list, etc.) or an 
+    object ``obj`` whose contents can be accessed through ``obj.__dict__``
+    or ``obj.__slots__``. An object that defines method ``obj._remove_gvars``
+    is replaced by ``obj._remove_gvars(gvlist)``.
+
+    The |GVar|\s are restored using ``gvar.distribute_gvars``: e.g., ::
+
+        gvlist = []
+        new_g = gvar.distribute_gvars(gvar.remove_gvars(g, gvlist), gvlist)
+
+    creates a copy ``new_g`` of ``g`` with the |GVar|\s restored 
+    (and preserving correlations between different |GVar|\s). ``gvlist``
+    contains copies of the restored |GVar|\s.
+
+    The default treatment of a class instance ``obj`` without an 
+    ``obj._remove_gvars(gvlist)`` method is equivalent to adding 
+    the following method to the object's class ::
 
         def _remove_gvars(self, gvlist):
             tmp = copy.copy(self)
             tmp.__dict__ = gvar.remove_gvars(tmp.__dict__, gvlist)
             return tmp 
 
-    A class that has method ``obj._remove_gvars(gvlist)`` should have  
-    a corresponding method ``obj._distribute_gvars(gvlist)``, for 
-    use by :func:`gvar.distribute_gvars`. The default behavior is 
-    equivalent to method::
+    assuming the class does not use ``__slots__``. A class that has 
+    method ``obj._remove_gvars(gvlist)`` should have a corresponding method 
+    ``obj._distribute_gvars(gvlist)``, for use by :func:`gvar.distribute_gvars`. 
+    The default behavior when this method is undefined is equivalent to::
 
         def _distribute_gvars(self, gvlist):
             self.__dict__ = gvar.distribute_gvars(self.__dict__, gvlist)
 
-    The defaults are somewhat different when the object has ``__slots__``.
+    There are analogous defaults for classes that uses ``__slots__``.
+
+    These routines are used by ``gvar.dump`` and ``gvar.load`` to facilitate
+    pickling of objects containing |GVar|\s.
 
     Args:
         g: Object containing |GVar|\s.
@@ -1230,10 +1243,10 @@ def remove_gvars(g, gvlist):
     """
     if isinstance(g, _gvar.GVar):
         return GVarRef(g, gvlist)
-    elif hasattr(g, 'keys'):
-        return type(g)([(k, remove_gvars(g[k], gvlist)) for k in g])
     elif hasattr(g, '_remove_gvars'):
         return g._remove_gvars(gvlist)
+    elif hasattr(g, 'keys'):
+        return type(g)([(k, remove_gvars(g[k], gvlist)) for k in g])
     elif type(g) in [collections.deque, list]:
         return type(g)([remove_gvars(x, gvlist) for x in g])
     elif isinstance(g, tuple):
