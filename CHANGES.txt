@@ -1,5 +1,7 @@
-Version 11.10.2 2022-10-31
+Version 11.11 2022-11-02
 ==========================
+Mostly bug fixes.
+
 - Fixes bug causing gvar.var to crash under certain circumstances 
   when one or more arguments are not a GVars.
 
@@ -12,7 +14,7 @@ Version 11.10.2 2022-10-31
 - Forces Cython to regenerate *.c files when using Python 3.11 or later (deals
   with incompatibilities introduced by 3.11).
 
-- gvar.load/dump provide better support for classes with __slots__.
+- gvar.load/dump add support for classes with __slots__.
 
 
 Version 11.10.1 2022-08-01
