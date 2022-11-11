@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Overview and Tutorial &#8212; gvar 11.11 documentation</title>
+    <title>Overview and Tutorial &#8212; gvar 11.11.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>  
@@ -510,12 +510,12 @@ the <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><
 </div>
 <p>Of course, <code class="docutils literal notranslate"><span class="pre">gvar.dump(g,</span> <span class="pre">'gfile.pkl')</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">=</span> <span class="pre">gvar.load('gfile.pkl')</span></code>
 are simpler and achieve the same goal.</p>
-<p>Using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> to pickle an object containing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s generates
+<p>Using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> to pickle an object containing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s usually generates
 a warning about lost correlations. This can be ignored if correlations
-are unimportant. If pickle must be used and correlations matter, <code class="docutils literal notranslate"><span class="pre">gvar.dumps/loads</span></code>
+are unimportant. If <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> must be used and correlations matter, <code class="docutils literal notranslate"><span class="pre">gvar.dumps/loads</span></code>
 can sometimes be used to make this possible. Consider, for example, a class <code class="docutils literal notranslate"><span class="pre">A</span></code> that stores
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>. We might be able to modify it so that <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> uses the
-<a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> routines: for example, the code:</p>
+<a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> routines: for example, the code</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
@@ -532,8 +532,8 @@ can sometimes be used to make this possible. Consider, for example, a class <cod
 </pre></div>
 </div>
 <p>has <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> convert the class’s dictionary into a byte stream
-using <code class="docutils literal notranslate"><span class="pre">gv.dumps(self.__dict__)</span></code>, which is reconstituted into
-a dictionary in <code class="docutils literal notranslate"><span class="pre">A.__init__</span></code>, using <code class="docutils literal notranslate"><span class="pre">gv.loads(a)</span></code>, upon unpickling.</p>
+using <code class="docutils literal notranslate"><span class="pre">gv.dumps(self.__dict__)</span></code> when pickling. This is reconstituted into
+a dictionary in <code class="docutils literal notranslate"><span class="pre">A.__init__</span></code>, using <code class="docutils literal notranslate"><span class="pre">gv.loads(a)</span></code>, upon un-pickling.</p>
 </section>
 <section id="non-gaussian-expectation-values">
 <h2>Non-Gaussian Expectation Values<a class="headerlink" href="#non-gaussian-expectation-values" title="Permalink to this headline">¶</a></h2>
@@ -919,7 +919,7 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>

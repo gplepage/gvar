@@ -499,12 +499,12 @@ the |GVar|\s are retrieved using ::
 Of course, ``gvar.dump(g, 'gfile.pkl')`` and ``g = gvar.load('gfile.pkl')`` 
 are simpler and achieve the same goal.
 
-Using :mod:`pickle` to pickle an object containing |GVar|\s generates 
+Using :mod:`pickle` to pickle an object containing |GVar|\s usually generates 
 a warning about lost correlations. This can be ignored if correlations 
-are unimportant. If pickle must be used and correlations matter, ``gvar.dumps/loads``
+are unimportant. If :mod:`pickle` must be used and correlations matter, ``gvar.dumps/loads``
 can sometimes be used to make this possible. Consider, for example, a class ``A`` that stores 
 |GVar|\s ``a`` and ``b``. We might be able to modify it so that :mod:`pickle` uses the 
-:mod:`gvar` routines: for example, the code::
+:mod:`gvar` routines: for example, the code ::
 
     class A:
         def __init__(self, a, b):
@@ -521,8 +521,8 @@ can sometimes be used to make this possible. Consider, for example, a class ``A`
         ...
 
 has :mod:`pickle` convert the class's dictionary into a byte stream 
-using ``gv.dumps(self.__dict__)``, which is reconstituted into 
-a dictionary in ``A.__init__``, using ``gv.loads(a)``, upon unpickling.
+using ``gv.dumps(self.__dict__)`` when pickling. This is reconstituted into 
+a dictionary in ``A.__init__``, using ``gv.loads(a)``, upon un-pickling.
 
 
 Non-Gaussian Expectation Values
