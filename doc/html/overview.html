@@ -476,39 +476,64 @@ is obtained by adding the <code class="docutils literal notranslate"><span class
 <span id="storing-gvars-for-later-use"></span><h2>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s for Later Use; <a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s<a class="headerlink" href="#storing-gvars-for-later-use-bufferdicts" title="Permalink to this headline">¶</a></h2>
 <p>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in a file for later use is complicated by the need to
 capture the covariances between different <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as well as their
-means. The easiest way to save an array or dictionary <code class="docutils literal notranslate"><span class="pre">g</span></code>  that contains
+means. The easiest way to save an array or dictionary or other
+object <code class="docutils literal notranslate"><span class="pre">g</span></code>  that contains
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s is to use <a class="reference internal" href="gvar.html#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a>: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gvar</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;gfile.p&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gvar</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;gfile.pkl&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>saves the data from <code class="docutils literal notranslate"><span class="pre">g</span></code> in a Python <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code>
-file named <code class="docutils literal notranslate"><span class="pre">'gfile.p'</span></code>. To reassemble the the data
+file named <code class="docutils literal notranslate"><span class="pre">'gfile.pkl'</span></code>. To reassemble the the data
 from <code class="docutils literal notranslate"><span class="pre">g</span></code> we use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;gfile.p&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;gfile.pkl&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Functions <a class="reference internal" href="gvar.html#gvar.dump" title="gvar.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dump()</span></code></a> and <a class="reference internal" href="gvar.html#gvar.load" title="gvar.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.load()</span></code></a> are similar to the
-corresponding functions in Python’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> module. Unlike
-the <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> functions, however, these can deal with <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.
-In particular they preserve information about the correlations between
+corresponding functions in Python’s <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> module but they
+preserve information about the correlations between
 different <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>. Correlations with <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that are not
 in <code class="docutils literal notranslate"><span class="pre">g</span></code> are lost, so it is important to include all <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s of
-interest in a single array or dictionary before saving them.</p>
+interest in <code class="docutils literal notranslate"><span class="pre">g</span></code> before saving them.</p>
 <p><a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s can also be pickled easily if they are stored in a
-<a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> since this data type has explicit support for pickling.
+<a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> since this data type has explicit support for pickling
+that preserves correlations.
 So if <code class="docutils literal notranslate"><span class="pre">g</span></code> is a
 <a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> containing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (and/or arrays of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s),</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;gfile.p&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;gfile.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>saves the contents of <code class="docutils literal notranslate"><span class="pre">g</span></code> to a file named <code class="docutils literal notranslate"><span class="pre">gfile.p</span></code>, and
+<p>saves the contents of <code class="docutils literal notranslate"><span class="pre">g</span></code> to a file named <code class="docutils literal notranslate"><span class="pre">gfile.pkl</span></code>, and
 the <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are retrieved using</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;gfile.p&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;gfile.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Of course, <code class="docutils literal notranslate"><span class="pre">gvar.dump(g,</span> <span class="pre">'gfile.p')</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">=</span> <span class="pre">gvar.load('gfile.p')</span></code>
+<p>Of course, <code class="docutils literal notranslate"><span class="pre">gvar.dump(g,</span> <span class="pre">'gfile.pkl')</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span> <span class="pre">=</span> <span class="pre">gvar.load('gfile.pkl')</span></code>
 are simpler and achieve the same goal.</p>
+<p>Using <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> to pickle an object containing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s generates
+a warning about lost correlations. This can be ignored if correlations
+are unimportant. If pickle must be used and correlations matter, <code class="docutils literal notranslate"><span class="pre">gvar.dumps/loads</span></code>
+can sometimes be used to make this possible. Consider, for example, a class <code class="docutils literal notranslate"><span class="pre">A</span></code> that stores
+<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>. We might be able to modify it so that <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> uses the
+<a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> routines: for example, the code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>has <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> convert the class’s dictionary into a byte stream
+using <code class="docutils literal notranslate"><span class="pre">gv.dumps(self.__dict__)</span></code>, which is reconstituted into
+a dictionary in <code class="docutils literal notranslate"><span class="pre">A.__init__</span></code>, using <code class="docutils literal notranslate"><span class="pre">gv.loads(a)</span></code>, upon unpickling.</p>
 </section>
 <section id="non-gaussian-expectation-values">
 <h2>Non-Gaussian Expectation Values<a class="headerlink" href="#non-gaussian-expectation-values" title="Permalink to this headline">¶</a></h2>

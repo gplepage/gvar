@@ -463,40 +463,67 @@ Storing |GVar|\s for Later Use; |BufferDict|\s
 --------------------------------------------------
 Storing |GVar|\s in a file for later use is complicated by the need to
 capture the covariances between different |GVar|\s as well as their
-means. The easiest way to save an array or dictionary ``g``  that contains
+means. The easiest way to save an array or dictionary or other 
+object ``g``  that contains
 |GVar|\s is to use :func:`gvar.dump`: for example, ::
 
-    >>> gvar.dump(g, 'gfile.p')
+    >>> gvar.dump(g, 'gfile.pkl')
 
 saves the data from ``g`` in a Python :mod:`pickle`
-file named ``'gfile.p'``. To reassemble the the data 
+file named ``'gfile.pkl'``. To reassemble the the data 
 from ``g`` we use::
 
-    >>> g = gvar.load('gfile.p')
+    >>> g = gvar.load('gfile.pkl')
 
 Functions :func:`gvar.dump` and :func:`gvar.load` are similar to the 
-corresponding functions in Python's :mod:`pickle` module. Unlike
-the :mod:`pickle` functions, however, these can deal with |GVar|\s in ``g``.
-In particular they preserve information about the correlations between
+corresponding functions in Python's :mod:`pickle` module but they 
+preserve information about the correlations between 
 different |GVar|\s in ``g``. Correlations with |GVar|\s that are not 
 in ``g`` are lost, so it is important to include all |GVar|\s of  
-interest in a single array or dictionary before saving them. 
+interest in ``g`` before saving them.
 
 |GVar|\s can also be pickled easily if they are stored in a
-|BufferDict| since this data type has explicit support for pickling.
+|BufferDict| since this data type has explicit support for pickling
+that preserves correlations.
 So if ``g`` is a
 |BufferDict| containing |GVar|\s (and/or arrays of |GVar|\s), ::
 
     >>> import pickle
-    >>> pickle.dump(g, open('gfile.p', 'wb'))
+    >>> pickle.dump(g, open('gfile.pkl', 'wb'))
 
-saves the contents of ``g`` to a file named ``gfile.p``, and
+saves the contents of ``g`` to a file named ``gfile.pkl``, and
 the |GVar|\s are retrieved using ::
 
-    >>> g = pickle.load(open('gfile.p', 'rb'))
+    >>> g = pickle.load(open('gfile.pkl', 'rb'))
 
-Of course, ``gvar.dump(g, 'gfile.p')`` and ``g = gvar.load('gfile.p')`` 
+Of course, ``gvar.dump(g, 'gfile.pkl')`` and ``g = gvar.load('gfile.pkl')`` 
 are simpler and achieve the same goal.
+
+Using :mod:`pickle` to pickle an object containing |GVar|\s generates 
+a warning about lost correlations. This can be ignored if correlations 
+are unimportant. If pickle must be used and correlations matter, ``gvar.dumps/loads``
+can sometimes be used to make this possible. Consider, for example, a class ``A`` that stores 
+|GVar|\s ``a`` and ``b``. We might be able to modify it so that :mod:`pickle` uses the 
+:mod:`gvar` routines: for example, the code::
+
+    class A:
+        def __init__(self, a, b):
+            if isinstance(a, bytes):
+                self.__dict__ = gv.loads(a)
+            else:
+                self.a = a 
+                self.b = b 
+                ...
+        
+        def __reduce__(self):
+            return A, (gv.dumps(self.__dict__), None)
+
+        ...
+
+has :mod:`pickle` convert the class's dictionary into a byte stream 
+using ``gv.dumps(self.__dict__)``, which is reconstituted into 
+a dictionary in ``A.__init__``, using ``gv.loads(a)``, upon unpickling.
+
 
 Non-Gaussian Expectation Values
 --------------------------------------------------------

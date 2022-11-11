@@ -476,15 +476,15 @@ from ``g`` we use::
     >>> g = gvar.load('gfile.pkl')
 
 Functions :func:`gvar.dump` and :func:`gvar.load` are similar to the 
-corresponding functions in Python's :mod:`pickle` module. Unlike
-the :mod:`pickle` functions, however, these can deal with |GVar|\s in ``g``.
-In particular they preserve information about the correlations between
+corresponding functions in Python's :mod:`pickle` module but they 
+preserve information about the correlations between 
 different |GVar|\s in ``g``. Correlations with |GVar|\s that are not 
 in ``g`` are lost, so it is important to include all |GVar|\s of  
-interest in a single array or dictionary before saving them.
+interest in ``g`` before saving them.
 
 |GVar|\s can also be pickled easily if they are stored in a
-|BufferDict| since this data type has explicit support for pickling.
+|BufferDict| since this data type has explicit support for pickling
+that preserves correlations.
 So if ``g`` is a
 |BufferDict| containing |GVar|\s (and/or arrays of |GVar|\s), ::
 
