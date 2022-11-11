@@ -210,6 +210,16 @@ class BufferDict(collections_MMapping):
         self._extension = {}
         self.shape = None
 
+    def _remove_gvars(self, gvlist):
+        tmp = BufferDict(self, buf=numpy.array(self._buf))
+        tmp._buf = _gvar.remove_gvars(tmp._buf, gvlist)
+        return tmp
+
+    def _distribute_gvars(self, gvlist):
+        tmp = BufferDict(self, buf=numpy.array(self._buf))
+        tmp._buf = _gvar.distribute_gvars(tmp._buf, gvlist)
+        return tmp
+
     def __reduce_ex__(self, dummy):
         return (BufferDict, (), self.__getstate__())
 
@@ -395,7 +405,7 @@ class BufferDict(collections_MMapping):
         # needed for python3.5
         return [(k,self[k]) for k in self]
 
-    def __setitem__(self,k,v):
+    def __setitem__(self, k, v):
         """ Set piece of buffer corresponding to ``k`` to value ``v``.
 
         The shape of ``v`` must equal that of ``self[k]`` if key ``k``
@@ -440,7 +450,7 @@ class BufferDict(collections_MMapping):
                             str(v.shape),str(d.shape)
                             ))
 
-    def __delitem__(self,k):
+    def __delitem__(self, k):
         if k not in self:
             raise ValueError('key not in BufferDict: ' + str(k))
         size = numpy.size(self[k])
@@ -500,12 +510,12 @@ class BufferDict(collections_MMapping):
         self._extension = {}
         return self._buf.flat
 
-    def _setflat(self,buf):
+    def _setflat(self, buf):
         """ Assigns buffer with buf if same size. """
         self._extension = {}
         self._buf.flat = buf
 
-    flat = property(_getflat,_setflat,doc='Buffer array iterator.')
+    flat = property(_getflat, _setflat, doc='Buffer array iterator.')
     def flatten(self):
         """ Copy of buffer array. """
         return numpy.array(self._buf)
@@ -519,7 +529,7 @@ class BufferDict(collections_MMapping):
         self._extension = {}
         return self._buf
 
-    def _setbuf(self,buf):
+    def _setbuf(self, buf):
         """ Replace buffer with ``buf``.
 
         ``buf`` must be a 1-dimensional :mod:`numpy` array of the same size

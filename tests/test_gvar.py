@@ -1998,7 +1998,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
     def test_dumps_loads(self):
         dict = collections.OrderedDict
         gs = gv.gvar('1(2)')
-        ga = (gv.gvar(['2(2)', '3(3)']) + gv.gvar('0(1)') )
+        ga = (gv.gvar([['2(2)', '3(3)']]) + gv.gvar('0(1)') )
         gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
         gd['v'] += gv.gvar('0(1)')
         gd[(1,3)] = gv.gvar('13(13)')

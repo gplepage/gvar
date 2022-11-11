@@ -1,3 +1,10 @@
+Version ???
+================
+
+- Fixes subtle bugs in gvar.dump/load. 
+
+- Pickling a GVar generates a warning about lost correlations.
+
 Version 11.11 2022-11-02
 ==========================
 Mostly bug fixes.

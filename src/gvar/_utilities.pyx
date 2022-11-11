@@ -1157,10 +1157,10 @@ def distribute_gvars(g, gvlist):
         Object ``g`` with :class:`GVarRef`\s replaced by corresponding |GVar|\s
         from list ``gvlist``.
     """
-    if isinstance(g, GVarRef):
-        return g(gvlist)
-    elif hasattr(g, '_distribute_gvars'):
+    if hasattr(g, '_distribute_gvars'):
         return g._distribute_gvars(gvlist)
+    elif isinstance(g, GVarRef):
+        return g(gvlist)
     elif hasattr(g, 'keys'):
         return type(g)([(k, distribute_gvars(g[k], gvlist)) for k in g])
     elif type(g) in [collections.deque, list]:
@@ -1241,10 +1241,10 @@ def remove_gvars(g, gvlist):
         Copy of object ``g`` with |GVar|\s replaced by :class:`GVarRef`\s. 
         The |GVar|\s are appended to ``gvlist``.
     """
-    if isinstance(g, _gvar.GVar):
-        return GVarRef(g, gvlist)
-    elif hasattr(g, '_remove_gvars'):
+    if hasattr(g, '_remove_gvars'):  # must be first
         return g._remove_gvars(gvlist)
+    elif isinstance(g, _gvar.GVar):
+        return GVarRef(g, gvlist)
     elif hasattr(g, 'keys'):
         return type(g)([(k, remove_gvars(g[k], gvlist)) for k in g])
     elif type(g) in [collections.deque, list]:
