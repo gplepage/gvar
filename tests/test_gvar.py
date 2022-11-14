@@ -1882,7 +1882,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
     def test_dump_load(self):
         dict = collections.OrderedDict
-        gs = gv.gvar('1(2)') * gv.gvar('3(2)')
+        gs = gv.gvar('1(2)') * gv.gvar('4(2)')
         ga = gv.gvar([2, 3], [[5., 1.], [1., 10.]]) 
         gd = gv.gvar(dict(s='1(2)', v=['2(2)', '3(3)'], g='4(4)'))
         gd['v'] += gv.gvar('0(1)')
@@ -1892,7 +1892,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             s = dump(g, outputfile=outputfile)
             d = load(s if outputfile is None else outputfile)
             self.assertEqual( str(g), str(d))
-            if test_cov:
+            if test_cov and getattr(g,'size',1) > 1:
                 self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
             # cleanup
             if isinstance(outputfile, str):
@@ -2023,7 +2023,8 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             s = gdump(g, outputfile=outputfile, method=method)
             d = gload(s if outputfile is None else outputfile, method=method)
             self.assertEqual( str(g), str(d))
-            self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
+            if getattr(g, 'size', 1) > 1:
+                self.assertEqual( str(gv.evalcov(g)), str(gv.evalcov(d)))
             # cleanup
             if isinstance(outputfile, str):
                 os.remove(outputfile) 
