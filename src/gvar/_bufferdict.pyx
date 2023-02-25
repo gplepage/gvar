@@ -19,11 +19,20 @@ import copy
 import pickle
 import json
 import gvar as _gvar
+import sys 
 
 try:
     from collections.abc import MutableMapping as collections_MMapping
 except ImportError:
     from collections import MutableMapping as collections_MMapping
+
+if sys.version_info.major == 2:
+    ORDEREDDICT = collections.OrderedDict
+else:
+    if sys.version_info.major == 3 and sys.version_info.minor < 6:
+        ORDEREDDICT = collections.OrderedDict
+    else:
+        ORDEREDDICT = dict
 
 BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])
 """ Data type for BufferDict._data[k]. Note shape==() implies a scalar. """
@@ -34,11 +43,11 @@ class BufferDict(collections_MMapping):
     |BufferDict|\s can be created in the usual way dictionaries are created::
 
         >>> b = BufferDict()
-        >>> b['a'] = 1.
-        >>> b['b'] = 2
+        >>> b['a'] = 1
+        >>> b['b'] = 2.
         >>> print(b)
         {'a': 1.0, 'b':2.0}
-        >>> b = BufferDict(a=1., b=2.)
+        >>> b = BufferDict(a=1, b=2.)
         >>> b = BufferDict([('a',1.), ('b',2.)])
 
     They can also be created from other dictionaries or |BufferDict|\s::
@@ -50,6 +59,9 @@ class BufferDict(collections_MMapping):
         >>> print(c)
         {'b': 2.0}
 
+    The ``keys`` keyword restricts the copy of a dictionary to entries whose
+    keys are in ``keys``.
+
     The values in a |BufferDict| are scalars or arrays of a scalar type
     (|GVar|, ``float``, ``int``, etc.). The data type is normally inferred
     (dynamically) from the data itself, but can be specified when
@@ -59,13 +71,21 @@ class BufferDict(collections_MMapping):
         >>> b = BufferDict(dict(a=1.2), dtype=int)
         >>> print(b, b.dtype)
         {'a': 1} int64
+    
+    When specified using the ``dtype`` keyword, data types are *not* changed
+    by subsequent additions to the |BufferDict|::
+
+        >>> b = BufferDict(dict(a=1.2), dtype=int)
+        >>> b['b'] = 2.7
+        >>> print(b, b.dtype)
+        {'a': 1, 'b': 2} int64
 
     Some simple arithemetic is allowed between two |BufferDict|\s, say,
     ``g1`` and ``g2`` provided they have the same keys and array shapes.
     So, for example::
 
-        >>> a = BufferDict(a=1., b=[2., 3.])
-        >>> b = BufferDict(a=10., b=[20., 30.])
+        >>> a = BufferDict(a=1, b=[2, 3])
+        >>> b = BufferDict(b=[20., 30.], a=10.)
         >>> print(a + b)
             {'a': 11.0, 'b': array([22., 33.])}
 
@@ -73,13 +93,27 @@ class BufferDict(collections_MMapping):
     by scalars. The corresponding ``+=``, ``-=``, ``*=``, ``/=`` operators
     are supported, as are unary ``+`` and ``-``.
 
-    Finally a |BufferDict| can be cloned from another one but with
+    Finally a |BufferDict| can be cloned from another one but using
     a different buffer (containing different values)::
 
         >>> b = BufferDict(a=1., b=2.)
         >>> c = BufferDict(b, buf=[10, 20])
         >>> print(c)
         {'a': 10, 'b': 20}
+
+    The  new buffer itself (i.e., not a copy) is used in the 
+    new |BufferDict| if the buffer is a :mod:`numpy` array:
+
+        >>> import numpy as np
+        >>> b = BufferDict(a=1., b=2.)
+        >>> nbuf = np.array([10, 20])
+        >>> c = BufferDict(b, buf=nbuf)
+        >>> c['a'] += 1
+        >>> print(c)
+        {'a': 11, 'b': 20}
+        >>> print(nbuf)
+        [11 20]
+
     """
 
     extension_pattern = re.compile('^([^()]+)\((.+)\)$')
@@ -89,72 +123,52 @@ class BufferDict(collections_MMapping):
         self._extension = {}
         self._ver_l = BufferDict._ver_g
         self.shape = None
+        self._dtype = None     # enforced dtype (default is None)
         if len(args)==0:
             # kargs are dictionary entries
-            self._odict = collections.OrderedDict()
-            self._buf = numpy.array([],numpy.intp)
+            self._odict = ORDEREDDICT()
+            self._buf = numpy.array([])
             for k in kargs:
                 self[k] = kargs[k]
-        elif len(args) == 1 and 'keys' in kargs and len(kargs) == 1:
-            self._odict = collections.OrderedDict()
-            self._buf = numpy.array([], numpy.intp)
-            try:
-                for k in kargs['keys']:
-                    self[k] = args[0][k]
-            except KeyError:
-                raise KeyError('Dictionary does not contain key in keys: ' + str(k))
+            return
+        if len(args) > 2:
+            raise RuntimeError('wrong number of arguments')
+        self._dtype = kargs.get('dtype', None)
+        keys = list(kargs['keys']) if 'keys' in kargs else None
+        if 'buf' in kargs:
+            buf = kargs['buf']
+            if len(args) > 1:
+                raise RuntimeError('too many arguments: buffer specified more than once')
+        elif len(args) == 2:
+            buf = args[1]
         else:
-            dtype = None
-            if len(args)==2 and len(kargs)==0:
-                bd, buf = args
-            elif len(args)==1 and len(kargs)==0:
-                bd = args[0]
-                buf = None
-            elif len(args)==1 and 'buf' in kargs and len(kargs)==1:
-                bd = args[0]
-                buf = kargs['buf']
-            elif len(args) == 1 and 'dtype' in kargs and len(kargs)==1:
-                bd = args[0]
-                buf = None
-                dtype = kargs['dtype']
+            buf = None
+        if isinstance(args[0], BufferDict) and keys is None:
+            # make copy of BufferDict args[0], possibly with new buffer
+            # copy keys, slices and shapes (fast build)
+            bd = args[0]
+            self._odict = ORDEREDDICT(bd._odict)
+            # copy buffer or use new one
+            if buf is None:
+                self._buf = numpy.array(bd._buf, dtype=self._dtype)
+            elif numpy.shape(buf) == bd._buf.shape:
+                self._buf = numpy.asarray(buf, dtype=self._dtype)
             else:
-                raise ValueError("Bad arguments for BufferDict.")
-            if isinstance(bd, BufferDict):
-                # make copy of BufferDict bd, possibly with new buffer
-                # copy keys, slices and shapes
-                self._odict = collections.OrderedDict(bd._odict)
-                # copy buffer or use new one
-                self._buf = (
-                    numpy.array(bd._buf, dtype=dtype)
-                    if buf is None else
-                    numpy.asarray(buf)
-                    )
-                if bd.size != self.size:
-                    raise ValueError("buf is wrong size --- %s not %s"
-                                     % (self.size, bd.size))
-                if self._buf.ndim != 1:
-                    raise ValueError("buf must be 1-d, not shape = %s"
-                                     % (self._buf.shape,))
-            elif buf is None:
-                self._odict = collections.OrderedDict()
-                self._buf = numpy.array(
-                    [], numpy.intp if dtype is None else dtype
-                    )
-                # add initial data
-                if hasattr(bd,"keys"):
-                    # bd a dictionary
-                    for k in bd:
-                        self[k] = bd[k]
-                else:
-                    # bd an array of tuples
-                    for ki, vi in bd:
-                        self[ki] = vi
-                if dtype is not None and self._buf.dtype != dtype:
-                    self._buf = numpy.array(self._buf, dtype=dtype)
-            else:
-                raise ValueError(
-                    "bd must be a BufferDict in BufferDict(bd,buf), not %s"
-                                    % str(type(bd)))
+                raise ValueError("buf is wrong shape --- %s not %s"
+                                    % (numpy.shape(buf), bd._buf.shape))
+            return
+        if buf is not None:
+            raise RuntimeError("can't specify buffer unless first argument is a BufferDict")
+        data = args[0].items() if hasattr(args[0], 'keys') else args[0]
+        self._odict = ORDEREDDICT()
+        self._buf = numpy.array([], dtype=self._dtype) 
+        if keys is None:
+            for k, v in data:
+                self[k] = v
+        else:
+            for k, v in data:
+                if k in keys:
+                    self[k] = v 
 
     def __copy__(self):
         return BufferDict(self)
@@ -225,13 +239,19 @@ class BufferDict(collections_MMapping):
 
     def __iadd__(self, g):
         """ self += |BufferDict| (or dictionary) """
-        g = BufferDict(g, keys=self.keys())
+        try:
+            g = BufferDict({k:g[k] for k in self})
+        except KeyError:
+            raise KeyError('g missing a key')
         self.flat[:] += g.flat
         return self
 
     def __isub__(self, g):
         """ self -= |BufferDict| (or dictionary) """
-        g = BufferDict(g, keys=self.keys())
+        try:
+            g = BufferDict({k:g[k] for k in self})
+        except KeyError:
+            raise KeyError('g missing a key')
         self.flat[:] -= g.flat
         return self
 
@@ -259,7 +279,10 @@ class BufferDict(collections_MMapping):
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
         """
-        g = BufferDict(g, keys=self.keys())
+        try:
+            g = BufferDict({k:g[k] for k in self})
+        except KeyError:
+            raise KeyError('g missing a key')
         return BufferDict(self, buf=self.flat[:] + g.flat)
 
     def __radd__(self, g):
@@ -268,7 +291,10 @@ class BufferDict(collections_MMapping):
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
         """
-        g = BufferDict(g, keys=self.keys())
+        try:
+            g = BufferDict({k:g[k] for k in self})
+        except KeyError:
+            raise KeyError('g missing a key')
         return BufferDict(self, buf=self.flat[:] + g.flat)
 
     def __sub__(self, g):
@@ -277,7 +303,10 @@ class BufferDict(collections_MMapping):
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
         """
-        g = BufferDict(g, keys=self.keys())
+        try:
+            g = BufferDict({k:g[k] for k in self})
+        except KeyError:
+            raise KeyError('g missing a key')
         return BufferDict(self, buf=self.flat[:] - g.flat)
 
     def __rsub__(self, g):
@@ -286,7 +315,10 @@ class BufferDict(collections_MMapping):
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
         """
-        g = BufferDict(g, keys=self.keys())
+        try:
+            g = BufferDict({k:g[k] for k in self})
+        except KeyError:
+            raise KeyError('g missing a key')
         return BufferDict(self, buf=g.flat[:] - self.flat)
 
     def __mul__(self, x):
@@ -413,20 +445,24 @@ class BufferDict(collections_MMapping):
         """
         self._extension = {}
         if k not in self:
-            v = numpy.asarray(v)
+            v = numpy.asarray(v, dtype=self._dtype)
             if v.shape==():
                 # add single piece of data
                 self._odict.__setitem__(
                     k, BUFFERDICTDATA(slice=len(self._buf), shape=())
                     )
-                self._buf = numpy.append(self._buf,v)
+                # self._buf = numpy.append(self._buf,v) ####
             else:
                 # add array
-                n = numpy.size(v)
+                n = v.size  # numpy.size(v)    #########
                 i = len(self._buf)
                 self._odict.__setitem__(
                     k, BUFFERDICTDATA(slice=slice(i,i+n), shape=tuple(v.shape))
                     )
+                # self._buf = numpy.append(self._buf, v) #####
+            if len(self._buf) == 0:
+                self._buf = v.flatten()
+            else:
                 self._buf = numpy.append(self._buf, v)
         else:
             d = self._odict.__getitem__(k)

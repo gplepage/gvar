@@ -1,6 +1,9 @@
+Version 11.11.2 2023-02-26
+==========================
+Cleans up inconsistent treatment of data types by gvar.BufferDict. 
+
 Version 11.11.1 2022-11-11
 ===========================
-
 - Fixes 2 minor bugs in gvar.dump/load. 
 
 Version 11.11 2022-11-02

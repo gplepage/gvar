@@ -223,9 +223,9 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         self.assertEqual(nb.flat[-1],130.)
         with self.assertRaises(ValueError):
             nb = BufferDict(b,buf=nb.flat[:-1])
-        nb = BufferDict(b, keys=reversed(bkeys))
+        nb = BufferDict(b, keys=reversed(bkeys[-2:]))
         nbkeys = list(nb.keys())
-        self.assertEqual(nbkeys, list(reversed(bkeys)))
+        self.assertEqual(nbkeys, bkeys[-2:])
 
     def test_update(self):
         """ b.add(dict(..)) """
@@ -260,9 +260,11 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         ib = BufferDict([(k, b[k]) for k in b], dtype=np.intp)
         self.assertTrue(np.all(ib.buf == b.buf))
         self.assertTrue(isinstance(ib.buf[0], np.intp))
-        ob = BufferDict([], dtype=object)
+        ob = BufferDict({}, dtype=object)
         ob[0] = 1
+        self.assertTrue(ob.dtype == object)
         ob[0] = gv.gvar('1(1)')
+        self.assertTrue(ob.dtype == object)
 
     def test_get(self):
         """ g.get(k) """
