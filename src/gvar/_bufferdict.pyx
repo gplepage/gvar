@@ -38,47 +38,59 @@ BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])
 """ Data type for BufferDict._data[k]. Note shape==() implies a scalar. """
 
 class BufferDict(collections_MMapping):
-    """ Ordered dictionary whose data are packed into a 1-d buffer.
+    """ Ordered dictionary whose values are packed into a 1-d buffer (:mod:`numpy` array).
 
     |BufferDict|\s can be created in the usual way dictionaries are created::
 
         >>> b = BufferDict()
         >>> b['a'] = 1
-        >>> b['b'] = 2.
+        >>> b['b'] = [2.7, 3.2]
         >>> print(b)
-        {'a': 1.0, 'b':2.0}
-        >>> b = BufferDict(a=1, b=2.)
-        >>> b = BufferDict([('a',1.), ('b',2.)])
+        {'a': 1.0, 'b': array([2.7, 3.2])}
+        >>> print(b.buf)
+        [1. 2.7 3.2]
+        >>> b = BufferDict(a=1, b=[2.7, 3.2])
+        >>> b = BufferDict([('a',1.), ('b',[2.7, 3.2])])
 
     They can also be created from other dictionaries or |BufferDict|\s::
 
         >>> c = BufferDict(b)
         >>> print(c)
-        {'a': 1.0, 'b': 2.0}
+        {'a': 1.0, 'b': 2.7}
         >>> c = BufferDict(b, keys=['b'])
         >>> print(c)
-        {'b': 2.0}
+        {'b': 2.7}
 
     The ``keys`` keyword restricts the copy of a dictionary to entries whose
     keys are in ``keys``.
 
     The values in a |BufferDict| are scalars or arrays of a scalar type
-    (|GVar|, ``float``, ``int``, etc.). The data type is normally inferred
-    (dynamically) from the data itself, but can be specified when
-    creating the |BufferDict| from another dictionary or list,
-    using keyword ``dtype``::
+    (|GVar|, ``float``, ``int``, etc.). The data type of the buffer is 
+    normally inferred (dynamically) from the data itself::
 
-        >>> b = BufferDict(dict(a=1.2), dtype=int)
+        >>> b = BufferDict(a=1)
         >>> print(b, b.dtype)
         {'a': 1} int64
-    
-    When specified using the ``dtype`` keyword, data types are *not* changed
-    by subsequent additions to the |BufferDict|::
-
-        >>> b = BufferDict(dict(a=1.2), dtype=int)
         >>> b['b'] = 2.7
         >>> print(b, b.dtype)
-        {'a': 1, 'b': 2} int64
+        {'a': 1.0, 'b': 2.7} float64     
+    
+    The data type of the |BufferDict|'s buffer can be specified
+    when creating the |BufferDict| from another dictionary or list
+    by using keyword ``dtype``::
+
+        >>> b = BufferDict(dict(a=1.2), dtype=int)  
+        >>> print(b, b.dtype)
+        {'a': 1} int64        
+        >>> b['b'] = 2.7
+        >>> print(b, b.dtype)
+        {'a': 1, 'b': 2} int64  
+  
+    Note in this example that the data type is *not* changed by subsequent
+    additions to the |BufferDict| when the ``dtype`` keyword is specified.
+    To create an empty |BufferDict| with a specified type use, for example,
+    ``BufferDict({}, dtype=int)``. Any data type supported by :mod:`numpy` 
+    arrays can be specified.
 
     Some simple arithemetic is allowed between two |BufferDict|\s, say,
     ``g1`` and ``g2`` provided they have the same keys and array shapes.
@@ -93,7 +105,7 @@ class BufferDict(collections_MMapping):
     by scalars. The corresponding ``+=``, ``-=``, ``*=``, ``/=`` operators
     are supported, as are unary ``+`` and ``-``.
 
-    Finally a |BufferDict| can be cloned from another one but using
+    Finally a |BufferDict| can be cloned from another one using
     a different buffer (containing different values)::
 
         >>> b = BufferDict(a=1., b=2.)
@@ -516,7 +528,10 @@ class BufferDict(collections_MMapping):
         return k in self._odict
 
     def __repr__(self):
-        return self.__class__.__name__ + '(' + str(self) + ')'
+        if self._dtype is None:
+            return self.__class__.__name__ + '(' + str(self) + ')'
+        else:
+            return self.__class__.__name__ + '(' + str(self) + ', dtype=' + str(self._dtype) + ')'
 
     def __str__(self):
         # Code from Giacomo Petrillo.

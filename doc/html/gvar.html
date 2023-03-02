@@ -2211,44 +2211,57 @@ below.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gvar.BufferDict">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">BufferDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.BufferDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ordered dictionary whose data are packed into a 1-d buffer.</p>
+<dd><p>Ordered dictionary whose values are packed into a 1-d buffer (<code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> array).</p>
 <p><a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s can be created in the usual way dictionaries are created:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.7</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="go">{&#39;a&#39;: 1.0, &#39;b&#39;:2.0}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="mf">1.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="mf">2.</span><span class="p">)])</span>
+<span class="go">{&#39;a&#39;: 1.0, &#39;b&#39;: array([2.7, 3.2])}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">buf</span><span class="p">)</span>
+<span class="go">[1. 2.7 3.2]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="mf">2.7</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="mf">1.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,[</span><span class="mf">2.7</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">])])</span>
 </pre></div>
 </div>
 <p>They can also be created from other dictionaries or <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-<span class="go">{&#39;a&#39;: 1.0, &#39;b&#39;: 2.0}</span>
+<span class="go">{&#39;a&#39;: 1.0, &#39;b&#39;: 2.7}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-<span class="go">{&#39;b&#39;: 2.0}</span>
+<span class="go">{&#39;b&#39;: 2.7}</span>
 </pre></div>
 </div>
+<p>The <code class="docutils literal notranslate"><span class="pre">keys</span></code> keyword restricts the copy of a dictionary to entries whose
+keys are in <code class="docutils literal notranslate"><span class="pre">keys</span></code>.</p>
 <p>The values in a <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> are scalars or arrays of a scalar type
-(<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, etc.). The data type is normally inferred
-(dynamically) from the data itself, but can be specified when
-creating the <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> from another dictionary or list,
-using keyword <code class="docutils literal notranslate"><span class="pre">dtype</span></code>:</p>
+(<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, etc.). The data type of the buffer is
+normally inferred (dynamically) from the data itself:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 1} int64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 1.0, &#39;b&#39;: 2.7} float64</span>
+</pre></div>
+</div>
+<p>The data type of the <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>’s buffer can be specified
+when creating the <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> from another dictionary or list
+by using keyword <code class="docutils literal notranslate"><span class="pre">dtype</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">1.2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 <span class="go">{&#39;a&#39;: 1} int64</span>
-</pre></div>
-</div>
-<p>When specified using the <code class="docutils literal notranslate"><span class="pre">dtype</span></code> keyword, data types are <em>not</em> changed
-by subsequent additions to the <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">1.2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.7</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 <span class="go">{&#39;a&#39;: 1, &#39;b&#39;: 2} int64</span>
 </pre></div>
 </div>
+<p>Note in this example that the data type is <em>not</em> changed by subsequent
+additions to the <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> when the <code class="docutils literal notranslate"><span class="pre">dtype</span></code> keyword is specified.
+To create an empty <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> with a specified type use, for example,
+<code class="docutils literal notranslate"><span class="pre">BufferDict({},</span> <span class="pre">dtype=int)</span></code>. Any data type supported by <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code>
+arrays can be specified.</p>
 <p>Some simple arithemetic is allowed between two <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s, say,
 <code class="docutils literal notranslate"><span class="pre">g1</span></code> and <code class="docutils literal notranslate"><span class="pre">g2</span></code> provided they have the same keys and array shapes.
 So, for example:</p>
@@ -2261,7 +2274,7 @@ So, for example:</p>
 <p>Subtraction is also defined, as are multiplication and division
 by scalars. The corresponding <code class="docutils literal notranslate"><span class="pre">+=</span></code>, <code class="docutils literal notranslate"><span class="pre">-=</span></code>, <code class="docutils literal notranslate"><span class="pre">*=</span></code>, <code class="docutils literal notranslate"><span class="pre">/=</span></code> operators
 are supported, as are unary <code class="docutils literal notranslate"><span class="pre">+</span></code> and <code class="docutils literal notranslate"><span class="pre">-</span></code>.</p>
-<p>Finally a <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> can be cloned from another one but using
+<p>Finally a <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> can be cloned from another one using
 a different buffer (containing different values):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">BufferDict</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">buf</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>

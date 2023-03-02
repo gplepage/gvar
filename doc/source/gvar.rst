@@ -341,7 +341,7 @@ but the values can also be accessed all at once through the buffer::
   >>> print(b.buf)
   [0. 1. 2. 3. 4. 5. 6.]
 
-The size, shape, and type of the data associated with a given key cannot be
+The size and shape of the data associated with a given key cannot be
 changed by later assignments. For example, here ``b['s'] = [10., 20.]`` would
 generate a ``ValueError`` exception. The actual value can, of course,
 be modified: ``b['s'] = 22.`` is fine.
