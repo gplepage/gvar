@@ -2167,10 +2167,9 @@ dictionaries,</p>
 <span class="go">[0. 1. 2. 3. 4. 5. 6.]</span>
 </pre></div>
 </div>
-<p>The size and shape of the data associated with a given key cannot be
-changed by later assignments. For example, here <code class="docutils literal notranslate"><span class="pre">b['s']</span> <span class="pre">=</span> <span class="pre">[10.,</span> <span class="pre">20.]</span></code> would
-generate a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception. The actual value can, of course,
-be modified: <code class="docutils literal notranslate"><span class="pre">b['s']</span> <span class="pre">=</span> <span class="pre">22.</span></code> is fine.</p>
+<p>A previous entry can be overwritten, but the size, shape, and type of the
+data needs to be the same. For example, here setting <code class="docutils literal notranslate"><span class="pre">b['s']</span> <span class="pre">=</span> <span class="pre">[10.,</span> <span class="pre">20.]</span></code>
+would generate a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception, but <code class="docutils literal notranslate"><span class="pre">b['s']</span> <span class="pre">=</span> <span class="pre">22.</span></code> is fine.</p>
 <p>The second difference between <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s and other dictionaries is
 illustrated by the following code:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">BufferDict</span><span class="p">()</span>
