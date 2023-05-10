@@ -37,7 +37,7 @@ update :
 doc-html doc:
 	make doc/html/index.html
 
-doc/html/index.html : $(SRCFILES) $(DOCFILES)
+doc/html/index.html : $(SRCFILES) $(DOCFILES) setup.cfg
 	sphinx-build -b html doc/source doc/html
 
 clear-doc:
