@@ -90,6 +90,7 @@ test-readme:
 clean:
 	rm -f -r build
 	rm -rf __pycache__
+	rm -rf src/*.egg-info
 	rm -f *.so *.tmp *.pyc *.prof .coverage doc.zip
 	rm -f -r dist/*
 	rm -f -r doc/build
