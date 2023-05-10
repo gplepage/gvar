@@ -1,7 +1,6 @@
 include makefile README.rst INSTALLATION.txt LICENSE.txt MANIFEST.in CHANGES.txt
 include pyproject.toml
-include setup.py src/gvar.pxd src/gvar/*.pxd  src/*.pyx src/gvar/*.pyx
-include gdev-setup.py
+include setup.py src/gvar.pxd src/gvar/*.pxd src/gvar/*.pyx
 
 graft doc/html
 graft tests
