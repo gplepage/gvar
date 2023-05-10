@@ -48,7 +48,7 @@ doc-zip doc.zip:
 
 
 sdist: $(SRCFILES) # source distribution
-	$(PYTHON) setup.py sdist
+	$(PYTHON) -m build --sdist
 
 .PHONY: tests
 
@@ -91,7 +91,7 @@ clean:
 	rm -f -r build
 	rm -rf __pycache__
 	rm -f *.so *.tmp *.pyc *.prof .coverage doc.zip
-	rm -f -r dist
+	rm -f -r dist/*
 	rm -f -r doc/build
 	$(MAKE) -C doc/source clean
 	$(MAKE) -C tests clean
