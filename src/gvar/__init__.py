@@ -104,7 +104,7 @@ tools for use with |GVar|\s (or ``float``\s):
 """
 
 # Created by G. Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-22 G. Peter Lepage.
+# Copyright (c) 2012-23  G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -130,7 +130,18 @@ from ._bufferdict import trim_redundant_keys    # legacy
 from ._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
 from ._utilities import *
 
-from ._version import __version__
+try:
+    import sys
+
+    if sys.version_info >= (3, 8):
+        from importlib import metadata
+    else:
+        import importlib_metadata as metadata
+    __version__ = metadata.version('gvar')
+except:
+    # less precise default if fail
+    __version__ = '>=11.11.3'
+
 
 from gvar import dataset
 from gvar import ode
@@ -139,12 +150,6 @@ from gvar import linalg
 from gvar import pade
 from gvar import powerseries
 from gvar import root
-
-# try:
-#     # use lsqfit's gammaQ if available; otherwise use one in ._utilities
-#     from lsqfit._utilities import gammaQ
-# except:
-#     pass
 
 _GVAR_LIST = []
 _CONFIG = dict(evalcov=15, evalcov_blocks=6000, var=50)

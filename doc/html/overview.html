@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Overview and Tutorial &#8212; gvar 11.11.2 documentation</title>
+    <title>Overview and Tutorial &#8212; gvar 11.11.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +41,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>  
@@ -51,9 +52,9 @@
           <div class="body" role="main">
             
   <section id="overview-and-tutorial">
-<h1>Overview and Tutorial<a class="headerlink" href="#overview-and-tutorial" title="Permalink to this headline">¶</a></h1>
+<h1>Overview and Tutorial<a class="headerlink" href="#overview-and-tutorial" title="Permalink to this heading">¶</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>This module provides tools for representing, manipulating, and  simulating
 Gaussian random variables numerically.  It can deal with individual variables
 or arbitrarily large sets of variables, correlated or uncorrelated. It  also
@@ -169,7 +170,7 @@ statement if using Python 2; or add</p>
 <p>at the start of your file.</p>
 </section>
 <section id="gaussian-random-variables">
-<h2>Gaussian Random Variables<a class="headerlink" href="#gaussian-random-variables" title="Permalink to this headline">¶</a></h2>
+<h2>Gaussian Random Variables<a class="headerlink" href="#gaussian-random-variables" title="Permalink to this heading">¶</a></h2>
 <p>The Higgs boson mass (125.7±0.4 GeV) from the previous section is
 an example of a Gaussian random variable. As discussed above, such variables
 <code class="docutils literal notranslate"><span class="pre">x</span></code> represent Gaussian probability distributions, and therefore are
@@ -206,7 +207,7 @@ different variables:</p>
 <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
 </section>
 <section id="creating-gaussian-variables">
-<span id="id1"></span><h2>Creating Gaussian Variables<a class="headerlink" href="#creating-gaussian-variables" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Creating Gaussian Variables<a class="headerlink" href="#creating-gaussian-variables" title="Permalink to this heading">¶</a></h2>
 <p>Objects of type <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> are of two types: 1) primary <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
 that are created from means and covariances using
 <a class="reference internal" href="gvar.html#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>; and 2) derived <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that result
@@ -303,7 +304,7 @@ by an array of standard deviations (square roots of diagonal entries in
 </div>
 </section>
 <section id="gvar-arithmetic-and-functions">
-<span id="id2"></span><h2><a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> Arithmetic and Functions<a class="headerlink" href="#gvar-arithmetic-and-functions" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2><a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> Arithmetic and Functions<a class="headerlink" href="#gvar-arithmetic-and-functions" title="Permalink to this heading">¶</a></h2>
 <p>The <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s discussed in the previous section are all <em>primary</em> <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
 since they were created by specifying their means and covariances
 explicitly, using <a class="reference internal" href="gvar.html#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>. What makes <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s particularly
@@ -428,7 +429,7 @@ and <code class="docutils literal notranslate"><span class="pre">cov</span></cod
 obtained from <code class="docutils literal notranslate"><span class="pre">gvar.gvar.cov</span></code>).</p>
 </section>
 <section id="error-budgets-from-gvars">
-<h2>Error Budgets from <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s<a class="headerlink" href="#error-budgets-from-gvars" title="Permalink to this headline">¶</a></h2>
+<h2>Error Budgets from <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s<a class="headerlink" href="#error-budgets-from-gvars" title="Permalink to this heading">¶</a></h2>
 <p>It is sometimes useful to know how much of the uncertainty in a derived quantity
 is due to a particular input uncertainty. Continuing the example above, for
 example, we might want to know how much of <code class="docutils literal notranslate"><span class="pre">f</span></code>s standard deviation
@@ -473,7 +474,7 @@ but only 0.2% of the 1.25% uncertainty in <code class="docutils literal notransl
 is obtained by adding the <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> contributions in quadrature.</p>
 </section>
 <section id="storing-gvars-for-later-use-bufferdicts">
-<span id="storing-gvars-for-later-use"></span><h2>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s for Later Use; <a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s<a class="headerlink" href="#storing-gvars-for-later-use-bufferdicts" title="Permalink to this headline">¶</a></h2>
+<span id="storing-gvars-for-later-use"></span><h2>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s for Later Use; <a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s<a class="headerlink" href="#storing-gvars-for-later-use-bufferdicts" title="Permalink to this heading">¶</a></h2>
 <p>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in a file for later use is complicated by the need to
 capture the covariances between different <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as well as their
 means. The easiest way to save an array or dictionary or other
@@ -536,7 +537,7 @@ using <code class="docutils literal notranslate"><span class="pre">gv.dumps(self
 a dictionary in <code class="docutils literal notranslate"><span class="pre">A.__init__</span></code>, using <code class="docutils literal notranslate"><span class="pre">gv.loads(a)</span></code>, upon un-pickling.</p>
 </section>
 <section id="non-gaussian-expectation-values">
-<h2>Non-Gaussian Expectation Values<a class="headerlink" href="#non-gaussian-expectation-values" title="Permalink to this headline">¶</a></h2>
+<h2>Non-Gaussian Expectation Values<a class="headerlink" href="#non-gaussian-expectation-values" title="Permalink to this heading">¶</a></h2>
 <p>By default functions of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are also <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, but there are cases where
 such functions cannot be represented accurately by Gaussian distributions. The
 product of 0.1(4) and 0.2(5), for example, is not very Gaussian because the
@@ -673,7 +674,7 @@ dimensions (10, 20, 50 … Gaussian variables). High dimensions usually
 cost more, requiring many more function evaluations (<code class="docutils literal notranslate"><span class="pre">neval</span></code>).</p>
 </section>
 <section id="random-number-generators-and-simulations">
-<span id="gvar-random-number-generators"></span><h2>Random Number Generators and Simulations<a class="headerlink" href="#random-number-generators-and-simulations" title="Permalink to this headline">¶</a></h2>
+<span id="gvar-random-number-generators"></span><h2>Random Number Generators and Simulations<a class="headerlink" href="#random-number-generators-and-simulations" title="Permalink to this heading">¶</a></h2>
 <p><a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s represent probability distributions. It is possible to use them
 to generate random numbers from those distributions. For example, in</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
@@ -779,7 +780,7 @@ errors and correlations:</p>
 example, in nonlinear fits.</p>
 </section>
 <section id="limitations">
-<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading">¶</a></h2>
 <p>The most fundamental limitation of this module is that the calculus of
 Gaussian variables that it assumes is only valid when standard deviations
 are small (compared to the distances over which the functions of interest
@@ -815,7 +816,7 @@ about 2e-8 (with 64-bit floating point numbers; <code class="docutils literal no
 appears in the covariance matrix).</p>
 </section>
 <section id="optimizations">
-<h2>Optimizations<a class="headerlink" href="#optimizations" title="Permalink to this headline">¶</a></h2>
+<h2>Optimizations<a class="headerlink" href="#optimizations" title="Permalink to this heading">¶</a></h2>
 <p>When there are lots of primary <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, the number of derivatives stored
 for each derived <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> can
 become rather large, potentially (though not necessarily) leading to slower
@@ -860,8 +861,9 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Overview and Tutorial</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
 <li><a class="reference internal" href="#gaussian-random-variables">Gaussian Random Variables</a></li>
@@ -877,12 +879,17 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">gvar Documentation</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="gvar.html"
-                        title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">gvar Documentation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="gvar.html"
+                          title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -899,7 +906,7 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -919,13 +926,13 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2020, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

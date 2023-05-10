@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Case Study: Numerical Analysis — Pendulum Clock &#8212; gvar 11.11.2 documentation</title>
+    <title>Case Study: Numerical Analysis — Pendulum Clock &#8212; gvar 11.11.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +41,7 @@
         <li class="right" >
           <a href="gvar_other.html" title="Numerical Analysis Modules in gvar"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study:  Numerical Analysis — Pendulum Clock</a></li> 
       </ul>
     </div>  
@@ -51,13 +52,13 @@
           <div class="body" role="main">
             
   <section id="case-study-numerical-analysis-pendulum-clock">
-<h1>Case Study:  Numerical Analysis — Pendulum Clock<a class="headerlink" href="#case-study-numerical-analysis-pendulum-clock" title="Permalink to this headline">¶</a></h1>
+<h1>Case Study:  Numerical Analysis — Pendulum Clock<a class="headerlink" href="#case-study-numerical-analysis-pendulum-clock" title="Permalink to this heading">¶</a></h1>
 <p>This case study illustrates how to mix <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s with numerical routines
 for integrating differential equations (<a class="reference internal" href="gvar_other.html#module-gvar.ode" title="gvar.ode: Ordinary differential equations."><code class="xref any py py-mod docutils literal notranslate"><span class="pre">gvar.ode</span></code></a>) and for
 finding roots of functions (<a class="reference internal" href="gvar_other.html#module-gvar.root" title="gvar.root: Roots (zeros) of one-dimensional functions."><code class="xref any py py-mod docutils literal notranslate"><span class="pre">gvar.root</span></code></a>). It also gives a
 simple example of a simulation that uses <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 <section id="the-problem">
-<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this heading">¶</a></h2>
 <p>The precision of a particular pendulum clock is limited by two  dominant
 factors: 1) the length of the pendulum (0.25m) can be adjusted  with a precision
 of at best ±0.5mm; and 2) irregularities in  the drive mechanism mean that the
@@ -71,7 +72,7 @@ is to determine how these uncertainties affect time-keeping over a day.</p>
 of the pendulum.</p>
 </section>
 <section id="pendulum-dynamics-finding-the-period">
-<h2>Pendulum Dynamics; Finding the Period<a class="headerlink" href="#pendulum-dynamics-finding-the-period" title="Permalink to this headline">¶</a></h2>
+<h2>Pendulum Dynamics; Finding the Period<a class="headerlink" href="#pendulum-dynamics-finding-the-period" title="Permalink to this heading">¶</a></h2>
 <p>We start by designing code to integrate the differential equation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
@@ -110,7 +111,7 @@ velocity (<code class="docutils literal notranslate"><span class="pre">y(t)[1]</
 </div>
 </section>
 <section id="analysis">
-<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h2>
+<h2>Analysis<a class="headerlink" href="#analysis" title="Permalink to this heading">¶</a></h2>
 <p>The last piece of the code does the analysis:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="n">l</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0005</span><span class="p">)</span>               <span class="c1"># length of pendulum</span>
@@ -174,7 +175,7 @@ the total error almost in half, to ±0.10% or about ±1.5 min/day. Further
 improvement requires tighter control over the length of the pendulum.</p>
 </section>
 <section id="simulation">
-<h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
+<h2>Simulation<a class="headerlink" href="#simulation" title="Permalink to this heading">¶</a></h2>
 <p>We can check the error propagation analysis above using
 a simulation. Adding the following code at the end of <code class="docutils literal notranslate"><span class="pre">main()</span></code> above</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># check errors in T using a simulation</span>
@@ -213,8 +214,9 @@ generate random values from correlated <a class="reference internal" href="gvar.
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Case Study:  Numerical Analysis — Pendulum Clock</a><ul>
 <li><a class="reference internal" href="#the-problem">The Problem</a></li>
 <li><a class="reference internal" href="#pendulum-dynamics-finding-the-period">Pendulum Dynamics; Finding the Period</a></li>
@@ -224,12 +226,17 @@ generate random values from correlated <a class="reference internal" href="gvar.
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="gvar_other.html"
-                        title="previous chapter">Numerical Analysis Modules in <code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="case-svdcut.html"
-                        title="next chapter">Case Study: Correlations and SVD Cuts</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="gvar_other.html"
+                          title="previous chapter">Numerical Analysis Modules in <code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="case-svdcut.html"
+                          title="next chapter">Case Study: Correlations and SVD Cuts</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -246,7 +253,7 @@ generate random values from correlated <a class="reference internal" href="gvar.
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -266,13 +273,13 @@ generate random values from correlated <a class="reference internal" href="gvar.
         <li class="right" >
           <a href="gvar_other.html" title="Numerical Analysis Modules in gvar"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study:  Numerical Analysis — Pendulum Clock</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2020, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

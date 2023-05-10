@@ -20,28 +20,11 @@ DOCFILES :=  $(shell ls doc/source/conf.py doc/source/*.{rst,png})
 SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})
 CYTHONFILES := src/gvar/_bufferdict.c src/gvar/_gvarcore.c src/gvar/_svec_smat.c src/gvar/_utilities.c src/gvar/dataset.c
 
-install-user : $(CYTHONFILES)
-	$(PIP) install . --user
+install-user : 
+	$(PIP) install . --user --no-cache-dir
 
-install install-sys : $(CYTHONFILES)
-	$(PIP) install .
-
-src/gvar/_gvarcore.c : src/gvar/_gvarcore.pyx src/gvar/_gvarcore.pxd
-	cd src/gvar; cython  _gvarcore.pyx
-
-src/gvar/_svec_smat.c : src/gvar/_svec_smat.pyx src/gvar/_svec_smat.pxd
-	cd src/gvar; cython  _svec_smat.pyx
-
-src/gvar/_bufferdict.c : src/gvar/_bufferdict.pyx
-	cd src/gvar; cython  _bufferdict.pyx
-
-src/gvar/_utilities.c : src/gvar/_utilities.pyx
-	cd src/gvar; cython  _utilities.pyx
-
-src/gvar/dataset.c : src/gvar/dataset.pyx
-	cd src/gvar; cython  dataset.pyx
-
-# $(PYTHON) setup.py install --record files-gvar.$(PYTHONVERSION)
+install install-sys : 
+	$(PIP) install . --no-cache-dir
 
 uninstall :			# mostly works (may leave some empty directories)
 	$(PIP) uninstall gvar
@@ -49,43 +32,22 @@ uninstall :			# mostly works (may leave some empty directories)
 update :
 	make uninstall install 
 
-rebuild:
-	rm -rf $(CYTHONFILES)
-	make uninstall install 
+.PHONY : doc 
 
-try:
-	$(PYTHON) setup.py install --user --record files-gvar.$(PYTHONVERSION)
-
-untry:
-	- cat files-gvar.$(PYTHONVERSION) | xargs rm -rf
-	- cat files-gdev.$(PYTHONVERSION) | xargs rm -rf
-
-install-gdev :
-	$(PYTHON) gdev-setup.py install --user --record files-gdev.$(PYTHONVERSION)
-
-install-gdev-sys :
-	$(PYTHON) gdev-setup.py install --record files-gdev.$(PYTHONVERSION)
-
-doc-html:
+doc-html doc:
 	make doc/html/index.html
 
 doc/html/index.html : $(SRCFILES) $(DOCFILES)
-	rm -rf doc/html; sphinx-build -b html doc/source doc/html
+	sphinx-build -b html doc/source doc/html
 
-# doc-pdf:
-# 	make doc/gvar.pdf
-
-# doc/gvar.pdf : $(SRCFILES) $(DOCFILES)
-# 	rm -rf doc/gvar.pdf
-# 	sphinx-build -b latex doc/source doc/latex
-# 	cd doc/latex; make gvar.pdf; mv gvar.pdf ..
-
+clear-doc:
+	rm -rf doc/html
+	
 doc-zip doc.zip:
 	cd doc/html; zip -r doc *; mv doc.zip ../..
 
-doc-all: doc-html # doc-pdf
 
-sdist: $(CYTHONFILES) # source distribution
+sdist: $(SRCFILES) # source distribution
 	$(PYTHON) setup.py sdist
 
 .PHONY: tests
@@ -102,9 +64,6 @@ run run-examples:
 
 register-pypi:
 	python setup.py register # use only once, first time
-
-# upload-pypi: $(CYTHONFILES)
-# 	python setup.py sdist upload
 
 upload-twine: $(CYTHONFILES)
 	twine upload dist/gvar-$(VERSION).tar.gz

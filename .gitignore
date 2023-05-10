@@ -29,12 +29,14 @@ ideas/
 todo/
 papers/
 old/
+save/
 gvar-distribution/
 doc/html/_static/dialog-todo.png
 doc/latex/
 doc/source/outputfile.p
 outputfile.p
-gvar.egg-info/
+*.egg-info/
+src/*.egg-info/
 doc/source/pendulum-paper.pdf
 README.html
 z*.py
