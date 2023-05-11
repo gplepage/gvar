@@ -1,3 +1,10 @@
+Version 11.11.10 2023-05-11
+===========================
+- New and much simpler installation code. Works with Python3.11, even if 
+  numpy is not installed.
+
+- Fix readthedocs setup.
+
 Version 11.11.2 2023-02-26
 ==========================
 Cleans up inconsistent treatment of data types by gvar.BufferDict. 
