@@ -1,3 +1,4 @@
+#
 # -*- coding: utf-8 -*-
 #
 # gvar documentation build configuration file, created by
@@ -11,7 +12,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+# import sys, os
 import gvar
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -27,10 +28,23 @@ import gvar
 # jsmath_path = '/usr/local/share/jsmath/easy/load.js'
 # extensions = ['sphinx.ext.autodoc','sphinx.ext.mathjax']
 extensions = ['sphinx.ext.autodoc','sphinx.ext.napoleon', 'sphinx.ext.imgmath'] # ,'rst2pdf.pdfbuilder']
-imgmath_image_format = "png"
+imgmath_image_format = 'svg'
 imgmath_use_preview = True
-imgmath_latex_preamble = "\\usepackage{arev}"
-imgmath_dvipng_args = ['-gamma', '0.35', '-D', '110', '-bg', 'Transparent']
+imgmath_latex_preamble = r"\usepackage{arev}"
+#imgmath_dvipng_args = ['-gamma', '0.35', '-D', '110', '-bg', 'Transparent']
+# imgmath_dvisvgm_args = ['-TT 10cm,0.1cm']
+imgmath_font_size = 12
+
+napoleon_google_docstring = True
+napoleon_numpy_docstring = True
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = False
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -46,7 +60,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'gvar'
-copyright = u'2009-2020, G. P. Lepage'
+copyright = u'2009-2023, G. P. Lepage'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -73,6 +87,7 @@ release = gvar.__version__
 # List of directories, relative to source directory, that shouldn't be searched
 # for source files.
 exclude_trees = ['_build']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -89,7 +104,7 @@ exclude_trees = ['_build']
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+# pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
@@ -168,37 +183,6 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'gvardoc'
+# htmlhelp_basename = 'gvardoc'
 
 
-# -- Options for LaTeX output --------------------------------------------------
-
-# The paper size ('letter' or 'a4').
-#latex_paper_size = 'letter'
-
-# The font size ('10pt', '11pt' or '12pt').
-#latex_font_size = '10pt'
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, documentclass [howto/manual]).
-latex_documents = [
-  ('index', 'gvar.tex', u'gvar Documentation',
-   u'G. P. Lepage', 'manual'),
-]
-
-# The name of an image file (relative to this directory) to place at the top of
-# the title page.
-#latex_logo = None
-
-# For "manual" documents, if this is true, then toplevel headings are parts,
-# not chapters.
-#latex_use_parts = False
-
-# Additional stuff for the LaTeX preamble.
-#latex_preamble = ''
-
-# Documents to append as an appendix to all manuals.
-#latex_appendices = []
-
-# If false, no module index is generated.
-#latex_use_modindex = True
