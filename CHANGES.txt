@@ -1,3 +1,12 @@
+Version 11.11.11 2023-06-11
+============================
+- Minor error in gvar.powerseries.PowerSeries.__truediv__ that triggered 
+  exception when it shouldn't have.
+
+- Fixes bug that caused a crash when old pickle files containing GVars 
+  were read in. Note that pickling GVars directly is generally not 
+  a great idea; use gvar.dump and gvar.load instead of pickle.load/dump.
+
 Version 11.11.10 2023-05-11
 ===========================
 - New and much simpler installation code. Works with Python3.11, even if 

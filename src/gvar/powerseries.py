@@ -304,12 +304,12 @@ class PowerSeries(object):
             if x.c[0] == 0:     # needed for numpy scalars
                 raise ZeroDivisionError
             order = min(self.order,x.order)
-            ans = 0.0*self.c[:order+1]
+            ans = []
             for n in range(order+1):
                 tot = self.c[n]
                 for i in range(n):
                     tot = tot - ans[i]*x.c[n-i]
-                ans[n] = tot/x.c[0]
+                ans.append(tot / x.c[0])
         except ZeroDivisionError:
             if self.c[0]==x.c[0] and len(self.c)>1 and len(x.c)>1:
                 # strip off matching overall factor of x from denom and num

@@ -74,7 +74,11 @@ cdef class GVar:
 
     def __setstate__(self, state):
         from gvar import gvar
-        self.v, self.d, self.cov = gvar(*state).internaldata
+        if len(state) == 3:
+            # legacy code (bad idea to use it, however)
+            self.cov, self.d, self.v = state
+        else:
+            self.v, self.d, self.cov = gvar(*state).internaldata
 
     def __deepcopy__(self, *args):
         return self
