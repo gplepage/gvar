@@ -1,16 +1,19 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.11.10 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 11.11.11 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="gvar.dataset - Random Data Sets" href="gvar_dataset.html" />
@@ -38,7 +41,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>  
@@ -274,7 +277,7 @@ it is already provided by <a class="reference internal" href="#module-gvar" titl
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s) – Point at which the function is evaluated.</p></li>
 <li><p><strong>f</strong> (<em>float</em>) – Value of function at point <code class="docutils literal notranslate"><span class="pre">gvar.mean(x)</span></code>.</p></li>
-<li><p><strong>dfdx</strong> (<em>float</em><em>, </em><em>array</em><em> of </em><em>floats</em><em>, or </em><em>a dictionary</em><em> of </em><em>floats</em>) – Derivatives of function with respect to x at
+<li><p><strong>dfdx</strong> (<em>float</em><em>, </em><em>array of floats</em><em>, or </em><em>a dictionary of floats</em>) – Derivatives of function with respect to x at
 point <code class="docutils literal notranslate"><span class="pre">gvar.mean(x)</span></code>.</p></li>
 </ul>
 </dd>
@@ -1946,6 +1949,15 @@ covariance matrices, should never be mixed in arithmetic or other
 expressions. Such mixing is unsupported and will result in
 unpredictable behavior. Arithmetic that mixes <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in
 this way will generate an error message: “incompatible GVars”.</p>
+<dl class="simple">
+<dt>Args</dt><dd><dl class="simple">
+<dt>cov: Covariance matrix for new <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>. A new</dt><dd><p>covariance matrix is created if <code class="docutils literal notranslate"><span class="pre">cov=None</span></code> (default).
+If <code class="docutils literal notranslate"><span class="pre">cov</span></code> is a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, the covariance matrix of
+the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> is used.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>New <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>.</p>
@@ -2654,7 +2666,7 @@ mean, standard deviation, skewness, and excess kurtosis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>moments</strong> (<em>array</em><em> of </em><em>floats</em>) – <code class="docutils literal notranslate"><span class="pre">moments[i]</span></code> is the (i+1)-th moment.
+<li><p><strong>moments</strong> (<em>array of floats</em>) – <code class="docutils literal notranslate"><span class="pre">moments[i]</span></code> is the (i+1)-th moment.
 Optional argument unless <code class="docutils literal notranslate"><span class="pre">histgram=None</span></code>.</p></li>
 <li><p><strong>histogram</strong> (<em>tuple</em>) – Tuple <code class="docutils literal notranslate"><span class="pre">(bins,prob)</span></code> where <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> is
 the probability in the bin between <code class="docutils literal notranslate"><span class="pre">bins[i-1]</span></code> and <code class="docutils literal notranslate"><span class="pre">bins[i]</span></code>.
@@ -2909,133 +2921,11 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#functions">Functions</a><ul>
-<li><a class="reference internal" href="#gvar.gvar"><code class="docutils literal notranslate"><span class="pre">gvar()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.gvar_function"><code class="docutils literal notranslate"><span class="pre">gvar_function()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.mean"><code class="docutils literal notranslate"><span class="pre">mean()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.sdev"><code class="docutils literal notranslate"><span class="pre">sdev()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.var"><code class="docutils literal notranslate"><span class="pre">var()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.is_primary"><code class="docutils literal notranslate"><span class="pre">is_primary()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dependencies"><code class="docutils literal notranslate"><span class="pre">dependencies()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.filter"><code class="docutils literal notranslate"><span class="pre">filter()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.fmt"><code class="docutils literal notranslate"><span class="pre">fmt()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.tabulate"><code class="docutils literal notranslate"><span class="pre">tabulate()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.correlate"><code class="docutils literal notranslate"><span class="pre">correlate()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.evalcov"><code class="docutils literal notranslate"><span class="pre">evalcov()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.cov"><code class="docutils literal notranslate"><span class="pre">cov()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.evalcov_blocks"><code class="docutils literal notranslate"><span class="pre">evalcov_blocks()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.evalcorr"><code class="docutils literal notranslate"><span class="pre">evalcorr()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.corr"><code class="docutils literal notranslate"><span class="pre">corr()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.uncorrelated"><code class="docutils literal notranslate"><span class="pre">uncorrelated()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.chi2"><code class="docutils literal notranslate"><span class="pre">chi2()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.qqplot"><code class="docutils literal notranslate"><span class="pre">qqplot()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.fmt_chi2"><code class="docutils literal notranslate"><span class="pre">fmt_chi2()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.equivalent"><code class="docutils literal notranslate"><span class="pre">equivalent()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dump"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dumps"><code class="docutils literal notranslate"><span class="pre">dumps()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.loads"><code class="docutils literal notranslate"><span class="pre">loads()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.gdump"><code class="docutils literal notranslate"><span class="pre">gdump()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.gdumps"><code class="docutils literal notranslate"><span class="pre">gdumps()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.gload"><code class="docutils literal notranslate"><span class="pre">gload()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.gloads"><code class="docutils literal notranslate"><span class="pre">gloads()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.remove_gvars"><code class="docutils literal notranslate"><span class="pre">remove_gvars()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.distribute_gvars"><code class="docutils literal notranslate"><span class="pre">distribute_gvars()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVarRef"><code class="docutils literal notranslate"><span class="pre">GVarRef</span></code></a></li>
-<li><a class="reference internal" href="#gvar.disassemble"><code class="docutils literal notranslate"><span class="pre">disassemble()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.reassemble"><code class="docutils literal notranslate"><span class="pre">reassemble()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.deriv"><code class="docutils literal notranslate"><span class="pre">deriv()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.raniter"><code class="docutils literal notranslate"><span class="pre">raniter()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.sample"><code class="docutils literal notranslate"><span class="pre">sample()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.bootstrap_iter"><code class="docutils literal notranslate"><span class="pre">bootstrap_iter()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.ranseed"><code class="docutils literal notranslate"><span class="pre">ranseed()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.fmt_errorbudget"><code class="docutils literal notranslate"><span class="pre">fmt_errorbudget()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.fmt_values"><code class="docutils literal notranslate"><span class="pre">fmt_values()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.regulate"><code class="docutils literal notranslate"><span class="pre">regulate()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.svd"><code class="docutils literal notranslate"><span class="pre">svd()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.rebuild"><code class="docutils literal notranslate"><span class="pre">rebuild()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.switch_gvar"><code class="docutils literal notranslate"><span class="pre">switch_gvar()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.restore_gvar"><code class="docutils literal notranslate"><span class="pre">restore_gvar()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.gvar_factory"><code class="docutils literal notranslate"><span class="pre">gvar_factory()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#gvar-gvar-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code> Objects</a><ul>
-<li><a class="reference internal" href="#gvar.GVar"><code class="docutils literal notranslate"><span class="pre">GVar</span></code></a><ul>
-<li><a class="reference internal" href="#gvar.GVar.mean"><code class="docutils literal notranslate"><span class="pre">GVar.mean</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.sdev"><code class="docutils literal notranslate"><span class="pre">GVar.sdev</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.var"><code class="docutils literal notranslate"><span class="pre">GVar.var</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.partialvar"><code class="docutils literal notranslate"><span class="pre">GVar.partialvar()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.partialsdev"><code class="docutils literal notranslate"><span class="pre">GVar.partialsdev()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.deriv"><code class="docutils literal notranslate"><span class="pre">GVar.deriv()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.__str__"><code class="docutils literal notranslate"><span class="pre">GVar.__str__()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.fmt"><code class="docutils literal notranslate"><span class="pre">GVar.fmt()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.cov"><code class="docutils literal notranslate"><span class="pre">GVar.cov</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.der"><code class="docutils literal notranslate"><span class="pre">GVar.der</span></code></a></li>
-<li><a class="reference internal" href="#gvar.GVar.dotder"><code class="docutils literal notranslate"><span class="pre">GVar.dotder()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#gvar-bufferdict-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code> Objects</a><ul>
-<li><a class="reference internal" href="#gvar.BufferDict"><code class="docutils literal notranslate"><span class="pre">BufferDict</span></code></a><ul>
-<li><a class="reference internal" href="#gvar.BufferDict.size"><code class="docutils literal notranslate"><span class="pre">BufferDict.size</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.flat"><code class="docutils literal notranslate"><span class="pre">BufferDict.flat</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.dtype"><code class="docutils literal notranslate"><span class="pre">BufferDict.dtype</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.buf"><code class="docutils literal notranslate"><span class="pre">BufferDict.buf</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.shape"><code class="docutils literal notranslate"><span class="pre">BufferDict.shape</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.flatten"><code class="docutils literal notranslate"><span class="pre">BufferDict.flatten()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.slice"><code class="docutils literal notranslate"><span class="pre">BufferDict.slice()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.slice_shape"><code class="docutils literal notranslate"><span class="pre">BufferDict.slice_shape()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.has_dictkey"><code class="docutils literal notranslate"><span class="pre">BufferDict.has_dictkey()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.all_keys"><code class="docutils literal notranslate"><span class="pre">BufferDict.all_keys()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.add_distribution"><code class="docutils literal notranslate"><span class="pre">BufferDict.add_distribution()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.del_distribution"><code class="docutils literal notranslate"><span class="pre">BufferDict.del_distribution()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.has_distribution"><code class="docutils literal notranslate"><span class="pre">BufferDict.has_distribution()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.BufferDict.uniform"><code class="docutils literal notranslate"><span class="pre">BufferDict.uniform()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#gvar-svd-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.SVD</span></code> Objects</a><ul>
-<li><a class="reference internal" href="#gvar.SVD"><code class="docutils literal notranslate"><span class="pre">SVD</span></code></a><ul>
-<li><a class="reference internal" href="#gvar.SVD.val"><code class="docutils literal notranslate"><span class="pre">SVD.val</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.vec"><code class="docutils literal notranslate"><span class="pre">SVD.vec</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.valmin"><code class="docutils literal notranslate"><span class="pre">SVD.valmin</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.valorig"><code class="docutils literal notranslate"><span class="pre">SVD.valorig</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.D"><code class="docutils literal notranslate"><span class="pre">SVD.D</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.nmod"><code class="docutils literal notranslate"><span class="pre">SVD.nmod</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.eigen_range"><code class="docutils literal notranslate"><span class="pre">SVD.eigen_range</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.delta"><code class="docutils literal notranslate"><span class="pre">SVD.delta</span></code></a></li>
-<li><a class="reference internal" href="#gvar.SVD.decomp"><code class="docutils literal notranslate"><span class="pre">SVD.decomp()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#vegas-pdfintegrator-and-other-pdf-related-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code> and other PDF-related Objects</a><ul>
-<li><a class="reference internal" href="#gvar.PDF"><code class="docutils literal notranslate"><span class="pre">PDF</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics"><code class="docutils literal notranslate"><span class="pre">PDFStatistics</span></code></a><ul>
-<li><a class="reference internal" href="#gvar.PDFStatistics.mean"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.mean</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics.sdev"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.sdev</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics.skew"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.skew</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics.ex_kurt"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.ex_kurt</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics.median"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.median</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics.plus"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.plus</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics.minus"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.minus</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFStatistics.gvar"><code class="docutils literal notranslate"><span class="pre">PDFStatistics.gvar</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#gvar.PDFHistogram"><code class="docutils literal notranslate"><span class="pre">PDFHistogram</span></code></a><ul>
-<li><a class="reference internal" href="#gvar.PDFHistogram.g"><code class="docutils literal notranslate"><span class="pre">PDFHistogram.g</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFHistogram.bins"><code class="docutils literal notranslate"><span class="pre">PDFHistogram.bins</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFHistogram.midpoints"><code class="docutils literal notranslate"><span class="pre">PDFHistogram.midpoints</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFHistogram.widths"><code class="docutils literal notranslate"><span class="pre">PDFHistogram.widths</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFHistogram.count"><code class="docutils literal notranslate"><span class="pre">PDFHistogram.count()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFHistogram.analyze"><code class="docutils literal notranslate"><span class="pre">PDFHistogram.analyze()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.PDFHistogram.make_plot"><code class="docutils literal notranslate"><span class="pre">PDFHistogram.make_plot()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#gvar-gvar-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code> Objects</a></li>
+<li><a class="reference internal" href="#gvar-bufferdict-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code> Objects</a></li>
+<li><a class="reference internal" href="#gvar-svd-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.SVD</span></code> Objects</a></li>
+<li><a class="reference internal" href="#vegas-pdfintegrator-and-other-pdf-related-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code> and other PDF-related Objects</a></li>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 </ul>
 </li>
@@ -3088,13 +2978,13 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

@@ -1,16 +1,19 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.11.10 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.11.11 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Numerical Analysis Modules in gvar" href="gvar_other.html" />
@@ -38,7 +41,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>  
@@ -811,37 +814,8 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
     <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a><ul>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
-<li><a class="reference internal" href="#functions">Functions</a><ul>
-<li><a class="reference internal" href="#gvar.dataset.avg_data"><code class="docutils literal notranslate"><span class="pre">avg_data()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.autocorr"><code class="docutils literal notranslate"><span class="pre">autocorr()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.bin_data"><code class="docutils literal notranslate"><span class="pre">bin_data()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.bootstrap_iter"><code class="docutils literal notranslate"><span class="pre">bootstrap_iter()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#classes">Classes</a><ul>
-<li><a class="reference internal" href="#gvar.dataset.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.samplesize"><code class="docutils literal notranslate"><span class="pre">Dataset.samplesize</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.append"><code class="docutils literal notranslate"><span class="pre">Dataset.append()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.extend"><code class="docutils literal notranslate"><span class="pre">Dataset.extend()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.grep"><code class="docutils literal notranslate"><span class="pre">Dataset.grep()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.slice"><code class="docutils literal notranslate"><span class="pre">Dataset.slice()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.arrayzip"><code class="docutils literal notranslate"><span class="pre">Dataset.arrayzip()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.trim"><code class="docutils literal notranslate"><span class="pre">Dataset.trim()</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.Dataset.toarray"><code class="docutils literal notranslate"><span class="pre">Dataset.toarray()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis</span></code></a><ul>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis.svdcut"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis.svdcut</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis.eps"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis.eps</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis.avgdata"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis.avgdata</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis.val"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis.val</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis.bsval"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis.bsval</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis.nmod"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis.nmod</span></code></a></li>
-<li><a class="reference internal" href="#gvar.dataset.svd_diagnosis.plot_ratio"><code class="docutils literal notranslate"><span class="pre">svd_diagnosis.plot_ratio()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
 </li>
 </ul>
@@ -893,13 +867,13 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>

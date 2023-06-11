@@ -194,10 +194,19 @@ def switch_gvar(cov=None):
     unpredictable behavior. Arithmetic that mixes |GVar|\s in 
     this way will generate an error message: "incompatible GVars".
 
-    :returns: New :func:`gvar.gvar`.
+    Args:
+        cov: Covariance matrix for new :func:`gvar.gvar`. A new 
+            covariance matrix is created if ``cov=None`` (default). 
+            If ``cov`` is a |GVar|, the covariance matrix of 
+            the |GVar| is used. 
+
+    Returns:
+        New :func:`gvar.gvar`.
     """
     global gvar
     _GVAR_LIST.append(gvar)
+    if isinstance(cov, GVar):
+        cov = cov.cov
     gvar = GVarFactory(cov)
     return gvar
 

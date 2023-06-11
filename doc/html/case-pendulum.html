@@ -1,16 +1,19 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Case Study: Numerical Analysis — Pendulum Clock &#8212; gvar 11.11.10 documentation</title>
+    <title>Case Study: Numerical Analysis — Pendulum Clock &#8212; gvar 11.11.11 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Case Study: Correlations and SVD Cuts" href="case-svdcut.html" />
@@ -38,7 +41,7 @@
         <li class="right" >
           <a href="gvar_other.html" title="Numerical Analysis Modules in gvar"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study:  Numerical Analysis — Pendulum Clock</a></li> 
       </ul>
     </div>  
@@ -75,14 +78,14 @@ of the pendulum.</p>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
 
 <span class="k">def</span> <span class="nf">make_pendulum</span><span class="p">(</span><span class="n">theta0</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Create pendulum solution y(t) = [theta(t), d/dt theta(t)].</span>
+    <span class="sd">&quot;&quot;&quot; Create pendulum solution y(t) = [theta(t), d/dt theta(t)].</span>
 
 <span class="sd">    Initial conditions are y(0) = [theta0, 0]. Parameter l is the</span>
 <span class="sd">    length of the pendulum.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">g_l</span> <span class="o">=</span> <span class="mf">9.8</span> <span class="o">/</span> <span class="n">l</span>
     <span class="k">def</span> <span class="nf">deriv</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; Calculate d/dt [theta(t), d/dt theta(t)]. &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; Calculate d/dt [theta(t), d/dt theta(t)]. &quot;&quot;&quot;</span>
         <span class="n">theta</span><span class="p">,</span> <span class="n">dtheta_dt</span> <span class="o">=</span> <span class="n">y</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">dtheta_dt</span><span class="p">,</span> <span class="o">-</span> <span class="n">g_l</span> <span class="o">*</span> <span class="n">gv</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)])</span>
     <span class="n">y0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
@@ -94,14 +97,14 @@ we find the period of oscillation using <a class="reference internal" href="gvar
 is the time at which the pendulum returns to its starting point and its
 velocity (<code class="docutils literal notranslate"><span class="pre">y(t)[1]</span></code>) vanishes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find_period</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">Tapprox</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Find oscillation period of pendulum solution y(t).</span>
+    <span class="sd">&quot;&quot;&quot; Find oscillation period of pendulum solution y(t).</span>
 
 <span class="sd">    Parameter Tapprox is the approximate period. The code finds the time</span>
 <span class="sd">    between 0.7 * Tapprox and 1.3 * Tapprox where y(t)[1] = d/dt theta(t)</span>
 <span class="sd">    vanishes. This is the period, provided Tapprox is correctly chosen.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">dtheta_dt</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; vanishes when dtheta/dt = 0 &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot; vanishes when dtheta/dt = 0 &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">y</span><span class="p">(</span><span class="n">t</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span>  <span class="n">gv</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">refine</span><span class="p">(</span><span class="n">dtheta_dt</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.7</span> <span class="o">*</span> <span class="n">Tapprox</span><span class="p">,</span> <span class="mf">1.3</span> <span class="o">*</span> <span class="n">Tapprox</span><span class="p">))</span>
 </pre></div>
@@ -270,13 +273,13 @@ generate random values from correlated <a class="reference internal" href="gvar.
         <li class="right" >
           <a href="gvar_other.html" title="Numerical Analysis Modules in gvar"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.11 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study:  Numerical Analysis — Pendulum Clock</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
     </div>
   </body>
 </html>
