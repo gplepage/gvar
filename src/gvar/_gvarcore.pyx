@@ -1,4 +1,5 @@
 # cython: boundscheck=False, language_level=3str, binding=True
+# cython: c_api_binop_methods=True
 # c#ython: profile=True
 # remove extra # above for profiling
 
@@ -859,7 +860,7 @@ class GVarFactory:
             self.cov = cov
 
     def __call__(self, *args, verify=False, fast=False):
-        cdef INTP_TYPE nx, i, nd, ib, nb
+        cdef INTP_TYPE nx, i, nd, ib, nb, n1, n2
         cdef svec der
         cdef smat cov
         cdef GVar gv, xg, yg
@@ -896,14 +897,14 @@ class GVarFactory:
                             k1_sl = slice(k1_sl, k1_sl + 1)
                             n1 = 1
                         else:
-                            n1 = numpy.product(k1_sh)
+                            n1 = numpy.prod(k1_sh)
                         for k2 in x:
                             k2_sl, k2_sh = x.slice_shape(k2)
                             if k2_sh == ():
                                 k2_sl = slice(k2_sl, k2_sl + 1)
                                 n2 = 1
                             else:
-                                n2 = numpy.product(k2_sh)
+                                n2 = numpy.prod(k2_sh)
                             xcov[k1_sl, k2_sl] = (
                                 numpy.asarray(args[1][k1, k2]).reshape(n1, n2)
                                 )

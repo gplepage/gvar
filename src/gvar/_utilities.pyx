@@ -542,14 +542,14 @@ def correlate(g, corr, upper=False, lower=False, verify=False):
                 i_sl = slice(i_sl, i_sl + 1)
                 ni = 1
             else:
-                ni = numpy.product(i_sh)
+                ni = numpy.prod(i_sh)
             for j in g:
                 j_sl, j_sh = g.slice_shape(j)
                 if j_sh == ():
                     j_sl = slice(j_sl, j_sl + 1)
                     nj = 1
                 else:
-                    nj = numpy.product(j_sh)
+                    nj = numpy.prod(j_sh)
                 corrflat[i_sl, j_sl] = numpy.asarray(corr[i, j]).reshape(ni, nj) 
         return BufferDict(g, buf=correlate(g.buf, corrflat, upper=upper, lower=lower, verify=verify))
     else:
@@ -2344,7 +2344,7 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=None):
             yield next(buf.flat)
         else:
             yield buf.reshape(g.shape)
-    raise StopIteration
+    # raise StopIteration
 
 def sample(g, eps=None, svdcut=None):
     """ Generate random sample from distribution ``g``.
@@ -2433,7 +2433,7 @@ def raniter(g, n=None, eps=None, svdcut=None, uniform=None):
             yield next(buf.flat)
         else:
             yield buf.reshape(g.shape)
-    raise StopIteration
+    # raise StopIteration
 
 class SVD(object):
     """ SVD decomposition of a pos. sym. matrix.
