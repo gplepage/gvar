@@ -656,6 +656,8 @@ class BufferDict(collections_MMapping):
                 :meth:`BufferDict.del_distribution`.
             invfcn (callable): Inverse of the transformation function.
         """
+        if '(' in name or ')' in name:
+            raise ValueError('distribution name contains parenthesis (not allowed): {}'. format(name))
         if name in BufferDict.invfcn:
             raise ValueError('distribution {} already defined'.format(name))
         BufferDict.invfcn[name] = invfcn
