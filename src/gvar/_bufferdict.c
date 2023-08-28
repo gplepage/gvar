@@ -4,7 +4,7 @@
 {
     "distutils": {
         "include_dirs": [
-            "/private/var/folders/zc/n_xx9k_d4tb_8y1rvhy2c7br0000gq/T/pip-build-env-l7idlyvh/overlay/lib/python3.11/site-packages/numpy/core/include"
+            "/private/var/folders/zc/n_xx9k_d4tb_8y1rvhy2c7br0000gq/T/pip-build-env-to2shygr/overlay/lib/python3.11/site-packages/numpy/core/include"
         ],
         "name": "gvar._bufferdict",
         "sources": [
@@ -2734,7 +2734,7 @@ static const char __pyx_k_BufferDict___str___locals_genexp[] = "BufferDict.__str
 static const char __pyx_k_Data_type_of_buffer_array_elemen[] = "Data type of buffer array elements.";
 static const char __pyx_k_New_buffer_wrong_type_or_shape_s[] = "New buffer wrong type or shape ---\n    %s,%s   not   %s,%s";
 static const char __pyx_k_can_t_specify_buffer_unless_firs[] = "can't specify buffer unless first argument is a BufferDict";
-static const char __pyx_k_distribution_name_contains_paren[] = "distribution name contains parentheses (not allowed): {}";
+static const char __pyx_k_distribution_name_contains_paren[] = "distribution name contains parenthesis (not allowed): {}";
 static const char __pyx_k_too_many_arguments_buffer_specif[] = "too many arguments: buffer specified more than once";
 /* #### Code section: decls ### */
 static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict___init__(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_self, PyObject *__pyx_v_args, PyObject *__pyx_v_kargs); /* proto */
@@ -19771,7 +19771,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_91add_distribution(CY
  *             invfcn (callable): Inverse of the transformation function.
  *         """
  *         if '(' in name or ')' in name:             # <<<<<<<<<<<<<<
- *             raise ValueError('distribution name contains parentheses (not allowed): {}'. format(name))
+ *             raise ValueError('distribution name contains parenthesis (not allowed): {}'. format(name))
  *         if name in BufferDict.invfcn:
  */
   __pyx_t_2 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s__7, __pyx_v_name, Py_EQ)); if (unlikely((__pyx_t_2 < 0))) __PYX_ERR(0, 659, __pyx_L1_error)
@@ -19788,7 +19788,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_91add_distribution(CY
     /* "gvar/_bufferdict.pyx":660
  *         """
  *         if '(' in name or ')' in name:
- *             raise ValueError('distribution name contains parentheses (not allowed): {}'. format(name))             # <<<<<<<<<<<<<<
+ *             raise ValueError('distribution name contains parenthesis (not allowed): {}'. format(name))             # <<<<<<<<<<<<<<
  *         if name in BufferDict.invfcn:
  *             raise ValueError('distribution {} already defined'.format(name))
  */
@@ -19827,14 +19827,14 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_91add_distribution(CY
  *             invfcn (callable): Inverse of the transformation function.
  *         """
  *         if '(' in name or ')' in name:             # <<<<<<<<<<<<<<
- *             raise ValueError('distribution name contains parentheses (not allowed): {}'. format(name))
+ *             raise ValueError('distribution name contains parenthesis (not allowed): {}'. format(name))
  *         if name in BufferDict.invfcn:
  */
   }
 
   /* "gvar/_bufferdict.pyx":661
  *         if '(' in name or ')' in name:
- *             raise ValueError('distribution name contains parentheses (not allowed): {}'. format(name))
+ *             raise ValueError('distribution name contains parenthesis (not allowed): {}'. format(name))
  *         if name in BufferDict.invfcn:             # <<<<<<<<<<<<<<
  *             raise ValueError('distribution {} already defined'.format(name))
  *         BufferDict.invfcn[name] = invfcn
@@ -19849,7 +19849,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_91add_distribution(CY
   if (unlikely(__pyx_t_1)) {
 
     /* "gvar/_bufferdict.pyx":662
- *             raise ValueError('distribution name contains parentheses (not allowed): {}'. format(name))
+ *             raise ValueError('distribution name contains parenthesis (not allowed): {}'. format(name))
  *         if name in BufferDict.invfcn:
  *             raise ValueError('distribution {} already defined'.format(name))             # <<<<<<<<<<<<<<
  *         BufferDict.invfcn[name] = invfcn
@@ -19888,7 +19888,7 @@ static PyObject *__pyx_pf_4gvar_11_bufferdict_10BufferDict_91add_distribution(CY
 
     /* "gvar/_bufferdict.pyx":661
  *         if '(' in name or ')' in name:
- *             raise ValueError('distribution name contains parentheses (not allowed): {}'. format(name))
+ *             raise ValueError('distribution name contains parenthesis (not allowed): {}'. format(name))
  *         if name in BufferDict.invfcn:             # <<<<<<<<<<<<<<
  *             raise ValueError('distribution {} already defined'.format(name))
  *         BufferDict.invfcn[name] = invfcn
