@@ -50,7 +50,9 @@ else:
         return fileinput.hook_compressed
 
 
-cimport numpy, cython
+cimport  numpy
+numpy.import_array()
+cimport cython
 
 from numpy cimport npy_intp as INTP_TYPE
 # index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
@@ -103,7 +105,7 @@ def bin_data(dataset, binsize=2):
 
 def avg_data(
     dataset, median=False, spread=False, bstrap=False, noerror=False, 
-    mismatch='truncate', warn=False
+    mismatch='truncate', unbias=False, warn=False
     ):
     """ Average ``dataset`` to estimate means and covariance.
 
@@ -145,71 +147,77 @@ def avg_data(
     whether there is a problem, and, if so, the problem can be ameliorated by 
     applying an SVD cut to the data after averaging (:func:`gvar.regulate`).
 
-    There are four optional arguments. If argument ``spread=True`` each
-    standard deviation in the results refers to the spread in the data, not
-    the uncertainty in the estimate of the mean. The former is ``sqrt(N)``
-    larger where ``N`` is the number of random numbers (or arrays) being
-    averaged::
+    Args:
+        spread (bool): Setting ``spread=True`` means that
+            standard deviations in the results refer to spreads in the data, not
+            uncertainties in the estimates of the means. The former is ``sqrt(N)``
+            larger where ``N`` is the number of random numbers (or arrays) being
+            averaged. This is useful, for example, when averaging bootstrap data. 
+            The default value is ``spread=False``.
 
-        >>> print(avg_data(random_numbers,spread=True))
-        1.31(50)
-        >>> print(avg_data(random_numbers))
-        1.31(20)
-        >>> print((0.50 / 0.20) ** 2)   # should be (about) 6
-        6.25
+        median (bool): Setting ``median=True`` 
+            replaces the means in the results by medians, while the standard
+            deviations are approximated by the width of the larger of the intervals 
+            above or below the median that contains 34% of the data. These 
+            estimates are more robust than the mean and standard deviation when 
+            averaging over small amounts of data; in particular, they are 
+            unaffected by extreme outliers in the data. But correlations 
+            between different variables are ignored in this case. The default 
+            is ``median=False``.
 
-    This is useful, for example, when averaging bootstrap data. The default
-    value is ``spread=False``.
+        bstrap (bool): Setting ``bstrap=True`` is
+            shorthand for setting ``median=True`` and ``spread=True``, and
+            overrides any explicit setting for these keyword arguments. This is the
+            typical choice for analyzing bootstrap data --- hence its name. The
+            default value is ``bstrap=False``.
 
-    The second option is triggered by setting ``median=True``. This
-    replaces the means in the results by medians, while the standard
-    deviations are approximated by the width of the larger interval 
-    above or below the median that contains 34% of the data. These 
-    estimates are more robust than the mean and standard deviation when 
-    averaging over small amounts of data; in particular, they are 
-    unaffected by extreme outliers in the data. The default 
-    is ``median=False``.
+        noerror (bool): Error estimates on the averages (and correlations) are omitted
+            if ``noerror=True`` is set --- just the mean values are
+            returned. The default value is ``noerror=False``.
 
-    The third option is triggered by setting ``bstrap=True``. This is
-    shorthand for setting ``median=True`` and ``spread=True``, and
-    overrides any explicit setting for these keyword arguments. This is the
-    typical choice for analyzing bootstrap data --- hence its name. The
-    default value is ``bstrap=False``.
+        mimatch (str): The ``mismatch`` option is only relevant when ``dataset`` is a
+            dictionary whose entries ``dataset[k]`` have different sample sizes. This
+            complicates the calculation of correlations between the different entries.
+            There are three choices for ``mismatch``:
 
-    The fourth option is to omit the error estimates on the averages, which
-    is triggered by setting ``noerror=True``. Just the mean values are
-    returned. The default value is ``noerror=False``.
+                ``mismatch='truncate'``: 
+                    Samples are discarded from the ends of
+                    entries so that all entries have the same sample size (equal to the 
+                    smallest sample size). This is the default. 
+                
+                ``mismatch='wavg'``: 
+                    The data set is decomposed into a collection of data sets 
+                    so that the entries in any given data set all have the same sample size;
+                    no samples are discarded. Each of the resulting data sets is averaged 
+                    separately, and the final result is the weighted average of these averages.
+                    This choice is the most accurate but also the slowest, especially for 
+                    large problems. It should only be used when the smallest sample size is 
+                    much larger (eg, 10x) than the number of quantities being averaged.
+                    It also requires the :mod:`lsqfit` Python module.
 
-    The fifth option, ``mismatch``, is only relevant when ``dataset`` is a
-    dictionary whose entries ``dataset[k]`` have different sample sizes. This
-    complicates the calculation of correlations between the different entries.
-    There are three choices for ``mismatch``:
+                ``mismatch='decorrelate'``: 
+                    Ignores correlations between different
+                    entries ``dataset[k]``. All samples are used and correlations within
+                    an entry ``dataset[k]`` are retained. This is the fastest choice.
+            
+        unbias (bool): The default choice ``unbias=False`` means that 
+            covariances are estimated using
+            :math:`\sum_i (x_i-\overline x)(y_i-\overline y)/N` where ``N`` is 
+            the number of random samples. This estimate is biased but is typically 
+            more accurate than the unbiased estimate obtained when ``N`` is 
+            replaced by ``N-1`` (because statistical fluctuations are then larger 
+            than the bias). The difference is negligible unless ``N`` is very small.
+            Setting ``unbias=True`` gives the unbiased estimate.
 
-        ``mismatch='truncate'``: Samples are discarded from the ends of
-        entries so that all entries have the same sample size (equal to the 
-        smallest sample size). This is the default. 
-        
-        ``mismatch='wavg'``: The data set is decomposed into a collection of data sets 
-        so that the entries in any given data set all have the same sample size;
-        no samples are discarded. Each of the resulting data sets is averaged 
-        separately, and the final result is the weighted average of these averages.
-        This choice is the most accurate but also the slowest, especially for 
-        large problems. It should only be used when the smallest sample size is 
-        much larger (eg, 10x) than the number of quantities being averaged.
-        It also requires the :mod:`lsqfit` Python module.
-
-        ``mismatch='decorrelate'``: Ignores correlations between different
-        entries ``dataset[k]``. All samples are used and correlations within
-        an entry ``dataset[k]`` are retained. This is the fastest choice.
-    
-    The final option ``warn`` determines whether or not a warning is issued
-    when different entries in a dictionary data set have different sample
-    sizes. The default is ``warn=False``.
+        warn (bool):``warn`` determines whether or not a warning is issued
+            when different entries in a dictionary data set have different sample
+            sizes. The default is ``warn=False``.
     """
     if bstrap:
         median = True
         spread = True
-    kargs = dict(median=median, spread=spread, noerror=noerror, warn=False)
+        unbias = False
+    kargs = dict(median=median, spread=spread, noerror=noerror, unbias=unbias, warn=False)
     if not hasattr(dataset,'keys'):
         # dataset is a list of arrays (all same shape) or numbers
         if len(dataset) == 0:
@@ -226,17 +234,18 @@ def avg_data(
         dataset_shape = dataset.shape 
         data_shape = dataset.shape[1:]
         dataset.shape = (dataset.shape[0], -1)
+        Neff = dataset.shape[0] if not unbias else (dataset.shape[0] - 1)
         if dataset.shape[0] >= 2:
             cov = numpy.cov(dataset, rowvar=False, bias=True)
         else:
             cov = numpy.zeros(dataset.shape[1:] + dataset.shape[1:], float)
         if not spread:
-            cov /= dataset.shape[0]
+            cov /= Neff
         if median:
             meanm, mean, meanp = numpy.percentile(dataset, q=[50 - 34.1344746, 50, 50 + 34.1344746], axis=0)
             sdev = numpy.maximum(meanp - mean, mean - meanm)
             if not spread:
-                sdev /= dataset.shape[0] ** 0.5 
+                sdev /= Neff ** 0.5 
             # replace std dev by sdev from percentiles in cov
             if data_shape == ():
                 cov = sdev ** 2

@@ -24,6 +24,7 @@ from scipy.linalg import eigh as _scipy_eigh
 from scipy.special import erf as _scipy_erf
 import numpy
 cimport numpy
+numpy.import_array()
 import warnings
 import pickle
 import json
@@ -2534,7 +2535,7 @@ class SVD(object):
         if rescale:
             diag = numpy.fabs(mat.diagonal())
             diag[diag==0.0] = 1.
-            D = (diag)**(-0.5)
+            D = 1. / (diag ** 0.5) # (diag)**(-0.5)
             # DmatD = mat*D
             # DmatD = (DmatD.transpose()*D).transpose()
             DmatD = D[:, None] * mat * D[None, :]
@@ -2659,9 +2660,9 @@ class SVD(object):
                 raise ValueError(           #
                     "Can't compute decomposition for rescaled matrix.")
             w = numpy.array(self.vec)
-            Dfac = self.D**(-n)
+            Dfac = self.D if n == -1 else 1. / self.D   # self.D**(-n)
             for j,valj in enumerate(self.val):
-                w[j] *= Dfac*valj**(n/2.)
+                w[j] *= Dfac* numpy.sqrt(valj if n == 1 else 1. / valj) # Dfac*valj**(n/2.)
         return w
 
 # use ordered dict for python2
@@ -3036,7 +3037,7 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
             else:
                 logdet = 2 * numpy.sum(numpy.log(block_sdev))
             i_wgts[0][0].extend(idx)
-            i_wgts[0][1].extend(block_sdev ** wgts)
+            i_wgts[0][1].extend(block_sdev if wgts == 1 else 1. / block_sdev) # ** wgts)
     # correlated parts
     for idx, block_cov in idx_bcov[1:]:
         g.nblocks[len(idx)] = g.nblocks.get(len(idx), 0) + 1
@@ -3092,7 +3093,7 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
                 )
         i_wgts = tmp
         return g, i_wgts
-
+ 
 def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     """ Apply SVD cuts to collection of |GVar|\s in ``g``.
 
@@ -3281,7 +3282,8 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
             g.logdet += 2 * numpy.sum(numpy.log(block_sdev))
         if wgts is not False:
             i_wgts[0][0].extend(idx)
-            i_wgts[0][1].extend(block_sdev ** wgts)
+            i_wgts[0][1].extend(block_sdev if wgts == 1 else 1. / block_sdev)
+                
     # correlated parts
     for idx, block_cov in idx_bcov[1:]:
         g.nblocks[len(idx)] = g.nblocks.get(len(idx), 0) + 1

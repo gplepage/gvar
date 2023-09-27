@@ -21,9 +21,11 @@ SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})
 CYTHONFILES := src/gvar/_bufferdict.c src/gvar/_gvarcore.c src/gvar/_svec_smat.c src/gvar/_utilities.c src/gvar/dataset.c
 
 install-user : 
+	rm -rf $(CYTHONFILES)
 	$(PIP) install . --user --no-cache-dir
 
 install install-sys : 
+	rm -rf $(CYTHONFILES)
 	$(PIP) install . --no-cache-dir
 
 uninstall :			# mostly works (may leave some empty directories)
@@ -66,10 +68,10 @@ run run-examples:
 register-pypi:
 	python setup.py register # use only once, first time
 
-upload-twine: $(CYTHONFILES)
+upload-twine: 
 	twine upload dist/gvar-$(VERSION).tar.gz
 
-upload-git: $(CYTHONFILES)
+upload-git: 
 	echo  "version $(VERSION)"
 	make doc-html
 	git diff --exit-code

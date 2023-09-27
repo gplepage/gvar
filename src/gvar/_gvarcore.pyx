@@ -22,6 +22,7 @@ from gvar._svec_smat import svec, smat
 from gvar._bufferdict import BufferDict
 
 cimport numpy
+numpy.import_array()
 cimport cython
 from ._svec_smat cimport svec, smat
 

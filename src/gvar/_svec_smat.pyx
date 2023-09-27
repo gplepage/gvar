@@ -15,6 +15,7 @@
 import numpy
 
 cimport numpy
+numpy.import_array()
 cimport cython
 
 from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free

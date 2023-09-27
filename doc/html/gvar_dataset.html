@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.11.13 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 11.11.14 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.13 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.14 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>  
@@ -222,46 +222,43 @@ poorly conditioned or singular if the number of samples is too small.
 Function <a class="reference internal" href="#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis()</span></code></a> can be used to determine
 whether there is a problem, and, if so, the problem can be ameliorated by
 applying an SVD cut to the data after averaging (<a class="reference internal" href="gvar.html#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>).</p>
-<p>There are four optional arguments. If argument <code class="docutils literal notranslate"><span class="pre">spread=True</span></code> each
-standard deviation in the results refers to the spread in the data, not
-the uncertainty in the estimate of the mean. The former is <code class="docutils literal notranslate"><span class="pre">sqrt(N)</span></code>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spread</strong> (<em>bool</em>) – Setting <code class="docutils literal notranslate"><span class="pre">spread=True</span></code> means that
+standard deviations in the results refer to spreads in the data, not
+uncertainties in the estimates of the means. The former is <code class="docutils literal notranslate"><span class="pre">sqrt(N)</span></code>
 larger where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of random numbers (or arrays) being
-averaged:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">avg_data</span><span class="p">(</span><span class="n">random_numbers</span><span class="p">,</span><span class="n">spread</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-<span class="go">1.31(50)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">avg_data</span><span class="p">(</span><span class="n">random_numbers</span><span class="p">))</span>
-<span class="go">1.31(20)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">((</span><span class="mf">0.50</span> <span class="o">/</span> <span class="mf">0.20</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1"># should be (about) 6</span>
-<span class="go">6.25</span>
-</pre></div>
-</div>
-<p>This is useful, for example, when averaging bootstrap data. The default
-value is <code class="docutils literal notranslate"><span class="pre">spread=False</span></code>.</p>
-<p>The second option is triggered by setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code>. This
+averaged. This is useful, for example, when averaging bootstrap data.
+The default value is <code class="docutils literal notranslate"><span class="pre">spread=False</span></code>.</p></li>
+<li><p><strong>median</strong> (<em>bool</em>) – Setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code>
 replaces the means in the results by medians, while the standard
-deviations are approximated by the width of the larger interval
+deviations are approximated by the width of the larger of the intervals
 above or below the median that contains 34% of the data. These
 estimates are more robust than the mean and standard deviation when
 averaging over small amounts of data; in particular, they are
-unaffected by extreme outliers in the data. The default
-is <code class="docutils literal notranslate"><span class="pre">median=False</span></code>.</p>
-<p>The third option is triggered by setting <code class="docutils literal notranslate"><span class="pre">bstrap=True</span></code>. This is
+unaffected by extreme outliers in the data. But correlations
+between different variables are ignored in this case. The default
+is <code class="docutils literal notranslate"><span class="pre">median=False</span></code>.</p></li>
+<li><p><strong>bstrap</strong> (<em>bool</em>) – Setting <code class="docutils literal notranslate"><span class="pre">bstrap=True</span></code> is
 shorthand for setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code> and <code class="docutils literal notranslate"><span class="pre">spread=True</span></code>, and
 overrides any explicit setting for these keyword arguments. This is the
 typical choice for analyzing bootstrap data — hence its name. The
-default value is <code class="docutils literal notranslate"><span class="pre">bstrap=False</span></code>.</p>
-<p>The fourth option is to omit the error estimates on the averages, which
-is triggered by setting <code class="docutils literal notranslate"><span class="pre">noerror=True</span></code>. Just the mean values are
-returned. The default value is <code class="docutils literal notranslate"><span class="pre">noerror=False</span></code>.</p>
-<p>The fifth option, <code class="docutils literal notranslate"><span class="pre">mismatch</span></code>, is only relevant when <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a
+default value is <code class="docutils literal notranslate"><span class="pre">bstrap=False</span></code>.</p></li>
+<li><p><strong>noerror</strong> (<em>bool</em>) – Error estimates on the averages (and correlations) are omitted
+if <code class="docutils literal notranslate"><span class="pre">noerror=True</span></code> is set — just the mean values are
+returned. The default value is <code class="docutils literal notranslate"><span class="pre">noerror=False</span></code>.</p></li>
+<li><p><strong>mimatch</strong> (<em>str</em>) – <p>The <code class="docutils literal notranslate"><span class="pre">mismatch</span></code> option is only relevant when <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a
 dictionary whose entries <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code> have different sample sizes. This
 complicates the calculation of correlations between the different entries.
 There are three choices for <code class="docutils literal notranslate"><span class="pre">mismatch</span></code>:</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">mismatch='truncate'</span></code>: Samples are discarded from the ends of
+<div><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">mismatch='truncate'</span></code>:</dt><dd><p>Samples are discarded from the ends of
 entries so that all entries have the same sample size (equal to the
 smallest sample size). This is the default.</p>
-<p><code class="docutils literal notranslate"><span class="pre">mismatch='wavg'</span></code>: The data set is decomposed into a collection of data sets
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mismatch='wavg'</span></code>:</dt><dd><p>The data set is decomposed into a collection of data sets
 so that the entries in any given data set all have the same sample size;
 no samples are discarded. Each of the resulting data sets is averaged
 separately, and the final result is the weighted average of these averages.
@@ -269,13 +266,28 @@ This choice is the most accurate but also the slowest, especially for
 large problems. It should only be used when the smallest sample size is
 much larger (eg, 10x) than the number of quantities being averaged.
 It also requires the <code class="xref py py-mod docutils literal notranslate"><span class="pre">lsqfit</span></code> Python module.</p>
-<p><code class="docutils literal notranslate"><span class="pre">mismatch='decorrelate'</span></code>: Ignores correlations between different
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">mismatch='decorrelate'</span></code>:</dt><dd><p>Ignores correlations between different
 entries <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code>. All samples are used and correlations within
 an entry <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code> are retained. This is the fastest choice.</p>
+</dd>
+</dl>
 </div></blockquote>
-<p>The final option <code class="docutils literal notranslate"><span class="pre">warn</span></code> determines whether or not a warning is issued
+</p></li>
+<li><p><strong>unbias</strong> (<em>bool</em>) – The default choice <code class="docutils literal notranslate"><span class="pre">unbias=False</span></code> means that
+covariances are estimated using
+<img class="math" src="_images/math/1d682695237974bf597f4575f44c7e676c8b56ee.svg" alt="\sum_i (x_i-\overline x)(y_i-\overline y)/N"/> where <code class="docutils literal notranslate"><span class="pre">N</span></code> is
+the number of random samples. This estimate is biased but is typically
+more accurate than the unbiased estimate obtained when <code class="docutils literal notranslate"><span class="pre">N</span></code> is
+replaced by <code class="docutils literal notranslate"><span class="pre">N-1</span></code> (because statistical fluctuations are then larger
+than the bias). The difference is negligible unless <code class="docutils literal notranslate"><span class="pre">N</span></code> is very small.
+Setting <code class="docutils literal notranslate"><span class="pre">unbias=True</span></code> gives the unbiased estimate.</p></li>
+<li><p><strong>warn</strong> (<em>bool</em>) – <code class="docutils literal notranslate"><span class="pre">warn</span></code> determines whether or not a warning is issued
 when different entries in a dictionary data set have different sample
-sizes. The default is <code class="docutils literal notranslate"><span class="pre">warn=False</span></code>.</p>
+sizes. The default is <code class="docutils literal notranslate"><span class="pre">warn=False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -867,7 +879,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.13 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.14 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>

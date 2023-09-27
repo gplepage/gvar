@@ -139,7 +139,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
         self.assertEqual(mean.mean,mean2.mean)
         self.assertEqual(mean.sdev,mean2.sdev)
         #
-        mean = avg_data([1,2],spread=True)
+        mean = avg_data([1,2], spread=True)
         self.assertAlmostEqual(mean.mean,1.5)
         self.assertAlmostEqual(mean.var,sum((vi-1.5)**2
                                for vi in [1,2])/2.)
@@ -151,6 +151,16 @@ class test_dataset(unittest.TestCase,ArrayTests):
         mean = avg_data([1,2], median=True, spread=True)
         self.assertAlmostEqual(mean.mean, 1.5)
         self.assertAlmostEqual(mean.var, 0.341344746**2)
+        #
+        mean = avg_data([1,2], unbias=False)
+        self.assertAlmostEqual(mean.mean, 1.5)
+        self.assertAlmostEqual(mean.var, 0.125)
+        self.assertAlmostEqual(mean.sdev, 0.125 ** 0.5)
+
+        mean = avg_data([1,2], unbias=True)
+        self.assertAlmostEqual(mean.mean, 1.5)
+        self.assertAlmostEqual(mean.var, 0.25)
+        self.assertAlmostEqual(mean.sdev, 0.5)
         #
         mean = avg_data([1,2,3])
         self.assertAlmostEqual(mean.mean,2.0)
@@ -217,6 +227,19 @@ class test_dataset(unittest.TestCase,ArrayTests):
         self.assertAlmostEqual(mean['s'],2.0)
         self.assertEqual(mean['v'].shape,(2,))
         self.assert_arraysclose(mean['v'], [2,2])
+
+        data = dict(s=[1,2])
+        mean = avg_data(data, unbias=True)['s']
+        self.assertAlmostEqual(mean.mean, 1.5)
+        self.assertAlmostEqual(mean.var, 0.25)
+        self.assertAlmostEqual(mean.sdev, 0.5)
+
+        data = dict(s=[1,2])
+        mean = avg_data(data, unbias=False)['s']
+        self.assertAlmostEqual(mean.mean, 1.5)
+        self.assertAlmostEqual(mean.var, 0.125)
+        self.assertAlmostEqual(mean.sdev, 0.125 ** 0.5)
+
 
     def test_avg_data_mismatch(self):
         """ avg_data(...,mismatch=...) """
