@@ -275,9 +275,9 @@ an entry <code class="docutils literal notranslate"><span class="pre">dataset[k]
 </div></blockquote>
 </p></li>
 <li><p><strong>unbias</strong> (<em>bool</em>) – The default choice <code class="docutils literal notranslate"><span class="pre">unbias=False</span></code> means that
-variances are estimated using
-<img class="math" src="_images/math/1b2ea44c8b834d17e7cdd9d0e39d3387ce85d0ca.svg" alt="&lt;(x-&lt;x&gt;)^2&gt;/N"/> where <code class="docutils literal notranslate"><span class="pre">N</span></code> is
-the number of random samples. This estimate is biased but is typically
+variances are estimated using <code class="docutils literal notranslate"><span class="pre">mean((x</span> <span class="pre">-</span> <span class="pre">mean(x))**2)/N</span></code>
+where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of random samples.
+This estimate is biased but is typically
 more accurate than the unbiased estimate obtained when <code class="docutils literal notranslate"><span class="pre">N</span></code> is
 replaced by <code class="docutils literal notranslate"><span class="pre">N-1</span></code> (because statistical fluctuations are then larger
 than the bias). The difference is negligible unless <code class="docutils literal notranslate"><span class="pre">N</span></code> is very small.

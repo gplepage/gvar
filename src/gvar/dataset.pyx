@@ -201,9 +201,9 @@ def avg_data(
                     an entry ``dataset[k]`` are retained. This is the fastest choice.
             
         unbias (bool): The default choice ``unbias=False`` means that 
-            variances are estimated using
-            :math:`<(x-<x>)^2>/N` where ``N`` is 
-            the number of random samples. This estimate is biased but is typically 
+            variances are estimated using ``mean((x - mean(x))**2)/N``
+            where ``N`` is the number of random samples. 
+            This estimate is biased but is typically 
             more accurate than the unbiased estimate obtained when ``N`` is 
             replaced by ``N-1`` (because statistical fluctuations are then larger 
             than the bias). The difference is negligible unless ``N`` is very small.
