@@ -4,7 +4,7 @@
 {
     "distutils": {
         "include_dirs": [
-            "/private/var/folders/zc/n_xx9k_d4tb_8y1rvhy2c7br0000gq/T/pip-build-env-he5ubb1p/overlay/lib/python3.11/site-packages/numpy/core/include"
+            "/private/var/folders/zc/n_xx9k_d4tb_8y1rvhy2c7br0000gq/T/pip-build-env-9p6l2q8_/overlay/lib/python3.11/site-packages/numpy/core/include"
         ],
         "name": "gvar._bufferdict",
         "sources": [

@@ -44,3 +44,9 @@ y*.py
 x*.py
 meta.yaml
 benchmarks/
+src/gvar/_bufferdict.c
+src/gvar/_gvarcore.c
+src/gvar/_svec_smat.c
+src/gvar/_utilities.c
+src/gvar/dataset.c
+
