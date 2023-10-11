@@ -1,4 +1,5 @@
 from setuptools import setup, Extension
+from Cython.Build import cythonize
 import numpy
 
 ext_args = dict(
@@ -16,4 +17,4 @@ ext_modules = [
     Extension(name="gvar._bufferdict", sources=["src/gvar/_bufferdict.pyx"], **ext_args),
     ]
 
-setup(ext_modules=ext_modules)
+setup(ext_modules=cythonize(ext_modules))
