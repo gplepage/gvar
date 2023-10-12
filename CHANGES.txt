@@ -1,3 +1,8 @@
+Version 11.11.17 2023-10-12
+============================
+Fixes obscure bug on Windows machines when evalcov_blocks(g) is called with a 
+single GVar g. The tests should now work on Windows machines.
+ 
 Version 11.11.16 2023-10-11
 ============================
 Identical to previous version but now offers Python wheels for installation.
