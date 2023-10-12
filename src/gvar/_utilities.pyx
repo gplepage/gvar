@@ -583,6 +583,7 @@ def evalcov_blocks_dense(g, compress=False):
     large, dense covariance matrices.
     """
     cdef INTP_TYPE nvar, i, j, nb, ib
+    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx, allvar
     cdef object[:] varlist
     cdef double sdev
     cdef smat cov 
@@ -595,8 +596,8 @@ def evalcov_blocks_dense(g, compress=False):
     nvar = len(varlist)
     if nvar <= 0:
         return (
-            [(numpy.array([]), numpy.array([]))] if compress else 
-            [(numpy.array([]), numpy.reshape([], (0,0)))] 
+            [(numpy.array([], dtype=numpy.intp), numpy.array([]))] if compress else 
+            [(numpy.array([], dtype=numpy.intp), numpy.reshape([], (0,0)))] 
             )
     allcov = evalcov(varlist)
     nb, key = _connected_components(allcov != 0, directed=False)
@@ -682,6 +683,7 @@ def evalcov_blocks(g, compress=False):
             the returned list (see above). Default is ``False``.
     """
     cdef INTP_TYPE nvar, iv, i, j, id, nb, ib, sib, snb, nval, nvalmax, n, nzeros
+    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx, allvar
     cdef double sdev
     cdef smat cov 
     cdef GVar gi
@@ -697,14 +699,14 @@ def evalcov_blocks(g, compress=False):
     nvar = len(varlist)
     if nvar <= 0:
         return (
-            [(numpy.array([]), numpy.array([]))] if compress else 
-            [(numpy.array([]), numpy.reshape([], (0,0)))] 
+            [(numpy.array([], dtype=numpy.intp), numpy.array([]))] if compress else 
+            [(numpy.array([], dtype=numpy.intp), numpy.reshape([], (0,0)))] 
             )
     elif nvar == 1:
         if compress:
-            return [(numpy.array([0]), numpy.array([varlist[0].sdev]))]
+            return [(numpy.array([0], dtype=numpy.intp), numpy.array([varlist[0].sdev]))]
         else:
-            return [(numpy.array([0]), numpy.array([[varlist[0].var]]))]
+            return [(numpy.array([0], dtype=numpy.intp), numpy.array([[varlist[0].var]]))]
     cov = varlist[0].cov
     ivlist_id = {} 
     ivlist_idset = {}
