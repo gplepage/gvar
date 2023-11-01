@@ -4,7 +4,7 @@
 # remove extra # above for profiling
 
 # Created by Peter Lepage (Cornell University) on 2011-08-17.
-# Copyright (c) 2011-2021 G. Peter Lepage.
+# Copyright (c) 2011-2023 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 # GNU General Public License for more details.
 
 import re
+import sys
 from scipy.sparse.csgraph import connected_components as _connected_components
 from gvar._svec_smat import svec, smat
 from gvar._bufferdict import BufferDict
@@ -56,13 +57,137 @@ _ARRAY_TYPES = [numpy.ndarray, gvar.powerseries.PowerSeries]
 from numpy cimport npy_intp as INTP_TYPE
 # index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
 
-# GVar
+# GVar definition
+
+# default format parameters and utilities (static parts of GVar)
+def GVar_old_str(g, dummy=None):
+    """ Legacy |GVar| formatter: return string representation of ``g``.
+
+    The representation is designed to show at least
+    one digit of the mean and two digits of the standard deviation.
+    For cases where mean and standard deviation are not
+    too different in magnitude, the representation is of the
+    form ``'mean(sdev)'``. When this is not possible, the string
+    has the form ``'mean +- sdev'``.
+    """
+    def ndec(x, offset=2):
+        ans = offset - numpy.log10(x)
+        ans = int(ans)
+        if ans > 0 and x * 10. ** ans >= [0.5, 9.5, 99.5][offset]:
+            ans -= 1
+        return 0 if ans < 0 else ans
+    dv = abs(g.sdev)
+    v = g.mean
+
+    # special cases
+    if numpy.isnan(v) or numpy.isnan(dv):
+        return '%g +- %g'%(v, dv)
+    elif dv == float('inf'):
+        return '%g +- inf' % v
+    elif v == 0 and (dv >= 1e5 or dv < 1e-4):
+        if dv == 0:
+            return '0(0)'
+        else:
+            ans = ("%.1e" % dv).split('e')
+            return "0.0(" + ans[0] + ")e" + ans[1]
+    elif v == 0:
+        if dv >= 9.95:
+            return '0(%.0f)' % dv
+        elif dv >= 0.995:
+            return '0.0(%.1f)' % dv
+        else:
+            ndecimal = ndec(dv)
+            return '%.*f(%.0f)' % (ndecimal, v, dv * 10. ** ndecimal)
+    elif dv == 0:
+        ans = ('%g' % v).split('e')
+        if len(ans) == 2:
+            return ans[0] + "(0)e" + ans[1]
+        else:
+            return ans[0] + "(0)"
+    # elif dv < 1e-6 * abs(v):
+    #     return '%g +- %.2g' % (v, dv)
+    elif dv > 1e4 * abs(v):
+        return '%.1g +- %.2g' % (v, dv)
+    elif abs(v) >= 1e6 or abs(v) < 1e-5:
+        # exponential notation for large |g.mean|
+        exponent = numpy.floor(numpy.log10(abs(v)))
+        fac = 10.**exponent
+        mantissa = str(g/fac)
+        exponent = "e" + ("%.0e" % fac).split("e")[-1]
+        return mantissa + exponent
+
+    # normal cases
+    if dv >= 9.95:
+        if abs(v) >= 9.5:
+            return '%.0f(%.0f)' % (v, dv)
+        else:
+            ndecimal = ndec(abs(v), offset=1)
+            return '%.*f(%.*f)' % (ndecimal, v, ndecimal, dv)
+    if dv >= 0.995:
+        if abs(v) >= 0.95:
+            return '%.1f(%.1f)' % (v, dv)
+        else:
+            ndecimal = ndec(abs(v), offset=1)
+            return '%.*f(%.*f)' % (ndecimal, v, ndecimal, dv)
+    else:
+        ndecimal = max(ndec(abs(v), offset=1), ndec(dv))
+        return '%.*f(%.0f)' % (ndecimal, v, dv * 10. ** ndecimal)
+
+if sys.version_info > (3,0):
+    # str.maketrans only available for Python 3.1+; use old formatter otherwise
+    GVar_spec_pattern = re.compile(
+        r'^(?P<align>[<>=^]?|.+[<>=^])(?P<sign>[-+ ]?)(?P<alt>[#]?)'
+        + r'(?P<width>\d*)(?P<grouping_opt>[,_]?)(?P<dot>[.]?)'
+        + r'(?P<precision>\d*)(?P<ftype>[efgpPn%]?)$'
+        )
+    GVar_strip_table = str.maketrans('', '', '+- _,.')
+    GVar_sdev_bracket = ('({})', '({})')      # (no-exponent, exponent)
+    GVar_plusminus = ' ± '                     
+    GVar_prange = (1e-5, 10 ** sys.float_info.dig) 
+    GVar_formatter = None 
+    GVar_default_format = '{:#.2p}' 
+
+    def GVar_lstrip(sd, chrs='.0,_'):
+        """ left-strip characters in chrs """
+        for i in range(len(sd)):
+            if sd[i] not in chrs:
+                break
+        else:
+            return '0'
+        return sd[i:]
+
+    def GVar_format_gvar(mn, sd, expon='0', alt=''):
+        """ Final formatting for the mean and sdev strings. """
+        # fix mean
+        if alt != '#' and mn[-1] == '.':
+            mn = mn[:-1]
+        if alt == '#' and '.' not in mn:
+            mn += '.'
+        # fix sdev
+        if 'e' in sd:
+            sd, sexpon = sd.split('e')
+            ndec = (0 if '.' not in sd else (len(sd) - sd.find('.') - 1)) - int(sexpon)
+            sd = float(sd) * 10 ** int(sexpon)
+            # print('2 ndec, sexpon, sd', ndec, sexpon, sd)
+            if ndec < 0:
+                ndec = 0
+            sd = '{{:.{ndec}f}}'.format(ndec=ndec).format(sd)
+        if alt != '#' and sd[-1] == '.':
+            sd = sd[:-1]
+        if alt == '#' and mn[-1] == '.' and sd[-1] != '.':
+            sd += '.'
+        sd = GVar_sdev_bracket[0 if expon == '0' else 1].format(GVar_lstrip(sd, chrs='.0,_'))
+        return (mn + sd) if expon == '0' else (mn + sd + 'e' + expon)
+else:
+    GVar_formatter = GVar_old_str
+    GVar_plusminus = ' +- '
+
 cdef class GVar:
     # cdef double v     -- value or mean
     # cdef svec d       -- vector of derivatives
     # cdef readonly smat cov    -- covariance matrix
-
-    def __init__(self,double v,svec d,smat cov):
+    
+    def __init__(self, double v, svec d, smat cov):
         self.v = v
         self.d = d
         self.cov = cov
@@ -88,85 +213,306 @@ cdef class GVar:
     def __copy__(self):
         return self
 
-    def __format__(self, fmt=None):
-        """ Convert to string and format the string """
-        return format(str(self), fmt)
+    @staticmethod
+    def set(**kargs):
+        """ Change |GVar|'s format parameters. 
+        
+        Typical usage is::
 
-    def __str__(self):
-        """ Return string representation of ``self``.
+            # change default format spec and plus/minus symbol
+            oldparam = GVar.set(default_format='{:.3f}', plusminus=' +/- ')
+            ...
+            # change back
+            GVar.set(**oldparam)
 
-        The representation is designed to show at least
-        one digit of the mean and two digits of the standard deviation.
-        For cases where mean and standard deviation are not
-        too different in magnitude, the representation is of the
-        form ``'mean(sdev)'``. When this is not possible, the string
-        has the form ``'mean +- sdev'``.
+        The following parameters can be reset.
+
+        Args:
+            formatter (callable): Sets default formatter with function
+                ``formatter(g, spec)`` where ``g`` is the |GVar| to be 
+                formatted and ``spec`` is the format specification 
+                (e.g, ``'.3g'`` or ``'.^20.3f'``). Setting 
+                ``formatter=None`` restores the original formatter.
+                Setting ``formatter='old'`` switches to the 
+                formatter used before :mod:`gvar` version 12.0
+                (buggy and deprecated).
+            default_format (str): Sets the format used when 
+                none is specified (``default_format='{}'`` is *not* 
+                allowed). The format can be specified as a 
+                full format string (e.g., ``'{:.4g}'``) or with
+                just the format specification (e.g., ``'.4g'``).
+                Default is ``'{:#.2p}'``.
+            plusminus (str): Sets the plus/minus symbol(s) 
+                for format strings. Default is ``' ± '``.
+            prange (tuple): Sets range of values of ``abs(g.mean)/g.sdev`` 
+                formatted with a compressed format when using the 
+                ``'p'`` presentation format. Values outside this range 
+                are formatted as ``'{g.mean} ± {g.sdev}'`` with the 
+                ``'p'`` format. Default is ``(1e-5, 10 ** sys.float_info.dig)``.
         """
-        def ndec(x, offset=2):
-            ans = offset - numpy.log10(x)
-            ans = int(ans)
-            if ans > 0 and x * 10. ** ans >= [0.5, 9.5, 99.5][offset]:
-                ans -= 1
-            return 0 if ans < 0 else ans
-        dv = abs(self.sdev)
-        v = self.mean
+            # sdev_format (str): Sets format used for the standard deviation
+            #     in the formatted string. Default is ``'{()}'.
+        # """
+        global GVar_formatter, GVar_default_format, GVar_plusminus, GVar_prange, GVar_sdev_bracket
+        old = {}
+        for k in kargs:
+            if k == 'formatter':
+                fmtr = GVar_old_str if kargs[k] == 'old' else kargs[k]
+                old[k] = GVar_formatter
+                GVar_formatter = fmtr
+            elif k == 'default_format':
+                if '{' not in kargs[k]:
+                    # assume kargs[k] is a format spec
+                    kargs[k] = '{:' + kargs[k] + '}'
+                # check for {}
+                f = kargs[k].split('{')
+                if len(f) != 2:
+                    raise ValueError('bad format: ' + kargs[k]) 
+                f = f[1].split(':')
+                if len(f) != 2 or '}' not in f[1]:
+                    raise ValueError('bad format: ' + kargs[k])
+                f = f[1].split('}')[0].strip()
+                if len(f) == 0:
+                    raise ValueError('bad format: ' + kargs[k])
+                # accept new format
+                old[k] = GVar_default_format
+                GVar_default_format = kargs[k]
+            elif k == 'plusminus':
+                old[k] = GVar_plusminus 
+                GVar_plusminus = kargs[k]
+            elif k == 'prange':
+                old[k] = GVar_prange 
+                GVar_prange = kargs[k]
+            elif k == 'sdev_format':
+                fmt = kargs[k]
+                if not isinstance(fmt, tuple):
+                    fmt = 2 * (fmt, )
+                if len(fmt) < 2:
+                    fmt = 2 * fmt
+                old[k] = GVar_sdev_bracket 
+                GVar_sdev_bracket = fmt
+            else:
+                raise ValueError('unknown parameter: ' + k)
+        return old
+
+    def __format__(self, spec):
+        """ Format strings for |GVar|\s. 
+        
+        Support is provided for standard presentation formats 
+        normally used for floats including: ``'e'``, ``'f'``, 
+        ``'g'``, ``'n'``, and ``'%'``. The format is applied to 
+        the mean value and the output modified to include the 
+        standard deviation when the mean is larger in magnitude 
+        than the standard deviation: e.g., ::
+
+            >>> x = gvar.gvar(12.314, 1.56)
+            >>> print(f'{x:.2g}'')
+            12(2)
+            >>> print(f'{x:.^25.3e}')
+            .....1.231(156)e+01......
+
+
+        The format is applied first to the standard deviation when it 
+        is the larger of the two.
+
+        There is an additional format, ``'p'``, where the precision 
+        field specifies the number  of digits displayed in the 
+        standard deviation::
+
+            >>> print(f'{x:.2p}')
+            12.3(1.6)
+
+        The default precision is 2. 
+        
+        An alternative form ``'#p'`` of this format may
+        add further digits to the standard deviation
+        (when it is larger in magnitude than the mean) so that 
+        at least one non-zero digit of the mean is displayed::
+
+            >>> x = gvar.gvar(9, 123)
+            >>> print(f'{x:#.2p}'')
+            9(123)
+
+        If the mean is exactly zero, the result is '0 ± sdev'.
+
+        Format ``'P'`` is similar to ``'#p'`` but always uses
+        the plus-minus format: ``'mean ± sdev'``.
+        
+        The default format, when none is specified, 
+        is '{:#.2p}'. This can be changed using 
+        ``GVar.set(default_format=...)``.
+        """
+        if GVar_formatter is not None:
+            return GVar_formatter(self, spec)
+        if spec == '':
+            return GVar_default_format.format(self)
+
+        # parse format spec
+        match = GVar_spec_pattern.match(spec)
+        if match is None:
+            raise ValueError('invalid format specifier: ' + spec)
+        spec = match.groupdict()
+        if spec['ftype'] == '':
+            spec['ftype'] = 'p'
+            spec['alt'] = '#'
+        # could have replaced '{{:...}}'.format(**spec) by f'{{:...}}' everywhere 
+        # ... but not for Python 2.7-3.5
 
         # special cases
-        if numpy.isnan(v) or numpy.isnan(dv):
-            return '%g +- %g'%(v, dv)
-        elif dv == float('inf'):
-            return '%g +- inf' % v
-        elif v == 0 and (dv >= 1e5 or dv < 1e-4):
-            if dv == 0:
-                return '0(0)'
+        gmean = self.mean
+        gsdev = abs(self.sdev)
+        if gmean in [float('nan'), float('inf')] and gsdev in [float('nan'), float('inf')]:
+            ans = str(gmean) + GVar_plusminus + str(gsdev)
+        elif gmean in [float('nan'), float('inf')]:
+            if spec['ftype'] in 'pP':
+                spec['ftype'] = 'g'
+                spec['alt'] = ''
+            sstr = '{{:{sign}{grouping_opt}{dot}{precision}{ftype}}}'.format(**spec).format(gsdev)
+            ans = str(gmean) + GVar_plusminus + sstr
+        elif gsdev in [float('nan'), float('inf')]:
+            if spec['ftype'] in 'pP':
+                spec['ftype'] = 'g'
+                spec['alt'] = ''
+                spec['precision'] = ''
+                spec['dot'] = ''
+            mstr = '{{:{sign}{alt}{grouping_opt}{dot}{precision}{ftype}}}'.format(**spec).format(gmean)
+            ans = mstr + GVar_plusminus + str(gsdev)
+        elif gsdev <= 0 and gmean == 0 and spec['ftype'] in 'pP':
+            ans = '0 ± 0'
+        elif gsdev <= 0 and spec['ftype'] == 'P':
+            ans = '{{:{sign}{grouping_opt}g}}'.format(**spec).format(gmean) + GVar_plusminus + '0'
+        elif gsdev <= 0:
+            if spec['ftype'] in 'p':
+                spec['ftype'] = 'g'
+                spec['alt'] = ''
+                spec['precision'] = ''
+                spec['dot'] = ''
+            mfmt = '{{:{sign}{alt}{grouping_opt}{dot}{precision}{ftype}}}'.format(**spec)
+            mstr = mfmt.format(gmean)
+            if 'e' in mstr:
+                mstr, expon = mstr.split('e')
+                ans = GVar_format_gvar(mstr, '0', expon=expon, alt=spec['alt'])
             else:
-                ans = ("%.1e" % dv).split('e')
-                return "0.0(" + ans[0] + ")e" + ans[1]
-        elif v == 0:
-            if dv >= 9.95:
-                return '0(%.0f)' % dv
-            elif dv >= 0.995:
-                return '0.0(%.1f)' % dv
+                ans = GVar_format_gvar(mstr, '0', alt=spec['alt'])
+        # normal processing
+        elif spec['ftype'] in 'efgn':
+            if spec['ftype'] in 'gn':
+                if spec['precision'] == '':
+                    spec['precision'] = '6'
+                    spec['dot'] = '.'
+                elif spec['precision'] == '0':
+                    spec['precision'] == '1'
+            if gsdev > abs(gmean):
+                sfmt = '{{:#{grouping_opt}{dot}{precision}{ftype}}}'.format(**spec)
+                sstr = sfmt.format(gsdev)
+                if 'e' in sstr:
+                    sstr, expon = sstr.split('e')
+                else:
+                    expon = '0'
+                if spec['ftype'] not in 'gn':
+                    mfmt = '{{:{sign}{alt}{grouping_opt}{dot}{precision}f}}'.format(**spec)
+                else: 
+                    # format mean to have same number of decimal places as sdev
+                    ndec = 0 if '.' not in sstr else (len(sstr) - sstr.find('.') - 1)
+                    mfmt = '{{:{sign}{alt}{grouping_opt}.{ndec}f}}'.format(ndec=ndec, **spec)
+                mstr = mfmt.format(gmean * 10 ** (-int(expon)))
+                ans = GVar_format_gvar(mstr, sstr, expon=expon, alt=spec['alt']) 
             else:
-                ndecimal = ndec(dv)
-                return '%.*f(%.0f)' % (ndecimal, v, dv * 10. ** ndecimal)
-        elif dv == 0:
-            ans = ('%g' % v).split('e')
-            if len(ans) == 2:
-                return ans[0] + "(0)e" + ans[1]
+                mfmt = '{{:{sign}#{grouping_opt}{dot}{precision}{ftype}}}'.format(**spec) 
+                mstr = mfmt.format(gmean)
+                if 'e' in mstr:
+                    mstr, expon = mstr.split('e')
+                else:
+                    expon = '0'
+                if spec['ftype'] not in 'gn': 
+                    sfmt = '{{:{alt}{grouping_opt}{dot}{precision}f}}'.format(**spec)  
+                else:
+                    if spec['alt'] == '' and mstr[-1] == '.':
+                        mstr = mstr[:-1]
+                    # format sdev to have same number of decimal places as mean
+                    ndec = 0 if '.' not in mstr else (len(mstr) - mstr.find('.') - 1)
+                    sfmt = '{{:{alt}{grouping_opt}.{ndec}f}}'.format(ndec=ndec, **spec)
+                sstr = sfmt.format(gsdev * 10 ** (-int(expon)))
+                ans = GVar_format_gvar(mstr, sstr, expon=expon, alt=spec['alt']) 
+            # if expon != '0':
+            #     ans += 'e' + expon
+        elif spec['ftype'] in 'pP':
+            if spec['precision'] == '':
+                spec['precision'] = '2'
+                spec['dot'] = '.'
+            if spec['alt'] == '#' and GVar_prange[0] < (abs(gmean) / gsdev) < 1 and spec['ftype'] != 'P':
+                # increase precision so at least one digit of the mean is displayed
+                nprec = int(numpy.floor(numpy.log10(gsdev)) - numpy.floor(numpy.log10(abs(gmean)))) + 1  
+                spec['precision'] = max(nprec, int(spec['precision']))
+            if spec['ftype'] == 'P' or not (GVar_prange[1] >= abs(gmean) / gsdev >= GVar_prange[0]):
+                # +- notation when magnitudes quite diffferent or P format
+                if spec['ftype'] == 'P' and abs(gmean) / gsdev > 1:
+                    # adjust number of digits
+                    ndig = min(
+                        sys.float_info.dig, 
+                        int(numpy.floor(numpy.log10(abs(gmean))) - numpy.floor(numpy.log10(gsdev))) + int(spec['precision'])
+                        )
+                    mfmt = '{{:{sign}{grouping_opt}.{ndig}g}}'.format(ndig=ndig, **spec)
+                else:
+                    mfmt = '{{:{sign}{grouping_opt}g}}'.format(**spec)
+                sfmt = '{{:#.{grouping_opt}{precision}g}}'.format(**spec)
+                sstr = sfmt.format(gsdev)
+                if sstr[-1] == '.':
+                    sstr = sstr[:-1]
+                if '.e' in sstr:
+                    sstr = sstr.split('.e')
+                    sstr = sstr[0] + 'e' + sstr[1]
+                ans = mfmt.format(gmean) + GVar_plusminus +  sstr
             else:
-                return ans[0] + "(0)"
-        # elif dv < 1e-6 * abs(v):
-        #     return '%g +- %.2g' % (v, dv)
-        elif dv > 1e4 * abs(v):
-            return '%.1g +- %.2g' % (v, dv)
-        elif abs(v) >= 1e6 or abs(v) < 1e-5:
-            # exponential notation for large |self.mean|
-            exponent = numpy.floor(numpy.log10(abs(v)))
-            fac = 10.**exponent
-            mantissa = str(self/fac)
-            exponent = "e" + ("%.0e" % fac).split("e")[-1]
-            return mantissa + exponent
-
-        # normal cases
-        if dv >= 9.95:
-            if abs(v) >= 9.5:
-                return '%.0f(%.0f)' % (v, dv)
-            else:
-                ndecimal = ndec(abs(v), offset=1)
-                return '%.*f(%.*f)' % (ndecimal, v, ndecimal, dv)
-        if dv >= 0.995:
-            if abs(v) >= 0.95:
-                return '%.1f(%.1f)' % (v, dv)
-            else:
-                ndecimal = ndec(abs(v), offset=1)
-                return '%.*f(%.*f)' % (ndecimal, v, ndecimal, dv)
+                sstr = '{{:#.{precision}g}}'.format(**spec).format(gsdev)
+                if 'e' in sstr:
+                    sstr, expon = sstr.split('e')
+                else:
+                    expon = '0'
+                ndec = len(sstr) - sstr.find('.') - 1
+                # print('A. sstr,ndec', sstr, ndec)
+                if abs(gmean) > gsdev:
+                    mstr = '{{:.{ndec}f}}'.format(ndec=ndec).format(gmean * 10 ** (-int(expon)))
+                    # reconstruct g with rounded values
+                    gmean = float(mstr) * 10 ** int(expon)
+                    gsdev = float(sstr) * 10 ** int(expon)
+                    ndig = len(mstr.split('e')[0].translate(GVar_strip_table).lstrip('0'))
+                    mstr = '{{:{sign}#{grouping_opt}.{ndig}g}}'.format(ndig=ndig, **spec).format(gmean)
+                    # print('B. mstr,ndig,gsdev,expon', mstr, ndig, gsdev, expon)
+                    if 'e' in mstr:
+                        mstr, expon = mstr.split('e')
+                    else:
+                        expon = '0' 
+                    sstr = '{{:#.{precision}g}}'.format(**spec).format(gsdev * 10 ** (-int(expon)))
+                    if mstr[-1] == '.':
+                        mstr = mstr[:-1]
+                    # print('C. mstr, sstr', mstr, sstr)        
+                    ans = GVar_format_gvar(mstr, sstr, expon=expon)
+                else:
+                    if spec['alt'] == '#' and gmean != 0:
+                        if float('{{:.{ndec}f}}'.format(ndec=ndec).format(gmean* 10 ** (-int(expon)))) == 0:
+                            ndec += 1
+                    ans = '{{:{sign}{grouping_opt}.{ndec}f}}'.format(ndec=ndec, **spec).format(self * 10 ** (-int(expon))) 
+                    if expon != '0':
+                        ans += 'e' + expon
+        elif spec['ftype'] == '%':
+            ans = '{{:{sign}{grouping_opt}{dot}{precision}f}}'.format(**spec).format(self * 100) + '%'
         else:
-            ndecimal = max(ndec(abs(v), offset=1), ndec(dv))
-            return '%.*f(%.0f)' % (ndecimal, v, dv * 10. ** ndecimal)
+            raise ValueError('invalid format specifier: ' + spec)
+        # padding, alignment
+        finalfmt = '{{:{align}{width}s}}'.format(**spec)
+        return finalfmt.format(ans)
+
+    def __str__(self):
+        """ Returns string using the default format: ``f'{self}'``. """
+        return '{}'.format(self)
+
+    # def format(self, spec=''):    # not useful
+    #     """ Format |GVar|: returns ``'{:spec}'.format(self)`` """
+    #     return self.__format__(spec)
 
     def __repr__(self):
-        """ Same as ``str(self)``. """
+        """ same as __str__ """
         return self.__str__()
 
     # def __hash__(self):  # conflicts with equality (unless make it hash(self.mean) -- dumb)
@@ -499,8 +845,52 @@ cdef class GVar:
             ans[i] = self_deriv.get(ider, 0.0) / xder
         return ans.flat[0] if x.shape == () else ans.reshape(x.shape)
 
-    def fmt(self, ndecimal=None, sep='', d=None):
-        """ Convert to string with format: ``mean(sdev)``.
+    def fmt(self, ndecimal=None, sep='', format='{}'):
+        """ Format |GVar|.
+
+        Typical usage::
+
+            >>> g = gvar.gvar(27.9315, 1.23)
+            >>> print(g.fmt(), g.fmt(format='{:.2g}'), g.fmt(ndecimal=3))
+            27.9(1.2) 28(1) 27.931(1.230)
+            >>> print(g.fmt(ndecimal=-1), g.fmt(sep='|')) 
+            27.9 ± 1.2 27.9|(1.2)
+
+        Args:
+            ndecimal (int or None): Format |GVar| using 
+                ``f'{self:.{ndecimal}f}'`` when ``ndecimal`` is a 
+                non-negative integer, or ``f'{self:.2P}'`` when
+                ``ndecimal`` is negative. Ignored 
+                if ``ndecimal=None`` (default).
+            sep (str): String inserted between the ``mean``
+                and the ``(sdev)`` in ``'mean(sdev)'``. Default
+                is ``sep=''``.
+            format (str): Format string. Ignored if ``ndecimal`` 
+                is not ``None``. Default is ``'{}'``.
+
+        Returns:
+            Formatted string.
+        """
+        global GVar_sdev_bracket
+        if GVar_formatter == GVar_old_str:
+            # use legacy code
+            return self._oldfmt(ndecimal=ndecimal, sep=sep)
+        if sep != '':
+            save = GVar_sdev_bracket
+            GVar_sdev_bracket = (sep + GVar_sdev_bracket[0], GVar_sdev_bracket[1])
+        if ndecimal != None:
+            if ndecimal >= 0:
+                ans = '{{:.{ndecimal}f}}'.format(ndecimal=ndecimal).format(self)
+            else:
+                ans = '{:.2P}'.format(self)
+        else:
+            ans = format.format(self)
+        if sep != '':
+            GVar_sdev_bracket = save
+        return ans
+
+    def _oldfmt(self, ndecimal=None, sep='', d=None):
+        """ Legacy code: Convert to string with format: ``mean(sdev)``.
 
         Leading zeros in the standard deviation are omitted: for example,
         ``25.67 +- 0.02`` becomes ``25.67(2)``. Parameter ``ndecimal``
@@ -690,17 +1080,13 @@ cdef class GVar:
     property sdev:
         """ Standard deviation. """
         def __get__(self):
-            cdef double var = self.cov.expval(self.d)
-            if var>=0:
-                return c_sqrt(var)
-            else:
-                return -c_sqrt(-var)
+            return  c_sqrt(abs(self.cov.expval(self.d)))
 
     property var:
         """ Variance. """
         # @cython.boundscheck(False)
         def __get__(self):
-            return self.cov.expval(self.d)
+            return abs(self.cov.expval(self.d))
 
     property internaldata:
         """ Data contained in |GVar|.
@@ -743,7 +1129,7 @@ cdef class GVar:
 
 # GVar factory functions
 
-_RE1 = re.compile(r"(.*)\s*[+][-]\s*(.*)")
+_RE1 = re.compile(r"(.*)\s*([+][/]?[-]|[±])\s*(.*)")
 _RE2 = re.compile(r"(.*)[e](.*)")
 _RE3 = re.compile(r"([-+]?)([0-9]*)[.]?([0-9]*)\s*\(([0-9]+)\)")
 _RE3a = re.compile(r"([-+]?[0-9]*[.]?[0-9]*)\s*\(([.0-9]+)\)")
@@ -817,8 +1203,8 @@ class GVarFactory:
         :noindex:
 
         Returns a |GVar| corresponding to string ``xstr`` which is
-        either of the form ``"xmean +- xsdev"`` or ``"x(xerr)"`` (see
-        :meth:`GVar.fmt`).
+        either of the form ``"xmean ± xsdev"`` or ``"x(xerr)"``. Here
+        ``±`` can be replaced by ``+/-`` or ``+-``.
 
     .. function:: gvar.gvar(xgvar)
         :noindex:
@@ -995,11 +1381,11 @@ class GVarFactory:
         # gvar('1(1)') etc
         x = args[0]
         if isinstance(x, str):
-            # case 1: x is a string like "3.72(41)" or "3.2 +- 4"
+            # case 1: x is a string like "3.72(41)" or "3.2 ± 4"
             x = x.strip()
             try:
-                # eg: 3.4 +- 0.7e-4
-                a,c = _RE1.match(x).groups()
+                # eg: 3.4 ± 0.7e-4 or 3 ± 0.9
+                a,_,c = _RE1.match(x).groups()
                 return self(float(a), float(c))
             except AttributeError:
                 pass

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar - Gaussian Random Variables &#8212; gvar 11.11.17 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 12.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.17 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>  
@@ -58,9 +58,9 @@
 <p>Objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> represent gaussian random variables,
 which are specified by a mean and standard deviation. They are created
 using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>          <span class="c1"># 0 +- 3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>          <span class="c1"># 2 +- 4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                    <span class="c1"># 2 +- 5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>          <span class="c1"># 0 ± 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>          <span class="c1"># 2 ± 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                    <span class="c1"># 2 ± 5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 <span class="go">22.0(5.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
@@ -199,8 +199,8 @@ the difference is about efficiency.</p>
 <dt class="sig sig-object py">
 <span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gvar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xstr</span></span></em><span class="sig-paren">)</span></dt>
 <dd><p>Returns a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> corresponding to string <code class="docutils literal notranslate"><span class="pre">xstr</span></code> which is
-either of the form <code class="docutils literal notranslate"><span class="pre">&quot;xmean</span> <span class="pre">+-</span> <span class="pre">xsdev&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;x(xerr)&quot;</span></code> (see
-<a class="reference internal" href="#gvar.GVar.fmt" title="gvar.GVar.fmt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">GVar.fmt()</span></code></a>).</p>
+either of the form <code class="docutils literal notranslate"><span class="pre">&quot;xmean</span> <span class="pre">±</span> <span class="pre">xsdev&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;x(xerr)&quot;</span></code>. Here
+<code class="docutils literal notranslate"><span class="pre">±</span></code> can be replaced by <code class="docutils literal notranslate"><span class="pre">+/-</span></code> or <code class="docutils literal notranslate"><span class="pre">+-</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -408,8 +408,24 @@ replaced by objects generated by function <code class="docutils literal notransl
 <dd><p>Format <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">g</span></code> can be a <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, an array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or a dictionary containing
 <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. Each <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">gi</span></code> in <code class="docutils literal notranslate"><span class="pre">g</span></code> is replaced
-by the string generated by <code class="docutils literal notranslate"><span class="pre">gi.fmt(ndecimal,sep)</span></code>. Result has same
-structure as <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+by the string generated by <code class="docutils literal notranslate"><span class="pre">gi.fmt(format,ndecimal,sep)</span></code>. The
+result has same structure as <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ndecimal</strong> (<em>int</em><em> or </em><em>None</em>) – Format each <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> using
+<code class="docutils literal notranslate"><span class="pre">f'{self:.{ndecimal}f}'</span></code> when <code class="docutils literal notranslate"><span class="pre">ndecimal</span></code> is a
+non-negative integer, or <code class="docutils literal notranslate"><span class="pre">f'{self:2P}'</span></code> when
+<code class="docutils literal notranslate"><span class="pre">ndecimal</span></code> is negative. Ignored
+if <code class="docutils literal notranslate"><span class="pre">ndecimal=None</span></code> (default).</p></li>
+<li><p><strong>sep</strong> (<em>str</em>) – String inserted between the <code class="docutils literal notranslate"><span class="pre">mean</span></code>
+and the <code class="docutils literal notranslate"><span class="pre">(sdev)</span></code> in <code class="docutils literal notranslate"><span class="pre">'mean(sdev)'</span></code>. Default
+is <code class="docutils literal notranslate"><span class="pre">sep=''</span></code>.</p></li>
+<li><p><strong>format</strong> (<em>str</em>) – Format string used to convert each <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>. Ignored
+if <code class="docutils literal notranslate"><span class="pre">ndecimal</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -2088,34 +2104,132 @@ shape as <code class="docutils literal notranslate"><span class="pre">x</span></
 </dl>
 </dd></dl>
 
-<p>There are two methods for converting <code class="docutils literal notranslate"><span class="pre">self</span></code> into a string, for
-printing:</p>
+<p>There are three methods for converting <code class="docutils literal notranslate"><span class="pre">self</span></code> into a string for
+printing and display, and fourth for modifying the defaults used
+in formatting:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.GVar.__format__">
+<span class="sig-name descname"><span class="pre">__format__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.__format__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format strings for <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<p>Support is provided for standard presentation formats
+normally used for floats including: <code class="docutils literal notranslate"><span class="pre">'e'</span></code>, <code class="docutils literal notranslate"><span class="pre">'f'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'g'</span></code>, <code class="docutils literal notranslate"><span class="pre">'n'</span></code>, and <code class="docutils literal notranslate"><span class="pre">'%'</span></code>. The format is applied to
+the mean value and the output modified to include the
+standard deviation when the mean is larger in magnitude
+than the standard deviation: e.g.,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">12.314</span><span class="p">,</span> <span class="mf">1.56</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s1">.2g</span><span class="si">}</span><span class="s1">&#39;&#39;)</span>
+<span class="go">12(2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s1">.^25.3e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">.....1.231(156)e+01......</span>
+</pre></div>
+</div>
+<p>The format is applied first to the standard deviation when it
+is the larger of the two.</p>
+<p>There is an additional format, <code class="docutils literal notranslate"><span class="pre">'p'</span></code>, where the precision
+field specifies the number  of digits displayed in the
+standard deviation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s1">.2p</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">12.3(1.6)</span>
+</pre></div>
+</div>
+<p>The default precision is 2.</p>
+<p>An alternative form <code class="docutils literal notranslate"><span class="pre">'#p'</span></code> of this format may
+add further digits to the standard deviation
+(when it is larger in magnitude than the mean) so that
+at least one non-zero digit of the mean is displayed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s1">#.2p</span><span class="si">}</span><span class="s1">&#39;&#39;)</span>
+<span class="go">9(123)</span>
+</pre></div>
+</div>
+<p>If the mean is exactly zero, the result is ‘0 ± sdev’.</p>
+<p>Format <code class="docutils literal notranslate"><span class="pre">'P'</span></code> is similar to <code class="docutils literal notranslate"><span class="pre">'#p'</span></code> but always uses
+the plus-minus format: <code class="docutils literal notranslate"><span class="pre">'mean</span> <span class="pre">±</span> <span class="pre">sdev'</span></code>.</p>
+<p>The default format, when none is specified,
+is ‘{:#.2p}’. This can be changed using
+<code class="docutils literal notranslate"><span class="pre">GVar.set(default_format=...)</span></code>.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="gvar.GVar.__str__">
 <span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.__str__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return string representation of <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p>
-<p>The representation is designed to show at least
-one digit of the mean and two digits of the standard deviation.
-For cases where mean and standard deviation are not
-too different in magnitude, the representation is of the
-form <code class="docutils literal notranslate"><span class="pre">'mean(sdev)'</span></code>. When this is not possible, the string
-has the form <code class="docutils literal notranslate"><span class="pre">'mean</span> <span class="pre">+-</span> <span class="pre">sdev'</span></code>.</p>
+<dd><p>Returns string using the default format: <code class="docutils literal notranslate"><span class="pre">f'{self}'</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gvar.GVar.fmt">
-<span class="sig-name descname"><span class="pre">fmt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndecimal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.fmt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert to string with format: <code class="docutils literal notranslate"><span class="pre">mean(sdev)</span></code>.</p>
-<p>Leading zeros in the standard deviation are omitted: for example,
-<code class="docutils literal notranslate"><span class="pre">25.67</span> <span class="pre">+-</span> <span class="pre">0.02</span></code> becomes <code class="docutils literal notranslate"><span class="pre">25.67(2)</span></code>. Parameter <code class="docutils literal notranslate"><span class="pre">ndecimal</span></code>
-specifies how many digits follow the decimal point in the mean.
-Parameter <code class="docutils literal notranslate"><span class="pre">sep</span></code> is a string that is inserted between the <code class="docutils literal notranslate"><span class="pre">mean</span></code>
-and the <code class="docutils literal notranslate"><span class="pre">(sdev)</span></code>. If <code class="docutils literal notranslate"><span class="pre">ndecimal</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), it is set
-automatically to the larger of <code class="docutils literal notranslate"><span class="pre">int(2-log10(self.sdev))</span></code> or
-<code class="docutils literal notranslate"><span class="pre">0</span></code>; this will display at least two digits of error. Very large
-or very small numbers are written with exponential notation when
-<code class="docutils literal notranslate"><span class="pre">ndecimal</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
-<p>Setting <code class="docutils literal notranslate"><span class="pre">ndecimal</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> returns <code class="docutils literal notranslate"><span class="pre">mean</span> <span class="pre">+-</span> <span class="pre">sdev</span></code>.</p>
+<span class="sig-name descname"><span class="pre">fmt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndecimal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'{}'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.fmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p>
+<p>Typical usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">27.9315</span><span class="p">,</span> <span class="mf">1.23</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">fmt</span><span class="p">(),</span> <span class="n">g</span><span class="o">.</span><span class="n">fmt</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{:.2g}</span><span class="s1">&#39;</span><span class="p">),</span> <span class="n">g</span><span class="o">.</span><span class="n">fmt</span><span class="p">(</span><span class="n">ndecimal</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="go">27.9(1.2) 28(1) 27.931(1.230)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">fmt</span><span class="p">(</span><span class="n">ndecimal</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">g</span><span class="o">.</span><span class="n">fmt</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">))</span>
+<span class="go">27.9 ± 1.2 27.9|(1.2)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ndecimal</strong> (<em>int</em><em> or </em><em>None</em>) – Format <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> using
+<code class="docutils literal notranslate"><span class="pre">f'{self:.{ndecimal}f}'</span></code> when <code class="docutils literal notranslate"><span class="pre">ndecimal</span></code> is a
+non-negative integer, or <code class="docutils literal notranslate"><span class="pre">f'{self:.2P}'</span></code> when
+<code class="docutils literal notranslate"><span class="pre">ndecimal</span></code> is negative. Ignored
+if <code class="docutils literal notranslate"><span class="pre">ndecimal=None</span></code> (default).</p></li>
+<li><p><strong>sep</strong> (<em>str</em>) – String inserted between the <code class="docutils literal notranslate"><span class="pre">mean</span></code>
+and the <code class="docutils literal notranslate"><span class="pre">(sdev)</span></code> in <code class="docutils literal notranslate"><span class="pre">'mean(sdev)'</span></code>. Default
+is <code class="docutils literal notranslate"><span class="pre">sep=''</span></code>.</p></li>
+<li><p><strong>format</strong> (<em>str</em>) – Format string. Ignored if <code class="docutils literal notranslate"><span class="pre">ndecimal</span></code>
+is not <code class="docutils literal notranslate"><span class="pre">None</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">'{}'</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.GVar.set">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.GVar.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>’s format parameters.</p>
+<p>Typical usage is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># change default format spec and plus/minus symbol</span>
+<span class="n">oldparam</span> <span class="o">=</span> <span class="n">GVar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">default_format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{:.3f}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">plusminus</span><span class="o">=</span><span class="s1">&#39; +/- &#39;</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="c1"># change back</span>
+<span class="n">GVar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">**</span><span class="n">oldparam</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The following parameters can be reset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>formatter</strong> (<em>callable</em>) – Sets default formatter with function
+<code class="docutils literal notranslate"><span class="pre">formatter(g,</span> <span class="pre">spec)</span></code> where <code class="docutils literal notranslate"><span class="pre">g</span></code> is the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> to be
+formatted and <code class="docutils literal notranslate"><span class="pre">spec</span></code> is the format specification
+(e.g, <code class="docutils literal notranslate"><span class="pre">'.3g'</span></code> or <code class="docutils literal notranslate"><span class="pre">'.^20.3f'</span></code>). Setting
+<code class="docutils literal notranslate"><span class="pre">formatter=None</span></code> restores the original formatter.
+Setting <code class="docutils literal notranslate"><span class="pre">formatter='old'</span></code> switches to the
+formatter used before <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> version 12.0
+(buggy and deprecated).</p></li>
+<li><p><strong>default_format</strong> (<em>str</em>) – Sets the format used when
+none is specified (<code class="docutils literal notranslate"><span class="pre">default_format='{}'</span></code> is <em>not</em>
+allowed). The format can be specified as a
+full format string (e.g., <code class="docutils literal notranslate"><span class="pre">'{:.4g}'</span></code>) or with
+just the format specification (e.g., <code class="docutils literal notranslate"><span class="pre">'.4g'</span></code>).
+Default is <code class="docutils literal notranslate"><span class="pre">'{:#.2p}'</span></code>.</p></li>
+<li><p><strong>plusminus</strong> (<em>str</em>) – Sets the plus/minus symbol(s)
+for format strings. Default is <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">±</span> <span class="pre">'</span></code>.</p></li>
+<li><p><strong>prange</strong> (<em>tuple</em>) – Sets range of values of <code class="docutils literal notranslate"><span class="pre">abs(g.mean)/g.sdev</span></code>
+formatted with a compressed format when using the
+<code class="docutils literal notranslate"><span class="pre">'p'</span></code> presentation format. Values outside this range
+are formatted as <code class="docutils literal notranslate"><span class="pre">'{g.mean}</span> <span class="pre">±</span> <span class="pre">{g.sdev}'</span></code> with the
+<code class="docutils literal notranslate"><span class="pre">'p'</span></code> format. Default is <code class="docutils literal notranslate"><span class="pre">(1e-5,</span> <span class="pre">10</span> <span class="pre">**</span> <span class="pre">sys.float_info.dig)</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <p>Two attributes and a method make reference to the original
@@ -2975,7 +3089,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 11.11.17 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>

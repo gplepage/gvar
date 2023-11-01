@@ -1,3 +1,10 @@
+Version 12.0 2023-11-01
+===========================
+Introduces more modern string formatting for GVars, including support for 
+the e, f and g formats used to format floats. For more details see the section 
+on "Formatting GVars for Printing and Display" in the GVar documentation.
+The default format is somewhat different from before.
+
 Version 11.11.17 2023-10-12
 ============================
 Fixes obscure bug on Windows machines when evalcov_blocks(g) is called with a 

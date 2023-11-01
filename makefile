@@ -69,7 +69,7 @@ register-pypi:
 	python setup.py register # use only once, first time
 
 upload-twine: 
-	twine upload dist/gvar-$(VERSION).tar.gz
+	twine upload dist/gvar-$(VERSION)*  
 
 upload-git: 
 	echo  "version $(VERSION)"

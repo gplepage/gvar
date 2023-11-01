@@ -34,8 +34,8 @@ energy when it carries momentum |~| 50±0.15 |~| GeV. ::
     >>> E = (p ** 2 +  m ** 2) ** 0.5       # Higgs boson energy
     >>> print(m, E)
     125.70(40) 135.28(38)
-    >>> print(E.mean, '+-', E.sdev)
-    135.279303665 +- 0.375787639425
+    >>> print(E.mean, '±', E.sdev)
+    135.279303665 ± 0.375787639425
 
 Here method :func:`gvar.gvar` creates objects ``m`` and ``p`` of type |GVar|
 that represent Gaussian random variables for the Higgs mass and momentum,
@@ -78,7 +78,7 @@ A extreme example of correlation arises if we reconstruct the
 Higgs boson's mass from its energy and momentum::
 
     >>> print((E ** 2 - p ** 2) / m ** 2)
-    1 +- 1.4e-18
+    1 ± 1.4e-18
 
 The numerator and denominator are completely correlated, indeed identical to
 machine precision, as they should be. This works only because |GVar| object
@@ -148,7 +148,8 @@ A mathematical function ``f(x)`` of a Gaussian variable is defined
 as the probability distribution of function values obtained by evaluating the
 function for random numbers drawn from the original distribution. The
 distribution of function values is itself approximately Gaussian provided the
-standard deviation ``x.sdev`` of the Gaussian variable  is sufficiently small.
+standard deviation ``x.sdev`` of the Gaussian variable  is sufficiently small
+(and the function is sufficiently smooth).
 Thus we can define a function ``f`` of a Gaussian  variable ``x`` to be a
 Gaussian variable itself, with ::
 
@@ -191,7 +192,7 @@ created from its mean ``xmean`` and standard deviation
     x = gvar.gvar(xmean, xsdev).
 
 This function can also be used to convert strings like ``"-72.374(22)"``
-or ``"511.2 +- 0.3"`` into |GVar|\s: for example, ::
+or ``"511.2 ± 0.3"`` into |GVar|\s: for example, ::
 
     >>> import gvar
     >>> x = gvar.gvar(3.1415, 0.0002)
@@ -200,12 +201,14 @@ or ``"511.2 +- 0.3"`` into |GVar|\s: for example, ::
     >>> x = gvar.gvar("3.1415(2)")
     >>> print(x)
     3.14150(20)
-    >>> x = gvar.gvar("3.1415 +- 0.0002")
+    >>> x = gvar.gvar("3.1415 ± 0.0002")
     >>> print(x)
     3.14150(20)
 
 Note that ``x = gvar.gvar(x)`` is useful when you are unsure
-whether ``x`` is initially a |GVar| or a string representing a |GVar|.
+whether ``x`` is initially a |GVar| or a string representing a |GVar|. Note
+also that ``'±'`` in the above example 
+could be replaced by ``'+/-'`` or ``'+-'``.
 
 |GVar|\s are usually more interesting when used to describe multidimensional
 distributions, especially if there are correlations between different
@@ -255,12 +258,12 @@ covariance and correlation matrices, respectively, of the list of
 :func:`gvar.gvar` can also be used to convert strings or tuples stored in
 arrays or dictionaries into |GVar|\s: for example, ::
 
-    >>> garray = gvar.gvar(['2(1)', '10+-5', (99, 3), gvar.gvar(0, 2)])
+    >>> garray = gvar.gvar(['2(1)', '10±5', (99, 3), gvar.gvar(0, 2)])
     >>> print(garray)
-    [2.0(1.0) 10.0(5.0) 99.0(3.0) 0.0(2.0)]
-    >>> gdict = gvar.gvar(dict(a='2(1)', b=['10+-5', (99, 3), gvar.gvar(0, 2)]))
+    [2.0(1.0) 10.0(5.0) 99.0(3.0) 0 ± 2.0]
+    >>> gdict = gvar.gvar(dict(a='2(1)', b=['10±5', (99, 3), gvar.gvar(0, 2)]))
     >>> print(gdict)
-    {'a': 2.0(1.0),'b': array([10.0(5.0), 99.0(3.0), 0.0(2.0)], dtype=object)}
+    {'a': 2.0(1.0),'b': array([10.0(5.0), 99.0(3.0), 0 ± 2.0], dtype=object)}
 
 If the covariance matrix in ``gvar.gvar`` is diagonal, it can be replaced
 by an array of standard deviations (square roots of diagonal entries in
@@ -284,7 +287,7 @@ The |GVar|\s discussed in the previous section are all *primary* |GVar|\s
 since they were created by specifying their means and covariances
 explicitly, using :func:`gvar.gvar`. What makes |GVar|\s particularly
 useful is that they can be used in
-arithemtic expressions (and numeric pure-Python functions), just like
+arithmetic expressions (and numeric pure-Python functions), just like
 Python floats. Such expressions result in new, *derived* |GVar|\s
 whose means, standard deviations, and correlations
 are determined from the covariance matrix of the
@@ -361,7 +364,8 @@ as its argument::
 
 Here function :func:`gvar.gvar_function` creates the |GVar| for a function with
 mean value ``f`` and derivative ``dfdx`` at point ``x``. A more complete
-version of ``erf`` is included in :mod:`gvar`.
+version of ``erf`` is included in :mod:`gvar`. Note that :func:`gvar.gvar_function`
+also works for functions of multiple variables.
 
 Some sample numerical analysis codes, adapted for use with |GVar|\s, are
 described in :ref:`numerical-analysis-modules-in-gvar`.
@@ -456,6 +460,57 @@ This shows ``y`` is responsible for 19.80% of the 19.84% uncertainty in ``f``,
 but only 0.2% of the 1.25% uncertainty in ``f/y``. The total uncertainty in each case
 is obtained by adding the ``x`` and ``y`` contributions in quadrature.
 
+.. _formatting-gvars-for-printing:
+
+Formatting |GVar|\s for Printing or Display
+--------------------------------------------
+|GVar|\s can be formatted analogously to floats::
+
+    >>> x =  gvar.gvar(3.14159, 0.0236)
+    >>> print(f'{x:.2g}', f'{x:.3f}', f'{x:.4e}', f'{x:.^20.2g}')
+    3.1(0) 3.142(24) 3.1416(236)e+00 .......3.1(0).......
+
+There are also two formats, ``'p'`` and ``'P'``, that are specific to |GVar|\s.
+For these the precision field in the format specifies the number of digits 
+displayed in the standard deviation::
+
+    >>> print(f'{x:.2p}', f'{x:.3P}')
+    3.142(24) 3.1416 ± 0.0236
+
+The ``'P'`` format always uses the ``±`` representation of a |GVar|. 
+
+The ``'#p'`` format is a variation on the ``'p'`` format. When the 
+standard deviation is larger in magnitude than the mean, the ``'#p'``
+format adjusts the precision so that at least one non-zero digit of the  
+mean is included in the formatted string: e.g., ::
+
+    >>> y = gvar.gvar(0.023, 10.2)
+    >>> print(f'{y:.2p}', f'{y:#.2p}')
+    0(10) 0.02(10.20)
+
+The default format specification is `#.2p`::
+
+    >>> print(f'{y}', str(y))
+    0.02(10.20) 0.02(10.20)
+
+The default format can be changed using the :meth:`gvar.GVar.set` method: e.g.,::
+
+    >>> gvar.GVar.set(default_format='{:.2P}')
+    >>> print(f'{y}', str(y))
+    0.023 ± 10 0.023 ± 10
+
+(This method can also be used to replace the formatter with a 
+different function: e.g., ``gvar.GVar.set(formatter=new_formatter)``
+causes |GVar| ``g`` to be formatted by ``new_formatter(g,spec)``.)
+
+Multiple |GVar|\s in an array (or a dictionary whose values are 
+|GVar|\s or arrays of |GVar|\s) can be formatted using 
+:func:`gvar.fmt`::
+
+    >>> print(gvar.fmt([x, y], format='{:.3P}'))
+    ['3.1416 ± 0.0236' '0.023 ± 10.2']
+
+Each |GVar| is replaced by its formatted string.
 
 .. _storing-gvars-for-later-use:
 
@@ -722,7 +777,7 @@ layout::
 
     >>> g = dict(a=gvar.gvar(0, 1), b=[gvar.gvar(0, 100), gvar.gvar(10, 1e-3)])
     >>> print(g)
-    {'a': 0.0(1.0), 'b': [0(100), 10.0000(10)]}
+    {'a': 0 ± 1.0, 'b': [0 ± 1.0e+02, 10.0000(10)]}
     >>> giter = gvar.raniter(g)
     >>> print(next(giter))
     {'a': -0.88986130981173306, 'b': array([-67.02994213,   9.99973707])}

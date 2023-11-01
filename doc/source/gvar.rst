@@ -22,9 +22,9 @@ Objects of type :class:`gvar.GVar` represent gaussian random variables,
 which are specified by a mean and standard deviation. They are created
 using :func:`gvar.gvar`: for example, ::
 
-    >>> x = gvar.gvar(10,3)          # 0 +- 3
-    >>> y = gvar.gvar(12,4)          # 2 +- 4
-    >>> z = x + y                    # 2 +- 5
+    >>> x = gvar.gvar(10,3)          # 0 ± 3
+    >>> y = gvar.gvar(12,4)          # 2 ± 4
+    >>> z = x + y                    # 2 ± 5
     >>> print(z)
     22.0(5.0)
     >>> print(z.mean)
@@ -290,13 +290,19 @@ The fundamental class for representing Gaussian variables is:
 
    .. automethod:: deriv(x)
 
-   There are two methods for converting ``self`` into a string, for
-   printing:
+   There are three methods for converting ``self`` into a string for
+   printing and display, and fourth for modifying the defaults used
+   in formatting:
+
+   .. automethod:: __format__
 
    .. automethod:: __str__
 
-   .. automethod:: fmt(ndecimal=None, sep='')
+   .. automethod:: fmt(ndecimal=None, sep='', format='{}')
 
+   .. automethod:: set
+
+   
    Two attributes and a method make reference to the original
    variables from which ``self`` is derived:
 
