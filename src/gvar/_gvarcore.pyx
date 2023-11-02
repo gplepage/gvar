@@ -141,7 +141,7 @@ if sys.version_info > (3,0):
         + r'(?P<precision>\d*)(?P<ftype>[efgpPn%]?)$'
         )
     GVar_strip_table = str.maketrans('', '', '+- _,.')
-    GVar_sdev_bracket = ('({})', '({})')      # (no-exponent, exponent)
+    GVar_sdev_format = ('({})', '({})')      # (no-exponent, exponent)
     GVar_plusminus = ' ± '                     
     GVar_prange = (1e-5, 10 ** sys.float_info.dig) 
     GVar_formatter = None 
@@ -176,7 +176,9 @@ if sys.version_info > (3,0):
             sd = sd[:-1]
         if alt == '#' and mn[-1] == '.' and sd[-1] != '.':
             sd += '.'
-        sd = GVar_sdev_bracket[0 if expon == '0' else 1].format(GVar_lstrip(sd, chrs='.0,_'))
+        # idx = 0 if expon == '0' else 1
+        # print(GVar_sdev_format, idx, expon=='0', GVar_sdev_format[idx])
+        sd = GVar_sdev_format[0 if expon == '0' else 1].format(GVar_lstrip(sd, chrs='.0,_'))
         return (mn + sd) if expon == '0' else (mn + sd + 'e' + expon)
 else:
     GVar_formatter = GVar_old_str
@@ -254,7 +256,7 @@ cdef class GVar:
             # sdev_format (str): Sets format used for the standard deviation
             #     in the formatted string. Default is ``'{()}'.
         # """
-        global GVar_formatter, GVar_default_format, GVar_plusminus, GVar_prange, GVar_sdev_bracket
+        global GVar_formatter, GVar_default_format, GVar_plusminus, GVar_prange, GVar_sdev_format
         old = {}
         for k in kargs:
             if k == 'formatter':
@@ -290,8 +292,8 @@ cdef class GVar:
                     fmt = 2 * (fmt, )
                 if len(fmt) < 2:
                     fmt = 2 * fmt
-                old[k] = GVar_sdev_bracket 
-                GVar_sdev_bracket = fmt
+                old[k] = GVar_sdev_format 
+                GVar_sdev_format = fmt
             else:
                 raise ValueError('unknown parameter: ' + k)
         return old
@@ -343,6 +345,7 @@ cdef class GVar:
         is '{:#.2p}'. This can be changed using 
         ``GVar.set(default_format=...)``.
         """
+        global GVar_sdev_format
         if GVar_formatter is not None:
             return GVar_formatter(self, spec)
         if spec == '':
@@ -493,8 +496,13 @@ cdef class GVar:
                     if spec['alt'] == '#' and gmean != 0:
                         if float('{{:.{ndec}f}}'.format(ndec=ndec).format(gmean* 10 ** (-int(expon)))) == 0:
                             ndec += 1
+                    if expon != '0':
+                        # kludge
+                        save_sdev_format = GVar_sdev_format
+                        GVar_sdev_format = (GVar_sdev_format[1], GVar_sdev_format[1])
                     ans = '{{:{sign}{grouping_opt}.{ndec}f}}'.format(ndec=ndec, **spec).format(self * 10 ** (-int(expon))) 
                     if expon != '0':
+                        GVar_sdev_format = save_sdev_format
                         ans += 'e' + expon
         elif spec['ftype'] == '%':
             ans = '{{:{sign}{grouping_opt}{dot}{precision}f}}'.format(**spec).format(self * 100) + '%'
@@ -872,13 +880,13 @@ cdef class GVar:
         Returns:
             Formatted string.
         """
-        global GVar_sdev_bracket
+        global GVar_sdev_format
         if GVar_formatter == GVar_old_str:
             # use legacy code
             return self._oldfmt(ndecimal=ndecimal, sep=sep)
         if sep != '':
-            save = GVar_sdev_bracket
-            GVar_sdev_bracket = (sep + GVar_sdev_bracket[0], GVar_sdev_bracket[1])
+            save = GVar_sdev_format
+            GVar_sdev_format = (sep + GVar_sdev_format[0], GVar_sdev_format[1])
         if ndecimal != None:
             if ndecimal >= 0:
                 ans = '{{:.{ndecimal}f}}'.format(ndecimal=ndecimal).format(self)
@@ -887,7 +895,7 @@ cdef class GVar:
         else:
             ans = format.format(self)
         if sep != '':
-            GVar_sdev_bracket = save
+            GVar_sdev_format = save
         return ans
 
     def _oldfmt(self, ndecimal=None, sep='', d=None):
