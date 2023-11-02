@@ -304,7 +304,7 @@ cdef class GVar:
         ``'g'``, ``'n'``, and ``'%'``. The format is applied to 
         the mean value and the output modified to include the 
         standard deviation when the mean is larger in magnitude 
-        than the standard deviation: e.g., ::
+        than the standard deviation::
 
             >>> x = gvar.gvar(12.314, 1.56)
             >>> print(f'{x:.2g}'')

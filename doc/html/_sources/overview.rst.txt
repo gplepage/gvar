@@ -524,7 +524,7 @@ that would work in a LaTeX document::
     >>> print(f'{y:.0f}')
     $0\,\pm\,10$
 
-Again, ``gvar.GVar.set(**old_settings)`` restores the original 
+Again ``gvar.GVar.set(**old_settings)`` restores the original 
 formatter.
 
 .. _storing-gvars-for-later-use:
