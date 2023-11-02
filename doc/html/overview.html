@@ -496,7 +496,7 @@ displayed in the standard deviation:</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">'#p'</span></code> format is a variation on the <code class="docutils literal notranslate"><span class="pre">'p'</span></code> format. When the
 standard deviation is larger in magnitude than the mean, the <code class="docutils literal notranslate"><span class="pre">'#p'</span></code>
 format adjusts the precision so that at least one non-zero digit of the
-mean is included in the formatted string: e.g.,</p>
+mean is included in the formatted string:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">0.023</span><span class="p">,</span> <span class="mf">10.2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s1">.2p</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s1">#.2p</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="go">0(10) 0.02(10.20)</span>
@@ -507,20 +507,20 @@ mean is included in the formatted string: e.g.,</p>
 <span class="go">0.02(10.20) 0.02(10.20)</span>
 </pre></div>
 </div>
-<p>The default format can be changed using the <a class="reference internal" href="gvar.html#gvar.GVar.set" title="gvar.GVar.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.GVar.set()</span></code></a> method: e.g.,:</p>
+<p>The default format can be changed using the <a class="reference internal" href="gvar.html#gvar.GVar.set" title="gvar.GVar.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.GVar.set()</span></code></a> method:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gvar</span><span class="o">.</span><span class="n">GVar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">default_format</span><span class="o">=</span><span class="s1">&#39;{:.2P}&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 <span class="go">0.023 ± 10 0.023 ± 10</span>
 </pre></div>
 </div>
 <p>(This method can also be used to replace the formatter with a
-different function: e.g., <code class="docutils literal notranslate"><span class="pre">gvar.GVar.set(formatter=new_formatter)</span></code>
+different function: <code class="docutils literal notranslate"><span class="pre">gvar.GVar.set(formatter=new_formatter)</span></code>
 causes <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">g</span></code> to be formatted by <code class="docutils literal notranslate"><span class="pre">new_formatter(g,spec)</span></code>.)</p>
-<p>Multiple <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in an array (or a dictionary whose values are
-<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s) can be formatted using
+<p>Multiple <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in an array, or in a dictionary whose values are
+<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s can be formatted using
 <a class="reference internal" href="gvar.html#gvar.fmt" title="gvar.fmt"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.fmt()</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gvar</span><span class="o">.</span><span class="n">fmt</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;{:.3P}&#39;</span><span class="p">))</span>
-<span class="go">[&#39;3.1416 ± 0.0236&#39; &#39;0.023 ± 10.2&#39;]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gvar</span><span class="o">.</span><span class="n">fmt</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">y</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;{:.3P}&#39;</span><span class="p">))</span>
+<span class="go">{&#39;a&#39;: &#39;3.1416 ± 0.0236&#39;, &#39;b&#39;: &#39;0.023 ± 10.2&#39;}</span>
 </pre></div>
 </div>
 <p>Each <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> is replaced by its formatted string.</p>

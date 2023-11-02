@@ -482,7 +482,7 @@ The ``'P'`` format always uses the ``±`` representation of a |GVar|.
 The ``'#p'`` format is a variation on the ``'p'`` format. When the 
 standard deviation is larger in magnitude than the mean, the ``'#p'``
 format adjusts the precision so that at least one non-zero digit of the  
-mean is included in the formatted string: e.g., ::
+mean is included in the formatted string::
 
     >>> y = gvar.gvar(0.023, 10.2)
     >>> print(f'{y:.2p}', f'{y:#.2p}')
@@ -493,14 +493,14 @@ The default format specification is `#.2p`::
     >>> print(f'{y}', str(y))
     0.02(10.20) 0.02(10.20)
 
-The default format can be changed using the :meth:`gvar.GVar.set` method: e.g.,::
+The default format can be changed using the :meth:`gvar.GVar.set` method::
 
     >>> gvar.GVar.set(default_format='{:.2P}')
     >>> print(f'{y}', str(y))
     0.023 ± 10 0.023 ± 10
 
 (This method can also be used to replace the formatter with a 
-different function: e.g., ``gvar.GVar.set(formatter=new_formatter)``
+different function: ``gvar.GVar.set(formatter=new_formatter)``
 causes |GVar| ``g`` to be formatted by ``new_formatter(g,spec)``.)
 
 Multiple |GVar|\s in an array, or in a dictionary whose values are 
