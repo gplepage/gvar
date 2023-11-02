@@ -228,23 +228,24 @@ cdef class GVar:
         The following parameters can be reset.
 
         Args:
-            formatter (callable): Sets default formatter with function
-                ``formatter(g, spec)`` where ``g`` is the |GVar| to be 
-                formatted and ``spec`` is the format specification 
+            formatter (callable): Sets the default formatter. The 
+                formatted string is returned by ``formatter(g, spec)`` 
+                where ``g`` is the |GVar| to be formatted 
+                and ``spec`` is the format specification 
                 (e.g, ``'.3g'`` or ``'.^20.3f'``). Setting 
                 ``formatter=None`` restores the original formatter.
                 Setting ``formatter='old'`` switches to the 
                 formatter used before :mod:`gvar` version 12.0
                 (buggy and deprecated).
             default_format (str): Sets the format used when 
-                none is specified (``default_format='{}'`` is *not* 
-                allowed). The format can be specified as a 
+                none is specified. (Note that ``default_format='{}'`` 
+                is *not* allowed.) The format can be specified as a 
                 full format string (e.g., ``'{:.4g}'``) or with
-                just the format specification (e.g., ``'.4g'``).
+                just the format specification (``'.4g'``).
                 Default is ``'{:#.2p}'``.
             plusminus (str): Sets the plus/minus symbol(s) 
                 for format strings. Default is ``' ± '``.
-            prange (tuple): Sets range of values of ``abs(g.mean)/g.sdev`` 
+            prange (tuple): Sets the range of values of ``abs(g.mean)/g.sdev`` 
                 formatted with a compressed format when using the 
                 ``'p'`` presentation format. Values outside this range 
                 are formatted as ``'{g.mean} ± {g.sdev}'`` with the 
