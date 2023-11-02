@@ -503,12 +503,12 @@ The default format can be changed using the :meth:`gvar.GVar.set` method: e.g.,:
 different function: e.g., ``gvar.GVar.set(formatter=new_formatter)``
 causes |GVar| ``g`` to be formatted by ``new_formatter(g,spec)``.)
 
-Multiple |GVar|\s in an array (or a dictionary whose values are 
-|GVar|\s or arrays of |GVar|\s) can be formatted using 
+Multiple |GVar|\s in an array, or in a dictionary whose values are 
+|GVar|\s or arrays of |GVar|\s can be formatted using 
 :func:`gvar.fmt`::
 
-    >>> print(gvar.fmt([x, y], format='{:.3P}'))
-    ['3.1416 ± 0.0236' '0.023 ± 10.2']
+    >>> print(gvar.fmt(dict(a=x, b=y), format='{:.3P}'))
+    {'a': '3.1416 ± 0.0236', 'b': '0.023 ± 10.2'}
 
 Each |GVar| is replaced by its formatted string.
 
