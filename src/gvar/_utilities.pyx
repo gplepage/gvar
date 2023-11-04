@@ -587,7 +587,7 @@ def correlate(g, corr, upper=False, lower=False, verify=False):
 @cython.boundscheck(False) # turn off bounds-checking
 @cython.wraparound(False)  # turn off negative index wrapping
 @cython.initializedcheck(False) # memory views initialized?
-def evalcov_blocks_dense(g, compress=False):
+def evalcov_blocks_dense(g, compress=False, verify=True):
     """ Evaluate covariance matrix for elements of ``g``.
 
     Same as :func:`gvar.evalcov_blocks` but optimized for 
@@ -610,7 +610,7 @@ def evalcov_blocks_dense(g, compress=False):
             [(numpy.array([], dtype=numpy.intp), numpy.array([]))] if compress else 
             [(numpy.array([], dtype=numpy.intp), numpy.reshape([], (0,0)))] 
             )
-    allcov = evalcov(varlist)
+    allcov = evalcov(varlist, verify=verify)
     nb, key = _connected_components(allcov != 0, directed=False)
     allvar = numpy.arange(nvar, dtype=numpy.intp)
     blocks = [([], [])]
@@ -724,6 +724,8 @@ def evalcov_blocks(g, compress=False):
     ivset_iv = numpy.array([set() for i in range(nvar)])
     nzeros = 0
     for iv, gi in enumerate(varlist):
+        if not (gi.cov is cov):
+            raise ValueError('Incompatible GVars.')
         idset = set()
         for i in range(gi.d.size):
             idset.add(cov.block[gi.d.v[i].i])
@@ -747,7 +749,7 @@ def evalcov_blocks(g, compress=False):
         # probably not sparse
         # nzeros is the minimum number of zeros; could actually be larger
         # so not foolproof
-        return evalcov_blocks_dense(varlist, compress=compress)
+        return evalcov_blocks_dense(varlist, compress=compress, verify=False)
     
     # build graph showing which pairs of variables share a block (or blocks)
     n = min(_gvar._CONFIG['evalcov_blocks'], nvalmax)
@@ -785,7 +787,7 @@ def evalcov_blocks(g, compress=False):
             blocks[0][1].append(varlist[i].sdev)
         else:
             # evaluate cov for sub-block
-            bcov = evalcov(varlist[idx])
+            bcov = evalcov(varlist[idx], verify=False)
             # check for sub-blocks within the sub-blocks
             allbcov =  numpy.arange(bcov.shape[0])
             snb, skey = _connected_components(bcov != 0, directed=False, connection='strong')
@@ -949,7 +951,7 @@ def var(g):
 @cython.boundscheck(False) # turn off bounds-checking
 @cython.wraparound(False)  # turn off negative index wrapping
 @cython.initializedcheck(False) # memory views initialized?
-def evalcov(g):
+def evalcov(g, verify=True):
     """ Compute covariance matrix for elements of 
     array/dictionary ``g``.
 
@@ -977,7 +979,7 @@ def evalcov(g):
         # convert g to list and call evalcov; repack as double dict
         if not isinstance(g,BufferDict):
             g = BufferDict(g)
-        gcov = evalcov(g.flat)
+        gcov = evalcov(g.flat, verify=verify)
         ansd = BufferDict()
         for k1 in g:
             k1_sl, k1_sh = g.slice_shape(k1)
@@ -1001,6 +1003,10 @@ def evalcov(g):
         cov = g[0].cov
     else:
         raise ValueError("g does not contain GVar's")
+    if verify:
+        for ga in g[:]:
+            if not (ga.cov is cov):
+                raise ValueError('Incompatible GVars')
     ####
     nc = cov.nrow 
     gdlist = numpy.array([ga.d for ga in g])
@@ -2131,7 +2137,7 @@ def wsum_der(numpy.float_t[:] wgt, GVar[:] glist):
     for i in range(wgt.shape[0]):
         w = wgt[i]
         g = glist[i]
-        assert g.cov is cov,"Incompatible |GVar|\s."
+        assert g.cov is cov,"Incompatible GVars."
         for j in range(g.d.size):
             ans[g.d.v[j].i] += w*g.d.v[j].v
     return ans
@@ -2158,7 +2164,7 @@ cpdef GVar wsum_gvar(numpy.float_t[:] wgt, GVar[:] glist):
     for i in range(ng): #w,g in zip(wgt,glist):
         w = wgt[i]
         g = glist[i]
-        assert g.cov is cov,"Incompatible |GVar|\s."
+        assert g.cov is cov,"Incompatible GVars."
         wv += w * g.v
         for j in range(g.d.size):
             der[g.d.v[j].i] += w * g.d.v[j].v

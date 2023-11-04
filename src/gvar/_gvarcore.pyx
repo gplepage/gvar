@@ -261,6 +261,8 @@ cdef class GVar:
         for k in kargs:
             if k == 'formatter':
                 fmtr = GVar_old_str if kargs[k] == 'old' else kargs[k]
+                if fmtr == GVar.__format__:
+                    fmtr = None
                 old[k] = GVar_formatter
                 GVar_formatter = fmtr
             elif k == 'default_format':
@@ -346,7 +348,7 @@ cdef class GVar:
         ``GVar.set(default_format=...)``.
         """
         global GVar_sdev_format
-        if GVar_formatter is not None:
+        if GVar_formatter is not None and GVar_formatter != GVar.__format__:
             return GVar_formatter(self, spec)
         if spec == '':
             return GVar_default_format.format(self)
@@ -1110,7 +1112,7 @@ cdef class GVar:
                     g.a = a
 
         creates a variation on |GVar| that, in effect, adds a new attribute
-        ``a``  to an existing |GVar| ``g`` (being careful not to avoid
+        ``a``  to an existing |GVar| ``g`` (being careful to avoid
         names that collide with an existing |GVar| attribute).
         """
         def __get__(self):

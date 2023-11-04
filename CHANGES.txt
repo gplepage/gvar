@@ -1,3 +1,7 @@
+Version ???
+==============
+- Minor fixes to GVar.set, GVar.__format__, evalcov, evalcov_blocks, evalcov_blocks_dense.
+
 Version 12.0 2023-11-01
 ===========================
 Introduces more modern string formatting for GVars, including support for 
