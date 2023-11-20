@@ -247,13 +247,13 @@ The following functions are used to generate and analyze random arrays or dictio
 from the distribution defined by array (or dictionary) ``g`` of |GVar|\s.
 The random numbers incorporate any correlations implied by the ``g``\s.
 
-.. autofunction:: gvar.sample(g, svdcut=1e-12, uniform=None, nbatch=None, mode='rbatch')
+.. autofunction:: gvar.sample(g, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch')
 
-.. autofunction:: gvar.raniter(g, n=None, svdcut=1e-12, uniform=None, nbatch=None, mode='rbatch')
+.. autofunction:: gvar.raniter(g, n=None, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch')
 
 .. autofunction:: gvar.gvar_from_sample(gs, mode='rbatch', unbias=False)
 
-.. autofunction:: gvar.bootstrap_iter(g, n=None, svdcut=1e-12)
+.. autofunction:: gvar.bootstrap_iter(g, n=None, eps=None, svdcut=None)
 
 This function is used to seed the random number generator used by :mod:`gvar`:
 
