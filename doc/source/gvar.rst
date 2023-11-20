@@ -18,12 +18,12 @@
 Introduction
 ------------
 
-Objects of type :class:`gvar.GVar` represent gaussian random variables,
-which are specified by a mean and standard deviation. They are created
+Objects of type :class:`gvar.GVar` represent Gaussian random variables,
+which are specified by means and covariances. They are created
 using :func:`gvar.gvar`: for example, ::
 
-    >>> x = gvar.gvar(10,3)          # 0 ± 3
-    >>> y = gvar.gvar(12,4)          # 2 ± 4
+    >>> x = gvar.gvar(10, 3)         # 0 ± 3
+    >>> y = gvar.gvar(12, 4)         # 2 ± 4
     >>> z = x + y                    # 2 ± 5
     >>> print(z)
     22.0(5.0)
@@ -33,7 +33,21 @@ using :func:`gvar.gvar`: for example, ::
     5.0
 
 This module contains a variety of tools for creating and
-manipulating gaussian random variables, including:
+manipulating Gaussian random variables, including:
+
+*Creating or modifying*
+
+    - :any:`gvar.gvar`\ ``(...)`` --- create new |GVar|
+
+    - :any:`gvar.gvar_function`\ ``(x, f, dfdx)`` --- create |GVar| for function of |GVar|.
+
+    - :any:`regulate`\ ``(g, svdcut|eps)`` --- regulate ``g``'s correlation matrix.
+
+    - :any:`svd`\ ``(g, svdcut)`` --- SVD regulation of correlation matrix.
+
+    - :any:`correlate`\ ``(g, corr)`` --- add correlations to |GVar|\s in array/dictionary ``g``.
+    
+*Examining and manipulating*
 
     - :any:`mean`\ ``(g)`` --- extract means.
 
@@ -41,25 +55,9 @@ manipulating gaussian random variables, including:
 
     - :any:`var`\ ``(g)`` --- extract variances.
 
-    - :any:`is_primary`\ ``(g)`` --- test whether primary (``True``) or derived (``False``) |GVar|\s.
+    - :any:`deriv`\ ``(g, x)`` --- derivatives of ``g`` with respect to ``x``.
 
-    - :any:`dependencies`\ ``(g)`` --- collect primary |GVar|\s contributing to ``g``.
-
-    - :any:`filter`\ ``(g, f, *args, **kargs)`` --- filter |GVar|\s in ``g`` through function ``f``.
-
-    - :any:`deriv`\ ``(g, x)`` --- derivatives of ``g`` with respect to ``x``,
-    
-    - :any:`fmt`\ ``(g)`` --- replace all |GVar|\s in array/dictionary by string representations.
-
-    - :any:`tabulate`\ ``(g)`` --- tabulate entries in array/dictionary of |GVar|\s.
-
-    - :any:`correlate`\ ``(g, corr)`` --- add correlations to |GVar|\s in array/dictionary ``g``.
-
-    - :any:`chi2`\ ``(g1, g2)`` --- ``chi**2`` of ``g1-g2``.
-
-    - :any:`qqplot`\ ``(g1, g2)`` --- QQ plot of ``g1-g2``,
-
-    - :any:`equivalent`\ ``(g1, g2)`` --- |GVar|\s the same in ``g1`` and ``g2``?
+    - :any:`is_primary`\ ``(g)`` --- test whether |GVar| is primary or derived.
 
     - :any:`evalcov`\ ``(g)`` --- compute covariance matrix.
 
@@ -67,21 +65,47 @@ manipulating gaussian random variables, including:
 
     - :any:`evalcorr`\ ``(g)`` --- compute correlation matrix.
 
+    - :any:`cov`\ ``(g1, g2)`` --- covariance between ``g1`` and ``g2``.
+
+    - :any:`corr`\ ``(g1, g2)`` --- correlation between ``g1`` and ``g2``.
+
+    - :any:`uncorrelated`\ ``(g1, g2)`` --- test for correlation
+
+    - :any:`chi2`\ ``(g1, g2)`` --- ``chi**2`` of ``g1-g2``.
+
+    - :any:`filter`\ ``(g, f, *args, **kargs)`` --- filter |GVar|\s in ``g`` through function ``f``.
+
+*Sampling*
+
+    - :any:`sample`\ ``(g, nbatch)``  --- random sample from collection of |GVar|\s.
+
+    - :any:`raniter`\ ``(g, n, nbatch)`` --- iterator for random numbers.
+
+    - :any:`gvar_from_sample`\ ``(gs)`` --- |GVar|\s from random sample.
+
+    - :any:`bootstrap_iter`\ ``(g, n)`` --- bootstrap iterator.
+
+    - :any:`ranseed`\ ``(seed)`` --- seed random number generator.
+
+*Formatting*
+    
+    - :any:`fmt`\ ``(g)`` --- replace all |GVar|\s in array/dictionary by string representations.
+
+    - :any:`tabulate`\ ``(g)`` --- tabulate entries in array/dictionary of |GVar|\s.
+
+    - :any:`qqplot`\ ``(g1, g2)`` --- QQ plot of ``g1-g2``,
+
+    - :any:`equivalent`\ ``(g1, g2)`` --- |GVar|\s the same in ``g1`` and ``g2``?
+
     - :any:`fmt_values`\ ``(g)`` --- list values for printing.
 
     - :any:`fmt_errorbudget`\ ``(g)`` --- create error-budget table for printing.
 
     - :any:`fmt_chi2`\ ``(f)`` --- format chi**2 information in f as string for printing.
 
-    - class :class:`BufferDict` --- ordered dictionary with data buffer.
+*Saving*
 
-    - class :class:`PDF` --- probability density function.
-
-    - class :class:`PDFStatistics` --- statistical analysis of moments of a random variable.
-
-    - class :class:`PDFHistogram` --- tool for building PDF histograms.
-
-    - :any:`dump`\ ``(g, outputfile)`` --- serialize data from ``g`` in file.
+    - :any:`dump`\ ``(g, outputfile)`` --- serialize data, including |GVar|\s, from ``g`` in file.
 
     - :any:`dumps`\ ``(g)`` --- serialize data from ``g`` in a bytes object.
 
@@ -103,21 +127,25 @@ manipulating gaussian random variables, including:
 
     - class :class:`GVarRef` --- placeholder for |GVar| removed by :func:`gvar.remove_gvars`.
 
+    - :any:`dependencies`\ ``(g)`` --- collect primary |GVar|\s contributing to ``g``.
+
     - :any:`disassemble`\ ``(g)`` --- low-level routine to disassemble a collection of |GVar|\s.
 
     - :any:`reassemble`\ ``(data,cov)`` --- low-level routine to reassemble a collection of |GVar|\s.
 
-    - :any:`raniter`\ ``(g,N)`` --- iterator for random numbers.
+*Related classes*
 
-    - :any:`ranseed`\ ``(seed)`` --- seed random number generator.
+    - class :class:`BufferDict` --- ordered dictionary with data buffer.
 
-    - :any:`sample`\ ``(g)``  --- random sample from collection of |GVar|\s.
+    - class :class:`SVD` --- SVD decomposition of symmetric matrix
 
-    - :any:`bootstrap_iter`\ ``(g,N)`` --- bootstrap iterator.
+    - class :class:`PDF` --- probability density function.
 
-    - :any:`regulate`\ ``(g, svdcut|eps)`` --- regulate correlation matrix.
+    - class :class:`PDFStatistics` --- statistical analysis of moments of a random variable.
 
-    - :any:`svd`\ ``(g, svdcut)`` --- SVD regulation of correlation matrix.
+    - class :class:`PDFHistogram` --- tool for building PDF histograms.
+
+*Analyzing Monte Carlo datasets*
 
     - :any:`dataset.bin_data`\ ``(data)`` --- bin random sample data.
 
@@ -215,15 +243,17 @@ matrices and correlation/comparison information can be extracted from arrays
 
 .. autofunction:: gvar.deriv(g, x)
 
-The following functions are used to generate random arrays or dictionaries
+The following functions are used to generate and analyze random arrays or dictionaries
 from the distribution defined by array (or dictionary) ``g`` of |GVar|\s.
 The random numbers incorporate any correlations implied by the ``g``\s.
 
-.. autofunction:: gvar.raniter(g, n=None, svdcut=1e-12)
+.. autofunction:: gvar.sample(g, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch')
 
-.. autofunction:: gvar.sample(g, svdcut=1e-12)
+.. autofunction:: gvar.raniter(g, n=None, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch')
 
-.. autofunction:: gvar.bootstrap_iter(g, n=None, svdcut=1e-12)
+.. autofunction:: gvar.gvar_from_sample(gs, mode='rbatch', unbias=False)
+
+.. autofunction:: gvar.bootstrap_iter(g, n=None, eps=None, svdcut=None)
 
 This function is used to seed the random number generator used by :mod:`gvar`:
 
@@ -437,6 +467,8 @@ below.
 
    .. automethod:: uniform(fname, umin, umax, shape=())
 
+   .. automethod:: batch_iter(mode)
+
 
 :class:`gvar.SVD` Objects
 ---------------------------
@@ -446,7 +478,7 @@ SVD analysis is handled by the following class:
 
    .. automethod:: decomp(n)
 
-:class:`vegas.PDFIntegrator` and other PDF-related Objects
+PDF-related Objects
 -----------------------------------------------------------
 Expectation values using probability density functions defined by
 collections of |GVar|\s can be evaluated using the :mod:`vegas`
@@ -454,8 +486,10 @@ module (for multi-dimensional integration) and class
 :class:`vegas.PDFIntegrator`. Related classes are:
 
 .. autoclass:: gvar.PDF(g, svdcut=1e-12)
+   :members:
 
 .. autoclass:: gvar.PDFStatistics(moments=None, histogram=None)
+   :members:
 
 .. autoclass:: gvar.PDFHistogram(g, nbin=None, binwidth=None, bins=None)
 

@@ -169,7 +169,7 @@ import numpy
 # import math
 from numpy import exp, log, sqrt, sin, cos, tan, arcsin, arccos, arctan
 from numpy import sinh, cosh, tanh, arcsinh, arccosh, arctanh
-from scipy.special import eval_hermite as _scipy_eval_hermite
+# from scipy.special import eval_hermite as _scipy_eval_hermite
 
 class PowerSeries(object):
     """
@@ -419,6 +419,7 @@ class PowerSeries(object):
 
     def erf(self):
         from gvar import erf as _gvar_erf 
+        from scipy.special import eval_hermite as _scipy_eval_hermite
         jmax = self.order + 1
         jarray = numpy.arange(jmax + 1)
         deriv = (

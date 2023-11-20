@@ -470,6 +470,27 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         BufferDict.del_distribution('f')
         BufferDict.del_distribution('ln')
 
+    def test_batch(self):
+        " batch BufferDict "
+        a = BufferDict(s=1., v=[[2.,3.,4.]])
+        buf = np.array([[10.,100,1000], [20, 200, 2000], [30.,300,3000.], [40.,400,4000]], dtype=float)
+        # answers
+        ar = BufferDict(s=[10., 100., 1000.], v=[[[  20.,  200., 2000.], [  30.,  300., 3000.], [  40.,  400., 4000.]]])        
+        al = BufferDict(s=[10., 100., 1000.], v=[[[  20.,   30.,   40.]], [[ 200.,  300.,  400.]], [[2000., 3000., 4000.]]])
+        ab = 3 * [None]
+        for i in range(3):
+            bufT = buf.T[i]
+            ab[i] = BufferDict(s=bufT[0], v=[bufT[1:]])
+        # rbatch
+        self.assertEqual(str(ar), str(BufferDict(a, rbatch_buf=buf)))
+        for i, b in enumerate(ar.batch_iter('rbatch')):
+            b = BufferDict(b)
+            self.assertEqual(str(ab[i]), str(b))
+        # lbatch
+        self.assertEqual(str(al), str(BufferDict(a, lbatch_buf=buf.T)))
+        for i, b in enumerate(al.batch_iter('lbatch')):
+            b = BufferDict(b)
+            self.assertEqual(str(ab[i]), str(b))
 
 if __name__ == '__main__':
     unittest.main()

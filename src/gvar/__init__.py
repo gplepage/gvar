@@ -47,6 +47,18 @@ variables including:
 
     - ``fmt_chi2(f)`` --- format chi**2 information in f.
 
+    - ``sample(g, nbatch)`` --- random sample from |GVar|\s.
+
+    - ``gvar_from_sample(gs)`` --- reconstruct Gaussian distribution from sample.
+    
+    - ``raniter(g, n, nbatch)`` --- iterator for random numbers.
+
+    - ``bootstrap_iter(g, n)`` --- bootstrap iterator.
+
+    - ``regulate(g, eps|svdcut)`` --- regulate correlation matrix.
+
+    - ``svd(g, svdcut)`` --- SVD regulation of correlation matrix.
+
     - ``PDF(g)`` --- (class) probability density function.
 
     - ``PDFStatistics`` --- (class) statistical analysis of moments of a random variable.
@@ -59,23 +71,13 @@ variables including:
 
     - ``reassemble(data, cov)`` --- reassemble into |GVar|\s.
 
-    - ``dump(g, outputfile)`` --- store |GVar|\s in file.
-
-    - ``dumps(g)`` --- store |GVar|s in a string.
-
     - ``load(inputfile)`` --- read |GVar|\s from a file.
 
     - ``loads(inputstr)`` --- read |GVar|\s from a string.
 
-    - ``raniter(g,N)`` --- iterator for random numbers.
+    - ``dump(g, outputfile)`` --- store |GVar|\s in file.
 
-    - ``sample(g)`` --- random sample from |GVar|\s.
-
-    - ``bootstrap_iter(g,N)`` --- bootstrap iterator.
-
-    - ``regulate(g, eps|svdcut)`` --- regulate correlation matrix.
-
-    - ``svd(g, svdcut)`` --- SVD regulation of correlation matrix.
+    - ``dumps(g)`` --- store |GVar|s in a string.
 
     - ``dataset.bin_data(data)`` --- bin random sample data.
 
@@ -120,15 +122,25 @@ import collections
 
 import numpy
 
-from ._gvarcore import *
-gvar = GVarFactory()            # order matters for this statement
+from ._gvarcore import sin, cos, tan, exp, log, sqrt, fabs, sinh, cosh, tanh
+from ._gvarcore import arcsin, arccos, arctan, arctan2, arcsinh, arccosh, arctanh, square
+from ._gvarcore import GVar, GVarFactory, gvar_function, abs
+gvar = GVarFactory()            # order matters for this statement (don't move down)
 
-from ._svec_smat import *
+from ._svec_smat import svec, smask, smat
 from ._bufferdict import BufferDict, asbufferdict, _BDict_UDistribution, BUFFERDICTDATA
 from ._bufferdict import has_dictkey, dictkey, get_dictkeys
 from ._bufferdict import trim_redundant_keys    # legacy
 from ._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
-from ._utilities import *
+# from ._utilities import *
+from ._utilities import rebuild, mean, fmt, sdev, deriv, is_primary
+from ._utilities import dependencies, missing_dependencies, uncorrelated, evalcorr, corr, cov
+from ._utilities import correlate, evalcov_blocks_dense, evalcov_blocks, mock_evalcov, var, evalcov
+from ._utilities import distribute_gvars, remove_gvars, collect_gvars, filter
+from ._utilities import dumps, loads, dump, load, gdumps, gdump, gloads, gload, olddump
+from ._utilities import disassemble, reassemble, wsum_der, msum_gvar, fmt_values, wsum_gvar
+from ._utilities import fmt_errorbudget, bootstrap_iter, sample, gvar_from_sample, raniter 
+from ._utilities import valder, gammaQ, gammaP, regulate, svd, erf, SVD, GVarRef
 
 try:
     import sys
@@ -154,6 +166,13 @@ from gvar import root
 _GVAR_LIST = []
 _CONFIG = dict(evalcov=15, evalcov_blocks=6000, var=50)
 
+if tuple([int(si) for si in numpy.__version__.split('.')]) >= (1, 17, 0):
+    _NEW_RNG = True
+    _GVAR_RNG = numpy.random.default_rng()
+else:
+    _NEW_RNG = False
+    _GVAR_RNG = numpy.random
+
 def ranseed(seed=None):
     """ Seed random number generators with tuple ``seed``.
 
@@ -174,13 +193,20 @@ def ranseed(seed=None):
     Returns:
         The seed used to reseed the generator.
     """
+    global _GVAR_RNG
     if seed is None:
-        seed = numpy.random.randint(1, int(2e9), size=3)
+        if _NEW_RNG:
+            seed = _GVAR_RNG.integers(1, int(2e9), size=3)
+        else:
+            seed = numpy.random.randint(1, int(2e9), size=3)
     try:
         seed = tuple(seed)
     except TypeError:
         pass
-    numpy.random.seed(seed)
+    if _NEW_RNG:
+        _GVAR_RNG = numpy.random.default_rng(seed)
+    else:
+        numpy.random.seed(seed)
     ranseed.seed = seed
     return seed
 
@@ -1126,8 +1152,17 @@ class PDFStatistics(object):
     """ Compute statistical information about a distribution.
 
     Given moments ``m[i]`` of a random variable, computes
-    mean, standard deviation, skewness, and excess kurtosis.
+    mean, standard deviation, skewness, and excess kurtosis. With
+    histogram data, also estimates the median and the interval 
+    centered on the median containing 68% of the probability.
 
+    Typical usage::
+
+        >>> stats = gvar.PDFStatistics(moments=moments, histogram=(bins, counts))
+        >>> print(stats)
+          mean = 0.018769738628101846   sdev = 0.20739   skew = 0.27825   ex_kurt = 3.0849
+          median = -0.03372571848916756   plus = 0.16875932667218416   minus = 0.13574922445045393
+    
     Args:
         moments (array of floats): ``moments[i]`` is the (i+1)-th moment.
             Optional argument unless ``histgram=None``.

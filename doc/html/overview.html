@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Overview and Tutorial &#8212; gvar 12.0 documentation</title>
+    <title>Overview and Tutorial &#8212; gvar 12.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>  
@@ -538,8 +538,8 @@ that would work in a LaTeX document:</p>
 <p>Again <code class="docutils literal notranslate"><span class="pre">gvar.GVar.set(**old_settings)</span></code> restores the original
 formatter.</p>
 </section>
-<section id="storing-gvars-for-later-use-bufferdicts">
-<span id="storing-gvars-for-later-use"></span><h2>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s for Later Use; <a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>s<a class="headerlink" href="#storing-gvars-for-later-use-bufferdicts" title="Permalink to this heading">¶</a></h2>
+<section id="storing-gvars-for-later-use">
+<span id="id4"></span><h2>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s for Later Use<a class="headerlink" href="#storing-gvars-for-later-use" title="Permalink to this heading">¶</a></h2>
 <p>Storing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s in a file for later use is complicated by the need to
 capture the covariances between different <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as well as their
 means. The easiest way to save an array or dictionary or other
@@ -601,225 +601,148 @@ can sometimes be used to make this possible. Consider, for example, a class <cod
 using <code class="docutils literal notranslate"><span class="pre">gv.dumps(self.__dict__)</span></code> when pickling. This is reconstituted into
 a dictionary in <code class="docutils literal notranslate"><span class="pre">A.__init__</span></code>, using <code class="docutils literal notranslate"><span class="pre">gv.loads(a)</span></code>, upon un-pickling.</p>
 </section>
-<section id="non-gaussian-expectation-values">
-<h2>Non-Gaussian Expectation Values<a class="headerlink" href="#non-gaussian-expectation-values" title="Permalink to this heading">¶</a></h2>
+<section id="sampling-distributions-non-gaussian-expectation-values">
+<span id="gvar-random-number-generators"></span><h2>Sampling Distributions; Non-Gaussian Expectation Values<a class="headerlink" href="#sampling-distributions-non-gaussian-expectation-values" title="Permalink to this heading">¶</a></h2>
 <p>By default functions of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are also <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, but there are cases where
 such functions cannot be represented accurately by Gaussian distributions. The
 product of 0.1(4) and 0.2(5), for example, is not very Gaussian because the
 standard deviations are large compared to the scale over which the product
 changes appreciably. In such cases one may want to use the true distribution
 of the function, instead of its Gaussian approximation, in an analysis.</p>
-<p>Class <code class="xref py py-class docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code> evaluates integrals over multi-dimensional
-Gaussian probability density functions (PDFs) using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">vegas</span></code> module,
-which does adaptive multi-dimensional  integration. This permits
-us, for example, to calculate the true mean and standard deviation  of
-a function of  Gaussian variables, or to test the extent to which the true
-distribution of the function is Gaussian. The following code analyzes
-the distribution of <code class="docutils literal notranslate"><span class="pre">sin(p[0]</span> <span class="pre">*</span> <span class="pre">p[1])</span></code> where <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">[0.1(4),</span> <span class="pre">0.2(5)]</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="kn">import</span> <span class="nn">vegas</span>
+<p>One approach to this problem is to use simulation. The following code analyzes
+the distribution of <code class="docutils literal notranslate"><span class="pre">f(p)</span> <span class="pre">=</span> <span class="pre">sin(p[0]</span> <span class="pre">*</span> <span class="pre">p[1])</span></code> where <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">[0.1(4),</span> <span class="pre">0.2(5)]</span></code>. To do
+this:</p>
+<ol class="arabic simple">
+<li><p>it generates 100,000 samples <code class="docutils literal notranslate"><span class="pre">[ps[0,i],</span> <span class="pre">ps[1,i]]</span></code>, with <code class="docutils literal notranslate"><span class="pre">i=0...99,999</span></code>, drawn from the Gaussian distribution specified by <code class="docutils literal notranslate"><span class="pre">p</span></code>;</p></li>
+<li><p>it calculates <code class="docutils literal notranslate"><span class="pre">f(ps[:,i])</span> <span class="pre">=</span> <span class="pre">sin(ps[0,i]</span> <span class="pre">*</span> <span class="pre">ps[1,i])</span></code> for each sample <code class="docutils literal notranslate"><span class="pre">i</span></code>, thereby obtaining 100,000 samples drawn from the real distribution for <code class="docutils literal notranslate"><span class="pre">f(p)</span></code>;</p></li>
+<li><p>it estimates the mean and standard deviation of this distribution from the samples.</p></li>
+</ol>
+<p>The sampling in step #1 is done using <a class="reference internal" href="gvar.html#gvar.sample" title="gvar.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.sample()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;0.1(4)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.2(5)&#39;</span><span class="p">])</span>
-
-<span class="c1"># function of interest</span>
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Gaussian approx.: </span><span class="si">{</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<span class="c1"># histogram for values of f(p)</span>
-<span class="n">fhist</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFHistogram</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">nbin</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="c1"># sample p, f(p) distributions</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100_000</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>                             <span class="c1"># step #1</span>
+<span class="n">f_ps</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>                                            <span class="c1"># step #2</span>
 
-<span class="c1"># want expectation value of fstats(p)</span>
-<span class="k">def</span> <span class="nf">fstats</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-    <span class="n">fp</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">moments</span><span class="o">=</span><span class="p">[</span><span class="n">fp</span><span class="p">,</span> <span class="n">fp</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">fp</span> <span class="o">**</span> <span class="mi">3</span><span class="p">,</span> <span class="n">fp</span> <span class="o">**</span> <span class="mi">4</span><span class="p">],</span>
-        <span class="n">histogram</span><span class="o">=</span><span class="n">fhist</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">fp</span><span class="p">),</span>
-        <span class="p">)</span>
-
-<span class="c1"># evaluate expectation value of fstats in 3 steps</span>
-<span class="c1"># 1 - create an integrator to evaluate expectation values of functions of p</span>
-<span class="n">p_expval</span> <span class="o">=</span> <span class="n">vegas</span><span class="o">.</span><span class="n">PDFIntegrator</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-<span class="c1"># 2 - adapt p_expval to the p&#39;s PDF (N.B., no function specified)</span>
-<span class="n">p_expval</span><span class="p">(</span><span class="n">neval</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="c1"># 3 - evaluate expectation value of function(s) fhist(p)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">p_expval</span><span class="p">(</span><span class="n">fstats</span><span class="p">,</span> <span class="n">neval</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">nitn</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">adapt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="c1"># results from expectation value integration</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;moments:&#39;</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;moments&#39;</span><span class="p">])</span>
+<span class="c1"># Gaussian approximation from simulation samples</span>
+<span class="n">f_p_sim</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">f_ps</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">f_ps</span><span class="p">))</span>          <span class="c1"># step #3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Gaussian approx. to simulation: </span><span class="si">{</span><span class="n">f_p_sim</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Running this code generates the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Gaussian</span> <span class="n">approx</span><span class="o">.</span><span class="p">:</span> <span class="mf">0.020</span><span class="p">(</span><span class="mi">94</span><span class="p">)</span>
+<span class="n">Gaussian</span> <span class="n">approx</span><span class="o">.</span> <span class="n">to</span> <span class="n">simulation</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">(</span><span class="mi">21</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Evaluating <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> directly gives 0.020(94); estimating the mean and standard deviation
+from the samples gives 0.02(21). The means agree but the simulation gives a standard deviation
+that is more than twice as large, suggesting fat tails on the distribution.</p>
+<p>Note that the line calculating <code class="docutils literal notranslate"><span class="pre">f_p_sim</span></code> can be simplified
+using <a class="reference internal" href="gvar.html#gvar.gvar_from_sample" title="gvar.gvar_from_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar_from_sample()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f_p_sim</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar_from_sample</span><span class="p">(</span><span class="n">f_ps</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can look more closely at the <code class="docutils literal notranslate"><span class="pre">f(ps)</span></code> distribution by examining moments and a histogram
+of the distribution, adding the following to the code above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">moments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">f_ps</span><span class="p">,</span> <span class="n">f_ps</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">f_ps</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">f_ps</span><span class="o">**</span><span class="mi">4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Moments: </span><span class="si">{</span><span class="n">moments</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">counts</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">f_ps</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFStatistics</span><span class="p">(</span>
-    <span class="n">moments</span><span class="o">=</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;moments&#39;</span><span class="p">],</span>
-    <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">fhist</span><span class="o">.</span><span class="n">bins</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;histogram&#39;</span><span class="p">]),</span>
+    <span class="n">moments</span><span class="o">=</span><span class="n">moments</span><span class="p">,</span>
+    <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">counts</span><span class="p">),</span>
     <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Statistics from Bayesian integrals:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Simulation statistics:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gaussian approx:&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This produces the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Moments</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01876974</span> <span class="mf">0.04336239</span> <span class="mf">0.00491038</span> <span class="mf">0.01153368</span><span class="p">]</span>
 
-<span class="c1"># plot histogram from integration (plt = matplotlib.pyplot)</span>
-<span class="n">plt</span> <span class="o">=</span> <span class="n">fhist</span><span class="o">.</span><span class="n">make_plot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;histogram&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\sin(p_0 p_1)$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="c1"># add extra curve corresponding to Gaussian with &quot;correct&quot; mean and sdev</span>
-<span class="n">correct_fp</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">mean</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">sdev</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
-<span class="n">pdf</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDF</span><span class="p">(</span><span class="n">correct_fp</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">pdf</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span> <span class="o">*</span> <span class="n">fhist</span><span class="o">.</span><span class="n">widths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">xi</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;k:&#39;</span> <span class="p">)</span>
+<span class="n">Simulation</span> <span class="n">statistics</span><span class="p">:</span>
+  <span class="n">mean</span> <span class="o">=</span> <span class="mf">0.018769738628101846</span>   <span class="n">sdev</span> <span class="o">=</span> <span class="mf">0.20739</span>   <span class="n">skew</span> <span class="o">=</span> <span class="mf">0.27825</span>   <span class="n">ex_kurt</span> <span class="o">=</span> <span class="mf">3.0849</span>
+  <span class="n">median</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.03372571848916756</span>   <span class="n">plus</span> <span class="o">=</span> <span class="mf">0.16875932667218416</span>   <span class="n">minus</span> <span class="o">=</span> <span class="mf">0.13574922445045393</span>
+</pre></div>
+</div>
+<p>The moments indicate that the distribution
+is slightly skewed, but has a large
+excess kurtosis of 3.1, which is indicative of fat tails.
+The histogram gives an
+estimate of the median, which is slightly offset from the mean, as well as estimates for
+the interval on either side
+of the median (<code class="docutils literal notranslate"><span class="pre">(median-minus,median)</span></code> or <code class="docutils literal notranslate"><span class="pre">(median,median+plus)</span></code>)
+that contains 34% of the probability. These intervals are again broader than what is
+suggested by simply evaluating <code class="docutils literal notranslate"><span class="pre">f(p)</span></code>.</p>
+<p>Finally we can look at the histogram for the distribution of <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> inferred
+from the samples, again adding to the code above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># plot histogram of f(p) distribution</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">stairs</span><span class="p">(</span><span class="n">counts</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Sim.&#39;</span><span class="p">)</span>
+
+<span class="c1"># compare with 2 Gaussian distributions</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">binsize</span> <span class="o">=</span> <span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fmt</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">([</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="s1">&#39;b:&#39;</span><span class="p">])</span>
+<span class="n">label</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">([</span><span class="s1">&#39;Gauss.&#39;</span><span class="p">,</span> <span class="s1">&#39;Gauss. Sim.&#39;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">f_p_sim</span><span class="p">]:</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">f</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">f</span><span class="o">.</span><span class="n">var</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="o">.</span><span class="n">sdev</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span> <span class="nb">next</span><span class="p">(</span><span class="n">fmt</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;sin(p[0]*p[1])&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;probability&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The key construct here is <code class="docutils literal notranslate"><span class="pre">p_expval</span></code> which is a <code class="xref py py-mod docutils literal notranslate"><span class="pre">vegas</span></code> integrator
-designed so that <code class="docutils literal notranslate"><span class="pre">p_expval(f)</span></code> returns the expectation value of any
-function <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> with respect to the probability distribution specified
-by <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">gv.gvar(['0.1(4)',</span> <span class="pre">'0.2(5)'])</span></code>. The integrator is adaptive so
-it is called once without a function, to allow it to adapt to the probability
-density function (PDF). It is then applied to function <code class="docutils literal notranslate"><span class="pre">fstats(p)</span></code>,
-which calculates various moments of <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> as well as information for
-histogramming values of <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> (using <a class="reference internal" href="gvar.html#gvar.PDFHistogram" title="gvar.PDFHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.PDFHistogram</span></code></a>).
-Parameters <code class="docutils literal notranslate"><span class="pre">nitn</span></code> and <code class="docutils literal notranslate"><span class="pre">neval</span></code> control the multidimensional integrator,
-telling it how many iterations of its adaptive algorithm to use
-and the maximum number of integrand evaluations to use in each iteration.</p>
-<p>The output from this code is:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">itn</span>   <span class="n">integral</span>        <span class="n">average</span>         <span class="n">chi2</span><span class="o">/</span><span class="n">dof</span>        <span class="n">Q</span>
-<span class="o">-------------------------------------------------------</span>
-  <span class="mi">1</span>   <span class="mf">1.00032</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>     <span class="mf">1.00032</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span>         <span class="mf">0.00</span>     <span class="mf">1.00</span>
-  <span class="mi">2</span>   <span class="mf">0.9992</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>      <span class="mf">0.99976</span><span class="p">(</span><span class="mi">69</span><span class="p">)</span>         <span class="mf">1.10</span>     <span class="mf">0.33</span>
-  <span class="mi">3</span>   <span class="mf">0.9987</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>      <span class="mf">0.99942</span><span class="p">(</span><span class="mi">57</span><span class="p">)</span>         <span class="mf">0.97</span>     <span class="mf">0.53</span>
-  <span class="mi">4</span>   <span class="mf">1.00058</span><span class="p">(</span><span class="mi">92</span><span class="p">)</span>     <span class="mf">0.99971</span><span class="p">(</span><span class="mi">49</span><span class="p">)</span>         <span class="mf">0.89</span>     <span class="mf">0.74</span>
-  <span class="mi">5</span>   <span class="mf">0.99992</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>     <span class="mf">0.99975</span><span class="p">(</span><span class="mi">44</span><span class="p">)</span>         <span class="mf">0.91</span>     <span class="mf">0.73</span>
-  <span class="mi">6</span>   <span class="mf">1.00059</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>     <span class="mf">0.99989</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>         <span class="mf">0.92</span>     <span class="mf">0.71</span>
-  <span class="mi">7</span>   <span class="mf">0.99830</span><span class="p">(</span><span class="mi">96</span><span class="p">)</span>     <span class="mf">0.99966</span><span class="p">(</span><span class="mi">37</span><span class="p">)</span>         <span class="mf">0.90</span>     <span class="mf">0.80</span>
-  <span class="mi">8</span>   <span class="mf">1.00201</span><span class="p">(</span><span class="mi">88</span><span class="p">)</span>     <span class="mf">0.99996</span><span class="p">(</span><span class="mi">34</span><span class="p">)</span>         <span class="mf">0.91</span>     <span class="mf">0.77</span>
-  <span class="mi">9</span>   <span class="mf">0.9977</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>      <span class="mf">0.99971</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span>         <span class="mf">0.89</span>     <span class="mf">0.86</span>
- <span class="mi">10</span>   <span class="mf">0.9996</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>      <span class="mf">0.99970</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>         <span class="mf">0.84</span>     <span class="mf">0.95</span>
-
-<span class="n">moments</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01862</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span> <span class="mf">0.043161</span><span class="p">(</span><span class="mi">90</span><span class="p">)</span> <span class="mf">0.004672</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span> <span class="mf">0.011470</span><span class="p">(</span><span class="mi">72</span><span class="p">)]</span>
-<span class="n">Statistics</span> <span class="kn">from</span> <span class="nn">Bayesian</span> <span class="n">integrals</span><span class="p">:</span>
-   <span class="n">mean</span> <span class="o">=</span> <span class="mf">0.01862</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>   <span class="n">sdev</span> <span class="o">=</span> <span class="mf">0.20692</span><span class="p">(</span><span class="mi">21</span><span class="p">)</span>   <span class="n">skew</span> <span class="o">=</span> <span class="mf">0.2567</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>   <span class="n">ex_kurt</span> <span class="o">=</span> <span class="mf">3.116</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-   <span class="n">median</span> <span class="o">=</span> <span class="mf">0.00017</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>   <span class="n">plus</span> <span class="o">=</span> <span class="mf">0.17397</span><span class="p">(</span><span class="mi">49</span><span class="p">)</span>   <span class="n">minus</span> <span class="o">=</span> <span class="mf">0.11705</span><span class="p">(</span><span class="mi">43</span><span class="p">)</span>
-<span class="n">Gaussian</span> <span class="n">approx</span><span class="p">:</span> <span class="mf">0.020</span><span class="p">(</span><span class="mi">94</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The table summarizes the integrator’s performance over the <code class="docutils literal notranslate"><span class="pre">nitn=10</span></code> iterations
-it performed to obtain the final results; see the <code class="xref py py-mod docutils literal notranslate"><span class="pre">vegas</span></code> documentation
-for further information. The expectation values for moments of
-<code class="docutils literal notranslate"><span class="pre">f(p)</span></code> are then listed, followed by the mean and standard deviation
-computed from these moments, as well as the skewness and excess kurtosis
-of the <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> distribution. The median value for the distribution is
-estimated from the histogram, as are the intervals on either side
-of the median (<code class="docutils literal notranslate"><span class="pre">(median-minus,median)</span></code> and <code class="docutils literal notranslate"><span class="pre">(median,median+plus)</span></code>)
-containing 34% of the probability. Finally the mean and standard deviation
-in the Gaussian approximate are listed.</p>
-<p>The exact mean of the <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> distribution is 0.0186(1), which is somewhat
-lower than Gaussian approximation of 0.020. A more important difference is
-in the standard deviation which is 0.2069(3) for the real distribution,
-but less than half that size (0.094) in the Gaussian approximation. The
-real distribution is significantly broader than the Gaussian approximation
-suggests, though its mean is close. The real distribution also has
-nonzero skewness (0.26(1)) and excess kurtosis (3.12(2)), which suggest
-that it is not well described by any Gaussian. (Skewness and excess kurtosis
-vanish for Gaussian distributions.)</p>
-<p>The code also displays a histogram showing the probability distribution for
-values of <code class="docutils literal notranslate"><span class="pre">f(p)</span></code>:</p>
-<a class="reference internal image-reference" href="_images/histogram.png"><img alt="_images/histogram.png" src="_images/histogram.png" style="width: 80%;" /></a>
-<p>This shows the actual probability associated with each <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> bin,
+<p>This generates the following figure:</p>
+<a class="reference internal image-reference" href="_images/histogram.png"><img alt="_images/histogram.png" src="_images/histogram.png" style="width: 75%;" /></a>
+<p>It shows the actual probability associated with each <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> bin (gray bins),
 together with the
 shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
-It also shows the Gaussian distribution corresponding to correct mean
-and standard deviation (0.019(207)) of the distribution (black dotted line).</p>
-<p>Neither Gaussian in this plot is quite right: the first is more accurate close
-to the maximimum, while the second does better further out. From the histogram
-we can estimate that 68% of the probability lies within ±0.14 of 0.03,
-which is probably the best succinct characterization of the uncertainty (<code class="docutils literal notranslate"><span class="pre">0.03(14)</span></code>).</p>
+It also shows the Gaussian distribution corresponding to the correct mean
+and standard deviation (0.02(21)) of the distribution (blue dotted line).
+Neither Gaussian in this plot is quite right: the first is more accurate close
+to the maximum, while the second does better further out.</p>
 <p>This example is relatively simple since the underlying Gaussian
-distribution is only two dimensional. The <code class="xref py py-mod docutils literal notranslate"><span class="pre">vegas</span></code> integrator used
-here is adaptive and so can function effectively even for high
-dimensions (10, 20, 50 … Gaussian variables). High dimensions usually
-cost more, requiring many more function evaluations (<code class="docutils literal notranslate"><span class="pre">neval</span></code>).</p>
-</section>
-<section id="random-number-generators-and-simulations">
-<span id="gvar-random-number-generators"></span><h2>Random Number Generators and Simulations<a class="headerlink" href="#random-number-generators-and-simulations" title="Permalink to this heading">¶</a></h2>
-<p><a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s represent probability distributions. It is possible to use them
-to generate random numbers from those distributions. For example, in</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">())</span>
-<span class="go">2.29895701465</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">())</span>
-<span class="go">3.00633184275</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">())</span>
-<span class="go">1.92649199321</span>
+distribution is only two dimensional and uncorrelated. <a class="reference internal" href="gvar.html#gvar.sample" title="gvar.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.sample()</span></code></a>
+works well in higher dimensions and with correlated <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.
+<a class="reference internal" href="gvar.html#gvar.sample" title="gvar.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.sample()</span></code></a> is implemented using <a class="reference internal" href="gvar.html#gvar.raniter" title="gvar.raniter"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.raniter()</span></code></a>, which
+can be used to generate a series of sample batches. Both of these
+functions work for distributions defined by dictionaries, as well
+as arrays (or individual <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s).</p>
+<p>Note that <a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> provides limited support for non-Gaussian probability distributions
+through the <a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> dictionary. This is illustrated by the following code fragment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">BufferDict</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;log(x)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s1">&#39;1(1)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;f(y)&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">BufferDict</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="go">{&#39;log(x)&#39;: 1.0(1.0), &#39;f(y)&#39;: 0 ± 1.0}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+<span class="go">2.7(2.7) 2.50(40)</span>
 </pre></div>
 </div>
-<p>calls to <code class="docutils literal notranslate"><span class="pre">z()</span></code> generate random numbers from a Gaussian random number
-generator with mean <code class="docutils literal notranslate"><span class="pre">z.mean=2.0</span></code> and standard deviation <code class="docutils literal notranslate"><span class="pre">z.sdev=0.5</span></code>.</p>
-<p>To obtain random arrays from an array <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
-use <code class="docutils literal notranslate"><span class="pre">giter=gvar.raniter(g)</span></code> (see <a class="reference internal" href="gvar.html#gvar.raniter" title="gvar.raniter"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.raniter()</span></code></a>) to create a
-random array generator <code class="docutils literal notranslate"><span class="pre">giter</span></code>. Each call to <code class="docutils literal notranslate"><span class="pre">next(giter)</span></code> generates
-a new array of random numbers. The random number arrays have the same
-shape as the array <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and have the distribution implied
-by those random variables (including correlations). For example,</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">da</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">da</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">giter</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">raniter</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">giter</span><span class="p">))</span>
-<span class="go">[ 1.51874589  1.59987422]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">giter</span><span class="p">))</span>
-<span class="go">[-1.39755111 -1.24780937]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">giter</span><span class="p">))</span>
-<span class="go">[ 0.49840244  0.50643312]</span>
+<p>Even though <code class="docutils literal notranslate"><span class="pre">'x'</span></code> and <code class="docutils literal notranslate"><span class="pre">'y'</span></code> are not keys, <code class="docutils literal notranslate"><span class="pre">b['x']</span></code> and <code class="docutils literal notranslate"><span class="pre">b['y']</span></code> are defined. <code class="docutils literal notranslate"><span class="pre">b['x']</span></code>
+is set equal to <code class="docutils literal notranslate"><span class="pre">exp(b['log(x)'])</span></code>. In a simulation this means that values for <code class="docutils literal notranslate"><span class="pre">b['log(x)']</span></code>
+will be drawn from a Gaussian distribution 1±1, while the values <code class="docutils literal notranslate"><span class="pre">b['x']</span></code> will be drawn
+from the corresponding log-normal distribution. Similarly the values for <code class="docutils literal notranslate"><span class="pre">b['f(y)']</span></code> are
+drawn from the Gaussian 0±1, while the values of <code class="docutils literal notranslate"><span class="pre">b['y']</span></code> are distributed uniformly on
+the interval between 2 and 3. Method <a class="reference internal" href="gvar.html#gvar.BufferDict.uniform" title="gvar.BufferDict.uniform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.BufferDict.uniform()</span></code></a> defines the
+function <code class="docutils literal notranslate"><span class="pre">f(y)</span></code> that connects the Gaussian and uniform distributions. The plot produced
+by the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bs</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="mi">100_000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">bs</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">stairs</span><span class="p">(</span><span class="n">counts</span> <span class="o">/</span> <span class="mi">100_000</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Note how the two random numbers separately vary over the region 1±1
-(approximately), but the separation between the two is rarely more than
-0±0.1. This is as expected given the strong correlation between <code class="docutils literal notranslate"><span class="pre">a</span></code>
-and <code class="docutils literal notranslate"><span class="pre">a+da</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">gvar.raniter(g)</span></code> also works when <code class="docutils literal notranslate"><span class="pre">g</span></code> is a dictionary (or
-<a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a>) whose entries <code class="docutils literal notranslate"><span class="pre">g[k]</span></code> are <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s or arrays of
-<a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. In such cases the iterator returns a dictionary with the same
-layout:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">b</span><span class="o">=</span><span class="p">[</span><span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="go">{&#39;a&#39;: 0 ± 1.0, &#39;b&#39;: [0 ± 1.0e+02, 10.0000(10)]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">giter</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">raniter</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">giter</span><span class="p">))</span>
-<span class="go">{&#39;a&#39;: -0.88986130981173306, &#39;b&#39;: array([-67.02994213,   9.99973707])}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">giter</span><span class="p">))</span>
-<span class="go">{&#39;a&#39;: 0.21289976681277872, &#39;b&#39;: array([ 29.9351328 ,  10.00008606])}</span>
-</pre></div>
-</div>
-<p>One use for such random number generators is dealing with situations where
-the standard deviations are too large to justify the linearization
-assumed in defining functions of Gaussian variables. Consider, for example,</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="go">0.5(2.5)</span>
-</pre></div>
-</div>
-<p>The standard deviation for <code class="docutils literal notranslate"><span class="pre">cos(x)</span></code> is obviously wrong since <code class="docutils literal notranslate"><span class="pre">cos(x)</span></code>
-can never be larger than one.
-We can estimate the the real mean and standard deviation using a simulation.
-To do this,
-we: 1) generate a large number of random numbers <code class="docutils literal notranslate"><span class="pre">xi</span></code> from <code class="docutils literal notranslate"><span class="pre">x</span></code>; 2) compute
-<code class="docutils literal notranslate"><span class="pre">cos(xi)</span></code> for each; and 3) compute the mean and standard deviation for the
-resulting distribution (or any other statistical quantity, particularly if
-the resulting distribution is not Gaussian):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># estimate mean,sdev from 1000 random x&#39;s</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ran_x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)])</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ran_cos</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ran_x</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean =&#39;</span><span class="p">,</span> <span class="n">ran_cos</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;  std dev =&#39;</span><span class="p">,</span> <span class="n">ran_cos</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-<span class="n">mean</span> <span class="o">=</span> <span class="mf">0.0350548954142</span>   <span class="n">std</span> <span class="n">dev</span> <span class="o">=</span> <span class="mf">0.718647118869</span>
-
-<span class="c1"># check by doing more (and different) random numbers</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ran_x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">)])</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">ran_cos</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ran_x</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mean =&#39;</span><span class="p">,</span> <span class="n">ran_cos</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;  std dev =&#39;</span><span class="p">,</span> <span class="n">ran_cos</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-<span class="n">mean</span> <span class="o">=</span> <span class="mf">0.00806276057656</span>   <span class="n">std</span> <span class="n">dev</span> <span class="o">=</span> <span class="mf">0.706357174056</span>
-</pre></div>
-</div>
-<p>This procedure generalizes trivially for multidimensional analyses, using
-arrays or dictionaries with <a class="reference internal" href="gvar.html#gvar.raniter" title="gvar.raniter"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.raniter()</span></code></a>.</p>
+<p>shows small statistical fluctuations around a uniform probability distribution distribution:</p>
+<a class="reference internal image-reference" href="_images/unif-histogram.png"><img alt="_images/unif-histogram.png" src="_images/unif-histogram.png" style="width: 75%;" /></a>
 <p>Note finally that <em>bootstrap</em> copies of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are easily created. A
 bootstrap copy of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">±</span> <span class="pre">dx</span></code> is another <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> with the same width but
 where the mean value is replaced by a random number drawn from the original
@@ -850,7 +773,7 @@ example, in nonlinear fits.</p>
 Gaussian variables that it assumes is only valid when standard deviations
 are small (compared to the distances over which the functions of interest
 change appreciably). One way of dealing with this limitation is to use
-simulations, as discussed in <a class="reference internal" href="#gvar-random-number-generators"><span class="std std-ref">Random Number Generators and Simulations</span></a>.</p>
+simulations, as discussed in <a class="reference internal" href="#gvar-random-number-generators"><span class="std std-ref">Sampling Distributions; Non-Gaussian Expectation Values</span></a>.</p>
 <p>Another potential issue is roundoff error, which can become problematic if
 there is a wide range of standard deviations among correlated modes. For
 example, the following code works as expected:</p>
@@ -936,9 +859,8 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
 <li><a class="reference internal" href="#gvar-arithmetic-and-functions"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code> Arithmetic and Functions</a></li>
 <li><a class="reference internal" href="#error-budgets-from-gvars">Error Budgets from <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s</a></li>
 <li><a class="reference internal" href="#formatting-gvars-for-printing-display">Formatting <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s for Printing/Display</a></li>
-<li><a class="reference internal" href="#storing-gvars-for-later-use-bufferdicts">Storing <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s for Later Use; <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code>s</a></li>
-<li><a class="reference internal" href="#non-gaussian-expectation-values">Non-Gaussian Expectation Values</a></li>
-<li><a class="reference internal" href="#random-number-generators-and-simulations">Random Number Generators and Simulations</a></li>
+<li><a class="reference internal" href="#storing-gvars-for-later-use">Storing <code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code>s for Later Use</a></li>
+<li><a class="reference internal" href="#sampling-distributions-non-gaussian-expectation-values">Sampling Distributions; Non-Gaussian Expectation Values</a></li>
 <li><a class="reference internal" href="#limitations">Limitations</a></li>
 <li><a class="reference internal" href="#optimizations">Optimizations</a></li>
 </ul>
@@ -992,7 +914,7 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>

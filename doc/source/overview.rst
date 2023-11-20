@@ -529,7 +529,7 @@ formatter.
 
 .. _storing-gvars-for-later-use:
 
-Storing |GVar|\s for Later Use; |BufferDict|\s
+Storing |GVar|\s for Later Use
 --------------------------------------------------
 Storing |GVar|\s in a file for later use is complicated by the need to
 capture the covariances between different |GVar|\s as well as their
@@ -594,8 +594,9 @@ has :mod:`pickle` convert the class's dictionary into a byte stream
 using ``gv.dumps(self.__dict__)`` when pickling. This is reconstituted into 
 a dictionary in ``A.__init__``, using ``gv.loads(a)``, upon un-pickling.
 
+.. _gvar-random-number-generators:
 
-Non-Gaussian Expectation Values
+Sampling Distributions; Non-Gaussian Expectation Values
 --------------------------------------------------------
 
 By default functions of |GVar|\s are also |GVar|\s, but there are cases where
@@ -605,231 +606,149 @@ standard deviations are large compared to the scale over which the product
 changes appreciably. In such cases one may want to use the true distribution
 of the function, instead of its Gaussian approximation, in an analysis.
 
-Class :class:`vegas.PDFIntegrator` evaluates integrals over multi-dimensional
-Gaussian probability density functions (PDFs) using the :mod:`vegas` module,
-which does adaptive multi-dimensional  integration. This permits
-us, for example, to calculate the true mean and standard deviation  of
-a function of  Gaussian variables, or to test the extent to which the true
-distribution of the function is Gaussian. The following code analyzes
-the distribution of ``sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``::
+One approach to this problem is to use simulation. The following code analyzes 
+the distribution of ``f(p) = sin(p[0] * p[1])`` where ``p = [0.1(4), 0.2(5)]``. To do  
+this: 
 
+1. it generates 100,000 samples ``[ps[0,i], ps[1,i]]``, with ``i=0...99,999``, drawn from the Gaussian distribution specified by ``p``;
+2. it calculates ``f(ps[:,i]) = sin(ps[0,i] * ps[1,i])`` for each sample ``i``, thereby obtaining 100,000 samples drawn from the real distribution for ``f(p)``;
+3. it estimates the mean and standard deviation of this distribution from the samples. 
+
+The sampling in step #1 is done using :func:`gvar.sample`::
+
+    import gvar as gv 
     import numpy as np
-    import gvar as gv
-    import vegas
 
     p = gv.gvar(['0.1(4)', '0.2(5)'])
-
-    # function of interest
     def f(p):
         return np.sin(p[0] * p[1])
+    print(f'Gaussian approx.: {f(p)}')
+    
+    # sample p, f(p) distributions
+    n = 100_000
+    ps = gv.sample(p, nbatch=n)                             # step #1
+    f_ps = f(ps)                                            # step #2
 
-    # histogram for values of f(p)
-    fhist = gv.PDFHistogram(f(p), nbin=16)
+    # Gaussian approximation from simulation samples
+    f_p_sim = gv.gvar(np.mean(f_ps), np.std(f_ps))          # step #3
+    print(f'Gaussian approx. to simulation: {f_p_sim}')
 
-    # want expectation value of fstats(p)
-    def fstats(p):
-        fp = f(p)
-        return dict(
-            moments=[fp, fp ** 2, fp ** 3, fp ** 4],
-            histogram=fhist.count(fp),
-            )
+Running this code generates the following output::
 
-    # evaluate expectation value of fstats in 3 steps
-    # 1 - create an integrator to evaluate expectation values of functions of p
-    p_expval = vegas.PDFIntegrator(p)
-    # 2 - adapt p_expval to the p's PDF (N.B., no function specified)
-    p_expval(neval=5000, nitn=10)
-    # 3 - evaluate expectation value of function(s) fhist(p)
-    results = p_expval(fstats, neval=5000, nitn=10, adapt=False)
+    Gaussian approx.: 0.020(94)
+    Gaussian approx. to simulation: 0.02(21)
 
-    # results from expectation value integration
-    print(results.summary())
-    print('moments:', results['moments'])
+Evaluating ``f(p)`` directly gives 0.020(94); estimating the mean and standard deviation 
+from the samples gives 0.02(21). The means agree but the simulation gives a standard deviation 
+that is more than twice as large, suggesting fat tails on the distribution.
+
+Note that the line calculating ``f_p_sim`` can be simplified 
+using :func:`gvar.gvar_from_sample`::
+
+        f_p_sim = gv.gvar_from_sample(f_ps)
+
+We can look more closely at the ``f(ps)`` distribution by examining moments and a histogram
+of the distribution, adding the following to the code above::
+    
+    moments = np.mean([f_ps, f_ps**2, f_ps**3, f_ps**4], axis=-1)
+    print(f'\nMoments: {moments}')
+    counts, bins = np.histogram(f_ps, bins=50)
     stats = gv.PDFStatistics(
-        moments=results['moments'],
-        histogram=(fhist.bins, results['histogram']),
+        moments=moments,
+        histogram=(bins, counts),
         )
-    print('Statistics from Bayesian integrals:')
+    print('\nSimulation statistics:')
     print(stats)
-    print('Gaussian approx:', f(p))
 
-    # plot histogram from integration (plt = matplotlib.pyplot)
-    plt = fhist.make_plot(results['histogram'])
-    plt.xlabel(r'$\sin(p_0 p_1)$')
-    plt.xlim(-1, 1)
-    # add extra curve corresponding to Gaussian with "correct" mean and sdev
-    correct_fp = gv.gvar(stats.mean.mean, stats.sdev.mean)
-    x = np.linspace(-1.,1.,50)
-    pdf = gv.PDF(correct_fp)
-    y = [pdf(xi) * fhist.widths[0] for xi in x]
-    plt.plot(x, y, 'k:' )
+This produces the following output::
+
+    Moments: [0.01876974 0.04336239 0.00491038 0.01153368]
+
+    Simulation statistics:
+      mean = 0.018769738628101846   sdev = 0.20739   skew = 0.27825   ex_kurt = 3.0849
+      median = -0.03372571848916756   plus = 0.16875932667218416   minus = 0.13574922445045393
+
+The moments indicate that the distribution
+is slightly skewed, but has a large
+excess kurtosis of |~| 3.1, which is indicative of fat tails. 
+The histogram gives an 
+estimate of the median, which is slightly offset from the mean, as well as estimates for 
+the interval on either side
+of the median (``(median-minus,median)`` or ``(median,median+plus)``)
+that contains 34% of the probability. These intervals are again broader than what is 
+suggested by simply evaluating ``f(p)``.
+
+Finally we can look at the histogram for the distribution of ``f(p)`` inferred 
+from the samples, again adding to the code above::
+
+    import matplotlib.pyplot as plt 
+
+    # plot histogram of f(p) distribution
+    plt.stairs(counts / n, bins, fill=True, color='k', ec='k', alpha=0.25, lw=1., label='Sim.')
+    
+    # compare with 2 Gaussian distributions
+    x = np.linspace(-1,1,500)
+    binsize = bins[1] - bins[0]
+    fmt = iter(['r--', 'b:'])
+    label = iter(['Gauss.', 'Gauss. Sim.'])
+    for f in [f(p), f_p_sim]:
+        y = np.exp(-(x - f.mean)**2 / 2 / f.var) / f.sdev / (2 * np.pi) ** 0.5
+        plt.plot(x, y * binsize, next(fmt), label=next(label))
+    plt.legend()
+    plt.xlabel('sin(p[0]*p[1])')
+    plt.ylabel('probability')
     plt.show()
 
-The key construct here is ``p_expval`` which is a :mod:`vegas` integrator
-designed so that ``p_expval(f)`` returns the expectation value of any
-function ``f(p)`` with respect to the probability distribution specified
-by ``p = gv.gvar(['0.1(4)', '0.2(5)'])``. The integrator is adaptive so
-it is called once without a function, to allow it to adapt to the probability
-density function (PDF). It is then applied to function ``fstats(p)``,
-which calculates various moments of ``f(p)`` as well as information for
-histogramming values of ``f(p)`` (using :class:`gvar.PDFHistogram`).
-Parameters ``nitn`` and ``neval`` control the multidimensional integrator,
-telling it how many iterations of its adaptive algorithm to use
-and the maximum number of integrand evaluations to use in each iteration.
-
-The output from this code is::
-
-    itn   integral        average         chi2/dof        Q
-    -------------------------------------------------------
-      1   1.00032(90)     1.00032(90)         0.00     1.00
-      2   0.9992(10)      0.99976(69)         1.10     0.33
-      3   0.9987(10)      0.99942(57)         0.97     0.53
-      4   1.00058(92)     0.99971(49)         0.89     0.74
-      5   0.99992(99)     0.99975(44)         0.91     0.73
-      6   1.00059(99)     0.99989(40)         0.92     0.71
-      7   0.99830(96)     0.99966(37)         0.90     0.80
-      8   1.00201(88)     0.99996(34)         0.91     0.77
-      9   0.9977(12)      0.99971(33)         0.89     0.86
-     10   0.9996(10)      0.99970(32)         0.84     0.95
-
-    moments: [0.01862(13) 0.043161(90) 0.004672(80) 0.011470(72)]
-    Statistics from Bayesian integrals:
-       mean = 0.01862(13)   sdev = 0.20692(21)   skew = 0.2567(75)   ex_kurt = 3.116(20)
-       median = 0.00017(14)   plus = 0.17397(49)   minus = 0.11705(43)
-    Gaussian approx: 0.020(94)
-
-The table summarizes the integrator's performance over the ``nitn=10`` iterations
-it performed to obtain the final results; see the :mod:`vegas` documentation
-for further information. The expectation values for moments of
-``f(p)`` are then listed, followed by the mean and standard deviation
-computed from these moments, as well as the skewness and excess kurtosis
-of the ``f(p)`` distribution. The median value for the distribution is
-estimated from the histogram, as are the intervals on either side
-of the median (``(median-minus,median)`` and ``(median,median+plus)``)
-containing 34% of the probability. Finally the mean and standard deviation
-in the Gaussian approximate are listed.
-
-The exact mean of the ``f(p)`` distribution is 0.0186(1), which is somewhat
-lower than Gaussian approximation of 0.020. A more important difference is
-in the standard deviation which is 0.2069(3) for the real distribution,
-but less than half that size (0.094) in the Gaussian approximation. The
-real distribution is significantly broader than the Gaussian approximation
-suggests, though its mean is close. The real distribution also has
-nonzero skewness (0.26(1)) and excess kurtosis (3.12(2)), which suggest
-that it is not well described by any Gaussian. (Skewness and excess kurtosis
-vanish for Gaussian distributions.)
-
-The code also displays a histogram showing the probability distribution for
-values of ``f(p)``:
+This generates the following figure:
 
 .. image:: histogram.*
-   :width: 80%
+   :width: 75%
 
-This shows the actual probability associated with each ``f(p)`` bin,
+It shows the actual probability associated with each ``f(p)`` bin (gray bins),
 together with the
 shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
-It also shows the Gaussian distribution corresponding to correct mean
-and standard deviation (0.019(207)) of the distribution (black dotted line).
-
+It also shows the Gaussian distribution corresponding to the correct mean
+and standard deviation (0.02(21)) of the distribution (blue dotted line).
 Neither Gaussian in this plot is quite right: the first is more accurate close
-to the maximimum, while the second does better further out. From the histogram
-we can estimate that 68% of the probability lies within ±0.14 of 0.03,
-which is probably the best succinct characterization of the uncertainty
-|~| (``0.03(14)``).
+to the maximum, while the second does better further out. 
 
 This example is relatively simple since the underlying Gaussian
-distribution is only two dimensional. The :mod:`vegas` integrator used
-here is adaptive and so can function effectively even for high
-dimensions (10, 20, 50 ... Gaussian variables). High dimensions usually
-cost more, requiring many more function evaluations (``neval``).
+distribution is only two dimensional and uncorrelated. :func:`gvar.sample`
+works well in higher dimensions and with correlated |GVar|\s. 
+:func:`gvar.sample` is implemented using :func:`gvar.raniter`, which 
+can be used to generate a series of sample batches. Both of these 
+functions work for distributions defined by dictionaries, as well 
+as arrays (or individual |GVar|\s).
 
+Note that :mod:`gvar` provides limited support for non-Gaussian probability distributions 
+through the |BufferDict| dictionary. This is illustrated by the following code fragment::
 
-.. _gvar-random-number-generators:
+    >>> b = gv.BufferDict()
+    >>> b['log(x)'] = gv.gvar('1(1)')
+    >>> b['f(y)'] = gv.BufferDict.uniform('f', 2., 3.)
+    >>> print(b)
+    {'log(x)': 1.0(1.0), 'f(y)': 0 ± 1.0}
+    >>> print(b['x'], b['y'])
+    2.7(2.7) 2.50(40)
 
-Random Number Generators and Simulations
-------------------------------------------
-|GVar|\s represent probability distributions. It is possible to use them
-to generate random numbers from those distributions. For example, in
+Even though ``'x'`` and ``'y'`` are not keys, ``b['x']`` and ``b['y']`` are defined. ``b['x']`` 
+is set equal to ``exp(b['log(x)'])``. In a simulation this means that values for ``b['log(x)']``
+will be drawn from a Gaussian distribution 1±1, while the values ``b['x']`` will be drawn 
+from the corresponding log-normal distribution. Similarly the values for ``b['f(y)']`` are 
+drawn from the Gaussian 0±1, while the values of ``b['y']`` are distributed uniformly on 
+the interval between 2 |~| and |~| 3. Method :meth:`gvar.BufferDict.uniform` defines the 
+function ``f(y)`` that connects the Gaussian and uniform distributions. The plot produced
+by the code ::
 
-    >>> z = gvar.gvar(2.0, 0.5)
-    >>> print(z())
-    2.29895701465
-    >>> print(z())
-    3.00633184275
-    >>> print(z())
-    1.92649199321
+    >>> bs = gv.sample(b, nbatch=100_000)
+    >>> counts, bins = np.histogram(bs['y'], bins=50)
+    >>> plt.stairs(counts / 100_000, bins, fill=True, color='k', ec='k', alpha=0.25, lw=1.)
+    >>> plt.show()
 
-calls to ``z()`` generate random numbers from a Gaussian random number
-generator with mean ``z.mean=2.0`` and standard deviation ``z.sdev=0.5``.
+shows small statistical fluctuations around a uniform probability distribution distribution:
 
-To obtain random arrays from an array ``g`` of |GVar|\s
-use ``giter=gvar.raniter(g)`` (see :func:`gvar.raniter`) to create a
-random array generator ``giter``. Each call to ``next(giter)`` generates
-a new array of random numbers. The random number arrays have the same
-shape as the array ``g`` of |GVar|\s and have the distribution implied
-by those random variables (including correlations). For example,
-
-    >>> a = gvar.gvar(1.0, 1.0)
-    >>> da = gvar.gvar(0.0, 0.1)
-    >>> g = [a, a+da]
-    >>> giter = gvar.raniter(g)
-    >>> print(next(giter))
-    [ 1.51874589  1.59987422]
-    >>> print(next(giter))
-    [-1.39755111 -1.24780937]
-    >>> print(next(giter))
-    [ 0.49840244  0.50643312]
-
-Note how the two random numbers separately vary over the region 1±1
-(approximately), but the separation between the two is rarely more than
-0±0.1. This is as expected given the strong correlation between ``a``
-and ``a+da``.
-
-``gvar.raniter(g)`` also works when ``g`` is a dictionary (or
-:class:`gvar.BufferDict`) whose entries ``g[k]`` are |GVar|\s or arrays of
-|GVar|\s. In such cases the iterator returns a dictionary with the same
-layout::
-
-    >>> g = dict(a=gvar.gvar(0, 1), b=[gvar.gvar(0, 100), gvar.gvar(10, 1e-3)])
-    >>> print(g)
-    {'a': 0 ± 1.0, 'b': [0 ± 1.0e+02, 10.0000(10)]}
-    >>> giter = gvar.raniter(g)
-    >>> print(next(giter))
-    {'a': -0.88986130981173306, 'b': array([-67.02994213,   9.99973707])}
-    >>> print(next(giter))
-    {'a': 0.21289976681277872, 'b': array([ 29.9351328 ,  10.00008606])}
-
-One use for such random number generators is dealing with situations where
-the standard deviations are too large to justify the linearization
-assumed in defining functions of Gaussian variables. Consider, for example,
-
-    >>> x = gvar.gvar(1., 3.)
-    >>> print(cos(x))
-    0.5(2.5)
-
-The standard deviation for ``cos(x)`` is obviously wrong since ``cos(x)``
-can never be larger than one.
-We can estimate the the real mean and standard deviation using a simulation.
-To do this,
-we: 1) generate a large number of random numbers ``xi`` from ``x``; 2) compute
-``cos(xi)`` for each; and 3) compute the mean and standard deviation for the
-resulting distribution (or any other statistical quantity, particularly if
-the resulting distribution is not Gaussian)::
-
-    # estimate mean,sdev from 1000 random x's
-    >>> ran_x = numpy.array([x() for _ in range(1000)])
-    >>> ran_cos = numpy.cos(ran_x)
-    >>> print('mean =', ran_cos.mean(), '  std dev =', ran_cos.std())
-    mean = 0.0350548954142   std dev = 0.718647118869
-
-    # check by doing more (and different) random numbers
-    >>> ran_x = numpy.array([x() for _ in range(100000)])
-    >>> ran_cos = numpy.cos(ran_x)
-    >>> print('mean =', ran_cos.mean(), '  std dev =', ran_cos.std())
-    mean = 0.00806276057656   std dev = 0.706357174056
-
-This procedure generalizes trivially for multidimensional analyses, using
-arrays or dictionaries with :func:`gvar.raniter`.
+.. image:: unif-histogram.*
+   :width:  75%
 
 Note finally that *bootstrap* copies of |GVar|\s are easily created. A
 bootstrap copy of |GVar| ``x ± dx`` is another |GVar| with the same width but

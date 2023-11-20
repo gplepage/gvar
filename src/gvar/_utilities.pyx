@@ -16,12 +16,12 @@ import gvar as _gvar
 from gvar._gvarcore import GVar
 from gvar._gvarcore cimport GVar
 
-from scipy.sparse.csgraph import connected_components as _connected_components
-from scipy.sparse import csr_matrix as _csr_matrix
-from scipy.linalg import solve_triangular as _solve_triangular
-from scipy.linalg import cholesky as _cholesky
-from scipy.linalg import eigh as _scipy_eigh
-from scipy.special import erf as _scipy_erf
+# from scipy.sparse.csgraph import connected_components as _connected_components
+# from scipy.sparse import csr_matrix as _csr_matrix
+# from scipy.linalg import solve_triangular as _solve_triangular
+# from scipy.linalg import cholesky as _cholesky
+# from scipy.linalg import eigh as _scipy_eigh
+# from scipy.special import erf as _scipy_erf
 import numpy
 cimport numpy
 numpy.import_array()
@@ -598,6 +598,7 @@ def evalcov_blocks_dense(g, compress=False, verify=True):
     cdef object[:] varlist
     cdef double sdev
     cdef smat cov 
+    from scipy.sparse.csgraph import connected_components as _connected_components
     if hasattr(g, 'flat'):
         varlist = g.flat[:]
     elif hasattr(g, 'keys'):
@@ -701,6 +702,8 @@ def evalcov_blocks(g, compress=False):
     cdef INTP_TYPE[::1] rows, cols
     cdef numpy.int8_t[::1] vals
     cdef object[::1] ivset_iv
+    from scipy.sparse.csgraph import connected_components as _connected_components
+    from scipy.sparse import csr_matrix as _csr_matrix
     if hasattr(g, 'flat'):
         varlist = g.flat[:]
     elif hasattr(g, 'keys'):
@@ -2352,7 +2355,7 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=None):
     while (n is None) or (count < n):
         count += 1
         buf = numpy.array(g.flat)
-        z = numpy.random.normal(0.0, 1.0, nwgt)
+        z = _gvar._GVAR_RNG.normal(0.0, 1.0, nwgt)
         i, wgts = i_wgts[0]
         if len(i) > 0:
             buf[i] += z[i] * wgts
@@ -2366,10 +2369,64 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=None):
             yield buf.reshape(g.shape)
     # raise StopIteration
 
-def sample(g, eps=None, svdcut=None):
-    """ Generate random sample from distribution ``g``.
+def sample(g, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch'):
+    """ Generate random sample(s) from distribution ``g``.
 
-    Equivalent to ``next(gvar.raniter(g, svdcut=svdcut, eps=eps))``.
+    The |GVar|\s in array (or dictionary) ``g`` collectively define a 
+    multidimensional Gaussian distribution. ``sample(g)`` returns
+    an array (or dictionary) containing random samples drawn from that 
+    distribution, with correlations intact::
+
+        >>> import gvar as gv
+        >>> g = dict(a=gv.gvar(1,1), b=gv.gvar([10, 100], [[1,0.99], [0.99,1]]))
+        >>> print(g)
+        {'a': 1.0(1.0), 'b': array([10.0(1.0), 100.0(1.0)], dtype=object)}        
+        >>> print(gv.sample(g))
+        {'a': 0.03301713218946034, 'b': array([ 11.65655789, 101.64702394])}
+
+    The layout for each sample is the same as for ``g`` -- an array (or 
+    dictionary) of the same shape but where each |GVar| is replaced by 
+    a number.
+
+    If multiple samples are needed, it is most efficient to create them all 
+    at once by specifying parameter ``nbatch``. The following code creates a 
+    batch of 10,000 |~| samples::
+
+        >>> gs = gv.sample(g, nbatch=10_000)
+        >>> print(gs['a'].shape, gs['b'].shape)
+        (10000,) (2, 10000)
+        >>> print(gs['a'])
+        [ 1.71081068 -0.12894464  0.41654825 ...  0.39854737  0.42461779
+          0.97666448]
+        >>> print(gs['b'])
+        [[ 10.94348928  10.46761851  11.10887492 ...  10.46469306   8.6012229
+           11.07082101]
+         [100.8592698  100.55615515 101.3894677  ... 100.50053354  98.60155065
+          101.11041462]]
+
+    Here individual samples are ``gs['a'][i]`` and ``gs['b'][:, i]`` 
+    where batch index ``i=0...9999`` labels the sample. 
+
+    Specifying ``mode='lbatch'`` (instead of default ``'rbatch'``) 
+    moves the batch index to the left, ``gs['b'][i, :]``::
+
+        >>> gs = gv.sample(g, nbatch=10_000, mode='lbatch')
+        >>> print(gs['b'].shape)
+        (10000, 2)
+        >>> print(gs['b'])
+        [[  9.28127683  99.53331081]
+         [  8.62228298  98.70607512]
+         [  9.63029983  99.8487004 ]
+         ...
+         [  9.3074379   99.38207642]
+         [ 10.22812261 100.19961713]
+         [  9.74325077  99.92798523]]
+
+    Note the strong correlations in the fluctuations of ``gs['b'][0]`` and ``gs['b'][1]``.
+
+    Equivalent to::
+    
+        next(gvar.raniter(g, svdcut=svdcut, eps=eps, uniform=uniform, nbatch=nbatch, mode=mode))
 
     Args:
         g: An array or dictionary of objects of type |GVar|; or a |GVar|.
@@ -2380,31 +2437,183 @@ def sample(g, eps=None, svdcut=None):
         svdcut (float): If nonzero, singularities in the correlation
             matrix are regulated using :func:`gvar.regulate`
             with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
+        nbatch (int or None): If not ``None``, returns
+            ``nbatch`` samples drawn from the distribution associated 
+            with ``g``. The results are packaged in arrays or dictionaries
+            whose elements have an extra index labeling the different 
+            samples in the batch. The batch index is 
+            the rightmost index if ``mode='rbatch'``; it is 
+            the leftmost index if ``mode='lbatch'``. Ignored
+            if ``nbatch`` is ``None`` (default).
+        mode (bool): Batch mode. Allowed 
+            modes are ``'rbatch'`` (default) or ``'lbatch'``,
+            corresponding to batch indices that are on the 
+            right or the left, respectively. 
+            Ignored if ``nbatch`` is ``None``.
+        uniform (float or None): Replace Gaussian distribution specified 
+            by ``g`` with a uniform distribution covering the interval 
+            ``[-uniform, uniform]`` times the standard deviation centered 
+            on the mean along each principal axis of the error ellipse.
+            Ignored if ``None`` (default).
 
     Returns:
         A random array or dictionary, with the same shape as ``g``,
-        drawn from the Gaussian distribution defined by ``g``.
+        drawn from the distribution defined by ``g``; or 
+        ``nbatch`` such samples if ``nbatch`` is not ``None``.
     """
-    return next(raniter(g, svdcut=svdcut, eps=eps))
+    return next(raniter(g, svdcut=svdcut, eps=eps, nbatch=nbatch, mode=mode, uniform=uniform))
 
-def raniter(g, n=None, eps=None, svdcut=None, uniform=None):
+def gvar_from_sample(gs, mode='rbatch', stderr=False, unbias=False):
+    """ Convert samples gs from Gaussian distribution into |GVar|\s.
+
+    ``gs`` is an array (or dictionary) of samples drawn from a multidimensional 
+    distribution. Each element of the array (or dictionary) has an extra batch index 
+    labeling the sample: ``gs[..., i]`` (or gs[key][..., i] for dictionaries)
+    where ``i`` is the batch index. ``gvar_from_sample(gs)`` calculates the means 
+    and covariances of the elements from the variations across samples (i.e., 
+    as ``i`` varies) and returns an array (or dictionary) whose 
+    elements are the corresponding |GVar|\s. These |GVar|\s specify a multidimensional
+    Gaussian distribution that has the same means and covariances as the samples.
+
+    For example, the following code ::
+
+        >>> g = gvar.gvar([1., 2.], [[0.81, 0.1], [0.1, 0.81]])
+        >>> gs = gvar.sample(g, nbatch=10_000)
+        >>> print(gs.shape)
+        (2, 10000)
+        >>> print(gs)
+        [[-0.28683979  2.01220091  0.88237606 ...  0.11822824 -0.43494815
+          -0.31612878]
+         [ 3.01067406  1.63392898  1.41686281 ...  2.87272547  1.7961971
+           4.19975679]]
+        >>> g_gs = gvar.gvar_from_sample(gs)
+        >>> print(g)
+        ['1.00(90)' '2.00(90)'] 
+        >>> print(gs)   
+        ['0.99(89)' '1.99(90)']
+        >>> print(gvar.evalcov(g))
+        [[0.81 0.1 ]
+         [0.1  0.81]]
+        >>> print(gvar.evalcov(g_gs))
+        [[0.8001385  0.10049553]
+         [0.10049553 0.81289579]]
+
+    creates 10,000 samples ``[gs[0,i], gs[1,i]]`` drawn from the Gaussian 
+    distribution |~| ``g``. Using these samples, ``gvar_from_sample`` estimates
+    the means and covariances of the original distribution. The resulting 
+    estimate ``g_gs`` agrees well with the exact distribution ``g`` because the 
+    latter is Gaussian.
+
+    ``gvar_from_sample`` can also be used to estimate the uncertainty (standard error)
+    in, for example, its estimates of the means and standard deviations::
+
+        >>> mom = gvar_from_sample([gs, gs**2], stderr=True)
+        >>> mean = mom[0]
+        >>> sdev = (mom[1] - mean**2) ** 0.5
+        >>> print(f'mean = {mean}    sdev = {sdev}')
+        mean = [0.9923(89) 1.9932(90)]    sdev = [0.8945(63) 0.9016(65)]
+
+    The means and standard deviations estimated from the sample agree within errors 
+    with the correct values of [1. 2.] and [0.9 0.9] respectively.
+
+    The sample index ``i`` is on the right in the example above. If ``mode='lbatch'``
+    (instead of default ``'rbatch'``) the index is on the right: ``[gs[i,0], gs[i,1]]``
+    where ``i=0...9999``.
+
+    Args:
+        gs (array or dict): Array of samples or dictionary whose values are samples 
+            or arrays of samples from a distribution. See :func:`gvar.sample` for 
+            more information.
+        mode (str): The sample index is the rightmost index when 
+            ``mode='rbatch'`` (default), and the leftmost index 
+            when ``mode='lbatch'``.
+        stderr (bool): If ``True`` the variances and covariances represent 
+            the uncertainties in the estimates of the mean (corresponding 
+            to the standard error) rather than the spread in the data; 
+            the former is smaller by a factor of one over the number of
+            samples. Ignored if ``False`` (default). 
+        unbias (bool): The default choice ``unbias=False`` means that 
+            variances are estimated using ``sum((x[:] - mean(x))**2)/N``
+            where ``N`` is the number of random samples. 
+            This estimate is biased but is typically 
+            more accurate than the unbiased estimate obtained 
+            when ``N`` is replaced by ``N-1`` (because statistical 
+            fluctuations are then larger than the bias). The difference 
+            is negligible unless ``N`` is very small.
+            Setting ``unbias=True`` gives the unbiased estimate.
+    
+    Results:
+        An array of |GVar|\s or a dictionary whose values are |GVar|\s or arrays
+        of |GVar|\s that specifies a multi-dimensional Gaussian distribution whose 
+        means and covariances are obtained from the sample.
+    """
+    if hasattr(gs, 'keys'):
+        try:
+            k0 = list(gs.keys())[0]
+        except IndexError:
+            # empty
+            return _gvar.BufferDict()
+        gs = _gvar.asbufferdict(gs)
+        if mode == 'lbatch':
+            # convert to 'rbatch'
+            gs = gs._l2rbatch()
+        elif mode != 'rbatch':
+            raise ValueError('unknown mode: ' + str(mode))
+        nbatch = gs[k0].shape[-1]
+        buf = gvar_from_sample(gs.buf.reshape(gs.size // nbatch, nbatch), mode='rbatch')
+        i0 = 0
+        ans = _gvar.BufferDict()
+        for k in gs:
+            shape = gs[k].shape[:-1]
+            i1 = i0 + int(numpy.prod(shape))
+            ans[k] = buf[i0:i1].reshape(shape)
+            i0 = i1
+        return ans
+    gs_size = numpy.size(gs)
+    if gs_size < 1:
+        # emtpy
+        return gs
+    gs_shape = numpy.shape(gs)
+    gs_size = numpy.prod(gs_shape)
+    if mode == 'rbatch':
+        # [gs gs gs gs gs] or [[gs gs gs gs gs]]
+        nbatch = gs_shape[-1]
+        if nbatch <= 1:
+            raise ValueError("can't create GVars")
+        g_shape = gs_shape[:-1]
+        # convert to 2-D array gs[alpha, i] where i=batch index
+        gs = numpy.asarray(gs).reshape(gs_size // nbatch, nbatch)
+        mean = numpy.mean(gs, axis=-1)
+        cov = numpy.cov(gs, rowvar=True, bias=not unbias)
+    elif mode == 'lbatch':
+        nbatch = gs_shape[0]
+        if nbatch <= 1:
+            raise ValueError("can't create GVars")
+        g_shape = gs_shape[1:]
+        gs = numpy.asarray(gs).reshape(nbatch, gs_size // nbatch)
+        mean = numpy.mean(gs, axis=0)
+        cov = numpy.cov(gs, rowvar=False, bias=not unbias)
+    else:
+        raise ValueError('unknown mode: ' + str(mode))
+    if stderr:
+        cov = cov / nbatch
+    if cov.shape == ():
+        cov = [[cov]]
+    return _gvar.gvar(mean, cov).reshape(g_shape) if g_shape != () else _gvar.gvar(mean, cov).flat[0]
+
+def raniter(g, n=None, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch'):
     """ Return iterator for random samples from distribution ``g``
 
-    The Gaussian variables (|GVar| objects) in array (or dictionary) ``g``
-    collectively define a multidimensional gaussian distribution. The
-    iterator defined by :func:`raniter` generates an array (or dictionary)
-    containing random numbers drawn from that distribution, with
-    correlations intact.
+    ``raniter(g, n, nbatch=nbatch, ...)`` returns an iterator that 
+    yields ``n`` samples, ``gvar.sample(g, nbatch=nbatch, ...)``,
+    drawn from the distribution specified by array (or dictionary) ``g`` 
+    of |GVar|\s.
 
-    The layout for the result is the same as for ``g``. So an array of the
-    same shape is returned if ``g`` is an array. When ``g`` is a dictionary,
-    individual entries ``g[k]`` may be |GVar|\s or arrays of |GVar|\s,
-    with arbitrary shapes.
+    Functionally equivalent to, but much faster than ::
 
-    :func:`raniter` also works when ``g`` is a single |GVar|, in which case
-    the resulting iterator returns random numbers drawn from the
-    distribution specified by ``g``.
-
+        for _ in range(n):
+            sample = gvar.sample(g, eps=eps, svdcut=svdcut, ...)
+     
     Args:
         g: An array (or dictionary) of objects of type |GVar|; or a |GVar|.
         n (int or ``None``): Maximum number of random iterations.
@@ -2420,40 +2629,82 @@ def raniter(g, n=None, eps=None, svdcut=None, uniform=None):
         uniform (float or None): Replace Gaussian distribution specified 
             by ``g`` with a uniform distribution covering the interval 
             ``[-uniform, uniform]`` times the standard deviation centered 
-            on the mean (along each principal axis of the error ellipse).
+            on the mean along each principal axis of the error ellipse.
             Ignored if ``None`` (default).
-
+        nbatch (int or None): If not ``None``, the iterator will return
+            ``nbatch`` samples drawn from the distribution associated 
+            with ``g``. The results are packaged in arrays or dictionaries
+            whose elements have an extra index labeling the different 
+            samples in the batch. The batch index is 
+            the rightmost index if ``mode='rbatch'``; it is 
+            the leftmost index if ``mode`` is ``'lbatch'``. Ignored
+            if ``nbatch`` is ``None`` (default).
+        mode (bool): Batch mode. Allowed 
+            modes are ``'rbatch'`` (default) or ``'lbatch'``,
+            corresponding to batch indices that are on the 
+            right or the left, respectively. 
+            Ignored if ``nbatch`` is ``None``.
+            
     Returns:
         An iterator that returns random arrays or dictionaries
-        with the same shape as ``g`` drawn from the Gaussian distribution
-        defined by ``g``.
+        with the same shape as ``g`` drawn from the Gaussian 
+        distribution defined by ``g``, or ``nbatch`` such 
+        samples when ``nbatch`` is secified.
     """
+    if mode not in ['lbatch', 'rbatch']:
+        raise ValueError('unknown batch mode: ' + str(mode))
     g, i_wgts = _gvar.regulate(g, eps=eps, svdcut=svdcut, wgts=1.)
     g_mean = mean(g.flat)
     nwgt = sum(len(wgts) for i, wgts in i_wgts)
+    sh = (nwgt,)
+    if nbatch is not None:
+        nbatch = int(nbatch)
+        nbatch = 1 if nbatch <= 1 else nbatch
+        bsh = (nbatch,)
+        sh =(nwgt, nbatch)
+    else:
+        bsh = ()
+        nbatch = 1
+        sh = (nwgt,1)
     count = 0
     while (n is None) or (count < n):
         count += 1
-        z = numpy.random.normal(0.0, 1.0, nwgt) if uniform is None else numpy.random.uniform(-uniform, uniform, nwgt)
-        zstart = 0 
-        zstop = 0
-        buf = numpy.array(g_mean)
+        z = _gvar._GVAR_RNG.normal(0.0, 1.0, sh) if uniform is None else _gvar._GVAR_RNG.uniform(-uniform, uniform, sh)
+        buf = numpy.transpose(nbatch * [g_mean])
         i, wgts = i_wgts[0]
+        zstart = 0
+        zstop = 0
         if len(i) > 0:
-            zstop += len(i)
-            buf[i] += z[zstart:zstop] * wgts
-            zstart = zstop
+            zstop += len(i)            
+            buf[i] += z[zstart:zstop] * wgts[:, None]  # None -> nbatch index
+        zstart = zstop
         for i, wgts in i_wgts[1:]:
-            zstop += len(i)
-            buf[i] += z[zstart:zstop].dot(wgts) 
+            zstop = zstart + len(wgts)
+            buf[i] += wgts.T.dot(z[zstart:zstop])
             zstart = zstop
         if g.shape is None:
-            yield BufferDict(g, buf=buf)
+            if bsh == ():
+                yield BufferDict(g, buf=buf[:, 0])
+            else:
+                rans = BufferDict(g, rbatch_buf=buf.reshape(g_mean.shape + bsh))
+                if mode == 'rbatch':
+                    yield rans 
+                else:
+                    lans = BufferDict()
+                    for k in rans:
+                        lans[k] = numpy.moveaxis(rans[k], -1, 0)
+                    yield lans
         elif g.shape == ():
-            yield next(buf.flat)
+            if bsh == ():
+                yield next(buf.flat)
+            else:
+                yield buf.reshape(bsh)
         else:
-            yield buf.reshape(g.shape)
-    # raise StopIteration
+            rans = buf.reshape(g.shape + bsh)
+            if mode == 'rbatch' or bsh == ():
+                yield rans 
+            else:
+                yield numpy.moveaxis(rans, -1, 0)
 
 class SVD(object):
     """ SVD decomposition of a pos. sym. matrix.
@@ -2633,6 +2884,7 @@ class SVD(object):
     
     @staticmethod 
     def _scipy_eigh(DmatD):
+        from scipy.linalg import eigh as _scipy_eigh
         val, vec = _scipy_eigh(DmatD)
         vec = numpy.transpose(vec) # now 1st index labels eigenval
         val = numpy.fabs(val)
@@ -3024,6 +3276,8 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
     if eps < 0:
         raise ValueError('negative eps = ' + str(eps))
     # ... continue with eps cutoff
+    from scipy.linalg import cholesky as _cholesky
+    from scipy.linalg import solve_triangular as _solve_triangular
     # replace g by a copy of g
     if hasattr(g,'keys'):
         is_dict = True
@@ -3067,7 +3321,7 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
             root_eps_norm = (eps * numpy.linalg.norm(corr, numpy.inf)) ** 0.5
             if noise:
                 sd = root_eps_norm * D
-                correction[idx] = _gvar.gvar(numpy.random.normal(0, sd), sd)
+                correction[idx] = _gvar.gvar(_gvar._GVAR_RNG.normal(0, sd), sd)
             else:
                 correction[idx] = _gvar.gvar(numpy.zeros(D.size), root_eps_norm * D)
             g.nmod += len(idx)
@@ -3317,7 +3571,7 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
                     if vali > valorigi:
                         # add next(raniter(s.delta)) to s.delta in correction
                         s.delta += (veci / s.D) * (
-                            numpy.random.normal(0.0, (vali - valorigi) ** 0.5)
+                            _gvar._GVAR_RNG.normal(0.0, (vali - valorigi) ** 0.5)
                             )
             correction[idx] = s.delta
             g.flat[idx] += s.delta
@@ -3374,6 +3628,7 @@ def erf(x):
     Works for floats, |GVar|\s, and :mod:`numpy` arrays.
     """
     cdef int i
+    from scipy.special import erf as _scipy_erf
     if isinstance(x, GVar):
         f = _scipy_erf(x.mean)
         dfdx = 2. * numpy.exp(- x.mean ** 2) / numpy.sqrt(numpy.pi)

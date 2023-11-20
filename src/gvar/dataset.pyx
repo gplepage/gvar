@@ -201,7 +201,7 @@ def avg_data(
                     an entry ``dataset[k]`` are retained. This is the fastest choice.
             
         unbias (bool): The default choice ``unbias=False`` means that 
-            variances are estimated using ``mean((x - mean(x))**2)/N``
+            variances are estimated using ``sum((x[i] - mean(x))**2)/N``
             where ``N`` is the number of random samples. 
             This estimate is biased but is typically 
             more accurate than the unbiased estimate obtained when ``N`` is 
@@ -234,9 +234,9 @@ def avg_data(
         dataset_shape = dataset.shape 
         data_shape = dataset.shape[1:]
         dataset.shape = (dataset.shape[0], -1)
-        Neff = dataset.shape[0] if not unbias else (dataset.shape[0] - 1)
+        Neff = dataset.shape[0] # if not unbias else (dataset.shape[0] - 1) -- handled in cov
         if dataset.shape[0] >= 2:
-            cov = numpy.cov(dataset, rowvar=False, bias=True)
+            cov = numpy.cov(dataset, rowvar=False, bias=not unbias)
         else:
             cov = numpy.zeros(dataset.shape[1:] + dataset.shape[1:], float)
         if not spread:
@@ -445,7 +445,7 @@ def bootstrap_iter(dataset, n=None):
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
-            idx = numpy.random.randint(0,ns,ns)
+            idx = _gvar._GVAR_RNG.integers(0, ns, ns) if _gvar._NEW_RNG else numpy.random.randint(0,ns,ns)
             ans = Dataset()
             for k in datadict:
                 ans[k] = datadict[k][idx]
@@ -464,7 +464,7 @@ def bootstrap_iter(dataset, n=None):
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
-            idx = numpy.random.randint(0,ns,ns)
+            idx = _gvar._GVAR_RNG.integers(0, ns, ns) if _gvar._NEW_RNG else numpy.random.randint(0,ns,ns)
             yield dataset[idx]
 
 

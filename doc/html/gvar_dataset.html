@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 12.0 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 12.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>  
@@ -275,7 +275,7 @@ an entry <code class="docutils literal notranslate"><span class="pre">dataset[k]
 </div></blockquote>
 </p></li>
 <li><p><strong>unbias</strong> (<em>bool</em>) – The default choice <code class="docutils literal notranslate"><span class="pre">unbias=False</span></code> means that
-variances are estimated using <code class="docutils literal notranslate"><span class="pre">mean((x</span> <span class="pre">-</span> <span class="pre">mean(x))**2)/N</span></code>
+variances are estimated using <code class="docutils literal notranslate"><span class="pre">sum((x[i]</span> <span class="pre">-</span> <span class="pre">mean(x))**2)/N</span></code>
 where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of random samples.
 This estimate is biased but is typically
 more accurate than the unbiased estimate obtained when <code class="docutils literal notranslate"><span class="pre">N</span></code> is
@@ -879,7 +879,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>

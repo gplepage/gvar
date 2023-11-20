@@ -18,7 +18,7 @@
 
 import re
 import sys
-from scipy.sparse.csgraph import connected_components as _connected_components
+# from scipy.sparse.csgraph import connected_components as _connected_components
 from gvar._svec_smat import svec, smat
 from gvar._bufferdict import BufferDict
 
@@ -548,9 +548,13 @@ cdef class GVar:
         else:
             raise TypeError("undefined comparison for GVars")
 
-    def __call__(self):
-        """ Generate random number from ``self``'s distribution."""
-        return numpy.random.normal(self.mean,self.sdev)
+    def __call__(self, nbatch=None, mode='rbatch'):
+        """ Generate random number from ``self``'s distribution.
+        
+        Equivalent to ``gvar.sample(self, nbatch=None, mode='rbatch')``.
+        """
+        from gvar import sample  # lazy import is necessary
+        return sample(self, nbatch=None, mode='rbatch')
 
     def __neg__(self):
         return GVar(-self.v,self.d.mul(-1.),self.cov)
@@ -1358,6 +1362,7 @@ class GVarFactory:
                     if fast:
                         idx = self.cov.append_diag_m(xcov)
                     else:
+                        from scipy.sparse.csgraph import connected_components as _connected_components
                         allxcov = numpy.arange(nx)
                         ans = numpy.empty(nx, dtype=object)
                         nb, key = _connected_components(xcov != 0, directed=False)

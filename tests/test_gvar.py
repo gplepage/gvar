@@ -17,6 +17,8 @@ test-gvar.py
 import os
 import unittest
 import collections
+import warnings 
+import copy
 import math
 import pickle
 import numpy as np
@@ -274,6 +276,7 @@ class test_gvar1(unittest.TestCase,ArrayTests):
         x = gvar(xmean,xsdev)
         # ranseed((1968,1972,1972,1978,1980))
         # random.seed(1952)
+        ranseed(123)
 
     def tearDown(self):
         """ cleanup after tests """
@@ -339,6 +342,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         gvar = switch_gvar()
         x,y = gvar([0.125,4.],[[0.25,0.0625],[0.0625,1.]])
         self.label = None
+        ranseed(123)
 
     def tearDown(self):
         """ cleanup after tests """
@@ -1373,6 +1377,73 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             s2 = next(raniter(g, eps=eps))
             self.assertEqual(str(s1), str(s2))
 
+    def test_batch_sample(self):
+        " sample(g, nbatch=...) raniter(g, nbatch=...)"
+        # dictionary
+        g = gvar(BufferDict(s='1(1)', a=[['2.0(1)','3.00(1)','4.000(1)']]))
+        nbatch = 5
+        ranseed(1)
+        sl = sample(g, nbatch=nbatch, mode='lbatch')
+        ranseed(1)
+        sr = sample(g, nbatch=nbatch, mode='rbatch')
+        for k in g:
+            self.assertTrue(sl[k].shape[0] == sr[k].shape[-1] == nbatch)
+            np.testing.assert_allclose(sl[k], np.moveaxis(sr[k], -1, 0))
+        for s in sl.batch_iter('lbatch'):
+            self.assertLess(chi2(s, g) / g.size, 10.)
+        for s in sr.batch_iter('rbatch'):
+            self.assertLess(chi2(s, g) / g.size, 10.)
+        # array
+        ranseed(1)
+        sl = sample(g['a'], nbatch=nbatch, mode='lbatch')
+        ranseed(1)
+        sr = sample(g['a'], nbatch=nbatch, mode='rbatch')
+        self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
+        np.testing.assert_allclose(sl, np.moveaxis(sr, -1, 0))
+        for s in sl:
+            self.assertLess(chi2(s, g['a']) / g['a'].size, 10.)
+        # gvar
+        ranseed(1)
+        sl = sample(g['s'], nbatch=nbatch, mode='lbatch')
+        ranseed(1)
+        sr = sample(g['s'], nbatch=nbatch, mode='rbatch')
+        self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
+        self.assertEqual(list(sl), list(sr))
+        for s in sl:
+            self.assertLess(chi2(s, g['s']), 10.)
+ 
+    @unittest.skipIf(FAST,"skipping test_gvar_from_sample for speed")
+    def test_gvar_from_sample(self):
+        " gvar_from_sample(gs) "
+        nbatch = 10_000
+        tol = dict(rtol=10 / nbatch ** 0.5, atol=20 / nbatch ** 0.5)
+        for mode in ['rbatch', 'lbatch']:
+            # dictionary
+            x = gv.gvar(dict(s=gv.gvar('100(3)'), a=gv.gvar([1, 10], [[1, 1.], [1., 4]])))
+            x_buf_cov = gv.evalcov(x.buf)
+            xs = gv.sample(x, nbatch=nbatch, mode=mode)
+            x_xs = gvar_from_sample(xs, mode=mode)
+            x_xs_buf_cov = gv.evalcov(x_xs.buf)
+            for k in x:
+                np.testing.assert_allclose(gv.mean(x[k]), gv.mean(x_xs[k]), **tol)
+            np.testing.assert_allclose(x_buf_cov, x_xs_buf_cov, **tol)
+            # array
+            x = x['a']
+            x.shape = 2, 1
+            x_cov = gv.evalcov(x)
+            xs = gv.sample(x, nbatch=nbatch, mode=mode)
+            x_xs = gvar_from_sample(xs, mode=mode)
+            x_xs_cov = gv.evalcov(x_xs)
+            np.testing.assert_allclose(x_cov, x_xs_cov, **tol)
+            # scalar
+            x = gv.gvar('1(2)')
+            np.testing.assert_allclose(x.mean, x.mean)
+            xs = gv.sample(x, nbatch=nbatch, mode=mode)
+            x_xs = gvar_from_sample(xs, mode=mode)
+            np.testing.assert_allclose(x.mean, x_xs.mean, **tol)
+            np.testing.assert_allclose(x.sdev, x_xs.sdev, **tol)
+
+
     @unittest.skipIf(FAST,"skipping test_raniter for speed")
     def test_raniter(self):
         """ raniter """
@@ -1419,8 +1490,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             + np.array([[1,0,0],[0,1,0],[0,0,1]]) * 1e-1
             )
         g = gvar(np.zeros(len(cov)), cov)
+        g = np.array([g[0]] + [gvar(1,1)] + list(g[1:]) + [gvar(10,1)])
         y = next(raniter(g, svdcut=svdcut))
-        np.testing.assert_allclose(y, y[0] * np.array([1, 1, 1]))
+        np.testing.assert_allclose(y[:1], y[0] * np.array([1]))
+        np.testing.assert_allclose(y[2:4], y[0] * np.array([1, 1]))
 
     def test_bootstrap_iter(self):
         """ bootstrap_iter """
@@ -1462,6 +1535,10 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             for k in p:
                 ans[k].append(p[k])
         for k in p:
+            self.assertFalse(k not in pr)
+        for k in pr:
+            self.assertFalse(k not in p)
+            self.assertEqual(pr[k].shape, p[k].shape)
             ansmean = np.mean(ans[k],axis=0)
             anssdev = np.std(ans[k],axis=0)
             pkmean = prmean[k]

@@ -114,7 +114,7 @@ class BufferDict(collections_MMapping):
         {'a': 10, 'b': 20}
 
     The  new buffer itself (i.e., not a copy) is used in the 
-    new |BufferDict| if the buffer is a :mod:`numpy` array:
+    new |BufferDict| if the buffer is a :mod:`numpy` array::
 
         >>> import numpy as np
         >>> b = BufferDict(a=1., b=2.)
@@ -125,6 +125,78 @@ class BufferDict(collections_MMapping):
         {'a': 11, 'b': 20}
         >>> print(nbuf)
         [11 20]
+
+    If many clones of a |BufferDict| are needed, it is usually substantially
+    more efficient to create them together in a single batch (or a 
+    small number of large batches). For example,
+    the following code 
+
+        >>> a = BufferDict(s=1., v=[2., 3., 4.])
+        >>> print(a, '   ', a.buf)
+        {'s': 1.0, 'v': array([2., 3.])}    [1. 2. 3. 4.]
+        >>> lbuf = np.array(
+        ... [[10., 20., 30., 40.], [100., 200., 300., 400.], [1000., 2000., 3000., 4000.]]
+        ... )
+        >>> lb = BufferDict(a, lbatch_buf=lbuf)
+        >>> print(lb)    
+        {
+            's': array([  10.,  100., 1000.]),
+            'v':
+            array([[  20.,   30.,   40.],
+                [ 200.,  300.,  400.],
+                [2000., 3000., 4000.]]),
+        }
+
+    merges three clones of the original |BufferDict| |~| ``a`` into 
+    |BufferDict| ``lb``. Each clone has its own buffer ``lbuf[i]``
+    where ``i=0...2`` labels the clone. Each element of ``lb`` has 
+    an extra (leftmost) index labeling the clone: ``lb['s'][i]`` 
+    and ``lb['v'][i, :]``. If needed, the individual clones 
+    can be pulled out into separate dictionaries using
+    :meth:`gvar.BufferDict.batch_iter`::
+
+        >>> for clone in b.batch_iter('lbatch'):
+        ...     print(clone)
+        ...
+        {'s': 10.0, 'v': array([20., 30., 40.])}
+        {'s': 100.0, 'v': array([200., 300., 400.])}
+        {'s': 1000.0, 'v': array([2000., 3000., 4000.])}
+
+    These clones all provide views into ``b.buf``.
+
+    The batch index is always the leftmost index in the example above. It is 
+    frequently more convenient for the batch index to be the rightmost 
+    index. This is done by setting  ``rbatch_buf`` rather than 
+    ``lbatch_buf`` when making the batch |BufferDict|: for example,  ::
+
+        >>> rbuf = np.array(
+        ... [[10., 100., 1000.], [20., 200., 2000.], [30., 300., 3000.], [40., 400., 4000.]]
+        ... )
+        >>> rb = BufferDict(a, rbatch_buf=rbuf)
+        >>> print(rb)
+        {
+            's': array([  10.,  100., 1000.]),
+            'v':
+            array([[  20.,  200., 2000.],
+                   [  30.,  300., 3000.]]),
+                   [  40.,  400., 4000.]]),
+        }
+
+    creates a batch |BufferDict| equivalent to the previous one but now
+    where the batch index is the last index for each element:
+    ``rb[k][...,i]`` for each key ``k`` and batch index ``i=0..2``.
+    The batch buffer ``rbuf`` used here is the transpose of that 
+    used for the ``lbatch`` case; ``rb.buf`` is a view into ``rbuf`` 
+    (not a copy as is the case for ``lbatch``). Again we can iterate over 
+    the individual clones (and these are the same as above)::
+
+        >>> for clone in rb.batch_iter('rbatch'):
+        ...     print(clone)
+        ...
+        {'s': 10.0, 'v': array([20., 30., 40.])}
+        {'s': 100.0, 'v': array([200., 300., 400.])}
+        {'s': 1000.0, 'v': array([2000., 3000., 4000.])}
+
 
     """
 
@@ -149,10 +221,12 @@ class BufferDict(collections_MMapping):
         keys = list(kargs['keys']) if 'keys' in kargs else None
         if 'buf' in kargs:
             buf = kargs['buf']
-            if len(args) > 1:
+            if len(args) > 1 or 'rbatch_buf' in kargs or 'lbatch_buf' in kargs:
                 raise RuntimeError('too many arguments: buffer specified more than once')
         elif len(args) == 2:
             buf = args[1]
+            if 'rbatch_buf' in kargs or 'lbatch_buf' in kargs:
+                raise RuntimeError('too many arguments: buffer specified more than once')
         else:
             buf = None
         if isinstance(args[0], BufferDict) and keys is None:
@@ -162,14 +236,42 @@ class BufferDict(collections_MMapping):
             self._odict = ORDEREDDICT(bd._odict)
             # copy buffer or use new one
             if buf is None:
-                self._buf = numpy.array(bd._buf, dtype=self._dtype)
-            elif numpy.shape(buf) == bd._buf.shape:
+                if 'rbatch_buf' in kargs:
+                    buf = kargs['rbatch_buf']
+                elif 'lbatch_buf' in kargs:
+                    # transpose to convert to rbatch_buf
+                    buf = numpy.transpose(kargs['lbatch_buf'])
+                else:
+                    buf = numpy.array(bd._buf, dtype=self._dtype)
+            if numpy.shape(buf) == bd._buf.shape:
                 self._buf = numpy.asarray(buf, dtype=self._dtype)
+            elif numpy.ndim(buf) == 2 and len(buf) == len(bd._buf):
+                # buf has extra indices => rbatch mode
+                extra_sh = numpy.shape(buf)[1:]
+                rescale = numpy.prod(extra_sh)
+                for k in self._odict:
+                    sh = self._odict[k].shape + extra_sh 
+                    sl = self._odict[k].slice
+                    if isinstance(sl, slice):
+                        sl = slice(sl.start * rescale, sl.stop * rescale)
+                    else:
+                        sl = slice(sl * rescale, (sl + 1) * rescale)
+                    self._odict[k] = BUFFERDICTDATA(slice=sl, shape=sh)
+                self._buf = numpy.asarray(buf, dtype=self._dtype).reshape(-1)
             else:
                 raise ValueError("buf is wrong shape --- %s not %s"
                                     % (numpy.shape(buf), bd._buf.shape))
+            if 'lbatch_buf' in kargs:
+                # move batch index to convert back from rbatch format
+                tmp = BufferDict()
+                tmp._odict = self._odict 
+                tmp._buf = self._buf
+                self._odict = ORDEREDDICT()
+                self._buf = numpy.array([], dtype=self._dtype) 
+                for k in tmp:
+                    self[k] = numpy.moveaxis(tmp[k], -1, 0)
             return
-        if buf is not None:
+        elif buf is not None:
             raise RuntimeError("can't specify buffer unless first argument is a BufferDict")
         data = args[0].items() if hasattr(args[0], 'keys') else args[0]
         self._odict = ORDEREDDICT()
@@ -181,6 +283,20 @@ class BufferDict(collections_MMapping):
             for k, v in data:
                 if k in keys:
                     self[k] = v 
+
+    def _r2lbatch(self):
+        """ Returns ``self`` converted from ``'rbatch'`` to ``'lbatch'`` mode."""
+        ans = _gvar.BufferDict() 
+        for k in self:
+            ans[k] = numpy.moveaxis(self[k], -1, 0)
+        return ans 
+
+    def _l2rbatch(self):
+        """ Returns ``self`` converted from ``'lbatch'`` to ``'rbatch'`` mode."""
+        ans = _gvar.BufferDict()
+        for k in self:
+            ans[k] = numpy.moveaxis(self[k], 0, -1)
+        return ans 
 
     def __copy__(self):
         return BufferDict(self)
@@ -617,11 +733,43 @@ class BufferDict(collections_MMapping):
         """ Returns ``True`` if ``self[k]`` is defined; ``False`` otherwise.
 
         Note that ``k`` may be a key or it may be related to a
-        related key associated with a non-Gaussian distribution
+        another key associated with a non-Gaussian distribution
         (e.g., ``'log(k)'``; see :func:`gvar.BufferDict.add_distribution`
         for more information).
         """
         return _gvar.has_dictkey(self, k)
+
+    def batch_iter(self, mode):
+        """ Iterate over dictionaries in a batch |BufferDict|.
+
+        Args:
+            mode (str): Type of batch |BufferDict|: ``'rbatch'`` if the 
+                batch index on each entry is on the right; or ``'lbatch'``
+                if the batch index is on the left. 
+
+        Returns:
+            An iterator that yields the individual dictionaries merged into
+            the batch |BufferDict|. The returned dictionaries are type ``dict``
+            (not type |BufferDict|). The values are views into the original
+            |BufferDict|, not copies.
+        """
+        if not self:
+            return []
+        if mode not in ['lbatch', 'rbatch']:
+            raise ValueError('unknown mode: ' + str(mode))
+        lbatch = True if mode == 'lbatch' else False
+        nbatch = self[list(self.keys())[0]].shape[0 if lbatch else -1]
+
+        # main loop
+        for i in range(nbatch):
+            ans = {}
+            if lbatch:
+                for k in self:
+                    ans[k] = self[k][i,...]
+            else:
+                for k in self:
+                    ans[k] = self[k][...,i]
+            yield ans
 
     @staticmethod
     def add_distribution(name, invfcn):
@@ -647,6 +795,8 @@ class BufferDict(collections_MMapping):
             gv.BufferDict.add_distribution('log', gv.exp)
             gv.BufferDict.add_distribution('sqrt', gv.square)
             gv.BufferDict.add_distribution('erfinv', gv.erf)
+
+        See also :meth:`gvar.BufferDict.uniform` for uniform distributions.
 
         Args:
             name (str): Distributions' function name. A ``ValueError`` is 
@@ -782,8 +932,8 @@ def has_dictkey(b, k):
     """ Returns ``True`` if ``b[k]`` is defined; ``False`` otherwise.
 
     Note that ``k`` may be a key or it may be related to a
-    related key associated with a non-Gaussian distribution
-    (e.g., ``'log(k)'``; see :func:`gvar.MultiFitter.add_distribution`).
+    another key associated with a non-Gaussian distribution
+    (e.g., ``'log(k)'``; see :func:`gvar.BufferDict.add_distribution`).
     """
     if k in b:
         return True

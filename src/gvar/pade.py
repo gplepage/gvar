@@ -16,7 +16,7 @@ import sys
 import numpy 
 import gvar as _gvar 
 # import scipy.linalg 
-from scipy.interpolate import pade as _scipy_pade
+# from scipy.interpolate import pade as _scipy_pade
 
 class Pade(object):
     """ Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\s.
@@ -152,6 +152,7 @@ class Pade(object):
 
     @staticmethod
     def _scipy_pade(c, n):
+        from scipy.interpolate import pade as _scipy_pade
         p, q = _scipy_pade(c, n)
         return numpy.array(p.c[::-1]), numpy.array(q.c[::-1])
 

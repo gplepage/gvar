@@ -90,6 +90,10 @@ test-download:
 test-readme:
 	python setup.py --long-description | rst2html.py > README.html
 
+import-time:
+	python -X importtime -c 'import numpy; import gvar'
+	# 2023-11-20: gvar import time = 84000 - 89000
+
 clean:
 	rm -f -r build
 	rm -rf __pycache__
