@@ -167,10 +167,8 @@ _GVAR_LIST = []
 _CONFIG = dict(evalcov=15, evalcov_blocks=6000, var=50)
 
 if tuple([int(si) for si in numpy.__version__.split('.')]) >= (1, 17, 0):
-    _NEW_RNG = True
     _GVAR_RNG = numpy.random.default_rng()
 else:
-    _NEW_RNG = False
     _GVAR_RNG = numpy.random
 
 def ranseed(seed=None):
@@ -195,7 +193,7 @@ def ranseed(seed=None):
     """
     global _GVAR_RNG
     if seed is None:
-        if _NEW_RNG:
+        if _GVAR_RNG != numpy.random:
             seed = _GVAR_RNG.integers(1, int(2e9), size=3)
         else:
             seed = numpy.random.randint(1, int(2e9), size=3)
@@ -203,7 +201,7 @@ def ranseed(seed=None):
         seed = tuple(seed)
     except TypeError:
         pass
-    if _NEW_RNG:
+    if _GVAR_RNG != numpy.random:
         _GVAR_RNG = numpy.random.default_rng(seed)
     else:
         numpy.random.seed(seed)

@@ -18,7 +18,7 @@ from __future__ import print_function   # makes this work for python2 and 3
 import gvar as gv
 import numpy as np
 
-gv.ranseed((1,2,4)) # gives reproducible random numbers
+gv.ranseed((1,2)) # gives reproducible random numbers
 
 def main():
     l = gv.gvar(0.25, 0.0005)               # length of pendulum
