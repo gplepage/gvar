@@ -94,8 +94,8 @@ test-readme:
 
 import-time:
 	python -X importtime -c 'import numpy; import gvar'
+	# 2023-11-29: gvar import time = 21000 - 23000
 	# 2023-11-20: gvar import time = 84000 - 89000
-	# 2023-11-29: gvar import time = 23000 - 30000
 
 clean:
 	rm -f -r build
