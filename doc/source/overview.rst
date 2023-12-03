@@ -365,7 +365,8 @@ as its argument::
 Here function :func:`gvar.gvar_function` creates the |GVar| for a function with
 mean value ``f`` and derivative ``dfdx`` at point ``x``. A more complete
 version of ``erf`` is included in :mod:`gvar`. Note that :func:`gvar.gvar_function`
-also works for functions of multiple variables.
+also works for functions of multiple variables. See 
+:ref:`case-study-creating-an-integrator` for a less trivial application.
 
 Some sample numerical analysis codes, adapted for use with |GVar|\s, are
 described in :ref:`numerical-analysis-modules-in-gvar`.

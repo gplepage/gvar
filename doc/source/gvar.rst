@@ -255,9 +255,11 @@ The random numbers incorporate any correlations implied by the ``g``\s.
 
 .. autofunction:: gvar.bootstrap_iter(g, n=None, eps=None, svdcut=None)
 
-This function is used to seed the random number generator used by :mod:`gvar`:
+:mod:`gvar`'s random number generator is ``gvar.RNG``. It is currently 
+(since version 12.1) an instance of ``numpy.random.Generator``.
+The following function is used to reseed the random number generator:
 
-.. autofunction:: gvar.ranseed(a)
+.. autofunction:: gvar.ranseed(seed=None, size=3, version=None)
 
 The following two functions that are useful for tabulating results
 and for analyzing where the errors in a |GVar| constructed from

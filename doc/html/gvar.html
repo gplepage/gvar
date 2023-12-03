@@ -1687,24 +1687,42 @@ with an SVD cutoff <code class="docutils literal notranslate"><span class="pre">
 </dl>
 </dd></dl>
 
-<p>This function is used to seed the random number generator used by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>:</p>
+<p><a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>’s random number generator is <code class="docutils literal notranslate"><span class="pre">gvar.RNG</span></code>. It is currently
+(since version 12.1) an instance of <code class="docutils literal notranslate"><span class="pre">numpy.random.Generator</span></code>.
+The following function is used to reseed the random number generator:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="gvar.ranseed">
-<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">ranseed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ranseed" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">ranseed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.ranseed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Seed random number generators with tuple <code class="docutils literal notranslate"><span class="pre">seed</span></code>.</p>
 <p>Argument <code class="docutils literal notranslate"><span class="pre">seed</span></code> is an integer or
 a <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code> of integers that is used to seed
-the random number generators used by <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code> and
-<code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> (and therefore by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>). Reusing
+the random number generators used by by <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>. Reusing
 the same <code class="docutils literal notranslate"><span class="pre">seed</span></code> results in the same set of random numbers.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ranseed</span></code> generates its own seed when called without an argument
 or with <code class="docutils literal notranslate"><span class="pre">seed=None</span></code>. This seed is stored in <code class="docutils literal notranslate"><span class="pre">ranseed.seed</span></code> and
-also returned by the function. The seed can be used to regenerate
-the same set of random numbers at a later time.</p>
+is also returned by the function. The seed can be used to regenerate
+the same set of random numbers at a later time. Keyword argument
+<code class="docutils literal notranslate"><span class="pre">size</span></code> specifies the size or shape of the new seed.</p>
+<p>Note: The random number generator changed in version 12.1
+of <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> in order to track changes in version 1.17 of
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code>, which provides the generator. To restore the
+old generator set keyword <code class="docutils literal notranslate"><span class="pre">version=0</span></code>. This option should
+only be used for legacy code as it is likely to
+disappear eventually. The default behavior</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>seed</strong> (<em>int</em><em>, </em><em>tuple</em><em>, or </em><em>None</em>) – Seed for generator. Generates a
-random tuple if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>tuple</em><em>, or </em><em>None</em>) – Seed for generator. Generates a
+random tuple for the seed if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Size of the tuple of integers used
+to seed the random number generator when <code class="docutils literal notranslate"><span class="pre">seed=None</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">size=3</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">seed</span></code> is not
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>version</strong> (<em>int</em><em> or </em><em>None</em>) – Version of random number generator:
+<code class="docutils literal notranslate"><span class="pre">version=0</span></code> specifies the generator used in <a class="reference internal" href="#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>
+versions earlier than 12.1; <code class="docutils literal notranslate"><span class="pre">version=None</span></code> (default)
+specifies the current random number generator.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The seed used to reseed the generator.</p>

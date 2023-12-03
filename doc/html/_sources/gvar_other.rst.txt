@@ -19,13 +19,14 @@ The sub-modules included here are:
 
     - :mod:`gvar.linalg` --- basic linear algebra.
 
-    - :mod:`gvar.ode` --- integration of systems of ordinary differential equations;
-        :ref:`one-dimensional integrals <integral>`.
+    - :mod:`gvar.ode` --- integration of systems of ordinary differential equations; :ref:`one-dimensional integrals <integral>`.
 
     - :mod:`gvar.powerseries` --- power series representation of functions.
 
     - :mod:`gvar.root` --- root-finding for one-dimensional functions.
 
+See :ref:`case-study-creating-an-integrator` for an example 
+illustrating how existing code can be repurposed to work with |GVar|\s.
 
 .. module:: gvar.cspline
    :synopsis: Cubic splines.

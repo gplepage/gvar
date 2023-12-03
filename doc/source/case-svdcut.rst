@@ -14,7 +14,7 @@ to fix the problem using an SVD |~| cut.
 The Problem
 ----------------
 We want to determine the slope indicated by measurements of a
-quantity ::
+quantity  ::
 
     y(x[i]) = y0 + s * x[i]
 

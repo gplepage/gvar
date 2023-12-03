@@ -34,12 +34,12 @@ from math import lgamma
 import sys
 cimport cython
 
-try:
-    # needed for oldload (optionally)
-    import yaml
-    from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
-except ImportError:
-    yaml = None
+# try:
+#     # needed for oldload (optionally)
+#     import yaml
+#     from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
+# except ImportError:
+#     yaml = None
 
 if sys.version_info > (3, 0):
     # python 3
@@ -1921,66 +1921,8 @@ def _rebuild_gvars(buf, cov, primary, derivs, fix_cov):
         buf[idx_derived] = tmp
     return buf
 
-####### old versions kept for legacy purposes (for now)
+####### old version kept for legacy purposes (for now)
 #######
-def olddump(g, outputfile, method='pickle', use_json=False):
-    """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
-
-    Old verion, here for testing purposes only.
-
-    The |GVar|\s are recovered using :func:`gvar.load`.
-
-    Three serialization methods are available: :mod:`pickle`, :mod:`json`,
-    and :mod:`yaml` (provided the :mod:`yaml` module is installed).
-
-    :mod:`json` can have trouble with dictionaries whose keys are not
-    strings. A workaround is used here that succeeds provided
-    ``eval(repr(k)) == k`` for every key ``k``, which is true for strings and
-    lots of other types of key. Use :mod:`pickle` where the workaround fails.
-
-    Args:
-        g: A |GVar|, array of |GVar|\s, or dictionary whose values
-            are |GVar|\s and/or arrays of |GVar|\s.
-        outputfile: The name of a file or a file object in which the
-            serialized |GVar|\s are stored.
-        method (str): Serialization method, which should be one of
-            ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.
-    """
-    if use_json is True:  # for legacy code
-        method = 'json'
-    if yaml is None and method == 'yaml':
-        raise RuntimeError('yaml module not installed')
-    if isinstance(outputfile, str):
-        with open(outputfile, 'w' if method in ['json', 'yaml'] else 'wb') as ofile:
-            return olddump(g, ofile, method=method)
-    else:
-        ofile = outputfile
-    if method in ['json', 'yaml']:
-        if hasattr(g, 'keys'):
-            if not isinstance(g, _gvar.BufferDict):
-                g = _gvar.BufferDict(g)
-            tag = method, 'dict'
-            gmean = [
-                    (repr(k) if method == 'json' else k, d.tolist())
-                    for k,d in _gvar.mean(g).items()
-                    ]
-            gcov = _gvar.evalcov(g.buf).tolist()
-        else:
-            tag = method, 'array'
-            gmean = numpy.array(_gvar.mean(g)).tolist()
-            gcov = _gvar.evalcov(g).tolist()
-        data = dict(tag=tag, gmean=gmean, gcov=gcov)
-        return (
-            json.dump(data, ofile) if method == 'json' else
-            yaml.dump(data, ofile, Dumper=yaml_Dumper)
-            )
-    elif method == 'pickle':
-        pickle.dump(
-            dict(tag=('pickle', None), gmean=_gvar.mean(g), gcov=_gvar.evalcov(g)), ofile
-            )
-    else:
-        raise ValueError('unknown method: ' + str(method))
-
 def _oldload1(inputfile, method=None, use_json=None):
     """ Load and return serialized |GVar|\s from file ``inputfile``.
 
@@ -2000,6 +1942,12 @@ def _oldload1(inputfile, method=None, use_json=None):
     Returns:
         The reconstructed |GVar|, or array or dictionary of |GVar|\s.
     """
+    try:
+        # needed for oldload (optionally)
+        import yaml
+        from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
+    except ImportError:
+        yaml = None
     warnings.warn("using old dump format", DeprecationWarning)
     if use_json is True: # for legacy code
         method = 'json'
@@ -2355,7 +2303,7 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=None):
     while (n is None) or (count < n):
         count += 1
         buf = numpy.array(g.flat)
-        z = _gvar._GVAR_RNG.normal(0.0, 1.0, nwgt)
+        z = _gvar.RNG.normal(0.0, 1.0, nwgt)
         i, wgts = i_wgts[0]
         if len(i) > 0:
             buf[i] += z[i] * wgts
@@ -2669,7 +2617,7 @@ def raniter(g, n=None, eps=None, svdcut=None, uniform=None, nbatch=None, mode='r
     count = 0
     while (n is None) or (count < n):
         count += 1
-        z = _gvar._GVAR_RNG.normal(0.0, 1.0, sh) if uniform is None else _gvar._GVAR_RNG.uniform(-uniform, uniform, sh)
+        z = _gvar.RNG.normal(0.0, 1.0, sh) if uniform is None else _gvar.RNG.uniform(-uniform, uniform, sh)
         buf = numpy.transpose(nbatch * [g_mean])
         i, wgts = i_wgts[0]
         zstart = 0
@@ -3321,7 +3269,7 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
             root_eps_norm = (eps * numpy.linalg.norm(corr, numpy.inf)) ** 0.5
             if noise:
                 sd = root_eps_norm * D
-                correction[idx] = _gvar.gvar(_gvar._GVAR_RNG.normal(0, sd), sd)
+                correction[idx] = _gvar.gvar(_gvar.RNG.normal(0, sd), sd)
             else:
                 correction[idx] = _gvar.gvar(numpy.zeros(D.size), root_eps_norm * D)
             g.nmod += len(idx)
@@ -3571,7 +3519,7 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
                     if vali > valorigi:
                         # add next(raniter(s.delta)) to s.delta in correction
                         s.delta += (veci / s.D) * (
-                            _gvar._GVAR_RNG.normal(0.0, (vali - valorigi) ** 0.5)
+                            _gvar.RNG.normal(0.0, (vali - valorigi) ** 0.5)
                             )
             correction[idx] = s.delta
             g.flat[idx] += s.delta

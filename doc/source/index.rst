@@ -20,6 +20,7 @@ Contents:
    gvar_other.rst
    case-pendulum.rst
    case-svdcut.rst
+   case-integral.rst
 
 Indices and tables
 ==================

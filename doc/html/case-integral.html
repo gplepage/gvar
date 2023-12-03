@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Case Study: Creating an Integrator &#8212; gvar 12.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Case Study: Correlations and SVD Cuts" href="case-svdcut.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="case-svdcut.html" title="Case Study: Correlations and SVD Cuts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Case Study: Creating an Integrator</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="case-study-creating-an-integrator">
+<span id="id1"></span><h1>Case Study: Creating an Integrator<a class="headerlink" href="#case-study-creating-an-integrator" title="Permalink to this heading">¶</a></h1>
+<p>This case study illustrates how to convert an existing numerical
+analysis routine, <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.integrate.quad()</span></code>, to work with <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
+<section id="the-problem">
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this heading">¶</a></h2>
+<p>We want a Python code that can evaluate one dimensional integrals such
+as</p>
+<div class="math">
+<p><img src="_images/math/15c6c635c7c3046d727bcd2dc94b0080194fbc68.svg" alt="I = \int\limits_a^b dx \, f(x)"/></p>
+</div><p>where any of the integration limits or <img class="math" src="_images/math/fb62ba1e89ca6200f224a445c3f4a567fc451fe1.svg" alt="f(x)"/> are <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and
+<img class="math" src="_images/math/fb62ba1e89ca6200f224a445c3f4a567fc451fe1.svg" alt="f(x)"/> is an arbitrary function coded as a Python function.</p>
+<p>One approach is to implement an integration function directly in
+Python, as then it is likely to work just as well for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as
+for floats. For example, the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">trap_integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">    </span><span class="sd">&quot;&quot;&quot; Estimate integral of f(x) on interval=(a,b) using the Trapezoidal Rule. &quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">interval</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">fx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">f</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span> <span class="k">for</span> <span class="n">xi</span> <span class="ow">in</span> <span class="n">x</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="n">I</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">fx</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">fx</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">I</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">D</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Itrap</span> <span class="o">=</span> <span class="n">trap_integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Itrap = </span><span class="si">{</span><span class="n">Itrap</span><span class="si">:</span><span class="s1">#P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">Itrap = 3.45 ± 0.32</span>
+</pre></div>
+</div>
+<p>estimates the integral of <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> over the interval between 0 ± 0.1 and 4 ± 0.1
+using the Trapezoidal Rule.</p>
+<p>This code is simple because we are using one of the simplest numerical
+estimates of the integral. A general purpose integrators needs a
+much more robust algorithm. For example, <code class="docutils literal notranslate"><span class="pre">trap_integral</span></code> fails badly when
+applied to a much more singular function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Itrap_g</span> <span class="o">=</span> <span class="n">trap_integral</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Itrap_g = </span><span class="si">{</span><span class="n">Itrap_g</span><span class="si">:</span><span class="s1">#P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">Itrap_g = 10.3633 ± 4.0e+03</span>
+</pre></div>
+</div>
+<p>The correct answer is 16.6 ± 1.9. We need a much larger number of integrand
+samples <code class="docutils literal notranslate"><span class="pre">n+1</span></code> (100x larger) to get reasonable results.</p>
+</section>
+<section id="leveraging-existing-code">
+<h2>Leveraging Existing Code<a class="headerlink" href="#leveraging-existing-code" title="Permalink to this heading">¶</a></h2>
+<p>Coding a more robust integrator is complicated and time consuming. A better
+strategy is, if possible, to build on existing libraries. Here we will use
+integrators from the <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.integrate</span></code> module.</p>
+<p>The integral <img class="math" src="_images/math/2c1e05a52378f314c457dad311d58554409b0d3b.svg" alt="I"/> is a function of its endpoints and of any parameters buried
+in the definition of the function <img class="math" src="_images/math/fb62ba1e89ca6200f224a445c3f4a567fc451fe1.svg" alt="f(x)"/>: <img class="math" src="_images/math/ee2947edd291ac5a388968d9f3dbb962e151882a.svg" alt="I = I(p)"/> where
+<img class="math" src="_images/math/fa059a3cef6a458c325f7d0b4cccc417de3f987e.svg" alt="p = [a, b, ...]"/> and <img class="math" src="_images/math/98ef5cc0c3d605c55db1af4ac8bff41a5db76303.svg" alt="p_i"/> for <img class="math" src="_images/math/1cde169736549c8f51b98ad1c63f4c920f9c68bc.svg" alt="i&gt;1"/>
+are the parameters implicit in the integrand (e.g.,
+<code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">K</span></code> in the examples above). We want an integrator
+that works when any of these parameters is replaced by a <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p>
+<p>We can do this using <a class="reference internal" href="gvar.html#gvar.gvar_function" title="gvar.gvar_function"><code class="xref any py py-func docutils literal notranslate"><span class="pre">gvar.gvar_function</span></code></a><code class="docutils literal notranslate"><span class="pre">(p,</span> <span class="pre">I,</span> <span class="pre">dI_dp)</span></code> where <code class="docutils literal notranslate"><span class="pre">p</span></code>
+is an array of the <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>-valued parameters,
+<code class="docutils literal notranslate"><span class="pre">I</span></code> is the integral evaluated with these parameters replaced
+by their mean values, and <code class="docutils literal notranslate"><span class="pre">dI_dp</span></code> is the array of derivatives
+of <code class="docutils literal notranslate"><span class="pre">I</span></code> with respect to each of these parameters
+— <img class="math" src="_images/math/826eb1603997b91edc64a24e1700a40d03109a8f.svg" alt="[dI/dp_0, dI/dp_1, ...]"/> — again
+evaluated with their mean values.</p>
+<p>The integral <code class="docutils literal notranslate"><span class="pre">I</span></code> (with the parameters replaced by their mean values )
+can be evaluated using standard routines as no <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are involved.
+The derivatives with respect to the endpoints are also easily evaluated:</p>
+<div class="math">
+<p><img src="_images/math/d91709d3e5925d16d3acf6ed8c3ea70ec2d35900.svg" alt="\frac{dI}{da} = - f(a) \quad\quad \frac{dI}{db} = f(b)"/></p>
+</div><p>The derivatives with respect to the function parameters involve
+different integrals, which again can be evaluated using standard
+routines:</p>
+<div class="math">
+<p><img src="_images/math/e5bb7ce71d12611ebaaf52902dde4a42a1069d40.svg" alt="\frac{dI}{dp_i} = \int\limits_a^b dx \, \frac{df(x)}{dp_i} \quad\quad \mbox{for $i&gt;1$}"/></p>
+</div><p>In the following code we use the integrators <code class="docutils literal notranslate"><span class="pre">quad(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">quad_vec(...)</span></code> from
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.integrate</span></code> to evaluate the integrals
+needed to calculate <code class="docutils literal notranslate"><span class="pre">I</span></code> and elements of <code class="docutils literal notranslate"><span class="pre">dI_dp</span></code>, respectively:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.integrate</span>
+
+<span class="k">def</span> <span class="nf">integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; GVar-compatible integrator &quot;&quot;&quot;</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">interval</span>
+
+    <span class="c1"># collect GVar-valued parameters</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dI_dp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">+=</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+        <span class="n">dI_dp</span> <span class="o">+=</span> <span class="p">[</span><span class="o">-</span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">]</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">mean</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">+=</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+        <span class="n">dI_dp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">mean</span>
+
+    <span class="c1"># evaluate integral I of f(x).mean</span>
+    <span class="n">sum_fx</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">fmean</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
+            <span class="n">sum_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fx</span>
+    <span class="n">I</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">fmean</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">epsrel</span><span class="o">=</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># parameters from the integrand</span>
+    <span class="n">pf</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">dependencies</span><span class="p">(</span><span class="n">sum_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># evaluate dI/dpf</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># vector-valued integrand returns df(x)/dpf</span>
+        <span class="k">def</span> <span class="nf">df_dpf</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">fx</span><span class="o">.</span><span class="n">deriv</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">])</span>
+
+        <span class="c1"># integrate df/dpf to obtain dI/dpf</span>
+        <span class="n">dI_dpf</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad_vec</span><span class="p">(</span><span class="n">df_dpf</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">epsrel</span><span class="o">=</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># combine with other parameters, if any</span>
+        <span class="n">p</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span>
+        <span class="n">dI_dp</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dI_dpf</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar_function</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">dI_dp</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">I</span>
+</pre></div>
+</div>
+<p>A key ingredient of this code is the use of <a class="reference internal" href="gvar.html#gvar.dependencies" title="gvar.dependencies"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dependencies()</span></code></a> to obtain
+an array <code class="docutils literal notranslate"><span class="pre">pf</span></code> of the <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>-valued parameters implicit in the integrand <code class="docutils literal notranslate"><span class="pre">f(x)</span></code>. This is
+done without
+knowing anything about <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> beyond the sum <code class="docutils literal notranslate"><span class="pre">sum_fx[0]</span></code> of its values
+at all the integration points used to calculate <code class="docutils literal notranslate"><span class="pre">I</span></code>. Given parameters <code class="docutils literal notranslate"><span class="pre">pf[i]</span></code>,
+the derivatives of <code class="docutils literal notranslate"><span class="pre">f(x)</span></code> with respect to those parameters are obtained
+using <code class="docutils literal notranslate"><span class="pre">f(x).deriv(pf)</span></code> (see the documentation for <a class="reference internal" href="gvar.html#gvar.GVar.deriv" title="gvar.GVar.deriv"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.GVar.deriv()</span></code></a>).</p>
+<p>This new integrator works well with the first example above and gives the same result:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">I</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;I = </span><span class="si">{</span><span class="n">I</span><span class="si">:</span><span class="s1">#P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">I = 3.45 ± 0.32</span>
+</pre></div>
+</div>
+<p>It also works well with the much more singular integrand <code class="docutils literal notranslate"><span class="pre">g(x)</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">I_g</span> <span class="o">=</span> <span class="n">integral</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;I_g = </span><span class="si">{</span><span class="n">I_g</span><span class="si">:</span><span class="s1">#P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">I_g = 16.6 ± 1.9</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> comes with a different integrator, <a class="reference internal" href="gvar_other.html#gvar.ode.integral" title="gvar.ode.integral"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.ode.integral()</span></code></a>, that gives
+the same results with similar performance: for example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Iode</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">ode</span><span class="o">.</span><span class="n">integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Iode = </span><span class="si">{</span><span class="n">Iode</span><span class="si">:</span><span class="s1">#P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">Iode = 3.45 ± 0.32</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Iode_g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">ode</span><span class="o">.</span><span class="n">integral</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Iode_g = </span><span class="si">{</span><span class="n">Iode_g</span><span class="si">:</span><span class="s1">#P</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">Iode_g = 16.6 ± 1.9</span>
+</pre></div>
+</div>
+<p>We can generate error budgets for each of the integral estimates to see where
+the final uncertainties come from:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">D</span><span class="o">=</span><span class="n">D</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outputs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">I</span><span class="o">=</span><span class="n">I</span><span class="p">,</span> <span class="n">Iode</span><span class="o">=</span><span class="n">Iode</span><span class="p">,</span> <span class="n">Itrap</span><span class="o">=</span><span class="n">Itrap</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">fmt_errorbudget</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">))</span>
+<span class="go">Partial % Errors:</span>
+<span class="go">                   I      Iode     Itrap</span>
+<span class="go">----------------------------------------</span>
+<span class="go">        a:      1.69      1.69      1.69</span>
+<span class="go">        b:      0.44      0.44      0.52</span>
+<span class="go">        A:      5.00      5.00      5.00</span>
+<span class="go">        K:      4.53      4.53      4.35</span>
+<span class="go">        D:      6.29      6.29      6.25</span>
+<span class="go">----------------------------------------</span>
+<span class="go">    total:      9.39      9.39      9.28</span>
+</pre></div>
+</div>
+<p>As expected the different methods are in good agreement
+(the Trapezoidal Rule gives slightly different results
+because <code class="docutils literal notranslate"><span class="pre">n</span></code> is a bit too small).</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Case Study: Creating an Integrator</a><ul>
+<li><a class="reference internal" href="#the-problem">The Problem</a></li>
+<li><a class="reference internal" href="#leveraging-existing-code">Leveraging Existing Code</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="case-svdcut.html"
+                          title="previous chapter">Case Study: Correlations and SVD Cuts</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/case-integral.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="case-svdcut.html" title="Case Study: Correlations and SVD Cuts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Case Study: Creating an Integrator</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2009-2023, G. P. Lepage.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

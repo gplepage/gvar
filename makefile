@@ -1,5 +1,5 @@
 # Created by G. Peter Lepage (Cornell University) on 2008-02-12.
-# Copyright (c) 2008-2020 G. Peter Lepage.
+# Copyright (c) 2008-2023 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,11 +21,13 @@ SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})
 CYTHONFILES := src/gvar/_bufferdict.c src/gvar/_gvarcore.c src/gvar/_svec_smat.c src/gvar/_utilities.c src/gvar/dataset.c
 
 install-user : 
-	rm -rf $(CYTHONFILES)
+	rm -rf $(CYTHONFILES) src/gvar/_version.py
+	python make_version.py src/gvar/_version.py
 	$(PIP) install . --user --no-cache-dir
 
 install install-sys : 
-	rm -rf $(CYTHONFILES)
+	rm -rf $(CYTHONFILES) src/gvar/_version.py
+	python make_version.py src/gvar/_version.py
 	$(PIP) install . --no-cache-dir
 
 uninstall :			# mostly works (may leave some empty directories)
@@ -93,6 +95,7 @@ test-readme:
 import-time:
 	python -X importtime -c 'import numpy; import gvar'
 	# 2023-11-20: gvar import time = 84000 - 89000
+	# 2023-11-29: gvar import time = 23000 - 30000
 
 clean:
 	rm -f -r build

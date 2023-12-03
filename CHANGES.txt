@@ -7,11 +7,17 @@ Version ???
   for (fast) Monte Carlo simulations: see the section on Sampling GVars 
   in the tutorial.
 
-- Updated use of numpy's random module to conform with changes in 
-  numpy version 1.17.
+- Updates use of numpy's random module to conform with changes in 
+  numpy version 1.17. See the documentation for :func:`gvar.ranseed`.
+
+- New case study (on Creating an Integrator) that illustrates how to 
+  repurpose an existing library function to accommodate GVars.
+  
+- Simplifies gvar.__version__ (no longer uses importlib.metadata, which is buggy
+  and increases gvar's import time significantly).
   
 - Minor fixes to GVar.set, GVar.__format__, evalcov, evalcov_blocks, 
-  evalcov_blocks_dense, andgvar.dataset.avg_data (when median=unbias=True).
+  evalcov_blocks_dense, and gvar.dataset.avg_data (when median=unbias=True).
 
 Version 12.0 2023-11-01
 ===========================

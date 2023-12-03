@@ -445,11 +445,7 @@ def bootstrap_iter(dataset, n=None):
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
-            idx = (
-                _gvar._GVAR_RNG.integers(0, ns, ns) 
-                if _gvar._GVAR_RNG != numpy.random else 
-                numpy.random.randint(0,ns,ns)
-                )
+            idx = _gvar.RNG.integers(0, ns, ns)
             ans = Dataset()
             for k in datadict:
                 ans[k] = datadict[k][idx]
@@ -468,11 +464,7 @@ def bootstrap_iter(dataset, n=None):
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
-            idx = (
-                _gvar._GVAR_RNG.integers(0, ns, ns) 
-                if _gvar._GVAR_RNG != numpy.random else 
-                numpy.random.randint(0,ns,ns)
-                )
+            idx = _gvar.RNG.integers(0, ns, ns)
             yield dataset[idx]
 
 

@@ -22,7 +22,6 @@ import copy
 import math
 import pickle
 import numpy as np
-import random
 import gvar as gv
 from gvar import *
 try:
@@ -2607,6 +2606,73 @@ class CC(object):
         self.__dict__ = gv.distribute_gvars(self.__dict__, gvlist)
         return self 
 
+# include following to test _oldload1, etc (no longer in gvar)
+import gvar as _gvar
+import json
+try:
+    # needed for oldload (optionally)
+    import yaml
+    from yaml import FullLoader as yaml_Loader, Dumper as yaml_Dumper
+except ImportError:
+    yaml = None
+
+def olddump(g, outputfile, method='pickle', use_json=False):
+    """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
+
+    Old verion, here for testing purposes only.
+
+    The |GVar|\s are recovered using :func:`gvar.load`.
+
+    Three serialization methods are available: :mod:`pickle`, :mod:`json`,
+    and :mod:`yaml` (provided the :mod:`yaml` module is installed).
+
+    :mod:`json` can have trouble with dictionaries whose keys are not
+    strings. A workaround is used here that succeeds provided
+    ``eval(repr(k)) == k`` for every key ``k``, which is true for strings and
+    lots of other types of key. Use :mod:`pickle` where the workaround fails.
+
+    Args:
+        g: A |GVar|, array of |GVar|\s, or dictionary whose values
+            are |GVar|\s and/or arrays of |GVar|\s.
+        outputfile: The name of a file or a file object in which the
+            serialized |GVar|\s are stored.
+        method (str): Serialization method, which should be one of
+            ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.
+    """
+    if use_json is True:  # for legacy code
+        method = 'json'
+    if yaml is None and method == 'yaml':
+        raise RuntimeError('yaml module not installed')
+    if isinstance(outputfile, str):
+        with open(outputfile, 'w' if method in ['json', 'yaml'] else 'wb') as ofile:
+            return olddump(g, ofile, method=method)
+    else:
+        ofile = outputfile
+    if method in ['json', 'yaml']:
+        if hasattr(g, 'keys'):
+            if not isinstance(g, _gvar.BufferDict):
+                g = _gvar.BufferDict(g)
+            tag = method, 'dict'
+            gmean = [
+                    (repr(k) if method == 'json' else k, d.tolist())
+                    for k,d in _gvar.mean(g).items()
+                    ]
+            gcov = _gvar.evalcov(g.buf).tolist()
+        else:
+            tag = method, 'array'
+            gmean = numpy.array(_gvar.mean(g)).tolist()
+            gcov = _gvar.evalcov(g).tolist()
+        data = dict(tag=tag, gmean=gmean, gcov=gcov)
+        return (
+            json.dump(data, ofile) if method == 'json' else
+            yaml.dump(data, ofile, Dumper=yaml_Dumper)
+            )
+    elif method == 'pickle':
+        pickle.dump(
+            dict(tag=('pickle', None), gmean=_gvar.mean(g), gcov=_gvar.evalcov(g)), ofile
+            )
+    else:
+        raise ValueError('unknown method: ' + str(method))
 
 if __name__ == '__main__':
 	unittest.main()

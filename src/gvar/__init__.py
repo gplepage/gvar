@@ -55,6 +55,10 @@ variables including:
 
     - ``bootstrap_iter(g, n)`` --- bootstrap iterator.
 
+    - ``ranseed(seed)`` --- seed random number generator.
+
+    - ``random(size)`` --- generate array of random numbers on [0.0,1.0).
+
     - ``regulate(g, eps|svdcut)`` --- regulate correlation matrix.
 
     - ``svd(g, svdcut)`` --- SVD regulation of correlation matrix.
@@ -119,7 +123,7 @@ tools for use with |GVar|\s (or ``float``\s):
 # GNU General Public License for more details.
 
 import collections
-
+import sys 
 import numpy
 
 from ._gvarcore import sin, cos, tan, exp, log, sqrt, fabs, sinh, cosh, tanh
@@ -137,22 +141,28 @@ from ._utilities import rebuild, mean, fmt, sdev, deriv, is_primary
 from ._utilities import dependencies, missing_dependencies, uncorrelated, evalcorr, corr, cov
 from ._utilities import correlate, evalcov_blocks_dense, evalcov_blocks, mock_evalcov, var, evalcov
 from ._utilities import distribute_gvars, remove_gvars, collect_gvars, filter
-from ._utilities import dumps, loads, dump, load, gdumps, gdump, gloads, gload, olddump
+from ._utilities import dumps, loads, dump, load, gdumps, gdump, gloads, gload #, olddump
 from ._utilities import disassemble, reassemble, wsum_der, msum_gvar, fmt_values, wsum_gvar
 from ._utilities import fmt_errorbudget, bootstrap_iter, sample, gvar_from_sample, raniter 
 from ._utilities import valder, gammaQ, gammaP, regulate, svd, erf, SVD, GVarRef
 
-try:
-    import sys
 
-    if sys.version_info >= (3, 8):
-        from importlib import metadata
-    else:
-        import importlib_metadata as metadata
-    __version__ = metadata.version('gvar')
-except:
-    # less precise default if fail
-    __version__ = '>=11.11.3'
+from ._version import __version__
+
+# import sys 
+# if sys.version_info >= (3,8):
+#     def __getattr__(name):
+#         from importlib import metadata
+#         if name == '__version__':
+#             return metadata.version('gvar')
+#         raise AttributeError(name)
+# else:
+#     try:
+#         import importlib_metadata as metadata
+#         __version__ = metadata.version('gvar')
+#     except:
+#         # less precise default if fail
+#         __version__ = '>=12.1'
 
 
 from gvar import dataset
@@ -166,44 +176,76 @@ from gvar import root
 _GVAR_LIST = []
 _CONFIG = dict(evalcov=15, evalcov_blocks=6000, var=50)
 
-if tuple([int(si) for si in numpy.__version__.split('.')]) >= (1, 17, 0):
-    _GVAR_RNG = numpy.random.default_rng()
-else:
-    _GVAR_RNG = numpy.random
 
-def ranseed(seed=None):
+def _v0_RNG(): 
+    " RNG for numpy versions less than 1.17. " 
+    def integers(low, high, size=None, dtype=numpy.int64):
+        return numpy.random.randint(low=low, high=high, size=size, dtype=dtype)
+    numpy.random.integers = integers
+    return numpy.random
+
+if tuple([int(si) for si in numpy.__version__.split('.')]) >= (1, 17, 0):
+    RNG = numpy.random.default_rng()
+else:
+    RNG = _v0_RNG()
+
+# ``gvar.RNG`` is set equal to ``numpy.random.default_rng()`` by default
+# (or ``numpy.random`` for ``numpy`` versions earlier than 1.17). Could 
+# replace this with some other generator provided it has methods ``random``,
+# ``normal``, ``uniform``, and ``integers`` analogous to those provided 
+# by the ``numpy`` generators. Setting gvar.RNG = gvar._v0_RNG() restores
+# the random number generator used before :mod:`gvar` version 12.1 (but 
+# see gvar.old_ranseed()).
+
+def ranseed(seed=None, size=3, version=None):
     """ Seed random number generators with tuple ``seed``.
 
     Argument ``seed`` is an integer or
     a :class:`tuple` of integers that is used to seed
-    the random number generators used by :mod:`numpy` and
-    :mod:`random` (and therefore by :mod:`gvar`). Reusing
+    the random number generators used by by :mod:`gvar`. Reusing
     the same ``seed`` results in the same set of random numbers.
 
     ``ranseed`` generates its own seed when called without an argument
     or with ``seed=None``. This seed is stored in ``ranseed.seed`` and
-    also returned by the function. The seed can be used to regenerate
-    the same set of random numbers at a later time.
+    is also returned by the function. The seed can be used to regenerate
+    the same set of random numbers at a later time. Keyword argument 
+    ``size`` specifies the size or shape of the new seed.
+
+    Note: The random number generator changed in version 12.1 
+    of :mod:`gvar` in order to track changes in version 1.17 of 
+    :mod:`numpy`, which provides the generator. To restore the 
+    old generator set keyword ``version=0``. This option should
+    only be used for legacy code as it is likely to 
+    disappear eventually.
 
     Args:
         seed (int, tuple, or None): Seed for generator. Generates a
-            random tuple if ``None``.
+            random tuple for the seed if ``None``.
+        size (int): Size of the tuple of integers used 
+            to seed the random number generator when ``seed=None``.
+            Default is ``size=3``. Ignored if ``seed`` is not
+            ``None``.
+        version (int or None): Version of random number generator:
+            ``version=0`` specifies the generator used in :mod:`gvar` 
+            versions earlier than 12.1; ``version=None`` (default) 
+            specifies the current random number generator.
     Returns:
         The seed used to reseed the generator.
     """
-    global _GVAR_RNG
+    global RNG
+    if version is not None:
+        # old generator
+        RNG = _v0_RNG()
     if seed is None:
-        if _GVAR_RNG != numpy.random:
-            seed = _GVAR_RNG.integers(1, int(2e9), size=3)
-        else:
-            seed = numpy.random.randint(1, int(2e9), size=3)
+        seed = RNG.integers(1, min(2**30, sys.maxsize), size=size)
     try:
         seed = tuple(seed)
     except TypeError:
         pass
-    if _GVAR_RNG != numpy.random:
-        _GVAR_RNG = numpy.random.default_rng(seed)
+    if version is None:
+        RNG = numpy.random.default_rng(seed)
     else:
+        # old generator
         numpy.random.seed(seed)
     ranseed.seed = seed
     return seed
