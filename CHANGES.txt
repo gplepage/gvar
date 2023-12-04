@@ -1,5 +1,5 @@
-Version 12.1
-==============
+Version 12.1 2023-12-04
+========================
 - Adds batch capability to gvar.sample and gvar.raniter so samples can 
   be created in large batches, which is much more efficient if large 
   numbers of samples are needed. Also adds similar capability to 
@@ -15,7 +15,7 @@ Version 12.1
 
 - The import time for gvar is greatly reduced, especially if numpy has 
   already been loaded. 
-  
+
 - Simplifies gvar.__version__ (no longer uses importlib.metadata, which is buggy
   and increases gvar's import time significantly).
   
