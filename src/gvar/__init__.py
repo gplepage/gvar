@@ -243,7 +243,14 @@ def ranseed(seed=None, size=3, version=None):
         The seed used to reseed the generator.
     """
     global RNG
-    if version is not None:
+    if RNG == numpy.random and version is None:
+        # version=0 implies numpy.random
+        version = 0
+    elif version in [1, None]:
+        version = None
+    else:
+        raise ValueError('unknown version = {}'.format(version))
+    if version == 0:
         # old generator
         RNG = _v0_RNG()
     if seed is None:
