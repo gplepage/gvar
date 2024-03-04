@@ -66,7 +66,7 @@ applied to a much more singular function::
     Itrap_g = 10.3633 ± 4.0e+03
 
 The correct answer is 16.6 ± 1.9. We need a much larger number of integrand 
-samples ``n+1`` (100x larger) to get reasonable results.
+samples ``n`` (100x larger) to get reasonable results.
 
 Leveraging Existing Code
 ---------------------------
@@ -89,7 +89,7 @@ of ``I`` with respect to each of these parameters
 --- :math:`[dI/dp_0, dI/dp_1, ...]` --- again 
 evaluated with their mean values.
 
-The integral ``I`` (with the parameters replaced by their mean values )
+The integral ``I`` (with the parameters replaced by their mean values)
 can be evaluated using standard routines as no |GVar|\s are involved.
 The derivatives with respect to the endpoints are also easily evaluated:
 

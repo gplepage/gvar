@@ -102,7 +102,7 @@ applied to a much more singular function:</p>
 </pre></div>
 </div>
 <p>The correct answer is 16.6 ± 1.9. We need a much larger number of integrand
-samples <code class="docutils literal notranslate"><span class="pre">n+1</span></code> (100x larger) to get reasonable results.</p>
+samples <code class="docutils literal notranslate"><span class="pre">n</span></code> (100x larger) to get reasonable results.</p>
 </section>
 <section id="leveraging-existing-code">
 <h2>Leveraging Existing Code<a class="headerlink" href="#leveraging-existing-code" title="Permalink to this heading">¶</a></h2>
@@ -122,7 +122,7 @@ by their mean values, and <code class="docutils literal notranslate"><span class
 of <code class="docutils literal notranslate"><span class="pre">I</span></code> with respect to each of these parameters
 — <img class="math" src="_images/math/826eb1603997b91edc64a24e1700a40d03109a8f.svg" alt="[dI/dp_0, dI/dp_1, ...]"/> — again
 evaluated with their mean values.</p>
-<p>The integral <code class="docutils literal notranslate"><span class="pre">I</span></code> (with the parameters replaced by their mean values )
+<p>The integral <code class="docutils literal notranslate"><span class="pre">I</span></code> (with the parameters replaced by their mean values)
 can be evaluated using standard routines as no <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are involved.
 The derivatives with respect to the endpoints are also easily evaluated:</p>
 <div class="math">

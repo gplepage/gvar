@@ -3094,25 +3094,13 @@ drawn from <code class="docutils literal notranslate"><span class="pre">g</span>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
 or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
-<li><p><strong>svdcut</strong> (<em>float</em><em> or </em><em>None</em>) – If nonzero, singularities in the correlation
+<li><p><strong>svdcut</strong> (<em>float</em>) – If nonzero, singularities in the correlation
 matrix are regulated using <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>
 with an SVD cutoff <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">svdcut=1e-12</span></code>.</p></li>
 <li><p><strong>eps</strong> (<em>non-negative float</em>) – If positive, singularities in the correlation matrix
 for <code class="docutils literal notranslate"><span class="pre">g</span></code> are regulated using <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>
 with cutoff <code class="docutils literal notranslate"><span class="pre">eps</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> is specified (and
 not <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
-<li><p><strong>svdcut</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, replace
-covariance matrix of <code class="docutils literal notranslate"><span class="pre">g</span></code> with a new matrix whose
-small eigenvalues are modified: eigenvalues smaller than
-<code class="docutils literal notranslate"><span class="pre">svdcut</span></code> times the maximum eigenvalue <code class="docutils literal notranslate"><span class="pre">eig_max</span></code> are
-replaced by <code class="docutils literal notranslate"><span class="pre">svdcut*eig_max</span></code>. This can ameliorate
-problems caused by roundoff errors when inverting the
-covariance matrix. It increases the uncertainty associated
-with the modified eigenvalues and so is conservative.
-Setting <code class="docutils literal notranslate"><span class="pre">svdcut=None</span></code> or <code class="docutils literal notranslate"><span class="pre">svdcut=0</span></code> leaves the
-covariance matrix unchanged. If <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> is negative
-eigenmodes with eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|*eig_max</span></code>
-are discarded. Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</p></li>
 <li><p><strong>noise</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> adds noise to the corrections caused by
 <code class="docutils literal notranslate"><span class="pre">svdcut/eps</span></code> (see documentation for <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>).
 Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
@@ -3339,7 +3327,7 @@ left depending upon <code class="docutils literal notranslate"><span class="pre"
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>chiv</strong> – An array of values for <img class="math" src="_images/math/7f2539bf7c52accbb29ae629466468c7c593dcc7.svg" alt="\chi(p)"/>
+<li><p><strong>chiv</strong> – An array of values for <img class="math" src="_images/math/290db8021d950c02bfbccdd738eeadbf3c6062b7.svg" alt="\chi_i(p)"/>
 evaluate a point <code class="docutils literal notranslate"><span class="pre">p</span></code> in paramter space. In batch
 mode the array has an extra batch index,
 either on the right (<code class="docutils literal notranslate"><span class="pre">mode='rbatch'</span></code>) or on the l

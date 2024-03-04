@@ -2898,7 +2898,7 @@ except ImportError:
     yaml = None
 
 def olddump(g, outputfile, method='pickle', use_json=False):
-    """ Serialize a collection ``g`` of |GVar|\s into file ``outputfile``.
+    """ Serialize a collection ``g`` of |GVar| objects into file ``outputfile``.
 
     Old verion, here for testing purposes only.
 
