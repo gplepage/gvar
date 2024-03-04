@@ -104,8 +104,8 @@ def bin_data(dataset, binsize=2):
     return list(accum/float(binsize))
 
 def avg_data(
-    dataset, median=False, spread=False, bstrap=False, noerror=False, 
-    mismatch='truncate', unbias=False, warn=False
+    dataset, median=False, stderr=None, spread=None, bstrap=False, 
+    noerror=False, mismatch='truncate', unbias=False, warn=False
     ):
     """ Average ``dataset`` to estimate means and covariance.
 
@@ -148,12 +148,15 @@ def avg_data(
     applying an SVD cut to the data after averaging (:func:`gvar.regulate`).
 
     Args:
-        spread (bool): Setting ``spread=True`` means that
-            standard deviations in the results refer to spreads in the data, not
-            uncertainties in the estimates of the means. The former is ``sqrt(N)``
-            larger where ``N`` is the number of random numbers (or arrays) being
-            averaged. This is useful, for example, when averaging bootstrap data. 
-            The default value is ``spread=False``.
+        stderr (bool): If ``True`` (default) the variances and covariances 
+            represent the uncertainties in the estimates of the means 
+            (corresponding to the standard errors). If ``False`` they represent 
+            the spread in the data (corresponding to the standard deviations 
+            of the distribution). The former is smaller by a factor of 
+            one over the number of samples. 
+
+        spread (bool): (Legacy) ``spread=True`` is the same as ``stderr=False``,
+            and vice versa.
 
         median (bool): Setting ``median=True`` 
             replaces the means in the results by medians, while the standard
@@ -166,7 +169,7 @@ def avg_data(
             is ``median=False``.
 
         bstrap (bool): Setting ``bstrap=True`` is
-            shorthand for setting ``median=True`` and ``spread=True``, and
+            shorthand for setting ``median=True`` and ``stderr=False``, and
             overrides any explicit setting for these keyword arguments. This is the
             typical choice for analyzing bootstrap data --- hence its name. The
             default value is ``bstrap=False``.
@@ -175,7 +178,7 @@ def avg_data(
             if ``noerror=True`` is set --- just the mean values are
             returned. The default value is ``noerror=False``.
 
-        mimatch (str): The ``mismatch`` option is only relevant when ``dataset`` is a
+        mismatch (str): The ``mismatch`` option is only relevant when ``dataset`` is a
             dictionary whose entries ``dataset[k]`` have different sample sizes. This
             complicates the calculation of correlations between the different entries.
             There are three choices for ``mismatch``:
@@ -213,11 +216,16 @@ def avg_data(
             when different entries in a dictionary data set have different sample
             sizes. The default is ``warn=False``.
     """
+    if stderr is None:
+        if spread is not None:
+            stderr = not spread
+        else:
+            stderr = True
     if bstrap:
         median = True
-        spread = True
+        stderr = False
         unbias = False
-    kargs = dict(median=median, spread=spread, noerror=noerror, unbias=unbias, warn=False)
+    kargs = dict(median=median, stderr=stderr, noerror=noerror, unbias=unbias, warn=False)
     if not hasattr(dataset,'keys'):
         # dataset is a list of arrays (all same shape) or numbers
         if len(dataset) == 0:
@@ -239,12 +247,12 @@ def avg_data(
             cov = numpy.cov(dataset, rowvar=False, bias=not unbias)
         else:
             cov = numpy.zeros(dataset.shape[1:] + dataset.shape[1:], float)
-        if not spread:
+        if stderr:
             cov /= Neff
         if median:
             meanm, mean, meanp = numpy.percentile(dataset, q=[50 - 34.1344746, 50, 50 + 34.1344746], axis=0)
             sdev = numpy.maximum(meanp - mean, mean - meanm)
-            if not spread:
+            if stderr:
                 sdev /= Neff ** 0.5 
             # replace std dev by sdev from percentiles in cov
             if data_shape == ():
@@ -1055,7 +1063,9 @@ class svd_diagnosis(object):
             bsavgdata = avg_data(bsdata)
             if isdict:
                 bsavgdata = bsavgdata.buf
-            bsval_list.append(_gvar.SVD(_gvar.evalcorr(bsavgdata)).val)
+            bsval_list.append(_gvar.SVD(
+                _gvar.evalcorr(bsavgdata), svdcut=None, warn=False
+                ).val)
         self.bsval = _gvar.dataset.avg_data(bsval_list, bstrap=True)
         # use heuristic to find recommended svdcut
         ratio = _gvar.mean(self.bsval) / self.val

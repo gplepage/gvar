@@ -62,7 +62,7 @@ class BufferDict(collections_MMapping):
         {'b': 2.7}
 
     The ``keys`` keyword restricts the copy of a dictionary to entries whose
-    keys are in ``keys``.
+    keys are in ``keys`` and in the same order as in ``keys``.
 
     The values in a |BufferDict| are scalars or arrays of a scalar type
     (|GVar|, ``float``, ``int``, etc.). The data type of the buffer is 
@@ -273,30 +273,43 @@ class BufferDict(collections_MMapping):
             return
         elif buf is not None:
             raise RuntimeError("can't specify buffer unless first argument is a BufferDict")
-        data = args[0].items() if hasattr(args[0], 'keys') else args[0]
+        data = args[0] if hasattr(args[0], 'keys') else dict(args[0])
         self._odict = ORDEREDDICT()
         self._buf = numpy.array([], dtype=self._dtype) 
         if keys is None:
-            for k, v in data:
-                self[k] = v
+            for k in data:
+                self[k] = data[k]
         else:
-            for k, v in data:
-                if k in keys:
-                    self[k] = v 
+            for k in keys:
+                if k in data:
+                    self[k] = data[k]
+            # for k, v in data:
+            #     if k in keys:
+            #         self[k] = v 
 
     def _r2lbatch(self):
         """ Returns ``self`` converted from ``'rbatch'`` to ``'lbatch'`` mode."""
         ans = _gvar.BufferDict() 
+        nbatch = None
         for k in self:
             ans[k] = numpy.moveaxis(self[k], -1, 0)
-        return ans 
+            if nbatch is None:
+                nbatch = ans[k].shape[0]
+            elif nbatch != ans[k].shape[0]:
+                raise ValueError('Not an rbatch BufferDict')
+        return ans, nbatch 
 
     def _l2rbatch(self):
         """ Returns ``self`` converted from ``'lbatch'`` to ``'rbatch'`` mode."""
         ans = _gvar.BufferDict()
+        nbatch = None
         for k in self:
             ans[k] = numpy.moveaxis(self[k], 0, -1)
-        return ans 
+            if nbatch is None:
+                nbatch = ans[k].shape[-1]
+            elif nbatch != ans[k].shape[-1]:
+                raise ValueError('Not an lbatch BufferDict')
+        return ans, nbatch 
 
     def __copy__(self):
         return BufferDict(self)
@@ -521,7 +534,7 @@ class BufferDict(collections_MMapping):
             if m is None:
                 continue
             k_fcn, k_stripped = m.groups()
-            if k_fcn in BufferDict.invfcn:
+            if k_fcn in BufferDict.invfcn and k_stripped not in self:
                 ans.append(k_stripped)
         return ans
 
@@ -553,9 +566,10 @@ class BufferDict(collections_MMapping):
         # Code from Giacomo Petrillo.
         for k in self:
             yield k
-            m = self.extension_pattern.match(k)
-            if m and m.group(1) in BufferDict.invfcn:
-                yield m.group(2)
+            if isinstance(k, str):
+                m = self.extension_pattern.match(k)
+                if m and m.group(1) in BufferDict.invfcn and m.group(2) not in self:
+                    yield m.group(2)
 
     def values(self):
         # needed for python3.5
@@ -683,9 +697,12 @@ class BufferDict(collections_MMapping):
         self._buf.flat = buf
 
     flat = property(_getflat, _setflat, doc='Buffer array iterator.')
-    def flatten(self):
+    def flatten(self, mode=None):
         """ Copy of buffer array. """
-        return numpy.array(self._buf)
+        if mode is None:
+            return numpy.array(self._buf)
+        else:
+            return self.rbatch_buf if mode=='rbatch' else self.lbatch_buf
 
     def _getdtype(self):
         return self._buf.dtype
@@ -738,6 +755,27 @@ class BufferDict(collections_MMapping):
         for more information).
         """
         return _gvar.has_dictkey(self, k)
+
+    def _getlbatch_buf(self):
+        if self.size == 0:
+            return numpy.array([], dtype=self.dtype)
+        rdict, nbatch = self._l2rbatch()
+        return rdict.flat[:].reshape(-1, nbatch).T
+
+    lbatch_buf = property(_getlbatch_buf, doc='lbatch_buf')
+
+    def _getrbatch_buf(self):
+        if self.size == 0:
+            return numpy.array([], dtype=self.dtype)
+        nbatch = None
+        for k in self:
+            if nbatch is None:
+                nbatch = self[k].shape[-1]
+            elif nbatch != self[k].shape[-1]:
+                raise ValueError('Not an rbatch BufferDict')
+        return numpy.array(self._buf).reshape(-1, nbatch)
+
+    rbatch_buf = property(_getrbatch_buf, doc='rbatch_buf')
 
     def batch_iter(self, mode):
         """ Iterate over dictionaries in a batch |BufferDict|.

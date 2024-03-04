@@ -14,11 +14,11 @@ PYTHON = python
 
 run:
 	$(PYTHON) pendulum-clock.py > pendulum-clock.tmp
-	- diff -w -B pendulum-clock.out pendulum-clock.tmp
+	- diff -w -I svdcut -B pendulum-clock.out pendulum-clock.tmp
 	$(PYTHON) svdcut.py > svdcut.tmp
-	- diff -w -B svdcut.out svdcut.tmp
+	- diff -w -I svdcut -B svdcut.out svdcut.tmp
 	$(PYTHON) integrate.py > integrate.tmp
-	- diff -w -B integrate.out integrate.tmp
+	- diff -w -I svdcut -B integrate.out integrate.tmp
 
 update-all:
 	$(PYTHON) pendulum-clock.py > pendulum-clock.out

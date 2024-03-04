@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar - Gaussian Random Variables &#8212; gvar 12.1 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 13.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>  
@@ -1556,9 +1556,9 @@ Ignored if <code class="docutils literal notranslate"><span class="pre">nbatch</
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>An iterator that returns random arrays or dictionaries
-with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code> drawn from the Gaussian
-distribution defined by <code class="docutils literal notranslate"><span class="pre">g</span></code>, or <code class="docutils literal notranslate"><span class="pre">nbatch</span></code> such
-samples when <code class="docutils literal notranslate"><span class="pre">nbatch</span></code> is secified.</p>
+(or single <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s with the same shape as <code class="docutils literal notranslate"><span class="pre">g</span></code> drawn
+from the Gaussian distribution defined by <code class="docutils literal notranslate"><span class="pre">g</span></code>, or <code class="docutils literal notranslate"><span class="pre">nbatch</span></code>
+such samples when <code class="docutils literal notranslate"><span class="pre">nbatch</span></code> is specified.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1626,11 +1626,12 @@ more information.</p></li>
 <li><p><strong>mode</strong> (<em>str</em>) – The sample index is the rightmost index when
 <code class="docutils literal notranslate"><span class="pre">mode='rbatch'</span></code> (default), and the leftmost index
 when <code class="docutils literal notranslate"><span class="pre">mode='lbatch'</span></code>.</p></li>
-<li><p><strong>stderr</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the variances and covariances represent
-the uncertainties in the estimates of the mean (corresponding
-to the standard error) rather than the spread in the data;
-the former is smaller by a factor of one over the number of
-samples. Ignored if <code class="docutils literal notranslate"><span class="pre">False</span></code> (default).</p></li>
+<li><p><strong>stderr</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) the variances and covariances
+represent the uncertainties in the estimates of the means
+(corresponding to the standard errors). If <code class="docutils literal notranslate"><span class="pre">False</span></code> they represent
+the spread in the data (corresponding to the standard deviations
+of the distribution). The former is smaller by a factor of
+one over the number of samples.</p></li>
 <li><p><strong>unbias</strong> (<em>bool</em>) – The default choice <code class="docutils literal notranslate"><span class="pre">unbias=False</span></code> means that
 variances are estimated using <code class="docutils literal notranslate"><span class="pre">sum((x[:]</span> <span class="pre">-</span> <span class="pre">mean(x))**2)/N</span></code>
 where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of random samples.
@@ -1907,6 +1908,10 @@ between two vectors (<code class="xref py py-mod docutils literal notranslate"><
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">result</span></code> is the desired expectation value.</p>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">wgts=True</span></code> causes <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a> to return a tuple
+<code class="docutils literal notranslate"><span class="pre">(gmod,</span> <span class="pre">i_wgts,</span> <span class="pre">i_invwgts)</span></code> where <code class="docutils literal notranslate"><span class="pre">i_wgts</span></code> is the decomposition of
+the covariance matrix and <code class="docutils literal notranslate"><span class="pre">i_invwgts</span></code> is the decomposition of the
+inverse of the covariance matrix.</p>
 <p>These decompositions are useful for least squares fitting and simulating
 correlated data. A Cholesky decomposition is used when <code class="docutils literal notranslate"><span class="pre">eps</span></code> is specified,
 while an SVD decomposition is used with <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>.</p>
@@ -1927,17 +1932,19 @@ Note <code class="docutils literal notranslate"><span class="pre">|svdcut|</span
 <li><p><strong>wgts</strong> – Setting <code class="docutils literal notranslate"><span class="pre">wgts=1</span></code> causes <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a> to compute
 and return a decomposition of the covariance matrix of
 the modified <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal notranslate"><span class="pre">gmod</span></code>. Setting <code class="docutils literal notranslate"><span class="pre">wgts=-1</span></code> results in
-a decomposition of the inverse of the covariance matrix. The
+a decomposition of the inverse of the covariance matrix. Setting
+<code class="docutils literal notranslate"><span class="pre">wgts=True</span></code> results in both decompositions. The
 default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>, in which case only <code class="docutils literal notranslate"><span class="pre">gmod</span></code> is returned.</p></li>
 <li><p><strong>noise</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, noise is added to the correction (see
 above). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A copy <code class="docutils literal notranslate"><span class="pre">gmod</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code> with the modified correlation matrix.
-If <code class="docutils literal notranslate"><span class="pre">wgts</span></code> is not <code class="docutils literal notranslate"><span class="pre">False</span></code>, a tuple <code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">i_wgts)</span></code> is returned
+<dd class="field-even"><p>If <code class="docutils literal notranslate"><span class="pre">wgts</span></code> is not <code class="docutils literal notranslate"><span class="pre">False</span></code>, a tuple <code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">i_wgts)</span></code> is returned
 where <code class="docutils literal notranslate"><span class="pre">i_wgts</span></code> contains a decomposition of the <code class="docutils literal notranslate"><span class="pre">gmod</span></code>
-covariance matrix or its inverse (see above).</p>
+covariance matrix or its inverse (see above), or if
+<code class="docutils literal notranslate"><span class="pre">wgts=True</span></code> both decompositions are returned:
+<code class="docutils literal notranslate"><span class="pre">(gmod,</span> <span class="pre">i_wgts,</span> <span class="pre">i_invwgts)</span></code>.</p>
 </dd>
 </dl>
 <p>Additional information is stored in <code class="docutils literal notranslate"><span class="pre">gmod</span></code>:</p>
@@ -2066,6 +2073,10 @@ between two vectors (<code class="xref py py-mod docutils literal notranslate"><
 <p>where <code class="docutils literal notranslate"><span class="pre">result</span></code> is the desired expectation value. The SVD
 decompositions are useful for least squares fitting and simulating
 correlated data.</p>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">wgts=True</span></code> causes <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a> to return a tuple
+<code class="docutils literal notranslate"><span class="pre">(gmod,</span> <span class="pre">i_wgts,</span> <span class="pre">i_invwgts)</span></code> where <code class="docutils literal notranslate"><span class="pre">i_wgts</span></code> is the decomposition of
+the covariance matrix and <code class="docutils literal notranslate"><span class="pre">i_invwgts</span></code> is the decomposition of the
+inverse of the covariance matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -2079,7 +2090,8 @@ Note <code class="docutils literal notranslate"><span class="pre">|svdcut|</span
 <li><p><strong>wgts</strong> – Setting <code class="docutils literal notranslate"><span class="pre">wgts=1</span></code> causes <a class="reference internal" href="#gvar.svd" title="gvar.svd"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.svd()</span></code></a> to compute
 and return a spectral decomposition of the covariance matrix of
 the modified <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal notranslate"><span class="pre">gmod</span></code>. Setting <code class="docutils literal notranslate"><span class="pre">wgts=-1</span></code> results in
-a decomposition of the inverse of the covariance matrix. The
+a decomposition of the inverse of the covariance matrix. Setting
+<code class="docutils literal notranslate"><span class="pre">wgts=True</span></code> results in both decompositions. The
 default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>, in which case only <code class="docutils literal notranslate"><span class="pre">gmod</span></code> is returned.</p></li>
 <li><p><strong>noise</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, noise is added to the SVD correction (see
 above). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
@@ -2087,10 +2099,12 @@ above). Default is <code class="docutils literal notranslate"><span class="pre">
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A copy <code class="docutils literal notranslate"><span class="pre">gmod</span></code> of <code class="docutils literal notranslate"><span class="pre">g</span></code> whose correlation matrix is modified by
-SVD cuts. If <code class="docutils literal notranslate"><span class="pre">wgts</span></code> is not <code class="docutils literal notranslate"><span class="pre">False</span></code>,
-a tuple <code class="docutils literal notranslate"><span class="pre">(g,</span> <span class="pre">i_wgts)</span></code> is returned where <code class="docutils literal notranslate"><span class="pre">i_wgts</span></code>
-contains an SVD decomposition of <code class="docutils literal notranslate"><span class="pre">gmod</span></code>’s
-covariance matrix or its inverse.</p>
+SVD cuts. If <code class="docutils literal notranslate"><span class="pre">wgts=1</span></code>, a tuple <code class="docutils literal notranslate"><span class="pre">(gmod,i_wgts)</span></code> is returned
+where  <code class="docutils literal notranslate"><span class="pre">i_wgts</span></code> contains an SVD decomposition of <code class="docutils literal notranslate"><span class="pre">gmod</span></code>’s
+covariance matrix. If <code class="docutils literal notranslate"><span class="pre">wgts=-1</span></code>, a tuple <code class="docutils literal notranslate"><span class="pre">(gmod,i_invwgts)</span></code> is
+returned where  <code class="docutils literal notranslate"><span class="pre">i_invwgts</span></code> contains an SVD decomposition of
+the inverse of <code class="docutils literal notranslate"><span class="pre">gmod</span></code>’s covariance matrix. If <code class="docutils literal notranslate"><span class="pre">wgts=True</span></code>,
+both decompositions are returned: <code class="docutils literal notranslate"><span class="pre">(gmod,i_wgts,i_invwgts)</span></code>.</p>
 </dd>
 </dl>
 <p>Data from the SVD analysis is stored in <code class="docutils literal notranslate"><span class="pre">gmod</span></code>:</p>
@@ -2590,7 +2604,7 @@ below.</p>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">keys</span></code> keyword restricts the copy of a dictionary to entries whose
-keys are in <code class="docutils literal notranslate"><span class="pre">keys</span></code>.</p>
+keys are in <code class="docutils literal notranslate"><span class="pre">keys</span></code> and in the same order as in <code class="docutils literal notranslate"><span class="pre">keys</span></code>.</p>
 <p>The values in a <a class="reference internal" href="#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> are scalars or arrays of a scalar type
 (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, etc.). The data type of the buffer is
 normally inferred (dynamically) from the data itself:</p>
@@ -2930,7 +2944,7 @@ the batch <a class="reference internal" href="#gvar.BufferDict" title="gvar.Buff
 <dl class="py class">
 <dt class="sig sig-object py" id="gvar.SVD">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">SVD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svdcut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svdnum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rescale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.SVD" title="Permalink to this definition">¶</a></dt>
-<dd><p>SVD decomposition of a pos. sym. matrix.</p>
+<dd><p>SVD decomposition of a pos. semi-def. sym. matrix.</p>
 <p><a class="reference internal" href="#gvar.SVD" title="gvar.SVD"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVD</span></code></a> is a function-class that computes the eigenvalues and
 eigenvectors of a symmetric matrix <code class="docutils literal notranslate"><span class="pre">mat</span></code>. Eigenvalues that
 are small (or negative, because of roundoff) can be eliminated or
@@ -2962,16 +2976,17 @@ modified using <em>svd</em> cuts. Typical usage is:</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mat</strong> – Positive, symmetric matrix.</p></li>
-<li><p><strong>svdcut</strong> – If positive, replace eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat</span></code> with
-<code class="docutils literal notranslate"><span class="pre">svdcut*(max</span> <span class="pre">eigenvalue)</span></code>; if negative, discard
-eigenmodes with eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>
-times the maximum eigenvalue.</p></li>
+<li><p><strong>svdcut</strong> – If positive (or zero), replace <code class="docutils literal notranslate"><span class="pre">mat</span></code>’s eigenvalues
+<code class="docutils literal notranslate"><span class="pre">e[i]</span> <span class="pre">-&gt;</span> <span class="pre">max(e[i],</span> <span class="pre">svdcut*max(e))</span></code>; otherwwise,
+discard eigenmodes with eigenvalues smaller
+than <code class="docutils literal notranslate"><span class="pre">|svdcut|</span></code> times the maximum eigenvalue.</p></li>
 <li><p><strong>svdnum</strong> – If positive, keep only the modes with the largest
 <code class="docutils literal notranslate"><span class="pre">svdnum</span></code> eigenvalues; ignore if set to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
 <li><p><strong>compute_delta</strong> (<em>bool</em>) – Compute <code class="docutils literal notranslate"><span class="pre">delta</span></code> (see below)
 if <code class="docutils literal notranslate"><span class="pre">True</span></code>; set <code class="docutils literal notranslate"><span class="pre">delta=None</span></code> otherwise.</p></li>
 <li><p><strong>rescale</strong> – Rescale the input matrix to make its diagonal
 elements equal to +-1.0 before diagonalizing.</p></li>
+<li><p><strong>warn</strong> – Suppress warnings if <code class="docutils literal notranslate"><span class="pre">False</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2979,8 +2994,8 @@ elements equal to +-1.0 before diagonalizing.</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gvar.SVD.val">
 <span class="sig-name descname"><span class="pre">val</span></span><a class="headerlink" href="#gvar.SVD.val" title="Permalink to this definition">¶</a></dt>
-<dd><p>An ordered array containing the eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat</span></code>. Note
-that <code class="docutils literal notranslate"><span class="pre">val[i]&lt;=val[i+1]</span></code>.</p>
+<dd><p>An ordered array containing the eigenvalues of <code class="docutils literal notranslate"><span class="pre">mat``after</span>
+<span class="pre">the</span> <span class="pre">SVD</span> <span class="pre">cut.</span> <span class="pre">Note</span> <span class="pre">that</span> <span class="pre">``val[i]&lt;=val[i+1]</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3015,7 +3030,7 @@ diagonal elements. <code class="docutils literal notranslate"><span class="pre">
 <dt class="sig sig-object py" id="gvar.SVD.nmod">
 <span class="sig-name descname"><span class="pre">nmod</span></span><a class="headerlink" href="#gvar.SVD.nmod" title="Permalink to this definition">¶</a></dt>
 <dd><p>The first <code class="docutils literal notranslate"><span class="pre">nmod</span></code> eigenvalues in <code class="docutils literal notranslate"><span class="pre">self.val</span></code> were modified by
-the SVD cut (equals 0 unless <code class="docutils literal notranslate"><span class="pre">svdcut</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>).</p>
+the SVD cut.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3066,10 +3081,10 @@ module (for multi-dimensional integration) and class
 <code class="xref py py-class docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code>. Related classes are:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gvar.PDF">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">PDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svdcut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">PDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">svdcut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Probability density function (PDF) for <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
 <p>Given an array or dictionary <code class="docutils literal notranslate"><span class="pre">g</span></code> of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, <code class="docutils literal notranslate"><span class="pre">pdf=PDF(g)</span></code> is
-the probability density function for the (usually correlated)
+the probability density function for the (correlated)
 multi-dimensional Gaussian distribution defined by <code class="docutils literal notranslate"><span class="pre">g</span></code>. That is
 <code class="docutils literal notranslate"><span class="pre">pdf(p)</span></code> is the probability density for random sample <code class="docutils literal notranslate"><span class="pre">p</span></code>
 drawn from <code class="docutils literal notranslate"><span class="pre">g</span></code>. The logarithm of the PDF is obtained using
@@ -3079,7 +3094,14 @@ drawn from <code class="docutils literal notranslate"><span class="pre">g</span>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>g</strong> – <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or array of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s, or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
 or arrays of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p></li>
-<li><p><strong>svdcut</strong> (<em>non-negative float</em><em> or </em><em>None</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, replace
+<li><p><strong>svdcut</strong> (<em>float</em><em> or </em><em>None</em>) – If nonzero, singularities in the correlation
+matrix are regulated using <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>
+with an SVD cutoff <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">svdcut=1e-12</span></code>.</p></li>
+<li><p><strong>eps</strong> (<em>non-negative float</em>) – If positive, singularities in the correlation matrix
+for <code class="docutils literal notranslate"><span class="pre">g</span></code> are regulated using <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>
+with cutoff <code class="docutils literal notranslate"><span class="pre">eps</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> is specified (and
+not <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
+<li><p><strong>svdcut</strong> – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, replace
 covariance matrix of <code class="docutils literal notranslate"><span class="pre">g</span></code> with a new matrix whose
 small eigenvalues are modified: eigenvalues smaller than
 <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> times the maximum eigenvalue <code class="docutils literal notranslate"><span class="pre">eig_max</span></code> are
@@ -3088,40 +3110,298 @@ problems caused by roundoff errors when inverting the
 covariance matrix. It increases the uncertainty associated
 with the modified eigenvalues and so is conservative.
 Setting <code class="docutils literal notranslate"><span class="pre">svdcut=None</span></code> or <code class="docutils literal notranslate"><span class="pre">svdcut=0</span></code> leaves the
-covariance matrix unchanged. Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</p></li>
+covariance matrix unchanged. If <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> is negative
+eigenmodes with eigenvalues smaller than <code class="docutils literal notranslate"><span class="pre">|svdcut|*eig_max</span></code>
+are discarded. Default is <code class="docutils literal notranslate"><span class="pre">1e-12</span></code>.</p></li>
+<li><p><strong>noise</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> adds noise to the corrections caused by
+<code class="docutils literal notranslate"><span class="pre">svdcut/eps</span></code> (see documentation for <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>).
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>mode</strong> (<em>str</em><em> or </em><em>None</em>) – <p>The PDF is evaluated simultaneously
+for batches of points in the parameter space
+when <code class="docutils literal notranslate"><span class="pre">mode</span></code> equals either <code class="docutils literal notranslate"><span class="pre">rbatch</span></code> or <code class="docutils literal notranslate"><span class="pre">lbatch</span></code>.
+For example, in the code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">PDF</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rbatch&#39;</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rbatch&#39;</span><span class="p">)</span>
+<span class="n">pdf_p</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">p[d,</span> <span class="pre">i]</span></code> represents a collection of 1000 points in
+the parameter space, labeled by batch index <code class="docutils literal notranslate"><span class="pre">i=0..999</span></code>.
+Index <code class="docutils literal notranslate"><span class="pre">d=0..3</span></code> labels directions in parameter space.
+<code class="docutils literal notranslate"><span class="pre">pdf_p=pdf(p)</span></code> returns the PDF value <code class="docutils literal notranslate"><span class="pre">pdf_p[i]</span></code> for
+each point. This is generally much more efficient than
+calculating the PDF values one at a time (for example,
+in PDF integrals using <code class="xref py py-mod docutils literal notranslate"><span class="pre">vegas</span></code>).</p>
+<p>In batch mode an extra batch index is added to each
+parameter. The index is the rightmost index when
+<code class="docutils literal notranslate"><span class="pre">mode='rbatch'</span></code> and the leftmost index when
+<code class="docutils literal notranslate"><span class="pre">mode='lbatch'</span></code> (e.g., <code class="docutils literal notranslate"><span class="pre">p[d,i]</span></code> and <code class="docutils literal notranslate"><span class="pre">p[i,d]</span></code>,
+respectively, in the example above).</p>
+<p>Default is <code class="docutils literal notranslate"><span class="pre">mode=None</span></code> which turns batch mode off.</p>
+</p></li>
+<li><p><strong>decorrelate</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> correlations between parameters
+are ignored. Ignored otherwise. Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
+<p>Objects of type <a class="reference internal" href="#gvar.PDF" title="gvar.PDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDF</span></code></a> have the following attributes:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.size">
+<span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#gvar.PDF.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimension of the parameter space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.nchiv">
+<span class="sig-name descname"><span class="pre">nchiv</span></span><a class="headerlink" href="#gvar.PDF.nchiv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimension of the <code class="docutils literal notranslate"><span class="pre">self.chiv(p)</span></code> vector. This
+can be smaller than <code class="docutils literal notranslate"><span class="pre">self.size</span></code> if <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> is
+negative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.shape">
+<span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#gvar.PDF.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shape of <code class="docutils literal notranslate"><span class="pre">g</span></code> array or <code class="docutils literal notranslate"><span class="pre">None</span></code>
+if <code class="docutils literal notranslate"><span class="pre">g</span></code> is a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.mean">
+<span class="sig-name descname"><span class="pre">mean</span></span><a class="headerlink" href="#gvar.PDF.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean values of <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array or dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.meanflat">
+<span class="sig-name descname"><span class="pre">meanflat</span></span><a class="headerlink" href="#gvar.PDF.meanflat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flattened array containing mean values of <code class="docutils literal notranslate"><span class="pre">g</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.cov">
+<span class="sig-name descname"><span class="pre">cov</span></span><a class="headerlink" href="#gvar.PDF.cov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modified covariance matrix of the elements in <code class="docutils literal notranslate"><span class="pre">g.flat[:]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.invcov">
+<span class="sig-name descname"><span class="pre">invcov</span></span><a class="headerlink" href="#gvar.PDF.invcov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse of modified covariance matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.i_wgts">
+<span class="sig-name descname"><span class="pre">i_wgts</span></span><a class="headerlink" href="#gvar.PDF.i_wgts" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a> decomposition of the modified covariance matrix.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.i_invwgts">
+<span class="sig-name descname"><span class="pre">i_invwgts</span></span><a class="headerlink" href="#gvar.PDF.i_invwgts" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a> decomposition of the inverse modified covariance matrix.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.logdet">
+<span class="sig-name descname"><span class="pre">logdet</span></span><a class="headerlink" href="#gvar.PDF.logdet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determinant of modified covariance matrix.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.dp_dchiv">
+<span class="sig-name descname"><span class="pre">dp_dchiv</span></span><a class="headerlink" href="#gvar.PDF.dp_dchiv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Jacobian <img class="math" src="_images/math/79a0d8e6d06b45840f9c23fa3f7f001bfe92b7b4.svg" alt="\mathrm{det}(\partial p_i/\partial \chi_j)"/>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.distribution">
+<span class="sig-name descname"><span class="pre">distribution</span></span><a class="headerlink" href="#gvar.PDF.distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array or dictionary of <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s describing the distribution
+corresponding to the PDF. This may differ from the initial distribution
+if <code class="docutils literal notranslate"><span class="pre">svdcut</span></code> or <code class="docutils literal notranslate"><span class="pre">eps</span></code> is nonzero.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.correction">
+<span class="sig-name descname"><span class="pre">correction</span></span><a class="headerlink" href="#gvar.PDF.correction" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">self.distribution</span> <span class="pre">-</span> <span class="pre">self.correction</span></code> is the original
+distribution before applying <code class="docutils literal notranslate"><span class="pre">svdcut/eps</span></code> corrections.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.nmod">
+<span class="sig-name descname"><span class="pre">nmod</span></span><a class="headerlink" href="#gvar.PDF.nmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of eigenmodes modified by the SVD cut.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDF.nblocks">
+<span class="sig-name descname"><span class="pre">nblocks</span></span><a class="headerlink" href="#gvar.PDF.nblocks" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">nblocks[s]</span></code> equals the number of block-diagonal
+sub-matrices of the <code class="docutils literal notranslate"><span class="pre">y</span></code>–<code class="docutils literal notranslate"><span class="pre">prior</span></code> covariance matrix that are
+size <code class="docutils literal notranslate"><span class="pre">s</span></code>-by-<code class="docutils literal notranslate"><span class="pre">s</span></code>. This is sometimes useful for debugging.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The main methods are:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.PDF.chi2">
+<span class="sig-name descname"><span class="pre">chi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.chi2" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">sum(self.chiv(p)**2)</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.PDF.chiv">
+<span class="sig-name descname"><span class="pre">chiv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pflat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.chiv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <img class="math" src="_images/math/290db8021d950c02bfbccdd738eeadbf3c6062b7.svg" alt="\chi_i(p)"/> where <img class="math" src="_images/math/3fdb321b144ca2cd05e3a904d266e8f1ae03550d.svg" alt="\chi^2(p) = \sum_i \chi_i^2(p)"/>.</p>
+<p>The PDF is proportional to <img class="math" src="_images/math/33c992e5f159e1d795a9db49905cbecfc1d7fe00.svg" alt="\exp(-\chi^2(p)/2)"/> where</p>
+<div class="math">
+<p><img src="_images/math/00f9ed8716301a163e30445fe9806a9ff96872df.svg" alt="\chi^2(p) = \Delta p \cdot\mathrm{cov}^{-1}_p\cdot\Delta p"/></p>
+</div><p><img class="math" src="_images/math/f5c5c1fc98cab35665cd5802c7dbb30a1cff0e14.svg" alt="\Delta p_i\equiv \overline p_i - p_i"/>, and <img class="math" src="_images/math/74813f3eac398fc5c50544c6d9967ea528a4f29a.svg" alt="\overline p_i"/>
+and <img class="math" src="_images/math/6628631356b79b3716505c2b445fe42a4a25aec2.svg" alt="\mathrm{cov}_p"/> are the means and covariance matrix of the
+distribution. By replacing the parameters <img class="math" src="_images/math/98ef5cc0c3d605c55db1af4ac8bff41a5db76303.svg" alt="p_i"/> with a new
+set of uncorrelated parameters (linear combinations of the originals),
+<img class="math" src="_images/math/ef2b8df3d992dfe1e72a5aa4aa6550c6cbd9b180.svg" alt="\chi^2(p)"/> is reexpressed as a sum of terms
+<img class="math" src="_images/math/35c1247eaf605856718626a5e980568e03588e7a.svg" alt="(\chi_i(p))^2"/>. By default the individual terms
+correspond to individual eigenmodes of the correlation matrix.
+If <code class="docutils literal notranslate"><span class="pre">eps</span></code> is specified (instead of <code class="docutils literal notranslate"><span class="pre">svdcut</span></code>), a Cholesky
+decomposition is used instead (see <a class="reference internal" href="#gvar.regulate" title="gvar.regulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.regulate()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – An array or dictionary represention a point in the
+distribution’s parameter space (or multiple points
+if in batch mode). Ignored if <code class="docutils literal notranslate"><span class="pre">pflat</span></code> is specified.</p></li>
+<li><p><strong>pflat</strong> (<em>array</em>) – The coordinates of a point in parameter
+space flattened into a 1-d array. In batch mode
+an extra batch index is added to the array, either
+on the right (<code class="docutils literal notranslate"><span class="pre">mode='rbatch'</span></code>) or on the left
+(<code class="docutils literal notranslate"><span class="pre">mode='lbatch'</span></code>), to represent multiple
+points.</p></li>
+<li><p><strong>mode</strong> – Batch mode. Defaults to <code class="docutils literal notranslate"><span class="pre">self.mode</span></code> if
+not specified (<code class="docutils literal notranslate"><span class="pre">mode='default'</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array containing <img class="math" src="_images/math/290db8021d950c02bfbccdd738eeadbf3c6062b7.svg" alt="\chi_i(p)"/>. In batch
+mode the array has an extra batch index (on the right or
+left depending upon <code class="docutils literal notranslate"><span class="pre">mode</span></code>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.PDF.pflat">
+<span class="sig-name descname"><span class="pre">pflat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chiv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.pflat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverse of <a class="reference internal" href="#gvar.PDF.chiv" title="gvar.PDF.chiv"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDF.chiv()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chiv</strong> – An array of values for <img class="math" src="_images/math/7f2539bf7c52accbb29ae629466468c7c593dcc7.svg" alt="\chi(p)"/>
+evaluate a point <code class="docutils literal notranslate"><span class="pre">p</span></code> in paramter space. In batch
+mode the array has an extra batch index,
+either on the right (<code class="docutils literal notranslate"><span class="pre">mode='rbatch'</span></code>) or on the l
+left (<code class="docutils literal notranslate"><span class="pre">mode='lbatch'</span></code>), to identify multiple
+points in parameter space.</p></li>
+<li><p><strong>mode</strong> – Batch mode used. Defaults to <code class="docutils literal notranslate"><span class="pre">self.mode</span></code> if
+not specified (<code class="docutils literal notranslate"><span class="pre">mode='default'</span></code>).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Am array containing the flattened version of <code class="docutils literal notranslate"><span class="pre">p</span></code>
+corresponding to <code class="docutils literal notranslate"><span class="pre">chiv</span></code>. In batch mode the array
+has an extra batch index (on the right or
+left depending upon <code class="docutils literal notranslate"><span class="pre">mode</span></code>).</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="gvar.PDF.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Probability density function evaluated at <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The PDF evaluated at <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<p>The PDF is <code class="docutils literal notranslate"><span class="pre">exp(-sum(self.chiv(p)**2)/2</span> <span class="pre">-</span> <span class="pre">self.lognorm)</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gvar.PDF.logpdf">
-<span class="sig-name descname"><span class="pre">logpdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.logpdf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Logarithm of the probability density function evaluated at <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<span class="sig-name descname"><span class="pre">logpdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.logpdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logarithm of the PDF evaluated at <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p>
+<p>The logarithm of the PDF is
+<code class="docutils literal notranslate"><span class="pre">-sum(self.chiv(p)**2)/2</span> <span class="pre">-</span> <span class="pre">self.lognorm</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="gvar.PDF.p2x">
-<span class="sig-name descname"><span class="pre">p2x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.p2x" title="Permalink to this definition">¶</a></dt>
-<dd><p>Map parameters <code class="docutils literal notranslate"><span class="pre">p</span></code> to vector in x-space.</p>
-<p>x-space is a vector space of dimension <code class="docutils literal notranslate"><span class="pre">p.size</span></code>. Its axes are
-in the directions specified by the eigenvectors of <code class="docutils literal notranslate"><span class="pre">p</span></code>’s covariance
-matrix, and distance along an axis is in units of the standard
-deviation in that direction.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gvar.PDF.x2dpflat">
-<span class="sig-name descname"><span class="pre">x2dpflat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.x2dpflat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Map vector <code class="docutils literal notranslate"><span class="pre">x</span></code> in x-space into the displacement from <code class="docutils literal notranslate"><span class="pre">g.mean</span></code>.</p>
-<p>x-space is a vector space of dimension <code class="docutils literal notranslate"><span class="pre">p.size</span></code>. Its axes are
-in the directions specified by the eigenvectors of <code class="docutils literal notranslate"><span class="pre">p</span></code>’s covariance
-matrix, and distance along an axis is in units of the standard
-deviation in that direction.</p>
+<dt class="sig sig-object py" id="gvar.PDF.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbatch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDF.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate random sample(s) from the PDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbatch</strong> (<em>int</em><em> or </em><em>None</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the iterator will return
+<code class="docutils literal notranslate"><span class="pre">nbatch</span></code> samples drawn from the PDF.
+The results are packaged in arrays or dictionaries
+whose elements have an extra index labeling the different
+samples in the batch. The batch index is
+the rightmost index if <code class="docutils literal notranslate"><span class="pre">mode='rbatch'</span></code>; it is
+the leftmost index if <code class="docutils literal notranslate"><span class="pre">mode</span></code> is <code class="docutils literal notranslate"><span class="pre">'lbatch'</span></code>. Ignored
+if <code class="docutils literal notranslate"><span class="pre">nbatch</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> (default).</p></li>
+<li><p><strong>mode</strong> (<em>bool</em>) – Batch mode. Allowed
+modes are <code class="docutils literal notranslate"><span class="pre">'rbatch'``or</span> <span class="pre">``'lbatch'</span></code>,
+corresponding to batch indices that are on the
+right or the left, respectively.
+Defaults to <code class="docutils literal notranslate"><span class="pre">self.mode</span></code> if
+not specified (<code class="docutils literal notranslate"><span class="pre">mode='default'</span></code>).</p></li>
+<li><p><strong>uniform</strong> (<em>float</em><em> or </em><em>None</em>) – Replace Gaussian distribution specified
+by <code class="docutils literal notranslate"><span class="pre">g</span></code> with a uniform distribution covering the interval
+<code class="docutils literal notranslate"><span class="pre">[-uniform,</span> <span class="pre">uniform]</span></code> times the standard deviation centered
+on the mean along each principal axis the distribution.
+Ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default).</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -3130,29 +3410,39 @@ deviation in that direction.</p>
 <dt class="sig sig-object py" id="gvar.PDFStatistics">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">PDFStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">moments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histogram</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFStatistics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute statistical information about a distribution.</p>
-<p>Given moments <code class="docutils literal notranslate"><span class="pre">m[i]</span></code> of a random variable, computes
-mean, standard deviation, skewness, and excess kurtosis. With
-histogram data, also estimates the median and the interval
-centered on the median containing 68% of the probability.</p>
+<p>Given moments <code class="docutils literal notranslate"><span class="pre">mom[i]</span></code> of a random variable, <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFStatistics</span></code></a>
+computes the mean, standard deviation, skewness, and excess kurtosis.</p>
+<p>With histogram data, it estimates the median and the intervals
+on either side of the median (each) containing 34% of the probability.
+Also it does a maximum likelihood fit of a split-normal distribution
+to the histogram. Finally the moments are estimated from the histogram
+if they are not otherwise specified.</p>
 <p>Typical usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">PDFStatistics</span><span class="p">(</span><span class="n">moments</span><span class="o">=</span><span class="n">moments</span><span class="p">,</span> <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">counts</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">PDFStatistics</span><span class="p">(</span><span class="n">moments</span><span class="o">=</span><span class="n">mom</span><span class="p">,</span> <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">prob</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
-<span class="go">  mean = 0.018769738628101846   sdev = 0.20739   skew = 0.27825   ex_kurt = 3.0849</span>
-<span class="go">  median = -0.03372571848916756   plus = 0.16875932667218416   minus = 0.13574922445045393</span>
+<span class="go">    mean = 0.9548573(45)   sdev = 0.028731(14)   skew = -1.0217(42)   ex_kurt = 1.643(29)</span>
+<span class="go">    split-normal: 0.9765402(99) +/- 0.0124721(50)/0.038875(19)</span>
+<span class="go">            median: 0.9596352(52) +/- 0.0222820(67)/0.032022(17)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span><span class="o">.</span><span class="n">plot_histogram</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>where the uncertainties on the various quantities reflect uncertainties
+specified in the inputs. The distribution in this example is significantly
+skewed, with the tail on the negative side of the peak roughly three
+times wider than that on the positive side. The last line displays
+a plot of the histogram, overlayed with plots of the Gaussians or
+two-sided Gaussians corresponding to the mean and standard deviation,
+or the median or split-normal distributions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>moments</strong> (<em>array of floats</em>) – <code class="docutils literal notranslate"><span class="pre">moments[i]</span></code> is the (i+1)-th moment.
-Optional argument unless <code class="docutils literal notranslate"><span class="pre">histgram=None</span></code>.</p></li>
+<li><p><strong>moments</strong> (array of floats or <code class="docutils literal notranslate"><span class="pre">GVar</span></code>s) – <code class="docutils literal notranslate"><span class="pre">moments[i]</span></code> is the
+(i+1)-th moment. Optional argument unless <code class="docutils literal notranslate"><span class="pre">histgram=None</span></code>.</p></li>
 <li><p><strong>histogram</strong> (<em>tuple</em>) – Tuple <code class="docutils literal notranslate"><span class="pre">(bins,prob)</span></code> where <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> is
 the probability in the bin between <code class="docutils literal notranslate"><span class="pre">bins[i-1]</span></code> and <code class="docutils literal notranslate"><span class="pre">bins[i]</span></code>.
 <code class="docutils literal notranslate"><span class="pre">prob[0]</span></code> is the probability below <code class="docutils literal notranslate"><span class="pre">bins[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">prob[-1]</span></code>
 is the probability above <code class="docutils literal notranslate"><span class="pre">bins[-1]</span></code>. Array <code class="docutils literal notranslate"><span class="pre">bins</span></code> is ordered.
-The format for <code class="docutils literal notranslate"><span class="pre">prob</span></code> is what is returned by accumulating calls
-to <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.PDFHistogram.count()</span></code></a>. Optional argument unless
-<code class="docutils literal notranslate"><span class="pre">moments=None</span></code>.</p></li>
+Optional argument unless <code class="docutils literal notranslate"><span class="pre">moments=None</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -3184,19 +3474,22 @@ to <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDF
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gvar.PDFStatistics.median">
 <span class="sig-name descname"><span class="pre">median</span></span><a class="headerlink" href="#gvar.PDFStatistics.median" title="Permalink to this definition">¶</a></dt>
-<dd><p>median (if <code class="docutils literal notranslate"><span class="pre">histogram</span></code> provided)</p>
+<dd><p><code class="docutils literal notranslate"><span class="pre">self.median.loc</span></code> is the location of the median estimated
+from the histogram, while the intervals</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">median</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">median</span><span class="o">.</span><span class="n">loc</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">median</span><span class="o">.</span><span class="n">plus</span><span class="p">)</span>
+<span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">median</span><span class="o">.</span><span class="n">loc</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">median</span><span class="o">.</span><span class="n">minus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">median</span><span class="o">.</span><span class="n">loc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>each contain 34% of the probability.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.PDFStatistics.plus">
-<span class="sig-name descname"><span class="pre">plus</span></span><a class="headerlink" href="#gvar.PDFStatistics.plus" title="Permalink to this definition">¶</a></dt>
-<dd><p>interval <code class="docutils literal notranslate"><span class="pre">(median,</span> <span class="pre">median+plus)</span></code> contains 34.1% of probability</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.PDFStatistics.minus">
-<span class="sig-name descname"><span class="pre">minus</span></span><a class="headerlink" href="#gvar.PDFStatistics.minus" title="Permalink to this definition">¶</a></dt>
-<dd><p>interval <code class="docutils literal notranslate"><span class="pre">(median-minus,</span> <span class="pre">median)</span></code> contains 34.1% of probability</p>
+<dt class="sig sig-object py" id="gvar.PDFStatistics.splitnormal">
+<span class="sig-name descname"><span class="pre">splitnormal</span></span><a class="headerlink" href="#gvar.PDFStatistics.splitnormal" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">self.splitnormal.loc</span></code> is the location of the peak
+of the split-normal distribution fit to the histogram. The
+standard deviations above and below that point are
+<code class="docutils literal notranslate"><span class="pre">self.splitnormal.plus</span></code> and <code class="docutils literal notranslate"><span class="pre">self.splitnormal.minus</span></code>, respectively.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -3205,10 +3498,45 @@ to <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDF
 <dd><p><code class="docutils literal notranslate"><span class="pre">gvar.gvar(mean,</span> <span class="pre">sdev)</span></code></p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="py attribute">
 <dt class="sig sig-object py" id="gvar.PDFStatistics.moments">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">moments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">4])</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFStatistics.moments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute 1st-4th moments of f, returned in an array.</p>
+<span class="sig-name descname"><span class="pre">moments</span></span><a class="headerlink" href="#gvar.PDFStatistics.moments" title="Permalink to this definition">¶</a></dt>
+<dd><p>array containing the values of (up to) the first four moments.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDFStatistics.bins">
+<span class="sig-name descname"><span class="pre">bins</span></span><a class="headerlink" href="#gvar.PDFStatistics.bins" title="Permalink to this definition">¶</a></dt>
+<dd><p>array of bin edges used for the histogram</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gvar.PDFStatistics.prob">
+<span class="sig-name descname"><span class="pre">prob</span></span><a class="headerlink" href="#gvar.PDFStatistics.prob" title="Permalink to this definition">¶</a></dt>
+<dd><p>array of probabilities <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> associated with the
+intervals <code class="docutils literal notranslate"><span class="pre">(bins[i-1],</span> <span class="pre">bins[i])</span></code>. <code class="docutils literal notranslate"><span class="pre">prob[0]</span></code> is the
+probability from below <code class="docutils literal notranslate"><span class="pre">bins[0]</span></code>; <code class="docutils literal notranslate"><span class="pre">prob[-1]</span></code> is the
+probability from above <code class="docutils literal notranslate"><span class="pre">bins[-1]</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gvar.PDFStatistics.plot_histogram">
+<span class="sig-name descname"><span class="pre">plot_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFStatistics.plot_histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot histogram.</p>
+<p>Plots the histogram, overlayed with plots of the Gaussian or
+two-sided Gaussians corresponding to the mean and standard deviation,
+or the median or split-normal distributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot</strong> – Plotter. Set to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> if <code class="docutils literal notranslate"><span class="pre">plot=None</span></code> (default).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Plot is displayed if <code class="docutils literal notranslate"><span class="pre">show=True</span></code>, and not otherwise (default).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The plotter.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -3462,7 +3790,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>

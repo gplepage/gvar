@@ -487,8 +487,22 @@ collections of |GVar|\s can be evaluated using the :mod:`vegas`
 module (for multi-dimensional integration) and class
 :class:`vegas.PDFIntegrator`. Related classes are:
 
-.. autoclass:: gvar.PDF(g, svdcut=1e-12)
-   :members:
+.. autoclass:: gvar.PDF(g, svdcut=1e-12, mode=None)
+   
+   The main methods are:
+
+   .. automethod:: chi2(p, mode='default')
+
+   .. automethod:: chiv(p, pflat=None, mode='default')
+
+   .. automethod:: pflat(chiv, mode='default')
+
+   .. automethod:: __call__(p, mode='default')
+
+   .. automethod:: logpdf(p, mode='default')
+
+   .. automethod:: sample(nbatch=None, uniform=None, mode='default')
+
 
 .. autoclass:: gvar.PDFStatistics(moments=None, histogram=None)
    :members:

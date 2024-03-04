@@ -223,9 +223,10 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
         self.assertEqual(nb.flat[-1],130.)
         with self.assertRaises(ValueError):
             nb = BufferDict(b,buf=nb.flat[:-1])
+        # order determined by keys
         nb = BufferDict(b, keys=reversed(bkeys[-2:]))
         nbkeys = list(nb.keys())
-        self.assertEqual(nbkeys, bkeys[-2:])
+        self.assertEqual(nbkeys, list(reversed(bkeys[-2:])))
 
     def test_update(self):
         """ b.add(dict(..)) """
@@ -492,6 +493,15 @@ class test_bufferdict(unittest.TestCase,ArrayTests):
             b = BufferDict(b)
             self.assertEqual(str(ab[i]), str(b))
 
+    def test_more_batch(self):
+        b = BufferDict(a=1., b=[[2.], [3.]])
+        lbuf = [[1, 2, 3], [10, 20, 30], [100, 200, 300.], [1000, 2000, 3000]]
+        lb = BufferDict(b, lbatch_buf=lbuf)
+        np.testing.assert_allclose(lbuf, lb.lbatch_buf)
+        rbuf = [[1., 10, 100, 1000], [2, 20, 200, 2000], [3, 30, 300, 3000]]
+        rb = BufferDict(b, rbatch_buf=rbuf)
+        np.testing.assert_allclose(rbuf, rb.rbatch_buf)
+        
 if __name__ == '__main__':
     unittest.main()
 

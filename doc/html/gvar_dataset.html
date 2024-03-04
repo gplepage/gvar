@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 12.1 documentation</title>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 13.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>  
@@ -225,12 +225,14 @@ applying an SVD cut to the data after averaging (<a class="reference internal" h
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>spread</strong> (<em>bool</em>) – Setting <code class="docutils literal notranslate"><span class="pre">spread=True</span></code> means that
-standard deviations in the results refer to spreads in the data, not
-uncertainties in the estimates of the means. The former is <code class="docutils literal notranslate"><span class="pre">sqrt(N)</span></code>
-larger where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of random numbers (or arrays) being
-averaged. This is useful, for example, when averaging bootstrap data.
-The default value is <code class="docutils literal notranslate"><span class="pre">spread=False</span></code>.</p></li>
+<li><p><strong>stderr</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) the variances and covariances
+represent the uncertainties in the estimates of the means
+(corresponding to the standard errors). If <code class="docutils literal notranslate"><span class="pre">False</span></code> they represent
+the spread in the data (corresponding to the standard deviations
+of the distribution). The former is smaller by a factor of
+one over the number of samples.</p></li>
+<li><p><strong>spread</strong> (<em>bool</em>) – (Legacy) <code class="docutils literal notranslate"><span class="pre">spread=True</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">stderr=False</span></code>,
+and vice versa.</p></li>
 <li><p><strong>median</strong> (<em>bool</em>) – Setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code>
 replaces the means in the results by medians, while the standard
 deviations are approximated by the width of the larger of the intervals
@@ -241,14 +243,14 @@ unaffected by extreme outliers in the data. But correlations
 between different variables are ignored in this case. The default
 is <code class="docutils literal notranslate"><span class="pre">median=False</span></code>.</p></li>
 <li><p><strong>bstrap</strong> (<em>bool</em>) – Setting <code class="docutils literal notranslate"><span class="pre">bstrap=True</span></code> is
-shorthand for setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code> and <code class="docutils literal notranslate"><span class="pre">spread=True</span></code>, and
+shorthand for setting <code class="docutils literal notranslate"><span class="pre">median=True</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr=False</span></code>, and
 overrides any explicit setting for these keyword arguments. This is the
 typical choice for analyzing bootstrap data — hence its name. The
 default value is <code class="docutils literal notranslate"><span class="pre">bstrap=False</span></code>.</p></li>
 <li><p><strong>noerror</strong> (<em>bool</em>) – Error estimates on the averages (and correlations) are omitted
 if <code class="docutils literal notranslate"><span class="pre">noerror=True</span></code> is set — just the mean values are
 returned. The default value is <code class="docutils literal notranslate"><span class="pre">noerror=False</span></code>.</p></li>
-<li><p><strong>mimatch</strong> (<em>str</em>) – <p>The <code class="docutils literal notranslate"><span class="pre">mismatch</span></code> option is only relevant when <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a
+<li><p><strong>mismatch</strong> (<em>str</em>) – <p>The <code class="docutils literal notranslate"><span class="pre">mismatch</span></code> option is only relevant when <code class="docutils literal notranslate"><span class="pre">dataset</span></code> is a
 dictionary whose entries <code class="docutils literal notranslate"><span class="pre">dataset[k]</span></code> have different sample sizes. This
 complicates the calculation of correlations between the different entries.
 There are three choices for <code class="docutils literal notranslate"><span class="pre">mismatch</span></code>:</p>
@@ -879,7 +881,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>

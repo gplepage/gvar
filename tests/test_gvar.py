@@ -24,11 +24,6 @@ import pickle
 import numpy as np
 import gvar as gv
 from gvar import *
-try:
-    import vegas
-    have_vegas = True
-except:
-    have_vegas = False
 
 FAST = False
 
@@ -1376,40 +1371,42 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             s2 = next(raniter(g, eps=eps))
             self.assertEqual(str(s1), str(s2))
 
-    def test_batch_sample(self):
-        " sample(g, nbatch=...) raniter(g, nbatch=...)"
-        # dictionary
-        g = gvar(BufferDict(s='1(1)', a=[['2.0(1)','3.00(1)','4.000(1)']]))
-        nbatch = 5
-        ranseed(1)
-        sl = sample(g, nbatch=nbatch, mode='lbatch')
-        ranseed(1)
-        sr = sample(g, nbatch=nbatch, mode='rbatch')
-        for k in g:
-            self.assertTrue(sl[k].shape[0] == sr[k].shape[-1] == nbatch)
-            np.testing.assert_allclose(sl[k], np.moveaxis(sr[k], -1, 0))
-        for s in sl.batch_iter('lbatch'):
-            self.assertLess(chi2(s, g) / g.size, 10.)
-        for s in sr.batch_iter('rbatch'):
-            self.assertLess(chi2(s, g) / g.size, 10.)
-        # array
-        ranseed(1)
-        sl = sample(g['a'], nbatch=nbatch, mode='lbatch')
-        ranseed(1)
-        sr = sample(g['a'], nbatch=nbatch, mode='rbatch')
-        self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
-        np.testing.assert_allclose(sl, np.moveaxis(sr, -1, 0))
-        for s in sl:
-            self.assertLess(chi2(s, g['a']) / g['a'].size, 10.)
-        # gvar
-        ranseed(1)
-        sl = sample(g['s'], nbatch=nbatch, mode='lbatch')
-        ranseed(1)
-        sr = sample(g['s'], nbatch=nbatch, mode='rbatch')
-        self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
-        self.assertEqual(list(sl), list(sr))
-        for s in sl:
-            self.assertLess(chi2(s, g['s']), 10.)
+    # def test_batch_sample(self):   ### makes no sense!
+    #     " sample(g, nbatch=...) raniter(g, nbatch=...)"
+    #     # dictionary
+    #     g = gvar(BufferDict(s='1(1)', a=[['2.0(1)','3.00(1)','4.000(1)']]))
+    #     nbatch = 5
+    #     ranseed(1)
+    #     sl = sample(g, nbatch=nbatch, mode='lbatch')
+    #     ranseed(1)
+    #     print(sl)
+    #     sr = sample(g, nbatch=nbatch, mode='rbatch')
+    #     print(sr)
+    #     for k in g:
+    #         self.assertTrue(sl[k].shape[0] == sr[k].shape[-1] == nbatch)
+    #         np.testing.assert_allclose(sl[k], np.moveaxis(sr[k], -1, 0))
+    #     for s in sl.batch_iter('lbatch'):
+    #         self.assertLess(chi2(s, g) / g.size, 10.)
+    #     for s in sr.batch_iter('rbatch'):
+    #         self.assertLess(chi2(s, g) / g.size, 10.)
+    #     # array
+    #     ranseed(1)
+    #     sl = sample(g['a'], nbatch=nbatch, mode='lbatch')
+    #     ranseed(1)
+    #     sr = sample(g['a'], nbatch=nbatch, mode='rbatch')
+    #     self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
+    #     np.testing.assert_allclose(sl, np.moveaxis(sr, -1, 0))
+    #     for s in sl:
+    #         self.assertLess(chi2(s, g['a']) / g['a'].size, 10.)
+    #     # gvar
+    #     ranseed(1)
+    #     sl = sample(g['s'], nbatch=nbatch, mode='lbatch')
+    #     ranseed(1)
+    #     sr = sample(g['s'], nbatch=nbatch, mode='rbatch')
+    #     self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
+    #     self.assertEqual(list(sl), list(sr))
+    #     for s in sl:
+    #         self.assertLess(chi2(s, g['s']), 10.)
  
     @unittest.skipIf(FAST,"skipping test_gvar_from_sample for speed")
     def test_gvar_from_sample(self):
@@ -1569,12 +1566,22 @@ class test_gvar2(unittest.TestCase,ArrayTests):
 
         # on-axis 0
         cov = np.array([[4.,0.0], [0.0, 0.0]])
-        s = SVD(cov, rescale=False, svdcut=None)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            s = SVD(cov, rescale=False, svdcut=None)
+            self.assertTrue('Matrix not positive definite' in str(w[-1].message))
         self.assertTrue(np.all(s.val == [0., 4.]))
+
+        cov = np.array([[4.,0.0], [0.0, -1.0]])
+        s = SVD(cov, svdcut=0.3)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            s = SVD(cov, rescale=False, svdcut=0.1, warn=True)
+            self.assertTrue('Negative eigenvalue' in str(w[-1].message))
 
         # singular case
         cov = evalcov([(x+y)/2**0.5,(x-y)/2**0.5,x,y])
-        s = SVD(cov)
+        s = SVD(cov, warn=False)
         e,v,k = s.val,s.vec,s.kappa
         self.assert_arraysclose(e,[0,0,2.,32.],rtol=1e-6)
         self.assert_arraysclose(sum(np.outer(vi,vi)*ei for ei,vi in zip(e,v)),
@@ -1712,8 +1719,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             if len(i) > 0:
                 ans[i, i] = np.array(wgts) ** 2
             for i, wgts in wlist[1:]:
-                for w in wgts:
-                    ans[i, i[:, None]] += np.outer(w, w)
+                ans[i[:, None], i] = wgts.T.dot(wgts)
             return ans
         def test_gvar(a, b):
             self.assertEqual(a.fmt(4), b.fmt(4))
@@ -1861,6 +1867,81 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assertTrue(not equivalent(
             g, {0:(x+dx)/2, 1:(x-dx)/20.}
             ))
+        
+    def test_svd_wgts(self):
+        def make_mat(wlist, n):
+            ans = np.zeros((n,n), float)
+            i, wgts = wlist[0]
+            if len(i) > 0:
+                ans[i, i] = np.array(wgts) ** 2
+            for i, wgts in wlist[1:]:
+                ans[i[:, None], i] = wgts.T.dot(wgts)
+            return ans
+        def test_invwgts(invwgts, cov, rtol=1e-7):
+            invcov = make_mat(invwgts, cov.shape[0])
+            np.testing.assert_allclose(
+                np.linalg.inv(cov), invcov, rtol=rtol, atol=1e-4
+                )
+        def test_wgts(wgts, cov, rtol=1e-7):
+            _cov = make_mat(wgts, cov.shape[0])
+            np.testing.assert_allclose(
+                cov, _cov, rtol=rtol, atol=1.
+                )
+        cov = [[1., .9, .99],[.9, 1, .9], [.99,  .9, 1.]]
+        D = np.array([1, 1e-1, 1e-2]) * 2
+        cov = D[None, :] * cov * D[:, None]
+        g = BufferDict(a=gvar(3*[1], cov), b = gvar(10,10)).buf
+        svdcut =  1e-1
+        gmod, i_wgts, i_invwgts = svd(g, svdcut=svdcut, wgts=True)
+        cov = evalcov(gmod)
+        test_wgts(i_wgts, cov)
+        test_invwgts(i_invwgts, cov)
+        gmod, i_invwgts = svd(g, svdcut=svdcut, wgts=-1)
+        cov = evalcov(gmod)
+        test_invwgts(i_invwgts, cov)
+        gmod, i_wgts = svd(g, svdcut=svdcut, wgts=1)
+        cov = evalcov(gmod)
+        test_wgts(i_wgts, cov)
+
+    def test_svd_wgts_True(self):
+        cov1 = np.array(
+            [[   1, 0, 0.99, 0],
+            [   0, 1,    0, 0], 
+            [0.99, 0,    1, 0],
+            [   0, 0,    0, 1]]
+            )
+        D = np.array([1, 1e-1, 1e-2, 1e-3]) * 2
+        cov1 = D[None, :] * cov1 * D[:, None]
+        g = gvar([0, 1, 2, 4], cov1)        
+        gg, i_w1  = svd(g, svdcut=1e-1, wgts=1)
+        gg, i_invw1 = svd(g, svdcut=1e-1, wgts=-1)
+        gg, i_w2, i_invw2 = svd(g, svdcut=1e-1, wgts=True)
+        for iwa, iwb in zip(i_w1, i_w2):
+            np.testing.assert_allclose(iwa[0], iwb[0])
+            np.testing.assert_allclose(iwa[1], iwb[1])
+        for iwa, iwb in zip(i_invw1, i_invw2):
+            np.testing.assert_allclose(iwa[0], iwb[0])
+            np.testing.assert_allclose(iwa[1], iwb[1])
+
+    def test_regulate_wgts_True(self):
+        cov1 = np.array(
+            [[   1, 0, 0.99, 0],
+            [   0, 1,    0, 0], 
+            [0.99, 0,    1, 0],
+            [   0, 0,    0, 1]]
+            )
+        D = np.array([1, 1e-1, 1e-2, 1e-3]) * 2
+        cov1 = D[None, :] * cov1 * D[:, None]
+        g = gvar([0, 1, 2, 4], cov1)        
+        gg, i_w1  = regulate(g, eps=1e-4, wgts=1)
+        gg, i_invw1 = regulate(g, eps=1e-4, wgts=-1)
+        gg, i_w2, i_invw2 = regulate(g, eps=1e-4, wgts=True)
+        for iwa, iwb in zip(i_w1, i_w2):
+            np.testing.assert_allclose(iwa[0], iwb[0])
+            np.testing.assert_allclose(iwa[1], iwb[1])
+        for iwa, iwb in zip(i_invw1, i_invw2):
+            np.testing.assert_allclose(iwa[0], iwb[0])
+            np.testing.assert_allclose(iwa[1], iwb[1])
 
     def test_valder(self):
         """ valder_var """
@@ -2391,31 +2472,231 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             np.all(np.fabs(gv.mean(diff)) < 5 * gv.sdev(diff))
             )
 
-
-    @unittest.skipIf(not have_vegas, "vegas not installed")
     @unittest.skipIf(FAST,"skipping test_pdfstatshist for speed")
     def test_pdfstatshist(self):
         " PDFStatistics(histogram) "
         g = gv.gvar('2(1.0)')
         hist = PDFHistogram(g + 0.1, nbin=50, binwidth=0.2)
-        integ = vegas.PDFIntegrator(g)
-        integ(neval=1000, nitn=5)
-        def f(p):
-            return hist.count(p)
-        results = integ(f, neval=1000, nitn=5,adapt=False)
+        N = 10000
+        gsample = gv.sample(g, nbatch=N, mode='rbatch')
+        results = hist.count(gsample)
+        results = gv.gvar(results, (results * (1 - results/N))**0.5)
         for stats in [
             PDFStatistics(histogram=(hist.bins, results)),
             hist.analyze(results).stats
             ]:
             self.assertTrue(
-                abs(stats.median.mean - g.mean) < 5 * stats.median.sdev
+                abs(stats.median.loc.mean - g.mean) < 5 * stats.median.loc.sdev
                 )
             self.assertTrue(
-                abs(stats.plus.mean - g.sdev) < 5 * stats.plus.sdev
+                abs(stats.median.plus.mean - g.sdev) < 5 * stats.median.plus.sdev
                 )
             self.assertTrue(
-                abs(stats.minus.mean - g.sdev) < 5 * stats.minus.sdev
+                abs(stats.median.minus.mean - g.sdev) < 5 * stats.median.minus.sdev
                 )
+            self.assertTrue(
+                abs(stats.splitnormal.loc.mean - g.mean) < 5 * stats.splitnormal.loc.sdev
+                )
+            self.assertTrue(
+                abs(stats.splitnormal.plus.mean - g.sdev) < 5 * stats.splitnormal.plus.sdev
+                )
+            self.assertTrue(
+                abs(stats.splitnormal.minus.mean - g.sdev) < 5 * stats.splitnormal.minus.sdev
+                )
+
+
+    def test_PDF(self):
+        gd = gvar(dict(s='1(1)', v=[['2(2)'], ['3(3)']]))
+        ga = gvar([['1(1)'], ['2(2)'], ['3(3)']])
+        gf = gvar(['1(1)', '2(2)', '3(3)'])
+        assert str(gf) == str(ga.flat[:]) == str(gd.flat[:])
+        ranseed(1)
+        # nonbatch
+        pdfd = PDF(gd)
+        pdfa = PDF(ga)
+        pdff = PDF(gf)
+        pf = sample(gf, mode=None)
+        chiv = pdff.chiv(pf)
+        pdf = pdff(pf)
+        pd = BufferDict(gd, buf=pf)
+        pa = pf.reshape(ga.shape)
+        for gx, px, pdfx in [(ga, pa,pdfa), (gd, pd,pdfd)]:
+            np.testing.assert_allclose(pdfx._flatten(px), pf)
+            self.assertEqual(str(pdfx._unflatten(pf)), str(px))
+            self.assertEqual(str(pdfx.distribution), str(gx))
+            np.testing.assert_allclose(pdfx(px), pdf)
+            np.testing.assert_allclose(pdfx.chiv(px), chiv)
+            np.testing.assert_allclose(pdfx.chiv(pflat=pf), chiv)
+            np.testing.assert_allclose(pdfx.pflat(chiv), pf)
+        
+        # rbatch
+        mode = 'rbatch'
+        pdfd = PDF(gd, mode=mode)
+        pdfa = PDF(ga, mode=mode)
+        pdff = PDF(gf, mode=mode)
+        pf = sample(gf, nbatch=5, mode=mode)
+        chiv = pdff.chiv(pf)
+        pdf = pdff(pf)
+        pd = BufferDict(gd, rbatch_buf=pf)
+        pa = pf.reshape(ga.shape + (-1,))
+        for px, pdfx in [(pa,pdfa), (pd,pdfd)]:
+            np.testing.assert_allclose(pdfx._flatten(px), pf)
+            self.assertEqual(str(pdfx._unflatten(pf)), str(px))
+            np.testing.assert_allclose(pdfx(px), pdf)
+            np.testing.assert_allclose(pdfx.chiv(px), chiv)
+            np.testing.assert_allclose(pdfx.chiv(pflat=pf), chiv)
+            np.testing.assert_allclose(pdfx.pflat(chiv), pf)
+
+        # rbatch
+        mode = 'lbatch'
+        pdfd = PDF(gd, mode=mode)
+        pdfa = PDF(ga, mode=mode)
+        pdff = PDF(gf, mode=mode)
+        pf = sample(gf, nbatch=5, mode=mode)
+        chiv = pdff.chiv(pf)
+        pdf = pdff(pf)
+        pd = BufferDict(gd, lbatch_buf=pf)
+        pa = pf.reshape((-1,) + ga.shape)
+        for px, pdfx in [(pa,pdfa), (pd,pdfd)]:
+            np.testing.assert_allclose(pdfx._flatten(px), pf)
+            self.assertEqual(str(pdfx._unflatten(pf)), str(px))
+            np.testing.assert_allclose(pdfx(px), pdf)
+            np.testing.assert_allclose(pdfx.chiv(px), chiv)
+            np.testing.assert_allclose(pdfx.chiv(pflat=pf), chiv)
+            np.testing.assert_allclose(pdfx.pflat(chiv), pf)
+
+    def test_PDF_chiv(self):
+        cov1 = np.array(
+            [[   1, 0, 0.99, 0],
+            [   0, 1,    0, 0], 
+            [0.99, 0,    1, 0],
+            [   0, 0,    0, 1]]
+            )
+        D = np.array([1, 1e-1, 1e-2, 1e-3])
+        cov1 = D[None, :] * cov1 * D[:, None]
+        g = gvar([0, 1, 2, 4], cov1)
+        for svdcut in [1e-15, 0.9]:
+            mod_cov = evalcov(svd(g, svdcut=svdcut))
+            pdf = PDF(g, svdcut=svdcut, noise=False)
+            np.testing.assert_allclose(mod_cov, pdf.cov, rtol=1e-8)
+            np.testing.assert_allclose(mod_cov @ pdf.invcov, np.eye(4,4), atol=1e-8)
+            np.testing.assert_allclose(np.linalg.det(mod_cov), pdf.dp_dchiv**2)
+            np.testing.assert_allclose(np.log(np.linalg.det(mod_cov)), pdf.logdet)
+            # calculate chi**2 for mode=None
+            p = sample(g)
+            chiv = pdf.chiv(p, mode=None)
+            delta = p - mean(g)
+            np.testing.assert_allclose(delta.T @ pdf.invcov @ delta, np.sum(chiv**2))
+            np.testing.assert_allclose(p, pdf.pflat(chiv))
+
+            # calculate chi**2 for mode=rbatch
+            nbatch = 10
+            mode = 'rbatch'
+            p = sample(g, nbatch=nbatch, mode=mode)
+            chiv = pdf.chiv(p, mode=mode)
+            # print('chiv.shape =', chiv.shape, 'chiv/dof:', np.average(np.sum(chiv**2, axis=0)) / 3.)
+            delta = p - mean(g)[:, None]
+            np.testing.assert_allclose(np.diag(delta.T @ pdf.invcov @ delta), np.sum(chiv**2, axis=0))
+            np.testing.assert_allclose(p, pdf.pflat(chiv, mode=mode))
+
+            # calculate chi**2 for mode=lbatch
+            mode = 'lbatch'
+            p = sample(g, nbatch=nbatch, mode=mode)
+            chiv = pdf.chiv(p, mode=mode)
+            # print('chiv.shape =', chiv.shape, 'chiv/dof:', np.average(np.sum(chiv**2, axis=1)) / 3.)
+            delta = p - mean(g)[None, :]
+            np.testing.assert_allclose(np.diag(delta @ pdf.invcov @ delta.T), np.sum(chiv**2, axis=1))
+            np.testing.assert_allclose(p, pdf.pflat(chiv, mode=mode))
+
+    def test_PDF_cov_pickle(self):
+        cov1 = np.array(
+            [[   1, 0, 0.99, 0],
+            [   0, 1,    0, 0], 
+            [0.99, 0,    1, 0],
+            [   0, 0,    0, 1]]
+            )
+        D = np.array([1, 1e-1, 1e-2, 1e-3])
+        cov1 = D[None, :] * cov1 * D[:, None]
+        g = gvar([0, 1, 2, 4], cov1)
+        pdf = pickle.loads(pickle.dumps(PDF(g)))
+        np.testing.assert_allclose(cov1, pdf.cov)
+        np.testing.assert_allclose(np.linalg.inv(cov1), pdf.invcov)
+        np.testing.assert_allclose(pdf.invcov.dot(pdf.cov), np.eye(4,4), atol=1e-8)
+
+    def test_PDF_decorrelate(self):
+        cov1 = np.array(
+            [[   1, 0, 0.99],
+            [   0, 1,    0], 
+            [0.99, 0,    1]]
+            )
+        D = np.array([0.1, 0.11, 0.09]) # sdev
+        cov1 = D[None, :] * cov1 * D[:, None]
+        g = gvar([0, 0.05, -0.05], cov1)
+        pdf = PDF(g, decorrelate=True)
+        np.testing.assert_allclose(pdf.cov, np.diag(var(g)))
+        np.testing.assert_allclose(pdf.invcov, np.diag(1 / var(g)))
+        np.testing.assert_allclose(np.linalg.det(pdf.cov), pdf.dp_dchiv ** 2)
+        self.assertEqual(str(g), str(pdf.distribution))
+        self.assertEqual(pdf.nmod, 0)
+
+    def test_PDF_pdf(self):
+        cov1 = np.array(
+            [[   1, 0, 0.99],
+            [   0, 1,    0], 
+            [0.99, 0,    1]]
+            )
+        # D = np.array([0.1, 0.11, 0.09]) # sdev
+        # cov1 = D[None, :] * cov1 * D[:, None]
+        # g = gvar([0, 0.05, -0.05], cov1)
+        D = np.array([0.2, 0.02, 0.02]) *10 # sdev
+        cov1 = D[None, :] * cov1 * D[:, None]
+        g = gvar([2, 3, 4], cov1)
+        pdf = PDF(g, mode='rbatch')
+        # crude MC integral of pdf
+        ranseed(123) 
+        N = 400_000
+        nsig = 4
+        p = pdf.sample(nbatch=N, mode='rbatch', uniform=nsig) 
+        J = (2 * nsig) ** 3 * pdf.dp_dchiv   # convert to dp space (since pdf normalized for p space)
+        pdf_p = pdf(p)
+        norm = np.average(pdf_p) * J
+        sdev = ((np.average(pdf_p ** 2) * J ** 2 - norm ** 2) / N) ** 0.5
+        np.testing.assert_allclose(norm, 1., atol=sdev*5)
+        # print(norm, sdev)
+
+    def test_PDF_sample(self):   ## add dictionaries
+        nbatch = 100_000
+        cov1 = np.array([[1., 0.99], [0.99, 1]])
+        D = np.array([2, 1e-1])
+        cov1 = D[None, :] * cov1 * D[:, None]
+        g = gvar([1, 2], cov1)
+        pdf = PDF(g)
+        for axis,mode in [(-1, 'rbatch'), (0, 'lbatch')]:
+            ranseed(12)
+            p = pdf.sample(nbatch=nbatch, mode=mode)
+            pavg = np.average(p, axis=axis)
+            psdev = ((np.average(p ** 2, axis=axis) - pavg ** 2) / 1) ** 0.5
+            self.assertEqual(str(gvar(pavg, psdev)), str(g))
+            if mode == 'rbatch':
+                cov01 = np.average(p[0]*p[1], axis=axis) - pavg[0] * pavg[1]
+                self.assertEqual(round(cov01, 2), round(evalcov(g)[0,1], 2))
+            else:   
+                cov01 = np.average(p[:, 0]*p[:, 1], axis=axis) - pavg[0] * pavg[1]
+                self.assertEqual(round(cov01, 2), round(evalcov(g)[0,1], 2))
+        
+        g = gv.BufferDict(a=g[0], b=g[1])
+        pdf = PDF(g)
+        for axis,mode in [(-1, 'rbatch'), (0, 'lbatch')]:
+            ranseed(12)
+            p = pdf.sample(nbatch=nbatch, mode=mode)
+            pavg = dict(a=np.average(p['a'], axis=axis), b=np.average(p['b'], axis=axis))
+            psdev = dict(
+                a=((np.average(p['a'] ** 2, axis=axis) - pavg['a'] ** 2) / 1) ** 0.5,
+                b=((np.average(p['b'] ** 2, axis=axis) - pavg['b'] ** 2) / 1) ** 0.5,
+                )
+            self.assertEqual(str(gvar(pavg, psdev)), str(g))
+            cov01 = np.average(p['a']*p['b'], axis=axis) - pavg['a'] * pavg['b']
+            self.assertEqual(round(cov01, 2), round(evalcov(g)['a','b'][0,0], 2))
 
     def test_regulate(self):
         D = np.array([1., 2., 3.])
@@ -2441,7 +2722,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
         np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
         
-        gr, dummy = regulate(g, eps=eps / norm, wgts=True)
+        gr, _, _ = regulate(g, eps=eps / norm, wgts=True)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         self.assertEqual(g.size - 1, gr.nmod)
         self.assertEqual(g.size, gr.dof)
@@ -2498,7 +2779,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
         np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
     
-        gr, dummy = regulate(g, eps=eps / norm, wgts=True)
+        gr, _, _ = regulate(g, eps=eps / norm, wgts=True)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         covr = evalcov(gr)
         np.testing.assert_allclose(covr[0, :], cov[0, :])
@@ -2528,7 +2809,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         covr[1:, 1:][np.diag_indices_from(covr[1:, 1:])] -= eps * cov[1:, 1:].diagonal()
         np.testing.assert_allclose(covr[1:, 1:], cov[1:, 1:])
 
-        gr, dummy = regulate(g, eps=eps / norm, wgts=True)
+        gr, _, _ = regulate(g, eps=eps / norm, wgts=True)
         self.assertTrue(gv.equivalent(gr - gr.correction, g))
         covr = evalcov(gr.flat)
         np.testing.assert_allclose(covr[0, :], cov[0, :])

@@ -689,14 +689,19 @@ def fmt_chi2(f):
     logarithm of the Bayes factor will also be printed if ``f`` has
     attribute ``logGBF``.
     """
-    if hasattr(f, 'logGBF'):
-        fmt = "chi2/dof = %.2g [%d]    Q = %.2g    log(GBF) = %.5g"
+    from scipy.special import gammaincc as gammaQ
+    Q = gammaQ(f.dof/2., f.chi2/2.)
+    fmt = 'chi2/dof [dof] = {:.2g} [{}]    Q = {:.2g}    {} = {:.5g}'
+    if hasattr(f, 'logGBF') and f.logGBF is not None:
         chi2_dof = f.chi2 / f.dof if f.dof != 0 else 0
-        return fmt % (chi2_dof, f.dof, f.Q, f.logGBF)
+        return fmt.format(chi2_dof, f.dof, Q, 'logGBF', f.logGBF)
+    elif hasattr(f, 'logBF') and f.logBF is not None:
+        chi2_dof = f.chi2 / f.dof if f.dof != 0 else 0
+        return fmt.format(chi2_dof, f.dof, Q, 'logBF', f.logBF)
     else:
-        fmt = "chi2/dof = %.2g [%d]    Q = %.2g"
+        fmt = 'chi2/dof [dof] = {:.2g} [{}]    Q = {:.2g}'
         chi2_dof = f.chi2 / f.dof if f.dof != 0 else 0
-        return fmt % (chi2_dof, f.dof, f.Q)
+        return fmt.format(chi2_dof, f.dof, Q)
 
 def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None, keys=None):
     """ Tabulate contents of an array or dictionary of |GVar|\s.
@@ -829,7 +834,817 @@ BufferDict.add_distribution('log', numpy.exp)
 BufferDict.add_distribution('sqrt', numpy.square)
 BufferDict.add_distribution('erfinv', erf)
 
+
 class PDF(object):
+    """ Probability density function (PDF) for ``g``.
+
+    Given an array or dictionary ``g`` of |GVar|\s, ``pdf=PDF(g)`` is
+    the probability density function for the (correlated)
+    multi-dimensional Gaussian distribution defined by ``g``. That is
+    ``pdf(p)`` is the probability density for random sample ``p``
+    drawn from ``g``. The logarithm of the PDF is obtained using
+    ``pdf.logpdf(p)``.
+
+    Args:
+        g: |GVar| or array of |GVar|\s, or dictionary of |GVar|\s
+            or arrays of |GVar|\s.
+
+        svdcut (float): If nonzero, singularities in the correlation
+            matrix are regulated using :func:`gvar.regulate`
+            with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
+
+        eps (non-negative float): If positive, singularities in the correlation matrix 
+            for ``g`` are regulated using :func:`gvar.regulate` 
+            with cutoff ``eps``. Ignored if ``svdcut`` is specified (and 
+            not ``None``).
+
+        noise (bool): If ``True`` adds noise to the corrections caused by 
+            ``svdcut/eps`` (see documentation for :func:`gvar.regulate`).
+            Default value is ``False``.
+
+        mode (str or None): The PDF is evaluated simultaneously 
+            for batches of points in the parameter space 
+            when ``mode`` equals either ``rbatch`` or ``lbatch``.
+            For example, in the code ::
+
+                import gvar as gv 
+                g = gv.gvar([1, 2], [[1., .1], [.1, 2]])
+                pdf = gvar.PDF(g, mode='rbatch')
+                p = gv.sample(g, nbatch=1000, mode='rbatch')
+                pdf_p = pdf(p)
+
+            ``p[d, i]`` represents a collection of 1000 points in 
+            the parameter space, labeled by batch index ``i=0..999``.
+            Index ``d=0..3`` labels directions in parameter space.
+            ``pdf_p=pdf(p)`` returns the PDF value ``pdf_p[i]`` for  
+            each point. This is generally much more efficient than 
+            calculating the PDF values one at a time (for example,
+            in PDF integrals using :mod:`vegas`).
+
+            In batch mode an extra batch index is added to each 
+            parameter. The index is the rightmost index when 
+            ``mode='rbatch'`` and the leftmost index when 
+            ``mode='lbatch'`` (e.g., ``p[d,i]`` and ``p[i,d]``,
+            respectively, in the example above).
+            
+            Default is ``mode=None`` which turns batch mode off.
+
+        decorrelate (bool): If ``True`` correlations between parameters 
+            are ignored. Ignored otherwise. Default value is ``False``.
+
+    Objects of type :class:`PDF` have the following attributes:
+
+    Attributes:    
+        size (int): Dimension of the parameter space.
+
+        nchiv (int): Dimension of the ``self.chiv(p)`` vector. This 
+            can be smaller than ``self.size`` if ``svdcut`` is 
+            negative.
+        
+        shape (tuple or None): Shape of ``g`` array or ``None`` 
+            if ``g`` is a dictionary.
+
+        mean (array or dictionary): Mean values of ``g``.
+
+        meanflat (array): Flattened array containing mean values of ``g``.
+
+        cov (array): Modified covariance matrix of the elements in ``g.flat[:]``.
+
+        invcov (array): Inverse of modified covariance matrix.
+
+        i_wgts: :func:`gvar.regulate` decomposition of the modified covariance matrix.
+
+        i_invwgts: :func:`gvar.regulate` decomposition of the inverse modified covariance matrix.
+
+        logdet: Determinant of modified covariance matrix.
+
+        dp_dchiv: Jacobian :math:`\mathrm{det}(\partial p_i/\partial \chi_j)`.
+
+        distribution: Array or dictionary of |GVar|\s describing the distribution 
+            corresponding to the PDF. This may differ from the initial distribution
+            if ``svdcut`` or ``eps`` is nonzero.
+        
+        correction: ``self.distribution - self.correction`` is the original  
+            distribution before applying ``svdcut/eps`` corrections.
+
+        nmod: Number of eigenmodes modified by the SVD cut.
+
+        nblocks (dict): ``nblocks[s]`` equals the number of block-diagonal
+            sub-matrices of the ``y``--``prior`` covariance matrix that are
+            size ``s``-by-``s``. This is sometimes useful for debugging.
+    """
+    def __init__(self, g, svdcut=1e-12, eps=None, noise=False, mode=None, decorrelate=False):
+        if decorrelate:
+            g = gvar(mean(g), sdev(g))
+        if hasattr(g, 'keys'):
+            # g is a dict
+            g = asbufferdict(g)
+            gflat = g.buf
+        else:
+            # g is an array
+            g = numpy.asarray(g)
+            gflat = g.reshape(-1)
+        if decorrelate:
+            i_wgts = [(numpy.arange(gflat.size), sdev(gflat))]
+            i_invwgts = [(numpy.arange(gflat.size), 1. / sdev(gflat))]
+            logdet = numpy.sum(numpy.log(var(gflat)))
+            self.nblocks = {1:gflat.size}
+            self.svdcut = None
+            self.eps = None
+        elif eps is None or svdcut is not None:
+            gflat, i_wgts, i_invwgts = svd(gflat, svdcut=svdcut, noise=noise, wgts=True)
+            logdet = gflat.logdet
+            self.nblocks = gflat.nblocks
+            self.svdcut = gflat.svdcut
+            self.eps = None
+        else:
+            gflat, i_wgts, i_invwgts = regulate(gflat, eps=eps, noise=noise, wgts=True)
+            logdet = gflat.logdet
+            self.nblocks = gflat.nblocks
+            self.svdcut = None
+            self.eps = gflat.eps
+        self.mode = mode
+        if mode is not None:
+            self.fcntype = mode
+        self.i_wgts = i_wgts        # -> cov
+        self.i_invwgts = i_invwgts  # -> 1/cov
+        self.logdet = logdet
+        self.dp_dchiv = numpy.exp(logdet  / 2)
+        self.size = g.size 
+        self.shape = g.shape 
+        self._cov = None 
+        self._invcov = None
+        if hasattr(g, 'keys'):
+            self._keys = g.keys()
+        self.mean = mean(g)
+        self.meanflat = mean(gflat)
+        if decorrelate:
+            self.nmod = 0 
+            self.correction = 0
+            self.distribution = g 
+        else:
+            self.nmod = gflat.nmod
+            self.correction = gflat.correction
+            self.distribution = self._unflatten(gflat, mode=None)
+        if self.nmod > 0 and svdcut is not None and svdcut < 0:
+            self.nchiv = self.size - self.nmod
+        else:
+            self.nchiv = self.size 
+        # devide exp(-chi**2/2) by norm
+        self.lognorm = 0.5 *  (g.size * numpy.log(2 * numpy.pi) + logdet)
+    
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        gvstate = dumps(dict(
+            correction=state['correction'], 
+            distribution=state['distribution'],
+            ))
+        del state['correction']
+        del state['distribution']
+        state['gvstate'] = gvstate
+        return state
+    
+    def __setstate__(self, state):
+        gvstate = loads(state['gvstate'])
+        del state['gvstate']
+        self.__dict__.update(state)
+        self.__dict__.update(gvstate)
+
+    @staticmethod
+    def _make_mat(size, i_wgts):
+        mat = numpy.zeros((size, size), dtype=float)
+        # 1x1 sub-matrices
+        i, wgts = i_wgts[0]
+        mat[i, i] = wgts ** 2
+        # nxn sub-matrices (n>1)
+        for i, wgts in i_wgts[1:]:
+            mat[i[:, None], i] = wgts.T.dot(wgts)
+        return mat
+
+    def _getcov(self):
+        if self._cov is None:
+            self._cov = PDF._make_mat(self.size, self.i_wgts)
+        return self._cov
+    def _getinvcov(self):
+        if self._invcov is None:
+            self._invcov = PDF._make_mat(self.size, self.i_invwgts)
+        return self._invcov     
+    cov = property(_getcov, doc="Covariance matrix.")
+    invcov = property(_getinvcov, doc="Inverse covariance matrix.")
+    
+    def _unflatten(self, pflat, mode='default'):
+        """ pflat -> p """  
+        if mode == 'default':
+            mode = self.mode
+        if self.shape is None:
+            if mode is None:
+                return BufferDict(self.mean, buf=pflat)  
+            elif mode == 'rbatch':
+                return BufferDict(self.mean, rbatch_buf=pflat)
+            else:       
+                return BufferDict(self.mean, lbatch_buf=pflat)
+        else:
+            pflat = numpy.asarray(pflat)
+            if mode is None:
+                return pflat.reshape(self.shape) if self.shape != () else pflat.flat[0]
+            elif mode == 'rbatch':
+                return pflat.reshape(self.shape + (-1,))
+            elif mode == 'lbatch':
+                return pflat.reshape((-1,) + self.shape)
+
+    def _flatten(self, p, mode='default'):
+        """ p -> pflat """ 
+        if mode == 'default':
+            mode = self.mode
+        if self.shape is None:
+            p = BufferDict(p, keys=self._keys)
+            if mode is None:
+                return p.buf 
+            else:
+                return p.rbatch_buf if mode == 'rbatch' else p.lbatch_buf
+        else:
+            p = numpy.asarray(p)
+            if mode is None:
+                return p.flat[:]
+            else:
+                return (
+                    p.flat[:].reshape(-1, p.shape[-1]) if mode=='rbatch' else
+                    p.flat[:].reshape(p.shape[0], -1)
+                    )
+
+    def chiv(self, p=None, pflat=None, mode='default'): 
+        """ Returns :math:`\chi_i(p)` where :math:`\chi^2(p) = \sum_i \chi_i^2(p)`.
+        
+        The PDF is proportional to :math:`\exp(-\chi^2(p)/2)` where
+
+        .. math::
+
+            \chi^2(p) = \Delta p \cdot\mathrm{cov}^{-1}_p\cdot\Delta p
+
+        :math:`\Delta p_i\equiv \overline p_i - p_i`, and :math:`\overline p_i`
+        and :math:`\mathrm{cov}_p` are the means and covariance matrix of the 
+        distribution. By replacing the parameters :math:`p_i` with a new 
+        set of uncorrelated parameters (linear combinations of the originals),
+        :math:`\chi^2(p)` is reexpressed as a sum of terms 
+        :math:`(\chi_i(p))^2`. By default the individual terms
+        correspond to individual eigenmodes of the correlation matrix.
+        If ``eps`` is specified (instead of ``svdcut``), a Cholesky 
+        decomposition is used instead (see :func:`gvar.regulate`).
+
+        Args:
+            p: An array or dictionary represention a point in the 
+                distribution's parameter space (or multiple points 
+                if in batch mode). Ignored if ``pflat`` is specified.
+            pflat (array): The coordinates of a point in parameter 
+                space flattened into a 1-d array. In batch mode 
+                an extra batch index is added to the array, either
+                on the right (``mode='rbatch'``) or on the left 
+                (``mode='lbatch'``), to represent multiple
+                points.
+            mode: Batch mode. Defaults to ``self.mode`` if 
+                not specified (``mode='default'``).
+
+        Returns:
+            An array containing :math:`\chi_i(p)`. In batch 
+            mode the array has an extra batch index (on the right or 
+            left depending upon ``mode``). 
+        """ 
+        if mode == 'default':
+            mode = self.mode 
+        if pflat is None:
+            pflat = self._flatten(p, mode)
+        else:
+            pflat = numpy.asarray(pflat)
+        # dpflat in rbatch mode
+        if mode != 'rbatch':
+            dpflat = (pflat - self.meanflat).T
+        else:
+            dpflat = pflat - self.meanflat[:, None]
+        if len(dpflat.shape) > 1:
+            chiv_shape = (self.nchiv, dpflat.shape[-1])
+        else:
+            chiv_shape = self.nchiv
+        chiv = numpy.zeros(chiv_shape, dtype=pflat.dtype)
+        i, iwgts = self.i_invwgts[0]
+        i1 = i2 = 0
+        if len(i) > 0:
+            i1 = i2
+            i2 += len(i)
+            if mode is not None:
+                chiv[i1:i2] = iwgts[:, None] * dpflat[i]
+            else:
+                chiv[i1:i2] = iwgts * dpflat[i]
+        for i, iwgts in self.i_invwgts[1:]:
+            i1 = i2 
+            i2 += len(i)
+            chiv[i1:i2] = iwgts.dot(dpflat[i])
+        return chiv.T if mode == 'lbatch' else chiv
+                    
+    def pflat(self, chiv, mode='default'):
+        """ Inverse of :meth:`PDF.chiv`.
+        
+        Args:
+            chiv: An array of values for :math:`\chi_i(p)` 
+                evaluate a point ``p`` in paramter space. In batch 
+                mode the array has an extra batch index, 
+                either on the right (``mode='rbatch'``) or on the l
+                left (``mode='lbatch'``), to identify multiple
+                points in parameter space.
+            mode: Batch mode used. Defaults to ``self.mode`` if 
+                not specified (``mode='default'``).
+
+        Returns:
+            Am array containing the flattened version of ``p`` 
+            corresponding to ``chiv``. In batch mode the array 
+            has an extra batch index (on the right or 
+            left depending upon ``mode``). 
+        """
+        if mode == 'default':
+            mode = self.mode
+        # put in rbatch mode (or None)
+        if mode == 'lbatch':
+            chiv = chiv.T
+        if mode is not None:
+            pshape = (self.size, chiv.shape[-1])
+        else:
+            pshape = self.size
+        dpflat = numpy.zeros(pshape, dtype=chiv.dtype)
+        i, wgts = self.i_wgts[0]
+        i1 = i2 = 0
+        if len(i) > 0:
+            # print('***', i, wgts)
+            i1 = i2 
+            i2 += len(i)
+            if mode is not None:
+                dpflat[i] = wgts[:, None] * chiv[i1:i2]
+            else:
+                dpflat[i] = wgts * chiv[i1:i2]
+        for i, wgts in self.i_wgts[1:]:
+            # print('***', i, wgts)
+            i1 = i2
+            i2 += len(i)
+            dpflat[i] = wgts.T.dot(chiv[i1:i2])
+        if mode != 'rbatch':
+            return dpflat.T + self.meanflat
+        else:
+            return dpflat + self.meanflat[:, None]
+
+    def chi2(self, p, mode='default'):
+        """ ``sum(self.chiv(p)**2)``. """
+        if mode == 'default':
+            mode = self.mode
+        return numpy.sum(
+            self.chiv(p, mode=mode) ** 2, 
+            axis=0 if mode != 'lbatch' else -1
+            )
+
+    def logpdf(self, p, mode='default'):
+        """ Logarithm of the PDF evaluated at ``p``.
+
+        The logarithm of the PDF is 
+        ``-sum(self.chiv(p)**2)/2 - self.lognorm``.
+        """
+        if mode == 'default':
+            mode = self.mode
+        return - self.lognorm - numpy.sum(
+            self.chiv(p, mode=mode) ** 2, 
+            axis=0 if mode != 'lbatch' else -1
+            ) / 2. 
+    
+    def __call__(self, p, mode='default'):
+        """ The PDF evaluated at ``p``. 
+        
+        The PDF is ``exp(-sum(self.chiv(p)**2)/2 - self.lognorm)``.
+        """
+        if mode == 'default':
+            mode = self.mode
+        return numpy.exp(self.logpdf(p, mode=mode))
+    
+    def sample(self, nbatch=None, uniform=None, mode='default'):
+        """ Generate random sample(s) from the PDF.
+
+        Args:
+            nbatch (int or None): If not ``None``, the iterator will return
+                ``nbatch`` samples drawn from the PDF. 
+                The results are packaged in arrays or dictionaries
+                whose elements have an extra index labeling the different 
+                samples in the batch. The batch index is 
+                the rightmost index if ``mode='rbatch'``; it is 
+                the leftmost index if ``mode`` is ``'lbatch'``. Ignored
+                if ``nbatch`` is ``None`` (default).
+            mode (bool): Batch mode. Allowed 
+                modes are ``'rbatch'``or ``'lbatch'``,
+                corresponding to batch indices that are on the 
+                right or the left, respectively. 
+                Defaults to ``self.mode`` if 
+                not specified (``mode='default'``).
+            uniform (float or None): Replace Gaussian distribution specified 
+                by ``g`` with a uniform distribution covering the interval 
+                ``[-uniform, uniform]`` times the standard deviation centered 
+                on the mean along each principal axis the distribution.
+                Ignored if ``None`` (default).
+        """
+        if mode == 'default':
+            mode = self.mode
+        if nbatch is None:
+            chiv = RNG.normal(size=self.nchiv) if uniform is None else RNG.uniform(-uniform, uniform, size=self.nchiv)
+            return self._unflatten(self.pflat(chiv, mode=None), mode=None)
+        else:
+            if mode is None:
+                mode = 'rbatch'
+            shape = (self.nchiv, nbatch) if mode == 'rbatch' else (nbatch, self.nchiv)
+            if uniform is None:
+                chiv = RNG.normal(size=shape)
+            else:
+                chiv = RNG.uniform(-uniform, uniform, size=shape)
+            return self._unflatten(self.pflat(chiv, mode=mode), mode=mode)
+
+
+
+# class PDF(object):
+#     """ Probability density function (PDF) for ``g``.
+
+#     Given an array or dictionary ``g`` of |GVar|\s, ``pdf=PDF(g)`` is
+#     the probability density function for the (correlated)
+#     multi-dimensional Gaussian distribution defined by ``g``. That is
+#     ``pdf(p)`` is the probability density for random sample ``p``
+#     drawn from ``g``. The logarithm of the PDF is obtained using
+#     ``pdf.logpdf(p)``.
+
+#     Args:
+#         g: |GVar| or array of |GVar|\s, or dictionary of |GVar|\s
+#             or arrays of |GVar|\s.
+
+#         svdcut (float): If nonzero, singularities in the correlation
+#             matrix are regulated using :func:`gvar.regulate`
+#             with an SVD cutoff ``svdcut``. Default is ``svdcut=1e-12``.
+
+#         eps (non-negative float): If positive, singularities in the correlation matrix 
+#             for ``g`` are regulated using :func:`gvar.regulate` 
+#             with cutoff ``eps``. Ignored if ``svdcut`` is specified (and 
+#             not ``None``).
+
+#         svdcut (float or None): If not ``None``, replace
+#             covariance matrix of ``g`` with a new matrix whose
+#             small eigenvalues are modified: eigenvalues smaller than
+#             ``svdcut`` times the maximum eigenvalue ``eig_max`` are
+#             replaced by ``svdcut*eig_max``. This can ameliorate
+#             problems caused by roundoff errors when inverting the
+#             covariance matrix. It increases the uncertainty associated
+#             with the modified eigenvalues and so is conservative.
+#             Setting ``svdcut=None`` or ``svdcut=0`` leaves the
+#             covariance matrix unchanged. If ``svdcut`` is negative 
+#             eigenmodes with eigenvalues smaller than ``|svdcut|*eig_max``
+#             are discarded. Default is ``1e-12``.
+
+#         mode (str or None): The PDF is evaluated simultaneously 
+#             for batches of points in the parameter space 
+#             when ``mode`` equals either ``rbatch`` or ``batch``.
+#             For example, in the code ::
+
+#                 import gvar as gv 
+#                 g = gv.gvar([1, 2], [[1., .1], [.1, 2]])
+#                 pdf = gvar.PDF(g, mode='rbatch')
+#                 p = gv.sample(g, nbatch=1000, mode='rbatch')
+#                 pdf_p = pdf(p)
+
+#             ``p[d, i]`` represents a collection of 1000 points in 
+#             the parameter space, labeled by batch index ``i=0..999``.
+#             Index ``d=0..3`` labels direction in parameter space.
+#             ``pdf(p)`` returns the PDF value ``pdf_p[i]`` for each 
+#             point. This is generally much more efficient than 
+#             calculating the PDF values one at a time (for example,
+#             in PDF integrals using :mod:`vegas`).
+
+#             In batch mode an extra batch index is added to each 
+#             parameter. The index is the rightmost index when 
+#             ``mode='rbatch'`` and the leftmost index when 
+#             ``mode='lbatch'`` (e.g., ``p[d,i]`` and ``p[i,d]``,
+#             respectively, in the example above).
+            
+#             Default is ``mode=None`` which turns batch mode off.
+
+#     Objects of type :class:`PDF` have the following attributes:
+
+#     Attributes:
+    
+#         size (int): Dimension of the parameter space.
+
+#         nchiv (int): Dimension of the ``self.chiv(p)`` vector. This 
+#             can be smaller than ``self.size`` if ``svdcut`` is 
+#             negative.
+        
+#         shape (tuple or None): Shape of ``g`` array or ``None`` 
+#             if ``g`` is a dictionary.
+
+#         mean (array or dictionary): Mean values of ``g``.
+
+#         meanflat (array): Flattened array containing mean values of ``g``.
+
+#         cov (array): Covariance matrix of the elements in ``g.flat[:]``.
+
+#         invcov (array): Inverse covariance matrix.
+
+#         i_wgts: :func:`gvar.regulate` decomposition of the covariance matrix.
+
+#         i_invwgts: :func:`gvar.regulate` decomposition of the inverse covariance matrix.
+
+#         dp_dchiv: Jacobian :math:``\mathrm{det}(\partial p_i/\partial \chi_j)``.
+
+#     """
+#     def __init__(self, g, svdcut=1e-12, eps=None, mode=None):
+#         if hasattr(g, 'keys'):
+#             # g is a dict
+#             g = BufferDict(g)
+#             gflat = g.buf
+#         else:
+#             # g is an array
+#             g = numpy.asarray(g)
+#             gflat = g.reshape(-1)
+#         if eps is None or svdcut is not None:
+#             gflat, i_wgts, i_invwgts = svd(gflat, svdcut=svdcut, wgts=True)
+#         else:
+#             gflat, i_wgts, i_invwgts = regulate(gflat, eps=eps, wgts=True)
+#         self.mode = mode
+#         if mode is not None:
+#             self.fcntype = mode
+#         self.i_wgts = i_wgts        # -> cov
+#         self.i_invwgts = i_invwgts  # -> 1/cov
+#         self.dp_dchiv = numpy.exp(gflat.logdet / 2)
+#         self.size = g.size 
+#         self.shape = g.shape 
+#         self._cov = None 
+#         self._invcov = None
+#         if hasattr(g, 'keys'):
+#             self._keys = g.keys()
+#         self.mean = mean(g)
+#         self.meanflat = mean(gflat)
+#         self.nmod = gflat.nmod
+#         self.correction = gflat.correction
+#         self.distribution = self._unflatten(gflat)
+#         if self.nmod > 0 and svdcut is not None and svdcut < 0:
+#             self.nchiv = self.size - self.nmod
+#         else:
+#             self.nchiv = self.size 
+#         # devide exp(-chi**2/2) by norm
+#         self.lognorm = 0.5 *  (g.size * numpy.log(2 * numpy.pi) + gflat.logdet)
+    
+#     def _remove_gvars(self, gvlist):
+#         pdf = copy.copy(self)
+#         pdf.correction = remove_gvars(self.correction, gvlist)
+#         pdf.distribution = remove_gvar(self.distribution, gvlist)
+#         return pdf 
+    
+#     def _distribute_gvars(self, gvlist):
+#         self.correction = distribute_gvars(self.correction, gvlist)
+#         self.distribution = distribute_gvars(self.distribution, gvlist)
+#         return self
+
+#     @staticmethod
+#     def _make_mat(size, i_wgts):
+#         mat = numpy.zeros((size, size), dtype=float)
+#         # 1x1 sub-matrices
+#         i, wgts = i_wgts[0]
+#         mat[i, i] = wgts ** 2
+#         # nxn sub-matrices (n>1)
+#         for i, wgts in i_wgts[1:]:
+#             mat[i[:, None], i] = wgts.T.dot(wgts)
+#         return mat
+
+#     def _getcov(self):
+#         if self._cov is None:
+#             self._cov = PDF._make_mat(self.size, self.i_wgts)
+#         return self._cov
+#     def _getinvcov(self):
+#         if self._invcov is None:
+#             self._invcov = PDF._make_mat(self.size, self.i_invwgts)
+#         return self._invcov     
+#     cov = property(_getcov, doc="Covariance matrix.")
+#     invcov = property(_getinvcov, doc="Inverse covariance matrix.")
+    
+#     def _unflatten(self, pflat, mode=None):
+#         """ pflat -> p """ 
+#         if mode is None:
+#             mode = self.mode  
+#         if self.shape is None:
+#             if mode is None:
+#                 return BufferDict(self.mean, buf=pflat)  
+#             elif mode == 'rbatch':
+#                 return BufferDict(self.mean, rbatch_buf=pflat)
+#             else:       
+#                 return BufferDict(self.mean, lbatch_buf=pflat)
+#         else:
+#             pflat = numpy.asarray(pflat)
+#             if mode is None:
+#                 return pflat.reshape(self.shape) if self.shape != () else pflat.flat[0]
+#             elif mode == 'rbatch':
+#                 return pflat.reshape(self.shape + (-1,))
+#             elif mode == 'lbatch':
+#                 return pflat.reshape((-1,) + self.shape)
+
+#     def _flatten(self, p, mode=None):
+#         """ p -> pflat """
+#         if mode is None:
+#             mode = self.mode  
+#         if self.shape is None:
+#             p = BufferDict(p, keys=self._keys)
+#             if mode is None:
+#                 return p.buf 
+#             else:
+#                 return p.rbatch_buf if mode == 'rbatch' else p.lbatch_buf
+#         else:
+#             p = numpy.asarray(p)
+#             if mode is None:
+#                 return p.flat[:]
+#             else:
+#                 return (
+#                     p.flat[:].reshape(-1, p.shape[-1]) if mode=='rbatch' else
+#                     p.flat[:].reshape(p.shape[0], -1)
+#                     )
+
+#     def chiv(self, p=None, pflat=None, mode=None):
+#         """ Returns :math:`\chi_i(p)` where :math:`\chi^2(p) = \sum_i \chi_i^2(p)`.
+        
+#         The PDF is proportional to :math:`\exp(-\chi^2(p)/2)` where
+
+#         .. math::
+
+#             \chi^2(p) = \Delta p \cdot\mathrm{cov}^{-1}_p\cdot\Delta p
+
+#         :math:`\Delta p_i\equiv \overline p_i - p_i`, and :math:`\overline p_i`
+#         and :math:`\mathrm{cov}_p` are the means and covariance matrix of the 
+#         distribution. By replacing the parameters :math:`p_i` with a new 
+#         set of uncorrelated parameters (linear combinations of the originals),
+#         :math:`\chi^2(p)` is reexpressed as a sum of terms 
+#         :math:`(\chi_i(p))^2`. By default the individual terms
+#         correspond to individual eigenmodes of the correlation matrix.
+#         If ``eps`` is specified (instead of ``svdcut``), a Cholesky 
+#         decomposition is used instead (see :func:`gvar.regulate`).
+
+#         Args:
+#             p: An array or dictionary represention a point in the 
+#                 distribution's parameter space (or multiple points 
+#                 if in batch mode). Ignored if ``pflat`` is specified.
+#             pflat (array): The coordinates of a point in parameter 
+#                 space flattened into a 1-d array. In batch mode 
+#                 an extra batch index is added to the array, either
+#                 on the right (``mode='rbatch'``) or on the left 
+#                 (``mode='lbatch'``), to represent multiple
+#                 points.
+#             mode: Batch mode used. Defaults to ``self.mode`` if 
+#                 ``mode=None``.
+
+#         Returns:
+#             An array containing :math:`\chi_i(p)`. In batch 
+#             mode the array has an extra batch index (on the right or 
+#             left depending upon ``mode``). 
+#         """ 
+#         if mode is None:
+#             mode = self.mode  
+#         if pflat is None:
+#             pflat = self._flatten(p, mode)
+#         else:
+#             pflat = numpy.asarray(pflat)
+#         # dpflat in rbatch mode
+#         if mode != 'rbatch':
+#             dpflat = (pflat - self.meanflat).T
+#         else:
+#             dpflat = pflat - self.meanflat[:, None]
+#         if len(dpflat.shape) > 1:
+#             chiv_shape = (self.nchiv, dpflat.shape[-1])
+#         else:
+#             chiv_shape = self.nchiv
+#         chiv = numpy.zeros(chiv_shape, dtype=pflat.dtype)
+#         i, iwgts = self.i_invwgts[0]
+#         i1 = i2 = 0
+#         if len(i) > 0:
+#             i1 = i2
+#             i2 += len(i)
+#             if mode is not None:
+#                 chiv[i1:i2] = iwgts[:, None] * dpflat[i]
+#             else:
+#                 chiv[i1:i2] = iwgts * dpflat[i]
+#         for i, iwgts in self.i_invwgts[1:]:
+#             i1 = i2 
+#             i2 += len(i)
+#             chiv[i1:i2] = iwgts.dot(dpflat[i])
+#         return chiv.T if mode == 'lbatch' else chiv
+                    
+#     def pflat(self, chiv, mode=None):
+#         """ Inverse of :meth:`PDF.chiv`.
+        
+#         Args:
+#             chiv: An array of values for :math:`\chi(p)` 
+#                 evaluate a point ``p`` in paramter space. In batch 
+#                 mode the array has an extra batch index, 
+#                 either on the right (``mode='rbatch'``) or on the l
+#                 left (``mode='lbatch'``), to identify multiple
+#                 points in parameter space.
+#             mode: Batch mode used. Defaults to ``self.mode`` if 
+#                 ``mode=None``.
+
+#         Returns:
+#             Am array containing the flattened version of ``p`` 
+#             corresponding to ``chiv``. In batch mode the array 
+#             has an extra batch index (on the right or 
+#             left depending upon ``mode``). 
+#         """
+#         if mode is None:
+#             mode = self.mode  
+#         # put in rbatch mode (or None)
+#         if mode == 'lbatch':
+#             chiv = chiv.T
+#         if mode is not None:
+#             pshape = (self.size, chiv.shape[-1])
+#         else:
+#             pshape = self.size
+#         dpflat = numpy.zeros(pshape, dtype=chiv.dtype)
+#         i, wgts = self.i_wgts[0]
+#         i1 = i2 = 0
+#         if len(i) > 0:
+#             # print('***', i, wgts)
+#             i1 = i2 
+#             i2 += len(i)
+#             if mode is not None:
+#                 dpflat[i] = wgts[:, None] * chiv[i1:i2]
+#             else:
+#                 dpflat[i] = wgts * chiv[i1:i2]
+#         for i, wgts in self.i_wgts[1:]:
+#             # print('***', i, wgts)
+#             i1 = i2
+#             i2 += len(i)
+#             dpflat[i] = wgts.T.dot(chiv[i1:i2])
+#         if mode != 'rbatch':
+#             return dpflat.T + self.meanflat
+#         else:
+#             return dpflat + self.meanflat[:, None]
+
+#     def chi2(self, p, mode=None):
+#         """ ``sum(self.chiv(p)**2)``. """
+#         return numpy.sum(
+#             self.chiv(p, mode=mode) ** 2, 
+#             axis=0 if mode != 'lbatch' else -1
+#             )
+
+#     def logpdf(self, p, mode=None):
+#         """ Logarithm of the PDF evaluated at ``p``.
+
+#         The logarithm of the PDF is 
+#         ``-sum(self.chiv(p)**2)/2 - self.lognorm``.
+
+#         """
+#         return - self.lognorm - numpy.sum(
+#             self.chiv(p, mode=mode) ** 2, 
+#             axis=0 if mode != 'lbatch' else -1
+#             ) / 2. 
+    
+#     def __call__(self, p, mode=None):
+#         """ The PDF evaluated at ``p``. 
+        
+#         The PDF is ``exp(-sum(self.chiv(p)**2)/2 - self.lognorm)``.
+#         """
+#         return numpy.exp(self.logpdf(p, mode=mode))
+    
+#     def sample(self, nbatch=None, mode=None, uniform=None):
+#         """ Generate random sample(s) from the PDF.
+
+#         Args:
+#             nbatch (int or None): If not ``None``, the iterator will return
+#                 ``nbatch`` samples drawn from the PDF. 
+#                 The results are packaged in arrays or dictionaries
+#                 whose elements have an extra index labeling the different 
+#                 samples in the batch. The batch index is 
+#                 the rightmost index if ``mode='rbatch'``; it is 
+#                 the leftmost index if ``mode`` is ``'lbatch'``. Ignored
+#                 if ``nbatch`` is ``None`` (default).
+#             mode (bool): Batch mode. Allowed 
+#                 modes are ``'rbatch'``or ``'lbatch'``,
+#                 corresponding to batch indices that are on the 
+#                 right or the left, respectively. 
+#                 If ``nbatch`` is ``None`` it is set equal to ``self.mode``.
+#             uniform (float or None): Replace Gaussian distribution specified 
+#                 by ``g`` with a uniform distribution covering the interval 
+#                 ``[-uniform, uniform]`` times the standard deviation centered 
+#                 on the mean along each principal axis the distribution.
+#                 Ignored if ``None`` (default).
+#         """
+#         if mode is None:
+#             mode = self.mode 
+#         if nbatch is None:
+#             chiv = RNG.normal(size=self.nchiv) if uniform is None else RNG.uniform(-uniform, uniform, size=self.nchiv)
+#             return self._unflatten(self.pflat(chiv))
+#         else:
+#             if mode is None:
+#                 mode = 'rbatch'
+#             shape = (self.nchiv, nbatch) if mode == 'rbatch' else (nbatch, self.nchiv)
+#             if uniform is None:
+#                 chiv = RNG.normal(size=shape)
+#             else:
+#                 chiv = RNG.uniform(-uniform, uniform, size=shape)
+#             return self._unflatten(self.pflat(chiv, mode=mode), mode=mode)
+
+
+class oldPDF(object):
     """ Probability density function (PDF) for ``g``.
 
     Given an array or dictionary ``g`` of |GVar|\s, ``pdf=PDF(g)`` is
@@ -869,27 +1684,57 @@ class PDF(object):
             )
         self.vec_sig = numpy.array(s.vec)
         self.vec_isig = numpy.array(s.vec)
-        self.pjac = s.val ** 0.5
-        for i, sigi in enumerate(s.val ** 0.5):
+        self.sig = s.val ** 0.5
+        self.dpdx = numpy.prod(self.sig)
+        for i, sigi in enumerate(self.sig):
             self.vec_sig[i] *= sigi
             self.vec_isig[i] /= sigi
         self.meanflat = mean(gflat)
         self.size = g.size
         self.shape = g.shape
-        self.g = g
+        if hasattr(g, 'keys'):
+            self._keys = g.keys()
+        self.mean = mean(g)
+        self.sample = sample(g)
         self.log_gnorm = numpy.sum(0.5 * numpy.log(2 * numpy.pi * s.val))
 
-    def x2dpflat(self, x):
+    def x2dpflat(self, x, mode=None):
         """ Map vector ``x`` in x-space into the displacement from ``g.mean``.
 
         x-space is a vector space of dimension ``p.size``. Its axes are
         in the directions specified by the eigenvectors of ``p``'s covariance
         matrix, and distance along an axis is in units of the standard
         deviation in that direction.
-        """
-        return x.dot(self.vec_sig)
 
-    def p2x(self, p):
+        Batches of ``x`` vectors can be processed together bu specifying the 
+        batch mode: ``mode='lbatch'`` means the batch index ``i`` is on the left, 
+        ``x[i,d]``; ``mode='rbatch'`` means the batch index is on the right, 
+        ``x[d,i]``.
+        """
+        if mode != 'rbatch':
+            return x.dot(self.vec_sig)
+        else:
+            return x.T.dot(self.vec_sig).T
+
+    def dpflat2x(self, dpflat, mode=None):
+        """ Map the displacement from ``mean(g)`` to vector ``x`` in x-space.
+
+        x-space is a vector space of dimension ``p.size``. Its axes are
+        in the directions specified by the eigenvectors of ``p``'s covariance
+        matrix, and distance along an axis is in units of the standard
+        deviation in that direction.
+
+        Batches of ``dpflat`` vectors can be processed together bu specifying the 
+        batch mode: ``mode='lbatch'`` means the batch index ``i`` is on the left, 
+        ``dpflat[i,d]``; ``mode='rbatch'`` means the batch index is on the right, 
+        ``dpflat[d,i]``.
+        """
+        if mode != 'lbatch':
+            return self.vec_isig.dot(dpflat)
+        else:
+            return self.vec_isig.dot(dpflat.T).T
+
+    def p2x(self, p, mode=None):
         """ Map parameters ``p`` to vector in x-space.
 
         x-space is a vector space of dimension ``p.size``. Its axes are
@@ -898,19 +1743,36 @@ class PDF(object):
         deviation in that direction.
         """
         if hasattr(p, 'keys'):
-            dp = BufferDict(p, keys=self.g.keys())._buf[:self.meanflat.size] - self.meanflat
+            p = BufferDict(p, keys=self._keys)
+            if mode == 'rbatch':
+                dpflat = p.rbatch_buf - self.meanflat[:, None]
+            elif mode == 'lbatch':
+                dpflat = p.lbatch_buf - self.meanflat[None, :]
+            else:
+                dpflat = p.buf - self.meanflat
         else:
-            dp = numpy.asarray(p).reshape(-1) - self.meanflat
-        return self.vec_isig.dot(dp)
+            p = numpy.array(p)
+            if mode == 'lbatch':
+                dpflat = p.flat[:].reshape(p.shape[0],-1) - self.meanflat[None, :]
+            elif mode == 'rbatch':
+                dpflat = p.flat[:].reshape(-1, p.shape[-1]) - self.meanflat[:, None]
+            else:
+                dpflat = p.flat[:] - self.meanflat
+        return self.dpflat2x(dpflat, mode=mode)
+        # if hasattr(p, 'keys'):
+        #     dp = BufferDict(p, keys=self._keys)._buf[:self.meanflat.size] - self.meanflat
+        # else:
+        #     dp = numpy.asarray(p).reshape(-1) - self.meanflat
+        # return self.vec_isig.dot(dp)
 
-    def logpdf(self, p):
+    def logpdf(self, p, mode=None):
         """ Logarithm of the probability density function evaluated at ``p``. """
-        x2 = self.p2x(p) ** 2
-        return -0.5 * numpy.sum(x2) - self.log_gnorm
+        x2 = self.p2x(p, mode=mode) ** 2
+        return -0.5 * numpy.sum(x2, axis=1 if mode=='lbatch' else 0) - self.log_gnorm
 
-    def __call__(self, p):
+    def __call__(self, p, mode=None):
         """ Probability density function evaluated at ``p``."""
-        return numpy.exp(self.logpdf(p))
+        return numpy.exp(self.logpdf(p, mode))
 
 class PDFHistogram(object):
     r""" Utility class for creating PDF histograms.
@@ -1205,32 +2067,83 @@ class PDFHistogram(object):
         return plot
 
 
+class _TwoSided:
+    " Two-sided Gaussian "
+    def __init__(self, loc, plus, minus, type='splitnormal'):
+        self.loc = loc 
+        self.plus = plus 
+        self.minus = minus 
+        self.type = type   # splitnormal or median
+    def __str__(self):
+        if self.loc is None:
+            return None
+        loc = str(self.loc)
+        def fmt(x):
+            if isinstance(x, float) or isinstance(x, int):
+                return '{:.5g}'.format(x)
+            else:
+                return str(x)
+        return '{} +/- {}/{}'.format(loc, fmt(self.plus), fmt(self.minus))
+    def __repr__(self):
+        return '_TwoSided({}, plus={}, minus={}, type={})'.format(self.loc, self.plus, self.minus, self.type)
+    def __call__(self, x):
+        if self.loc is None or self.plus is None or self.minus is None:
+            return None
+        loc = mean(self.loc)
+        plus = mean(self.plus) 
+        minus = mean(self.minus)
+        x = numpy.asarray(x)
+        xflat = x.flat[:]
+        ans = 0 * xflat
+        if self.type == 'splitnormal':
+            wp = wm = numpy.sqrt(2 / numpy.pi) / (plus + minus)
+        else:
+            wp = numpy.sqrt(0.5 / numpy.pi) / plus
+            wm = numpy.sqrt(0.5 / numpy.pi) / minus
+        idx = xflat >= loc
+        ans[idx] = wp * numpy.exp(-(xflat[idx] - loc)**2 / (2 * plus**2)) 
+        idx = xflat < loc
+        ans[idx] = wm * numpy.exp(-(xflat[idx] - loc)**2 / (2 * minus**2)) 
+        return ans.reshape(x.shape)
+
 class PDFStatistics(object):
     """ Compute statistical information about a distribution.
 
-    Given moments ``m[i]`` of a random variable, computes
-    mean, standard deviation, skewness, and excess kurtosis. With
-    histogram data, also estimates the median and the interval 
-    centered on the median containing 68% of the probability.
+    Given moments ``mom[i]`` of a random variable, :class:`PDFStatistics`
+    computes the mean, standard deviation, skewness, and excess kurtosis. 
+    
+    With histogram data, it estimates the median and the intervals 
+    on either side of the median (each) containing 34% of the probability.
+    Also it does a maximum likelihood fit of a split-normal distribution
+    to the histogram. Finally the moments are estimated from the histogram
+    if they are not otherwise specified.
 
     Typical usage::
 
-        >>> stats = gvar.PDFStatistics(moments=moments, histogram=(bins, counts))
+        >>> stats = gvar.PDFStatistics(moments=mom, histogram=(bins, prob))
         >>> print(stats)
-          mean = 0.018769738628101846   sdev = 0.20739   skew = 0.27825   ex_kurt = 3.0849
-          median = -0.03372571848916756   plus = 0.16875932667218416   minus = 0.13574922445045393
+            mean = 0.9548573(45)   sdev = 0.028731(14)   skew = -1.0217(42)   ex_kurt = 1.643(29)
+            split-normal: 0.9765402(99) +/- 0.0124721(50)/0.038875(19)
+                    median: 0.9596352(52) +/- 0.0222820(67)/0.032022(17)
+        >>> stats.plot_histogram(show=True)
     
+    where the uncertainties on the various quantities reflect uncertainties 
+    specified in the inputs. The distribution in this example is significantly
+    skewed, with the tail on the negative side of the peak roughly three 
+    times wider than that on the positive side. The last line displays 
+    a plot of the histogram, overlayed with plots of the Gaussians or 
+    two-sided Gaussians corresponding to the mean and standard deviation,
+    or the median or split-normal distributions.
+
     Args:
-        moments (array of floats): ``moments[i]`` is the (i+1)-th moment.
-            Optional argument unless ``histgram=None``.
+        moments (array of floats or ``GVar``\s): ``moments[i]`` is the 
+            (i+1)-th moment. Optional argument unless ``histgram=None``.  
 
         histogram (tuple): Tuple ``(bins,prob)`` where ``prob[i]`` is
             the probability in the bin between ``bins[i-1]`` and ``bins[i]``.
             ``prob[0]`` is the probability below ``bins[0]`` and ``prob[-1]``
             is the probability above ``bins[-1]``. Array ``bins`` is ordered.
-            The format for ``prob`` is what is returned by accumulating calls
-            to :meth:`gvar.PDFHistogram.count`. Optional argument unless
-            ``moments=None``.
+            Optional argument unless ``moments=None``. 
 
     The attributes are as follows:
 
@@ -1239,56 +2152,55 @@ class PDFStatistics(object):
         sdev: standard deviation
         skew: skewness coefficient
         ex_kurt: excess kurtosis
-        median: median (if ``histogram`` provided)
-        plus: interval ``(median, median+plus)`` contains 34.1% of probability
-        minus: interval ``(median-minus, median)`` contains 34.1% of probability
+        median: ``self.median.loc`` is the location of the median estimated 
+            from the histogram, while the intervals ::
+            
+                (self.median.loc, self.median.loc + self.median.plus)
+                (self.median.loc - self.median.minus, self.median.loc)
+            
+            each contain 34% of the probability.
+        splitnormal: ``self.splitnormal.loc`` is the location of the peak
+            of the split-normal distribution fit to the histogram. The 
+            standard deviations above and below that point are 
+            ``self.splitnormal.plus`` and ``self.splitnormal.minus``, respectively.
         gvar: ``gvar.gvar(mean, sdev)``
+        moments: array containing the values of (up to) the first four moments.
+        bins: array of bin edges used for the histogram
+        prob: array of probabilities ``prob[i]`` associated with the 
+            intervals ``(bins[i-1], bins[i])``. ``prob[0]`` is the 
+            probability from below ``bins[0]``; ``prob[-1]`` is the 
+            probability from above ``bins[-1]``.
     """
     def __init__(self, moments=None, histogram=None, prefix='   '):
         self.prefix = prefix
         if histogram is not None:
             bins, prob = histogram
-            prob = prob / sum(prob)
-            cumprob = numpy.cumsum(prob)[:-1]
-            probspline = cspline.CSpline(bins, cumprob, alg='cspline')
-            x0 = []
-            for p0 in [0.317310507863 / 2., 0.5, 1 - 0.317310507863 / 2.]:
-                if cumprob[0] < p0 and cumprob[-1] > p0:
-                    def f(x):
-                        return probspline(x) - p0
-                    x0.append(root.refine(f, (bins[0], bins[-1])))
-                else:
-                    x0.append(None)
-            self.minus, self.median, self.plus = x0
-            if self.median is None:
-                self.minus = None
-                self.plus = None
-            else:
-                if self.minus is not None:
-                    self.minus = self.median - self.minus
-                if self.plus is not None:
-                    self.plus = self.plus - self.median
+            self.bins = numpy.array(bins)
+            self.prob = numpy.array(prob) / numpy.sum(prob)
+            if len(self.prob) == len(self.bins) - 1:
+                # add out-of-bounds probabilities
+                self.prob = numpy.array([0.] + self.prob.tolist() + [0.])
+            elif len(self.prob) != len(self.bins) + 1:
+                raise ValueError('length mismatch: len(bins)!=len(prob)-1 in histogram')
+            self.splitnormal = self._fit_splitnormal(self.bins, self.prob)
+            self.median = self._fit_median(self.bins, self.prob)
+            # self.bins = bins 
+            # self.prob = prob / numpy.sum(prob)
             if moments is None:
                 mid = (bins[1:] + bins[:-1]) / 2.
                 moments = numpy.sum(
-                    [mid * prob[1:-1], mid**2 * prob[1:-1],
-                    mid**3 * prob[1:-1], mid**4 * prob[1:-1],
+                    [mid * self.prob[1:-1], mid**2 * self.prob[1:-1],
+                    mid**3 * self.prob[1:-1], mid**4 * self.prob[1:-1],
                     ],
                     axis=1
                     )
-                if self.minus is not None and self.plus is not None:
-                    self.gvar = (
-                        self.median + (self.plus - self.minus) / 2. +
-                        gvar(0., mean(self.plus + self.minus) / 2.)
-                        )
-                elif self.minus is not None:
-                    self.gvar = self.median + gvar(0, self.minus.mean)
-                elif self.plus is not None:
-                    self.gvar = self.median + gvar(0, self.plus.mean)
-                else:
-                    self.gvar = None
+        else:
+            # self.splitnormal = None 
+            # self.median = None 
+            self.bins = None 
+            self.prob = None
         if moments is not None:
-            x = numpy.array(moments)
+            x = self.moments = numpy.array(moments)
             self.mean = x[0]
             if len(x) > 1:
                 self.sdev = numpy.fabs(x[1] - x[0] ** 2) ** 0.5
@@ -1302,10 +2214,69 @@ class PDFStatistics(object):
                     - 3 * self.mean ** 4
                     ) / self.sdev ** 4 - 3.
             if not hasattr(self, 'gvar'):
-                self.gvar = self.mean + gvar(0 * mean(self.mean), mean(self.sdev))
+                self.gvar = self.mean + gvar(0, mean(self.sdev))
         else:
             raise ValueError('need moments and/or histogram')
+        
+    def _fit_median(self, bins, prob):
+        """ Fit median model to histogram """
+        prob = prob / sum(prob)
+        cumprob = numpy.cumsum(prob)[:-1]
+        probspline = cspline.CSpline(bins, cumprob, alg='cspline')
+        x0 = []
+        for p0 in [0.317310507863 / 2., 0.5, 1 - 0.317310507863 / 2.]:
+            if cumprob[0] < p0 and cumprob[-1] > p0:
+                def f(x):
+                    return probspline(x) - p0
+                x0.append(root.refine(f, (bins[0], bins[-1])))
+            else:
+                x0.append(None)
+        minus, median, plus = x0 
+        if median is None or minus is None or plus is None:
+            return None
+        return _TwoSided(median, plus=plus - median, minus=median - minus, type='median')
 
+    def _fit_splitnormal(self, bins, prob):
+        """ Fit split-normal model to histogram. """
+        x = (bins[1:] + bins[:-1]) / 2
+        wgt = prob[1:-1] / sum(prob[1:-1])
+        def sum_plus(mu, n=2):
+            idx = x > mu
+            ans = sum(wgt[idx] * (x[idx] - mu) ** n)
+            return ans 
+        def sum_minus(mu, n=2):
+            idx = x < mu
+            ans = sum(wgt[idx] * (x[idx] - mu) ** n)
+            return ans
+        def Lhat(mu):
+            return sum_plus(mu) ** (1/3) + sum_minus(mu) ** (1/3)
+        def dLhat_dmu(mu):
+            return (2/3) * (
+                sum_plus(mu, n=2) ** (-2/3) * sum_plus(mu, n=1)  +
+                sum_minus(mu, n=2) ** (-2/3) * sum_minus(mu, n=1)
+                )
+        # find search interval for mu
+        lhatmu = [mean(Lhat(mu)) for mu in x]
+        i = numpy.argmin(lhatmu)
+        if i < 1 or i > len(x) - 2:
+            # print('****', i, [dLhat_dmu(xx) for xx in x])
+            return None
+        if wgt[i-1] < 1e-8 * wgt[i] or 1e-8 * wgt[i] > wgt[i+1]:
+            return None
+        # search for root
+        try:
+            mu = root.refine(dLhat_dmu, interval=(x[i-1], x[i+1]))
+        except:
+            return None
+        sigp = (Lhat(mu) * sum_plus(mu) ** (2/3)) ** 0.5
+        sigm = (Lhat(mu) * sum_minus(mu) ** (2/3)) ** 0.5
+        if mu is None or sigp is None or sigm is None:
+            return None
+        return _TwoSided(mu, plus=sigp, minus=sigm, type='splitnormal')
+
+    # def __repr__(self):
+    #     return str(self)
+    
     def __str__(self):
         ans = self.prefix
         ans += 'mean = {}'.format(self.mean)
@@ -1316,18 +2287,60 @@ class PDFStatistics(object):
                     ans += '   {} = {}'.format(attr, x)
                 else:
                     ans += '   {} = {:.5}'.format(attr, x)
+        if hasattr(self, 'splitnormal'):
+            ans += '\n' + self.prefix
+            ans += 'split-normal: {}'.format(self.splitnormal) 
         if hasattr(self, 'median'):
             ans += '\n' + self.prefix
-            ans += 'median = {}'.format(self.median)
-            ans += '   plus = {}'.format(self.plus)
-            ans += '   minus = {}'.format(self.minus)
+            ans += '      median: {}'.format(self.median)
         return ans
 
-    @staticmethod
-    def moments(f, exponents=numpy.arange(1,5)):
-        """ Compute 1st-4th moments of f, returned in an array. """
-        return f ** exponents
+    def plot_histogram(self, plot=None, show=False):
+        """ Plot histogram.
 
+        Plots the histogram, overlayed with plots of the Gaussian or 
+        two-sided Gaussians corresponding to the mean and standard deviation,
+        or the median or split-normal distributions.
+
+        Args:
+            plot: Plotter. Set to ``matplotlib.pyplot`` if ``plot=None`` (default).
+            show (bool): Plot is displayed if ``show=True``, and not otherwise (default).
+
+        Returns:
+            The plotter.
+        """
+        if plot is None:
+            import matplotlib.pyplot as plot 
+        if self.prob is None or self.bins is None:
+            return plot
+        density = mean(self.prob[1:-1]) / (self.bins[1:] - self.bins[:-1])
+        plot.bar(
+            self.bins[:-1], density, width=self.bins[1:]-self.bins[:-1], align='edge',
+            color='k', ec='k', alpha=0.1, lw=0.5, label='data'
+            )
+        x = numpy.linspace(*plot.xlim(), num=4000)
+        g = _TwoSided(self.gvar.mean, self.gvar.sdev, self.gvar.sdev)
+        sn = g(x) 
+        plot.plot(x, sn, 'b:', label='mean')
+        if self.splitnormal is not None:
+            sn = self.splitnormal(x)
+            if sn is not None:
+                plot.plot(x, sn, 'g', lw=1, label='split-normal')
+        if self.median is not None:
+            sn = self.median(x)
+            if sn is not None:
+                plot.plot(x, sn, 'r--', lw=1, label='median')
+        plot.legend()
+        plot.xlabel(r'$f(p)$')
+        plot.ylabel(r'probability density')
+        if show:
+            plot.show()
+        return plot
+    
+    # @staticmethod
+    # def moments(f, exponents=numpy.arange(1,5)):
+    #     """ Compute 1st-4th moments of f, returned in an array. """
+    #     return f ** exponents
 
 def make_fake_data(g, fac=1.0):
     """ Make fake data based on ``g``.

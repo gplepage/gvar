@@ -1,3 +1,29 @@
+Version 13.0 ???
+====================
+
+- gvar.PDF is completely rewritten to increase functionality for use by the 
+  vegas and lsqfit modules. The changes are incompatible with previous versions.
+
+- Substantial extensions to gvar.PDFStatistics for use in lsqfit.vegas_fit. Adds 
+  a fit to a continuous split-normal distribution to the histogram analysis. 
+  Introduces an incompatibility because the attributes of a PDFStatistics 
+  have different names. Adds plotting capability.
+
+- bd = gvar.BufferDict(d, keys=[k1, k2, ...]) copies d[k] into bd[k]
+  for every k in keys that is also in d. The results are now copied in the 
+  order specified by keys. 
+
+- Fixes a bug in gvar.BufferDict.all_keys that in certain situations included 
+  the same key twice.
+
+- Adds BufferDict.lbatch_buf and BufferDict.rbatch_buf for extracting batch buffers 
+  from batch BufferDicts.
+
+- Fixes bug in gvar.BufferDict.all_keys which caused crashes when keys 
+  were not strings.
+
+- Fixes inconsistencies in gvar.SVD when svdcut=0.0. 
+
 Version 12.1 2023-12-04
 ========================
 - Adds batch capability to gvar.sample and gvar.raniter so samples can 

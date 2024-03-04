@@ -1211,6 +1211,12 @@ def distribute_gvars(g, gvlist):
             return g
         except:
             return g
+    elif hasattr(g, '__self__'):
+        try:
+            g.__self__ = _gvar.distribute_gvars(g.__self__, gvlist)
+            return g
+        except:
+            return g
     else:
         return g
 
@@ -1295,6 +1301,13 @@ def remove_gvars(g, gvlist):
             tmp = copy.copy(g)
             tmp.__dict__ = _gvar.remove_gvars(tmp.__dict__, gvlist)
             return tmp 
+        except:
+            return g
+    elif hasattr(g, '__self__'):
+        try:
+            tmp = copy.copy(g)
+            tmp.__self__ = _gvar.remove_gvars(tmp.__self__, gvlist)
+            return tmp
         except:
             return g
     else:
@@ -2409,7 +2422,7 @@ def sample(g, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch'):
         drawn from the distribution defined by ``g``; or 
         ``nbatch`` such samples if ``nbatch`` is not ``None``.
     """
-    return next(raniter(g, svdcut=svdcut, eps=eps, nbatch=nbatch, mode=mode, uniform=uniform))
+    return _gvar.PDF(g, svdcut=svdcut, eps=eps).sample(nbatch=nbatch, mode=mode, uniform=uniform)
 
 def gvar_from_sample(gs, mode='rbatch', stderr=False, unbias=False):
     """ Convert samples gs from Gaussian distribution into |GVar|\s.
@@ -2475,11 +2488,12 @@ def gvar_from_sample(gs, mode='rbatch', stderr=False, unbias=False):
         mode (str): The sample index is the rightmost index when 
             ``mode='rbatch'`` (default), and the leftmost index 
             when ``mode='lbatch'``.
-        stderr (bool): If ``True`` the variances and covariances represent 
-            the uncertainties in the estimates of the mean (corresponding 
-            to the standard error) rather than the spread in the data; 
-            the former is smaller by a factor of one over the number of
-            samples. Ignored if ``False`` (default). 
+        stderr (bool): If ``True`` (default) the variances and covariances 
+            represent the uncertainties in the estimates of the means 
+            (corresponding to the standard errors). If ``False`` they represent 
+            the spread in the data (corresponding to the standard deviations 
+            of the distribution). The former is smaller by a factor of 
+            one over the number of samples. 
         unbias (bool): The default choice ``unbias=False`` means that 
             variances are estimated using ``sum((x[:] - mean(x))**2)/N``
             where ``N`` is the number of random samples. 
@@ -2504,10 +2518,11 @@ def gvar_from_sample(gs, mode='rbatch', stderr=False, unbias=False):
         gs = _gvar.asbufferdict(gs)
         if mode == 'lbatch':
             # convert to 'rbatch'
-            gs = gs._l2rbatch()
+            gs, nbatch = gs._l2rbatch()
         elif mode != 'rbatch':
             raise ValueError('unknown mode: ' + str(mode))
-        nbatch = gs[k0].shape[-1]
+        else:
+            nbatch = gs[k0].shape[-1]
         buf = gvar_from_sample(gs.buf.reshape(gs.size // nbatch, nbatch), mode='rbatch')
         i0 = 0
         ans = _gvar.BufferDict()
@@ -2595,67 +2610,20 @@ def raniter(g, n=None, eps=None, svdcut=None, uniform=None, nbatch=None, mode='r
             
     Returns:
         An iterator that returns random arrays or dictionaries
-        with the same shape as ``g`` drawn from the Gaussian 
-        distribution defined by ``g``, or ``nbatch`` such 
-        samples when ``nbatch`` is secified.
+        (or single |GVar|\s with the same shape as ``g`` drawn 
+        from the Gaussian distribution defined by ``g``, or ``nbatch`` 
+        such samples when ``nbatch`` is specified.
     """
     if mode not in ['lbatch', 'rbatch']:
         raise ValueError('unknown batch mode: ' + str(mode))
-    g, i_wgts = _gvar.regulate(g, eps=eps, svdcut=svdcut, wgts=1.)
-    g_mean = mean(g.flat)
-    nwgt = sum(len(wgts) for i, wgts in i_wgts)
-    sh = (nwgt,)
-    if nbatch is not None:
-        nbatch = int(nbatch)
-        nbatch = 1 if nbatch <= 1 else nbatch
-        bsh = (nbatch,)
-        sh =(nwgt, nbatch)
-    else:
-        bsh = ()
-        nbatch = 1
-        sh = (nwgt,1)
+    pdf = _gvar.PDF(g, eps=eps, svdcut=svdcut)
     count = 0
     while (n is None) or (count < n):
         count += 1
-        z = _gvar.RNG.normal(0.0, 1.0, sh) if uniform is None else _gvar.RNG.uniform(-uniform, uniform, sh)
-        buf = numpy.transpose(nbatch * [g_mean])
-        i, wgts = i_wgts[0]
-        zstart = 0
-        zstop = 0
-        if len(i) > 0:
-            zstop += len(i)            
-            buf[i] += z[zstart:zstop] * wgts[:, None]  # None -> nbatch index
-        zstart = zstop
-        for i, wgts in i_wgts[1:]:
-            zstop = zstart + len(wgts)
-            buf[i] += wgts.T.dot(z[zstart:zstop])
-            zstart = zstop
-        if g.shape is None:
-            if bsh == ():
-                yield BufferDict(g, buf=buf[:, 0])
-            else:
-                rans = BufferDict(g, rbatch_buf=buf.reshape(g_mean.shape + bsh))
-                if mode == 'rbatch':
-                    yield rans 
-                else:
-                    lans = BufferDict()
-                    for k in rans:
-                        lans[k] = numpy.moveaxis(rans[k], -1, 0)
-                    yield lans
-        elif g.shape == ():
-            if bsh == ():
-                yield next(buf.flat)
-            else:
-                yield buf.reshape(bsh)
-        else:
-            rans = buf.reshape(g.shape + bsh)
-            if mode == 'rbatch' or bsh == ():
-                yield rans 
-            else:
-                yield numpy.moveaxis(rans, -1, 0)
+        yield pdf.sample(nbatch=nbatch, mode=mode)
 
 class SVD(object):
-    """ SVD decomposition of a pos. sym. matrix.
+    """ SVD decomposition of a pos. semi-def. sym. matrix.
 
     :class:`SVD` is a function-class that computes the eigenvalues and
     eigenvectors of a symmetric matrix ``mat``. Eigenvalues that
@@ -2686,23 +2654,23 @@ class SVD(object):
 
     Args:
         mat: Positive, symmetric matrix.
-        svdcut: If positive, replace eigenvalues of ``mat`` with
-            ``svdcut*(max eigenvalue)``; if negative, discard 
-            eigenmodes with eigenvalues smaller than ``svdcut`` 
-            times the maximum eigenvalue.
+        svdcut: If positive (or zero), replace ``mat``'s eigenvalues
+            ``e[i] -> max(e[i], svdcut*max(e))``; otherwwise,
+            discard eigenmodes with eigenvalues smaller
+            than ``|svdcut|`` times the maximum eigenvalue.
         svdnum: If positive, keep only the modes with the largest
             ``svdnum`` eigenvalues; ignore if set to ``None``.
         compute_delta (bool): Compute ``delta`` (see below) 
             if ``True``; set ``delta=None`` otherwise.
         rescale: Rescale the input matrix to make its diagonal 
             elements equal to +-1.0 before diagonalizing.
-
+        warn: Suppress warnings if ``False``. Default is ``True``.
     The results are accessed using:
 
     ..  attribute:: val
 
-        An ordered array containing the eigenvalues of ``mat``. Note
-        that ``val[i]<=val[i+1]``.
+        An ordered array containing the eigenvalues of ``mat``after
+        the SVD cut. Note that ``val[i]<=val[i+1]``.
 
     ..  attribute:: vec
 
@@ -2727,7 +2695,7 @@ class SVD(object):
     ..  attribute:: nmod
 
         The first ``nmod`` eigenvalues in ``self.val`` were modified by
-        the SVD cut (equals 0 unless ``svdcut > 0``).
+        the SVD cut.
 
     ..  attribute:: eigen_range
 
@@ -2742,7 +2710,8 @@ class SVD(object):
         ``compute_delta==False``.
     """
     def __init__(
-        self, mat, svdcut=None, svdnum=None, compute_delta=False, rescale=False
+        self, mat, svdcut=None, svdnum=None, compute_delta=False, 
+        rescale=False, warn=True
         ):
         super(SVD,self).__init__()
         mat = numpy.asarray(mat)
@@ -2771,12 +2740,14 @@ class SVD(object):
         if val is None:
             raise numpy.linalg.LinAlgError('eigen analysis failed')
         self.kappa = val[0]/val[-1] if val[-1]!=0 else None  # min/max eval
-        self.eigen_range = self.kappa
+        self.eigen_range = self.kappa  # kappa is legacy name
         self.delta = None
         self.nmod = 0
         self.valorig = numpy.array(val)
         # svd cuts
-        if (svdcut is None or svdcut==0.0) and (svdnum is None or svdnum<=0):
+        if svdcut is None and (svdnum is None or svdnum<=0):
+            if warn and val[0] <= 0:
+                warnings.warn('Matrix not positive definite, lambda_min/lambda_max = {:.2g}; need svdcut?'.format(val[0] / val[-1]))
             self.val = val
             self.vec = vec
             return
@@ -2785,17 +2756,21 @@ class SVD(object):
             val = val[-svdnum:]
             vec = vec[-svdnum:]
         # impose svdcut on eigenvalues
-        if svdcut is None or svdcut==0:
+        if svdcut is None:
             self.val = val
             self.vec = vec
             return
         valmin = abs(svdcut)*val[-1]
-        if svdcut>0:
+        if svdcut>=0:
             # force all eigenvalues >= valmin
             dely = None
             for i in range(len(val)):
                 if val[i]<valmin:
                     self.nmod += 1
+                    if warn and val[i] < 0 and abs(val[i]/val[-1]) > abs(svdcut):
+                        warnings.warn(
+                            'Negative eigenvalue with |lambda/lambda_max| = {:.2g} > svdcut; need larger svdcut?'.format(abs(val[i]/val[-1]))
+                            )
                     if compute_delta:
                         if dely is None:
                             dely = vec[i]*_gvar.gvar(0.0,(valmin-val[i])**0.5)
@@ -2822,7 +2797,7 @@ class SVD(object):
     def _numpy_eigh(DmatD):
         val, vec = numpy.linalg.eigh(DmatD)
         vec = numpy.transpose(vec) # now 1st index labels eigenval
-        val = numpy.fabs(val)
+        # val = numpy.fabs(val)
         # guarantee that sorted, with smallest val[i] first
         indices = numpy.arange(val.size) # in case val[i]==val[j]
         val, indices, vec = zip(*sorted(zip(val, indices, vec)))
@@ -2835,7 +2810,7 @@ class SVD(object):
         from scipy.linalg import eigh as _scipy_eigh
         val, vec = _scipy_eigh(DmatD)
         vec = numpy.transpose(vec) # now 1st index labels eigenval
-        val = numpy.fabs(val)
+        # val = numpy.fabs(val)
         # guarantee that sorted, with smallest val[i] first
         indices = numpy.arange(val.size) # in case val[i]==val[j]
         val, indices, vec = zip(*sorted(zip(val, indices, vec)))
@@ -3132,6 +3107,11 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
 
     where ``result`` is the desired expectation value. 
     
+    Setting ``wgts=True`` causes :func:`gvar.regulate` to return a tuple 
+    ``(gmod, i_wgts, i_invwgts)`` where ``i_wgts`` is the decomposition of 
+    the covariance matrix and ``i_invwgts`` is the decomposition of the 
+    inverse of the covariance matrix.
+
     These decompositions are useful for least squares fitting and simulating 
     correlated data. A Cholesky decomposition is used when ``eps`` is specified,
     while an SVD decomposition is used with ``svdcut``.
@@ -3151,16 +3131,18 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
         wgts: Setting ``wgts=1`` causes :func:`gvar.regulate` to compute
             and return a decomposition of the covariance matrix of
             the modified |GVar|\s, ``gmod``. Setting ``wgts=-1`` results in
-            a decomposition of the inverse of the covariance matrix. The
+            a decomposition of the inverse of the covariance matrix. Setting
+            ``wgts=True`` results in both decompositions. The
             default value is ``False``, in which case only ``gmod`` is returned.
         noise (bool): If ``True``, noise is added to the correction (see
             above). Default is ``False``.
 
     Returns:
-        A copy ``gmod`` of ``g`` with the modified correlation matrix.
         If ``wgts`` is not ``False``, a tuple ``(g, i_wgts)`` is returned 
         where ``i_wgts`` contains a decomposition of the ``gmod``
-        covariance matrix or its inverse (see above).
+        covariance matrix or its inverse (see above), or if 
+        ``wgts=True`` both decompositions are returned: 
+        ``(gmod, i_wgts, i_invwgts)``.
 
     Additional information is stored in ``gmod``:
 
@@ -3245,9 +3227,12 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
     correction = numpy.empty(len(g.flat), object)
     correction[:] = 0 * _gvar.gvar(0, 1)
     i_wgts = [([], [])]     # 1st entry, for all 1x1 blocks 
+    if wgts is True:
+        i_invwgts = [([], [])]
     logdet = 0
     g.nblocks = {}
     idx_bcov = evalcov_blocks(g.flat, compress=True)
+
     # uncorrelated parts
     idx, block_sdev = idx_bcov[0]
     if len(idx) > 0:
@@ -3258,7 +3243,11 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
             else:
                 logdet = 2 * numpy.sum(numpy.log(block_sdev))
             i_wgts[0][0].extend(idx)
-            i_wgts[0][1].extend(block_sdev if wgts == 1 else 1. / block_sdev) # ** wgts)
+            i_wgts[0][1].extend(block_sdev if wgts != -1 else 1. / block_sdev) 
+            if wgts is True:
+                i_invwgts[0][0].extend(idx)
+                i_invwgts[0][1].extend(1. / block_sdev) 
+
     # correlated parts
     for idx, block_cov in idx_bcov[1:]:
         g.nblocks[len(idx)] = g.nblocks.get(len(idx), 0) + 1
@@ -3286,16 +3275,14 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
                 raise numpy.linalg.LinAlgError(
                     'cholesky decomposition failed -- try larger eps'
                     )
-            if wgts == 1:
+            if wgts == 1 or wgts is True:
                 i_wgts.append((idx, U[:, :] * D[None, :]))
-            elif wgts == -1:
+            if wgts == -1 or wgts is True:
                 Uinv = _solve_triangular( 
                     U.T, numpy.eye(len(corr)), trans=1, lower=True
                     # U, np.eye(len(corr)),  lower=False # worse for Fortran (!?)
                     )
-                i_wgts.append((idx, Uinv.T * Dinv[None, :]))
-            else:
-                raise ValueError('invalid wgts = ' + str(wgts))
+                (i_wgts if wgts == -1 else i_invwgts).append((idx, Uinv.T * Dinv[None, :]))
             logdet += 2 * numpy.sum(numpy.log(U.diagonal() * D))
     # format the correction
     if is_dict:
@@ -3308,12 +3295,21 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
         g.logdet = logdet
         # repack i_wgts into numpy arrays
         tmp = []
-        for iw, wgts in i_wgts:
+        for iw, wt in i_wgts:
             tmp.append(
-                (numpy.array(iw, numpy.intp), numpy.array(wgts, numpy.double))
+                (numpy.array(iw, numpy.intp), numpy.array(wt, numpy.double))
                 )
         i_wgts = tmp
-        return g, i_wgts
+        if wgts is True:
+            tmp = []
+            for iw, wt in i_invwgts:
+                tmp.append(
+                    (numpy.array(iw, numpy.intp), numpy.array(wt, numpy.double))
+                    )
+            i_invwgts = tmp        
+            return g, i_wgts, i_invwgts
+        else:
+            return g, i_wgts
  
 def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     """ Apply SVD cuts to collection of |GVar|\s in ``g``.
@@ -3396,6 +3392,11 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     decompositions are useful for least squares fitting and simulating 
     correlated data.
 
+    Setting ``wgts=True`` causes :func:`gvar.svd` to return a tuple 
+    ``(gmod, i_wgts, i_invwgts)`` where ``i_wgts`` is the decomposition of 
+    the covariance matrix and ``i_invwgts`` is the decomposition of the 
+    inverse of the covariance matrix.
+
     Args:
         g: An array of |GVar|\s or a dicitionary whose values are
             |GVar|\s and/or arrays of |GVar|\s.
@@ -3407,17 +3408,20 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
         wgts: Setting ``wgts=1`` causes :func:`gvar.svd` to compute
             and return a spectral decomposition of the covariance matrix of
             the modified |GVar|\s, ``gmod``. Setting ``wgts=-1`` results in
-            a decomposition of the inverse of the covariance matrix. The
+            a decomposition of the inverse of the covariance matrix. Setting
+            ``wgts=True`` results in both decompositions. The
             default value is ``False``, in which case only ``gmod`` is returned.
         noise: If ``True``, noise is added to the SVD correction (see
             above). Default is ``False``.
 
     Returns:
         A copy ``gmod`` of ``g`` whose correlation matrix is modified by
-        SVD cuts. If ``wgts`` is not ``False``,
-        a tuple ``(g, i_wgts)`` is returned where ``i_wgts``
-        contains an SVD decomposition of ``gmod``'s
-        covariance matrix or its inverse.
+        SVD cuts. If ``wgts=1``, a tuple ``(gmod,i_wgts)`` is returned 
+        where  ``i_wgts`` contains an SVD decomposition of ``gmod``'s
+        covariance matrix. If ``wgts=-1``, a tuple ``(gmod,i_invwgts)`` is 
+        returned where  ``i_invwgts`` contains an SVD decomposition of 
+        the inverse of ``gmod``'s covariance matrix. If ``wgts=True``, 
+        both decompositions are returned: ``(gmod,i_wgts,i_invwgts)``.
 
     Data from the SVD analysis is stored in ``gmod``:
 
@@ -3491,6 +3495,8 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     g.nmod = 0
     if wgts is not False:
         i_wgts = [([], [])] # 1st entry for all 1x1 blocks
+        if wgts is True:
+            i_invwgts = [([], [])]
     lost_modes = 0
     g.nblocks = {}
     # uncorrelated parts
@@ -3503,7 +3509,11 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
             g.logdet += 2 * numpy.sum(numpy.log(block_sdev))
         if wgts is not False:
             i_wgts[0][0].extend(idx)
-            i_wgts[0][1].extend(block_sdev if wgts == 1 else 1. / block_sdev)
+            i_wgts[0][1].extend(block_sdev if wgts != -1 else 1. / block_sdev)
+            if wgts is True:
+                i_invwgts[0][0].extend(idx)
+                i_invwgts[0][1].extend(1. / block_sdev)
+
                 
     # correlated parts
     for idx, block_cov in idx_bcov[1:]:
@@ -3532,9 +3542,14 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
             g.flat[idx] = newg
         if wgts is not False:
             i_wgts.append(
-                (idx, numpy.array(s.decomp(wgts)[::-1]))
+                (idx, numpy.array(s.decomp(1 if wgts != -1 else -1)[::-1]))
                 # (idx, numpy.array([w for w in s.decomp(wgts)[::-1]]))
                 )
+            if wgts is True:
+                i_invwgts.append(
+                    (idx, numpy.array(s.decomp(-1)[::-1]))
+                    )
+
         if s.eigen_range < g.eigen_range:
             g.eigen_range = s.eigen_range
     g.nmod += lost_modes
@@ -3561,12 +3576,21 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     if wgts is not False:
         # repack into numpy arrays
         tmp = []
-        for iw, wgts in i_wgts:
+        for iw, w in i_wgts:
             tmp.append(
-                (numpy.array(iw, numpy.intp), numpy.array(wgts, numpy.double))
+                (numpy.array(iw, numpy.intp), numpy.array(w, numpy.double))
                 )
         i_wgts = tmp
-        return (g, i_wgts)
+        if wgts is True:
+            tmp = []
+            for iw, w in i_invwgts:
+                tmp.append(
+                    (numpy.array(iw, numpy.intp), numpy.array(w, numpy.double))
+                    )
+            i_invwgts = tmp
+            return (g, i_wgts, i_invwgts)
+        else:
+            return (g, i_wgts)
     else:
         return g
 
