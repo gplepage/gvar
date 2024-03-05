@@ -1370,43 +1370,46 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             ranseed(12)
             s2 = next(raniter(g, eps=eps))
             self.assertEqual(str(s1), str(s2))
+        # test default svdcut (=> no error generated)
+        with self.assertRaises(UserWarning):
+            sample(gvar([1,1], [[1,1],[1,1]]), svdcut=None)
+        sample(gvar([1,1], [[1,1],[1,1]]))
 
-    # def test_batch_sample(self):   ### makes no sense!
-    #     " sample(g, nbatch=...) raniter(g, nbatch=...)"
-    #     # dictionary
-    #     g = gvar(BufferDict(s='1(1)', a=[['2.0(1)','3.00(1)','4.000(1)']]))
-    #     nbatch = 5
-    #     ranseed(1)
-    #     sl = sample(g, nbatch=nbatch, mode='lbatch')
-    #     ranseed(1)
-    #     print(sl)
-    #     sr = sample(g, nbatch=nbatch, mode='rbatch')
-    #     print(sr)
-    #     for k in g:
-    #         self.assertTrue(sl[k].shape[0] == sr[k].shape[-1] == nbatch)
-    #         np.testing.assert_allclose(sl[k], np.moveaxis(sr[k], -1, 0))
-    #     for s in sl.batch_iter('lbatch'):
-    #         self.assertLess(chi2(s, g) / g.size, 10.)
-    #     for s in sr.batch_iter('rbatch'):
-    #         self.assertLess(chi2(s, g) / g.size, 10.)
-    #     # array
-    #     ranseed(1)
-    #     sl = sample(g['a'], nbatch=nbatch, mode='lbatch')
-    #     ranseed(1)
-    #     sr = sample(g['a'], nbatch=nbatch, mode='rbatch')
-    #     self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
-    #     np.testing.assert_allclose(sl, np.moveaxis(sr, -1, 0))
-    #     for s in sl:
-    #         self.assertLess(chi2(s, g['a']) / g['a'].size, 10.)
-    #     # gvar
-    #     ranseed(1)
-    #     sl = sample(g['s'], nbatch=nbatch, mode='lbatch')
-    #     ranseed(1)
-    #     sr = sample(g['s'], nbatch=nbatch, mode='rbatch')
-    #     self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
-    #     self.assertEqual(list(sl), list(sr))
-    #     for s in sl:
-    #         self.assertLess(chi2(s, g['s']), 10.)
+
+    def test_batch_sample(self):   ### makes no sense!
+        " sample(g, nbatch=...) raniter(g, nbatch=...)"
+        # dictionary
+        g = gvar(BufferDict(s='1(1)', a=[['1(1)','1(1)','1(1)']]))
+        nbatch = 5
+        ranseed(1)
+        sl = sample(g, nbatch=nbatch, mode='lbatch')
+        ranseed(1)
+        sr = sample(g, nbatch=nbatch, mode='rbatch')
+        for k in g:
+            self.assertTrue(sl[k].shape[0] == sr[k].shape[-1] == nbatch)
+        np.testing.assert_allclose(np.sum(sl.flat), np.sum(sr.flat))
+        for s in sl.batch_iter('lbatch'):
+            self.assertLess(chi2(s, g) / g.size, 10.)
+        for s in sr.batch_iter('rbatch'):
+            self.assertLess(chi2(s, g) / g.size, 10.)
+        # array
+        ranseed(1)
+        sl = sample(g['a'], nbatch=nbatch, mode='lbatch')
+        ranseed(1)
+        sr = sample(g['a'], nbatch=nbatch, mode='rbatch')
+        self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
+        np.testing.assert_allclose(np.sum(sl.flat), np.sum(sr.flat))
+        for s in sl:
+            self.assertLess(chi2(s, g['a']) / g['a'].size, 10.)
+        # gvar
+        ranseed(1)
+        sl = sample(g['s'], nbatch=nbatch, mode='lbatch')
+        ranseed(1)
+        sr = sample(g['s'], nbatch=nbatch, mode='rbatch')
+        self.assertTrue(sl.shape[0] == sr.shape[-1] == nbatch)
+        self.assertEqual(list(sl), list(sr))
+        for s in sl:
+            self.assertLess(chi2(s, g['s']), 10.)
  
     @unittest.skipIf(FAST,"skipping test_gvar_from_sample for speed")
     def test_gvar_from_sample(self):
