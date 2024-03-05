@@ -2330,7 +2330,7 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=None):
             yield buf.reshape(g.shape)
     # raise StopIteration
 
-def sample(g, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch'):
+def sample(g, eps=None, svdcut=1e-12, uniform=None, nbatch=None, mode='rbatch'):
     """ Generate random sample(s) from distribution ``g``.
 
     The |GVar|\s in array (or dictionary) ``g`` collectively define a 
@@ -2564,7 +2564,7 @@ def gvar_from_sample(gs, mode='rbatch', stderr=False, unbias=False):
         cov = [[cov]]
     return _gvar.gvar(mean, cov).reshape(g_shape) if g_shape != () else _gvar.gvar(mean, cov).flat[0]
 
-def raniter(g, n=None, eps=None, svdcut=None, uniform=None, nbatch=None, mode='rbatch'):
+def raniter(g, n=None, eps=None, svdcut=1e-12, uniform=None, nbatch=None, mode='rbatch'):
     """ Return iterator for random samples from distribution ``g``
 
     ``raniter(g, n, nbatch=nbatch, ...)`` returns an iterator that 

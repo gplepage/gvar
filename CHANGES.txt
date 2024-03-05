@@ -1,5 +1,5 @@
-Version 13.0 ???
-====================
+Version 13.0 2024/03/04
+========================
 
 - gvar.PDF is completely rewritten to increase functionality for use by the 
   vegas and lsqfit modules. The changes are incompatible with previous versions.
