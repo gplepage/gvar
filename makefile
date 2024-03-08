@@ -21,11 +21,13 @@ SRCFILES := $(shell ls setup.py src/gvar/*.{py,pyx})
 CYTHONFILES := src/gvar/_bufferdict.c src/gvar/_gvarcore.c src/gvar/_svec_smat.c src/gvar/_utilities.c src/gvar/dataset.c
 
 install-user : 
+	rm -rf build src/*.egg-info
 	rm -rf $(CYTHONFILES) src/gvar/_version.py
 	python make_version.py src/gvar/_version.py
 	$(PIP) install . --user --no-cache-dir
 
 install install-sys : 
+	rm -rf build src/*.egg-info
 	rm -rf $(CYTHONFILES) src/gvar/_version.py
 	python make_version.py src/gvar/_version.py
 	$(PIP) install . --no-cache-dir

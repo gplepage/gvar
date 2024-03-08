@@ -2905,7 +2905,7 @@ def olddump(g, outputfile, method='pickle', use_json=False):
 
     Old verion, here for testing purposes only.
 
-    The |GVar|\s are recovered using :func:`gvar.load`.
+    The |GVar| are recovered using :func:`gvar.load`.
 
     Three serialization methods are available: :mod:`pickle`, :mod:`json`,
     and :mod:`yaml` (provided the :mod:`yaml` module is installed).
@@ -2916,10 +2916,10 @@ def olddump(g, outputfile, method='pickle', use_json=False):
     lots of other types of key. Use :mod:`pickle` where the workaround fails.
 
     Args:
-        g: A |GVar|, array of |GVar|\s, or dictionary whose values
-            are |GVar|\s and/or arrays of |GVar|\s.
+        g: A |GVar|, array of |GVar|, or dictionary whose values
+            are |GVar| and/or arrays of |GVar|.
         outputfile: The name of a file or a file object in which the
-            serialized |GVar|\s are stored.
+            serialized |GVar| are stored.
         method (str): Serialization method, which should be one of
             ``['pickle', 'json', 'yaml']``. Default is ``'pickle'``.
     """
