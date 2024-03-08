@@ -65,6 +65,7 @@ tests test-all:
 	@echo '     Run again if any test fails.'
 	@echo ''
 	$(PYTHON) -m unittest discover
+	rm -f tests/xxx.*
 
 run run-examples:
 	$(MAKE) -C examples PYTHON=$(PYTHON) run
