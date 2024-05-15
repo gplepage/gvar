@@ -31,8 +31,8 @@ def integral(f, interval, tol=1e-8):
     def fmean(x):
         fx = f(x)
         if isinstance(fx, gv.GVar):
-            sum_fx[0] += f(x)
-            return f(x).mean
+            sum_fx[0] += fx
+            return fx.mean
         else:
             return fx
     I = scipy.integrate.quad(fmean, a, b, epsrel=tol)[0]
