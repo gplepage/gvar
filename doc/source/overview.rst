@@ -626,8 +626,8 @@ The sampling in step #1 is done using :func:`gvar.sample`::
     print(f'Gaussian approx.: {f(p)}')
     
     # sample p, f(p) distributions
-    n = 100_000
-    ps = gv.sample(p, nbatch=n)                             # step #1
+    N = 100_000
+    ps = gv.sample(p, nbatch=N)                             # step #1
     f_ps = f(ps)                                            # step #2
 
     # Gaussian approximation from simulation samples
@@ -656,48 +656,46 @@ of the distribution, adding the following to the code above::
     counts, bins = np.histogram(f_ps, bins=50)
     stats = gv.PDFStatistics(
         moments=moments,
-        histogram=(bins, counts),
+        histogram=(bins, counts, N),
         )
     print('\nSimulation statistics:')
     print(stats)
 
 This produces the following output::
 
-    Moments: [0.01876974 0.04336239 0.00491038 0.01153368]
+        Moments: [0.01909415 0.04337961 0.00513808 0.0115701 ]
 
-    Simulation statistics:
-      mean = 0.018769738628101846   sdev = 0.20739   skew = 0.27825   ex_kurt = 3.0849
-      median = -0.03372571848916756   plus = 0.16875932667218416   minus = 0.13574922445045393
+        Simulation statistics:
+        mean = 0.01909414973482394   sdev = 0.2074   skew = 0.29896   ex_kurt = 3.0921
+        split-normal: 0.00018(79) +/- 0.2213(11)/0.1930(11)
+              median: 0.00702(33) +/- 0.1675(12)/0.13656(95)
 
 The moments indicate that the distribution
 is slightly skewed, but has a large
 excess kurtosis of |~| 3.1, which is indicative of fat tails. 
-The histogram gives an 
+The histogram provides an 
 estimate of the median, which is slightly offset from the mean, as well as estimates for 
 the interval on either side
 of the median (``(median-minus,median)`` or ``(median,median+plus)``)
 that contains 34% of the probability. These intervals are again broader than what is 
-suggested by simply evaluating ``f(p)``.
+suggested by simply evaluating ``f(p)``. The histogram data are also fit to a continuous 
+2-sided Gaussian (split-normal).
 
 Finally we can look at the histogram for the distribution of ``f(p)`` inferred 
 from the samples, again adding to the code above::
 
-    import matplotlib.pyplot as plt 
-
     # plot histogram of f(p) distribution
-    plt.stairs(counts / n, bins, fill=True, color='k', ec='k', alpha=0.25, lw=1., label='Sim.')
-    
+    plt = stats.plot_histogram(fits=[])
+
     # compare with 2 Gaussian distributions
     x = np.linspace(-1,1,500)
-    binsize = bins[1] - bins[0]
     fmt = iter(['r--', 'b:'])
     label = iter(['Gauss.', 'Gauss. Sim.'])
     for f in [f(p), f_p_sim]:
         y = np.exp(-(x - f.mean)**2 / 2 / f.var) / f.sdev / (2 * np.pi) ** 0.5
-        plt.plot(x, y * binsize, next(fmt), label=next(label))
+        plt.plot(x, y, next(fmt), label=next(label))
     plt.legend()
     plt.xlabel('sin(p[0]*p[1])')
-    plt.ylabel('probability')
     plt.show()
 
 This generates the following figure:
@@ -740,7 +738,8 @@ drawn from the Gaussian 0±1, while the values of ``b['y']`` are distributed uni
 the interval between 2 |~| and |~| 3. Method :meth:`gvar.BufferDict.uniform` defines the 
 function ``f(y)`` that connects the Gaussian and uniform distributions. The plot produced
 by the code ::
-
+    
+    >>> import matplotlib.pyplot as plt 
     >>> bs = gv.sample(b, nbatch=100_000)
     >>> counts, bins = np.histogram(bs['y'], bins=50)
     >>> plt.stairs(counts / 100_000, bins, fill=True, color='k', ec='k', alpha=0.25, lw=1.)

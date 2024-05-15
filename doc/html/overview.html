@@ -628,8 +628,8 @@ this:</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Gaussian approx.: </span><span class="si">{</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="c1"># sample p, f(p) distributions</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">100_000</span>
-<span class="n">ps</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>                             <span class="c1"># step #1</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100_000</span>
+<span class="n">ps</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>                             <span class="c1"># step #1</span>
 <span class="n">f_ps</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>                                            <span class="c1"># step #2</span>
 
 <span class="c1"># Gaussian approximation from simulation samples</span>
@@ -657,47 +657,45 @@ of the distribution, adding the following to the code above:</p>
 <span class="n">counts</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">f_ps</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFStatistics</span><span class="p">(</span>
     <span class="n">moments</span><span class="o">=</span><span class="n">moments</span><span class="p">,</span>
-    <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">counts</span><span class="p">),</span>
+    <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span>
     <span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Simulation statistics:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This produces the following output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Moments</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01876974</span> <span class="mf">0.04336239</span> <span class="mf">0.00491038</span> <span class="mf">0.01153368</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Moments</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01909415</span> <span class="mf">0.04337961</span> <span class="mf">0.00513808</span> <span class="mf">0.0115701</span> <span class="p">]</span>
 
 <span class="n">Simulation</span> <span class="n">statistics</span><span class="p">:</span>
-  <span class="n">mean</span> <span class="o">=</span> <span class="mf">0.018769738628101846</span>   <span class="n">sdev</span> <span class="o">=</span> <span class="mf">0.20739</span>   <span class="n">skew</span> <span class="o">=</span> <span class="mf">0.27825</span>   <span class="n">ex_kurt</span> <span class="o">=</span> <span class="mf">3.0849</span>
-  <span class="n">median</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.03372571848916756</span>   <span class="n">plus</span> <span class="o">=</span> <span class="mf">0.16875932667218416</span>   <span class="n">minus</span> <span class="o">=</span> <span class="mf">0.13574922445045393</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="mf">0.01909414973482394</span>   <span class="n">sdev</span> <span class="o">=</span> <span class="mf">0.2074</span>   <span class="n">skew</span> <span class="o">=</span> <span class="mf">0.29896</span>   <span class="n">ex_kurt</span> <span class="o">=</span> <span class="mf">3.0921</span>
+<span class="n">split</span><span class="o">-</span><span class="n">normal</span><span class="p">:</span> <span class="mf">0.00018</span><span class="p">(</span><span class="mi">79</span><span class="p">)</span> <span class="o">+/-</span> <span class="mf">0.2213</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="o">/</span><span class="mf">0.1930</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+      <span class="n">median</span><span class="p">:</span> <span class="mf">0.00702</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span> <span class="o">+/-</span> <span class="mf">0.1675</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">/</span><span class="mf">0.13656</span><span class="p">(</span><span class="mi">95</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The moments indicate that the distribution
 is slightly skewed, but has a large
 excess kurtosis of 3.1, which is indicative of fat tails.
-The histogram gives an
+The histogram provides an
 estimate of the median, which is slightly offset from the mean, as well as estimates for
 the interval on either side
 of the median (<code class="docutils literal notranslate"><span class="pre">(median-minus,median)</span></code> or <code class="docutils literal notranslate"><span class="pre">(median,median+plus)</span></code>)
 that contains 34% of the probability. These intervals are again broader than what is
-suggested by simply evaluating <code class="docutils literal notranslate"><span class="pre">f(p)</span></code>.</p>
+suggested by simply evaluating <code class="docutils literal notranslate"><span class="pre">f(p)</span></code>. The histogram data are also fit to a continuous
+2-sided Gaussian (split-normal).</p>
 <p>Finally we can look at the histogram for the distribution of <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> inferred
 from the samples, again adding to the code above:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="c1"># plot histogram of f(p) distribution</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">stairs</span><span class="p">(</span><span class="n">counts</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Sim.&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot histogram of f(p) distribution</span>
+<span class="n">plt</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">plot_histogram</span><span class="p">(</span><span class="n">fits</span><span class="o">=</span><span class="p">[])</span>
 
 <span class="c1"># compare with 2 Gaussian distributions</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">500</span><span class="p">)</span>
-<span class="n">binsize</span> <span class="o">=</span> <span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">fmt</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">([</span><span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="s1">&#39;b:&#39;</span><span class="p">])</span>
 <span class="n">label</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">([</span><span class="s1">&#39;Gauss.&#39;</span><span class="p">,</span> <span class="s1">&#39;Gauss. Sim.&#39;</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">f_p_sim</span><span class="p">]:</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">f</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">f</span><span class="o">.</span><span class="n">var</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="o">.</span><span class="n">sdev</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">binsize</span><span class="p">,</span> <span class="nb">next</span><span class="p">(</span><span class="n">fmt</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="nb">next</span><span class="p">(</span><span class="n">fmt</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;sin(p[0]*p[1])&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;probability&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -736,7 +734,8 @@ drawn from the Gaussian 0±1, while the values of <code class="docutils literal 
 the interval between 2 and 3. Method <a class="reference internal" href="gvar.html#gvar.BufferDict.uniform" title="gvar.BufferDict.uniform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.BufferDict.uniform()</span></code></a> defines the
 function <code class="docutils literal notranslate"><span class="pre">f(y)</span></code> that connects the Gaussian and uniform distributions. The plot produced
 by the code</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bs</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="mi">100_000</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bs</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="mi">100_000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">bs</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">stairs</span><span class="p">(</span><span class="n">counts</span> <span class="o">/</span> <span class="mi">100_000</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

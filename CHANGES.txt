@@ -1,3 +1,10 @@
+Version 13.1 ???
+==================
+- Improvements to gvar.PDFStatistics, including new keywords fits 
+  and errorbars for PDFStatistics.plot_histogram.
+
+- gvar.PDFHistogram deprecated.
+
 Version 13.0.1 and 13.0.2 2024-03-05
 =====================================
 - Fixes default arguments for sample and raniter.

@@ -158,8 +158,8 @@ needed to calculate <code class="docutils literal notranslate"><span class="pre"
     <span class="k">def</span> <span class="nf">fmean</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
-            <span class="n">sum_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span>
+            <span class="n">sum_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">fx</span>
+            <span class="k">return</span> <span class="n">fx</span><span class="o">.</span><span class="n">mean</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">fx</span>
     <span class="n">I</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">fmean</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">epsrel</span><span class="o">=</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>

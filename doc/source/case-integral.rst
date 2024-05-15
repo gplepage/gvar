@@ -132,8 +132,8 @@ needed to calculate ``I`` and elements of ``dI_dp``, respectively::
         def fmean(x):
             fx = f(x)
             if isinstance(fx, gv.GVar):
-                sum_fx[0] += f(x)
-                return f(x).mean
+                sum_fx[0] += fx
+                return fx.mean
             else:
                 return fx
         I = scipy.integrate.quad(fmean, a, b, epsrel=tol)[0]
@@ -157,7 +157,7 @@ needed to calculate ``I`` and elements of ``dI_dp``, respectively::
             # combine with other parameters, if any
             p += list(pf)
             dI_dp += list(dI_dpf)
-            
+
         return gv.gvar_function(p, I, dI_dp) if len(p) > 0 else I
 
 A key ingredient of this code is the use of :func:`gvar.dependencies` to obtain 

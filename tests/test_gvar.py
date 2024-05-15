@@ -2479,33 +2479,30 @@ class test_gvar2(unittest.TestCase,ArrayTests):
     def test_pdfstatshist(self):
         " PDFStatistics(histogram) "
         g = gv.gvar('2(1.0)')
-        hist = PDFHistogram(g + 0.1, nbin=50, binwidth=0.2)
         N = 10000
         gsample = gv.sample(g, nbatch=N, mode='rbatch')
-        results = hist.count(gsample)
-        results = gv.gvar(results, (results * (1 - results/N))**0.5)
-        for stats in [
-            PDFStatistics(histogram=(hist.bins, results)),
-            hist.analyze(results).stats
-            ]:
-            self.assertTrue(
-                abs(stats.median.loc.mean - g.mean) < 5 * stats.median.loc.sdev
-                )
-            self.assertTrue(
-                abs(stats.median.plus.mean - g.sdev) < 5 * stats.median.plus.sdev
-                )
-            self.assertTrue(
-                abs(stats.median.minus.mean - g.sdev) < 5 * stats.median.minus.sdev
-                )
-            self.assertTrue(
-                abs(stats.splitnormal.loc.mean - g.mean) < 5 * stats.splitnormal.loc.sdev
-                )
-            self.assertTrue(
-                abs(stats.splitnormal.plus.mean - g.sdev) < 5 * stats.splitnormal.plus.sdev
-                )
-            self.assertTrue(
-                abs(stats.splitnormal.minus.mean - g.sdev) < 5 * stats.splitnormal.minus.sdev
-                )
+        counts, bins = np.histogram(gsample, bins=100)
+        # n +/- sqrt(n * (1-p))  where p = n/N  (and n=counts)
+        # counts = gv.gvar(counts, (counts * (1 - counts/N))**0.5)
+        stats = PDFStatistics(histogram=(bins, counts, N))
+        self.assertTrue(
+            abs(stats.median.loc.mean - g.mean) < 5 * stats.median.loc.sdev
+            )
+        self.assertTrue(
+            abs(stats.median.plus.mean - g.sdev) < 5 * stats.median.plus.sdev
+            )
+        self.assertTrue(
+            abs(stats.median.minus.mean - g.sdev) < 5 * stats.median.minus.sdev
+            )
+        self.assertTrue(
+            abs(stats.splitnormal.loc.mean - g.mean) < 5 * stats.splitnormal.loc.sdev
+            )
+        self.assertTrue(
+            abs(stats.splitnormal.plus.mean - g.sdev) < 5 * stats.splitnormal.plus.sdev
+            )
+        self.assertTrue(
+            abs(stats.splitnormal.minus.mean - g.sdev) < 5 * stats.splitnormal.minus.sdev
+            )
 
 
     def test_PDF(self):

@@ -58,15 +58,17 @@
 <p>Objects of type <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> represent Gaussian random variables,
 which are specified by means and covariances. They are created
 using <a class="reference internal" href="#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>         <span class="c1"># 0 ± 3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>         <span class="c1"># 2 ± 4</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                    <span class="c1"># 2 ± 5</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>         <span class="c1"># 10 ± 3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>         <span class="c1"># 12 ± 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>                    <span class="c1"># 22 ± 5</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
 <span class="go">22.0(5.0)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
 <span class="go">22.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">sdev</span><span class="p">)</span>
 <span class="go">5.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">y</span><span class="p">)</span>           <span class="c1"># z is correlated with y</span>
+<span class="go">1(0)</span>
 </pre></div>
 </div>
 <p>This module contains a variety of tools for creating and
@@ -147,7 +149,6 @@ manipulating Gaussian random variables, including:</p>
 <li><p>class <a class="reference internal" href="#gvar.SVD" title="gvar.SVD"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVD</span></code></a> — SVD decomposition of symmetric matrix</p></li>
 <li><p>class <a class="reference internal" href="#gvar.PDF" title="gvar.PDF"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDF</span></code></a> — probability density function.</p></li>
 <li><p>class <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFStatistics</span></code></a> — statistical analysis of moments of a random variable.</p></li>
-<li><p>class <a class="reference internal" href="#gvar.PDFHistogram" title="gvar.PDFHistogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFHistogram</span></code></a> — tool for building PDF histograms.</p></li>
 </ul>
 </div></blockquote>
 <p><em>Analyzing Monte Carlo datasets</em></p>
@@ -3406,18 +3407,27 @@ Also it does a maximum likelihood fit of a split-normal distribution
 to the histogram. Finally the moments are estimated from the histogram
 if they are not otherwise specified.</p>
 <p>Typical usage:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">PDFStatistics</span><span class="p">(</span><span class="n">moments</span><span class="o">=</span><span class="n">mom</span><span class="p">,</span> <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">prob</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;1(1)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.05(5)&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">N</span> <span class="o">=</span> <span class="mi">10_000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">psample</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p01sample</span> <span class="o">=</span> <span class="n">psample</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">psample</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">moments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">p01sample</span><span class="p">,</span> <span class="n">p01sample</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">p01sample</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">p01sample</span><span class="o">**</span><span class="mi">4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">p01sample</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFStatistics</span><span class="p">(</span><span class="n">moments</span><span class="o">=</span><span class="n">mom</span><span class="p">,</span> <span class="n">histogram</span><span class="o">=</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
-<span class="go">    mean = 0.9548573(45)   sdev = 0.028731(14)   skew = -1.0217(42)   ex_kurt = 1.643(29)</span>
-<span class="go">    split-normal: 0.9765402(99) +/- 0.0124721(50)/0.038875(19)</span>
-<span class="go">            median: 0.9596352(52) +/- 0.0222820(67)/0.032022(17)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span><span class="o">.</span><span class="n">plot_histogram</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">mean = 0.05190738402779899   sdev = 0.088379   skew = 1.2499   ex_kurt = 3.5594</span>
+<span class="go">split-normal: 0.0069(38) +/- 0.1144(49)/0.0517(37)</span>
+<span class="go">      median: 0.0327(28) +/- 0.0960(56)/0.0486(26)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span><span class="o">.</span><span class="n">plot_histogram</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>where the uncertainties on the various quantities reflect uncertainties
-specified in the inputs. The distribution in this example is significantly
-skewed, with the tail on the negative side of the peak roughly three
-times wider than that on the positive side. The last line displays
+<p>The distribution in this example is
+skewed, with the tail on the positive side of the peak roughly
+twice as wide as that on the negative side. The last line displays
 a plot of the histogram, overlayed with plots of the Gaussians or
 two-sided Gaussians corresponding to the mean and standard deviation,
 or the median or split-normal distributions.</p>
@@ -3425,12 +3435,22 @@ or the median or split-normal distributions.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>moments</strong> (array of floats or <code class="docutils literal notranslate"><span class="pre">GVar</span></code>s) – <code class="docutils literal notranslate"><span class="pre">moments[i]</span></code> is the
-(i+1)-th moment. Optional argument unless <code class="docutils literal notranslate"><span class="pre">histgram=None</span></code>.</p></li>
-<li><p><strong>histogram</strong> (<em>tuple</em>) – Tuple <code class="docutils literal notranslate"><span class="pre">(bins,prob)</span></code> where <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> is
-the probability in the bin between <code class="docutils literal notranslate"><span class="pre">bins[i-1]</span></code> and <code class="docutils literal notranslate"><span class="pre">bins[i]</span></code>.
-<code class="docutils literal notranslate"><span class="pre">prob[0]</span></code> is the probability below <code class="docutils literal notranslate"><span class="pre">bins[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">prob[-1]</span></code>
-is the probability above <code class="docutils literal notranslate"><span class="pre">bins[-1]</span></code>. Array <code class="docutils literal notranslate"><span class="pre">bins</span></code> is ordered.
-Optional argument unless <code class="docutils literal notranslate"><span class="pre">moments=None</span></code>.</p></li>
+(i+1)-th moment. Optional unless <code class="docutils literal notranslate"><span class="pre">histogram=None</span></code>.</p></li>
+<li><p><strong>histogram</strong> (<em>tuple</em>) – <p>(Optional unless <code class="docutils literal notranslate"><span class="pre">moments=None</span></code>) Tuple <code class="docutils literal notranslate"><span class="pre">(bins,prob)</span></code>
+specifying histogram bins and the probabilities contained in each bin.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">len(prob)</span> <span class="pre">==</span> <span class="pre">len(bins)</span> <span class="pre">+</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">prob[0]</span></code> is the probability
+below <code class="docutils literal notranslate"><span class="pre">bins[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">prob[-1]</span></code> is the probability above <code class="docutils literal notranslate"><span class="pre">bins[-1]</span></code>,
+while <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> is the probability between <code class="docutils literal notranslate"><span class="pre">bins[i-1]</span></code> and <code class="docutils literal notranslate"><span class="pre">bins[i]</span></code>;
+the sum of probabilities is normalized to equal one.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">len(prob)</span> <span class="pre">==</span> <span class="pre">len(bins)</span> <span class="pre">-</span> <span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> is the probability
+betwen <code class="docutils literal notranslate"><span class="pre">bins[i]</span></code> and <code class="docutils literal notranslate"><span class="pre">bins[i+1]</span></code>.</p>
+<p>Alternatively if <code class="docutils literal notranslate"><span class="pre">histogram=(bins,</span> <span class="pre">counts,</span> <span class="pre">N)</span></code>,
+array <code class="docutils literal notranslate"><span class="pre">counts</span></code> is the number of random samples in each bin,
+where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the total number of samples. The probability
+associated with each bin is then <code class="docutils literal notranslate"><span class="pre">prob</span> <span class="pre">=</span> <span class="pre">counts</span> <span class="pre">/</span> <span class="pre">N</span></code>.
+An uncertainty is assigned to each probability (assuming
+a binomial distribution).</p>
+</p></li>
 </ul>
 </dd>
 </dl>
@@ -3475,7 +3495,7 @@ from the histogram, while the intervals</p>
 <dt class="sig sig-object py" id="gvar.PDFStatistics.splitnormal">
 <span class="sig-name descname"><span class="pre">splitnormal</span></span><a class="headerlink" href="#gvar.PDFStatistics.splitnormal" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal notranslate"><span class="pre">self.splitnormal.loc</span></code> is the location of the peak
-of the split-normal distribution fit to the histogram. The
+of the (continuous) split-normal distribution fit to the histogram. The
 standard deviations above and below that point are
 <code class="docutils literal notranslate"><span class="pre">self.splitnormal.plus</span></code> and <code class="docutils literal notranslate"><span class="pre">self.splitnormal.minus</span></code>, respectively.</p>
 </dd></dl>
@@ -3504,13 +3524,14 @@ standard deviations above and below that point are
 <dd><p>array of probabilities <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> associated with the
 intervals <code class="docutils literal notranslate"><span class="pre">(bins[i-1],</span> <span class="pre">bins[i])</span></code>. <code class="docutils literal notranslate"><span class="pre">prob[0]</span></code> is the
 probability from below <code class="docutils literal notranslate"><span class="pre">bins[0]</span></code>; <code class="docutils literal notranslate"><span class="pre">prob[-1]</span></code> is the
-probability from above <code class="docutils literal notranslate"><span class="pre">bins[-1]</span></code>.</p>
+probability from above <code class="docutils literal notranslate"><span class="pre">bins[-1]</span></code>. The <code class="docutils literal notranslate"><span class="pre">prob[i]</span></code> can
+be numbers or <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gvar.PDFStatistics.plot_histogram">
-<span class="sig-name descname"><span class="pre">plot_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFStatistics.plot_histogram" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plot histogram.</p>
+<span class="sig-name descname"><span class="pre">plot_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['mean',</span> <span class="pre">'split-normal',</span> <span class="pre">'median']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errorbars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFStatistics.plot_histogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot histogram of probability density.</p>
 <p>Plots the histogram, overlayed with plots of the Gaussian or
 two-sided Gaussians corresponding to the mean and standard deviation,
 or the median or split-normal distributions.</p>
@@ -3519,181 +3540,19 @@ or the median or split-normal distributions.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>plot</strong> – Plotter. Set to <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code> if <code class="docutils literal notranslate"><span class="pre">plot=None</span></code> (default).</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – Plot is displayed if <code class="docutils literal notranslate"><span class="pre">show=True</span></code>, and not otherwise (default).</p></li>
+<li><p><strong>fits</strong> – Array indicating histogram fits to be plotted on the histogram.
+Default is <code class="docutils literal notranslate"><span class="pre">fits=['mean',</span> <span class="pre">'split-normal',</span> <span class="pre">'median']</span></code> which draws
+all of  the fits normally examined by <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.PDFStatistics</span></code></a>:
+a fit to a Gaussian based on the mean and standard deviation of
+the distribution; a fit to a continuous two-sided Gaussian (split-normal);
+and a fit to a (discontinuous) two-sided Gaussian centered on the median.
+Set <code class="docutils literal notranslate"><span class="pre">fits=[]</span></code> to omit the fits from the plot.</p></li>
+<li><p><strong>errorbars</strong> (<em>bool</em>) – Plot errorbars on histogram if <code class="docutils literal notranslate"><span class="pre">True</span></code> (default) when
+the input probabilities are <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s; ignored otherwise.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The plotter.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="gvar.PDFHistogram">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">PDFHistogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram" title="Permalink to this definition">¶</a></dt>
-<dd><p>Utility class for creating PDF histograms.</p>
-<p>This class is designed to facilitate studies of probability
-density functions associated with <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s. The following code,
-for example, makes a histogram of probabilities for the Gaussian
-distribution corresponding to <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> 1.0(5):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="s1">&#39;1.0(5)&#39;</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)]</span>
-
-<span class="n">hist</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">PDFHistogram</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-<span class="n">count</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;probabilities:&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">prob</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;statistics:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Here <code class="docutils literal notranslate"><span class="pre">hist</span></code> defines a histogram with 8 bins, centered on
-<code class="docutils literal notranslate"><span class="pre">g.mean</span></code>, and each with width equal to <code class="docutils literal notranslate"><span class="pre">g.sdev</span></code>. The data in
-array <code class="docutils literal notranslate"><span class="pre">data</span></code> is a random sampling from <code class="docutils literal notranslate"><span class="pre">g</span></code>’s distribution.
-The number of data elements in each bin is determined by
-<code class="docutils literal notranslate"><span class="pre">hist.count(data)</span></code> and turned into probabilities by
-<code class="docutils literal notranslate"><span class="pre">hist.analyze(count)</span></code>. The probabilities (<code class="docutils literal notranslate"><span class="pre">a.prob</span></code>) and
-a statistical analysis of the probability distribution based
-on the histogram (<code class="docutils literal notranslate"><span class="pre">a.stats</span></code>) are then printed out:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">probabilities</span><span class="p">:</span> <span class="p">[</span> <span class="mf">0.0017</span>  <span class="mf">0.0213</span>  <span class="mf">0.1358</span>  <span class="mf">0.3401</span>  <span class="mf">0.3418</span>  <span class="mf">0.1351</span>  <span class="mf">0.0222</span>  <span class="mf">0.0018</span><span class="p">]</span>
-<span class="n">statistics</span><span class="p">:</span>
-      <span class="n">mean</span> <span class="o">=</span> <span class="mf">1.001</span>   <span class="n">sdev</span> <span class="o">=</span> <span class="mf">0.52334</span>   <span class="n">skew</span> <span class="o">=</span> <span class="mf">0.0069999</span>   <span class="n">ex_kurt</span> <span class="o">=</span> <span class="mf">0.034105</span>
-   <span class="n">median</span> <span class="o">=</span> <span class="mf">1.00141666398</span>   <span class="n">plus</span> <span class="o">=</span> <span class="mf">0.499891542549</span>   <span class="n">minus</span> <span class="o">=</span> <span class="mf">0.501710986504</span>
-</pre></div>
-</div>
-<p>A plot of the histogram can be created and displayed using,
-for example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span> <span class="o">=</span> <span class="n">hist</span><span class="o">.</span><span class="n">make_plot</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;probabilities&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">vegas.PDFIntegrator</span></code> can be used to create histograms for more
-complicated, multi-dimensional distributions: the expectation value of
-<code class="docutils literal notranslate"><span class="pre">hist.count(f(p))</span></code> over values of <code class="docutils literal notranslate"><span class="pre">p</span></code> drawn from a multi-dimensional
-distribution gives the the probability distribution for function <code class="docutils literal notranslate"><span class="pre">f(p)</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>g</strong> (<a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – The mean and standard deviation of <code class="docutils literal notranslate"><span class="pre">g</span></code> are
-used to design the histogram bins, which are centered
-on <code class="docutils literal notranslate"><span class="pre">g.mean</span></code>. Ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (in which case <code class="docutils literal notranslate"><span class="pre">bins</span></code> must
-be specified).</p></li>
-<li><p><strong>nbin</strong> (<em>int</em>) – The number of histogram bins. Set equal to
-<code class="docutils literal notranslate"><span class="pre">PDFHistogram.default_nbin</span></code> (=8 initially) if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>binwidth</strong> (<em>float</em>) – The width of each bin is <code class="docutils literal notranslate"><span class="pre">binwidth</span> <span class="pre">*</span> <span class="pre">g.sdev</span></code>.
-Set equal to <code class="docutils literal notranslate"><span class="pre">PDFHistogram.default_binwidth</span></code> (=1. initially)
-if <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>bins</strong> (array or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Ignored if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default). Otherwise specifies the
-histogram’s bin edges, overriding the default bin design specified
-by <code class="docutils literal notranslate"><span class="pre">g</span></code>. <code class="docutils literal notranslate"><span class="pre">len(bins)</span></code> is one larger than the number of bins. If
-specified it overrides the default bin design indicated by <code class="docutils literal notranslate"><span class="pre">g</span></code>.
-One of <code class="docutils literal notranslate"><span class="pre">g</span></code> or <code class="docutils literal notranslate"><span class="pre">bins</span></code> must be specified.</p></li>
-</ul>
-</dd>
-</dl>
-<p>The main attributes are:</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.PDFHistogram.g">
-<span class="sig-name descname"><span class="pre">g</span></span><a class="headerlink" href="#gvar.PDFHistogram.g" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> used to design the histogram.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.PDFHistogram.bins">
-<span class="sig-name descname"><span class="pre">bins</span></span><a class="headerlink" href="#gvar.PDFHistogram.bins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bin edges for the histogram (see above).</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.PDFHistogram.midpoints">
-<span class="sig-name descname"><span class="pre">midpoints</span></span><a class="headerlink" href="#gvar.PDFHistogram.midpoints" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bin midpoints.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="gvar.PDFHistogram.widths">
-<span class="sig-name descname"><span class="pre">widths</span></span><a class="headerlink" href="#gvar.PDFHistogram.widths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bin widths.</p>
-</dd></dl>
-
-<p>The main methods are:</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="gvar.PDFHistogram.count">
-<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.count" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute histogram of data.</p>
-<p>Counts the number of elements from array <code class="docutils literal notranslate"><span class="pre">data</span></code> in each bin of the
-histogram. Results are returned in an array, call it <code class="docutils literal notranslate"><span class="pre">h</span></code>, of
-length <code class="docutils literal notranslate"><span class="pre">nbin+2</span></code> where <code class="docutils literal notranslate"><span class="pre">h[0]</span></code> is the number of data elements
-that fall below the range of the histogram, <code class="docutils literal notranslate"><span class="pre">h[-1]</span></code>
-(i.e., <code class="docutils literal notranslate"><span class="pre">h[nbin+1]</span></code>) is the number that fall above the range,
-and <code class="docutils literal notranslate"><span class="pre">h[i]</span></code> is the number in the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th bin for <code class="docutils literal notranslate"><span class="pre">i=1...nbin</span></code>.</p>
-<p>Argument <code class="docutils literal notranslate"><span class="pre">data</span></code> can also be a float, in which case the result is the
-same as from <code class="docutils literal notranslate"><span class="pre">histogram([data])</span></code>. Note that the expectation value of
-<code class="docutils literal notranslate"><span class="pre">count(f(p))</span></code> over parameter values <code class="docutils literal notranslate"><span class="pre">p</span></code> drawn from a random
-distribution gives the probabilities for values of <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> to fall
-in each histogram bin. Dividing  by the bin widths gives the average
-probability density for random variable <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> in each bin.</p>
-<p>Bin intervals are closed on the left and open on the right,
-except for the last interval which is closed on both ends.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gvar.PDFHistogram.analyze">
-<span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.analyze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Analyze count data from <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDFHistogram.count()</span></code></a>.</p>
-<p>Turns an array of counts (see <a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDFHistogram.count()</span></code></a>) into a
-histogram of probabilities, and  estimates the mean, standard
-deviation, and other statistical characteristics of the corresponding
-probability distribution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>count</strong> (<em>array</em>) – Array of length <code class="docutils literal notranslate"><span class="pre">nbin+2</span></code> containing histogram
-data where <code class="docutils literal notranslate"><span class="pre">count[0]</span></code> is the count for values that are
-below the range of the histogram, <code class="docutils literal notranslate"><span class="pre">count[-1]</span></code> is the count
-for values above the range, and <code class="docutils literal notranslate"><span class="pre">count[i]</span></code> is the count
-for the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th bin where <code class="docutils literal notranslate"><span class="pre">i=1...nbin</span></code>.</p>
-</dd>
-</dl>
-<p>Returns a named tuple containing the following information (in order):</p>
-<blockquote>
-<div><p><em>bins</em>: Array of bin edges for histogram (length <code class="docutils literal notranslate"><span class="pre">nbin+1</span></code>)</p>
-<p><em>prob</em>: Array of probabilities for each bin.</p>
-<p><em>stats</em>: Statistical data about histogram. See <a class="reference internal" href="#gvar.PDFStatistics" title="gvar.PDFStatistics"><code class="xref py py-class docutils literal notranslate"><span class="pre">PDFStatistics</span></code></a>.</p>
-<p><em>norm</em>: Convert counts into probabilities by dividing by <code class="docutils literal notranslate"><span class="pre">norm</span></code>.</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gvar.PDFHistogram.make_plot">
-<span class="sig-name descname"><span class="pre">make_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plottype='probability'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar=dict(alpha=0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color='b')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errorbar=dict(fmt='b.')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gaussian=dict(ls='--'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c='r')</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.PDFHistogram.make_plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert histogram counts in array <code class="docutils literal notranslate"><span class="pre">count</span></code> into a plot.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>count</strong> (<em>array</em>) – Array of histogram counts (see
-<a class="reference internal" href="#gvar.PDFHistogram.count" title="gvar.PDFHistogram.count"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PDFHistogram.count()</span></code></a>).</p></li>
-<li><p><strong>plot</strong> (<em>plotter</em>) – <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib</span></code> plotting window. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
-uses the default window. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>show</strong> (<em>boolean</em>) – Displayes plot if <code class="docutils literal notranslate"><span class="pre">True</span></code>; otherwise returns
-the plot. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>plottype</strong> (<em>str</em>) – The probabilities in each bin are plotted if
-<code class="docutils literal notranslate"><span class="pre">plottype='probability'</span></code> (default). The average probability
-density is plot if <code class="docutils literal notranslate"><span class="pre">plottype='density'</span></code>. The
-cumulative probability is plotted if <code class="docutils literal notranslate"><span class="pre">plottype=cumulative</span></code>.</p></li>
-<li><p><strong>bar</strong> (<em>dictionary</em>) – Additional plotting arguments for the bar graph
-showing the histogram. This part of the plot is omitted
-if <code class="docutils literal notranslate"><span class="pre">bar=None</span></code>.</p></li>
-<li><p><strong>errorbar</strong> (<em>dictionary</em>) – Additional plotting arguments for the
-errorbar graph, showing error bars on the histogram. This
-part of the plot is omitted if <code class="docutils literal notranslate"><span class="pre">errorbar=None</span></code>.</p></li>
-<li><p><strong>gaussian</strong> (<em>dictionary</em>) – Additional plotting arguments for the
-plot of the Gaussian probability for the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> (<code class="docutils literal notranslate"><span class="pre">g</span></code>)
-specified in the initialization. This part of the plot
-is omitted if <code class="docutils literal notranslate"><span class="pre">gaussian=None</span></code> or if no <code class="docutils literal notranslate"><span class="pre">g</span></code> was
-specified.</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>

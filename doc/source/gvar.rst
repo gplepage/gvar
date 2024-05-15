@@ -22,15 +22,17 @@ Objects of type :class:`gvar.GVar` represent Gaussian random variables,
 which are specified by means and covariances. They are created
 using :func:`gvar.gvar`: for example, ::
 
-    >>> x = gvar.gvar(10, 3)         # 0 ± 3
-    >>> y = gvar.gvar(12, 4)         # 2 ± 4
-    >>> z = x + y                    # 2 ± 5
+    >>> x = gvar.gvar(10, 3)         # 10 ± 3
+    >>> y = gvar.gvar(12, 4)         # 12 ± 4
+    >>> z = x + y                    # 22 ± 5
     >>> print(z)
     22.0(5.0)
     >>> print(z.mean)
     22.0
     >>> print(z.sdev)
     5.0
+    >>> print((z - x) / y)           # z is correlated with y
+    1(0)
 
 This module contains a variety of tools for creating and
 manipulating Gaussian random variables, including:
@@ -142,8 +144,6 @@ manipulating Gaussian random variables, including:
     - class :class:`PDF` --- probability density function.
 
     - class :class:`PDFStatistics` --- statistical analysis of moments of a random variable.
-
-    - class :class:`PDFHistogram` --- tool for building PDF histograms.
 
 *Analyzing Monte Carlo datasets*
 
@@ -506,16 +506,6 @@ module (for multi-dimensional integration) and class
 
 .. autoclass:: gvar.PDFStatistics(moments=None, histogram=None)
    :members:
-
-.. autoclass:: gvar.PDFHistogram(g, nbin=None, binwidth=None, bins=None)
-
-  The main methods are:
-
-  .. automethod:: count(data)
-
-  .. automethod:: analyze(count)
-
-  .. automethod:: make_plot(count, plot=None, show=False, , plottype='probability', bar=dict(alpha=0.15, color='b'), errorbar=dict(fmt='b.'), gaussian=dict(ls='--', c='r'))
 
 Requirements
 ------------

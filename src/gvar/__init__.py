@@ -67,8 +67,6 @@ variables including:
 
     - ``PDFStatistics`` --- (class) statistical analysis of moments of a random variable.
 
-    - ``PDFHistogram`` --- (class) tool for building PDF histograms.
-
     - ``BufferDict`` --- (class) ordered dictionary with data buffer.
 
     - ``disassemble(g)`` --- disassemble |GVar|\s in ``g``.
@@ -1376,11 +1374,6 @@ class oldPDF(object):
             else:
                 dpflat = p.flat[:] - self.meanflat
         return self.dpflat2x(dpflat, mode=mode)
-        # if hasattr(p, 'keys'):
-        #     dp = BufferDict(p, keys=self._keys)._buf[:self.meanflat.size] - self.meanflat
-        # else:
-        #     dp = numpy.asarray(p).reshape(-1) - self.meanflat
-        # return self.vec_isig.dot(dp)
 
     def logpdf(self, p, mode=None):
         """ Logarithm of the probability density function evaluated at ``p``. """
@@ -1392,7 +1385,7 @@ class oldPDF(object):
         return numpy.exp(self.logpdf(p, mode))
 
 class PDFHistogram(object):
-    r""" Utility class for creating PDF histograms.
+    r""" Utility class for creating PDF histograms. (Deprecated.)
 
     This class is designed to facilitate studies of probability
     density functions associated with |GVar|\s. The following code,
@@ -1465,6 +1458,11 @@ class PDFHistogram(object):
     default_binwidth = 1.
 
     def __init__(self, g=None, nbin=None, binwidth=None, bins=None):
+        import warnings
+        warnings. warn(
+            'PDFHistogram is deprecated. Use numpy.histogram.', 
+            DeprecationWarning, stacklevel=2
+            )
         if nbin is None or nbin < 0:
             nbin = self.default_nbin
         if binwidth is None:
@@ -1737,30 +1735,51 @@ class PDFStatistics(object):
 
     Typical usage::
 
-        >>> stats = gvar.PDFStatistics(moments=mom, histogram=(bins, prob))
+        >>> import gvar as gv 
+        >>> import numpy as np
+        >>> p = gv.gvar(['1(1)', '0.05(5)'])
+        >>> N = 10_000
+        >>> psample = gv.sample(p, nbatch=N)
+        >>> p01sample = psample[0] * psample[1]
+        >>>
+        >>> moments = np.mean([p01sample, p01sample**2, p01sample**3, p01sample**4], axis=-1)
+        >>> counts, bins = np.histogram(p01sample, bins=50)
+        >>>
+        >>> stats = gv.PDFStatistics(moments=mom, histogram=(bins, counts, N))
         >>> print(stats)
-            mean = 0.9548573(45)   sdev = 0.028731(14)   skew = -1.0217(42)   ex_kurt = 1.643(29)
-            split-normal: 0.9765402(99) +/- 0.0124721(50)/0.038875(19)
-                    median: 0.9596352(52) +/- 0.0222820(67)/0.032022(17)
-        >>> stats.plot_histogram(show=True)
+        mean = 0.05190738402779899   sdev = 0.088379   skew = 1.2499   ex_kurt = 3.5594
+        split-normal: 0.0069(38) +/- 0.1144(49)/0.0517(37)
+              median: 0.0327(28) +/- 0.0960(56)/0.0486(26)
+        >>> stats.plot_histogram().show()
     
-    where the uncertainties on the various quantities reflect uncertainties 
-    specified in the inputs. The distribution in this example is significantly
-    skewed, with the tail on the negative side of the peak roughly three 
-    times wider than that on the positive side. The last line displays 
+    The distribution in this example is 
+    skewed, with the tail on the positive side of the peak roughly 
+    twice as wide as that on the negative side. The last line displays 
     a plot of the histogram, overlayed with plots of the Gaussians or 
     two-sided Gaussians corresponding to the mean and standard deviation,
     or the median or split-normal distributions.
 
     Args:
         moments (array of floats or ``GVar``\s): ``moments[i]`` is the 
-            (i+1)-th moment. Optional argument unless ``histgram=None``.  
+            (i+1)-th moment. Optional unless ``histogram=None``.  
 
-        histogram (tuple): Tuple ``(bins,prob)`` where ``prob[i]`` is
-            the probability in the bin between ``bins[i-1]`` and ``bins[i]``.
-            ``prob[0]`` is the probability below ``bins[0]`` and ``prob[-1]``
-            is the probability above ``bins[-1]``. Array ``bins`` is ordered.
-            Optional argument unless ``moments=None``. 
+        histogram (tuple): (Optional unless ``moments=None``) Tuple ``(bins,prob)``
+            specifying histogram bins and the probabilities contained in each bin.
+            
+            If ``len(prob) == len(bins) + 1``, ``prob[0]`` is the probability 
+            below ``bins[0]`` and ``prob[-1]`` is the probability above ``bins[-1]``,
+            while ``prob[i]`` is the probability between ``bins[i-1]`` and ``bins[i]``;
+            the sum of probabilities is normalized to equal one. 
+            
+            If ``len(prob) == len(bins) - 1``, ``prob[i]`` is the probability  
+            betwen ``bins[i]`` and ``bins[i+1]``. 
+
+            Alternatively if ``histogram=(bins, counts, N)``, 
+            array ``counts`` is the number of random samples in each bin, 
+            where ``N`` is the total number of samples. The probability 
+            associated with each bin is then ``prob = counts / N``. 
+            An uncertainty is assigned to each probability (assuming 
+            a binomial distribution). 
 
     The attributes are as follows:
 
@@ -1777,7 +1796,7 @@ class PDFStatistics(object):
             
             each contain 34% of the probability.
         splitnormal: ``self.splitnormal.loc`` is the location of the peak
-            of the split-normal distribution fit to the histogram. The 
+            of the (continuous) split-normal distribution fit to the histogram. The 
             standard deviations above and below that point are 
             ``self.splitnormal.plus`` and ``self.splitnormal.minus``, respectively.
         gvar: ``gvar.gvar(mean, sdev)``
@@ -1786,19 +1805,25 @@ class PDFStatistics(object):
         prob: array of probabilities ``prob[i]`` associated with the 
             intervals ``(bins[i-1], bins[i])``. ``prob[0]`` is the 
             probability from below ``bins[0]``; ``prob[-1]`` is the 
-            probability from above ``bins[-1]``.
+            probability from above ``bins[-1]``. The ``prob[i]`` can
+            be numbers or |GVar|\s.
     """
     def __init__(self, moments=None, histogram=None, prefix='   '):
         self.prefix = prefix
         if histogram is not None:
-            bins, prob = histogram
+            if len(histogram) == 3:
+                bins, counts, N = histogram 
+                prob = gvar(counts, (counts * (1 - counts / N)) ** 0.5) / N
+            else:
+                bins, prob = histogram
             self.bins = numpy.array(bins)
-            self.prob = numpy.array(prob) / numpy.sum(prob)
+            self.prob = numpy.fabs(prob)
             if len(self.prob) == len(self.bins) - 1:
                 # add out-of-bounds probabilities
                 self.prob = numpy.array([0.] + self.prob.tolist() + [0.])
             elif len(self.prob) != len(self.bins) + 1:
                 raise ValueError('length mismatch: len(bins)!=len(prob)-1 in histogram')
+            self.prob /= numpy.sum(self.prob)
             self.splitnormal = self._fit_splitnormal(self.bins, self.prob)
             self.median = self._fit_median(self.bins, self.prob)
             # self.bins = bins 
@@ -1837,7 +1862,7 @@ class PDFStatistics(object):
         
     def _fit_median(self, bins, prob):
         """ Fit median model to histogram """
-        prob = prob / sum(prob)
+        # prob = prob / sum(prob)
         cumprob = numpy.cumsum(prob)[:-1]
         probspline = cspline.CSpline(bins, cumprob, alg='cspline')
         x0 = []
@@ -1912,8 +1937,8 @@ class PDFStatistics(object):
             ans += '      median: {}'.format(self.median)
         return ans
 
-    def plot_histogram(self, plot=None, show=False):
-        """ Plot histogram.
+    def plot_histogram(self, plot=None, show=False, fits=['mean', 'split-normal', 'median'], errorbars=True):
+        """ Plot histogram of probability density.
 
         Plots the histogram, overlayed with plots of the Gaussian or 
         two-sided Gaussians corresponding to the mean and standard deviation,
@@ -1921,8 +1946,20 @@ class PDFStatistics(object):
 
         Args:
             plot: Plotter. Set to ``matplotlib.pyplot`` if ``plot=None`` (default).
+
             show (bool): Plot is displayed if ``show=True``, and not otherwise (default).
 
+            fits: Array indicating histogram fits to be plotted on the histogram.
+                Default is ``fits=['mean', 'split-normal', 'median']`` which draws 
+                all of  the fits normally examined by :class:`gvar.PDFStatistics`:
+                a fit to a Gaussian based on the mean and standard deviation of 
+                the distribution; a fit to a continuous two-sided Gaussian (split-normal); 
+                and a fit to a (discontinuous) two-sided Gaussian centered on the median. 
+                Set ``fits=[]`` to omit the fits from the plot.
+
+            errorbars (bool): Plot errorbars on histogram if ``True`` (default) when 
+                the input probabilities are |GVar|\s; ignored otherwise.
+            
         Returns:
             The plotter.
         """
@@ -1931,6 +1968,13 @@ class PDFStatistics(object):
         if self.prob is None or self.bins is None:
             return plot
         density = mean(self.prob[1:-1]) / (self.bins[1:] - self.bins[:-1])
+        if errorbars:
+            errors = sdev(self.prob[1:-1]) / (self.bins[1:] - self.bins[:-1])
+            plot.errorbar(
+                x=(self.bins[1:] + self.bins[:-1])/2., y=density, yerr=errors,
+                alpha=0.5, lw=0.5, elinewidth=0.5, mew=0.5, ms=0.5,
+                fmt='k.'
+                )
         plot.bar(
             self.bins[:-1], density, width=self.bins[1:]-self.bins[:-1], align='edge',
             color='k', ec='k', alpha=0.1, lw=0.5, label='data'
@@ -1938,12 +1982,15 @@ class PDFStatistics(object):
         x = numpy.linspace(*plot.xlim(), num=4000)
         g = _TwoSided(self.gvar.mean, self.gvar.sdev, self.gvar.sdev)
         sn = g(x) 
-        plot.plot(x, sn, 'b:', label='mean')
-        if self.splitnormal is not None:
+        if fits is None:
+            fits = []
+        if 'mean' in fits:
+            plot.plot(x, sn, 'b:', label='mean')
+        if 'split-normal' in fits and self.splitnormal is not None:
             sn = self.splitnormal(x)
             if sn is not None:
                 plot.plot(x, sn, 'g', lw=1, label='split-normal')
-        if self.median is not None:
+        if 'median' in fits and self.median is not None:
             sn = self.median(x)
             if sn is not None:
                 plot.plot(x, sn, 'r--', lw=1, label='median')
@@ -1954,10 +2001,6 @@ class PDFStatistics(object):
             plot.show()
         return plot
     
-    # @staticmethod
-    # def moments(f, exponents=numpy.arange(1,5)):
-    #     """ Compute 1st-4th moments of f, returned in an array. """
-    #     return f ** exponents
 
 def make_fake_data(g, fac=1.0):
     """ Make fake data based on ``g``.
