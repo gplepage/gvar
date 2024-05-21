@@ -1,7 +1,7 @@
-Version 13.1 ???
-==================
-- Improvements to gvar.PDFStatistics, including new keywords fits 
-  and errorbars for PDFStatistics.plot_histogram.
+Version 13.1 2024-05-21
+========================
+- Improvements to gvar.PDFStatistics, including new keywords 
+  fits, errorbars for PDFStatistics.plot_histogram.
 
 - gvar.PDFHistogram deprecated.
 
