@@ -63,6 +63,11 @@ from ._bufferdict import BufferDict
 from numpy cimport npy_intp as INTP_TYPE
 cimport cython
 
+if numpy.version.version >= '2.0':
+    FLOAT_TYPE = numpy.float64
+else:
+    FLOAT_TYPE = numpy.float_
+
 cdef extern from "math.h":
     double c_pow "pow" (double x,double y)
     double c_sin "sin" (double x)
@@ -156,7 +161,7 @@ def mean(g):
             g = BufferDict(g)
     else:
         g = numpy.asarray(g)
-    buf = numpy.zeros(g.size,numpy.float_)
+    buf = numpy.zeros(g.size,FLOAT_TYPE)
     try:
         for i, gi in enumerate(g.flat):
             if gi == None:
@@ -359,7 +364,7 @@ def _dependencies(g, all=False):
         dep = dep - pri
     ans = []
     idx = numpy.zeros(1, numpy.intp)
-    val = numpy.ones(1, numpy.float_)
+    val = numpy.ones(1, FLOAT_TYPE)
     sv = _gvar.svec(1)
     for i in dep:
         idx[0] = i
@@ -547,7 +552,7 @@ def correlate(g, corr, upper=False, lower=False, verify=False):
     cdef numpy.ndarray[numpy.float_t, ndim=1] sdevflat, meanflat
     if hasattr(g, 'keys'):
         g = _gvar.asbufferdict(g)
-        corrflat = numpy.empty((len(g.buf), len(g.buf)), numpy.float_)
+        corrflat = numpy.empty((len(g.buf), len(g.buf)), FLOAT_TYPE)
         for i in g:
             i_sl, i_sh = g.slice_shape(i)
             if i_sh == ():
@@ -1042,7 +1047,7 @@ def evalcov(g, verify=True):
         if ni <= 0:
             # GVars don't depend on other GVars (eg, 0*gvar('1(1)') gives such a thing)
             is_dense = True 
-            ans = numpy.zeros((ng, ng), numpy.float_)
+            ans = numpy.zeros((ng, ng), FLOAT_TYPE)
         else:
             # less than 50% zero is defined as dense (ad hoc)
             is_dense = cov_zeros / ni / ni < 0.5  # N.B. sparse vecs ok 
@@ -1060,7 +1065,7 @@ def evalcov(g, verify=True):
     else:
         is_dense = False
     if not is_dense:
-        ans = numpy.empty((ng, ng),numpy.float_)
+        ans = numpy.empty((ng, ng),FLOAT_TYPE)
         covd = numpy.zeros(ng, object)
         np_imask = numpy.asarray(imask)
         for a in range(ng):
@@ -1111,7 +1116,7 @@ def evalcov_old(g):
     g_shape = g.shape
     g = g.flat
     ng = len(g)
-    ans = numpy.zeros((ng,ng),numpy.float_)
+    ans = numpy.zeros((ng,ng),FLOAT_TYPE)
     if hasattr(g[0], 'cov'):
         cov = g[0].cov
     else:
@@ -2097,7 +2102,7 @@ def wsum_der(numpy.float_t[:] wgt, GVar[:] glist):
     ng = len(glist)
     assert ng==len(wgt),"wgt and glist have different lengths."
     cov = glist[0].cov
-    ans = numpy.zeros(len(cov),numpy.float_)
+    ans = numpy.zeros(len(cov),FLOAT_TYPE)
     for i in range(wgt.shape[0]):
         w = wgt[i]
         g = glist[i]
@@ -2123,7 +2128,7 @@ cpdef GVar wsum_gvar(numpy.float_t[:] wgt, GVar[:] glist):
     ng = len(glist)
     assert ng==len(wgt),"wgt and glist have different lengths."
     cov = glist[0].cov
-    der = numpy.zeros(len(cov),numpy.float_)
+    der = numpy.zeros(len(cov),FLOAT_TYPE)
     wv = 0.0
     for i in range(ng): #w,g in zip(wgt,glist):
         w = wgt[i]
@@ -2887,11 +2892,11 @@ def valder(v):
     same as that of ``v``.
     """
     try:
-        v = numpy.asarray(v,numpy.float_)
+        v = numpy.asarray(v,FLOAT_TYPE)
     except ValueError:
         raise ValueError("Bad input.")
     gv_gvar = _gvar.gvar_factory()
-    return gv_gvar(v,numpy.zeros(v.shape,numpy.float_))
+    return gv_gvar(v,numpy.zeros(v.shape,FLOAT_TYPE))
 
 
 # ## miscellaneous functions ##

@@ -26,6 +26,11 @@ from libc.string cimport memset
 from numpy cimport npy_intp as INTP_TYPE
 # index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
 
+if numpy.version.version >= '2.0':
+    FLOAT_TYPE = numpy.float64
+else:
+    FLOAT_TYPE = numpy.float_
+
 cdef class svec:
     """ sparse vector --- for GVar derivatives (only)"""
     # cdef svec_element * v
@@ -41,7 +46,7 @@ cdef class svec:
 
     def __getstate__(self):
         cdef numpy.ndarray[INTP_TYPE, ndim=1] idx = numpy.empty(self.size, numpy.intp)
-        cdef numpy.ndarray[numpy.float_t, ndim=1] val = numpy.empty(self.size, numpy.float_)
+        cdef numpy.ndarray[numpy.float_t, ndim=1] val = numpy.empty(self.size, FLOAT_TYPE)
         cdef INTP_TYPE i
         for i in range(self.size):
             idx[i] = self.v[i].i
@@ -100,9 +105,9 @@ cdef class svec:
         cdef INTP_TYPE i,nsize
         cdef numpy.ndarray[numpy.float_t, ndim=1] ans
         if self.size==0:
-            return numpy.zeros(msize, numpy.float_)
+            return numpy.zeros(msize, FLOAT_TYPE)
         nsize = max(self.v[self.size-1].i + 1, msize)
-        ans = numpy.zeros(nsize, numpy.float_)
+        ans = numpy.zeros(nsize, FLOAT_TYPE)
         for i in range(self.size):
             ans[self.v[i].i] = self.v[i].v
         return ans
@@ -335,7 +340,7 @@ cdef class smat:
         cdef svec new_svec
         idx = numpy.zeros(1, numpy.intp)
         nr = self.nrow # len(self.rowlist)
-        v = numpy.zeros(1, numpy.float_)
+        v = numpy.zeros(1, FLOAT_TYPE)
         vrange = numpy.arange(nr, nr+d.shape[0], dtype=numpy.intp)
         for i in range(d.shape[0]):
             v[0] = d[i]
@@ -360,7 +365,7 @@ cdef class smat:
         assert m.shape[0]==m.shape[1], "m must be square matrix"
         nm = m.shape[0]
         idx = numpy.zeros(nm, numpy.intp)
-        v = numpy.zeros(nm, numpy.float_)
+        v = numpy.zeros(nm, FLOAT_TYPE)
         nr = self.nrow # len(self.rowlist)
         vrange = numpy.arange(nr, nr + nm, dtype=numpy.intp)
         for i in range(nm):
@@ -452,7 +457,7 @@ cdef class smat:
         cdef INTP_TYPE nr, size, i
         cdef svec row
         nr = self.nrow # len(self.rowlist)
-        v = numpy.zeros(nr, numpy.float_)
+        v = numpy.zeros(nr, FLOAT_TYPE)
         idx = numpy.zeros(nr, numpy.intp)
         size = 0
         for i in range(nr):
@@ -481,7 +486,7 @@ cdef class smat:
         cdef svec row
         cdef svec ans
         nr = self.nrow # len(self.rowlist)
-        v = numpy.zeros(nr,numpy.float_)
+        v = numpy.zeros(nr,FLOAT_TYPE)
         idx = numpy.zeros(nr,numpy.intp)
         size = 0
         for i in range(nr):
@@ -504,7 +509,7 @@ cdef class smat:
         cdef numpy.ndarray[numpy.float_t,ndim=2] ans
         cdef INTP_TYPE nr = self.nrow # len(self.rowlist)
         cdef INTP_TYPE i
-        ans = numpy.zeros((nr,nr),numpy.float_)
+        ans = numpy.zeros((nr,nr),FLOAT_TYPE)
         for i in range(nr):
             row = self.row[i].toarray() # self.rowlist[i].toarray()
             ans[i][:len(row)] = row

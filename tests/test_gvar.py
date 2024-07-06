@@ -27,6 +27,9 @@ from gvar import *
 
 FAST = False
 
+if np.version.version >= '2.0':
+    np.set_printoptions(legacy="1.25")
+
 class ArrayTests(object):
     def __init__(self):
         pass

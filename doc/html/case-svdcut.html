@@ -1,19 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 13.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 13.1.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=310c80ee" />
+    <script src="_static/documentation_options.js?v=3a15012f"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Case Study: Creating an Integrator" href="case-integral.html" />
@@ -41,7 +38,7 @@
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Numerical Analysis — Pendulum Clock"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Correlations and SVD Cuts</a></li> 
       </ul>
     </div>  
@@ -52,12 +49,12 @@
           <div class="body" role="main">
             
   <section id="case-study-correlations-and-svd-cuts">
-<h1>Case Study: Correlations and SVD Cuts<a class="headerlink" href="#case-study-correlations-and-svd-cuts" title="Permalink to this heading">¶</a></h1>
+<h1>Case Study: Correlations and SVD Cuts<a class="headerlink" href="#case-study-correlations-and-svd-cuts" title="Link to this heading">¶</a></h1>
 <p>This case study illustrates a problem that arises when constructing
 correlation matrices from a small number of random samples. It shows how
 to fix the problem using an SVD cut.</p>
 <section id="the-problem">
-<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this heading">¶</a></h2>
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Link to this heading">¶</a></h2>
 <p>We want to determine the slope indicated by measurements of a
 quantity</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">s</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -135,7 +132,7 @@ eigenvalues result in contributions to the <code class="docutils literal notrans
 function in the fit that are both spurious and large.</p>
 </section>
 <section id="a-poor-solution">
-<h2>A Poor Solution<a class="headerlink" href="#a-poor-solution" title="Permalink to this heading">¶</a></h2>
+<h2>A Poor Solution<a class="headerlink" href="#a-poor-solution" title="Link to this heading">¶</a></h2>
 <p>One solution is to declare the correlations unreliable and to discard them,
 keeping just the individual standard deviations:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">gv</span><span class="o">.</span><span class="n">sdev</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
@@ -162,7 +159,7 @@ Not surprisingly, the accuracy of our slope determination is quite
 sensitive to these correlations.</p>
 </section>
 <section id="a-better-solution">
-<h2>A Better Solution<a class="headerlink" href="#a-better-solution" title="Permalink to this heading">¶</a></h2>
+<h2>A Better Solution<a class="headerlink" href="#a-better-solution" title="Link to this heading">¶</a></h2>
 <p>A better solution is to determine which of the correlation matrix’s
 eigenvalues are accurate and retain those in the fit. We do this
 with <a class="reference internal" href="gvar_dataset.html#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis()</span></code></a> which uses a bootstrap
@@ -174,7 +171,8 @@ Adding the code</p>
 </div>
 <p>displays a plot showing the ratio of the bootstrap estimate for each
 eigenvalue divided by the real eigenvalue:</p>
-<a class="reference internal image-reference" href="_images/svdcut.png"><img alt="_images/svdcut.png" src="_images/svdcut.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="_images/svdcut.png"><img alt="_images/svdcut.png" src="_images/svdcut.png" style="width: 80%;" />
+</a>
 <p>The bootstrap tests the stability of eigenvalues with limited sample sizes.
 Bootstrap estimates that are significantly lower than the real values
 indicate eigenvalues that are likely unreliable. Here
@@ -274,7 +272,7 @@ be essential for a usable correlation matrix.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -282,7 +280,7 @@ be essential for a usable correlation matrix.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -303,13 +301,13 @@ be essential for a usable correlation matrix.</p>
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Numerical Analysis — Pendulum Clock"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Correlations and SVD Cuts</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    &#169; Copyright 2009-2023, G. P. Lepage.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

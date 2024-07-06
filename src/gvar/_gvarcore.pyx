@@ -27,7 +27,6 @@ numpy.import_array()
 cimport cython
 from ._svec_smat cimport svec, smat
 
-
 cdef extern from "math.h":
     double c_pow "pow" (double x,double y)
     double c_sin "sin" (double x)
@@ -57,6 +56,11 @@ _ARRAY_TYPES = [numpy.ndarray, gvar.powerseries.PowerSeries]
 from numpy cimport npy_intp as INTP_TYPE
 # index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
 
+if numpy.version.version >= '2.0':
+    FLOAT_TYPE = numpy.float64
+else:
+    FLOAT_TYPE = numpy.float_
+    
 # GVar definition
 
 # default format parameters and utilities (static parts of GVar)
@@ -1022,7 +1026,7 @@ cdef class GVar:
         # create masked derivative vector for self
         md_size = 0
         md_idx = numpy.zeros(dstop-dstart, numpy.intp)
-        md_v = numpy.zeros(dstop-dstart,numpy.float_)
+        md_v = numpy.zeros(dstop-dstart,FLOAT_TYPE)
         for i in range(self.d.size):
             if dmask[self.d.v[i].i-dstart]==0:
                 continue
@@ -1284,7 +1288,7 @@ class GVarFactory:
                 if set(args[0].keys()) == set(args[1].keys()):
                     # means and stdevs
                     x = BufferDict(args[0])
-                    xsdev = BufferDict(x, buf=numpy.empty(x.size, numpy.float_))
+                    xsdev = BufferDict(x, buf=numpy.empty(x.size, FLOAT_TYPE))
                     for k in x:
                         xsdev[k] = args[1][k]
                     xflat = self(x.flat, xsdev.flat)
@@ -1292,7 +1296,7 @@ class GVarFactory:
                 else:
                     # means and covariance matrix
                     x = BufferDict(args[0])
-                    xcov = numpy.empty((x.size, x.size), numpy.float_)
+                    xcov = numpy.empty((x.size, x.size), FLOAT_TYPE)
                     for k1 in x:
                         k1_sl, k1_sh = x.slice_shape(k1)
                         if k1_sh == ():
@@ -1316,8 +1320,8 @@ class GVarFactory:
             # (x,xsdev) or (xarray,sdev-array) or (xarray,cov)
             # unpack arguments and verify types
             try:
-                x = numpy.asarray(args[0],numpy.float_)
-                xsdev = numpy.asarray(args[1],numpy.float_)
+                x = numpy.asarray(args[0],FLOAT_TYPE)
+                xsdev = numpy.asarray(args[1],FLOAT_TYPE)
             except (ValueError,TypeError):
                 raise TypeError(
                     "arguments must be numbers or arrays of numbers"
@@ -1373,7 +1377,7 @@ class GVarFactory:
                 else:
                     raise ValueError("Argument shapes mismatched: " +
                         str(x.shape) + ' ' + str(xsdev.shape))
-                d = numpy.ones(nx, dtype=numpy.float_)
+                d = numpy.ones(nx, dtype=FLOAT_TYPE)
                 ans = numpy.empty(nx, dtype=object)
                 for i in range(nx):
                     der = svec(1)
@@ -1481,13 +1485,13 @@ class GVarFactory:
         elif isinstance(args[1], tuple):
             try:
                 d_idx = numpy.asarray(args[1][1], numpy.intp)
-                d_v = numpy.asarray(args[1][0], numpy.float_)
+                d_v = numpy.asarray(args[1][0], FLOAT_TYPE)
                 assert d_idx.ndim == 1 and d_v.ndim == 1 and d_idx.shape[0] == d_v.shape[0]
             except (ValueError, TypeError, AssertionError):
                 raise TypeError('Badly formed derivative.')
         else:
             try:
-                d = numpy.asarray(args[1], numpy.float_)
+                d = numpy.asarray(args[1], FLOAT_TYPE)
                 assert d.ndim == 1
             except (ValueError, TypeError, AssertionError):
                 raise TypeError('Badly formed derivative.')

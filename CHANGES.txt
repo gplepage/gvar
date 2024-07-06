@@ -1,3 +1,7 @@
+Version 13.1.1 ????
+=====================
+Modified so that it works with numpy>=2.0.
+
 Version 13.1 2024-05-21
 ========================
 - Improvements to gvar.PDFStatistics, including new keywords 
