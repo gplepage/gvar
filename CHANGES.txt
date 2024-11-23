@@ -1,3 +1,8 @@
+Version 13.1.2 2024-11-23 
+==========================
+Fix to pyproject.toml.
+
+
 Version 13.1.1 2024-07-06
 ==========================
 Modified so that it works with numpy>=2.0.
