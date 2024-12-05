@@ -1,19 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Case Study: Creating an Integrator &#8212; gvar 13.1.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>Case Study: Creating an Integrator &#8212; gvar 13.1.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=310c80ee" />
+    <script src="_static/documentation_options.js?v=a9950f5c"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Case Study: Correlations and SVD Cuts" href="case-svdcut.html" />
@@ -37,7 +34,7 @@
         <li class="right" >
           <a href="case-svdcut.html" title="Case Study: Correlations and SVD Cuts"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Creating an Integrator</a></li> 
       </ul>
     </div>  
@@ -48,17 +45,17 @@
           <div class="body" role="main">
             
   <section id="case-study-creating-an-integrator">
-<span id="id1"></span><h1>Case Study: Creating an Integrator<a class="headerlink" href="#case-study-creating-an-integrator" title="Permalink to this heading">¶</a></h1>
+<span id="id1"></span><h1>Case Study: Creating an Integrator<a class="headerlink" href="#case-study-creating-an-integrator" title="Link to this heading">¶</a></h1>
 <p>This case study illustrates how to convert an existing numerical
 analysis routine, <code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.integrate.quad()</span></code>, to work with <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s.</p>
 <section id="the-problem">
-<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this heading">¶</a></h2>
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Link to this heading">¶</a></h2>
 <p>We want a Python code that can evaluate one dimensional integrals such
 as</p>
 <div class="math">
-<p><img src="_images/math/15c6c635c7c3046d727bcd2dc94b0080194fbc68.svg" alt="I = \int\limits_a^b dx \, f(x)"/></p>
-</div><p>where any of the integration limits or <img class="math" src="_images/math/fb62ba1e89ca6200f224a445c3f4a567fc451fe1.svg" alt="f(x)"/> are <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and
-<img class="math" src="_images/math/fb62ba1e89ca6200f224a445c3f4a567fc451fe1.svg" alt="f(x)"/> is an arbitrary function coded as a Python function.</p>
+<p><img src="_images/math/2fc6f7c66eaeb65c78c8106ec820a87eff9867ed.svg" alt="I = \int\limits_a^b dx \, f(x)"/></p>
+</div><p>where any of the integration limits or <img class="math" src="_images/math/cf669b5c367d259a73b5121e5fc467a1a76fd85f.svg" alt="f(x)"/> are <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s and
+<img class="math" src="_images/math/cf669b5c367d259a73b5121e5fc467a1a76fd85f.svg" alt="f(x)"/> is an arbitrary function coded as a Python function.</p>
 <p>One approach is to implement an integration function directly in
 Python, as then it is likely to work just as well for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as
 for floats. For example, the code</p>
@@ -105,13 +102,13 @@ applied to a much more singular function:</p>
 samples <code class="docutils literal notranslate"><span class="pre">n</span></code> (100x larger) to get reasonable results.</p>
 </section>
 <section id="leveraging-existing-code">
-<h2>Leveraging Existing Code<a class="headerlink" href="#leveraging-existing-code" title="Permalink to this heading">¶</a></h2>
+<h2>Leveraging Existing Code<a class="headerlink" href="#leveraging-existing-code" title="Link to this heading">¶</a></h2>
 <p>Coding a more robust integrator is complicated and time consuming. A better
 strategy is, if possible, to build on existing libraries. Here we will use
 integrators from the <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.integrate</span></code> module.</p>
-<p>The integral <img class="math" src="_images/math/2c1e05a52378f314c457dad311d58554409b0d3b.svg" alt="I"/> is a function of its endpoints and of any parameters buried
-in the definition of the function <img class="math" src="_images/math/fb62ba1e89ca6200f224a445c3f4a567fc451fe1.svg" alt="f(x)"/>: <img class="math" src="_images/math/ee2947edd291ac5a388968d9f3dbb962e151882a.svg" alt="I = I(p)"/> where
-<img class="math" src="_images/math/fa059a3cef6a458c325f7d0b4cccc417de3f987e.svg" alt="p = [a, b, ...]"/> and <img class="math" src="_images/math/98ef5cc0c3d605c55db1af4ac8bff41a5db76303.svg" alt="p_i"/> for <img class="math" src="_images/math/1cde169736549c8f51b98ad1c63f4c920f9c68bc.svg" alt="i&gt;1"/>
+<p>The integral <img class="math" src="_images/math/f8dc841da5f1a539ecdad210a480565371ed299b.svg" alt="I"/> is a function of its endpoints and of any parameters buried
+in the definition of the function <img class="math" src="_images/math/cf669b5c367d259a73b5121e5fc467a1a76fd85f.svg" alt="f(x)"/>: <img class="math" src="_images/math/71be7448c71e3358d597a248d48f41b7910907df.svg" alt="I = I(p)"/> where
+<img class="math" src="_images/math/b78478d3f53a0cf7e94ebd2e94d609da8b072a21.svg" alt="p = [a, b, ...]"/> and <img class="math" src="_images/math/c7fca9edb59139187c3617bb6c780e03a3763d3a.svg" alt="p_i"/> for <img class="math" src="_images/math/9bf4da32e7c6f8956e9af64882e558604cfa2395.svg" alt="i&gt;1"/>
 are the parameters implicit in the integrand (e.g.,
 <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">K</span></code> in the examples above). We want an integrator
 that works when any of these parameters is replaced by a <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>.</p>
@@ -120,18 +117,18 @@ is an array of the <a class="reference internal" href="gvar.html#gvar.GVar" titl
 <code class="docutils literal notranslate"><span class="pre">I</span></code> is the integral evaluated with these parameters replaced
 by their mean values, and <code class="docutils literal notranslate"><span class="pre">dI_dp</span></code> is the array of derivatives
 of <code class="docutils literal notranslate"><span class="pre">I</span></code> with respect to each of these parameters
-— <img class="math" src="_images/math/826eb1603997b91edc64a24e1700a40d03109a8f.svg" alt="[dI/dp_0, dI/dp_1, ...]"/> — again
+— <img class="math" src="_images/math/c09d1ad5a6d4f69b26b424fa4349e1d185f6b57e.svg" alt="[dI/dp_0, dI/dp_1, ...]"/> — again
 evaluated with their mean values.</p>
 <p>The integral <code class="docutils literal notranslate"><span class="pre">I</span></code> (with the parameters replaced by their mean values)
 can be evaluated using standard routines as no <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are involved.
 The derivatives with respect to the endpoints are also easily evaluated:</p>
 <div class="math">
-<p><img src="_images/math/d91709d3e5925d16d3acf6ed8c3ea70ec2d35900.svg" alt="\frac{dI}{da} = - f(a) \quad\quad \frac{dI}{db} = f(b)"/></p>
+<p><img src="_images/math/aa8910e18ba0bf983cf5f8801718291aa8cd5f8a.svg" alt="\frac{dI}{da} = - f(a) \quad\quad \frac{dI}{db} = f(b)"/></p>
 </div><p>The derivatives with respect to the function parameters involve
 different integrals, which again can be evaluated using standard
 routines:</p>
 <div class="math">
-<p><img src="_images/math/e5bb7ce71d12611ebaaf52902dde4a42a1069d40.svg" alt="\frac{dI}{dp_i} = \int\limits_a^b dx \, \frac{df(x)}{dp_i} \quad\quad \mbox{for $i&gt;1$}"/></p>
+<p><img src="_images/math/1ebb9766678c145608a46b1ad4c1ddc8f7f9d2e3.svg" alt="\frac{dI}{dp_i} = \int\limits_a^b dx \, \frac{df(x)}{dp_i} \quad\quad \mbox{for $i&gt;1$}"/></p>
 </div><p>In the following code we use the integrators <code class="docutils literal notranslate"><span class="pre">quad(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">quad_vec(...)</span></code> from
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.integrate</span></code> to evaluate the integrals
 needed to calculate <code class="docutils literal notranslate"><span class="pre">I</span></code> and elements of <code class="docutils literal notranslate"><span class="pre">dI_dp</span></code>, respectively:</p>
@@ -269,7 +266,7 @@ because <code class="docutils literal notranslate"><span class="pre">n</span></c
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -277,7 +274,7 @@ because <code class="docutils literal notranslate"><span class="pre">n</span></c
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -295,13 +292,13 @@ because <code class="docutils literal notranslate"><span class="pre">n</span></c
         <li class="right" >
           <a href="case-svdcut.html" title="Case Study: Correlations and SVD Cuts"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.3 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Creating an Integrator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    &#169; Copyright 2009-2023, G. P. Lepage.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

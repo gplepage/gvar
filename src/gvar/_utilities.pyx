@@ -2315,12 +2315,13 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=None):
         An iterator that returns bootstrap copies of ``g``.
     """
     g, i_wgts = _gvar.regulate(g, eps=eps, svdcut=svdcut, wgts=1.)
-    g_flat = g.flat
+    g_flat = g.flatten()
+    buf = numpy.zeros_like(g_flat)
     nwgt = sum(len(wgts) for i, wgts in i_wgts)
     count = 0
     while (n is None) or (count < n):
         count += 1
-        buf = numpy.array(g.flat)
+        buf[:] = g_flat
         z = _gvar.RNG.normal(0.0, 1.0, nwgt)
         i, wgts = i_wgts[0]
         if len(i) > 0:
