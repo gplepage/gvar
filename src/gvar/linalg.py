@@ -21,7 +21,7 @@ def det(a):
 
     Args:
         a: Two-dimensional, square matrix/array of numbers
-            and/or :class:`gvar.GVar`\s.
+            and/or :class:`gvar.GVar`\\s.
 
     Returns:
         Deterimant of the matrix.
@@ -41,7 +41,7 @@ def slogdet(a):
 
     Args:
         a: Two-dimensional, square matrix/array of numbers
-            and/or :class:`gvar.GVar`\s.
+            and/or :class:`gvar.GVar`\\s.
 
     Returns:
         Tuple ``(s, logdet)`` where the determinant of matrix ``a`` is
@@ -64,8 +64,8 @@ def eigvalsh(a, eigvec=False):
 
     Args:
         a: Two-dimensional, square Hermitian matrix/array of numbers
-            and/or :class:`gvar.GVar`\s. Array elements must be
-            real-valued if `gvar.GVar`\s are involved (i.e., symmetric
+            and/or :class:`gvar.GVar`\\s. Array elements must be
+            real-valued if `gvar.GVar`\\s are involved (i.e., symmetric
             matrix).
         eigvec (bool): If ``True``, method returns a tuple of arrays
             ``(val, vec)`` where ``val[i]`` are the
@@ -95,8 +95,8 @@ def eigh(a, eigvec=True, rcond=None):
 
     Args:
         a: Two-dimensional, square Hermitian matrix/array of numbers
-            and/or :class:`gvar.GVar`\s. Array elements must be
-            real-valued if `gvar.GVar`\s are involved (i.e., symmetric
+            and/or :class:`gvar.GVar`\\s. Array elements must be
+            real-valued if `gvar.GVar`\\s are involved (i.e., symmetric
             matrix).
         eigvec (bool): If ``True``  (default), method returns a tuple
             of arrays ``(val, vec)`` where ``val[i]`` are the
@@ -150,11 +150,11 @@ def eigh(a, eigvec=True, rcond=None):
         return val
 
 def svd(a, compute_uv=True, rcond=None):
-    """ svd decomposition of matrix ``a`` containing |GVar|\s.
+    """ svd decomposition of matrix ``a`` containing |GVar|\\s.
 
     Args:
         a: Two-dimensional matrix/array of numbers
-            and/or :class:`gvar.GVar`\s.
+            and/or :class:`gvar.GVar`\\s.
         compute_uv (bool): It ``True`` (default), returns
             tuple ``(u,s,vT)`` where matrix ``a = u @ np.diag(s) @ vT``
             where matrices ``u`` and ``vT`` satisfy ``u.T @ u = 1``
@@ -226,7 +226,7 @@ def svd(a, compute_uv=True, rcond=None):
 
 
 def lstsq(a, b, rcond=None, weighted=False, extrainfo=False):
-    """ Least-squares solution ``x`` to ``a @ x = b`` for |GVar|\s.
+    """ Least-squares solution ``x`` to ``a @ x = b`` for |GVar|\\s.
 
     Here ``x`` is defined to be the solution that minimizes ``||b - a @ x||``.
     If ``b`` has a covariance matrix, another option is to weight the
@@ -236,8 +236,8 @@ def lstsq(a, b, rcond=None, weighted=False, extrainfo=False):
     obtain the weighted-least-squares solution.
 
     Args:
-        a : Matrix/array of shape ``(M,N)`` containing numbers and/or |GVar|\s.
-        b : Vector/array of shape ``(M,)`` containing numbers and/or |GVar|\s.
+        a : Matrix/array of shape ``(M,N)`` containing numbers and/or |GVar|\\s.
+        b : Vector/array of shape ``(M,)`` containing numbers and/or |GVar|\\s.
         rcond (float): Cutoff for singular values of ``a``. Singular values
             smaller than ``rcond`` times the maximum eigenvalue are ignored.
             Default (``rcond=None``) is ``max(M,N)`` times machine precision.
@@ -299,7 +299,7 @@ def inv(a):
 
     Args:
         a: Two-dimensional, square matrix/array of numbers
-            and/or :class:`gvar.GVar`\s.
+            and/or :class:`gvar.GVar`\\s.
 
     Returns:
         The inverse of matrix ``a``.
@@ -319,9 +319,9 @@ def solve(a, b):
 
     Args:
         a: Two-dimensional, square matrix/array of numbers
-            and/or :class:`gvar.GVar`\s.
+            and/or :class:`gvar.GVar`\\s.
         b: One-dimensional vector/array of numbers and/or
-            :class:`gvar.GVar`\s, or an array of such vectors.
+            :class:`gvar.GVar`\\s, or an array of such vectors.
             Requires ``b.shape[0] == a.shape[1]``.
 
     Returns:

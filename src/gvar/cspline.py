@@ -175,7 +175,7 @@ class CSpline:
             to use smaller values.
         warn (bool): If ``True``, warnings are generated
             when the spline function is called for ``x`` values that
-            fall outside of the original range of ``xknot``\s used to
+            fall outside of the original range of ``xknot``\\s used to
             define the spline. Default value is ``False``, 
             which means out-of-range warnings are suppressed.
         alg (str): Spline algorithm used, which is one of:

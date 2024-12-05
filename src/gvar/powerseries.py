@@ -181,7 +181,7 @@ class PowerSeries(object):
 
     The order of the power series is normally determined by the length of
     the input list ``c``. This can be overridden by specifying the order of
-    the power series using the ``order`` parameter. The list of ``c[i]``\s
+    the power series using the ``order`` parameter. The list of ``c[i]``\\s
     is then padded with zeros if ``c`` is too short, or truncated if it
     is too long. Omitting ``c`` altogether results in a power series
     all of whose coefficients are zero. Individual series
