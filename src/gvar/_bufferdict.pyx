@@ -40,7 +40,7 @@ BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])
 class BufferDict(collections_MMapping):
     """ Ordered dictionary whose values are packed into a 1-d buffer (:mod:`numpy` array).
 
-    |BufferDict|\s can be created in the usual way dictionaries are created::
+    |BufferDict|\\s can be created in the usual way dictionaries are created::
 
         >>> b = BufferDict()
         >>> b['a'] = 1
@@ -52,7 +52,7 @@ class BufferDict(collections_MMapping):
         >>> b = BufferDict(a=1, b=[2.7, 3.2])
         >>> b = BufferDict([('a',1.), ('b',[2.7, 3.2])])
 
-    They can also be created from other dictionaries or |BufferDict|\s::
+    They can also be created from other dictionaries or |BufferDict|\\s::
 
         >>> c = BufferDict(b)
         >>> print(c)
@@ -92,7 +92,7 @@ class BufferDict(collections_MMapping):
     ``BufferDict({}, dtype=int)``. Any data type supported by :mod:`numpy` 
     arrays can be specified.
 
-    Some simple arithemetic is allowed between two |BufferDict|\s, say,
+    Some simple arithemetic is allowed between two |BufferDict|\\s, say,
     ``g1`` and ``g2`` provided they have the same keys and array shapes.
     So, for example::
 
@@ -813,7 +813,7 @@ class BufferDict(collections_MMapping):
     def add_distribution(name, invfcn):
         """ Add new parameter distribution.
 
-        |BufferDict|\s can be used to represent a  restricted
+        |BufferDict|\\s can be used to represent a  restricted
         class of  non-Gaussian distributions. For example, the code ::
 
             import gvar as gv

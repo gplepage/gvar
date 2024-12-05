@@ -126,7 +126,7 @@ def avg_data(
     estimates the means of the distributions from which the random
     numbers/arrays are drawn, together with the uncertainties in those
     estimates. The results are returned as a |GVar| or an array of
-    |GVar|\s, or a dictionary of |GVar|\s and/or arrays of |GVar|\s::
+    |GVar|\\s, or a dictionary of |GVar|\\s and/or arrays of |GVar|\\s::
 
         >>> print(avg_data(random_numbers))
         1.31(20)
@@ -141,7 +141,7 @@ def avg_data(
     ``avg_data(dataset)`` also estimates any correlations between different
     quantities in ``dataset``. When ``dataset`` is a dictionary, it does this by
     assuming that the lists of random numbers/arrays for the different
-    ``dataset[k]``\s are synchronized, with the first element in one list
+    ``dataset[k]``\\s are synchronized, with the first element in one list
     corresponding to the first elements in all other lists, and so on.
 
     Note that estimates of the correlations are robust only if the 
@@ -587,8 +587,8 @@ class Dataset(collections.OrderedDict):
         <HDF5 dataset "s": shape (4,), type "<f8">
         <HDF5 dataset "v": shape (4, 2), type "<f8">
 
-    Finally, :class:`Dataset`\s can also be constructed from other
-    dictionaries (including other :class:`Dataset`\s), or lists of key-data
+    Finally, :class:`Dataset`\\s can also be constructed from other
+    dictionaries (including other :class:`Dataset`\\s), or lists of key-data
     tuples. For example, ::
 
         >>> dset = Dataset('datafile')
@@ -970,7 +970,7 @@ class svd_diagnosis(object):
     (e.g., :class:`gvar.dataset.Dataset`) whose values are lists
     of random numbers or random arrays. The random numbers or
     arrays are averaged (using :func:`gvar.dataset.avg_data`)
-    to produce a set |GVar|\s and their correlation matrix.
+    to produce a set |GVar|\\s and their correlation matrix.
     The smallest eigenvalues of the correlation matrix are poorly
     estimated when the number of random samples is insufficiently
     large --- the number of samples should typically be significantly
@@ -996,8 +996,8 @@ class svd_diagnosis(object):
             (e.g., :class:`gvar.dataset.Dataset`) whose values are lists
             of random numbers or random arrays. Alternatively it can
             be a tuple ``(g, Ns)`` where: ``g`` is an array of
-            |GVar|\s or a dictionary whose values are |GVar|\s or
-            arrays of |GVar|\s; and ``Ns`` is the number of random
+            |GVar|\\s or a dictionary whose values are |GVar|\\s or
+            arrays of |GVar|\\s; and ``Ns`` is the number of random
             samples. Then the list of random data that is analyzed is
             created is created using ``gvar.raniter(g, n=Ns)``.
 
