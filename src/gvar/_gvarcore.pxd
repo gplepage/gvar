@@ -1,5 +1,5 @@
 # cython: language_level=3str, binding=True
-# Copyright (c) 2012-20 G. Peter Lepage.
+# Copyright (c) 2012-24 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,9 +10,6 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
-from numpy cimport npy_intp as INTP_TYPE
-# index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
 
 from ._svec_smat cimport svec, smat
 

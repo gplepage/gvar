@@ -1,6 +1,6 @@
 # cython: language_level=3str, binding=True
 # Created by Peter Lepage (Cornell University) in 2012.
-# Copyright (c) 2012-20 G. Peter Lepage.
+# Copyright (c) 2012-24 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,18 +49,8 @@ else:
     def hook_compressed_alt(encoding):
         return fileinput.hook_compressed
 
-
-cimport  numpy
-numpy.import_array()
 cimport cython
 
-from numpy cimport npy_intp as INTP_TYPE
-# index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
-
-if numpy.version.version >= '2.0':
-    FLOAT_TYPE = numpy.float64
-else:
-    FLOAT_TYPE = numpy.float_
 
 # tools for random data: Dataset, avg_data, bin_data
 
@@ -98,7 +88,7 @@ def bin_data(dataset, binsize=2):
         return []
     # force dataset into a numpy array of floats
     try:
-        dataset = numpy.asarray(dataset, FLOAT_TYPE)
+        dataset = numpy.asarray(dataset, float)
     except ValueError:
         raise ValueError("Inconsistent array shapes or data types in dataset.")
 
@@ -386,12 +376,12 @@ def autocorr(dataset):
         raise ValueError("Need at least two samples to compute autocorr.")
     # force dataset into a numpy array of floats
     try:
-        dataset = numpy.asarray(dataset,FLOAT_TYPE)
+        dataset = numpy.asarray(dataset,float)
     except ValueError:
         raise ValueError("Inconsistent array shapes or data types in dataset.")
 
     datat = dataset.transpose()
-    ans = numpy.zeros(datat.shape,FLOAT_TYPE)
+    ans = numpy.zeros(datat.shape,float)
     idxlist = numpy.ndindex(datat.shape[:-1])
     for idx in numpy.ndindex(datat.shape[:-1]):
         f = datat[idx]
@@ -454,7 +444,7 @@ def bootstrap_iter(dataset, n=None):
         ns = min(len(dataset[k]) for k in dataset)  # number of samples
         datadict = collections.OrderedDict()
         for k in dataset:
-            datadict[k] = numpy.asarray(dataset[k],FLOAT_TYPE)
+            datadict[k] = numpy.asarray(dataset[k],float)
         ct = 0
         while (n is None) or (ct<n):
             ct += 1
@@ -469,7 +459,7 @@ def bootstrap_iter(dataset, n=None):
             return
         # force dataset into a numpy array of floats
         try:
-            dataset = numpy.asarray(dataset,FLOAT_TYPE)
+            dataset = numpy.asarray(dataset,float)
         except ValueError:
             raise ValueError( #
                 "Inconsistent array shapes or data types in dataset.")
@@ -719,7 +709,7 @@ class Dataset(collections.OrderedDict):
         """ Create new dictionary ``d`` where ``d[k]=numpy.array(self[k])`` for all ``k``. """
         ans = collections.OrderedDict()
         for k in self:
-            ans[k] = numpy.array(self[k],FLOAT_TYPE)
+            ans[k] = numpy.array(self[k],float)
         return ans
 
     def append(self, *args, **kargs):
@@ -745,7 +735,7 @@ class Dataset(collections.OrderedDict):
             # append(k, m)
             k = args[0]
             try:
-                d = numpy.asarray(args[1],FLOAT_TYPE)
+                d = numpy.asarray(args[1],float)
             except ValueError:
                 raise ValueError("Unreadable data: " + str(args[1]))
             if d.shape==():
@@ -801,7 +791,7 @@ class Dataset(collections.OrderedDict):
             # extend(k,m)
             k = args[0]
             try:
-                d = [numpy.asarray(di,FLOAT_TYPE) for di in args[1]]
+                d = [numpy.asarray(di,float) for di in args[1]]
             except TypeError:
                 raise TypeError('Bad argument.')
             if not d:
@@ -952,7 +942,7 @@ class Dataset(collections.OrderedDict):
                 "Different shapes for different elements in template.")
         n_sample = shape[0]
         ans_shape = shape[:1] + template_shape + shape[1:]
-        ans = numpy.zeros(ans_shape, FLOAT_TYPE)
+        ans = numpy.zeros(ans_shape, float)
         ans = ans.reshape(n_sample, template.size, -1)
         for i,k in enumerate(template_flat):
             ans[:, i, :] = numpy.reshape(self[k], (n_sample,-1))

@@ -11,7 +11,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details. 
 
-from gvar._svec_smat cimport svec, smat
+from gvar._svec_smat cimport svec, smat, smask
 from gvar._gvarcore cimport GVar
-cimport numpy
+# cimport numpy
 

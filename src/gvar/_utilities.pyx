@@ -1,6 +1,8 @@
 # cython: language_level=3str, binding=True
+# c#ython: profile=True
+# remove extra # above for profiling
 # Created by Peter Lepage (Cornell University) on 2012-05-31.
-# Copyright (c) 2012-21 G. Peter Lepage.
+# Copyright (c) 2012-24 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +25,6 @@ from gvar._gvarcore cimport GVar
 # from scipy.linalg import eigh as _scipy_eigh
 # from scipy.special import erf as _scipy_erf
 import numpy
-cimport numpy
-numpy.import_array()
 import warnings
 import pickle
 import json
@@ -55,18 +55,11 @@ cdef double EPSILON = sys.float_info.epsilon * 10.         # roundoff error thre
 
 from libc.math cimport  log, exp  # don't put lgamma here -- old C compilers don't have it
 
-from ._svec_smat import svec, smat, smask
-from ._svec_smat cimport svec, smat, smask
+from gvar._svec_smat import svec, smat, smask
+from gvar._svec_smat cimport svec, smat, smask
+from gvar._bufferdict import BufferDict
 
-from ._bufferdict import BufferDict
-
-from numpy cimport npy_intp as INTP_TYPE
 cimport cython
-
-if numpy.version.version >= '2.0':
-    FLOAT_TYPE = numpy.float64
-else:
-    FLOAT_TYPE = numpy.float_
 
 cdef extern from "math.h":
     double c_pow "pow" (double x,double y)
@@ -116,9 +109,9 @@ def rebuild(g, corr=0.0, gvar=_gvar.gvar):
         layout as ``g``) where all correlations with variables other than
         those in ``g`` are erased.
     """
-    cdef numpy.ndarray[numpy.float_t,ndim=2] gcov
-    cdef INTP_TYPE i,j,ng
-    cdef float cr
+    cdef double[:, ::1] gcov
+    cdef Py_ssize_t i,j,ng
+    cdef double cr
     if hasattr(g,'keys'):
         ## g is a dict
         if not isinstance(g,BufferDict):
@@ -131,16 +124,17 @@ def rebuild(g, corr=0.0, gvar=_gvar.gvar):
         g = numpy.asarray(g)
         if corr!=0.0:
             ng = g.size
-            gcov = evalcov(g).reshape(ng,ng)
+            _gcov = evalcov(g).reshape(ng,ng)
+            gcov = _gcov
             cr = corr
             for i in range(ng):
                 for j in range(i+1,ng):
                     if gcov[i,j]==0:
                         gcov[i,j] = cr*c_sqrt(gcov[i,i]*gcov[j,j])
                         gcov[j,i] = gcov[i,j]
-            return gvar(mean(g),gcov.reshape(2*g.shape))
+            return gvar(mean(g), _gcov.reshape(2*g.shape))
         else:
-            return gvar(mean(g),evalcov(g))
+            return gvar(mean(g), evalcov(g))
 
 
 def mean(g):
@@ -151,17 +145,17 @@ def mean(g):
 
     Elements of ``g`` that are not |GVar|\\s are left unchanged.
     """
-    cdef INTP_TYPE i
+    cdef Py_ssize_t i
     cdef GVar gi
-    cdef numpy.ndarray[numpy.float_t,ndim=1] buf
-    if isinstance(g,GVar):
+    cdef double[::1] buf
+    if isinstance(g, GVar):
         return g.mean
     if hasattr(g,'keys'):
         if not isinstance(g,BufferDict):
             g = BufferDict(g)
     else:
         g = numpy.asarray(g)
-    buf = numpy.zeros(g.size,FLOAT_TYPE)
+    buf = _buf = numpy.zeros(g.size, float)
     try:
         for i, gi in enumerate(g.flat):
             if gi == None:
@@ -170,7 +164,7 @@ def mean(g):
     except TypeError:
         for i, ogi in enumerate(g.flat):
             buf[i] = ogi.mean if isinstance(ogi, GVar) else ogi
-    return BufferDict(g,buf=buf) if g.shape is None else buf.reshape(g.shape)
+    return BufferDict(g, buf=_buf) if g.shape is None else _buf.reshape(g.shape)
 
 def fmt(g, ndecimal=None, sep='', format='{:#p}'):
     """ Format :class:`gvar.GVar`\\s in ``g``.
@@ -193,7 +187,7 @@ def fmt(g, ndecimal=None, sep='', format='{:#p}'):
             if ``ndecimal`` is not ``None``.
 
     """
-    cdef INTP_TYPE i
+    cdef Py_ssize_t i
     cdef GVar gi
     if isinstance(g, GVar):
         return g.fmt(format=format, ndecimal=ndecimal, sep=sep)
@@ -217,7 +211,6 @@ def sdev(g):
 
     The deviation is set to 0.0 for elements of ``g`` that are not |GVar|\\s.
     """
-    cdef numpy.ndarray[numpy.float_t, ndim=1] buf
     if isinstance(g, GVar):
         return g.sdev
     if hasattr(g,'keys'):
@@ -228,8 +221,7 @@ def sdev(g):
         g = numpy.asarray(g)
         if g.size == 0:
             return numpy.array([])
-        buf = var(g.flat) ** 0.5
-        return buf.reshape(g.shape)
+        return (var(g.flat) ** 0.5).reshape(g.shape)
 
 def deriv(g, x):
     """ Compute partial derivatives of |GVar|\\s in ``g`` w.r.t. primary |GVar|\\s in ``x``.
@@ -248,9 +240,9 @@ def deriv(g, x):
         derivatives with respect to the primary |GVar|\\s in ``x``.
         The derivatives have the same shape as ``x``.
     """
-    cdef INTP_TYPE i    
+    cdef Py_ssize_t i    
     cdef GVar gi
-    cdef numpy.ndarray ans
+    # cdef numpy.ndarray ans
     x = numpy.asarray(x)
     if hasattr(g, 'keys'):
         ansdict = BufferDict()
@@ -293,9 +285,9 @@ def is_primary(g):
     appearance is marked as a primary |GVar|. This avoids double counting 
     the same primary |GVar| --- each primary |GVar| in the list is unique. 
     """
-    cdef INTP_TYPE i, j
+    cdef Py_ssize_t i, j
     cdef GVar gi
-    cdef numpy.ndarray buf
+    # cdef numpy.ndarray buf
     if isinstance(g, GVar):
         return g.is_primary()
     if hasattr(g,'keys'):
@@ -341,10 +333,10 @@ def dependencies(g, all=False):
 
 def _dependencies(g, all=False):
     " Same as dependencies when ``g`` is all |GVar|\\s. "
-    cdef INTP_TYPE i
+    cdef Py_ssize_t i
     cdef GVar gi
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
-    cdef numpy.ndarray[numpy.float_t, ndim=1] val
+    cdef Py_ssize_t[::1] idx 
+    cdef double[::1] val
     if hasattr(g,'keys'):
         if not isinstance(g,BufferDict):
             g = BufferDict(g)
@@ -364,11 +356,11 @@ def _dependencies(g, all=False):
         dep = dep - pri
     ans = []
     idx = numpy.zeros(1, numpy.intp)
-    val = numpy.ones(1, FLOAT_TYPE)
-    sv = _gvar.svec(1)
+    val = numpy.ones(1, float)
+    sv = svec(1)
     for i in dep:
         idx[0] = i
-        sv = _gvar.svec(1)
+        sv = svec(1)
         sv._assign(val, idx)
         ans.append(_gvar.gvar(0.0, sv, _gvar.gvar.cov))
     return numpy.array(ans)
@@ -406,7 +398,7 @@ def uncorrelated(g1,g2):
     """
     cdef GVar g
     cdef smat cov
-    cdef INTP_TYPE i
+    cdef Py_ssize_t i
     if g1 is None or g2 is None:
         return True
     # collect indices from g1 and g2 separately
@@ -547,12 +539,12 @@ def correlate(g, corr, upper=False, lower=False, verify=False):
             ``False`` because verification is costly for large
             matrices.
     """
-    cdef INTP_TYPE ni, nj
-    cdef numpy.ndarray[numpy.float_t, ndim=2] corrflat
-    cdef numpy.ndarray[numpy.float_t, ndim=1] sdevflat, meanflat
+    cdef Py_ssize_t ni, nj
+    # cdef numpy.ndarray[numpy.float_t, ndim=2] corrflat    # not necessary
+    # cdef numpy.ndarray[numpy.float_t, ndim=1] sdevflat, meanflat
     if hasattr(g, 'keys'):
         g = _gvar.asbufferdict(g)
-        corrflat = numpy.empty((len(g.buf), len(g.buf)), FLOAT_TYPE)
+        corrflat = numpy.empty((len(g.buf), len(g.buf)), float)
         for i in g:
             i_sl, i_sh = g.slice_shape(i)
             if i_sh == ():
@@ -571,8 +563,8 @@ def correlate(g, corr, upper=False, lower=False, verify=False):
         return BufferDict(g, buf=correlate(g.buf, corrflat, upper=upper, lower=lower, verify=verify))
     else:
         g = numpy.asarray(g)
-        meanflat = _gvar.mean(g.flat)
-        sdevflat = _gvar.sdev(g.flat)
+        meanflat = mean(g.flat)
+        sdevflat = sdev(g.flat)
         corrflat = numpy.asarray(corr).reshape(meanflat.shape[0], -1)
         if upper:
             corrflat = numpy.triu(corrflat)
@@ -598,8 +590,9 @@ def evalcov_blocks_dense(g, compress=False, verify=True):
     Same as :func:`gvar.evalcov_blocks` but optimized for 
     large, dense covariance matrices.
     """
-    cdef INTP_TYPE nvar, i, j, nb, ib
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx, allvar
+    cdef Py_ssize_t nvar, i, j, nb, ib
+    cdef Py_ssize_t[::1] idx 
+    # cdef numpy.ndarray[Py_ssize_t, ndim=1] idx, allvar # not necessary
     cdef object[:] varlist
     cdef double sdev
     cdef smat cov 
@@ -699,13 +692,13 @@ def evalcov_blocks(g, compress=False):
             uncorrelated |GVar|\\s in ``g.flat`` into the first element of 
             the returned list (see above). Default is ``False``.
     """
-    cdef INTP_TYPE nvar, iv, i, j, id, nb, ib, sib, snb, nval, nvalmax, n, nzeros
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx, allvar
+    cdef Py_ssize_t nvar, iv, i, j, id, nb, ib, sib, snb, nval, nvalmax, n, nzeros
+    # cdef numpy.ndarray[Py_ssize_t, ndim=1] idx, allvar # not necessary
     cdef double sdev
     cdef smat cov 
     cdef GVar gi
-    cdef INTP_TYPE[::1] rows, cols
-    cdef numpy.int8_t[::1] vals
+    cdef Py_ssize_t[::1] rows, cols
+    cdef char[::1] vals
     cdef object[::1] ivset_iv
     from scipy.sparse.csgraph import connected_components as _connected_components
     from scipy.sparse import csr_matrix as _csr_matrix
@@ -820,22 +813,6 @@ def evalcov_blocks(g, compress=False):
 @cython.boundscheck(False) # turn off bounds-checking
 @cython.wraparound(False)  # turn off negative index wrapping
 @cython.initializedcheck(False) # memory views initialized?
-def mock_evalcov(numpy.ndarray[numpy.float_t, ndim=2] cov, numpy.ndarray[numpy.float_t, ndim=2] d):
-    """ Mock evalcov for testing.
-
-    Assumes maximum density. It also has no overhead for collecting either ``cov`` or 
-    ``d``, unlike the real ``evalcov``. The focus is on the N**3 part of the algorithm.
-
-    Args:
-        cov: Covariance matrix of primary |GVar|\\s.
-        d: ``d[a]`` is the derivative vector for |GVar| ``g[a]`` (i.e., 
-            ``dg[a]/dx[i]`` for |GVar| ``ga[a]`` where ``x[i]`` are primary |GVar|\\s.)
-    """
-    return d.T @ cov @ d
-
-@cython.boundscheck(False) # turn off bounds-checking
-@cython.wraparound(False)  # turn off negative index wrapping
-@cython.initializedcheck(False) # memory views initialized?
 def var(g):
     """ Compute variances for elements of 
     array/dictionary ``g`` or a single |GVar|.
@@ -846,15 +823,15 @@ def var(g):
     |GVar|\\s, the result is a dictionary where
     ``cov[k]`` is the variance for ``g[k]``.
     """
-    cdef INTP_TYPE a,b,ng,i,j,nc, vec_zeros
-    cdef INTP_TYPE cov_zeros, previousid, bsize, ni, id
-    cdef numpy.ndarray[numpy.float_t, ndim=1] ans
-    cdef numpy.ndarray[numpy.float_t, ndim=2] np_gd
-    cdef numpy.int8_t[::1] imask
-    cdef numpy.ndarray[numpy.int8_t, ndim=1] np_imask
-    cdef numpy.ndarray[numpy.float_t, ndim=2] mcov, mcov_gd
-    cdef numpy.ndarray[numpy.float_t, ndim=1] varlist
-    cdef numpy.int8_t is_dense, ib, only_gvars
+    cdef Py_ssize_t a,b,ng,i,j,nc, vec_zeros
+    cdef Py_ssize_t cov_zeros, previousid, bsize, ni, id
+    cdef double[::1] ans
+    cdef double[:, ::1] np_gd
+    cdef char[::1] imask
+    cdef double[:, ::1] mcov 
+    cdef double[:, ::1] mcov_gd
+    # cdef numpy.ndarray[numpy.float_t, ndim=1] varlist # not necessary
+    cdef char is_dense, ib, only_gvars
     cdef GVar ga
     cdef svec da
     cdef smat cov
@@ -884,7 +861,7 @@ def var(g):
     ng = len(g)
     if ng <= 0:
         return numpy.array(None)
-    ans = numpy.zeros(ng, dtype=float)
+    ans = _ans = numpy.zeros(ng, dtype=float)
     gdlist = numpy.empty(ng, object)
     cov = None
     only_gvars = True
@@ -933,18 +910,18 @@ def var(g):
             # collect cov matrix for primary GVars and
             # derivative vectors for g[a]; form dot products
             mask = smask(imask)
-            np_gd = numpy.zeros((ng, mask.len), dtype=float)
-            mcov = cov.masked_mat(mask)
+            np_gd = _np_gd = numpy.zeros((ng, mask.len), dtype=float)
+            mcov = _mcov = cov.masked_mat(mask)
             for a in range(ng):
                 da = gdlist[a]
                 if da is None:
                     continue
                 da.masked_vec(mask, out=np_gd[a])
-            mcov_gd = mcov.dot(np_gd.T)
+            mcov_gd = _mcov.dot(np_gd.T)
             for a in range(ng):
                 if gdlist[a] is None:
                     continue
-                ans[a] = np_gd[a].dot(mcov_gd[:, a])
+                ans[a] = _np_gd[a].dot(mcov_gd[:, a])
     else:
         is_dense = False
     if not is_dense:
@@ -953,8 +930,7 @@ def var(g):
             if da is None:
                 continue
             ans[a] = cov.expval(da)
-    return ans.reshape(g_shape)
-
+    return _ans.reshape(g_shape)
 
 @cython.boundscheck(False) # turn off bounds-checking
 @cython.wraparound(False)  # turn off negative index wrapping
@@ -969,14 +945,13 @@ def evalcov(g, verify=True):
     |GVar|\\s, the result is a doubly-indexed dictionary where
     ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.
     """
-    cdef INTP_TYPE a,b,ng,i,j,nc
-    cdef INTP_TYPE cov_zeros, previousid, bsize, ni, id
-    cdef numpy.ndarray[numpy.float_t, ndim=2] ans
-    cdef numpy.ndarray[numpy.float_t, ndim=2] np_gd
-    cdef numpy.int8_t[::1] imask
-    cdef numpy.ndarray[numpy.int8_t, ndim=1] np_imask
-    cdef numpy.ndarray[numpy.float_t, ndim=2] mcov 
-    cdef numpy.int8_t is_dense, ib
+    cdef Py_ssize_t a,b,ng,i,j,nc
+    cdef Py_ssize_t cov_zeros, previousid, bsize, ni, id
+    cdef double[:, ::1] ans
+    cdef double[:, ::1] np_gd
+    cdef char[::1] imask
+    # cdef numpy.ndarray[numpy.float_t, ndim=2] mcov # not necessary
+    cdef char is_dense, ib
     cdef GVar ga
     cdef svec da
     cdef smat cov
@@ -1047,7 +1022,7 @@ def evalcov(g, verify=True):
         if ni <= 0:
             # GVars don't depend on other GVars (eg, 0*gvar('1(1)') gives such a thing)
             is_dense = True 
-            ans = numpy.zeros((ng, ng), FLOAT_TYPE)
+            ans = _ans = numpy.zeros((ng, ng), float)
         else:
             # less than 50% zero is defined as dense (ad hoc)
             is_dense = cov_zeros / ni / ni < 0.5  # N.B. sparse vecs ok 
@@ -1055,89 +1030,27 @@ def evalcov(g, verify=True):
                 # collect cov matrix for primary GVars and
                 # derivative vectors for g[a]; form dot products
                 mask = smask(imask)
-                np_gd = numpy.zeros((ng, mask.len), dtype=float)
+                np_gd = _np_gd = numpy.zeros((ng, mask.len), dtype=float)
                 mcov = cov.masked_mat(mask)
                 for a in range(ng):
                     da = gdlist[a]
                     da.masked_vec(mask, out=np_gd[a])
-                # ans = numpy.matmul(np_gd, numpy.matmul(mcov,np_gd.T))
-                ans = np_gd.dot(mcov.dot(np_gd.T))
+                ans = _ans = _np_gd.dot(mcov.dot(np_gd.T))
     else:
         is_dense = False
     if not is_dense:
-        ans = numpy.empty((ng, ng),FLOAT_TYPE)
+        ans = _ans = numpy.empty((ng, ng),float)
         covd = numpy.zeros(ng, object)
-        np_imask = numpy.asarray(imask)
+        # np_imask = numpy.asarray(imask)
         for a in range(ng):
             da = gdlist[a]
-            covd[a] = cov.masked_dot(da, np_imask)
+            covd[a] = cov.masked_dot(da, imask) # np_imask)
             ans[a, a] = da.dot(covd[a])
             for b in range(a):
                 ans[a, b] = da.dot(covd[b])
                 ans[b, a] = ans[a, b]
-    return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
+    return _ans.reshape(2*g_shape) if g_shape != () else _ans.reshape(1,1)
 
-def evalcov_old(g):
-    """ Compute covariance matrix for elements of
-    array/dictionary ``g``. Old version, for testing.
-
-    If ``g`` is an array of |GVar|\\s, ``evalcov`` returns the
-    covariance matrix as an array with shape ``g.shape+g.shape``.
-    If ``g`` is a dictionary whose values are |GVar|\\s or arrays of
-    |GVar|\\s, the result is a doubly-indexed dictionary where
-    ``cov[k1,k2]`` is the covariance for ``g[k1]`` and ``g[k2]``.
-    """
-    cdef INTP_TYPE a,b,ng,i,j,nc
-    cdef numpy.ndarray[numpy.float_t, ndim=2] ans
-    cdef numpy.ndarray[object, ndim=1] covd
-    cdef numpy.ndarray[numpy.int8_t, ndim=1] imask
-    cdef GVar ga,gb
-    cdef svec da,db
-    cdef smat cov
-    if hasattr(g,"keys"):
-        # convert g to list and call evalcov; repack as double dict
-        if not isinstance(g,BufferDict):
-            g = BufferDict(g)
-        gcov = evalcov(g.flat)
-        ansd = BufferDict()
-        for k1 in g:
-            k1_sl, k1_sh = g.slice_shape(k1)
-            if k1_sh == ():
-                k1_sl = slice(k1_sl, k1_sl+1)
-                k1_sh = (1,)
-            for k2 in g:
-                k2_sl, k2_sh = g.slice_shape(k2)
-                if k2_sh == ():
-                    k2_sl = slice(k2_sl, k2_sl+1)
-                    k2_sh = (1,)
-                ansd[k1, k2] = gcov[k1_sl, k2_sl].reshape(k1_sh + k2_sh)
-        return ansd
-    g = numpy.asarray(g)
-    g_shape = g.shape
-    g = g.flat
-    ng = len(g)
-    ans = numpy.zeros((ng,ng),FLOAT_TYPE)
-    if hasattr(g[0], 'cov'):
-        cov = g[0].cov
-    else:
-        raise ValueError("g does not contain GVar's")
-    nc = cov.nrow 
-    # mask restricts calculation to relevant primary GVars
-    imask = numpy.zeros(nc, numpy.int8)
-    for a in range(ng):
-        ga = g[a]
-        da = ga.d
-        for i in range(da.size):
-            imask[da.v[i].i] = True
-    covd = numpy.zeros(ng, object)
-    for a in range(ng):
-        ga = g[a]
-        covd[a] = cov.masked_dot(ga.d, imask)
-        ans[a,a] = ga.d.dot(covd[a])
-        for b in range(a):
-            ans[a,b] = ga.d.dot(covd[b])
-            ans[b,a] = ans[a,b]
-    return ans.reshape(2*g_shape) if g_shape != () else ans.reshape(1,1)
 
 ###### dump/load
 ######
@@ -1206,19 +1119,19 @@ def distribute_gvars(g, gvlist):
     elif hasattr(g, '__slots__'):
         try:
             for k in g.__slots__:
-                setattr(g, k, _gvar.distribute_gvars(getattr(g, k), gvlist))
+                setattr(g, k, distribute_gvars(getattr(g, k), gvlist))
             return g
         except:
             return g
     elif hasattr(g, '__dict__') and not hasattr(g, '__slots__'):
         try:
-            g.__dict__ = _gvar.distribute_gvars(g.__dict__, gvlist)
+            g.__dict__ = distribute_gvars(g.__dict__, gvlist)
             return g
         except:
             return g
     elif hasattr(g, '__self__'):
         try:
-            g.__self__ = _gvar.distribute_gvars(g.__self__, gvlist)
+            g.__self__ = distribute_gvars(g.__self__, gvlist)
             return g
         except:
             return g
@@ -1297,21 +1210,21 @@ def remove_gvars(g, gvlist):
         try:
             tmp = copy.copy(g)
             for k in tmp.__slots__:
-                setattr(tmp, k, _gvar.remove_gvars(getattr(tmp, k), gvlist))
+                setattr(tmp, k, remove_gvars(getattr(tmp, k), gvlist))
             return tmp
         except:
             return g
     elif hasattr(g, '__dict__') and not hasattr(g, '__slots__'):
         try:
             tmp = copy.copy(g)
-            tmp.__dict__ = _gvar.remove_gvars(tmp.__dict__, gvlist)
+            tmp.__dict__ = remove_gvars(tmp.__dict__, gvlist)
             return tmp 
         except:
             return g
     elif hasattr(g, '__self__'):
         try:
             tmp = copy.copy(g)
-            tmp.__self__ = _gvar.remove_gvars(tmp.__self__, gvlist)
+            tmp.__self__ = remove_gvars(tmp.__self__, gvlist)
             return tmp
         except:
             return g
@@ -1508,7 +1421,7 @@ def dump(g, outputfile=None, add_dependencies=False, **kargs):
     gvlist = []
     datadict['data'] = remove_gvars(g, gvlist)
     if gvlist:
-        datadict['gvlist'] = _gvar.gdumps(
+        datadict['gvlist'] = gdumps(
             gvlist, method='pickle', 
             add_dependencies=add_dependencies
             )
@@ -1555,7 +1468,7 @@ def load(inputfile, method=None, **kargs):
         ifile = inputfile
         iloc = inputfile.tell()
     elif isinstance(inputfile, StringIO):
-        return _gvar.gload(inputfile, method)
+        return gload(inputfile, method)
     elif isinstance(inputfile, str):
         ifile = open(inputfile, 'rb')
     else:
@@ -1567,7 +1480,7 @@ def load(inputfile, method=None, **kargs):
         if 'gvlist' in datadict:
             return distribute_gvars(
                 datadict['data'], 
-                _gvar.gloads(datadict['gvlist'])
+                gloads(datadict['gvlist'])
                 )   
         else:
             return datadict['data']
@@ -1589,7 +1502,7 @@ def gdumps(g, method='json', add_dependencies=False):
 
         # create string containing GVars in g
         import gvar as gv 
-        gstr = gv.gdumps(g)
+        gstr (g)
 
         # convert string back into GVars
         new_g = gv.gloads(gstr)
@@ -1737,7 +1650,7 @@ _DUMPMETHODS = dict(json='json', p='pickle', pkl='pickle', pickle='pickle')
 def gloads(inputstr):
     """ Return |GVar|\\s that are serialized in ``inputstr``.
 
-    This function recovers the |GVar|\\s serialized with :func:`gvar.gdumps(g)`.
+    This function recovers the |GVar|\\s serialized with :func:`(g)`.
     It is shorthand for::
 
         gvar.gload(StringIO(inputstr), method='json')
@@ -1746,7 +1659,7 @@ def gloads(inputstr):
 
         # create string containing GVars in g
         import gvar as gv 
-        gstr = gv.gdumps(g)
+        gstr (g)
 
         # convert string back into GVars
         new_g = gv.gloads(gstr)
@@ -1837,9 +1750,9 @@ def gload(inputfile, method=None, **kargs):
 def _gdump(g, add_dependencies=False):
     """ Repack ``g`` in dictionary that can be serialized. Used by :func:`gdump`.
     """
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
-    cdef numpy.ndarray bcov
-    cdef numpy.ndarray primary, derived
+    # cdef numpy.ndarray[Py_ssize_t, ndim=1] idx # not necessary
+    # cdef numpy.ndarray bcov
+    # cdef numpy.ndarray primary, derived
     data = {}
     if hasattr(g, 'keys'):
         if not isinstance(g, _gvar.BufferDict):
@@ -1858,27 +1771,27 @@ def _gdump(g, add_dependencies=False):
     buf = g.flat[:]
     data['bufsize'] = len(buf)
     if add_dependencies:
-        buf = numpy.concatenate([buf, _gvar.dependencies(buf)])
+        buf = numpy.concatenate([buf, dependencies(buf)])
         data['fix_cov'] = False
-    elif not _gvar.missing_dependencies(buf):
+    elif not missing_dependencies(buf):
         data['fix_cov'] = False 
     else:
         data['fix_cov'] = True
-    data['means'] = _gvar.mean(buf).tolist()
+    data['means'] = mean(buf).tolist()
     data['bcovs'] = []
     first_pass = True
-    for idx, bcov in _gvar.evalcov_blocks(buf, compress=True):
+    for idx, bcov in evalcov_blocks(buf, compress=True):
         data['bcovs'] += [[idx.tolist(), bcov.tolist()]]
         if first_pass:
             data['bcovs'][0] += [[], []]
             first_pass = False
         else:
-            primary = _gvar.is_primary(buf[idx])
+            primary = is_primary(buf[idx])
             derived = numpy.logical_not(primary)
             if numpy.all(primary) or numpy.all(derived):
                 data['bcovs'][-1] += [[], []]
             else:
-                derivs = _gvar.deriv(buf[idx][derived], buf[idx][primary])
+                derivs = deriv(buf[idx][derived], buf[idx][primary])
                 data['bcovs'][-1] += [primary.tolist(), derivs.tolist()]
     return data 
 
@@ -1925,15 +1838,15 @@ def _rebuild_gvars(buf, cov, primary, derivs, fix_cov):
     idx_primary = numpy.arange(buf.size)[primary]
     idx_derived = numpy.arange(buf.size)[numpy.logical_not(primary)]
     # contributions from primaries
-    tmp = _gvar.mean(buf[idx_derived]) + numpy.sum(
-        (buf[idx_primary] - _gvar.mean(buf[idx_primary]))[None, :] * derivs,
+    tmp = mean(buf[idx_derived]) + numpy.sum(
+        (buf[idx_primary] - mean(buf[idx_primary]))[None, :] * derivs,
         axis=1
         )
     # contributions from missing primaries
     if fix_cov:
         buf[idx_derived] = tmp + _gvar.gvar(
             numpy.zeros(len(idx_derived), dtype=float),
-            cov[idx_derived[:, None], idx_derived] * (1 + EPSILON) - _gvar.evalcov(tmp)
+            cov[idx_derived[:, None], idx_derived] * (1 + EPSILON) - evalcov(tmp)
             )
     else:
         buf[idx_derived] = tmp
@@ -2047,21 +1960,21 @@ def disassemble(g):
         g (dict, array, or gvar.GVar): Collection of |GVar|\\s to be
             disassembled.
     """
-    cdef INTP_TYPE i, gsize
+    cdef Py_ssize_t i, gsize
     cdef GVar gi
-    cdef numpy.ndarray[object, ndim=1] newbuf
+    cdef object[::1] newbuf
     if hasattr(g, 'keys'):
         if not isinstance(g, BufferDict):
             g = BufferDict(g)
     else:
         g = numpy.asarray(g)
     gsize = g.size
-    newbuf = numpy.empty(gsize, object)
+    newbuf = _newbuf = numpy.empty(gsize, object)
     for i,gi in enumerate(g.flat):
         if gi == None:
             raise ValueError('g contains None')
         newbuf[i] = (gi.v, gi.d)
-    return BufferDict(g, buf=newbuf) if g.shape is None else newbuf.reshape(g.shape)
+    return BufferDict(g, buf=newbuf) if g.shape is None else _newbuf.reshape(g.shape)
 
 def reassemble(data, smat cov=_gvar.gvar.cov):
     """ Convert data from :func:`gvar.disassemble` back into |GVar|\\s.
@@ -2072,37 +1985,37 @@ def reassemble(data, smat cov=_gvar.gvar.cov):
         cov (gvar.smat): Covariance matrix corresponding to the |GVar|\\s
             in ``data``. (Default is ``gvar.gvar.cov``.)
     """
-    cdef INTP_TYPE i, datasize
+    cdef Py_ssize_t i, datasize
     cdef object datai
     cdef svec der
     cdef double val
-    cdef numpy.ndarray[object, ndim=1] newbuf
+    cdef object[::1] newbuf
     if hasattr(data, 'keys'):
         if not isinstance(data, BufferDict):
             data = BufferDict(data)
     else:
         data = numpy.asarray(data)
     datasize = data.size
-    newbuf = numpy.empty(datasize, object)
+    newbuf =_newbuf = numpy.empty(datasize, object)
     for i,(val,der) in enumerate(data.flat):
         newbuf[i] = GVar(val, der, cov)
     return (
         BufferDict(data, buf=newbuf) if data.shape is None else
-        newbuf.reshape(data.shape)
+        _newbuf.reshape(data.shape)
         )
 
 
-def wsum_der(numpy.float_t[:] wgt, GVar[:] glist):
+def wsum_der(double[:] wgt, GVar[:] glist):
     """ weighted sum of |GVar| derivatives """
     cdef GVar g
     cdef smat cov
     cdef double w
-    cdef INTP_TYPE ng,i,j
-    cdef numpy.ndarray[numpy.float_t,ndim=1] ans
+    cdef Py_ssize_t ng,i,j
+    cdef double[::1] ans
     ng = len(glist)
     assert ng==len(wgt),"wgt and glist have different lengths."
     cov = glist[0].cov
-    ans = numpy.zeros(len(cov),FLOAT_TYPE)
+    ans = numpy.zeros(len(cov),float)
     for i in range(wgt.shape[0]):
         w = wgt[i]
         g = glist[i]
@@ -2111,24 +2024,24 @@ def wsum_der(numpy.float_t[:] wgt, GVar[:] glist):
             ans[g.d.v[j].i] += w*g.d.v[j].v
     return ans
 
-def msum_gvar(numpy.float_t[:, :] wgt, GVar[:] glist, GVar[:] out):
-    cdef INTP_TYPE i
+def msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
+    cdef Py_ssize_t i
     for i in range(wgt.shape[0]):
         out[i] = wsum_gvar(wgt[i], glist)
 
-cpdef GVar wsum_gvar(numpy.float_t[:] wgt, GVar[:] glist):
+cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
     """ weighted sum of |GVar|\\s """
     cdef svec wd
     cdef double wv, w
     cdef GVar g
     cdef smat cov
-    cdef INTP_TYPE ng, i, j, nd, size
+    cdef Py_ssize_t ng, i, j, nd, size
     cdef double[:] der
-    cdef INTP_TYPE[:] idx
+    cdef Py_ssize_t[:] idx
     ng = len(glist)
     assert ng==len(wgt),"wgt and glist have different lengths."
     cov = glist[0].cov
-    der = numpy.zeros(len(cov),FLOAT_TYPE)
+    der = numpy.zeros(len(cov),float)
     wv = 0.0
     for i in range(ng): #w,g in zip(wgt,glist):
         w = wgt[i]
@@ -2314,7 +2227,7 @@ def bootstrap_iter(g, n=None, eps=None, svdcut=None):
     Returns:
         An iterator that returns bootstrap copies of ``g``.
     """
-    g, i_wgts = _gvar.regulate(g, eps=eps, svdcut=svdcut, wgts=1.)
+    g, i_wgts = regulate(g, eps=eps, svdcut=svdcut, wgts=1.)
     g_flat = g.flatten()
     buf = numpy.zeros_like(g_flat)
     nwgt = sum(len(wgts) for i, wgts in i_wgts)
@@ -2893,11 +2806,11 @@ def valder(v):
     same as that of ``v``.
     """
     try:
-        v = numpy.asarray(v,FLOAT_TYPE)
+        v = numpy.asarray(v,float)
     except ValueError:
         raise ValueError("Bad input.")
     gv_gvar = _gvar.gvar_factory()
-    return gv_gvar(v,numpy.zeros(v.shape,FLOAT_TYPE))
+    return gv_gvar(v,numpy.zeros(v.shape,float))
 
 
 # ## miscellaneous functions ##
@@ -3191,10 +3104,10 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
         Logarithm of the determinant of the covariance matrix after ``eps``
         regulation is applied.
     """
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
-    cdef numpy.ndarray[numpy.float_t, ndim=2] block_cov 
-    cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D, sd, mn, z, Dinv
-    cdef numpy.ndarray[object, ndim=1] correction
+    # cdef numpy.ndarray[Py_ssize_t, ndim=1] idx        # not necessary
+    # cdef numpy.ndarray[numpy.float_t, ndim=2] block_cov 
+    # cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D, sd, mn, z, Dinv
+    # cdef numpy.ndarray[object, ndim=1] correction
     cdef double root_eps_norm, logdet
     # which cutoff?
     if eps is None and svdcut is None:
@@ -3303,14 +3216,14 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
         tmp = []
         for iw, wt in i_wgts:
             tmp.append(
-                (numpy.array(iw, numpy.intp), numpy.array(wt, numpy.double))
+                (numpy.array(iw, numpy.intp), numpy.array(wt, float))
                 )
         i_wgts = tmp
         if wgts is True:
             tmp = []
             for iw, wt in i_invwgts:
                 tmp.append(
-                    (numpy.array(iw, numpy.intp), numpy.array(wt, numpy.double))
+                    (numpy.array(iw, numpy.intp), numpy.array(wt, float))
                     )
             i_invwgts = tmp        
             return g, i_wgts, i_invwgts
@@ -3475,10 +3388,10 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
         Array or dictionary containing the SVD corrections added to ``g``
         to create ``gmod``: ``gmod = g + gmod.correction``.
     """
-    cdef numpy.ndarray[INTP_TYPE, ndim=1] idx 
-    cdef numpy.ndarray[numpy.float_t, ndim=2] block_cov 
-    cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D
-    cdef numpy.ndarray[object, ndim=1] correction
+    # cdef numpy.ndarray[Py_ssize_t, ndim=1] idx    # not necessary
+    # cdef numpy.ndarray[numpy.float_t, ndim=2] block_cov 
+    # cdef numpy.ndarray[numpy.float_t, ndim=1] block_sdev, D
+    # cdef numpy.ndarray[object, ndim=1] correction
     # legacy keyword
     if add_svdnoise is not None:
         noise = add_svdnoise
@@ -3493,7 +3406,7 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
                 obj = numpy.array(g).view(cls)
                 return obj
         g = svdarray(g)
-    idx_bcov = _gvar.evalcov_blocks(g.flat, compress=True)
+    idx_bcov = evalcov_blocks(g.flat, compress=True)
     g.logdet = 0.0
     correction = numpy.zeros(len(g.flat), object)
     correction[:] = 0 * _gvar.gvar(0, 1)
@@ -3584,14 +3497,14 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
         tmp = []
         for iw, w in i_wgts:
             tmp.append(
-                (numpy.array(iw, numpy.intp), numpy.array(w, numpy.double))
+                (numpy.array(iw, numpy.intp), numpy.array(w, float))
                 )
         i_wgts = tmp
         if wgts is True:
             tmp = []
             for iw, w in i_invwgts:
                 tmp.append(
-                    (numpy.array(iw, numpy.intp), numpy.array(w, numpy.double))
+                    (numpy.array(iw, numpy.intp), numpy.array(w, float))
                     )
             i_invwgts = tmp
             return (g, i_wgts, i_invwgts)

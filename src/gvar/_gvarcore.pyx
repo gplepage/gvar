@@ -4,7 +4,7 @@
 # remove extra # above for profiling
 
 # Created by Peter Lepage (Cornell University) on 2011-08-17.
-# Copyright (c) 2011-2023 G. Peter Lepage.
+# Copyright (c) 2011-2024 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,13 +19,13 @@
 import re
 import sys
 # from scipy.sparse.csgraph import connected_components as _connected_components
-from gvar._svec_smat import svec, smat
+from gvar._svec_smat import svec, smat, smask
 from gvar._bufferdict import BufferDict
 
-cimport numpy
-numpy.import_array()
+# cimport numpy
+# numpy.import_array()
 cimport cython
-from ._svec_smat cimport svec, smat
+from gvar._svec_smat cimport svec, smat, smask
 
 cdef extern from "math.h":
     double c_pow "pow" (double x,double y)
@@ -50,16 +50,16 @@ from numpy import arcsinh, arccosh, arctanh, square
 import copy
 import warnings
 
-import gvar.powerseries
-_ARRAY_TYPES = [numpy.ndarray, gvar.powerseries.PowerSeries]
+from gvar.powerseries import PowerSeries
+_ARRAY_TYPES = [numpy.ndarray, PowerSeries]
 
-from numpy cimport npy_intp as INTP_TYPE
+# from numpy cimport npy_intp as Py_ssize_t
 # index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
 
-if numpy.version.version >= '2.0':
-    FLOAT_TYPE = numpy.float64
-else:
-    FLOAT_TYPE = numpy.float_
+# if numpy.version.version >= '2.0':
+#     float = numpy.float64
+# else:
+#     float = numpy.float_
     
 # GVar definition
 
@@ -569,7 +569,7 @@ cdef class GVar:
     def __add__(xx,yy):
         cdef GVar ans = GVar.__new__(GVar)
         cdef GVar x,y
-        # cdef INTP_TYPE i,nx,di,ny
+        cdef Py_ssize_t i,nx,di,ny
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
         elif isinstance(xx,GVar):
@@ -846,12 +846,12 @@ cdef class GVar:
             |GVar|\\s in ``x``.  The result has the same 
             shape as ``x``.
         """
-        cdef INTP_TYPE i, ider
+        cdef Py_ssize_t i, ider
         cdef double xder
-        cdef numpy.ndarray[numpy.float_t, ndim=1] ans
+        cdef double[::1] ans
         cdef GVar xi
         x = numpy.asarray(x)
-        ans = numpy.zeros(x.size, dtype=float)
+        ans = _ans = numpy.zeros(x.size, dtype=float)
         self_deriv = dict([(self.d.v[i].i, self.d.v[i].v) for i in range(self.d.size)])
         for i in range(x.size):
             xi = x.flat[i]
@@ -862,7 +862,7 @@ cdef class GVar:
             if xder == 0:
                 continue
             ans[i] = self_deriv.get(ider, 0.0) / xder
-        return ans.flat[0] if x.shape == () else ans.reshape(x.shape)
+        return _ans.flat[0] if x.shape == () else _ans.reshape(x.shape)
 
     def fmt(self, ndecimal=None, sep='', format='{}'):
         """ Format |GVar|.
@@ -979,11 +979,11 @@ cdef class GVar:
         cdef GVar ai
         cdef svec md
         cdef smat cov
-        cdef numpy.ndarray[INTP_TYPE,ndim=1] dmask
-        cdef numpy.ndarray[INTP_TYPE,ndim=1] md_idx
-        cdef numpy.ndarray[numpy.float_t,ndim=1] md_v
-        cdef INTP_TYPE i,j,md_size
-        cdef INTP_TYPE dstart,dstop
+        cdef Py_ssize_t[::1] dmask
+        cdef Py_ssize_t[::1] md_idx
+        cdef double[::1] md_v
+        cdef Py_ssize_t i, j, md_size
+        cdef Py_ssize_t dstart, dstop
         if self.d.size<=0:
             return 0.0
         dstart = self.d.v[0].i
@@ -1026,7 +1026,7 @@ cdef class GVar:
         # create masked derivative vector for self
         md_size = 0
         md_idx = numpy.zeros(dstop-dstart, numpy.intp)
-        md_v = numpy.zeros(dstop-dstart,FLOAT_TYPE)
+        md_v = numpy.zeros(dstop-dstart,float)
         for i in range(self.d.size):
             if dmask[self.d.v[i].i-dstart]==0:
                 continue
@@ -1126,23 +1126,23 @@ cdef class GVar:
         def __get__(self):
             return self.v, self.d, self.cov
 
-    def dotder(self, numpy.float_t[:] v not None):
+    def dotder(self, double[:] v not None):
         """ Return the dot product of ``self.der`` and ``v``. """
         cdef double ans = 0
-        cdef INTP_TYPE i
+        cdef Py_ssize_t i
         for i in range(self.d.size):
             ans += v[self.d.v[i].i] * self.d.v[i].v
         return ans
 
-    def mdotder(self, numpy.float_t[:, :]  m not None):
+    def mdotder(self, double[:, :]  m not None):
         """ Return the dot product of m and ``self.der``. """
-        cdef numpy.ndarray[numpy.float_t, ndim=1] ans 
-        cdef INTP_TYPE i, j 
-        ans = numpy.zeros(m.shape[0], dtype=float)
+        cdef double[:] ans 
+        cdef Py_ssize_t i, j 
+        ans = _ans = numpy.zeros(m.shape[0], dtype=float)
         for j in range(m.shape[0]):
             for i in range(self.d.size):
                 ans[j] += m[j, self.d.v[i].i] * self.d.v[i].v
-        return ans
+        return _ans
 
 
 
@@ -1266,16 +1266,13 @@ class GVarFactory:
             self.cov = cov
 
     def __call__(self, *args, verify=False, fast=False):
-        cdef INTP_TYPE nx, i, nd, ib, nb, n1, n2
+        cdef Py_ssize_t nx, i, nd, ib, nb, n1, n2
         cdef svec der
         cdef smat cov
         cdef GVar gv, xg, yg
-        cdef numpy.ndarray[numpy.float_t, ndim=1] d
-        cdef numpy.ndarray[numpy.float_t, ndim=1] d_v
-        cdef numpy.ndarray[numpy.float_t, ndim=2] xcov
-        cdef numpy.ndarray[INTP_TYPE, ndim=1] d_idx
-        cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
-        cdef numpy.ndarray[INTP_TYPE, ndim=1] xrow, yrow
+        cdef double[::1] d
+        cdef double[:, ::1] xcov
+        cdef Py_ssize_t[::1] idx
 
         if len(args)==2:
             if hasattr(args[0], 'keys'):
@@ -1288,7 +1285,7 @@ class GVarFactory:
                 if set(args[0].keys()) == set(args[1].keys()):
                     # means and stdevs
                     x = BufferDict(args[0])
-                    xsdev = BufferDict(x, buf=numpy.empty(x.size, FLOAT_TYPE))
+                    xsdev = BufferDict(x, buf=numpy.empty(x.size, float))
                     for k in x:
                         xsdev[k] = args[1][k]
                     xflat = self(x.flat, xsdev.flat)
@@ -1296,7 +1293,7 @@ class GVarFactory:
                 else:
                     # means and covariance matrix
                     x = BufferDict(args[0])
-                    xcov = numpy.empty((x.size, x.size), FLOAT_TYPE)
+                    xcov = _xcov = numpy.empty((x.size, x.size), float)
                     for k1 in x:
                         k1_sl, k1_sh = x.slice_shape(k1)
                         if k1_sh == ():
@@ -1311,7 +1308,7 @@ class GVarFactory:
                                 n2 = 1
                             else:
                                 n2 = numpy.prod(k2_sh)
-                            xcov[k1_sl, k2_sl] = (
+                            _xcov[k1_sl, k2_sl] = (
                                 numpy.asarray(args[1][k1, k2]).reshape(n1, n2)
                                 )
                     xflat = self(x.flat, xcov, verify=verify, fast=fast)
@@ -1320,8 +1317,8 @@ class GVarFactory:
             # (x,xsdev) or (xarray,sdev-array) or (xarray,cov)
             # unpack arguments and verify types
             try:
-                x = numpy.asarray(args[0],FLOAT_TYPE)
-                xsdev = numpy.asarray(args[1],FLOAT_TYPE)
+                x = numpy.asarray(args[0],float)
+                xsdev = numpy.asarray(args[1],float)
             except (ValueError,TypeError):
                 raise TypeError(
                     "arguments must be numbers or arrays of numbers"
@@ -1340,11 +1337,6 @@ class GVarFactory:
                 der = svec(1)
                 der.v[0].i = idx[0]
                 der.v[0].v = 1.0
-                # gv = GVar.__new__(GVar)
-                # gv.v = x
-                # gv.d = der
-                # gv.cov = self.cov
-                # return gv
                 return GVar(x, der, self.cov)
             else:
                 # array of gvars from x and sdev/cov arrays
@@ -1354,10 +1346,10 @@ class GVarFactory:
                         raise ValueError('negative standard deviation: ' + str(xsdev))
                     idx = self.cov.append_diag(xsdev.reshape(nx) ** 2)
                 elif xsdev.shape==2 * x.shape: # x,cov
-                    xcov = xsdev.reshape(nx, nx)
+                    xcov = _xcov = xsdev.reshape(nx, nx)
                     with numpy.errstate(under='ignore'):
                         if not numpy.allclose(xcov, xcov.T, equal_nan=True):
-                            raise ValueError('non-symmetric covariance matrix:\n' + str(xcov))
+                            raise ValueError('non-symmetric covariance matrix:\n' + str(_xcov))
                     if verify:
                         try:
                             numpy.linalg.cholesky(xcov)
@@ -1369,15 +1361,15 @@ class GVarFactory:
                         from scipy.sparse.csgraph import connected_components as _connected_components
                         allxcov = numpy.arange(nx)
                         ans = numpy.empty(nx, dtype=object)
-                        nb, key = _connected_components(xcov != 0, directed=False)
+                        nb, key = _connected_components(_xcov != 0, directed=False)
                         for ib in range(nb):
                             bidx = allxcov[key == ib]
-                            ans[bidx] = self(x.flat[bidx], xcov[bidx[:, None], bidx], fast=True)
+                            ans[bidx] = self(x.flat[bidx], _xcov[bidx[:, None], bidx], fast=True)
                         return ans.reshape(x.shape)
                 else:
                     raise ValueError("Argument shapes mismatched: " +
                         str(x.shape) + ' ' + str(xsdev.shape))
-                d = numpy.ones(nx, dtype=FLOAT_TYPE)
+                d = numpy.ones(nx, dtype=float)
                 ans = numpy.empty(nx, dtype=object)
                 for i in range(nx):
                     der = svec(1)
@@ -1467,13 +1459,12 @@ class GVarFactory:
     
     def _call3(self, *args):
         # gvar(x,der,cov)
-        cdef INTP_TYPE nx, i, nd, ib, nb
+        # cdef Py_ssize_t nx, i, nd, ib, nb
         cdef svec der
         cdef smat cov
-        cdef numpy.ndarray[numpy.float_t, ndim=1] d
-        cdef numpy.ndarray[numpy.float_t, ndim=1] d_v
-        cdef numpy.ndarray[INTP_TYPE, ndim=1] d_idx
-        cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
+        cdef double[::1] d
+        cdef double[::1] d_v
+        cdef Py_ssize_t[::1] d_idx
         try:
             x = float(args[0])
         except (ValueError, TypeError):
@@ -1485,18 +1476,18 @@ class GVarFactory:
         elif isinstance(args[1], tuple):
             try:
                 d_idx = numpy.asarray(args[1][1], numpy.intp)
-                d_v = numpy.asarray(args[1][0], FLOAT_TYPE)
+                d_v = numpy.asarray(args[1][0], float)
                 assert d_idx.ndim == 1 and d_v.ndim == 1 and d_idx.shape[0] == d_v.shape[0]
             except (ValueError, TypeError, AssertionError):
                 raise TypeError('Badly formed derivative.')
         else:
             try:
-                d = numpy.asarray(args[1], FLOAT_TYPE)
+                d = _d = numpy.asarray(args[1], float)
                 assert d.ndim == 1
             except (ValueError, TypeError, AssertionError):
                 raise TypeError('Badly formed derivative.')
-            d_idx = d.nonzero()[0]
-            d_v = d[d_idx]
+            d_idx = _d.nonzero()[0]
+            d_v = _d[d_idx]
         assert len(cov) > d_idx[-1], "length mismatch between der and cov"
         der = svec(len(d_idx))
         der.assign(d_v, d_idx)
@@ -1505,13 +1496,15 @@ class GVarFactory:
     def _call4(self, *args, verify=False, fast=False):
         # gvar(ymean, ycov, x, xycov)
         # y,x 1-d arrays, ycov, xycov 2-d arrays
-        cdef INTP_TYPE i, j, k, ni, nj
+        cdef Py_ssize_t i, j, k, ni, nj
         cdef smat cov
         cdef GVar xg, yg
-        cdef numpy.ndarray[numpy.float_t, ndim=1] ymean
-        cdef numpy.ndarray[numpy.float_t, ndim=2] ycov, xycov
-        cdef numpy.ndarray[INTP_TYPE, ndim=1] idx
-        cdef numpy.ndarray[INTP_TYPE, ndim=1] xrow, yrow
+        cdef double[:] ymean
+        cdef double[:, :] ycov
+        cdef double[:, :] xycov
+        cdef Py_ssize_t[::1] idx
+        cdef Py_ssize_t[::1] xrow
+        cdef Py_ssize_t[::1] yrow
         try:
             ymean = numpy.asarray(args[0], float)
             assert ymean.ndim == 1 and ymean.shape[0] > 0
@@ -1532,7 +1525,7 @@ class GVarFactory:
         except:
             raise ValueError('x must be a 1-d array of numbers')
         try:
-            xycov = numpy.asarray(args[3])
+            xycov = _xycov = numpy.asarray(args[3])
             assert xycov.shape[0] == x.shape[0]
             assert xycov.shape[1] == ymean.shape[0]
         except:
@@ -1544,8 +1537,10 @@ class GVarFactory:
             return self(ymean, ycov, verify=verify, fast=fast)
         else:
             y = self(ymean, ycov, verify=verify, fast=False)
-        xrow = numpy.zeros(len(x), numpy.intp)
-        yrow = numpy.zeros(len(y), numpy.intp)
+        _xrow = numpy.zeros(len(x), numpy.intp)
+        xrow = _xrow
+        _yrow = numpy.zeros(len(y), numpy.intp)
+        yrow = _yrow
         for j, xg in enumerate(x):
             if xg.d.size != 1 or xg.d.v[0].v != 1.:
                 raise ValueError('x[i] must be primary GVars')
@@ -1553,7 +1548,7 @@ class GVarFactory:
         for j, yg in enumerate(y):
             yrow[j] = yg.d.v[0].i
         idx = numpy.argsort(xrow)
-        y[0].cov.add_offdiag_m(xrow[idx], yrow, xycov[idx])
+        y[0].cov.add_offdiag_m(_xrow[idx], yrow, _xycov[idx])
         if verify:
             allrow = list(xrow) + list(yrow)
             allcov = numpy.zeros(2*(len(allrow),), float)
@@ -1656,8 +1651,4 @@ def abs(g):
         return fabs(g)
     except:
         return numpy.absolute(g)
-
-
-
-
 

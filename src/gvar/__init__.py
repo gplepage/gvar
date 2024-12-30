@@ -137,7 +137,7 @@ from ._bufferdict import add_parameter_parentheses, nonredundant_keys   # legacy
 # from ._utilities import *
 from ._utilities import rebuild, mean, fmt, sdev, deriv, is_primary
 from ._utilities import dependencies, missing_dependencies, uncorrelated, evalcorr, corr, cov
-from ._utilities import correlate, evalcov_blocks_dense, evalcov_blocks, mock_evalcov, var, evalcov
+from ._utilities import correlate, evalcov_blocks_dense, evalcov_blocks, var, evalcov
 from ._utilities import distribute_gvars, remove_gvars, collect_gvars, filter
 from ._utilities import dumps, loads, dump, load, gdumps, gdump, gloads, gload #, olddump
 from ._utilities import disassemble, reassemble, wsum_der, msum_gvar, fmt_values, wsum_gvar
