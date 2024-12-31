@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>gvar - Gaussian Random Variables &#8212; gvar 13.1.3 documentation</title>
+    <title>gvar - Gaussian Random Variables &#8212; gvar 13.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=310c80ee" />
-    <script src="_static/documentation_options.js?v=a9950f5c"></script>
+    <script src="_static/documentation_options.js?v=87b184bf"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>  
@@ -1161,7 +1161,7 @@ object containing the serialized data is returned. Otherwise
 <p>Typical usage is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create string containing GVars in g</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="n">gstr</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gdumps</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="n">gstr</span> <span class="p">(</span><span class="n">g</span><span class="p">)</span>
 
 <span class="c1"># convert string back into GVars</span>
 <span class="n">new_g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gloads</span><span class="p">(</span><span class="n">gstr</span><span class="p">)</span>
@@ -1230,7 +1230,7 @@ whose values are <a class="reference internal" href="#gvar.GVar" title="gvar.GVa
 <dt class="sig sig-object py" id="gvar.gloads">
 <span class="sig-prename descclassname"><span class="pre">gvar.</span></span><span class="sig-name descname"><span class="pre">gloads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputstring</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.gloads" title="Link to this definition">¶</a></dt>
 <dd><p>Return <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s that are serialized in <code class="docutils literal notranslate"><span class="pre">inputstr</span></code>.</p>
-<p>This function recovers the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s serialized with <code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gdumps(g)()</span></code>.
+<p>This function recovers the <a class="reference internal" href="#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s serialized with <code class="xref py py-func docutils literal notranslate"><span class="pre">(g)()</span></code>.
 It is shorthand for:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gvar</span><span class="o">.</span><span class="n">gload</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">inputstr</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1238,7 +1238,7 @@ It is shorthand for:</p>
 <p>Typical usage is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create string containing GVars in g</span>
 <span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="n">gstr</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gdumps</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<span class="n">gstr</span> <span class="p">(</span><span class="n">g</span><span class="p">)</span>
 
 <span class="c1"># convert string back into GVars</span>
 <span class="n">new_g</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gloads</span><span class="p">(</span><span class="n">gstr</span><span class="p">)</span>
@@ -3776,7 +3776,7 @@ also uses the <code class="xref py py-mod docutils literal notranslate"><span cl
         <li class="right" >
           <a href="overview.html" title="Overview and Tutorial"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code> - Gaussian Random Variables</a></li> 
       </ul>
     </div>

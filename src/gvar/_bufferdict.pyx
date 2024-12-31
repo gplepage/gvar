@@ -205,7 +205,7 @@ class BufferDict(collections_MMapping):
 
     def __init__(self, *args, **kargs):
         self._extension = {}
-        self._ver_l = BufferDict._ver_g
+        self._ver_l = BufferDict.g
         self.shape = None
         self._dtype = None     # enforced dtype (default is None)
         if len(args)==0:
@@ -494,7 +494,7 @@ class BufferDict(collections_MMapping):
         else:
             self[k] = v
 
-    def __getitem__(self,k):
+    def __getitem__(self, k):
         """ Return piece of buffer corresponding to key ``k``. """
         try:
             d = self._odict.__getitem__(k)

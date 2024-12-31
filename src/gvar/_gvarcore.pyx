@@ -1,5 +1,5 @@
 # cython: boundscheck=False, language_level=3str, binding=True
-# cython: c_api_binop_methods=True
+# cython: c_api_binop_methods=False
 # c#ython: profile=True
 # remove extra # above for profiling
 
@@ -22,8 +22,6 @@ import sys
 from gvar._svec_smat import svec, smat, smask
 from gvar._bufferdict import BufferDict
 
-# cimport numpy
-# numpy.import_array()
 cimport cython
 from gvar._svec_smat cimport svec, smat, smask
 
@@ -52,14 +50,6 @@ import warnings
 
 from gvar.powerseries import PowerSeries
 _ARRAY_TYPES = [numpy.ndarray, PowerSeries]
-
-# from numpy cimport npy_intp as Py_ssize_t
-# index type for numpy (signed) -- same as numpy.intp_t and Py_ssize_t
-
-# if numpy.version.version >= '2.0':
-#     float = numpy.float64
-# else:
-#     float = numpy.float_
     
 # GVar definition
 
@@ -566,100 +556,213 @@ cdef class GVar:
     def __pos__(self):
         return self
 
-    def __add__(xx,yy):
-        cdef GVar ans = GVar.__new__(GVar)
-        cdef GVar x,y
-        cdef Py_ssize_t i,nx,di,ny
+    # def __add__(xx,yy):
+    #     cdef GVar ans = GVar.__new__(GVar)
+    #     cdef GVar x,y
+    #     cdef Py_ssize_t i,nx,di,ny
+    #     if type(yy) in _ARRAY_TYPES:
+    #         return NotImplemented   # let ndarray handle it
+    #     elif isinstance(xx,GVar):
+    #         if isinstance(yy,GVar):
+    #             x = xx
+    #             y = yy
+    #             assert x.cov is y.cov,"incompatible GVars"
+    #             ans.v = x.v + y.v
+    #             ans.d = x.d.add(y.d)
+    #             ans.cov = x.cov
+    #             # return GVar(x.v+y.v,x.d.add(y.d),x.cov)
+    #         else:
+    #             x = xx
+    #             ans.v = x.v + yy
+    #             ans.d = x.d
+    #             ans.cov = x.cov
+    #             # return GVar(x.v+yy,x.d,x.cov)
+    #     elif isinstance(yy,GVar):
+    #         y = yy
+    #         ans.v = y.v + xx
+    #         ans.d = y.d
+    #         ans.cov = y.cov
+    #         # return GVar(y.v+xx,y.d,y.cov)
+    #     else:
+    #         return NotImplemented
+    #     return ans
+
+    def __add__(self, yy):
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
-        elif isinstance(xx,GVar):
-            if isinstance(yy,GVar):
-                x = xx
-                y = yy
-                assert x.cov is y.cov,"incompatible GVars"
-                ans.v = x.v + y.v
-                ans.d = x.d.add(y.d)
-                ans.cov = x.cov
-                # return GVar(x.v+y.v,x.d.add(y.d),x.cov)
-            else:
-                x = xx
-                ans.v = x.v + yy
-                ans.d = x.d
-                ans.cov = x.cov
-                # return GVar(x.v+yy,x.d,x.cov)
-        elif isinstance(yy,GVar):
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar x, y
+        x = self 
+        ans.cov = x.cov
+        if isinstance(yy,GVar):
             y = yy
-            ans.v = y.v + xx
-            ans.d = y.d
-            ans.cov = y.cov
-            # return GVar(y.v+xx,y.d,y.cov)
+            assert x.cov is y.cov,"incompatible GVars"
+            ans.v = x.v + y.v
+            ans.d = x.d.add(y.d)
         else:
-            return NotImplemented
+            ans.v = x.v + yy
+            ans.d = x.d
         return ans
 
-    def __sub__(xx,yy):
-        cdef GVar x,y
-        if type(yy) in _ARRAY_TYPES:
-            return NotImplemented   # let ndarray handle it
-        elif isinstance(xx,GVar):
+    def __radd__(self, xx):
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar y = self  # xx can't be a GVar
+        ans.cov = y.cov
+        ans.v = y.v + xx
+        ans.d = y.d
+        return ans
+
+    # def __sub__(xx,yy):
+    #     cdef GVar x,y
+    #     if type(yy) in _ARRAY_TYPES:
+    #         return NotImplemented   # let ndarray handle it
+    #     elif isinstance(xx,GVar):
+    #         if isinstance(yy,GVar):
+    #             x = xx
+    #             y = yy
+    #             assert x.cov is y.cov,"incompatible GVars"
+    #             return GVar(x.v-y.v,x.d.add(y.d,1.,-1.),x.cov)
+    #         else:
+    #             x = xx
+    #             return GVar(x.v-yy,x.d,x.cov)
+    #     elif isinstance(yy,GVar):
+    #         y = yy
+    #         return GVar(xx-y.v,y.d.mul(-1.),y.cov)
+    #     else:
+    #         return NotImplemented
+
+    def __sub__(self, yy):
+            if type(yy) in _ARRAY_TYPES:
+                return NotImplemented   # let ndarray handle it
+            cdef GVar ans = GVar.__new__(GVar)
+            cdef GVar x, y
+            x = self
+            ans.cov = x.cov
             if isinstance(yy,GVar):
-                x = xx
                 y = yy
                 assert x.cov is y.cov,"incompatible GVars"
-                return GVar(x.v-y.v,x.d.add(y.d,1.,-1.),x.cov)
+                ans.v = x.v - y.v
+                ans.d = x.d.add(y.d, 1., -1.)
+                # return GVar(x.v-y.v,x.d.add(y.d,1.,-1.),x.cov)
             else:
-                x = xx
-                return GVar(x.v-yy,x.d,x.cov)
-        elif isinstance(yy,GVar):
-            y = yy
-            return GVar(xx-y.v,y.d.mul(-1.),y.cov)
-        else:
-            return NotImplemented
+                ans.v = x.v - yy
+                ans.d = x.d 
+                # return GVar(x.v-yy,x.d,x.cov)
+            return ans
 
-    def __mul__(xx,yy):
-        cdef GVar x,y
+    def __rsub__(self, xx):
+            cdef GVar ans = GVar.__new__(GVar)
+            cdef GVar y = self  # x can't be a GVar
+            ans.cov = y.cov
+            ans.v = xx - y.v
+            ans.d = y.d.mul(-1.)
+            # return GVar(xx-y.v,y.d.mul(-1.),y.cov)
+            return ans
 
+    # def __mul__(xx,yy):
+    #     cdef GVar x,y
+
+    #     if type(yy) in _ARRAY_TYPES:
+    #         return NotImplemented   # let ndarray handle it
+    #     elif isinstance(xx,GVar):
+    #         if isinstance(yy,GVar):
+    #             x = xx
+    #             y = yy
+    #             assert x.cov is y.cov,"incompatible GVars"
+    #             return GVar(x.v * y.v, x.d.add(y.d, y.v, x.v), x.cov)
+    #         else:
+    #             x = xx
+    #             return GVar(x.v*yy, x.d.mul(yy), x.cov)
+    #     elif isinstance(yy,GVar):
+    #         y = yy
+    #         return GVar(xx*y.v, y.d.mul(xx), y.cov)
+    #     else:
+    #         return NotImplemented
+
+    def __mul__(self, yy):
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
-        elif isinstance(xx,GVar):
-            if isinstance(yy,GVar):
-                x = xx
-                y = yy
-                assert x.cov is y.cov,"incompatible GVars"
-                return GVar(x.v * y.v, x.d.add(y.d, y.v, x.v), x.cov)
-            else:
-                x = xx
-                return GVar(x.v*yy, x.d.mul(yy), x.cov)
-        elif isinstance(yy,GVar):
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar x, y
+        x = self 
+        ans.cov = x.cov
+        if isinstance(yy, GVar):
             y = yy
-            return GVar(xx*y.v, y.d.mul(xx), y.cov)
+            assert x.cov is y.cov,"incompatible GVars"
+            ans.v = x.v * y.v
+            ans.d = x.d.add(y.d, y.v, x.v)
+            # return GVar(x.v * y.v, x.d.add(y.d, y.v, x.v), x.cov)
         else:
-            return NotImplemented
+            ans.v = x.v * yy
+            ans.d = x.d.mul(yy)
+            # return GVar(x.v*yy, x.d.mul(yy), x.cov)
+        return ans
+
+    def __rmul__(self, xx):
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar y = self  # x can't be GVar
+        y = self 
+        ans.cov = y.cov
+        ans.v = xx * y.v
+        ans.d = y.d.mul(xx)
+        # return GVar(xx*y.v, y.d.mul(xx), y.cov)
+        return ans
 
     # truediv and div are the same --- 1st is for python3, 2nd for python2
-    def __truediv__(xx,yy):
-        cdef GVar x,y
-        cdef double xd,yd
+    # def __truediv__(xx,yy):
+    #     cdef GVar x,y
+    #     cdef double xd,yd
+    #     if type(yy) in _ARRAY_TYPES:
+    #         return NotImplemented   # let ndarray handle it
+    #     elif isinstance(xx,GVar):
+    #         if isinstance(yy,GVar):
+    #             x = xx
+    #             y = yy
+    #             assert x.cov is y.cov,"incompatible GVars"
+    #             return GVar(x.v/y.v,x.d.add(y.d,1./y.v,-x.v/y.v**2),x.cov)
+    #         else:
+    #             x = xx
+    #             yd=yy
+    #             return GVar(x.v/yd,x.d.mul(1./yd),x.cov)
+    #     elif isinstance(yy,GVar):
+    #         y = yy
+    #         xd=xx
+    #         return GVar(xd/y.v,y.d.mul(-xd/y.v**2),y.cov)
+    #     else:
+    #         return NotImplemented
+
+    def __truediv__(self, yy):
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
-        elif isinstance(xx,GVar):
-            if isinstance(yy,GVar):
-                x = xx
-                y = yy
-                assert x.cov is y.cov,"incompatible GVars"
-                return GVar(x.v/y.v,x.d.add(y.d,1./y.v,-x.v/y.v**2),x.cov)
-            else:
-                x = xx
-                yd=yy
-                return GVar(x.v/yd,x.d.mul(1./yd),x.cov)
-        elif isinstance(yy,GVar):
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar x, y
+        cdef double yd
+        x = self 
+        ans.cov = x.cov
+        if isinstance(yy,GVar):
             y = yy
-            xd=xx
-            return GVar(xd/y.v,y.d.mul(-xd/y.v**2),y.cov)
+            assert x.cov is y.cov,"incompatible GVars"
+            ans.v = x.v / y.v
+            ans.d = x.d.add(y.d, 1. / y.v, -x.v / y.v ** 2)
+            # return GVar(x.v/y.v,x.d.add(y.d,1./y.v,-x.v/y.v**2),x.cov)
         else:
-            return NotImplemented
+            yd=yy
+            ans.v = x.v / yd
+            ans.d = x.d.mul(1. / yd)
+            # return GVar(x.v/yd,x.d.mul(1./yd),x.cov)
+        return ans
 
-    def __div__(xx, yy):
+    def __rtruediv__(self, xx):
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar y=self    # xx can't be GVar
+        cdef double xd = xx
+        ans.cov = y.cov
+        ans.v = xd / y.v
+        ans.d = y.d.mul(-xd / y.v ** 2)
+        # return GVar(xd/y.v,y.d.mul(-xd/y.v**2),y.cov)
+        return ans
+
+    def __div__(xx, yy): # Python2 only -- ignore
         cdef GVar x, y
         cdef double xd, yd
         if type(yy) in _ARRAY_TYPES:
@@ -685,34 +788,65 @@ cdef class GVar:
         else:
             return NotImplemented
 
-    def __pow__(xx, yy, zz):
-        cdef GVar x, y
-        cdef double ans, f1, f2, yd, xd
+    # def __pow__(xx, yy, zz):
+    #     cdef GVar x, y
+    #     cdef double ans, f1, f2, yd, xd
+    #     if type(yy) in _ARRAY_TYPES:
+    #         return NotImplemented   # let ndarray handle it
+    #     elif isinstance(xx, GVar):
+    #         if isinstance(yy, GVar):
+    #             x = xx
+    #             y = yy
+    #             assert x.cov is y.cov,"incompatible GVars"
+    #             ans = c_pow(x.v, y.v)
+    #             f1 = c_pow(x.v,y.v-1)*y.v
+    #             f2 = ans*c_log(x.v)
+    #             return GVar(ans, x.d.add(y.d, f1, f2), x.cov)
+    #         else:
+    #             x = xx
+    #             yd= yy
+    #             ans = c_pow(x.v,yd)
+    #             f1 = c_pow(x.v,yd-1)*yy
+    #             return GVar(ans, x.d.mul(f1), x.cov)
+    #     elif isinstance(yy, GVar):
+    #         y = yy
+    #         xd= xx
+    #         ans = c_pow(xd, y.v)
+    #         f1 = ans*c_log(xd)
+    #         return GVar(ans, y.d.mul(f1), y.cov)
+    #     else:
+    #         return NotImplemented
+
+    def __pow__(self, yy, mod=None):    # mod ignored
         if type(yy) in _ARRAY_TYPES:
             return NotImplemented   # let ndarray handle it
-        elif isinstance(xx, GVar):
-            if isinstance(yy, GVar):
-                x = xx
-                y = yy
-                assert x.cov is y.cov,"incompatible GVars"
-                ans = c_pow(x.v, y.v)
-                f1 = c_pow(x.v,y.v-1)*y.v
-                f2 = ans*c_log(x.v)
-                return GVar(ans, x.d.add(y.d, f1, f2), x.cov)
-            else:
-                x = xx
-                yd= yy
-                ans = c_pow(x.v,yd)
-                f1 = c_pow(x.v,yd-1)*yy
-                return GVar(ans, x.d.mul(f1), x.cov)
-        elif isinstance(yy, GVar):
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar x, y
+        cdef double yd
+        x = self 
+        ans.cov = x.cov
+        if isinstance(yy, GVar):
             y = yy
-            xd= xx
-            ans = c_pow(xd, y.v)
-            f1 = ans*c_log(xd)
-            return GVar(ans, y.d.mul(f1), y.cov)
+            assert x.cov is y.cov,"incompatible GVars"
+            ans.v = c_pow(x.v, y.v)
+            ans.d = x.d.add(y.d, c_pow(x.v, y.v - 1) * y.v, ans.v * c_log(x.v))
+            # return GVar(ansd, x.d.add(y.d, f1, f2), x.cov)
         else:
-            return NotImplemented
+            yd= yy
+            ans.v = c_pow(x.v, yd)
+            ans.d = x.d.mul(c_pow(x.v,yd-1) * yd)
+            # return GVar(ans, x.d.mul(f1), x.cov)
+        return ans 
+
+    def __rpow__(self, xx, mod=None):   # mod ignored
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar y = self  # xx can't be GVar
+        cdef double xd = xx
+        ans.cov = y.cov
+        ans.v = c_pow(xd, y.v)
+        ans.d = y.d.mul(ans.v * c_log(xd))
+        # return GVar(ans, y.d.mul(f1), y.cov)
+        return ans
 
     def sin(self):
         return GVar(c_sin(self.v), self.d.mul(c_cos(self.v)), self.cov)

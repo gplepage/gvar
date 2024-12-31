@@ -14,8 +14,6 @@
 
 import numpy
 
-# cimport numpy
-# numpy.import_array()
 cimport cython
 
 from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
@@ -36,11 +34,9 @@ cdef class svec:
         PyMem_Free(<void *> self.v)
 
     def __getstate__(self):
-        # cdef numpy.ndarray[Py_ssize_t, ndim=1] idx = numpy.empty(self.size, numpy.intp)
-        # cdef numpy.ndarray[double, ndim=1] val = numpy.empty(self.size, float)
         cdef Py_ssize_t[::1] idx 
-        idx = _idx = numpy.empty(self.size, numpy.intp)
         cdef double[::1] val
+        idx = _idx = numpy.empty(self.size, numpy.intp)
         val = _val = numpy.empty(self.size, float)
         cdef Py_ssize_t i
         for i in range(self.size):
