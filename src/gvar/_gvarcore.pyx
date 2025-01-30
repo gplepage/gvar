@@ -606,10 +606,16 @@ cdef class GVar:
 
     def __radd__(self, xx):
         cdef GVar ans = GVar.__new__(GVar)
-        cdef GVar y = self  # xx can't be a GVar
+        cdef GVar y = self
+        cdef GVar x
         ans.cov = y.cov
-        ans.v = y.v + xx
-        ans.d = y.d
+        if isinstance(xx, GVar):        # needed because of Cython bug #6598
+            x = xx 
+            ans.v = x.v + y.v
+            ans.d = x.d.add(y.d)
+        else:
+            ans.v = y.v + xx
+            ans.d = y.d
         return ans
 
     # def __sub__(xx,yy):
@@ -632,39 +638,46 @@ cdef class GVar:
     #         return NotImplemented
 
     def __sub__(self, yy):
-            if type(yy) in _ARRAY_TYPES:
-                return NotImplemented   # let ndarray handle it
-            cdef GVar ans = GVar.__new__(GVar)
-            cdef GVar x, y
-            x = self
-            ans.cov = x.cov
-            if isinstance(yy,GVar):
-                y = yy
-                assert x.cov is y.cov,"incompatible GVars"
-                ans.v = x.v - y.v
-                ans.d = x.d.add(y.d, 1., -1.)
-                # return GVar(x.v-y.v,x.d.add(y.d,1.,-1.),x.cov)
-            else:
-                ans.v = x.v - yy
-                ans.d = x.d 
-                # return GVar(x.v-yy,x.d,x.cov)
-            return ans
+        if type(yy) in _ARRAY_TYPES:
+            return NotImplemented   # let ndarray handle it
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar x, y
+        x = self
+        ans.cov = x.cov
+        if isinstance(yy,GVar):
+            y = yy
+            assert x.cov is y.cov,"incompatible GVars"
+            ans.v = x.v - y.v
+            ans.d = x.d.add(y.d, 1., -1.)
+            # return GVar(x.v-y.v,x.d.add(y.d,1.,-1.),x.cov)
+        else:
+            ans.v = x.v - yy
+            ans.d = x.d 
+            # return GVar(x.v-yy,x.d,x.cov)
+        return ans
 
     def __rsub__(self, xx):
-            cdef GVar ans = GVar.__new__(GVar)
-            cdef GVar y = self  # x can't be a GVar
-            ans.cov = y.cov
+        cdef GVar ans = GVar.__new__(GVar)
+        cdef GVar y = self  # x can't be a GVar
+        cdef GVar x
+        ans.cov = y.cov
+        if isinstance(xx, GVar):        # needed because of Cython bug #6598
+            x = xx
+            assert x.cov is y.cov,"incompatible GVars"
+            ans.v = x.v - y.v
+            ans.d = x.d.add(y.d, 1., -1.)
+        else: 
             ans.v = xx - y.v
             ans.d = y.d.mul(-1.)
             # return GVar(xx-y.v,y.d.mul(-1.),y.cov)
-            return ans
+        return ans
 
-    # def __mul__(xx,yy):
+    # def __mul__(xx, yy):
     #     cdef GVar x,y
 
     #     if type(yy) in _ARRAY_TYPES:
     #         return NotImplemented   # let ndarray handle it
-    #     elif isinstance(xx,GVar):
+    #     elif isinstance(xx, GVar):
     #         if isinstance(yy,GVar):
     #             x = xx
     #             y = yy
@@ -673,7 +686,7 @@ cdef class GVar:
     #         else:
     #             x = xx
     #             return GVar(x.v*yy, x.d.mul(yy), x.cov)
-    #     elif isinstance(yy,GVar):
+    #     elif isinstance(yy, GVar):
     #         y = yy
     #         return GVar(xx*y.v, y.d.mul(xx), y.cov)
     #     else:
@@ -695,16 +708,22 @@ cdef class GVar:
         else:
             ans.v = x.v * yy
             ans.d = x.d.mul(yy)
-            # return GVar(x.v*yy, x.d.mul(yy), x.cov)
+            # return GVar(x.v * yy, x.d.mul(yy), x.cov)
         return ans
 
     def __rmul__(self, xx):
         cdef GVar ans = GVar.__new__(GVar)
-        cdef GVar y = self  # x can't be GVar
-        y = self 
+        cdef GVar y = self  
+        cdef GVar x
         ans.cov = y.cov
-        ans.v = xx * y.v
-        ans.d = y.d.mul(xx)
+        if isinstance(xx, GVar):        # needed because of Cython bug #6598
+            x = xx
+            assert x.cov is y.cov,"incompatible GVars"
+            ans.v = x.v * y.v
+            ans.d = x.d.add(y.d, y.v, x.v)
+        else:
+            ans.v = xx * y.v
+            ans.d = y.d.mul(xx)
         # return GVar(xx*y.v, y.d.mul(xx), y.cov)
         return ans
 
@@ -755,10 +774,18 @@ cdef class GVar:
     def __rtruediv__(self, xx):
         cdef GVar ans = GVar.__new__(GVar)
         cdef GVar y=self    # xx can't be GVar
-        cdef double xd = xx
+        cdef double xd
+        cdef GVar x
         ans.cov = y.cov
-        ans.v = xd / y.v
-        ans.d = y.d.mul(-xd / y.v ** 2)
+        if isinstance(xx, GVar):        # needed because of Cython bug #6598
+            x = xx
+            assert x.cov is y.cov, "incompatible GVars"
+            ans.v = x.v / y.v
+            ans.d = x.d.add(y.d, 1. / y.v, -x.v / y.v ** 2)
+        else:
+            xd = xx
+            ans.v = xd / y.v
+            ans.d = y.d.mul(-xd / y.v ** 2)
         # return GVar(xd/y.v,y.d.mul(-xd/y.v**2),y.cov)
         return ans
 
@@ -841,11 +868,19 @@ cdef class GVar:
     def __rpow__(self, xx, mod=None):   # mod ignored
         cdef GVar ans = GVar.__new__(GVar)
         cdef GVar y = self  # xx can't be GVar
-        cdef double xd = xx
+        cdef double xd
+        cdef GVar x
         ans.cov = y.cov
-        ans.v = c_pow(xd, y.v)
-        ans.d = y.d.mul(ans.v * c_log(xd))
-        # return GVar(ans, y.d.mul(f1), y.cov)
+        if isinstance(xx, GVar):        # needed because of Cython bug #6598
+            x = xx
+            assert x.cov is y.cov, "incompatible GVars"
+            ans.v = c_pow(x.v, y.v)
+            ans.d = x.d.add(y.d, c_pow(x.v, y.v - 1) * y.v, ans.v * c_log(x.v))
+        else:
+            xd = xx
+            ans.v = c_pow(xd, y.v)
+            ans.d = y.d.mul(ans.v * c_log(xd))
+            # return GVar(ans, y.d.mul(f1), y.cov)
         return ans
 
     def sin(self):

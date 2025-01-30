@@ -205,7 +205,7 @@ class BufferDict(collections_MMapping):
 
     def __init__(self, *args, **kargs):
         self._extension = {}
-        self._ver_l = BufferDict.g
+        self._ver_l = BufferDict._ver_g
         self.shape = None
         self._dtype = None     # enforced dtype (default is None)
         if len(args)==0:

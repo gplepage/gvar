@@ -1,5 +1,8 @@
 *.pyc
 .vscode
+.pynb_checkpoints
+issues
+*.ipynb
 build/
 ideas/
 __pycache__/

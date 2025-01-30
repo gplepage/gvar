@@ -13,5 +13,4 @@
 
 from gvar._svec_smat cimport svec, smat, smask
 from gvar._gvarcore cimport GVar
-# cimport numpy
 
