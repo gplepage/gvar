@@ -12,5 +12,5 @@
 # GNU General Public License for more details. 
 
 from gvar._svec_smat cimport svec, smat, smask
-from gvar._gvarcore cimport GVar, msum_gvar, wsum_gvar
+from gvar._gvarcore cimport GVar, wsum_der, msum_gvar, wsum_gvar
 
