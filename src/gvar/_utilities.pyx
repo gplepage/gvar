@@ -2024,7 +2024,7 @@ def wsum_der(double[:] wgt, GVar[:] glist):
             ans[g.d.v[j].i] += w*g.d.v[j].v
     return ans
 
-def msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
+cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
     cdef Py_ssize_t i
     for i in range(wgt.shape[0]):
         out[i] = wsum_gvar(wgt[i], glist)

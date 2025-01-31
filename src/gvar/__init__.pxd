@@ -13,4 +13,5 @@
 
 from gvar._svec_smat cimport svec, smat, smask
 from gvar._gvarcore cimport GVar
+from gvar._utilities cimport msum_gvar, wsum_gvar
 
