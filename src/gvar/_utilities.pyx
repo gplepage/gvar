@@ -2005,62 +2005,62 @@ def reassemble(data, smat cov=_gvar.gvar.cov):
         )
 
 
-def wsum_der(double[:] wgt, GVar[:] glist):
-    r""" weighted sum of |GVar| derivatives """
-    cdef GVar g
-    cdef smat cov
-    cdef double w
-    cdef Py_ssize_t ng,i,j
-    cdef double[::1] ans
-    ng = len(glist)
-    assert ng==len(wgt),"wgt and glist have different lengths."
-    cov = glist[0].cov
-    ans = numpy.zeros(len(cov),float)
-    for i in range(wgt.shape[0]):
-        w = wgt[i]
-        g = glist[i]
-        assert g.cov is cov,"Incompatible GVars."
-        for j in range(g.d.size):
-            ans[g.d.v[j].i] += w*g.d.v[j].v
-    return ans
+# cpdef wsum_der(double[:] wgt, GVar[:] glist):
+#     r""" weighted sum of |GVar| derivatives """
+#     cdef GVar g
+#     cdef smat cov
+#     cdef double w
+#     cdef Py_ssize_t ng,i,j
+#     cdef double[::1] ans
+#     ng = len(glist)
+#     assert ng==len(wgt),"wgt and glist have different lengths."
+#     cov = glist[0].cov
+#     ans = numpy.zeros(len(cov),float)
+#     for i in range(wgt.shape[0]):
+#         w = wgt[i]
+#         g = glist[i]
+#         assert g.cov is cov,"Incompatible GVars."
+#         for j in range(g.d.size):
+#             ans[g.d.v[j].i] += w*g.d.v[j].v
+#     return ans
 
-cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
-    cdef Py_ssize_t i
-    for i in range(wgt.shape[0]):
-        out[i] = wsum_gvar(wgt[i], glist)
+# cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
+#     cdef Py_ssize_t i
+#     for i in range(wgt.shape[0]):
+#         out[i] = wsum_gvar(wgt[i], glist)
 
-cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
-    r""" weighted sum of |GVar|\s """
-    cdef svec wd
-    cdef double wv, w
-    cdef GVar g
-    cdef smat cov
-    cdef Py_ssize_t ng, i, j, nd, size
-    cdef double[:] der
-    cdef Py_ssize_t[:] idx
-    ng = len(glist)
-    assert ng==len(wgt),"wgt and glist have different lengths."
-    cov = glist[0].cov
-    der = numpy.zeros(len(cov),float)
-    wv = 0.0
-    for i in range(ng): #w,g in zip(wgt,glist):
-        w = wgt[i]
-        g = glist[i]
-        assert g.cov is cov,"Incompatible GVars."
-        wv += w * g.v
-        for j in range(g.d.size):
-            der[g.d.v[j].i] += w * g.d.v[j].v
-    idx = numpy.zeros(len(cov), numpy.intp) # der.nonzero()[0]
-    nd = 0
-    for i in range(der.shape[0]):
-        if der[i]!=0:
-            idx[nd] = i
-            nd += 1
-    wd = svec(nd)
-    for i in range(nd):
-        wd.v[i].i = idx[i]
-        wd.v[i].v = der[idx[i]]
-    return GVar(wv, wd, cov)
+# cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
+#     r""" weighted sum of |GVar|\s """
+#     cdef svec wd
+#     cdef double wv, w
+#     cdef GVar g
+#     cdef smat cov
+#     cdef Py_ssize_t ng, i, j, nd, size
+#     cdef double[:] der
+#     cdef Py_ssize_t[:] idx
+#     ng = len(glist)
+#     assert ng==len(wgt),"wgt and glist have different lengths."
+#     cov = glist[0].cov
+#     der = numpy.zeros(len(cov),float)
+#     wv = 0.0
+#     for i in range(ng): #w,g in zip(wgt,glist):
+#         w = wgt[i]
+#         g = glist[i]
+#         assert g.cov is cov,"Incompatible GVars."
+#         wv += w * g.v
+#         for j in range(g.d.size):
+#             der[g.d.v[j].i] += w * g.d.v[j].v
+#     idx = numpy.zeros(len(cov), numpy.intp) # der.nonzero()[0]
+#     nd = 0
+#     for i in range(der.shape[0]):
+#         if der[i]!=0:
+#             idx[nd] = i
+#             nd += 1
+#     wd = svec(nd)
+#     for i in range(nd):
+#         wd.v[i].i = idx[i]
+#         wd.v[i].v = der[idx[i]]
+#     return GVar(wv, wd, cov)
 
 def fmt_values(outputs, ndecimal=None, ndigit=None):
     r""" Tabulate :class:`gvar.GVar`\s in ``outputs``.

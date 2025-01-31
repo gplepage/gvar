@@ -19,3 +19,9 @@ cdef class GVar:
     cdef readonly smat cov
     cpdef GVar clone(self)
     cpdef bint is_primary(self)
+
+cpdef object wsum_der(double[:] wgt, GVar[:] glist)
+
+cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out)
+
+cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist)

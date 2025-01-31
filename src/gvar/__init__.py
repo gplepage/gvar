@@ -126,7 +126,7 @@ import numpy
 
 from ._gvarcore import sin, cos, tan, exp, log, sqrt, fabs, sinh, cosh, tanh
 from ._gvarcore import arcsin, arccos, arctan, arctan2, arcsinh, arccosh, arctanh, square
-from ._gvarcore import GVar, GVarFactory, gvar_function, abs
+from ._gvarcore import GVar, GVarFactory, gvar_function, abs, wsum_der, msum_gvar, wsum_gvar
 gvar = GVarFactory()            # order matters for this statement (don't move down)
 
 from ._svec_smat import svec, smask, smat
@@ -140,7 +140,7 @@ from ._utilities import dependencies, missing_dependencies, uncorrelated, evalco
 from ._utilities import correlate, evalcov_blocks_dense, evalcov_blocks, var, evalcov
 from ._utilities import distribute_gvars, remove_gvars, collect_gvars, filter
 from ._utilities import dumps, loads, dump, load, gdumps, gdump, gloads, gload #, olddump
-from ._utilities import disassemble, reassemble, wsum_der, msum_gvar, fmt_values, wsum_gvar
+from ._utilities import disassemble, reassemble, fmt_values
 from ._utilities import fmt_errorbudget, bootstrap_iter, sample, gvar_from_sample, raniter 
 from ._utilities import valder, gammaQ, gammaP, regulate, svd, erf, SVD, GVarRef
 
