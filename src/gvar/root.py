@@ -19,7 +19,7 @@ import numpy
 import gvar
 
 def search(fcn, x0, incr=0, fac=1.1, maxit=100, analyzer=None):
-    """ Search for and bracket root of one-dimensional function ``fcn(x)``.
+    r""" Search for and bracket root of one-dimensional function ``fcn(x)``.
 
     This method searches for an interval in ``x`` that brackets 
     a root of ``fcn(x)=0``. It examines points ::
@@ -97,7 +97,7 @@ def search(fcn, x0, incr=0, fac=1.1, maxit=100, analyzer=None):
 
 
 def refine(fcn, interval, rtol=None, maxit=1000, analyzer=None):
-    """ Find root ``x`` of one-dimensional function ``fcn`` on an interval.
+    r""" Find root ``x`` of one-dimensional function ``fcn`` on an interval.
 
     This method finds a root ``x`` of ``fcn(x)=0`` inside an ``interval=(a,b)``
     that brackets the root, with ``fcn(a) * fcn(b) <= 0``.

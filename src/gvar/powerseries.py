@@ -172,7 +172,7 @@ from numpy import sinh, cosh, tanh, arcsinh, arccosh, arctanh
 # from scipy.special import eval_hermite as _scipy_eval_hermite
 
 class PowerSeries(object):
-    """
+    r"""
     Power series representation of a function.
 
     The power series created by ``PowerSeries(c)`` corresponds to::
@@ -181,7 +181,7 @@ class PowerSeries(object):
 
     The order of the power series is normally determined by the length of
     the input list ``c``. This can be overridden by specifying the order of
-    the power series using the ``order`` parameter. The list of ``c[i]``\\s
+    the power series using the ``order`` parameter. The list of ``c[i]``\s
     is then padded with zeros if ``c`` is too short, or truncated if it
     is too long. Omitting ``c`` altogether results in a power series
     all of whose coefficients are zero. Individual series
@@ -243,21 +243,21 @@ class PowerSeries(object):
                 doc="Copy of power series coefficients (numpy.array).")
 
     def __getitem__(self, i):
-        """ Return C{i}th coefficient of power series. """
+        r""" Return C{i}th coefficient of power series. """
         if numpy.size(i) > 1:
             return self.c[i[0]][i[1:]]
         else:
             return self.c[i if numpy.shape(i) == () else i[0]]
 
     def __setitem__(self, i, val):
-        """ Set C{i}th coefficient of power series equal to C{val}. """
+        r""" Set C{i}th coefficient of power series equal to C{val}. """
         if numpy.size(i) > 1:
             self.c[i[0]][i[1:]] = val
         else:
             self.c[i if numpy.shape(i) == () else i[0]] = val
 
     def __iter__(self):
-        """ Iterate over coefficients of power series C{self}. """
+        r""" Iterate over coefficients of power series C{self}. """
         return iter(self.c)
 
     def __add__(self,x):
@@ -574,7 +574,7 @@ class PowerSeries(object):
         return ans
 
     def deriv(self, *n):
-        """ Compute *n*-th derivative (or partial derivative) of ``self``.
+        r""" Compute *n*-th derivative (or partial derivative) of ``self``.
 
         Args:
             n (array): Number of derivatives in each direction.  Default is ``n=[1]``.
@@ -656,7 +656,7 @@ class PowerSeries(object):
 
 
 def multiseries(c, order=None):
-    """ Create multivariate power series from coefficients in array ``c``.
+    r""" Create multivariate power series from coefficients in array ``c``.
 
     Args:
         c (array): :mod:`numpy`-like array containing the power series 
@@ -688,7 +688,7 @@ def multiseries(c, order=None):
     return ans
     
 def multivar(dim, order):
-    """ Create :class:`PowerSeries` objects representing the expansion variables.
+    r""" Create :class:`PowerSeries` objects representing the expansion variables.
 
     Args:
         dim (int): The dimensionality of the multivariate space.

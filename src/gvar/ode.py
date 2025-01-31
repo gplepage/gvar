@@ -23,7 +23,7 @@ import gvar
 TINY = sys.float_info.min ** 0.5
 
 class Integrator(object):
-    """ Integrate ``dy/dx = deriv(x,y)``.
+    r""" Integrate ``dy/dx = deriv(x,y)``.
 
     An :class:`Integrator` object ``odeint`` integrates 
     ``dy/dx = f(x,y)`` to obtain ``y(x1)`` from ``y0 = y(x0)``. 
@@ -163,7 +163,7 @@ class Integrator(object):
         self.nbad = 0
 
     def __call__(self, y0, interval):
-        """ Integrate from ``x0`` to ``x1`` where ``interval=(x0,x1)`` and ``y0=y(x0)``. """
+        r""" Integrate from ``x0`` to ``x1`` where ``interval=(x0,x1)`` and ``y0=y(x0)``. """
         if len(interval) > 2:
             # evaluate for sequence of intervals, one at a time
             ans = []
@@ -242,7 +242,7 @@ class Integrator(object):
         return y
 
     def solution(self, x0, y0):
-        """ Create a solution function ``y(x)`` such that ``y(x0) = y0``.
+        r""" Create a solution function ``y(x)`` such that ``y(x0) = y0``.
 
         A list of solution values ``[y(x0), y(x1) ...]`` is returned if the
         function is called with a list ``[x0, x1 ...]`` of ``x`` values.
@@ -263,7 +263,7 @@ class Integrator(object):
         return soln
 
 def rk5_stepper(x, h, y , deriv, errors=False):
-    """ Compute y(x+h) from y and dy/dx=deriv(x,y).
+    r""" Compute y(x+h) from y and dy/dx=deriv(x,y).
 
     Uses a one-step 5th-order Runge-Kutta algorithm.
 
@@ -309,7 +309,7 @@ def rk5_stepper(x, h, y , deriv, errors=False):
         return xn,yn
 
 class DictIntegrator(Integrator):
-    """ Integrate ``dy/dx = deriv(x,y)`` where ``y`` is a dictionary.
+    r""" Integrate ``dy/dx = deriv(x,y)`` where ``y`` is a dictionary.
 
     An :class:`DictIntegrator` object ``odeint`` 
     integrates ``dy/dx = f(x,y)`` to obtain ``y(x1)`` from 
@@ -422,7 +422,7 @@ class DictIntegrator(Integrator):
         return gvar.BufferDict(y0, buf=ans)
 
 def integral(fcn, interval, fcnshape=None, tol=1e-8, hmin=None):
-    """ Compute integral of ``fcn(x)`` on interval.
+    r""" Compute integral of ``fcn(x)`` on interval.
 
     Given a function ``fcn(x)`` the call ::
 
@@ -492,7 +492,7 @@ def integral(fcn, interval, fcnshape=None, tol=1e-8, hmin=None):
     return ans if fcnshape is not None else gvar.BufferDict(fx0, buf=ans)
 
 class Solution:
-    """ ODE analyzer for storing intermediate values.
+    r""" ODE analyzer for storing intermediate values.
 
     Usage: eg, given ::
 

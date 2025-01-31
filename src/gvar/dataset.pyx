@@ -55,7 +55,7 @@ cimport cython
 # tools for random data: Dataset, avg_data, bin_data
 
 def bin_data(dataset, binsize=2):
-    """ Bin random data.
+    r""" Bin random data.
 
     ``dataset`` is a list of random numbers or random arrays, or a
     dictionary of lists of random numbers/arrays.
@@ -102,7 +102,7 @@ def avg_data(
     dataset, median=False, stderr=None, spread=None, bstrap=False, 
     noerror=False, mismatch='truncate', unbias=False, warn=False
     ):
-    """ Average ``dataset`` to estimate means and covariance.
+    r""" Average ``dataset`` to estimate means and covariance.
 
     ``dataset`` is a list of random numbers, a list of random arrays, or a dictionary
     of lists of random numbers and/or arrays: for example, ::
@@ -116,7 +116,7 @@ def avg_data(
     estimates the means of the distributions from which the random
     numbers/arrays are drawn, together with the uncertainties in those
     estimates. The results are returned as a |GVar| or an array of
-    |GVar|\\s, or a dictionary of |GVar|\\s and/or arrays of |GVar|\\s::
+    |GVar|\s, or a dictionary of |GVar|\s and/or arrays of |GVar|\s::
 
         >>> print(avg_data(random_numbers))
         1.31(20)
@@ -131,7 +131,7 @@ def avg_data(
     ``avg_data(dataset)`` also estimates any correlations between different
     quantities in ``dataset``. When ``dataset`` is a dictionary, it does this by
     assuming that the lists of random numbers/arrays for the different
-    ``dataset[k]``\\s are synchronized, with the first element in one list
+    ``dataset[k]``\s are synchronized, with the first element in one list
     corresponding to the first elements in all other lists, and so on.
 
     Note that estimates of the correlations are robust only if the 
@@ -337,7 +337,7 @@ def avg_data(
 
 
 def autocorr(dataset):
-    """ Compute autocorrelation in ``dataset``.
+    r""" Compute autocorrelation in ``dataset``.
 
     ``dataset`` is a list of random numbers or random arrays, or a dictionary
     of lists of random numbers/arrays.
@@ -392,7 +392,7 @@ def autocorr(dataset):
 
 
 def bootstrap_iter(dataset, n=None):
-    """ Create iterator that returns bootstrap copies of ``dataset``.
+    r""" Create iterator that returns bootstrap copies of ``dataset``.
 
     ``dataset`` is a list of random numbers or random arrays, or a dictionary
     of lists of random numbers/arrays. ``bootstrap_iter(dataset,n)`` is an
@@ -472,7 +472,7 @@ def bootstrap_iter(dataset, n=None):
 
 
 class Dataset(collections.OrderedDict):
-    """ Dictionary for collecting random data.
+    r""" Dictionary for collecting random data.
 
     A :class:`gvar.dataset.Dataset` is an ordered dictionary whose values
     represent collections of random samples. Each value is  a :mod:`numpy`
@@ -577,8 +577,8 @@ class Dataset(collections.OrderedDict):
         <HDF5 dataset "s": shape (4,), type "<f8">
         <HDF5 dataset "v": shape (4, 2), type "<f8">
 
-    Finally, :class:`Dataset`\\s can also be constructed from other
-    dictionaries (including other :class:`Dataset`\\s), or lists of key-data
+    Finally, :class:`Dataset`\s can also be constructed from other
+    dictionaries (including other :class:`Dataset`\s), or lists of key-data
     tuples. For example, ::
 
         >>> dset = Dataset('datafile')
@@ -706,14 +706,14 @@ class Dataset(collections.OrderedDict):
                     self.append(k, d)
 
     def toarray(self):
-        """ Create new dictionary ``d`` where ``d[k]=numpy.array(self[k])`` for all ``k``. """
+        r""" Create new dictionary ``d`` where ``d[k]=numpy.array(self[k])`` for all ``k``. """
         ans = collections.OrderedDict()
         for k in self:
             ans[k] = numpy.array(self[k],float)
         return ans
 
     def append(self, *args, **kargs):
-        """ Append data to dataset.
+        r""" Append data to dataset.
 
         There are three equivalent ways of adding data to a dataset
         ``data``: for example, each of ::
@@ -759,7 +759,7 @@ class Dataset(collections.OrderedDict):
             self.append(k, kargs[k])
 
     def extend(self, *args, **kargs):
-        """ Add batched data to dataset.
+        r""" Add batched data to dataset.
 
         There are three equivalent ways of adding batched data, containing
         multiple samples for each quantity, to a dataset ``data``: for
@@ -818,7 +818,7 @@ class Dataset(collections.OrderedDict):
             self.extend(k,kargs[k])
 
     def slice(self, sl):
-        """ Create new dataset with ``self[k] -> self[k][sl].``
+        r""" Create new dataset with ``self[k] -> self[k][sl].``
 
         Parameter ``sl`` is a slice object that is applied to every
         item in the dataset to produce a new :class:`gvar.Dataset`.
@@ -845,7 +845,7 @@ class Dataset(collections.OrderedDict):
         return ans
 
     def grep(self, rexp):
-        """ Create new dataset containing items whose keys match ``rexp``.
+        r""" Create new dataset containing items whose keys match ``rexp``.
 
         Returns a new :class:`gvar.dataset.Dataset`` containing only the
         items ``self[k]`` whose keys ``k`` match regular expression
@@ -874,7 +874,7 @@ class Dataset(collections.OrderedDict):
         return ans
 
     def trim(self):
-        """ Create new dataset where all entries have same sample size. """
+        r""" Create new dataset where all entries have same sample size. """
         ns = self.samplesize
         ans = Dataset()
         for k in self:
@@ -888,7 +888,7 @@ class Dataset(collections.OrderedDict):
                           doc="Smallest number of samples for any key.")
 
     def arrayzip(self, template):
-        """ Merge lists of random data according to ``template``.
+        r""" Merge lists of random data according to ``template``.
 
         ``template`` is an array of keys in the dataset, where the shapes
         of ``self[k]`` are the same for all keys ``k`` in ``template``.
@@ -950,7 +950,7 @@ class Dataset(collections.OrderedDict):
 
 
 class svd_diagnosis(object):
-    """ Diagnose the need for an SVD cut.
+    r""" Diagnose the need for an SVD cut.
 
     :class:`gvar.dataset.svd_diagnosis` bootstraps the spectrum of
     the correlation matrix for the data in ``dataset`` to determine
@@ -960,7 +960,7 @@ class svd_diagnosis(object):
     (e.g., :class:`gvar.dataset.Dataset`) whose values are lists
     of random numbers or random arrays. The random numbers or
     arrays are averaged (using :func:`gvar.dataset.avg_data`)
-    to produce a set |GVar|\\s and their correlation matrix.
+    to produce a set |GVar|\s and their correlation matrix.
     The smallest eigenvalues of the correlation matrix are poorly
     estimated when the number of random samples is insufficiently
     large --- the number of samples should typically be significantly
@@ -986,8 +986,8 @@ class svd_diagnosis(object):
             (e.g., :class:`gvar.dataset.Dataset`) whose values are lists
             of random numbers or random arrays. Alternatively it can
             be a tuple ``(g, Ns)`` where: ``g`` is an array of
-            |GVar|\\s or a dictionary whose values are |GVar|\\s or
-            arrays of |GVar|\\s; and ``Ns`` is the number of random
+            |GVar|\s or a dictionary whose values are |GVar|\s or
+            arrays of |GVar|\s; and ``Ns`` is the number of random
             samples. Then the list of random data that is analyzed is
             created is created using ``gvar.raniter(g, n=Ns)``.
 
@@ -1104,7 +1104,7 @@ class svd_diagnosis(object):
             )
 
     def plot_ratio(self, plot=None, show=False):
-        """ Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
+        r""" Plot ratio of bootstrapped eigenvalues divided by actual eigenvalues.
 
         Ratios (blue points) are plotted versus the value of the actual
         eigenvalues divided by the maximum eigenvalue. Error bars on

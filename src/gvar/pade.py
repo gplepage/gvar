@@ -19,7 +19,7 @@ import gvar as _gvar
 # from scipy.interpolate import pade as _scipy_pade
 
 class Pade(object):
-    """ Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\\s.
+    r""" Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\s.
 
     The ``order=(m,n)`` Pade approximant to a series given by
     ``sum_i f[i] * x**i`` is the ratio of  polynomials of order ``m``
@@ -33,7 +33,7 @@ class Pade(object):
     coefficients used in the numerator and denominator are given by ``pade.num.c``
     and ``pade.den.c``, respectively.
 
-    Elements in the series ``f[i]`` may be numbers or :class:`gvar.GVar`\\s.
+    Elements in the series ``f[i]`` may be numbers or :class:`gvar.GVar`\s.
     When the latter appear, the code uses an SVD algorithm (see :func:`pade_svd`) 
     to deal with the imprecision in the input data. It automatically reduces
     the order of the approximant if the extraction of Pade coefficients
@@ -160,7 +160,7 @@ class Pade(object):
         return self.num(x) / self.den(x)
 
 def pade_gvar(f, m, n, rtol='gavg'):  
-    """ ``(m,n)`` Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\\\s.
+    """ ``(m,n)`` Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\s.
 
     The ``(m,n)`` Pade approximant to a series given by
     ``sum_i f[i] * x**i`` is the ratio of  polynomials of order ``m``
@@ -196,7 +196,7 @@ def pade_gvar(f, m, n, rtol='gavg'):
     return (pade.num.c, pade.den.c)
 
 def pade_svd(f, m, n, rtol=1e-14):
-    """ ``(m,n)`` Pade approximant to ``sum_i f[i] x**i``.
+    r""" ``(m,n)`` Pade approximant to ``sum_i f[i] x**i``.
 
     The ``(m,n)`` Pade approximant to a series given by
     ``sum_i f[i] * x**i`` is the ratio of  polynomials of order ``m``

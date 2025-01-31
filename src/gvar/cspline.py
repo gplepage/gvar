@@ -18,7 +18,7 @@ import numpy
 import gvar as _gvar
 
 class CSpline:
-    """ Cubic spline approximation to a function.
+    r""" Cubic spline approximation to a function.
 
     Given ``N`` values of a function ``yknot[i]`` at ``N`` points
     ``xknot[i]`` for ``i=0..N-1`` (the *knots* of the spline),
@@ -175,7 +175,7 @@ class CSpline:
             to use smaller values.
         warn (bool): If ``True``, warnings are generated
             when the spline function is called for ``x`` values that
-            fall outside of the original range of ``xknot``\\s used to
+            fall outside of the original range of ``xknot``\s used to
             define the spline. Default value is ``False``, 
             which means out-of-range warnings are suppressed.
         alg (str): Spline algorithm used, which is one of:
@@ -531,7 +531,7 @@ class CSpline:
         return ans.reshape(xshape) if xshape != () else ans[0]            
 
 def tri_diag_solve(a, b, c, d):
-    """ Solve a[i] * x[i-1] + b[i] * x[i] + c[i] * x[i+1] = d[i] for x[i]
+    r""" Solve a[i] * x[i-1] + b[i] * x[i] + c[i] * x[i+1] = d[i] for x[i]
 
     Adapted from: http://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm.
     """

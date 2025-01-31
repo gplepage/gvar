@@ -1,4 +1,4 @@
-""" Correlated gaussian random variables.
+r""" Correlated gaussian random variables.
 
 Objects of type :class:`gvar.GVar` represent gaussian random variables,
 which are specified by a mean and standard deviation. They are created
@@ -47,7 +47,7 @@ variables including:
 
     - ``fmt_chi2(f)`` --- format chi**2 information in f.
 
-    - ``sample(g, nbatch)`` --- random sample from |GVar|\\s.
+    - ``sample(g, nbatch)`` --- random sample from |GVar|\s.
 
     - ``gvar_from_sample(gs)`` --- reconstruct Gaussian distribution from sample.
     
@@ -69,15 +69,15 @@ variables including:
 
     - ``BufferDict`` --- (class) ordered dictionary with data buffer.
 
-    - ``disassemble(g)`` --- disassemble |GVar|\\s in ``g``.
+    - ``disassemble(g)`` --- disassemble |GVar|\s in ``g``.
 
-    - ``reassemble(data, cov)`` --- reassemble into |GVar|\\s.
+    - ``reassemble(data, cov)`` --- reassemble into |GVar|\s.
 
-    - ``load(inputfile)`` --- read |GVar|\\s from a file.
+    - ``load(inputfile)`` --- read |GVar|\s from a file.
 
-    - ``loads(inputstr)`` --- read |GVar|\\s from a string.
+    - ``loads(inputstr)`` --- read |GVar|\s from a string.
 
-    - ``dump(g, outputfile)`` --- store |GVar|\\s in file.
+    - ``dump(g, outputfile)`` --- store |GVar|\s in file.
 
     - ``dumps(g)`` --- store |GVar|s in a string.
 
@@ -90,7 +90,7 @@ variables including:
     - ``dataset.Dataset`` --- class for collecting data.
 
 There are also sub-modules that implement some standard numerical analysis
-tools for use with |GVar|\\s (or ``float``\\s):
+tools for use with |GVar|\s (or ``float``\s):
 
     - ``cspline`` --- cubic splines for 1-d data.
 
@@ -196,7 +196,7 @@ else:
 # see gvar.old_ranseed()).
 
 def ranseed(seed=None, size=3, version=None):
-    """ Seed random number generators with tuple ``seed``.
+    r""" Seed random number generators with tuple ``seed``.
 
     Argument ``seed`` is an integer or
     a :class:`tuple` of integers that is used to seed
@@ -266,13 +266,13 @@ def ranseed(seed=None, size=3, version=None):
     return seed
 
 def switch_gvar(cov=None):
-    """ Switch :func:`gvar.gvar` to new :class:`gvar.GVarFactory`.
+    r""" Switch :func:`gvar.gvar` to new :class:`gvar.GVarFactory`.
 
-    |GVar|\\s created from different factory functions (see 
+    |GVar|\s created from different factory functions (see 
     :func:`gvar.gvar_factory`), with different 
     covariance matrices, should never be mixed in arithmetic or other 
     expressions. Such mixing is unsupported and will result in 
-    unpredictable behavior. Arithmetic that mixes |GVar|\\s in 
+    unpredictable behavior. Arithmetic that mixes |GVar|\s in 
     this way will generate an error message: "incompatible GVars".
 
     Args:
@@ -292,13 +292,13 @@ def switch_gvar(cov=None):
     return gvar
 
 def restore_gvar():
-    """ Restore previous :func:`gvar.gvar`.
+    r""" Restore previous :func:`gvar.gvar`.
 
-    |GVar|\\s created from different factory functions (see 
+    |GVar|\s created from different factory functions (see 
     :func:`gvar.gvar_factory`), with different 
     covariance matrices, should never be mixed in arithmetic or other 
     expressions. Such mixing is unsupported and will result in 
-    unpredictable behavior. Arithmetic that mixes |GVar|\\s in 
+    unpredictable behavior. Arithmetic that mixes |GVar|\s in 
     this way will generate an error message: "incompatible GVars".
 
     :returns: Previous :func:`gvar.gvar`.
@@ -311,24 +311,24 @@ def restore_gvar():
     return gvar
 
 def gvar_factory(cov=None):
-    """ Return new function for creating |GVar|\\s (to replace
+    r""" Return new function for creating |GVar|\s (to replace
     :func:`gvar.gvar`).
 
     If ``cov`` is specified, it is used as the covariance matrix
-    for new |GVar|\\s created by the function returned by
+    for new |GVar|\s created by the function returned by
     ``gvar_factory(cov)``. Otherwise a new covariance matrix is created
     internally.
 
-    |GVar|\\s created from different factory functions, with different 
+    |GVar|\s created from different factory functions, with different 
     covariance matrices, should never be mixed in arithmetic or other 
     expressions. Such mixing is unsupported and will result in 
-    unpredictable behavior. Arithmetic that mixes |GVar|\\s in 
+    unpredictable behavior. Arithmetic that mixes |GVar|\s in 
     this way will generate an error message: "incompatible GVars".
     """
     return GVarFactory(cov)
 
 def qqplot(g1, g2=None, plot=None, eps=None, svdcut=None, dof=None, nocorr=False):
-    """ QQ plot ``g1-g2``.
+    r""" QQ plot ``g1-g2``.
 
     The QQ plot compares the distribution of the means of Gaussian 
     distribution ``g1-g2`` to that of random samples from the 
@@ -338,11 +338,11 @@ def qqplot(g1, g2=None, plot=None, eps=None, svdcut=None, dof=None, nocorr=False
     the correct standard deviations.
 
     Usually ``g1`` and ``g2`` are dictionaries with the same keys,
-    where ``g1[k]`` and ``g2[k]`` are |GVar|\\s or arrays of
-    |GVar|\\s having the same shape. Alternatively ``g1`` and ``g2``
-    can be |GVar|\\s, or arrays of |GVar|\\s having the same shape.
+    where ``g1[k]`` and ``g2[k]`` are |GVar|\s or arrays of
+    |GVar|\s having the same shape. Alternatively ``g1`` and ``g2``
+    can be |GVar|\s, or arrays of |GVar|\s having the same shape.
 
-    One of ``g1`` or ``g2`` can contain numbers instead of |GVar|\\s.
+    One of ``g1`` or ``g2`` can contain numbers instead of |GVar|\s.
 
     One or the other of ``g1`` or ``g2`` can be missing keys, or missing
     elements from arrays. Only the parts of ``g1`` and ``g2`` that
@@ -361,15 +361,15 @@ def qqplot(g1, g2=None, plot=None, eps=None, svdcut=None, dof=None, nocorr=False
     many variables (``g.size >> 1``).
 
     Args:
-        g1: |GVar| or array of |GVar|\\s, or a dictionary whose values are
-            |GVar|\\s or arrays of |GVar|\\s. Specifies a multi-dimensional
+        g1: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
             Gaussian distribution. Alternatively the elements can be 
-            numbers instead of |GVar|\\s, in which case ``g1`` specifies 
+            numbers instead of |GVar|\s, in which case ``g1`` specifies 
             a sample from a distribution.
-        g2: |GVar| or array of |GVar|\\s, or a dictionary whose values are
-            |GVar|\\s or arrays of |GVar|\\s. Specifies a multi-dimensional
+        g2: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
             Gaussian distribution. Alternatively the elements can be 
-            numbers instead of |GVar|\\s, in which case ``g2`` specifies 
+            numbers instead of |GVar|\s, in which case ``g2`` specifies 
             a sample from a distribution. Setting ``g2=None`` 
             (default) is equivalent to setting its elements all to zero.
         plot: a :mod:`matplotlib` plotter. If ``None`` (default), 
@@ -414,7 +414,7 @@ def qqplot(g1, g2=None, plot=None, eps=None, svdcut=None, dof=None, nocorr=False
     return plot 
 
 def chi2(g1, g2=None, eps=None, svdcut=None, dof=None, nocorr=False):
-    """ Compute chi**2 of ``g1-g2``.
+    r""" Compute chi**2 of ``g1-g2``.
 
     chi**2 equals ``dg.invcov.dg, where ``dg = g1 - g2`` and 
     ``invcov`` is the inverse of ``dg``'s covariance matrix. 
@@ -427,11 +427,11 @@ def chi2(g1, g2=None, eps=None, svdcut=None, dof=None, nocorr=False):
     being compared.
 
     Usually ``g1`` and ``g2`` are dictionaries with the same keys,
-    where ``g1[k]`` and ``g2[k]`` are |GVar|\\s or arrays of
-    |GVar|\\s having the same shape. Alternatively ``g1`` and ``g2``
-    can be |GVar|\\s, or arrays of |GVar|\\s having the same shape.
+    where ``g1[k]`` and ``g2[k]`` are |GVar|\s or arrays of
+    |GVar|\s having the same shape. Alternatively ``g1`` and ``g2``
+    can be |GVar|\s, or arrays of |GVar|\s having the same shape.
 
-    One of ``g1`` or ``g2`` can contain numbers instead of |GVar|\\s,
+    One of ``g1`` or ``g2`` can contain numbers instead of |GVar|\s,
     in which case ``chi**2`` is a measure of the likelihood that
     the numbers came from the distribution specified by the other
     argument.
@@ -454,15 +454,15 @@ def chi2(g1, g2=None, eps=None, svdcut=None, dof=None, nocorr=False):
     this can be changed using the ``dof`` argument.
 
     Args:
-        g1: |GVar| or array of |GVar|\\s, or a dictionary whose values are
-            |GVar|\\s or arrays of |GVar|\\s. Specifies a multi-dimensional
+        g1: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
             Gaussian distribution. Alternatively the elements can be 
-            numbers instead of |GVar|\\s, in which case ``g1`` specifies 
+            numbers instead of |GVar|\s, in which case ``g1`` specifies 
             a sample from a distribution.
-        g2: |GVar| or array of |GVar|\\s, or a dictionary whose values are
-            |GVar|\\s or arrays of |GVar|\\s. Specifies a multi-dimensional
+        g2: |GVar| or array of |GVar|\s, or a dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s. Specifies a multi-dimensional
             Gaussian distribution. Alternatively the elements can be 
-            numbers instead of |GVar|\\s, in which case ``g2`` specifies 
+            numbers instead of |GVar|\s, in which case ``g2`` specifies 
             a sample from a distribution. Setting ``g2=None`` 
             (default) is equivalent to setting its elements all to zero.
         eps (float): If positive, singularities in the correlation matrix 
@@ -576,9 +576,9 @@ def chi2(g1, g2=None, eps=None, svdcut=None, dof=None, nocorr=False):
     return ans(chi2, dof, res)
 
 def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
-    """ Determine whether ``g1`` and ``g2`` contain equivalent |GVar|\\s.
+    r""" Determine whether ``g1`` and ``g2`` contain equivalent |GVar|\s.
 
-    Compares sums and differences of |GVar|\\s stored in ``g1``
+    Compares sums and differences of |GVar|\s stored in ``g1``
     and ``g2`` to see if they agree within tolerances. Operationally,
     agreement means that::
 
@@ -586,23 +586,23 @@ def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
 
     where ``diff`` and ``summ`` are the difference and sum of the
     mean values (``g.mean``) or derivatives (``g.der``) associated with
-    each pair of |GVar|\\s.
+    each pair of |GVar|\s.
 
-    |GVar|\\s that are equivalent are effectively interchangeable with respect
+    |GVar|\s that are equivalent are effectively interchangeable with respect
     to both their means and also their covariances with any other |GVar|
     (including ones not in ``g1`` and ``g2``).
 
-    ``g1`` and ``g2`` can be individual |GVar|\\s or arrays of |GVar|\\s
-    or dictionaries whose values are |GVar|\\s and/or arrays of |GVar|\\s.
+    ``g1`` and ``g2`` can be individual |GVar|\s or arrays of |GVar|\s
+    or dictionaries whose values are |GVar|\s and/or arrays of |GVar|\s.
     Comparisons are made only for shared keys when they are dictionaries.
     Array dimensions must match between ``g1`` and ``g2``, but the shapes
     can be different; comparisons are made for the parts of the arrays that
     overlap in shape.
 
-    :param g1: A |GVar| or an array of |GVar|\\s or a dictionary of
-        |GVar|\\s and/or arrays of |GVar|\\s.
-    :param g2: A |GVar| or an array of |GVar|\\s or a dictionary of
-        |GVar|\\s and/or arrays of |GVar|\\s.
+    :param g1: A |GVar| or an array of |GVar|\s or a dictionary of
+        |GVar|\s and/or arrays of |GVar|\s.
+    :param g2: A |GVar| or an array of |GVar|\s or a dictionary of
+        |GVar|\s and/or arrays of |GVar|\s.
     :param rtol: Relative tolerance with which mean values and derivatives
         must agree with each other. Default is ``1e-10``.
     :param atol: Absolute tolerance within which mean values and derivatives
@@ -681,7 +681,7 @@ def equivalent(g1, g2, rtol=1e-10, atol=1e-10):
 
 
 def fmt_chi2(f):
-    """ Return string containing ``chi**2/dof``, ``dof`` and ``Q`` from ``f``.
+    r""" Return string containing ``chi**2/dof``, ``dof`` and ``Q`` from ``f``.
 
     Assumes ``f`` has attributes ``chi2``, ``dof`` and ``Q``. The
     logarithm of the Bayes factor will also be printed if ``f`` has
@@ -702,10 +702,10 @@ def fmt_chi2(f):
         return fmt.format(chi2_dof, f.dof, Q)
 
 def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None, keys=None):
-    """ Tabulate contents of an array or dictionary of |GVar|\\s.
+    r""" Tabulate contents of an array or dictionary of |GVar|\s.
 
-    Given an array ``g`` of |GVar|\\s or a dictionary whose values are
-    |GVar|\\s or arrays of |GVar|\\s, ``gvar.tabulate(g)`` returns a
+    Given an array ``g`` of |GVar|\s or a dictionary whose values are
+    |GVar|\s or arrays of |GVar|\s, ``gvar.tabulate(g)`` returns a
     string containing a table of the values of ``g``'s entries.
     For example, the code ::
 
@@ -735,8 +735,8 @@ def tabulate(g, ncol=1, headers=True, offset='', ndecimal=None, keys=None):
                  0,2     0.033 (15)
 
     Args:
-        g: Array of |GVar|\\s (any shape) or dictionary whose values are
-            |GVar|\\s or arrays of |GVar|\\s (any shape).
+        g: Array of |GVar|\s (any shape) or dictionary whose values are
+            |GVar|\s or arrays of |GVar|\s (any shape).
         ncol: The table is split over ``ncol`` columns of key/index values
             plus |GVar| values. Default value is 1.
         headers: Prints standard header on table if ``True``; omits the
@@ -834,9 +834,9 @@ BufferDict.add_distribution('erfinv', erf)
 
 
 class PDF(object):
-    """ Probability density function (PDF) for ``g``.
+    r""" Probability density function (PDF) for ``g``.
 
-    Given an array or dictionary ``g`` of |GVar|\\s, ``pdf=PDF(g)`` is
+    Given an array or dictionary ``g`` of |GVar|\s, ``pdf=PDF(g)`` is
     the probability density function for the (correlated)
     multi-dimensional Gaussian distribution defined by ``g``. That is
     ``pdf(p)`` is the probability density for random sample ``p``
@@ -844,8 +844,8 @@ class PDF(object):
     ``pdf.logpdf(p)``.
 
     Args:
-        g: |GVar| or array of |GVar|\\s, or dictionary of |GVar|\\s
-            or arrays of |GVar|\\s.
+        g: |GVar| or array of |GVar|\s, or dictionary of |GVar|\s
+            or arrays of |GVar|\s.
 
         svdcut (float): If nonzero, singularities in the correlation
             matrix are regulated using :func:`gvar.regulate`
@@ -918,7 +918,7 @@ class PDF(object):
 
         dp_dchiv: Jacobian :math:`\mathrm{det}(\partial p_i/\partial \chi_j)`.
 
-        distribution: Array or dictionary of |GVar|\\s describing the distribution 
+        distribution: Array or dictionary of |GVar|\s describing the distribution 
             corresponding to the PDF. This may differ from the initial distribution
             if ``svdcut`` or ``eps`` is nonzero.
         
@@ -1031,7 +1031,7 @@ class PDF(object):
     invcov = property(_getinvcov, doc="Inverse covariance matrix.")
     
     def _unflatten(self, pflat, mode='default'):
-        """ pflat -> p """  
+        r""" pflat -> p """  
         if mode == 'default':
             mode = self.mode
         if self.shape is None:
@@ -1051,7 +1051,7 @@ class PDF(object):
                 return pflat.reshape((-1,) + self.shape)
 
     def _flatten(self, p, mode='default'):
-        """ p -> pflat """ 
+        r""" p -> pflat """ 
         if mode == 'default':
             mode = self.mode
         if self.shape is None:
@@ -1071,7 +1071,7 @@ class PDF(object):
                     )
 
     def chiv(self, p=None, pflat=None, mode='default'): 
-        """ Returns :math:`\chi_i(p)` where :math:`\chi^2(p) = \sum_i \chi_i^2(p)`.
+        r""" Returns :math:`\chi_i(p)` where :math:`\chi^2(p) = \sum_i \chi_i^2(p)`.
         
         The PDF is proportional to :math:`\exp(-\chi^2(p)/2)` where
 
@@ -1139,7 +1139,7 @@ class PDF(object):
         return chiv.T if mode == 'lbatch' else chiv
                     
     def pflat(self, chiv, mode='default'):
-        """ Inverse of :meth:`PDF.chiv`.
+        r""" Inverse of :meth:`PDF.chiv`.
         
         Args:
             chiv: An array of values for :math:`\chi_i(p)` 
@@ -1188,7 +1188,7 @@ class PDF(object):
             return dpflat + self.meanflat[:, None]
 
     def chi2(self, p, mode='default'):
-        """ ``sum(self.chiv(p)**2)``. """
+        r""" ``sum(self.chiv(p)**2)``. """
         if mode == 'default':
             mode = self.mode
         return numpy.sum(
@@ -1197,7 +1197,7 @@ class PDF(object):
             )
 
     def logpdf(self, p, mode='default'):
-        """ Logarithm of the PDF evaluated at ``p``.
+        r""" Logarithm of the PDF evaluated at ``p``.
 
         The logarithm of the PDF is 
         ``-sum(self.chiv(p)**2)/2 - self.lognorm``.
@@ -1210,7 +1210,7 @@ class PDF(object):
             ) / 2. 
     
     def __call__(self, p, mode='default'):
-        """ The PDF evaluated at ``p``. 
+        r""" The PDF evaluated at ``p``. 
         
         The PDF is ``exp(-sum(self.chiv(p)**2)/2 - self.lognorm)``.
         """
@@ -1219,7 +1219,7 @@ class PDF(object):
         return numpy.exp(self.logpdf(p, mode=mode))
     
     def sample(self, nbatch=None, uniform=None, mode='default'):
-        """ Generate random sample(s) from the PDF.
+        r""" Generate random sample(s) from the PDF.
 
         Args:
             nbatch (int or None): If not ``None``, the iterator will return
@@ -1260,9 +1260,9 @@ class PDF(object):
 
 
 class oldPDF(object):
-    """ Probability density function (PDF) for ``g``.
+    r""" Probability density function (PDF) for ``g``.
 
-    Given an array or dictionary ``g`` of |GVar|\\s, ``pdf=PDF(g)`` is
+    Given an array or dictionary ``g`` of |GVar|\s, ``pdf=PDF(g)`` is
     the probability density function for the (usually correlated)
     multi-dimensional Gaussian distribution defined by ``g``. That is
     ``pdf(p)`` is the probability density for random sample ``p``
@@ -1270,8 +1270,8 @@ class oldPDF(object):
     ``pdf.logpdf(p)``.
 
     Args:
-        g: |GVar| or array of |GVar|\\s, or dictionary of |GVar|\\s
-            or arrays of |GVar|\\s.
+        g: |GVar| or array of |GVar|\s, or dictionary of |GVar|\s
+            or arrays of |GVar|\s.
 
         svdcut (non-negative float or None): If not ``None``, replace
             covariance matrix of ``g`` with a new matrix whose
@@ -1314,7 +1314,7 @@ class oldPDF(object):
         self.log_gnorm = numpy.sum(0.5 * numpy.log(2 * numpy.pi * s.val))
 
     def x2dpflat(self, x, mode=None):
-        """ Map vector ``x`` in x-space into the displacement from ``g.mean``.
+        r""" Map vector ``x`` in x-space into the displacement from ``g.mean``.
 
         x-space is a vector space of dimension ``p.size``. Its axes are
         in the directions specified by the eigenvectors of ``p``'s covariance
@@ -1332,7 +1332,7 @@ class oldPDF(object):
             return x.T.dot(self.vec_sig).T
 
     def dpflat2x(self, dpflat, mode=None):
-        """ Map the displacement from ``mean(g)`` to vector ``x`` in x-space.
+        r""" Map the displacement from ``mean(g)`` to vector ``x`` in x-space.
 
         x-space is a vector space of dimension ``p.size``. Its axes are
         in the directions specified by the eigenvectors of ``p``'s covariance
@@ -1350,7 +1350,7 @@ class oldPDF(object):
             return self.vec_isig.dot(dpflat.T).T
 
     def p2x(self, p, mode=None):
-        """ Map parameters ``p`` to vector in x-space.
+        r""" Map parameters ``p`` to vector in x-space.
 
         x-space is a vector space of dimension ``p.size``. Its axes are
         in the directions specified by the eigenvectors of ``p``'s covariance
@@ -1376,19 +1376,19 @@ class oldPDF(object):
         return self.dpflat2x(dpflat, mode=mode)
 
     def logpdf(self, p, mode=None):
-        """ Logarithm of the probability density function evaluated at ``p``. """
+        r""" Logarithm of the probability density function evaluated at ``p``. """
         x2 = self.p2x(p, mode=mode) ** 2
         return -0.5 * numpy.sum(x2, axis=1 if mode=='lbatch' else 0) - self.log_gnorm
 
     def __call__(self, p, mode=None):
-        """ Probability density function evaluated at ``p``."""
+        r""" Probability density function evaluated at ``p``."""
         return numpy.exp(self.logpdf(p, mode))
 
 class PDFHistogram(object):
     r""" Utility class for creating PDF histograms. (Deprecated.)
 
     This class is designed to facilitate studies of probability
-    density functions associated with |GVar|\\s. The following code,
+    density functions associated with |GVar|\s. The following code,
     for example, makes a histogram of probabilities for the Gaussian
     distribution corresponding to |GVar| 1.0(5)::
 
@@ -1489,7 +1489,7 @@ class PDFHistogram(object):
         self.nbin = len(self.bins) - 1
 
     def count(self, data):
-        """ Compute histogram of data.
+        r""" Compute histogram of data.
 
         Counts the number of elements from array ``data`` in each bin of the
         histogram. Results are returned in an array, call it ``h``, of
@@ -1530,7 +1530,7 @@ class PDFHistogram(object):
         return numpy.array([below] + middle.tolist() + [above], float)
 
     def analyze(self, count):
-        """ Analyze count data from :meth:`PDFHistogram.count`.
+        r""" Analyze count data from :meth:`PDFHistogram.count`.
 
         Turns an array of counts (see :meth:`PDFHistogram.count`) into a
         histogram of probabilities, and  estimates the mean, standard
@@ -1573,7 +1573,7 @@ class PDFHistogram(object):
 
     @staticmethod
     def gaussian_pdf(x, g):
-        """ Gaussian probability density function at ``x`` for |GVar| ``g``. """
+        r""" Gaussian probability density function at ``x`` for |GVar| ``g``. """
         return (
             numpy.exp(-(x - g.mean) ** 2 / 2. /g.var) /
             numpy.sqrt(g.var * 2 * numpy.pi)
@@ -1585,7 +1585,7 @@ class PDFHistogram(object):
         errorbar=dict(fmt='b.'),
         gaussian=dict(ls='--', c='r')
         ):
-        """ Convert histogram counts in array ``count`` into a plot.
+        r""" Convert histogram counts in array ``count`` into a plot.
 
         Args:
             count (array): Array of histogram counts (see
@@ -1722,7 +1722,7 @@ class _TwoSided:
         return ans.reshape(x.shape)
 
 class PDFStatistics(object):
-    """ Compute statistical information about a distribution.
+    r""" Compute statistical information about a distribution.
 
     Given moments ``mom[i]`` of a random variable, :class:`PDFStatistics`
     computes the mean, standard deviation, skewness, and excess kurtosis. 
@@ -1757,10 +1757,10 @@ class PDFStatistics(object):
     twice as wide as that on the negative side. The last line displays 
     a plot of the histogram, overlayed with plots of the Gaussians or 
     two-sided Gaussians corresponding to the mean and standard deviation,
-    or the median or split-normal distributions.
+    or the median or split-normal distributions. 
 
     Args:
-        moments (array of floats or ``GVar``\\s): ``moments[i]`` is the 
+        moments (array of floats or ``GVar``\s): ``moments[i]`` is the 
             (i+1)-th moment. Optional unless ``histogram=None``.  
 
         histogram (tuple): (Optional unless ``moments=None``) Tuple ``(bins,prob)``
@@ -1806,7 +1806,7 @@ class PDFStatistics(object):
             intervals ``(bins[i-1], bins[i])``. ``prob[0]`` is the 
             probability from below ``bins[0]``; ``prob[-1]`` is the 
             probability from above ``bins[-1]``. The ``prob[i]`` can
-            be numbers or |GVar|\\s.
+            be numbers or |GVar|\s.
     """
     def __init__(self, moments=None, histogram=None, prefix='   '):
         self.prefix = prefix
@@ -1861,7 +1861,7 @@ class PDFStatistics(object):
             raise ValueError('need moments and/or histogram')
         
     def _fit_median(self, bins, prob):
-        """ Fit median model to histogram """
+        r""" Fit median model to histogram """
         # prob = prob / sum(prob)
         cumprob = numpy.cumsum(prob)[:-1]
         probspline = cspline.CSpline(bins, cumprob, alg='cspline')
@@ -1879,7 +1879,7 @@ class PDFStatistics(object):
         return _TwoSided(median, plus=plus - median, minus=median - minus, type='median')
 
     def _fit_splitnormal(self, bins, prob):
-        """ Fit split-normal model to histogram. """
+        r""" Fit split-normal model to histogram. """
         x = (bins[1:] + bins[:-1]) / 2
         wgt = prob[1:-1] / sum(prob[1:-1])
         def sum_plus(mu, n=2):
@@ -1938,7 +1938,7 @@ class PDFStatistics(object):
         return ans
 
     def plot_histogram(self, plot=None, show=False, fits=['mean', 'split-normal', 'median'], errorbars=True):
-        """ Plot histogram of probability density.
+        r""" Plot histogram of probability density.
 
         Plots the histogram, overlayed with plots of the Gaussian or 
         two-sided Gaussians corresponding to the mean and standard deviation,
@@ -1958,7 +1958,7 @@ class PDFStatistics(object):
                 Set ``fits=[]`` to omit the fits from the plot.
 
             errorbars (bool): Plot errorbars on histogram if ``True`` (default) when 
-                the input probabilities are |GVar|\\s; ignored otherwise.
+                the input probabilities are |GVar|\s; ignored otherwise.
             
         Returns:
             The plotter.
@@ -2003,9 +2003,9 @@ class PDFStatistics(object):
     
 
 def make_fake_data(g, fac=1.0):
-    """ Make fake data based on ``g``.
+    r""" Make fake data based on ``g``.
 
-    This function replaces the |GVar|\\s in ``g`` by  new |GVar|\\s with similar
+    This function replaces the |GVar|\s in ``g`` by  new |GVar|\s with similar
     means and a similar covariance matrix, but multiplied by ``fac**2`` (so
     standard deviations are ``fac`` times smaller or larger). The changes are random.
     The function was designed to create fake data for testing fitting
@@ -2014,14 +2014,14 @@ def make_fake_data(g, fac=1.0):
     are  10x smaller than those of the corresponding priors).
 
     Args:
-        g (dict, array or gvar.GVar): The |GVar| or array of |GVar|\\s,
-            or dictionary whose values are |GVar|\\s or arrays of |GVar|\\s that
+        g (dict, array or gvar.GVar): The |GVar| or array of |GVar|\s,
+            or dictionary whose values are |GVar|\s or arrays of |GVar|\s that
             from which the fake data is generated.
 
         fac (float): Uncertainties are rescaled by ``fac`` in the fake data.
 
     Returns:
-        A collection of |GVar|\\s with the same layout as ``g`` but with
+        A collection of |GVar|\s with the same layout as ``g`` but with
         somewhat different means, and standard deviations rescaled by ``fac``.
     """
     if hasattr(g, 'keys'):

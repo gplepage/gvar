@@ -21,7 +21,7 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 from libc.string cimport memset
 
 cdef class svec:
-    """ sparse vector --- for GVar derivatives (only)"""
+    r""" sparse vector --- for GVar derivatives (only)"""
     # cdef svec_element * v
     # cdef readonly usigned int size ## number of elements in v
 
@@ -57,7 +57,7 @@ cdef class svec:
         return (svec, (self.size,), self.__getstate__())
 
     def __len__(self):
-        """ """
+        r""" """
         cdef Py_ssize_t i
         if self.size==0:
             return 0
@@ -90,7 +90,7 @@ cdef class svec:
         return _ans    
 
     cpdef object toarray(self, Py_ssize_t msize=0):
-        """ Create numpy.array version of self, padded with zeros to length
+        r""" Create numpy.array version of self, padded with zeros to length
         msize if msize is not None and larger than the actual size.
         """
         cdef Py_ssize_t i,nsize
@@ -104,7 +104,7 @@ cdef class svec:
         return _ans
 
     cpdef _assign(self, const double[:] v, const Py_ssize_t[:] idx):
-        """ Assign v and idx to self.v[i].v and self.v[i].i.
+        r""" Assign v and idx to self.v[i].v and self.v[i].i.
 
         Assumes that len(v)==len(idx)==self.size and idx sorted
         """
@@ -123,7 +123,7 @@ cdef class svec:
                 )
 
     def assign(self, v, idx):
-        """ assign v and idx to self.v[i].v and self.v[i].i """
+        r""" assign v and idx to self.v[i].v and self.v[i].i """
         cdef Py_ssize_t nv, i, j
         nv = len(v)
         assert nv==len(idx) and nv==self.size,"v,idx length mismatch"
@@ -142,7 +142,7 @@ cdef class svec:
                     )
 
     cpdef double dot(svec self, svec v):
-        """ Compute dot product of self and v: <self|v> """
+        r""" Compute dot product of self and v: <self|v> """
         cdef svec va,vb
         cdef Py_ssize_t ia,ib
         cdef double ans
@@ -167,7 +167,7 @@ cdef class svec:
         return ans
 
     cpdef svec add(svec self, svec v, double a=1., double b=1.):
-        """ Compute a*self + b*v. """
+        r""" Compute a*self + b*v. """
         cdef svec va, vb
         cdef Py_ssize_t ia, ib, i, ians
         cdef svec ans
@@ -232,7 +232,7 @@ cdef class svec:
         return ans
 
     cpdef svec mul(svec self, double a):
-        """ Compute a*self. """
+        r""" Compute a*self. """
         cdef Py_ssize_t i
         if a == 0:
             return svec.__new__(svec, 0)
@@ -244,7 +244,7 @@ cdef class svec:
     
     @cython.initializedcheck(False)
     cpdef object masked_vec(svec self, smask mask, out=None):
-        """ Returns compact vector containing the unmasked components of the svec. 
+        r""" Returns compact vector containing the unmasked components of the svec. 
         
         N.B. If use ``out`` make sure it is zeroed first.
         """
@@ -285,7 +285,7 @@ cdef class smask:
         return self.len
 
 cdef class smat:
-    """ sym. sparse matrix --- for GVar covariance matrices (only) """
+    r""" sym. sparse matrix --- for GVar covariance matrices (only) """
     # cdef object rowlist
 
     def __cinit__(smat self):
@@ -305,7 +305,7 @@ cdef class smat:
         self.nrow, self.nrow_max, self.row = data
 
     def __len__(self):
-        """ Dimension of matrix. """
+        r""" Dimension of matrix. """
         return self.nrow # len(self.rowlist)
 
     cpdef Py_ssize_t blockid(smat self, Py_ssize_t i):
@@ -324,7 +324,7 @@ cdef class smat:
         # print('**** added memory')
 
     cpdef object append_diag(self, const double[:] d):
-        """ Add d[i] along diagonal. """
+        r""" Add d[i] along diagonal. """
         cdef Py_ssize_t i, nr
         cdef double[::1] v
         cdef Py_ssize_t[::1] idx
@@ -433,7 +433,7 @@ cdef class smat:
 
 
     cpdef double expval(self, svec vv):
-        """ Compute expectation value <vv|self|vv>. """
+        r""" Compute expectation value <vv|self|vv>. """
         cdef Py_ssize_t i
         cdef svec row
         cdef double ans
@@ -444,7 +444,7 @@ cdef class smat:
         return ans
 
     cpdef svec dot(self, svec vv):
-        """ Compute dot product self|vv>. """
+        r""" Compute dot product self|vv>. """
         cdef double[::1] v
         cdef Py_ssize_t[::1] idx
         cdef double rowv
@@ -468,7 +468,7 @@ cdef class smat:
         return ans
 
     cpdef svec masked_dot(self, svec vv, const char[:] imask):
-        """ Compute masked dot product self|vv>.
+        r""" Compute masked dot product self|vv>.
 
         imask indicates which components to compute and keep in final result;
         disregard components i where imask[i]==False.
@@ -499,7 +499,7 @@ cdef class smat:
         return ans
 
     cpdef object toarray(self):
-        """ Create numpy ndim=2 array version of self. """
+        r""" Create numpy ndim=2 array version of self. """
         cdef double[:, ::1] ans
         cdef double[:] row
         cdef Py_ssize_t nr = self.nrow # len(self.rowlist)
@@ -513,7 +513,7 @@ cdef class smat:
 
     @cython.initializedcheck(False)
     cpdef object masked_mat(smat self, smask mask, out=None):
-        """ Returns compact matrix containing the unmasked components of the smat. 
+        r""" Returns compact matrix containing the unmasked components of the smat. 
         
         N.B. If use ``out`` make sure it is zeroed first.
         """

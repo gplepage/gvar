@@ -38,9 +38,9 @@ BUFFERDICTDATA = collections.namedtuple('BUFFERDICTDATA',['slice','shape'])
 """ Data type for BufferDict._data[k]. Note shape==() implies a scalar. """
 
 class BufferDict(collections_MMapping):
-    """ Ordered dictionary whose values are packed into a 1-d buffer (:mod:`numpy` array).
+    r""" Ordered dictionary whose values are packed into a 1-d buffer (:mod:`numpy` array).
 
-    |BufferDict|\\s can be created in the usual way dictionaries are created::
+    |BufferDict|\s can be created in the usual way dictionaries are created::
 
         >>> b = BufferDict()
         >>> b['a'] = 1
@@ -52,7 +52,7 @@ class BufferDict(collections_MMapping):
         >>> b = BufferDict(a=1, b=[2.7, 3.2])
         >>> b = BufferDict([('a',1.), ('b',[2.7, 3.2])])
 
-    They can also be created from other dictionaries or |BufferDict|\\s::
+    They can also be created from other dictionaries or |BufferDict|\s::
 
         >>> c = BufferDict(b)
         >>> print(c)
@@ -92,7 +92,7 @@ class BufferDict(collections_MMapping):
     ``BufferDict({}, dtype=int)``. Any data type supported by :mod:`numpy` 
     arrays can be specified.
 
-    Some simple arithemetic is allowed between two |BufferDict|\\s, say,
+    Some simple arithemetic is allowed between two |BufferDict|\s, say,
     ``g1`` and ``g2`` provided they have the same keys and array shapes.
     So, for example::
 
@@ -288,7 +288,7 @@ class BufferDict(collections_MMapping):
             #         self[k] = v 
 
     def _r2lbatch(self):
-        """ Returns ``self`` converted from ``'rbatch'`` to ``'lbatch'`` mode."""
+        r""" Returns ``self`` converted from ``'rbatch'`` to ``'lbatch'`` mode."""
         ans = _gvar.BufferDict() 
         nbatch = None
         for k in self:
@@ -300,7 +300,7 @@ class BufferDict(collections_MMapping):
         return ans, nbatch 
 
     def _l2rbatch(self):
-        """ Returns ``self`` converted from ``'lbatch'`` to ``'rbatch'`` mode."""
+        r""" Returns ``self`` converted from ``'lbatch'`` to ``'rbatch'`` mode."""
         ans = _gvar.BufferDict()
         nbatch = None
         for k in self:
@@ -318,11 +318,11 @@ class BufferDict(collections_MMapping):
         return BufferDict(self, buf=copy.deepcopy(self.buf, memo))
 
     def __getstate__(self):
-        """ Capture state for pickling. """
+        r""" Capture state for pickling. """
         return (_gvar.dumps(collections.OrderedDict(self)), BufferDict.invfcn)
 
     def __setstate__(self, state):
-        """ Restore state when unpickling. """
+        r""" Restore state when unpickling. """
         if not hasattr(state, 'keys'):
             if isinstance(state, tuple):
                 contents, invfcn = state
@@ -379,7 +379,7 @@ class BufferDict(collections_MMapping):
         return (BufferDict, (), self.__getstate__())
 
     def __iadd__(self, g):
-        """ self += |BufferDict| (or dictionary) """
+        r""" self += |BufferDict| (or dictionary) """
         try:
             g = BufferDict({k:g[k] for k in self})
         except KeyError:
@@ -388,7 +388,7 @@ class BufferDict(collections_MMapping):
         return self
 
     def __isub__(self, g):
-        """ self -= |BufferDict| (or dictionary) """
+        r""" self -= |BufferDict| (or dictionary) """
         try:
             g = BufferDict({k:g[k] for k in self})
         except KeyError:
@@ -397,25 +397,25 @@ class BufferDict(collections_MMapping):
         return self
 
     def __imul__(self, x):
-        """ ``self *= x`` for scalar ``x`` """
+        r""" ``self *= x`` for scalar ``x`` """
         self.flat[:] *= x
         return self
 
     def __itruediv__(self, x):
-        """ ``self /= x`` for scalar ``x`` """
+        r""" ``self /= x`` for scalar ``x`` """
         self.flat[:] /= x
         return self
 
     def __pos__(self):
-        """ ``+self`` """
+        r""" ``+self`` """
         return BufferDict(self, buf=+self.flat[:])
 
     def __neg__(self):
-        """ ``-self`` """
+        r""" ``-self`` """
         return BufferDict(self, buf=-self.flat[:])
 
     def __add__(self, g):
-        """ :class:`BufferDict` (or a dictionary).
+        r""" :class:`BufferDict` (or a dictionary).
 
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
@@ -427,7 +427,7 @@ class BufferDict(collections_MMapping):
         return BufferDict(self, buf=self.flat[:] + g.flat)
 
     def __radd__(self, g):
-        """ Add ``self`` to another :class:`BufferDict` (or a dictionary).
+        r""" Add ``self`` to another :class:`BufferDict` (or a dictionary).
 
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
@@ -439,7 +439,7 @@ class BufferDict(collections_MMapping):
         return BufferDict(self, buf=self.flat[:] + g.flat)
 
     def __sub__(self, g):
-        """ Subtract a :class:`BufferDict` (or a dictionary) from ``self``.
+        r""" Subtract a :class:`BufferDict` (or a dictionary) from ``self``.
 
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
@@ -451,7 +451,7 @@ class BufferDict(collections_MMapping):
         return BufferDict(self, buf=self.flat[:] - g.flat)
 
     def __rsub__(self, g):
-        """ Subtract ``self`` from a :class:`BufferDict` (or a dictionary).
+        r""" Subtract ``self`` from a :class:`BufferDict` (or a dictionary).
 
         The two dictionaries need to have compatible layouts: i.e., the
         same keys and array shapes.
@@ -463,24 +463,24 @@ class BufferDict(collections_MMapping):
         return BufferDict(self, buf=g.flat[:] - self.flat)
 
     def __mul__(self, x):
-        """ Multiply ``self``` by scalar ``x``. """
+        r""" Multiply ``self``` by scalar ``x``. """
         return BufferDict(self, buf=self.flat[:] * x)
 
     def __rmul__(self, x):
-        """ Multiply ``self`` by scalar ``x``. """
+        r""" Multiply ``self`` by scalar ``x``. """
         return BufferDict(self, buf=self.flat[:] * x)
 
     # truediv and div are the same --- 1st is for python3, 2nd for python2
     def __truediv__(self, x):
-        """ Divide ``self`` by scalar ``x``. """
+        r""" Divide ``self`` by scalar ``x``. """
         return BufferDict(self, buf=self.flat[:] / x)
 
     def __div__(self, x):
-        """ Divide ``self`` by scalar ``x``. """
+        r""" Divide ``self`` by scalar ``x``. """
         return BufferDict(self, buf=self.flat[:] / x)
 
     def add(self,k,v):
-        """ Augment buffer with data ``v``, indexed by key ``k``.
+        r""" Augment buffer with data ``v``, indexed by key ``k``.
 
         ``v`` is either a scalar or a :mod:`numpy` array (or a list or
         other data type that can be changed into a numpy.array).
@@ -495,7 +495,7 @@ class BufferDict(collections_MMapping):
             self[k] = v
 
     def __getitem__(self, k):
-        """ Return piece of buffer corresponding to key ``k``. """
+        r""" Return piece of buffer corresponding to key ``k``. """
         try:
             d = self._odict.__getitem__(k)
             ans = self._buf[d.slice]
@@ -539,7 +539,7 @@ class BufferDict(collections_MMapping):
         return ans
 
     def all_keys(self):
-        """ Iterator over all keys and implicit keys.
+        r""" Iterator over all keys and implicit keys.
         
         For example, the following code ::
 
@@ -580,7 +580,7 @@ class BufferDict(collections_MMapping):
         return [(k,self[k]) for k in self]
 
     def __setitem__(self, k, v):
-        """ Set piece of buffer corresponding to ``k`` to value ``v``.
+        r""" Set piece of buffer corresponding to ``k`` to value ``v``.
 
         The shape of ``v`` must equal that of ``self[k]`` if key ``k``
         is already in ``self``.
@@ -692,13 +692,13 @@ class BufferDict(collections_MMapping):
         return self._buf.flat
 
     def _setflat(self, buf):
-        """ Assigns buffer with buf if same size. """
+        r""" Assigns buffer with buf if same size. """
         self._extension = {}
         self._buf.flat = buf
 
     flat = property(_getflat, _setflat, doc='Buffer array iterator.')
     def flatten(self, mode=None):
-        """ Copy of buffer array. """
+        r""" Copy of buffer array. """
         if mode is None:
             return numpy.array(self._buf)
         else:
@@ -714,7 +714,7 @@ class BufferDict(collections_MMapping):
         return self._buf
 
     def _setbuf(self, buf):
-        """ Replace buffer with ``buf``.
+        r""" Replace buffer with ``buf``.
 
         ``buf`` must be a 1-dimensional :mod:`numpy` array of the same size
         as ``self._buf``.
@@ -731,23 +731,23 @@ class BufferDict(collections_MMapping):
     buf = property(_getbuf,_setbuf,doc='Buffer array (not a copy).')
 
     def _getsize(self):
-        """ Length of buffer. """
+        r""" Length of buffer. """
         return len(self._buf)
 
     size = property(_getsize,doc='Size of buffer array.')
 
     def slice(self,k):
-        """ Return slice/index in ``self.flat`` corresponding to key ``k``."""
+        r""" Return slice/index in ``self.flat`` corresponding to key ``k``."""
         self._extension = {}
         return self._odict.__getitem__(k).slice
 
     def slice_shape(self,k):
-        """ Return tuple ``(slice/index, shape)`` corresponding to key ``k``."""
+        r""" Return tuple ``(slice/index, shape)`` corresponding to key ``k``."""
         self._extension = {}
         return self._odict.__getitem__(k)
 
     def has_dictkey(self, k):
-        """ Returns ``True`` if ``self[k]`` is defined; ``False`` otherwise.
+        r""" Returns ``True`` if ``self[k]`` is defined; ``False`` otherwise.
 
         Note that ``k`` may be a key or it may be related to a
         another key associated with a non-Gaussian distribution
@@ -778,7 +778,7 @@ class BufferDict(collections_MMapping):
     rbatch_buf = property(_getrbatch_buf, doc='rbatch_buf')
 
     def batch_iter(self, mode):
-        """ Iterate over dictionaries in a batch |BufferDict|.
+        r""" Iterate over dictionaries in a batch |BufferDict|.
 
         Args:
             mode (str): Type of batch |BufferDict|: ``'rbatch'`` if the 
@@ -811,9 +811,9 @@ class BufferDict(collections_MMapping):
 
     @staticmethod
     def add_distribution(name, invfcn):
-        """ Add new parameter distribution.
+        r""" Add new parameter distribution.
 
-        |BufferDict|\\s can be used to represent a  restricted
+        |BufferDict|\s can be used to represent a  restricted
         class of  non-Gaussian distributions. For example, the code ::
 
             import gvar as gv
@@ -852,7 +852,7 @@ class BufferDict(collections_MMapping):
 
     @staticmethod
     def del_distribution(name):
-        """ Delete |BufferDict| distribution ``name``. 
+        r""" Delete |BufferDict| distribution ``name``. 
         
         Raises a ``ValueError`` if ``name`` is not the name of 
         an existing distribution.
@@ -865,12 +865,12 @@ class BufferDict(collections_MMapping):
 
     @staticmethod
     def has_distribution(name):
-        """ ``True`` if ``name`` has been defined as a distribution; ``False`` otherwise. """
+        r""" ``True`` if ``name`` has been defined as a distribution; ``False`` otherwise. """
         return name in BufferDict.invfcn
     
     @staticmethod
     def uniform(fname, umin, umax, shape=()):
-        """ Create uniform distribution on interval ``[umin, umax]``.
+        r""" Create uniform distribution on interval ``[umin, umax]``.
 
         The code ::
 
@@ -923,7 +923,7 @@ class _BDict_UDistribution(object):
 BufferDict._ver_g = 0    # version of distribution collection (for cache synch)
 
 def asbufferdict(g, dtype=None):
-    """ Convert ``g`` to a BufferDict, keeping only ``g[k]`` for ``k in keylist``.
+    r""" Convert ``g`` to a BufferDict, keeping only ``g[k]`` for ``k in keylist``.
 
     ``asbufferdict(g)`` will return ``g`` if it is already a
     :class:`gvar.BufferDict`; otherwise it will convert the dictionary-like
@@ -936,7 +936,7 @@ def asbufferdict(g, dtype=None):
     return BufferDict(g, **kargs)
 
 def get_dictkeys(bdict, klist):
-    """ Same as ``[dictkey(bdict, k) for k in klist]``. """
+    r""" Same as ``[dictkey(bdict, k) for k in klist]``. """
     ans = []
     for k in klist:
         if k not in bdict:
@@ -952,7 +952,7 @@ def get_dictkeys(bdict, klist):
     return ans
 
 def dictkey(bdict, k):
-    """ Find key in ``bdict`` corresponding to ``k``.
+    r""" Find key in ``bdict`` corresponding to ``k``.
 
     Could be ``k`` itself or one of the standard extensions,
     such as ``log(k)`` or ``sqrt(k)``.
@@ -967,7 +967,7 @@ def dictkey(bdict, k):
         return k
 
 def has_dictkey(b, k):
-    """ Returns ``True`` if ``b[k]`` is defined; ``False`` otherwise.
+    r""" Returns ``True`` if ``b[k]`` is defined; ``False`` otherwise.
 
     Note that ``k`` may be a key or it may be related to a
     another key associated with a non-Gaussian distribution
@@ -983,7 +983,7 @@ def has_dictkey(b, k):
         return False
 
 def _stripkey(k):
-    """ Return (stripped key, fcn) where fcn is exp or square or ...
+    r""" Return (stripped key, fcn) where fcn is exp or square or ...
 
     Strip off any ``"log"`` or ``"sqrt"`` or ... prefix.
     """
@@ -999,7 +999,7 @@ def _stripkey(k):
 
 
 def nonredundant_keys(keys):
-    """ Return list containing only nonredundant keys in list ``keys``. """
+    r""" Return list containing only nonredundant keys in list ``keys``. """
     discards = set()
     for k in keys:
         if isinstance(k, str):
@@ -1013,7 +1013,7 @@ def nonredundant_keys(keys):
     return ans
 
 def add_parameter_parentheses(p):
-    """ Return dictionary with proper keys for parameter distributions (legacy code).
+    r""" Return dictionary with proper keys for parameter distributions (legacy code).
 
     This utility function helps fix legacy code that uses
     parameter keys like ``logp`` or ``sqrtp`` instead of
@@ -1038,7 +1038,7 @@ def add_parameter_parentheses(p):
     return newp
 
 def trim_redundant_keys(p):
-    """ Remove redundant keys from dictionary ``p``.
+    r""" Remove redundant keys from dictionary ``p``.
 
     A key ``'c'`` is redundant if either of ``'log(c)'``
     or ``'sqrt(c)'`` is also a key. (There are additional redundancies
