@@ -1,6 +1,6 @@
 Version 13.1.5 2025-01-31
 =========================
-Fixes error pxd files introduced by last update.
+Fixes error in pxd files introduced by last update.
 
 Version 13.1.4 2025-01-31
 =========================
