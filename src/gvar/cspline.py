@@ -1,7 +1,7 @@
 """ Cubic splines for GVars. """
 
 # Created by G. Peter Lepage (Cornell University) on 2014-04-27.
-# Copyright (c) 2014-20 G. Peter Lepage.
+# Copyright (c) 2014-24 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -80,7 +80,8 @@ class CSpline:
         ``alg='steffen'``
             Monotonic cubic spline that has quadratic precision
             where the function is monotonic between knots. This is 
-            the default algorithm.
+            the default algorithm. (M. Steffen, Astron. 
+            Astrophys. 239, 443-450 (1990).)
 
         ``alg='cspline'``
             Cubic spline with continuous second derivatives ``f''(x)``
@@ -171,8 +172,7 @@ class CSpline:
             The polynomial is constructed from the spline's 
             value and derivatives at the (nearest) knot of the
             spline. The allowed range is ``0 <= extrap_order <= 3``. 
-            The default value is 3 although it is common practice 
-            to use smaller values.
+            The default value is 2.
         warn (bool): If ``True``, warnings are generated
             when the spline function is called for ``x`` values that
             fall outside of the original range of ``xknot``\s used to

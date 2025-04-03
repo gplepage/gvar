@@ -1,5 +1,5 @@
 # cython: language_level=3str, binding=True
-# Copyright (c) 2013-20 G. Peter Lepage.
+# Copyright (c) 2013-25 G. Peter Lepage.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

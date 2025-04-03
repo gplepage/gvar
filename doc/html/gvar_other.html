@@ -130,7 +130,8 @@ keyword <code class="docutils literal notranslate"><span class="pre">alg</span><
 <div><dl class="simple">
 <dt><code class="docutils literal notranslate"><span class="pre">alg='steffen'</span></code></dt><dd><p>Monotonic cubic spline that has quadratic precision
 where the function is monotonic between knots. This is
-the default algorithm.</p>
+the default algorithm. (M. Steffen, Astron.
+Astrophys. 239, 443-450 (1990).)</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">alg='cspline'</span></code></dt><dd><p>Cubic spline with continuous second derivatives <code class="docutils literal notranslate"><span class="pre">f''(x)</span></code>
 (in addition to <code class="docutils literal notranslate"><span class="pre">f'(x)</span></code> and <code class="docutils literal notranslate"><span class="pre">f(x)</span></code>). Sets
@@ -220,8 +221,7 @@ extrapolations outside of the spline range.
 The polynomial is constructed from the spline’s
 value and derivatives at the (nearest) knot of the
 spline. The allowed range is <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">extrap_order</span> <span class="pre">&lt;=</span> <span class="pre">3</span></code>.
-The default value is 3 although it is common practice
-to use smaller values.</p></li>
+The default value is 2.</p></li>
 <li><p><strong>warn</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, warnings are generated
 when the spline function is called for <code class="docutils literal notranslate"><span class="pre">x</span></code> values that
 fall outside of the original range of <code class="docutils literal notranslate"><span class="pre">xknot</span></code>s used to

@@ -1,4 +1,4 @@
-"""
+r"""
 Module :mod:`gvar.powerseries` provides tools for manipulating power series
 approximations of functions. A function's power series is specified by the
 coefficients in its Taylor expansion with respect to an independent variable,
@@ -614,7 +614,7 @@ class PowerSeries(object):
             return self
 
     def integ(self, *n, **kargs): # should be (self, *n, x0=1) but not with Py2
-        """ Compute *n*-th indefinite integral of ``self``.
+        rr""" Compute *n*-th indefinite integral of ``self``.
 
         If *x0* is specified, then the definite integral,
         integrating from point *x0*, is returned.
@@ -625,7 +625,7 @@ class PowerSeries(object):
                 in each direction (default is 0).
         Returns:
             :class:`PowerSeries` object representing the *n*-th integral of ``self``.
-        """
+        r"""
         x0 = kargs.get('x0', 0.)
         if len(n) > 1:
             if numpy.shape(x0) == ():
@@ -656,7 +656,7 @@ class PowerSeries(object):
 
 
 def multiseries(c, order=None):
-    r""" Create multivariate power series from coefficients in array ``c``.
+    rr""" Create multivariate power series from coefficients in array ``c``.
 
     Args:
         c (array): :mod:`numpy`-like array containing the power series 
@@ -669,7 +669,7 @@ def multiseries(c, order=None):
     
     Returns:
         :class:`PowerSeries` object representing the multivariate power series. 
-    """
+    r"""
     c = numpy.asarray(c)
     if c.ndim <= 0:
         return None
@@ -688,7 +688,7 @@ def multiseries(c, order=None):
     return ans
     
 def multivar(dim, order):
-    r""" Create :class:`PowerSeries` objects representing the expansion variables.
+    rr""" Create :class:`PowerSeries` objects representing the expansion variables.
 
     Args:
         dim (int): The dimensionality of the multivariate space.
@@ -700,7 +700,7 @@ def multivar(dim, order):
         An array of ``dim`` :class:`PowerSeries` objects corresponding to 
         each of the expansion variables in a ``dim``-dimensional multivariate
         power series.
-    """
+    r"""
     if dim <= 0 or order < 0:
         return []
     shape = dim * (order + 1,)

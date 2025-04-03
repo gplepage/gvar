@@ -160,7 +160,7 @@ class Pade(object):
         return self.num(x) / self.den(x)
 
 def pade_gvar(f, m, n, rtol='gavg'):  
-    """ ``(m,n)`` Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\s.
+    r""" ``(m,n)`` Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\s.
 
     The ``(m,n)`` Pade approximant to a series given by
     ``sum_i f[i] * x**i`` is the ratio of  polynomials of order ``m``
