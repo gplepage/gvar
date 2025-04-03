@@ -1,4 +1,4 @@
-r"""
+"""
 Module :mod:`gvar.powerseries` provides tools for manipulating power series
 approximations of functions. A function's power series is specified by the
 coefficients in its Taylor expansion with respect to an independent variable,
@@ -150,8 +150,7 @@ one can calculate the Taylor expansion coefficients for ``exp(x+y)`` using::
     1.3495000000000001 1.3498588075760032
 
 Here function :func:`multivar` creates :class:`PowerSeries` objects corresponding to the 
-expansion variables through a given order.
-"""
+expansion variables through a given order."""
 # Created by G. Peter Lepage on 2009-12-14.
 # Copyright (c) 2009-2020 G. Peter Lepage.
 #
@@ -203,7 +202,7 @@ class PowerSeries(object):
             the order is inferred from the array of coefficients. 
             If array ``c`` is too small for the specified ``order``, 
             the array is padded with zeros at the end.
-    """
+"""
     def __init__(self, c=None, order=None):
         if isinstance(c, PowerSeries):
             c = numpy.array(c.c)
@@ -243,21 +242,21 @@ class PowerSeries(object):
                 doc="Copy of power series coefficients (numpy.array).")
 
     def __getitem__(self, i):
-        r""" Return C{i}th coefficient of power series. """
+        r""" Return C{i}th coefficient of power series."""
         if numpy.size(i) > 1:
             return self.c[i[0]][i[1:]]
         else:
             return self.c[i if numpy.shape(i) == () else i[0]]
 
     def __setitem__(self, i, val):
-        r""" Set C{i}th coefficient of power series equal to C{val}. """
+        r""" Set C{i}th coefficient of power series equal to C{val}."""
         if numpy.size(i) > 1:
             self.c[i[0]][i[1:]] = val
         else:
             self.c[i if numpy.shape(i) == () else i[0]] = val
 
     def __iter__(self):
-        r""" Iterate over coefficients of power series C{self}. """
+        r""" Iterate over coefficients of power series C{self}."""
         return iter(self.c)
 
     def __add__(self,x):
@@ -582,7 +581,7 @@ class PowerSeries(object):
         Returns:
             :class:`PowerSeries` object representing the 
             *n*-th derivative or partial derivative of ``self``.
-        """
+    """
         if len(n) == 0:
             n = [1]
         if len(n) > 1:
@@ -625,7 +624,7 @@ class PowerSeries(object):
                 in each direction (default is 0).
         Returns:
             :class:`PowerSeries` object representing the *n*-th integral of ``self``.
-        r"""
+    """
         x0 = kargs.get('x0', 0.)
         if len(n) > 1:
             if numpy.shape(x0) == ():
@@ -669,7 +668,7 @@ def multiseries(c, order=None):
     
     Returns:
         :class:`PowerSeries` object representing the multivariate power series. 
-    r"""
+    """
     c = numpy.asarray(c)
     if c.ndim <= 0:
         return None
@@ -700,7 +699,7 @@ def multivar(dim, order):
         An array of ``dim`` :class:`PowerSeries` objects corresponding to 
         each of the expansion variables in a ``dim``-dimensional multivariate
         power series.
-    r"""
+"""
     if dim <= 0 or order < 0:
         return []
     shape = dim * (order + 1,)
