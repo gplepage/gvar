@@ -614,7 +614,7 @@ class PowerSeries(object):
             return self
 
     def integ(self, *n, **kargs): # should be (self, *n, x0=1) but not with Py2
-        rr""" Compute *n*-th indefinite integral of ``self``.
+        r""" Compute *n*-th indefinite integral of ``self``.
 
         If *x0* is specified, then the definite integral,
         integrating from point *x0*, is returned.
@@ -656,7 +656,7 @@ class PowerSeries(object):
 
 
 def multiseries(c, order=None):
-    rr""" Create multivariate power series from coefficients in array ``c``.
+    r""" Create multivariate power series from coefficients in array ``c``.
 
     Args:
         c (array): :mod:`numpy`-like array containing the power series 
@@ -688,7 +688,7 @@ def multiseries(c, order=None):
     return ans
     
 def multivar(dim, order):
-    rr""" Create :class:`PowerSeries` objects representing the expansion variables.
+    r""" Create :class:`PowerSeries` objects representing the expansion variables.
 
     Args:
         dim (int): The dimensionality of the multivariate space.
