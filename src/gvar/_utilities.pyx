@@ -2077,7 +2077,8 @@ def fmt_values(outputs, ndecimal=None, ndigit=None):
         ndecimal = ndigit
     ans = "Values:\n"
     for vk in outputs:
-        ans += "%19s: %-20s\n" % (vk,outputs[vk].fmt(ndecimal))
+        ans += '{:>19s}: {:<20s}\n'.format(vk, outputs[vk].fmt(ndecimal))
+        # ans += "%19s: %-20s\n" % (vk,outputs[vk].fmt(ndecimal))
     return ans
 
 def fmt_errorbudget(

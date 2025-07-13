@@ -1515,7 +1515,11 @@ class GVarFactory:
                         raise ValueError('negative standard deviation: ' + str(xsdev))
                     idx = self.cov.append_diag(xsdev.reshape(nx) ** 2)
                 elif xsdev.shape==2 * x.shape: # x,cov
-                    xcov = _xcov = xsdev.reshape(nx, nx)
+                    try:
+                        xcov = _xcov = xsdev.reshape(nx, nx)
+                    except ValueError:
+                        xsdev = numpy.array(xsdev, order='C', copy=True)
+                        xcov = _xcov = xsdev.reshape(nx, nx)
                     with numpy.errstate(under='ignore'):
                         if not numpy.allclose(xcov, xcov.T, equal_nan=True):
                             raise ValueError('non-symmetric covariance matrix:\n' + str(_xcov))
@@ -1843,7 +1847,7 @@ cpdef object wsum_der(double[:] wgt, GVar[:] glist):
 cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
     cdef Py_ssize_t i
     for i in range(wgt.shape[0]):
-        out[i] = wsum_gvar(wgt[i], glist)
+        out[i] = <GVar> wsum_gvar(wgt[i], glist)
 
 cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
     r""" weighted sum of |GVar|\s """

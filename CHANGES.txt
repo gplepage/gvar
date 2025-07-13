@@ -1,3 +1,8 @@
+Version 13.1.7 2025-07-13
+=========================
+- Trivial bug fix in fmt_values().
+- Fixes gvar.gvar(mean, cov) so it works when cov is not c-contiguous or when it is read-only.
+
 Version 13.1.6 2025-04-03
 =========================
 Fixes documentation error that was causing problems.
