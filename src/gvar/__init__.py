@@ -1152,7 +1152,7 @@ class PDF(object):
                 not specified (``mode='default'``).
 
         Returns:
-            Am array containing the flattened version of ``p`` 
+            An array containing the flattened version of ``p`` 
             corresponding to ``chiv``. In batch mode the array 
             has an extra batch index (on the right or 
             left depending upon ``mode``). 

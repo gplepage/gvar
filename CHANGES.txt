@@ -1,3 +1,10 @@
+Version 13.1.8 2026-01-??
+==========================
+- Fixes problem in gvar.svd that arose when trying 
+  to gv.dump/load results in Python 3.14.
+
+- Minor fixes to documentation.
+
 Version 13.1.7 2025-07-13
 =========================
 - Trivial bug fix in fmt_values().

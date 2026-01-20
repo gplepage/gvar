@@ -288,7 +288,7 @@ class BufferDict(collections_MMapping):
             #         self[k] = v 
 
     def _r2lbatch(self):
-        r""" Returns ``self`` converted from ``'rbatch'`` to ``'lbatch'`` mode."""
+        r""" Returns ``self, nbatch`` converted from ``'rbatch'`` to ``'lbatch'`` mode."""
         ans = _gvar.BufferDict() 
         nbatch = None
         for k in self:
@@ -300,7 +300,7 @@ class BufferDict(collections_MMapping):
         return ans, nbatch 
 
     def _l2rbatch(self):
-        r""" Returns ``self`` converted from ``'lbatch'`` to ``'rbatch'`` mode."""
+        r""" Returns ``self, nbatch`` converted from ``'lbatch'`` to ``'rbatch'`` mode."""
         ans = _gvar.BufferDict()
         nbatch = None
         for k in self:

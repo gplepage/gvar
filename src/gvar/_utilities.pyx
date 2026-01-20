@@ -3037,7 +3037,7 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
     while an SVD decomposition is used with ``svdcut``.
 
     Args:
-        g: An array of |GVar|\s or a dicitionary whose values are
+        g: An array of |GVar|\s or a dictionary whose values are
             |GVar|\s and/or arrays of |GVar|\s.
         eps (float): The diagonal elements of the ``g`` covariance matrix
             are multiplied by ``1 + eps*norm`` where ``norm`` is the norm of
@@ -3230,7 +3230,23 @@ def regulate(g, eps=None, svdcut=None, wgts=False, noise=False):
             return g, i_wgts, i_invwgts
         else:
             return g, i_wgts
- 
+
+class _svdarray(numpy.ndarray):
+    " Used by svd so can add attributes to arrays "
+    def __new__(cls, inputarray):
+        obj = numpy.array(inputarray).view(cls)
+        return obj
+
+    def _remove_gvars(self, gvlist):
+        tmp = copy.copy(self)
+        tmp.flat[:] = _gvar.remove_gvars(numpy.asarray(tmp), gvlist)
+        return tmp
+
+    def _distribute_gvars(self, gvlist):
+        tmp = copy.copy(self)
+        tmp.flat[:] = _gvar.distribute_gvars(numpy.asarray(tmp.flat[:]), gvlist)
+        return tmp
+
 def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     r""" Apply SVD cuts to collection of |GVar|\s in ``g``.
 
@@ -3318,7 +3334,7 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
     inverse of the covariance matrix.
 
     Args:
-        g: An array of |GVar|\s or a dicitionary whose values are
+        g: An array of |GVar|\s or a dictionary whose values are
             |GVar|\s and/or arrays of |GVar|\s.
         svdcut (None or float): If positive, replace eigenvalues ``eig``
             of the correlation matrix with ``max(eig, svdcut * max_eig)``
@@ -3402,11 +3418,7 @@ def svd(g, svdcut=1e-12, wgts=False, noise=False, add_svdnoise=None):
         g = _gvar.BufferDict(g)
     else:
         is_dict = False
-        class svdarray(numpy.ndarray):
-            def __new__(cls, inputarray):
-                obj = numpy.array(g).view(cls)
-                return obj
-        g = svdarray(g)
+        g = _svdarray(g)  
     idx_bcov = evalcov_blocks(g.flat, compress=True)
     g.logdet = 0.0
     correction = numpy.zeros(len(g.flat), object)
