@@ -1,4 +1,4 @@
-Version 13.1.8 2026-01-??
+Version 13.1.8 2026-01-21
 ==========================
 - Fixes problem in gvar.svd that arose when trying 
   to gv.dump/load results in Python 3.14.
