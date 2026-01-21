@@ -10,7 +10,7 @@ jobs:
       # matrix:
       #   os:  [ubuntu-20.04]
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-2022]
         # os: [ubuntu-latest, macos13, macos-latest]
         # see https://github.com/actions/runner-images
     steps:
