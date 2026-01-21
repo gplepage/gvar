@@ -20,7 +20,7 @@ jobs:
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3.1
         env:
-          CIBW_SKIP: pp*  cp39-* 
+          CIBW_SKIP:  cp39-* 
           CIBW_ARCHS_MACOS: x86_64 arm64
           CIBW_ARCHS_WINDOWS: auto64
           CIBW_ARCHS_LINUX: auto64
