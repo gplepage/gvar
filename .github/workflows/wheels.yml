@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         # os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-15-intel, macos-latest]
-        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-15-intel, macos-latest]
+        os: [mmacos-latest]
 
     steps:
       - uses: actions/checkout@v5
@@ -27,7 +27,7 @@ jobs:
         #   CIBW_SOME_OPTION: value
         #   ...
         env:
-          CIBW_SKIP: pp* cp36-* cp37-* cp38-* cp39-* 
+          CIBW_SKIP: cp38-* cp39-* 
           CIBW_TEST_REQUIRES: pytest
           CIBW_TEST_COMMAND: "pytest {project}/tests"    
           CIBW_TEST_SKIP: "*_arm64 *_universal2:arm64"
