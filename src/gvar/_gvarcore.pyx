@@ -1844,11 +1844,6 @@ cpdef object wsum_der(double[:] wgt, GVar[:] glist):
             ans[g.d.v[j].i] += w*g.d.v[j].v
     return ans
 
-cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
-    cdef Py_ssize_t i
-    for i in range(wgt.shape[0]):
-        out[i] = <GVar> wsum_gvar(wgt[i], glist)
-
 cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
     r""" weighted sum of |GVar|\s """
     cdef svec wd
@@ -1881,3 +1876,9 @@ cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
         wd.v[i].i = idx[i]
         wd.v[i].v = der[idx[i]]
     return GVar(wv, wd, cov)
+
+cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
+    cdef Py_ssize_t i
+    for i in range(wgt.shape[0]):
+        out[i] = wsum_gvar(wgt[i], glist)
+
