@@ -1880,5 +1880,5 @@ cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
 cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
     cdef Py_ssize_t i
     for i in range(wgt.shape[0]):
-        out[i] = wsum_gvar(wgt[i], glist)
+        out[i] = <GVar> wsum_gvar(wgt[i], glist)
 
