@@ -343,7 +343,7 @@ cdef class smat:
                 self._add_memory()
             new_svec = svec(1)
             new_svec._assign(v, idx)
-            self.row[self.nrow] = new_svec
+            self.row[self.nrow] = <object> new_svec
             self.block[self.nrow] = self.next_block
             self.next_block += 1
             self.nrow += 1
@@ -376,7 +376,7 @@ cdef class smat:
                 self._add_memory()
             new_svec = svec(n_nonzero) # nm)
             new_svec._assign(v[:n_nonzero], idx[:n_nonzero])
-            self.row[self.nrow] = new_svec
+            self.row[self.nrow] = <object> new_svec
             self.block[self.nrow] = self.next_block
             self.nrow += 1
         self.next_block += 1
@@ -413,7 +413,7 @@ cdef class smat:
                 newx.v[k].i = yrow[j]
                 newx.v[k].v = xym[i, j]
                 k += 1
-            self.row[xrow[i]] = newx
+            self.row[xrow[i]] = <object> newx
         for i in range(len(yrow)):
             y = self.row[yrow[i]]
             newy = svec(y.size + len(xrow))
@@ -426,7 +426,7 @@ cdef class smat:
                 newy.v[k].i = y.v[j].i
                 newy.v[k].v = y.v[j].v
                 k += 1
-            self.row[yrow[i]] = newy
+            self.row[yrow[i]] = <object> newy
             
 
 
