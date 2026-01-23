@@ -868,12 +868,12 @@ def var(g):
     for a in range(ng):
         if isinstance(g[a], GVar):
             ga = <GVar> g[a]
-            gdlist[a] = <object> ga.d 
+            gdlist[a] = <svec> ga.d 
             if cov is None:
                 cov = ga.cov
         else:
             only_gvars = False
-            gdlist[a] = <object> None
+            gdlist[a] = <svec> None
     nc = cov.nrow
 
     if ng > _gvar._CONFIG['var'] and only_gvars:
@@ -1044,8 +1044,8 @@ def evalcov(g, verify=True):
         # np_imask = numpy.asarray(imask)
         for a in range(ng):
             da = gdlist[a]
-            covd[a] = <object> cov.masked_dot(da, imask) # np_imask)
-            ans[a, a] = <object> da.dot(covd[a])
+            covd[a] = <svec> cov.masked_dot(da, imask) # np_imask)
+            ans[a, a] = da.dot(covd[a])
             for b in range(a):
                 ans[a, b] = da.dot(covd[b])
                 ans[b, a] = ans[a, b]
