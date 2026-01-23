@@ -1877,8 +1877,11 @@ cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist):
         wd.v[i].v = der[idx[i]]
     return GVar(wv, wd, cov)
 
+cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, object[:] out):
+    cdef Py_ssize_t i
+    for i in range(wgt.shape[0]):
+        out[i] = wsum_gvar(wgt[i], glist)
 
-cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
     # paste in wsum_gvar code rather than calling it because latter
     # triggered a cython bug on certain linux machines
     # Original code (which caused this problem):
@@ -1887,38 +1890,38 @@ cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out):
     # for i in range(wgt.shape[0]):
     #     out[i] = <GVar> wsum_gvar(wgt[i], glist)
     #
-    cdef Py_ssize_t iouter
-    cdef svec wd
-    cdef double wv, w
-    cdef GVar g
-    cdef smat cov
-    cdef Py_ssize_t ng, i, j, nd, size
-    cdef double[:] der
-    cdef Py_ssize_t[:] idx
-    ng = len(glist)
-    assert ng==len(wgt.shape[1]), "wgt[i] and glist have different lengths."
-    cov = glist[0].cov
-    for i in range(1, ng):
-        assert glist[i].cov is cov, "Incompatible GVars."
-    for iouter in range(wgt.shape[0]):
-        der = numpy.zeros(len(cov),float)
-        wv = 0.0
-        for i in range(ng): #w,g in zip(wgt,glist):
-            w = wgt[iouter, i]
-            g = glist[i]
-            wv += w * g.v
-            for j in range(g.d.size):
-                der[g.d.v[j].i] += w * g.d.v[j].v
-        idx = numpy.zeros(len(cov), numpy.intp) 
-        nd = 0
-        for i in range(der.shape[0]):
-            if der[i]!=0:
-                idx[nd] = i
-                nd += 1
-        wd = svec(nd)
-        for i in range(nd):
-            wd.v[i].i = idx[i]
-            wd.v[i].v = der[idx[i]]
-        out[iouter] = GVar(wv, wd, cov)
+    # cdef Py_ssize_t iouter
+    # cdef svec wd
+    # cdef double wv, w
+    # cdef GVar g
+    # cdef smat cov
+    # cdef Py_ssize_t ng, i, j, nd, size
+    # cdef double[:] der
+    # cdef Py_ssize_t[:] idx
+    # ng = len(glist)
+    # assert ng==len(wgt.shape[1]), "wgt[i] and glist have different lengths."
+    # cov = glist[0].cov
+    # for i in range(1, ng):
+    #     assert glist[i].cov is cov, "Incompatible GVars."
+    # for iouter in range(wgt.shape[0]):
+    #     der = numpy.zeros(len(cov),float)
+    #     wv = 0.0
+    #     for i in range(ng): #w,g in zip(wgt,glist):
+    #         w = wgt[iouter, i]
+    #         g = glist[i]
+    #         wv += w * g.v
+    #         for j in range(g.d.size):
+    #             der[g.d.v[j].i] += w * g.d.v[j].v
+    #     idx = numpy.zeros(len(cov), numpy.intp) 
+    #     nd = 0
+    #     for i in range(der.shape[0]):
+    #         if der[i]!=0:
+    #             idx[nd] = i
+    #             nd += 1
+    #     wd = svec(nd)
+    #     for i in range(nd):
+    #         wd.v[i].i = idx[i]
+    #         wd.v[i].v = der[idx[i]]
+    #     out[iouter] = GVar(wv, wd, cov)
        
 

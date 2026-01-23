@@ -22,6 +22,6 @@ cdef class GVar:
 
 cpdef object wsum_der(double[:] wgt, GVar[:] glist)
 
-cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, GVar[:] out)
+cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, object[:] out)
 
 cpdef GVar wsum_gvar(double[:] wgt, GVar[:] glist)
