@@ -836,7 +836,7 @@ def var(g):
     cdef svec da
     cdef smat cov
     cdef smask mask
-    cdef svec[::1] gdlist
+    cdef object[::1] gdlist
     cdef svec covd
 
     if isinstance(g, _gvar.GVar):
@@ -868,12 +868,12 @@ def var(g):
     for a in range(ng):
         if isinstance(g[a], GVar):
             ga = <GVar> g[a]
-            gdlist[a] = <svec> ga.d 
+            gdlist[a] = <object> ga.d 
             if cov is None:
                 cov = ga.cov
         else:
             only_gvars = False
-            gdlist[a] = <svec> None
+            gdlist[a] = None
     nc = cov.nrow
 
     if ng > _gvar._CONFIG['var'] and only_gvars:
@@ -882,9 +882,10 @@ def var(g):
         imask = numpy.zeros(nc, numpy.int8)
         vec_zeros = 0
         for i in range(ng):
-            da = gdlist[i]
-            if da is None:
-                continue
+            if gdlist[i] is None:
+                continue 
+            else:
+                da = <svec> gdlist[i]
             vec_zeros += da.size
             for j in range(da.size):
                 imask[da.v[j].i] = True
@@ -957,7 +958,7 @@ def evalcov(g, verify=True):
     cdef smat cov
     cdef smask mask
     cdef svec[::1] gdlist
-    cdef svec[::1] covd
+    cdef list covd = []
     if hasattr(g, "keys"):
         # convert g to list and call evalcov; repack as double dict
         if not isinstance(g,BufferDict):
@@ -1040,11 +1041,12 @@ def evalcov(g, verify=True):
         is_dense = False
     if not is_dense:
         ans = _ans = numpy.empty((ng, ng),float)
-        covd = numpy.zeros(ng, object)
+        # covd = numpy.zeros(ng, object)
         # np_imask = numpy.asarray(imask)
         for a in range(ng):
             da = gdlist[a]
-            covd[a] = <svec> cov.masked_dot(da, imask) # np_imask)
+            # covd[a] = <svec> cov.masked_dot(da, imask) # np_imask)
+            covd.append(cov.masked_dot(da, imask))   # np_imask)
             ans[a, a] = da.dot(covd[a])
             for b in range(a):
                 ans[a, b] = da.dot(covd[b])
