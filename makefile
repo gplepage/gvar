@@ -43,7 +43,7 @@ update :
 doc-html doc:
 	make doc/html/index.html
 
-doc/html/index.html : $(SRCFILES) $(DOCFILES) pyproject.toml
+doc/html/index.html : $(SRCFILES) $(DOCFILES)
 	sphinx-build -b html doc/source doc/html
 
 clear-doc:
