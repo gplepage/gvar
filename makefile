@@ -54,8 +54,8 @@ doc-zip doc.zip:
 
 
 sdist: $(SRCFILES) # source distribution
-	$(PYTHON) setup.py sdist
-	# $(PYTHON) -m build --sdist
+	$(PYTHON) -m build --sdist
+# 	$(PYTHON) setup.py sdist
 
 .PHONY: tests
 
