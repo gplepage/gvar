@@ -1,3 +1,7 @@
+Version 13.1.9 2026-01-24
+==========================
+Fixes os-compatibility issues with previous version.
+
 Version 13.1.8 2026-01-21
 ==========================
 - Fixes problem in gvar.svd that arose when trying 

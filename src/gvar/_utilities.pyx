@@ -831,7 +831,6 @@ def var(g):
     cdef char[::1] imask
     cdef double[:, ::1] mcov 
     cdef double[:, ::1] mcov_gd
-    # cdef numpy.ndarray[numpy.float_t, ndim=1] varlist # not necessary
     cdef char is_dense, ib, only_gvars
     cdef GVar ga
     cdef svec da
