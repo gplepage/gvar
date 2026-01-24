@@ -34,6 +34,7 @@ from math import lgamma
 import sys
 cimport cython
 
+
 # try:
 #     # needed for oldload (optionally)
 #     import yaml
@@ -868,7 +869,7 @@ def var(g):
     for a in range(ng):
         if isinstance(g[a], GVar):
             ga = <GVar> g[a]
-            gdlist[a] = <object> ga.d 
+            gdlist[a] = ga.d 
             if cov is None:
                 cov = ga.cov
         else:
@@ -914,9 +915,9 @@ def var(g):
             np_gd = _np_gd = numpy.zeros((ng, mask.len), dtype=float)
             mcov = _mcov = cov.masked_mat(mask)
             for a in range(ng):
-                da = gdlist[a]
-                if da is None:
+                if gdlist[a] is None:
                     continue
+                da = <svec> gdlist[a]
                 da.masked_vec(mask, out=np_gd[a])
             mcov_gd = _mcov.dot(np_gd.T)
             for a in range(ng):
@@ -927,10 +928,9 @@ def var(g):
         is_dense = False
     if not is_dense:
         for a in range(ng):
-            da = gdlist[a]
-            if da is None:
+            if gdlist[a] is None:
                 continue
-            ans[a] = cov.expval(da)
+            ans[a] = cov.expval(<svec> gdlist[a])
     return _ans.reshape(g_shape)
 
 @cython.boundscheck(False) # turn off bounds-checking
@@ -958,7 +958,7 @@ def evalcov(g, verify=True):
     cdef smat cov
     cdef smask mask
     cdef svec[::1] gdlist
-    cdef list covd = []
+    cdef object[::1] covd
     if hasattr(g, "keys"):
         # convert g to list and call evalcov; repack as double dict
         if not isinstance(g,BufferDict):
@@ -1041,15 +1041,13 @@ def evalcov(g, verify=True):
         is_dense = False
     if not is_dense:
         ans = _ans = numpy.empty((ng, ng),float)
-        # covd = numpy.zeros(ng, object)
-        # np_imask = numpy.asarray(imask)
+        covd = numpy.zeros(ng, object)
         for a in range(ng):
             da = gdlist[a]
-            # covd[a] = <svec> cov.masked_dot(da, imask) # np_imask)
-            covd.append(cov.masked_dot(da, imask))   # np_imask)
-            ans[a, a] = da.dot(covd[a])
+            covd[a] = cov.masked_dot(da, imask) 
+            ans[a, a] = da.dot(<svec> covd[a])
             for b in range(a):
-                ans[a, b] = da.dot(covd[b])
+                ans[a, b] = da.dot(<svec> covd[b])
                 ans[b, a] = ans[a, b]
     return _ans.reshape(2*g_shape) if g_shape != () else _ans.reshape(1,1)
 

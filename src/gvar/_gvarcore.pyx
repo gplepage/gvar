@@ -1882,13 +1882,6 @@ cpdef msum_gvar(double[:, :] wgt, GVar[:] glist, object[:] out):
     for i in range(wgt.shape[0]):
         out[i] = wsum_gvar(wgt[i], glist)
 
-    # paste in wsum_gvar code rather than calling it because latter
-    # triggered a cython bug on certain linux machines
-    # Original code (which caused this problem):
-    #
-    # cdef Py_ssize_t i
-    # for i in range(wgt.shape[0]):
-    #     out[i] = <GVar> wsum_gvar(wgt[i], glist)
     #
     # cdef Py_ssize_t iouter
     # cdef svec wd
