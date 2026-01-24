@@ -9,7 +9,8 @@ jobs:
     strategy:
       matrix:
         # os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-15-intel, macos-latest]
-        os: [ubuntu-latest, ubuntu-24.04-arm, macos-15-intel, macos-latest]
+        # os: [ubuntu-latest, ubuntu-24.04-arm, macos-15-intel, macos-latest]
+        os: [windows-latest, windows-11-arm]
         # os: [macos-latest]
         # os: [windows-latest]
         # os: [windows-2022]
