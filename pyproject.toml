@@ -1,9 +1,53 @@
 [build-system]
 requires = [
-    "setuptools>=39.2.0", 
+    "setuptools>=80.10.1", 
     "wheel",
     "numpy>=2.0",
     "Cython>=3.0"
     ]
 build-backend = 'setuptools.build_meta'
 
+[project]
+name = "gvar"
+dynamic = ["version"]
+authors = [
+  { name="G. Peter Lepage", email="g.p.lepage@cornell.edu" },
+]
+description = "Utilities for manipulating correlated Gaussian random variables."
+readme = "README.rst"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "GPL-3.0+"
+license-files = ["LICENSE.txt"]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.11"
+]
+
+[project.urls]
+Homepage = "https://github.com/gplepage/gvar"
+Issues = "https://github.com/gplepage/gvar/issues"
+
+## continue using setup.py until ext-modules is stable
+#
+#[tool.setuptools]
+#ext-modules = [
+#   {name="gvar._gvarcore", sources=["src/gvar/_gvarcore.pyx"]},
+#   {name= "gvar._svec_smat", sources=["src/gvar/_svec_smat.pyx"]},
+#   {name="gvar._utilities", sources=["src/gvar/_utilities.pyx"]},
+#   {name="gvar.dataset", sources=["src/gvar/dataset.pyx"]},
+#   {name="gvar._bufferdict", sources=["src/gvar/_bufferdict.pyx"]},
+#   # You can also specify other options like include_dirs, language, etc.
+#]
+
+[tool.setuptools.dynamic]
+version = {attr = "gvar.__version__"} 
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+gvar = ["*.pxd"]

@@ -120,6 +120,8 @@ tools for use with |GVar|\s (or ``float``\s):
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+__version__='13.1.9'
+
 import collections
 import sys 
 import numpy
@@ -143,25 +145,6 @@ from ._utilities import dumps, loads, dump, load, gdumps, gdump, gloads, gload #
 from ._utilities import disassemble, reassemble, fmt_values
 from ._utilities import fmt_errorbudget, bootstrap_iter, sample, gvar_from_sample, raniter 
 from ._utilities import valder, gammaQ, gammaP, regulate, svd, erf, SVD, GVarRef
-
-
-from ._version import __version__
-
-# import sys 
-# if sys.version_info >= (3,8):
-#     def __getattr__(name):
-#         from importlib import metadata
-#         if name == '__version__':
-#             return metadata.version('gvar')
-#         raise AttributeError(name)
-# else:
-#     try:
-#         import importlib_metadata as metadata
-#         __version__ = metadata.version('gvar')
-#     except:
-#         # less precise default if fail
-#         __version__ = '>=12.1'
-
 
 from gvar import dataset
 from gvar import ode
