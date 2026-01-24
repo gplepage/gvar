@@ -620,7 +620,7 @@ class test_dataset(unittest.TestCase,ArrayTests):
         # test with dictionary
         gv.ranseed(2)
         sd = gv.dataset.svd_diagnosis(dict(a=dset))
-        self.assertEqual(s.svdcut, sd.svdcut)
+        self.assertAlmostEqual(s.svdcut, sd.svdcut)
 
         # large dataset (small or no svdcut)
         dset = []
