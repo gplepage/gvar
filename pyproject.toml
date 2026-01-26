@@ -24,7 +24,7 @@ license = "GPL-3.0+"
 license-files = ["LICENSE.txt"]
 dependencies = [
     "numpy>=1.24",
-    "scipy>=1.17"
+    "scipy>=1.11"
 ]
 
 [project.urls]
