@@ -1,3 +1,14 @@
+Version 13.1.10 2606-09-29(?)
+=============================
+- Replaces scipy's pade (which is disappearing) 
+  by mpmath's pade in gvar.pade.
+
+- Fixes new bug in the GVar formatter that affected 
+  default format for certain values of GVar.
+
+- Change to gvar.dataset.svd_diagnosis() when 
+  both process_dataset and models specified.
+
 Version 13.1.9 2026-01-24
 ==========================
 Fixes os-compatibility issues with previous version.

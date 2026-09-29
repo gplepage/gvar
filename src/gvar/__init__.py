@@ -120,7 +120,7 @@ tools for use with |GVar|\s (or ``float``\s):
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-__version__='13.1.9'
+__version__='13.1.10'
 
 import collections
 import sys 

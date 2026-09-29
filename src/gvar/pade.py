@@ -15,8 +15,6 @@
 import sys
 import numpy 
 import gvar as _gvar 
-# import scipy.linalg 
-# from scipy.interpolate import pade as _scipy_pade
 
 class Pade(object):
     r""" Pade approximant to ``sum_i f[i] x**i`` for ``GVar``\s.
@@ -91,7 +89,7 @@ class Pade(object):
                 )
         if not numpy.any([isinstance(fi, _gvar.GVar) for fi in f]):
             if rtol is None:
-                p, q = Pade._scipy_pade(f, n)
+                p, q = Pade._mpmath_pade(f, m, n)
             else:
                 self.rtol = 1e-14
                 p, q = pade_svd(f, m, n, rtol=self.rtol)
@@ -128,7 +126,7 @@ class Pade(object):
 
         # find Pade coefficients
         if self.rtol is None:
-            p, q = Pade._scipy_pade(_gvar.mean(c), n)
+            p, q = Pade._mpmath_pade(_gvar.mean(c), m, n)
         else:
             p, q = pade_svd(_gvar.mean(c), m, n, rtol=self.rtol)
         m = len(p) - 1
@@ -151,10 +149,13 @@ class Pade(object):
         self.order = (m, n)
 
     @staticmethod
-    def _scipy_pade(c, n):
-        from scipy.interpolate import pade as _scipy_pade
-        p, q = _scipy_pade(c, n)
-        return numpy.array(p.c[::-1]), numpy.array(q.c[::-1])
+    def _mpmath_pade(c, m, n):
+        from mpmath import pade as _mpmath_pade
+        p, q = _mpmath_pade(c, m, n)
+        return numpy.array(p, float), numpy.array(q, float)
+
+
+
 
     def __call__(self, x):
         return self.num(x) / self.den(x)
@@ -232,9 +233,6 @@ def pade_svd(f, m, n, rtol=1e-14):
         raise ValueError(
             'not enough f[i]s -- need {} have {}'.format(n + m + 1, len(f))
             )
-    # if USE_SCIPY_PADE:
-    #     p, q = scipy_pade(c, n)
-    #     return numpy.array(p.c[::-1]), numpy.array(q.c[::-1])
     ts = rtol * linalg.norm(c)
     if linalg.norm(c[:m + 1]) <= rtol * linalg.norm(c):
         # return power series through order m

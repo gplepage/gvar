@@ -1003,7 +1003,9 @@ class svd_diagnosis(object):
 
         process_dataset: Function that converts datasets into averaged
             data. Function :func:`gvar.dataset.avg_data` is used if
-            set equal to ``None`` (default).
+            ``process_dataset=None`` (default). The function call is 
+            ``process_dataset(dataset)`` if parameter ``models=None``;
+            otherwise the call is ``process_dataset(dataset, models=models)``.
 
         mincut: Minimum SVD cut (default 1e-12).
 
@@ -1025,7 +1027,7 @@ class svd_diagnosis(object):
                 tset.append(d)
             dataset = tset
         if process_dataset is not None:
-            avg_data = process_dataset
+            avg_data = process_dataset if models is None else lambda dataset: process_dataset(dataset, methods=methods)
         elif models is None or models == []:
             avg_data = _gvar.dataset.avg_data
         else:

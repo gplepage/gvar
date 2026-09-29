@@ -1060,6 +1060,11 @@ class test_linalg(unittest.TestCase, ArrayTests):
         cnp, residual, rank, s = np.linalg.lstsq(gv.mean(M), gv.mean(y), rcond=None)
         np.testing.assert_allclose(cnp, gv.mean(c))
 
+def ref_pade(c, m, n):
+    import mpmath 
+    p, q = mpmath.pade(c, m, n)
+    return np.array(p, float), np.array(q, float)
+
 class test_pade(unittest.TestCase,ArrayTests):
     def setUp(self): pass
 
@@ -1074,8 +1079,8 @@ class test_pade(unittest.TestCase,ArrayTests):
         # Taylor expansion for exp(x)
         e_exp = [1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24.0, 1.0/120.0]
 
-        # test against scipy
-        p0, q0 = Pade._scipy_pade(e_exp, 2)
+        # test against reference pade
+        p0, q0 = ref_pade(e_exp, 3, 2)
         p, q = pade_svd(e_exp, 3, 2)
         assert numpy.allclose(p, p0)
         assert numpy.allclose(q, q0)
@@ -1088,7 +1093,7 @@ class test_pade(unittest.TestCase,ArrayTests):
             ))
 
         # now with 10% errors --- automatically reduces to (2,1)
-        p0, q0 = Pade._scipy_pade(e_exp[:4], 1)
+        p0, q0 = ref_pade(e_exp[:4], 2, 1)
         p, q = pade_svd(e_exp, 3, 2, rtol=0.1)
         assert numpy.allclose(p, p0)
         assert numpy.allclose(q, q0)
@@ -1131,17 +1136,16 @@ class test_pade(unittest.TestCase,ArrayTests):
     def test_pade_gvar(self):
         " pade_gvar(tayl, m, n) and Pade(tayl, order=(m,n))"
         optprint('\n=========== Test pade_gvar')
-        e_exp = [1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24.0, 1.0/120.0, 1.0/720.]
-        def _scipy_pade(m, n):
-            return Pade._scipy_pade(e_exp[:m + n + 1], n)
+        e_exp_ref = [1.0, 1.0, 1.0/2.0, 1.0/6.0, 1.0/24.0, 1.0/120.0, 1.0/720.]
+        e_exp = np.array(e_exp_ref)
         def print_result(p, q):
             optprint('num =', p)
             optprint('den =', q)
         def test_result(p, q, e_exp):
             m = len(p) - 1
             n = len(q) - 1
-            # test against scipy
-            p0, q0 = _scipy_pade(m, n)
+            # test against reference pade
+            p0, q0 = ref_pade(e_exp_ref, m, n)
             try:
                 assert numpy.allclose(mean(p), p0)
             except:
@@ -1154,7 +1158,6 @@ class test_pade(unittest.TestCase,ArrayTests):
             assert numpy.allclose(mean(ratio), 1.)
             assert numpy.allclose(sdev(ratio), 0.0)
 
-        # print('scipy', _scipy_pade(1,1), pade_svd(e_exp, 3,2, rtol=0.01))
         # 1% noise --- automatically reduces to (2,1)
         e_exp_noise = [x * gvar('1.0(1)') for x in e_exp]
         p, q = pade_gvar(e_exp_noise, 3, 2)
