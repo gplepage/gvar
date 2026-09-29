@@ -3,14 +3,14 @@
 <html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Case Study: Creating an Integrator &#8212; gvar 13.1.9 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=310c80ee" />
-    <script src="_static/documentation_options.js?v=19863220"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>Case Study: Creating an Integrator &#8212; gvar 13.1.10 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=0c472235" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
+    <script src="_static/documentation_options.js?v=d0d56005"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Case Study: Correlations and SVD Cuts" href="case-svdcut.html" />
@@ -22,7 +22,7 @@
 
   </head><body>
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="case-svdcut.html" title="Case Study: Correlations and SVD Cuts"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Creating an Integrator</a></li> 
       </ul>
     </div>  
@@ -59,10 +59,10 @@ as</p>
 <p>One approach is to implement an integration function directly in
 Python, as then it is likely to work just as well for <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s as
 for floats. For example, the code</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">trap_integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">trap_integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
 <span class="gp">... </span><span class="w">    </span><span class="sd">&quot;&quot;&quot; Estimate integral of f(x) on interval=(a,b) using the Trapezoidal Rule. &quot;&quot;&quot;</span>
 <span class="gp">... </span>    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">interval</span>
 <span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -74,7 +74,7 @@ for floats. For example, the code</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.11</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">D</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">D</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
@@ -90,7 +90,7 @@ using the Trapezoidal Rule.</p>
 estimates of the integral. A general purpose integrators needs a
 much more robust algorithm. For example, <code class="docutils literal notranslate"><span class="pre">trap_integral</span></code> fails badly when
 applied to a much more singular function:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Itrap_g</span> <span class="o">=</span> <span class="n">trap_integral</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -132,9 +132,9 @@ routines:</p>
 </div><p>In the following code we use the integrators <code class="docutils literal notranslate"><span class="pre">quad(...)</span></code> and <code class="docutils literal notranslate"><span class="pre">quad_vec(...)</span></code> from
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.integrate</span></code> to evaluate the integrals
 needed to calculate <code class="docutils literal notranslate"><span class="pre">I</span></code> and elements of <code class="docutils literal notranslate"><span class="pre">dI_dp</span></code>, respectively:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.integrate</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scipy.integrate</span>
 
-<span class="k">def</span> <span class="nf">integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">integral</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; GVar-compatible integrator &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">interval</span>
 
@@ -152,7 +152,7 @@ needed to calculate <code class="docutils literal notranslate"><span class="pre"
 
     <span class="c1"># evaluate integral I of f(x).mean</span>
     <span class="n">sum_fx</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">def</span> <span class="nf">fmean</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fmean</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
         <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
             <span class="n">sum_fx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">fx</span>
@@ -167,7 +167,7 @@ needed to calculate <code class="docutils literal notranslate"><span class="pre"
     <span class="c1"># evaluate dI/dpf</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># vector-valued integrand returns df(x)/dpf</span>
-        <span class="k">def</span> <span class="nf">df_dpf</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">df_dpf</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
             <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="n">gv</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">fx</span><span class="o">.</span><span class="n">deriv</span><span class="p">(</span><span class="n">pf</span><span class="p">)</span>
@@ -241,7 +241,7 @@ because <code class="docutils literal notranslate"><span class="pre">n</span></c
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -280,7 +280,7 @@ because <code class="docutils literal notranslate"><span class="pre">n</span></c
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -292,13 +292,13 @@ because <code class="docutils literal notranslate"><span class="pre">n</span></c
         <li class="right" >
           <a href="case-svdcut.html" title="Case Study: Correlations and SVD Cuts"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Creating an Integrator</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>

@@ -3,14 +3,14 @@
 <html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Overview and Tutorial &#8212; gvar 13.1.9 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=310c80ee" />
-    <script src="_static/documentation_options.js?v=19863220"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>Overview and Tutorial &#8212; gvar 13.1.10 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=0c472235" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
+    <script src="_static/documentation_options.js?v=d0d56005"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="gvar - Gaussian Random Variables" href="gvar.html" />
@@ -23,7 +23,7 @@
 
   </head><body>
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>  
@@ -64,7 +64,7 @@ uncertain: for example, the mass, 125.7±0.4 GeV, of the recently
 discovered Higgs boson from particle physics. The following code illustrates a
 (very) simple application of <a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a>;  it calculates the Higgs boson’s
 energy when it carries momentum 50±0.15 GeV.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">125.7</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>             <span class="c1"># Higgs boson mass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>               <span class="c1"># Higgs boson momentum</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span>  <span class="n">m</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>       <span class="c1"># Higgs boson energy</span>
@@ -161,7 +161,7 @@ Monte Carlo integration).</p>
 <p><em>About Printing:</em> The examples in this tutorial use the <code class="docutils literal notranslate"><span class="pre">print</span></code> function
 as it is used in Python 3. Drop the outermost parenthesis in each <code class="docutils literal notranslate"><span class="pre">print</span></code>
 statement if using Python 2; or add</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_function</span>
 </pre></div>
 </div>
 <p>at the start of your file.</p>
@@ -219,7 +219,7 @@ created from its mean <code class="docutils literal notranslate"><span class="pr
 </div>
 <p>This function can also be used to convert strings like <code class="docutils literal notranslate"><span class="pre">&quot;-72.374(22)&quot;</span></code>
 or <code class="docutils literal notranslate"><span class="pre">&quot;511.2</span> <span class="pre">±</span> <span class="pre">0.3&quot;</span></code> into <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">gvar</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="mf">3.1415</span><span class="p">,</span> <span class="mf">0.0002</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="go">3.14150(20)</span>
@@ -370,10 +370,10 @@ a <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><co
 derivative. For example, the following code defines a new version of the
 standard Python error function that accepts either floats or <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s
 as its argument:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">gvar</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span>
 
-<span class="k">def</span> <span class="nf">erf</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">erf</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gvar</span><span class="o">.</span><span class="n">GVar</span><span class="p">):</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">erf</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span>
         <span class="n">dfdx</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
@@ -523,7 +523,7 @@ mean is included in the formatted string:</p>
 <p><a class="reference internal" href="gvar.html#gvar.GVar.set" title="gvar.GVar.set"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.GVar.set()</span></code></a> can also be used to replace the formatter
 with a different function. The following example switches to a format
 that would work in a LaTeX document:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">new_formatter</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">new_formatter</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="sa">r</span><span class="s1">&#39;${g.mean:</span><span class="si">{spec}</span><span class="s1">}\,\pm\,{g.sdev:</span><span class="si">{spec}</span><span class="s1">}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">g</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">old_settings</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">GVar</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">formatter</span><span class="o">=</span><span class="n">new_formatter</span><span class="p">)</span>
@@ -563,7 +563,7 @@ interest in <code class="docutils literal notranslate"><span class="pre">g</span
 that preserves correlations.
 So if <code class="docutils literal notranslate"><span class="pre">g</span></code> is a
 <a class="reference internal" href="gvar.html#gvar.BufferDict" title="gvar.BufferDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.BufferDict</span></code></a> containing <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s (and/or arrays of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s),</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;gfile.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -580,8 +580,8 @@ are unimportant. If <code class="xref py py-mod docutils literal notranslate"><s
 can sometimes be used to make this possible. Consider, for example, a class <code class="docutils literal notranslate"><span class="pre">A</span></code> that stores
 <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>. We might be able to modify it so that <code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code> uses the
 <a class="reference internal" href="gvar.html#module-gvar" title="gvar: Correlated Gaussian random variables."><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar</span></code></a> routines: for example, the code</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -589,7 +589,7 @@ can sometimes be used to make this possible. Consider, for example, a class <cod
             <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
             <span class="o">...</span>
 
-    <span class="k">def</span> <span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="p">(</span><span class="n">gv</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="o">...</span>
@@ -616,11 +616,11 @@ this:</p>
 <li><p>it estimates the mean and standard deviation of this distribution from the samples.</p></li>
 </ol>
 <p>The sampling in step #1 is done using <a class="reference internal" href="gvar.html#gvar.sample" title="gvar.sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.sample()</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">p</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">([</span><span class="s1">&#39;0.1(4)&#39;</span><span class="p">,</span> <span class="s1">&#39;0.2(5)&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Gaussian approx.: </span><span class="si">{</span><span class="n">f</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
@@ -697,7 +697,8 @@ from the samples, again adding to the code above:</p>
 </pre></div>
 </div>
 <p>This generates the following figure:</p>
-<a class="reference internal image-reference" href="_images/histogram.png"><img alt="_images/histogram.png" src="_images/histogram.png" style="width: 75%;" /></a>
+<a class="reference internal image-reference" href="_images/histogram.png"><img alt="_images/histogram.png" src="_images/histogram.png" style="width: 75%;" />
+</a>
 <p>It shows the actual probability associated with each <code class="docutils literal notranslate"><span class="pre">f(p)</span></code> bin (gray bins),
 together with the
 shape (red dashed line) expected from the Gaussian approximation (0.020(94)).
@@ -731,7 +732,7 @@ drawn from the Gaussian 0±1, while the values of <code class="docutils literal 
 the interval between 2 and 3. Method <a class="reference internal" href="gvar.html#gvar.BufferDict.uniform" title="gvar.BufferDict.uniform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gvar.BufferDict.uniform()</span></code></a> defines the
 function <code class="docutils literal notranslate"><span class="pre">f(y)</span></code> that connects the Gaussian and uniform distributions. The plot produced
 by the code</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bs</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">nbatch</span><span class="o">=</span><span class="mi">100_000</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">counts</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">bs</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">stairs</span><span class="p">(</span><span class="n">counts</span> <span class="o">/</span> <span class="mi">100_000</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ec</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
@@ -739,7 +740,8 @@ by the code</p>
 </pre></div>
 </div>
 <p>shows small statistical fluctuations around a uniform probability distribution distribution:</p>
-<a class="reference internal image-reference" href="_images/unif-histogram.png"><img alt="_images/unif-histogram.png" src="_images/unif-histogram.png" style="width: 75%;" /></a>
+<a class="reference internal image-reference" href="_images/unif-histogram.png"><img alt="_images/unif-histogram.png" src="_images/unif-histogram.png" style="width: 75%;" />
+</a>
 <p>Note finally that <em>bootstrap</em> copies of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a>s are easily created. A
 bootstrap copy of <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">±</span> <span class="pre">dx</span></code> is another <a class="reference internal" href="gvar.html#gvar.GVar" title="gvar.GVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.GVar</span></code></a> with the same width but
 where the mean value is replaced by a random number drawn from the original
@@ -774,7 +776,7 @@ simulations, as discussed in <a class="reference internal" href="#gvar-random-nu
 <p>Another potential issue is roundoff error, which can become problematic if
 there is a wide range of standard deviations among correlated modes. For
 example, the following code works as expected:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar</span> <span class="kn">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gvar</span><span class="w"> </span><span class="kn">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tiny</span> <span class="o">=</span> <span class="mf">1e-4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">da</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="n">tiny</span><span class="p">,</span> <span class="n">tiny</span><span class="p">)</span>
@@ -784,7 +786,7 @@ example, the following code works as expected:</p>
 </pre></div>
 </div>
 <p>Reducing <code class="docutils literal notranslate"><span class="pre">tiny</span></code>, however, leads to problems:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">gvar</span> <span class="kn">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">gvar</span><span class="w"> </span><span class="kn">import</span> <span class="n">gvar</span><span class="p">,</span> <span class="n">evalcov</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tiny</span> <span class="o">=</span> <span class="mf">1e-8</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">da</span> <span class="o">=</span> <span class="n">gvar</span><span class="p">(</span><span class="n">tiny</span><span class="p">,</span> <span class="n">tiny</span><span class="p">)</span>
@@ -810,7 +812,7 @@ separate the primary variables into groups that are never mixed in
 calculations and to use different <a class="reference internal" href="gvar.html#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a>s when generating the
 variables in different groups. New versions of <a class="reference internal" href="gvar.html#gvar.gvar" title="gvar.gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.gvar()</span></code></a> are
 obtained using <a class="reference internal" href="gvar.html#gvar.switch_gvar" title="gvar.switch_gvar"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.switch_gvar()</span></code></a>: for example,</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span>
 <span class="o">...</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">gvar</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
@@ -844,7 +846,7 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -896,7 +898,7 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -911,13 +913,13 @@ be used to create new versions of <a class="reference internal" href="gvar.html#
         <li class="right" >
           <a href="index.html" title="gvar Documentation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Overview and Tutorial</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>

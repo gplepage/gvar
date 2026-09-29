@@ -3,14 +3,14 @@
 <html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 13.1.9 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=310c80ee" />
-    <script src="_static/documentation_options.js?v=19863220"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>Case Study: Correlations and SVD Cuts &#8212; gvar 13.1.10 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=0c472235" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
+    <script src="_static/documentation_options.js?v=d0d56005"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Case Study: Creating an Integrator" href="case-integral.html" />
@@ -23,7 +23,7 @@
 
   </head><body>
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Numerical Analysis — Pendulum Clock"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Correlations and SVD Cuts</a></li> 
       </ul>
     </div>  
@@ -63,8 +63,8 @@ quantity</p>
 <p>for <code class="docutils literal notranslate"><span class="pre">x=[1,2...10]</span></code>. The
 measurements are noisy so we average 13 sets <code class="docutils literal notranslate"><span class="pre">y_sample[j]</span></code>
 of independent measurements:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gv</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="mf">4.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="mf">7.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span> <span class="mf">9.</span><span class="p">,</span> <span class="mf">10.</span><span class="p">])</span>
 <span class="n">y_samples</span> <span class="o">=</span> <span class="p">[</span>
@@ -100,9 +100,9 @@ of independent measurements:</p>
 </pre></div>
 </div>
 <p>To extract a slope we fit these data using the <code class="xref py py-mod docutils literal notranslate"><span class="pre">lsqfit</span></code> module:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">lsqfit</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">lsqfit</span>
 
-<span class="k">def</span> <span class="nf">fcn</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fcn</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;y0&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
 
 <span class="n">prior</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">gvar</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">y0</span><span class="o">=</span><span class="s1">&#39;0(5)&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="s1">&#39;0(5)&#39;</span><span class="p">))</span>
@@ -171,7 +171,8 @@ Adding the code</p>
 </div>
 <p>displays a plot showing the ratio of the bootstrap estimate for each
 eigenvalue divided by the real eigenvalue:</p>
-<a class="reference internal image-reference" href="_images/svdcut.png"><img alt="_images/svdcut.png" src="_images/svdcut.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="_images/svdcut.png"><img alt="_images/svdcut.png" src="_images/svdcut.png" style="width: 80%;" />
+</a>
 <p>The bootstrap tests the stability of eigenvalues with limited sample sizes.
 Bootstrap estimates that are significantly lower than the real values
 indicate eigenvalues that are likely unreliable. Here
@@ -240,7 +241,7 @@ be essential for a usable correlation matrix.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -285,7 +286,7 @@ be essential for a usable correlation matrix.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -300,13 +301,13 @@ be essential for a usable correlation matrix.</p>
         <li class="right" >
           <a href="case-pendulum.html" title="Case Study: Numerical Analysis — Pendulum Clock"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Case Study: Correlations and SVD Cuts</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>

@@ -3,14 +3,14 @@
 <html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>gvar.dataset - Random Data Sets &#8212; gvar 13.1.9 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4848ba22" />
-    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=310c80ee" />
-    <script src="_static/documentation_options.js?v=19863220"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>gvar.dataset - Random Data Sets &#8212; gvar 13.1.10 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=0c472235" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css?v=424f8d56" />
+    <script src="_static/documentation_options.js?v=d0d56005"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Numerical Analysis Modules in gvar" href="gvar_other.html" />
@@ -23,7 +23,7 @@
 
   </head><body>
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>  
@@ -151,7 +151,7 @@ using <code class="docutils literal notranslate"><span class="pre">yaml</span></
 </pre></div>
 </div>
 <p>and could be read into a <a class="reference internal" href="#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.Dataset</span></code></a> using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">yaml</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">()</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;datafile&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dfile</span><span class="p">:</span>
@@ -392,7 +392,7 @@ maximum if <code class="docutils literal notranslate"><span class="pre">n</span>
 multidimensional distributions:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gvar.dataset.Dataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.Dataset" title="Link to this definition">¶</a></dt>
 <dd><p>Dictionary for collecting random data.</p>
 <p>A <a class="reference internal" href="#gvar.dataset.Dataset" title="gvar.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.Dataset</span></code></a> is an ordered dictionary whose values
 represent collections of random samples. Each value is  a <code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code>
@@ -487,7 +487,7 @@ equivalent to the text file above would contain two groups,
 one with key <code class="docutils literal notranslate"><span class="pre">'s'</span></code> that is a one-dimensional array with shape (4,),
 and another with key <code class="docutils literal notranslate"><span class="pre">'v'</span></code> that is a two-dimensional array
 with shape (4, 2):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">h5py</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;datafile.h5&#39;</span><span class="p">)[</span><span class="s1">&#39;/mcdata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 <span class="go">&lt;HDF5 dataset &quot;s&quot;: shape (4,), type &quot;&lt;f8&quot;&gt;</span>
@@ -694,7 +694,7 @@ shape).</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gvar.dataset.svd_diagnosis">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">svd_diagnosis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbstrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mincut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.svd_diagnosis" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">gvar.dataset.</span></span><span class="sig-name descname"><span class="pre">svd_diagnosis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbstrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mincut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gvar.dataset.svd_diagnosis" title="Link to this definition">¶</a></dt>
 <dd><p>Diagnose the need for an SVD cut.</p>
 <p><a class="reference internal" href="#gvar.dataset.svd_diagnosis" title="gvar.dataset.svd_diagnosis"><code class="xref py py-class docutils literal notranslate"><span class="pre">gvar.dataset.svd_diagnosis</span></code></a> bootstraps the spectrum of
 the correlation matrix for the data in <code class="docutils literal notranslate"><span class="pre">dataset</span></code> to determine
@@ -711,7 +711,7 @@ larger than the number of random variables being analyzed in
 order to get good estimates of the correlations between these
 variables.</p>
 <p>Typical usage is</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gvar</span> <span class="k">as</span> <span class="nn">gv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gvar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gv</span>
 
 <span class="n">s</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">svd_diagnosis</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 <span class="n">avgdata</span> <span class="o">=</span> <span class="n">gv</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">avgdata</span><span class="p">,</span> <span class="n">svdcut</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">svdcut</span><span class="p">)</span>
@@ -743,7 +743,9 @@ for use with a multi-fitter using keyword <code class="docutils literal notransl
 <code class="docutils literal notranslate"><span class="pre">data</span></code>. Ignored if keyword <code class="docutils literal notranslate"><span class="pre">process_datasets</span></code> is specified.</p></li>
 <li><p><strong>process_dataset</strong> – Function that converts datasets into averaged
 data. Function <a class="reference internal" href="#gvar.dataset.avg_data" title="gvar.dataset.avg_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">gvar.dataset.avg_data()</span></code></a> is used if
-set equal to <code class="docutils literal notranslate"><span class="pre">None</span></code> (default).</p></li>
+<code class="docutils literal notranslate"><span class="pre">process_dataset=None</span></code> (default). The function call is
+<code class="docutils literal notranslate"><span class="pre">process_dataset(dataset)</span></code> if parameter <code class="docutils literal notranslate"><span class="pre">models=None</span></code>;
+otherwise the call is <code class="docutils literal notranslate"><span class="pre">process_dataset(dataset,</span> <span class="pre">models=models)</span></code>.</p></li>
 <li><p><strong>mincut</strong> – Minimum SVD cut (default 1e-12).</p></li>
 </ul>
 </dd>
@@ -818,7 +820,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -892,7 +894,7 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -907,13 +909,13 @@ Uses <code class="docutils literal notranslate"><span class="pre">plot</span> <s
         <li class="right" >
           <a href="gvar.html" title="gvar - Gaussian Random Variables"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">gvar 13.1.10 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">gvar.dataset</span></code> - Random Data Sets</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2009-2023, G. P. Lepage.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>
