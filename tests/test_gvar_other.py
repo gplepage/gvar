@@ -798,7 +798,7 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
                     self.assertGreater(sum(idx), m.order)
         # begin
         c = np.arange(2 * 3 * 4, dtype=float)
-        c.shape = (2, 3, 4)
+        c = c.reshape((2, 3, 4))
 
         # check order
         m = multiseries(c.tolist(), order=3)
@@ -889,7 +889,7 @@ class test_powerseries(unittest.TestCase, PowerSeriesTests):
 
         # multivar
         c = np.arange(1 * 2 * 3, dtype=float)
-        c.shape = (1, 2, 3)
+        c = c.reshape((1, 2, 3))
         m = multiseries(c)
         x, y, z = multivar(3, order=m.order)
         newm = sum(c[ijk] * x ** ijk[0] * y ** ijk[1] * z ** ijk[2] for ijk in np.ndindex(c.shape))

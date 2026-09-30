@@ -236,7 +236,7 @@ def avg_data(
         # calculate covariance
         dataset_shape = dataset.shape 
         data_shape = dataset.shape[1:]
-        dataset.shape = (dataset.shape[0], -1)
+        dataset = dataset.reshape((dataset.shape[0], -1))
         Neff = dataset.shape[0] # if not unbias else (dataset.shape[0] - 1) -- handled in cov
         if dataset.shape[0] >= 2:
             cov = numpy.cov(dataset, rowvar=False, bias=not unbias)
@@ -259,9 +259,9 @@ def avg_data(
                 cov = D[None, :] * cov * D[:, None]
         else:
             mean = dataset.mean(axis=0)
-        mean.shape = data_shape 
-        cov.shape = data_shape + data_shape
-        dataset.shape = dataset_shape
+        mean = mean.reshape(data_shape) 
+        cov = cov.reshape(data_shape + data_shape)
+        dataset = dataset.reshape(dataset_shape)
         if mean.shape == ():
             cov = cov ** 0.5
         return _gvar.gvar(mean, cov, fast=True)    

@@ -908,8 +908,8 @@ class BufferDict(collections_MMapping):
             return _gvar.gvar(0, 1)
         else:
             ans = _gvar.gvar(int(numpy.prod(shape)) * [(0, 1.)]) 
-            ans.shape = shape 
-            return ans
+            # ans.shape = shape 
+            return ans.reshape(shape)
 
 class _BDict_UDistribution(object):
     def __init__(self, umin, umax):

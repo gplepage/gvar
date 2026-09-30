@@ -1827,8 +1827,7 @@ def _gload(data):
                 g[k] = numpy.reshape(buf[sl], sh)
         return _gvar.BufferDict(g)
     else:
-        buf.shape = tuple(data['shape'])
-        return buf
+        return buf.reshape(tuple(data['shape']))
 
 def _rebuild_gvars(buf, cov, primary, derivs, fix_cov):
     " reconnect derived GVars to primary GVars; used by :func:`_gload` "

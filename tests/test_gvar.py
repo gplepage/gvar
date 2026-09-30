@@ -1272,7 +1272,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
         self.assert_arraysequal(xmean, mean(xx))
         self.assert_arraysequal(evalcov(x), evalcov(xx))
         # matrix
-        x.shape = (2, 1)
+        x = x.reshape((2, 1))
         xmean = mean(x)
         xsdev = sdev(x)
         xx = correlate(gvar(xmean, xsdev), evalcorr(x))
@@ -1431,7 +1431,7 @@ class test_gvar2(unittest.TestCase,ArrayTests):
             np.testing.assert_allclose(x_buf_cov, x_xs_buf_cov, **tol)
             # array
             x = x['a']
-            x.shape = 2, 1
+            x = x.reshape((2, 1))
             x_cov = gv.evalcov(x)
             xs = gv.sample(x, nbatch=nbatch, mode=mode)
             x_xs = gvar_from_sample(xs, mode=mode)
