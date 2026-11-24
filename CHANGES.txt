@@ -1,4 +1,4 @@
-Version 13.1.10 2606-09-29(?)
+Version 13.1.10 2606-09-29
 =============================
 - Replaces scipy's pade (which is disappearing) 
   by mpmath's pade in gvar.pade.
