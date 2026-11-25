@@ -1,4 +1,9 @@
-Version 13.1.10 2606-09-29
+Version 13.1.11 2026-11-25 ????
+===========================
+Fixes problem in build-system (remove numpy) that was causing 
+trouble for some operating systems.
+
+Version 13.1.10 2026-09-29
 =============================
 - Replaces scipy's pade (which is disappearing) 
   by mpmath's pade in gvar.pade.
